@@ -1,2 +1,2 @@
 # ProjetIntegreTeam4
-Test your commit name in this file
+Test your commit name in this file.
