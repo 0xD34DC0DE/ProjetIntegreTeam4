@@ -32,7 +32,7 @@ public class TestingRunner implements ApplicationRunner {
 
     personRepository.deleteAll().block();
     String[] names = new String[]{
-            "Sallyann Durling",
+            "Sallyann Durlinga",
             "Rosco Darrel",
             "Barney Lindelof",
             "Aldric Garrison",
