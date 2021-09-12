@@ -1,7 +1,9 @@
 package com.team4.backend;
 
 import com.team4.backend.model.ExamplePerson;
+import com.team4.backend.model.User;
 import com.team4.backend.repository.PersonRepository;
+import com.team4.backend.repository.UserRepository;
 import com.team4.backend.service.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +27,9 @@ public class TestingRunner implements ApplicationRunner {
     private static final Logger log = LoggerFactory.getLogger(TestingRunner.class);
 
     private final PersonRepository personRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     TestingRunner(PersonRepository personRepository) {
@@ -57,7 +62,7 @@ public class TestingRunner implements ApplicationRunner {
             "Gwennie Grewcock",
             "Wilona Frohock"
     };
-
+    /*
     Random rnd = new Random();
     Flux.fromStream(Arrays.stream(names)
             .map(name ->
@@ -66,6 +71,11 @@ public class TestingRunner implements ApplicationRunner {
                     )
             ))
             .subscribe(p -> log.info("new person created: {}", p.block()));
+     */
+
+        Flux.fromStream(Arrays.stream(names)
+                .map(name -> userRepository.save(User.builder().registrationNumber("12390213").firstName(name).build())))
+                .subscribe(p -> log.info("new user created: {}", p.block()));
 
     }
 }
