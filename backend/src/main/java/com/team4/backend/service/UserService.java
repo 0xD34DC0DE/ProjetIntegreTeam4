@@ -32,7 +32,7 @@ public class UserService {
     private JwtUtil jwtUtil;
 
     public Mono<AuthResponse> login(@RequestBody AuthRequest authRequest){
-        return findUserByRegistrationNumberAndPassword(authRequest.getRegistrationNumber(), pbkdf2Encoder.encode(authRequest.getPassword()))
+        return userRepository.findByRegistrationNumberAndPassword(authRequest.getRegistrationNumber(), pbkdf2Encoder.encode(authRequest.getPassword()))
                 .map(user -> new AuthResponse(jwtUtil.generateToken(user)));
 
     }
@@ -46,7 +46,4 @@ public class UserService {
             -depending on the answer the frontend will forward to the form or not
      */
 
-    private Mono<User> findUserByRegistrationNumberAndPassword(String registrationNumber,String password){
-        return userRepository.findByRegistrationNumberAndPassword(registrationNumber,password);
-    }
 }
