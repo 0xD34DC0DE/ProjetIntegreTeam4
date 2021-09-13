@@ -25,11 +25,13 @@ public class PersonController {
     }
 
     @GetMapping("/personByName/{name}")
+    @PreAuthorize("hasAuthority('STUDENT')")
     public Mono<ExamplePerson> countByBalance(@PathVariable("name") String name) {
         return personService.findByName(name);
     }
 
     @GetMapping("/personByNameFirstLetter/{letter}")
+    @PreAuthorize("hasAuthority('SUPERVISOR')")
     public Flux<ExamplePerson> findAllByNameFirstLetter(@PathVariable("letter") String letter) {
         return personService.findAllByNameFirstLetter(letter);
     }
