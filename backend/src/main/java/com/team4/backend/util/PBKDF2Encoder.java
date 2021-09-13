@@ -1,4 +1,4 @@
-package com.team4.backend.security;
+package com.team4.backend.util;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,23 +1,17 @@
 package com.team4.backend;
 
-import com.team4.backend.model.ExamplePerson;
 import com.team4.backend.model.User;
-import com.team4.backend.repository.PersonRepository;
 import com.team4.backend.repository.UserRepository;
-import com.team4.backend.security.PBKDF2Encoder;
-import com.team4.backend.service.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
 import java.util.Arrays;
-import java.util.Random;
 
 @Component
 @Order(1)
