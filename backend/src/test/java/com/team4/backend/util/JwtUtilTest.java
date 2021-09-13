@@ -34,7 +34,7 @@ public class JwtUtilTest {
     @Test
     void generateToken() {
         //ARRANGE
-        User user = User.builder().registrationNumber("123456789").role(Role.ROLE_STUDENT).build();
+        User user = User.builder().registrationNumber("123456789").role(Role.STUDENT).build();
 
         //ACT
         String token = jwtUtil.generateToken(user);
@@ -46,7 +46,7 @@ public class JwtUtilTest {
     @Test
     void getAllClaimsFromToken(){
         //ARRANGE
-        User user = User.builder().registrationNumber("123456789").role(Role.ROLE_STUDENT).build();
+        User user = User.builder().registrationNumber("123456789").role(Role.STUDENT).build();
         Map<String, Role> claims = new HashMap<>();
 
         claims.put("role",user.getRole());
@@ -68,7 +68,7 @@ public class JwtUtilTest {
     @Test
     void isTokenExpired(){
         //ARRANGE
-        User user = User.builder().registrationNumber("123456789").role(Role.ROLE_STUDENT).build();
+        User user = User.builder().registrationNumber("123456789").role(Role.STUDENT).build();
         Map<String, Role> claims = new HashMap<>();
         Date creationDate = new Date();
 
@@ -92,7 +92,7 @@ public class JwtUtilTest {
     @Test
     void getRegistrationNumberFromToken(){
         //ARRANGE
-        User user = User.builder().registrationNumber("123456789").role(Role.ROLE_STUDENT).build();
+        User user = User.builder().registrationNumber("123456789").role(Role.STUDENT).build();
         Map<String, Role> claims = new HashMap<>();
         Date creationDate = new Date();
 

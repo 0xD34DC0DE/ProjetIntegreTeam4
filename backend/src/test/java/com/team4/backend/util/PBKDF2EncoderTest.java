@@ -43,7 +43,7 @@ public class PBKDF2EncoderTest {
     @Test
     void matches() throws NoSuchAlgorithmException, InvalidKeySpecException {
         //ARRANGE
-        CharSequence passwordEntered = "myPassword";
+        CharSequence passwordEntered = "fdeldalmd";
         CharSequence wrongPassword = "sdadasd";
         String encodedPassword = Base64.getEncoder().encodeToString(SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512")
                 .generateSecret(new PBEKeySpec(passwordEntered.toString().toCharArray(), pbkdf2Encoder.getSecret().getBytes(), pbkdf2Encoder.getIteration(), pbkdf2Encoder.getKeyLength()))

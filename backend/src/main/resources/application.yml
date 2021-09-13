@@ -7,5 +7,5 @@ security:
 
   jwt:
     secret : ThisIsSecretForJWTHS512SignatureAlgorithmThatMUSTHave64ByteLength
-    expiration : 28800
+    expiration : 2880
 
