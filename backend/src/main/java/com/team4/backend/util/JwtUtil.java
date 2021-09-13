@@ -49,6 +49,14 @@ public class JwtUtil {
                 .compact();
     }
 
+    public Claims getAllClaimsFromToken(String token) {
+        return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token).getBody();
+    }
+
+    private Boolean isTokenExpired(String token){
+        return getAllClaimsFromToken(token).getExpiration().before(new Date());
+    }
+
 
 
 }
