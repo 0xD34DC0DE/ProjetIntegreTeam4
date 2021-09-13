@@ -4,6 +4,7 @@ import com.team4.backend.model.ExamplePerson;
 import com.team4.backend.model.User;
 import com.team4.backend.repository.PersonRepository;
 import com.team4.backend.repository.UserRepository;
+import com.team4.backend.security.PBKDF2Encoder;
 import com.team4.backend.service.PersonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,28 +19,27 @@ import reactor.core.publisher.Flux;
 import java.util.Arrays;
 import java.util.Random;
 
-
-@Order(1)
-@Profile("test")
 @Component
+@Order(1)
 public class TestingRunner implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(TestingRunner.class);
 
-    private final PersonRepository personRepository;
+    //private final PersonRepository personRepository;
 
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    TestingRunner(PersonRepository personRepository) {
-        this.personRepository = personRepository;
-    }
+    //@Autowired
+    //TestingRunner(PersonRepository personRepository) {
+    //    this.personRepository = personRepository;
+    //}
 
     @Override
     public void run(final ApplicationArguments args) {
+        userRepository.deleteAll().block();
 
-    personRepository.deleteAll().block();
+    //personRepository.deleteAll().block();
     String[] names = new String[]{
             "Sallyann Durlinga",
             "Rosco Darrel",
@@ -63,6 +63,7 @@ public class TestingRunner implements ApplicationRunner {
             "Wilona Frohock"
     };
     /*
+
     Random rnd = new Random();
     Flux.fromStream(Arrays.stream(names)
             .map(name ->
@@ -71,8 +72,8 @@ public class TestingRunner implements ApplicationRunner {
                     )
             ))
             .subscribe(p -> log.info("new person created: {}", p.block()));
-     */
 
+     */
         Flux.fromStream(Arrays.stream(names)
                 .map(name -> userRepository.save(User.builder().registrationNumber("12390213").firstName(name).build())))
                 .subscribe(p -> log.info("new user created: {}", p.block()));

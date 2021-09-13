@@ -7,6 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -17,7 +18,7 @@ import java.util.UUID;
 @ToString
 @NoArgsConstructor
 @Document(collection = "users")
-public class User implements UserDetails {
+public class User implements UserDetails, Serializable {
 
     private UUID uuid;
 

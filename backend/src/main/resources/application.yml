@@ -1,3 +1,6 @@
-spring:
-  profiles:
-    active: test
+security:
+  password:
+    encoder:
+      secret : mysecret
+      iteration : 33
+      keyLength : 256
