@@ -57,6 +57,10 @@ public class JwtUtil {
         return getAllClaimsFromToken(token).getExpiration().before(new Date());
     }
 
+    public String getRegistrationNumberFromToken(String token){
+        return getAllClaimsFromToken(token).getSubject();
+    }
+
 
 
 }

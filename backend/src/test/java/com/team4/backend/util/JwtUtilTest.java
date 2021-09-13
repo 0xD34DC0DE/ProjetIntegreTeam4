@@ -88,4 +88,26 @@ public class JwtUtilTest {
         //ASSERT
         assertFalse(isTokenExpired);
     }
+
+    @Test
+    void getRegistrationNumberFromToken(){
+        //ARRANGE
+        User user = User.builder().registrationNumber("123456789").role(Role.ROLE_STUDENT).build();
+        Map<String, Role> claims = new HashMap<>();
+        Date creationDate = new Date();
+
+        claims.put("role",user.getRole());
+
+        String token = Jwts.builder()
+                .setClaims(claims)
+                .setSubject(user.getRegistrationNumber())
+                .signWith(jwtUtil.getKey())
+                .compact();
+
+        //ACT
+        String returnedRegistrationNumber = jwtUtil.getRegistrationNumberFromToken(token);
+
+        //ASSERT
+        assertEquals(user.getRegistrationNumber(),returnedRegistrationNumber);
+    }
 }
