@@ -26,7 +26,7 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
 
     @Override
     public Mono<SecurityContext> load(ServerWebExchange serverWebExchange) {
-        log.info(serverWebExchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION));
+        //log.info(serverWebExchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION));
         return Mono.justOrEmpty(serverWebExchange.getRequest().getHeaders().getFirst(HttpHeaders.AUTHORIZATION))
                 .filter(authHeader -> authHeader.startsWith("Bearer "))
                 .flatMap(authHeader -> {
