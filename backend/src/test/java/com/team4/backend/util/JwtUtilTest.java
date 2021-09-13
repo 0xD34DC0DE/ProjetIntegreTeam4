@@ -47,9 +47,10 @@ public class JwtUtilTest {
     void getAllClaimsFromToken(){
         //ARRANGE
         User user = User.builder().registrationNumber("123456789").role(Role.ROLE_STUDENT).build();
-
         Map<String, Role> claims = new HashMap<>();
+
         claims.put("role",user.getRole());
+
         String token = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getRegistrationNumber())
@@ -62,5 +63,29 @@ public class JwtUtilTest {
 
         //ASSERT
         assertEquals(user.getRegistrationNumber(),returnedClaims.getSubject());
+    }
+
+    @Test
+    void isTokenExpired(){
+        //ARRANGE
+        User user = User.builder().registrationNumber("123456789").role(Role.ROLE_STUDENT).build();
+        Map<String, Role> claims = new HashMap<>();
+        Date creationDate = new Date();
+
+        claims.put("role",user.getRole());
+
+        String token = Jwts.builder()
+                .setClaims(claims)
+                .setSubject(user.getRegistrationNumber())
+                .setIssuedAt(creationDate)
+                .setExpiration(new Date(creationDate.getTime() + 100000))
+                .signWith(jwtUtil.getKey())
+                .compact();
+
+        //ACT
+        boolean isTokenExpired = jwtUtil.isTokenExpired(token);
+
+        //ASSERT
+        assertFalse(isTokenExpired);
     }
 }
