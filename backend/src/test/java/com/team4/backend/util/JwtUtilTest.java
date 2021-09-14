@@ -44,7 +44,7 @@ public class JwtUtilTest {
     }
 
     @Test
-    void getAllClaimsFromToken(){
+    void getAllClaimsFromToken() {
         //ARRANGE
         User user = User.builder().registrationNumber("123456789").role(Role.STUDENT).build();
         Map<String, Role> claims = new HashMap<>();
@@ -66,7 +66,7 @@ public class JwtUtilTest {
     }
 
     @Test
-    void isTokenExpired(){
+    void isTokenExpired() {
         //ARRANGE
         User user = User.builder().registrationNumber("123456789").role(Role.STUDENT).build();
         Map<String, Role> claims = new HashMap<>();
@@ -74,7 +74,7 @@ public class JwtUtilTest {
 
         claims.put("role",user.getRole());
 
-        String token = Jwts.builder()
+        String token1 = Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getRegistrationNumber())
                 .setIssuedAt(creationDate)
@@ -82,11 +82,21 @@ public class JwtUtilTest {
                 .signWith(jwtUtil.getKey())
                 .compact();
 
+        String token2 = Jwts.builder()
+                .setClaims(claims)
+                .setSubject(user.getRegistrationNumber())
+                .setIssuedAt(creationDate)
+                .setExpiration(new Date(creationDate.getTime() + -1000))
+                .signWith(jwtUtil.getKey())
+                .compact();
+
         //ACT
-        boolean isTokenExpired = jwtUtil.isTokenExpired(token);
+        boolean isTokenExpired1 = jwtUtil.isTokenExpired(token1);
+        boolean isTokenExpired2 = jwtUtil.isTokenExpired(token2);
 
         //ASSERT
-        assertFalse(isTokenExpired);
+        assertFalse(isTokenExpired1);
+        assertTrue(isTokenExpired2);
     }
 
     @Test
@@ -94,7 +104,6 @@ public class JwtUtilTest {
         //ARRANGE
         User user = User.builder().registrationNumber("123456789").role(Role.STUDENT).build();
         Map<String, Role> claims = new HashMap<>();
-        Date creationDate = new Date();
 
         claims.put("role",user.getRole());
 
@@ -109,5 +118,23 @@ public class JwtUtilTest {
 
         //ASSERT
         assertEquals(user.getRegistrationNumber(),returnedRegistrationNumber);
+    }
+
+    @Test
+    void isTokenValid(){
+        //ARRANGE
+        String token1 = Jwts.builder()
+                .signWith(jwtUtil.getKey())
+                .compact();
+
+        String token2 = "dasdasdasdsad";
+        //ACT
+        boolean isTokenValid1 = jwtUtil.isTokenValid(token1);
+        boolean isTokenValid2 = jwtUtil.isTokenValid(token2);
+
+        //ASSERT
+        assertTrue(isTokenValid1);
+        assertFalse(isTokenValid2);
+
     }
 }

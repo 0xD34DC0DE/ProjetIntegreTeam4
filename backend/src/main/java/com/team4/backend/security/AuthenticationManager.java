@@ -26,14 +26,14 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
         String authToken = authentication.getCredentials().toString();
-        String registrationNumber = jwtUtil.getRegistrationNumberFromToken(authToken);
-        //log.info(authentication.getPrincipal().toString());
-        return Mono.just(!jwtUtil.isTokenExpired(authToken))
+        String registrationNumber = jwtUtil.isTokenValid(authToken) && !jwtUtil.isTokenExpired(authToken) ?jwtUtil.getRegistrationNumberFromToken(authToken): "";
+
+        return Mono.just(jwtUtil.isTokenValid(authToken) && !jwtUtil.isTokenExpired(authToken))
                 .filter(valid -> valid)
                 .switchIfEmpty(Mono.empty())
                 .map(valid -> {
                     Claims claims = jwtUtil.getAllClaimsFromToken(authToken);
-                   // log.info(claims.toString());
+                    // log.info(claims.toString());
                     String role = claims.get("role").toString();
                     return new UsernamePasswordAuthenticationToken(
                             registrationNumber,
