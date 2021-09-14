@@ -1,8 +1,6 @@
 package com.team4.backend.service;
 
 import com.team4.backend.model.User;
-import com.team4.backend.model.dto.AuthRequest;
-import com.team4.backend.model.dto.AuthResponse;
 import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.JwtUtil;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -13,6 +11,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Mono;
+
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -33,28 +32,25 @@ public class UserServiceTest {
     UserService userService;
 
     @Test
-    void login(){
+    void login() {
         //ARRANGE
-        User user = new User();
+        User user1 = User.builder().registrationNumber("123456789").email("123456789@gmail.com").password("araa").build();
         String token = "adasdadadsas";
-        AuthRequest authRequest1 = new AuthRequest("123123","sdadasd");
 
-        when(pbkdf2Encoder.encode(authRequest1.getPassword())).thenReturn("d893szwerf=");
-        when(userRepository.findByRegistrationNumberAndPassword(authRequest1.getRegistrationNumber(),pbkdf2Encoder.encode(authRequest1.getPassword()))).thenReturn(Mono.just(user));
-        when(jwtUtil.generateToken(user)).thenReturn(token);
+        when(userRepository.findByEmailAndPassword(user1.getEmail(), pbkdf2Encoder.encode(user1.getPassword()))).thenReturn(Mono.just(user1));
+        when(jwtUtil.generateToken(user1)).thenReturn("adasdadadsas");
 
-        AuthRequest authRequest2 = new AuthRequest("3123123","dfsadasad");
 
-        when(pbkdf2Encoder.encode(authRequest2.getPassword())).thenReturn("-0-adkc7ayqe=");
-        when(userRepository.findByRegistrationNumberAndPassword(authRequest2.getRegistrationNumber(),pbkdf2Encoder.encode(authRequest2.getPassword()))).thenReturn(Mono.empty());
+        User user2 = User.builder().registrationNumber("342432423").email("342432423@gmail.com").password("fdsfsd").build();
+
+        when(userRepository.findByEmailAndPassword(user2.getEmail(), pbkdf2Encoder.encode(user2.getPassword()))).thenReturn(Mono.empty());
 
         //ACT
-
-        Mono<AuthResponse> returnedToken1 = userService.login(authRequest1);
-        Mono<AuthResponse> returnedToken2 = userService.login(authRequest2);
+        Mono<String> returnedToken1 = userService.login(user1.getEmail(), user1.getPassword());
+        Mono<String> returnedToken2 = userService.login(user2.getEmail(), user2.getPassword());
 
         //ASSERT
-        returnedToken1.subscribe(Assertions::assertNotNull);
+        returnedToken1.subscribe(subToken -> assertEquals(token, subToken));
         returnedToken2.subscribe(Assertions::assertNull);
     }
 

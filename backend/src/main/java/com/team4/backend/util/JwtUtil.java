@@ -44,7 +44,7 @@ public class JwtUtil {
 
         return Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.getRegistrationNumber())
+                .setSubject(user.getEmail())
                 .setIssuedAt(createdDate)
                 .setExpiration(expirationDate)
                 .signWith(key)
@@ -66,7 +66,7 @@ public class JwtUtil {
         }
     }
 
-    public String getRegistrationNumberFromToken(String token) {
+    public String getEmailFromToken(String token) {
         return getAllClaimsFromToken(token).getSubject();
     }
 
