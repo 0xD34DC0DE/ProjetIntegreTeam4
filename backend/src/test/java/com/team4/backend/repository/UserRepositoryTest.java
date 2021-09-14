@@ -1,8 +1,6 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.User;
-import com.team4.backend.model.dto.AuthRequest;
-import com.team4.backend.util.PBKDF2Encoder;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -33,7 +31,7 @@ public class UserRepositoryTest {
     @BeforeAll
     void init(){
         Flux<User> users = Flux.just(
-                User.builder().registrationNumber("123456789").password("araa").build(),
+                User.builder().registrationNumber("123456789").email("123456789@gmail.com").password("araa").build(),
                 User.builder().registrationNumber("423423432").build()
         );
 
@@ -44,16 +42,38 @@ public class UserRepositoryTest {
     @Test
     void findByRegistrationNumberAndPassword(){
         //ARRANGE
-        AuthRequest authRequest1 = new AuthRequest("123456789","araa");
-        AuthRequest authRequest2 = new AuthRequest("4esdad","dsd2e32");
+        String registrationNumber1 = "123456789";
+        String password1 = "araa";
+
+        String registrationNumber2 = "4esdad";
+        String password2 = "dsd2e32";
 
         //ACT
-        Mono<User> userMono1 = userRepository.findByRegistrationNumberAndPassword(authRequest1.getRegistrationNumber(),authRequest1.getPassword());
-        Mono<User> userMono2 = userRepository.findByRegistrationNumberAndPassword(authRequest2.getRegistrationNumber(),authRequest2.getPassword());
+        Mono<User> userMono1 = userRepository.findByRegistrationNumberAndPassword(registrationNumber1,password1);
+        Mono<User> userMono2 = userRepository.findByRegistrationNumberAndPassword(registrationNumber2,password2);
 
         //ASSERT
 
-        userMono1.subscribe( user -> assertEquals(authRequest1.getRegistrationNumber(),user.getRegistrationNumber()));
+        userMono1.subscribe( user -> assertEquals(registrationNumber1,user.getRegistrationNumber()));
+        userMono2.subscribe(Assertions::assertNull);
+    }
+
+    @Test
+    void findByEmailAndPassword(){
+        //ARRANGE
+        String email1 = "123456789@gmail.com";
+        String password1 = "araa";
+
+        String email2 = "4esdad@gmail.com";
+        String password2 = "dsd2e32";
+
+        //ACT
+        Mono<User> userMono1 = userRepository.findByEmailAndPassword(email1,password1);
+        Mono<User> userMono2 = userRepository.findByEmailAndPassword(email2,password2);
+
+        //ASSERT
+
+        userMono1.subscribe( user -> assertEquals(email1,user.getEmail()));
         userMono2.subscribe(Assertions::assertNull);
     }
 

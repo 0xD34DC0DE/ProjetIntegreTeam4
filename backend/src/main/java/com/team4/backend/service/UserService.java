@@ -1,14 +1,11 @@
 package com.team4.backend.service;
 
-import com.team4.backend.model.dto.AuthRequest;
-import com.team4.backend.model.dto.AuthResponse;
 import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.JwtUtil;
 import com.team4.backend.util.PBKDF2Encoder;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -24,9 +21,9 @@ public class UserService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public Mono<AuthResponse> login(@RequestBody AuthRequest authRequest){
-        return userRepository.findByRegistrationNumberAndPassword(authRequest.getRegistrationNumber(), pbkdf2Encoder.encode(authRequest.getPassword()))
-                .map(user -> new AuthResponse(jwtUtil.generateToken(user)));
+    public Mono<String> login(String email, String password){
+        return userRepository.findByEmailAndPassword(email, pbkdf2Encoder.encode(password))
+                .map(user -> jwtUtil.generateToken(user));
 
     }
 

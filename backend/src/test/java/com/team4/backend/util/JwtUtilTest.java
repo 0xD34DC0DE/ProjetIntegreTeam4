@@ -33,26 +33,26 @@ public class JwtUtilTest {
     @Test
     void generateToken() {
         //ARRANGE
-        User user = User.builder().registrationNumber("123456789").role(Role.STUDENT).build();
+        User user = User.builder().email("123456789@claurendeau.qc.ca").role(Role.STUDENT).build();
 
         //ACT
         String token = jwtUtil.generateToken(user);
 
         //ASSERT
-        assertEquals(user.getRegistrationNumber(), Jwts.parserBuilder().setSigningKey(jwtUtil.getKey()).build().parseClaimsJws(token).getBody().getSubject());
+        assertEquals(user.getEmail(), Jwts.parserBuilder().setSigningKey(jwtUtil.getKey()).build().parseClaimsJws(token).getBody().getSubject());
     }
 
     @Test
     void getAllClaimsFromToken() {
         //ARRANGE
-        User user = User.builder().registrationNumber("123456789").role(Role.STUDENT).build();
+        User user = User.builder().email("123456789@claurendeau.qc.ca").role(Role.STUDENT).build();
         Map<String, Role> claims = new HashMap<>();
 
         claims.put("role",user.getRole());
 
         String token = Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.getRegistrationNumber())
+                .setSubject(user.getEmail())
                 .setIssuedAt(new Date())
                 .signWith(jwtUtil.getKey())
                 .compact();
@@ -61,13 +61,13 @@ public class JwtUtilTest {
         Claims returnedClaims = jwtUtil.getAllClaimsFromToken(token);
 
         //ASSERT
-        assertEquals(user.getRegistrationNumber(),returnedClaims.getSubject());
+        assertEquals(user.getEmail(),returnedClaims.getSubject());
     }
 
     @Test
     void isTokenExpired() {
         //ARRANGE
-        User user = User.builder().registrationNumber("123456789").role(Role.STUDENT).build();
+        User user = User.builder().email("123456789@claurendeau.qc.ca").role(Role.STUDENT).build();
         Map<String, Role> claims = new HashMap<>();
         Date creationDate = new Date();
 
@@ -75,7 +75,7 @@ public class JwtUtilTest {
 
         String token1 = Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.getRegistrationNumber())
+                .setSubject(user.getEmail())
                 .setIssuedAt(creationDate)
                 .setExpiration(new Date(creationDate.getTime() + 100000))
                 .signWith(jwtUtil.getKey())
@@ -83,7 +83,7 @@ public class JwtUtilTest {
 
         String token2 = Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.getRegistrationNumber())
+                .setSubject(user.getEmail())
                 .setIssuedAt(creationDate)
                 .setExpiration(new Date(creationDate.getTime() + -1000))
                 .signWith(jwtUtil.getKey())
@@ -99,24 +99,24 @@ public class JwtUtilTest {
     }
 
     @Test
-    void getRegistrationNumberFromToken(){
+    void getEmailFromToken(){
         //ARRANGE
-        User user = User.builder().registrationNumber("123456789").role(Role.STUDENT).build();
+        User user = User.builder().email("123456789@claurendeau.qc.ca").role(Role.STUDENT).build();
         Map<String, Role> claims = new HashMap<>();
 
         claims.put("role",user.getRole());
 
         String token = Jwts.builder()
                 .setClaims(claims)
-                .setSubject(user.getRegistrationNumber())
+                .setSubject(user.getEmail())
                 .signWith(jwtUtil.getKey())
                 .compact();
 
         //ACT
-        String returnedRegistrationNumber = jwtUtil.getRegistrationNumberFromToken(token);
+        String returnedEmail = jwtUtil.getEmailFromToken(token);
 
         //ASSERT
-        assertEquals(user.getRegistrationNumber(),returnedRegistrationNumber);
+        assertEquals(user.getEmail(),returnedEmail);
     }
 
     @Test
