@@ -1,7 +1,5 @@
 package com.team4.backend.service;
 
-import com.team4.backend.TestingRunner;
-import com.team4.backend.model.User;
 import com.team4.backend.model.dto.AuthRequest;
 import com.team4.backend.model.dto.AuthResponse;
 import com.team4.backend.repository.UserRepository;

@@ -20,11 +20,11 @@ import reactor.core.publisher.Mono;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Log
-@ExtendWith(SpringExtension.class)
 @DataMongoTest
-@ContextConfiguration(classes ={UserRepository.class})
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @EnableAutoConfiguration
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ContextConfiguration(classes ={UserRepository.class})
 public class UserRepositoryTest {
 
     @Autowired
