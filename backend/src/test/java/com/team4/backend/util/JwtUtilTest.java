@@ -3,7 +3,6 @@ package com.team4.backend.util;
 
 import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;
-import com.team4.backend.util.JwtUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.java.Log;
