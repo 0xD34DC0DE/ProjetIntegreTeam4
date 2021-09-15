@@ -1,11 +1,26 @@
 package com.team4.backend.repository;
 
+import com.team4.backend.model.Student;
+import com.team4.backend.model.enums.StudentState;
+import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DataMongoTest
+@EnableAutoConfiguration
+@ExtendWith(SpringExtension.class)
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+@ContextConfiguration(classes ={StudentRepository.class})
 public class StudentRepositoryTest {
 
     @Autowired
@@ -22,34 +37,37 @@ public class StudentRepositoryTest {
         final String schoolName = "Example school";
         final String phoneNumber = "123-456-7890";
 
-        final StudentState studentState = StudentState.Registered;
+        final StudentState studentState = StudentState.REGISTERED;
 
-        Mono<Student> student = Mono.just(
-                Student.builder()
-                        .registrationNumber(registrationNumber)
-                        .email(email)
-                        .password(password)
-                        .firstName(firstName)
-                        .lastName(lastName)
-                        .schoolName(schoolName)
-                        .phoneNumber(phoneNumber)
-                        .isEnabled(true)
-                        .build()
-        );
+        Student student = Student.studentBuilder()
+                .registrationNumber(registrationNumber)
+                .email(email)
+                .password(password)
+                .firstName(firstName)
+                .lastName(lastName)
+                .schoolName(schoolName)
+                .phoneNumber(phoneNumber)
+                .studentState(studentState)
+                .build();
 
-        Mono<Student> savedStudent = studentRepository.save(student);
+        Mono<Student> studentMono = studentRepository.save(student);
 
-        savedStudent.subscribe(student -> {
-            assertNotNull(student.getId());
-            assertEquals(student.getrRegistrationNumber(), registrationNumber);
-            assertEquals(student.getEmail(), email);
-            assertNotEquals(student.password, password); // Password should be encrypted, not cleartext
-            assertEquals(student.getFirstName(), firstName);
-            assertEquals(student.getLastName(), lastName);
-            assertEquals(student.getSchoolName(), schoolName);
-            assertEquals(student.getPhoneNumber(), phoneNumber);
-            //TODO Add check for isEnable()
-        });
+        StepVerifier
+                .create(studentMono)
+                .assertNext(s -> {
+                    assertNotNull(s.getId());
+                    assertEquals(s.getRegistrationNumber(), registrationNumber);
+                    assertEquals(s.getEmail(), email);
+                    assertNotEquals(s.getPassword(), password); // Password should be encrypted, not cleartext
+                    assertEquals(s.getFirstName(), firstName);
+                    assertEquals(s.getLastName(), lastName);
+                    assertEquals(s.getSchoolName(), schoolName);
+                    assertEquals(s.getPhoneNumber(), phoneNumber);
+                    assertEquals(s.getStudentState(), studentState);
+                })
+                .expectComplete()
+                .verify();
+        //TODO Add check for isEnable()
     }
 
 }
