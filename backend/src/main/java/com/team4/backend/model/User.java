@@ -20,8 +20,6 @@ import java.util.UUID;
 @Document(collection = "users")
 public class User implements UserDetails, Serializable {
 
-    private UUID uuid;
-
     @Getter @Setter
     private String registrationNumber,email,password,firstName,lastName;
 
@@ -35,8 +33,7 @@ public class User implements UserDetails, Serializable {
     private Boolean isEnabled;
 
     @Builder
-    public User(String email,String firstName,String lastName,String password,String registrationNumber,Role role){
-        this.uuid = UUID.randomUUID();
+    public User(String email,String firstName,String lastName,String password,String registrationNumber,Role role,boolean isEnabled){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -44,6 +41,7 @@ public class User implements UserDetails, Serializable {
         this.registrationNumber = registrationNumber;
         this.role = role;
         this.registrationDate = LocalDate.now();
+        this.isEnabled = isEnabled;
     }
 
     @Override
