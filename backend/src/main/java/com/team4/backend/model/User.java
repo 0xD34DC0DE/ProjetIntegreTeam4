@@ -2,7 +2,6 @@ package com.team4.backend.model;
 
 import com.team4.backend.model.enums.Role;
 import lombok.*;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -21,10 +20,6 @@ import java.util.UUID;
 @Document(collection = "users")
 public class User implements UserDetails, Serializable {
 
-    @Id
-    @Getter @Setter
-    private String id;
-
     @Getter @Setter
     private String registrationNumber,email,password,firstName,lastName;
 
@@ -38,8 +33,7 @@ public class User implements UserDetails, Serializable {
     private Boolean isEnabled;
 
     @Builder
-    public User(String id, String email,String firstName,String lastName,String password,String registrationNumber,Role role){
-        this.id = id; // Auto generated
+    public User(String email,String firstName,String lastName,String password,String registrationNumber,Role role,boolean isEnabled){
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
@@ -47,6 +41,7 @@ public class User implements UserDetails, Serializable {
         this.registrationNumber = registrationNumber;
         this.role = role;
         this.registrationDate = LocalDate.now();
+        this.isEnabled = isEnabled;
     }
 
     @Override

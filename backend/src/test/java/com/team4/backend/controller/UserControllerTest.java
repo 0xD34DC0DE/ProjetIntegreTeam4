@@ -1,5 +1,6 @@
 package com.team4.backend.controller;
 
+import com.team4.backend.model.dto.AuthRequest;
 import com.team4.backend.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -32,18 +33,14 @@ public class UserControllerTest {
     @Test
     public void login(){
         //ARRANGE
-        String email = "12345678@gmail.com";
-        String password = "massou123";
+        AuthRequest authRequest = new AuthRequest("12345678@gmail.com","massou123");
 
-        when(userService.login(email,password)).thenReturn(Mono.just("sadasdadsas"));
+        when(userService.login(authRequest)).thenReturn(Mono.just("sadasdadsas"));
 
         //ACT
         HttpStatus httpStatus= webTestClient
-                .post()
-                .uri(uriBuilder ->
-                        uriBuilder.path("/user/login")
-                .queryParam("email",email)
-                .queryParam("password",password).build())
+                .post().uri("/user/login")
+                .bodyValue(authRequest)
                 .exchange()
                 .expectStatus()
                 .isOk()

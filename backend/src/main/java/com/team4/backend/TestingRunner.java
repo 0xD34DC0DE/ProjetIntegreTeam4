@@ -79,10 +79,10 @@ public class TestingRunner implements ApplicationRunner {
                 .subscribe(p -> log.info("new person created: {}", p.block()));
 
 
-        userRepository.save(User.builder().email("123456789@gmail.com").role(Role.STUDENT).password(pbkdf2Encoder.encode("massou123")).build())
+        userRepository.save(User.builder().email("123456789@gmail.com").role(Role.STUDENT).password(pbkdf2Encoder.encode("massou123")).isEnabled(true).build())
                 .subscribe(user -> log.info("Entity has been saved: {}", user));
 
-        userRepository.save(User.builder().email("45673234@gmail.com").role(Role.SUPERVISOR).password(pbkdf2Encoder.encode("sasuke123")).build())
+        userRepository.save(User.builder().email("45673234@gmail.com").role(Role.SUPERVISOR).password(pbkdf2Encoder.encode("sasuke123")).isEnabled(true).build())
                 .subscribe(user -> log.info("Entity has been saved: {}", user));
 
     }

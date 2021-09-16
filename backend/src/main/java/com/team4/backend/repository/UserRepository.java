@@ -10,5 +10,5 @@ import java.util.UUID;
 @Repository
 public interface UserRepository extends ReactiveMongoRepository<User, UUID> {
     Mono<User> findByRegistrationNumberAndPassword(String registrationNumber,String password);
-    Mono<User> findByEmailAndPassword(String email, String password);
+    Mono<User> findByEmailAndPasswordAndIsEnabledTrue(String email, String password);
 }
