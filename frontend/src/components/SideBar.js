@@ -59,9 +59,9 @@ function SideBar({ setOpen, open }) {
           </IconButton>
         </Toolbar>
         <List>
-          {drawerListItems.map((item) => {
+          {drawerListItems.map((item, key) => {
             return (
-              <ListItemButton>
+              <ListItemButton key={key}>
                 <ListItemIcon>
                   <Icon>{item[1]}</Icon>
                 </ListItemIcon>
