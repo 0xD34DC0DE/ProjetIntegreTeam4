@@ -2,16 +2,15 @@ package com.team4.backend.model;
 
 import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;
+
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode(callSuper = true)
 @Document(collection = "students")
 public class Student extends User {
 
@@ -22,7 +21,8 @@ public class Student extends User {
     private StudentState studentState;
 
     @Builder(builderMethodName = "studentBuilder")
-    public Student(String email,
+    public Student(String id,
+                   String email,
                    String firstName,
                    String lastName,
                    String password,
@@ -30,7 +30,7 @@ public class Student extends User {
                    String schoolName,
                    String phoneNumber,
                    StudentState studentState) {
-        super(email, firstName, lastName, password, registrationNumber, Role.STUDENT);
+        super(id, email, firstName, lastName, password, registrationNumber, Role.STUDENT);
         super.setIsEnabled(true);
         this.schoolName = schoolName;
         this.phoneNumber = phoneNumber;
