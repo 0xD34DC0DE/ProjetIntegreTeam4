@@ -2,6 +2,7 @@ import { Dialog, DialogContent, DialogContentText, DialogActions, TextField, Typ
 import { Button } from "@mui/material";
 import { KeyboardArrowRight, KeyboardArrowLeft, Create } from "@mui/icons-material";
 import React, { useState } from "react";
+import FormField from "./FormField";
 
 const Home = () => {
     const [step, setStep] = useState(0)
@@ -34,113 +35,24 @@ const Home = () => {
     const displayFormField = () => {
         if(step === 0) {
             return (
-                <React.Fragment>
-                    <DialogContentText>
-                        Enter your email address and your password
-                    </DialogContentText>
-                    <FormControl sx={{width: "100%"}}>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="email"
-                            label="Email Address"
-                            type="email"
-                            fullWidth
-                            variant="standard"
-                            value={form.email}
-                            onChange={handleFormChange}
-                            sx={{pb: 0}}
-                        />
-                    </FormControl>
-                </React.Fragment>
+                <FormField id="email" dialogContentText="Enter your e-mail" label="E-mail" onChange={handleFormChange} value={form.email} type="email"/>
             );
         }else if(step === 1) {
             return (
                 <React.Fragment>
-                    <DialogContentText>
-                        Enter your first name and last name
-                    </DialogContentText>
-                    <FormControl sx={{width: "100%"}}>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="first_name"
-                            label="First name"
-                            type="text"
-                            variant="standard"
-                            value = {form.first_name}
-                            onChange={handleFormChange}
-                            sx={{flexGrow: 1}}
-                        />
-                    </FormControl>
-                    <FormControl sx={{width: "100%"}}>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="last_name"
-                            label="Last name"
-                            type="text"
-                            variant="standard"
-                            value = {form.last_name}
-                            onChange={handleFormChange}
-                            sx={{flexGrow: 1}}
-                        />
-                    </FormControl>
+                    <FormField id="first_name" dialogContentText="Enter your first name and your last name" label="First name" onChange={handleFormChange} value={form.first_name} type="text"/>
+                    <FormField id="last_name" dialogContentText="" label="Last name" onChange={handleFormChange} value={form.last_name} type="text"/>
                 </React.Fragment>
             );
         }else if(step === 2) {
             return (
-                <React.Fragment>
-                    <DialogContentText>
-                        Enter your phone number
-                    </DialogContentText>
-                    <FormControl sx={{width: "100%"}}>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="phone_number"
-                            label="Phone number"
-                            type="tel"
-                            variant="standard"
-                            sx={{flexGrow: 1}}
-                            value = {form.phone_number}
-                            onChange={handleFormChange}
-                        />
-                    </FormControl>
-                </React.Fragment>
+                <FormField id="phone_number" dialogContentText="Enter your phone number" label="Phone number" onChange={handleFormChange} value={form.phone_number} type="tel"/>
             );
         }else if(step === 3) {
             return (
                 <React.Fragment>
-                    <DialogContentText>
-                        Enter your password
-                    </DialogContentText>
-                    <FormControl sx={{width: "100%"}}>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="password"
-                            label="Password"
-                            type="password"
-                            fullWidth
-                            variant="standard"
-                            value = {form.password}
-                            onChange={handleFormChange}
-                        />
-                    </FormControl>
-                    <FormControl sx={{width: "100%"}}>
-                        <TextField
-                            autoFocus
-                            margin="dense"
-                            id="confirm_password"
-                            label="Confirm password"
-                            type="password"
-                            fullWidth
-                            variant="standard"
-                            value = {form.confirm_password}
-                            onChange={handleFormChange}
-                        />
-                    </FormControl>
+                    <FormField id="password" dialogContentText="Enter your phone number" label="Password" onChange={handleFormChange} value={form.password} type="password"/>
+                    <FormField id="confirm_password" dialogContentText="" label="Confirm password" onChange={handleFormChange} value={form.confirm_password} type="password"/>
                 </React.Fragment>
             )
         }
