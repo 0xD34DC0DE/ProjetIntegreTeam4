@@ -1,52 +1,78 @@
 import {
-  Divider,
-  Drawer,
-  Icon,
   List,
-  ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
-  Typography,
 } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import React from "react";
-export const drawerWidth = 240;
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    width: drawerWidth,
+import MuiDrawer from "@mui/material/Drawer";
+import Icon from "@mui/material/Icon";
+import IconButton from "@mui/material/IconButton";
+import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
+import Toolbar from "@mui/material/Toolbar";
+import * as React from "react";
+import { drawerListItems } from "../modals/drawerListItems";
+
+const Drawer = styled(MuiDrawer, {
+  shouldForwardProp: (prop) => prop,
+})(({ theme, open }) => ({
+  "& .MuiDrawer-paper": {
+    position: "relative",
+    float: "left",
+    width: theme.spacing(50),
+    transition: theme.transitions.create("width", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    boxSizing: "border-box",
+    ...(!open && {
+      overflowX: "hidden",
+      transition: theme.transitions.create("width", {
+        duration: theme.transitions.duration.leavingScreen,
+      }),
+      [theme.breakpoints.up("sm")]: {
+        width: theme.spacing(9),
+      },
+    }),
   },
 }));
-/**
- *
- *
- * @description The SideBar component with a Drawer from Material-Ui
- * @author Maxime Dupuis
- */
-const SideBar = () => {
+
+const mdTheme = createTheme();
+
+function SideBar({ setOpen, open }) {
+  const toggleDrawer = () => {
+    setOpen(!open);
+  };
+
   return (
-    <>
-      <Drawer
-        className={drawerWidth}
-        variant="persistent"
-        anchor="left"
-        open={true}
-      >
-        <Typography variant="h6">Header</Typography>
+    <ThemeProvider theme={mdTheme}>
+      <Drawer variant="permanent" open={open} anchor="left">
+        <Toolbar
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            px: [1],
+          }}
+        >
+          <IconButton onClick={toggleDrawer}>
+            {open ? <Icon>chevron_left</Icon> : <Icon>chevron_right</Icon>}
+          </IconButton>
+        </Toolbar>
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                <Icon>star</Icon>
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
+          {drawerListItems.map((item) => {
+            return (
+              <ListItemButton>
+                <ListItemIcon>
+                  <Icon>{item[1]}</Icon>
+                </ListItemIcon>
+                <ListItemText>{item[0]}</ListItemText>
+              </ListItemButton>
+            );
+          })}
         </List>
-        <Divider />
       </Drawer>
-    </>
+    </ThemeProvider>
   );
-};
+}
 
 export default SideBar;

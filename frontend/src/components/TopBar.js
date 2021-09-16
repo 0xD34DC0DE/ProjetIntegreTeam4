@@ -1,31 +1,40 @@
-import { AppBar, Icon, Toolbar, Typography, Button } from "@mui/material";
-import { makeStyles } from "@mui/styles";
-import { drawerWidth } from "./SideBar";
+import { Icon, Toolbar } from "@mui/material";
+import MuiAppBar from "@mui/material/AppBar";
+import Badge from "@mui/material/Badge";
+import IconButton from "@mui/material/IconButton";
+import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
 import React from "react";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    float: "right",
-    border: "2px solid black",
-    width: `calc(100% - ${drawerWidth}px`,
-  },
-  loginIcon: {
-    textAlign: "right",
-    flexGrow: 1,
-  },
+const AppBar = styled(MuiAppBar, {
+  shouldForwardProp: (prop) => prop,
+})(({ theme, open }) => ({
+  overflowX: "hidden",
+  float: "right",
+  width: `calc(100% - ${theme.spacing(50)})`,
+  ...(!open && {
+    width: `calc(100% - ${theme.spacing(9)})`,
+  }),
 }));
 
-export default function TopBar() {
-  const classes = useStyles();
+const mdTheme = createTheme();
 
+const TopBar = ({ open }) => {
   return (
-    <AppBar position="static" className={classes.root}>
-      <Toolbar>
-        <Icon className={classes.loginIcon} color="inherit">
-          person
-        </Icon>
-      </Toolbar>
-    </AppBar>
+    <ThemeProvider theme={mdTheme}>
+      <AppBar position="static" open={open}>
+        <Toolbar>
+          <IconButton color="inherit">
+            <Badge badgeContent={4} color="secondary">
+              <Icon>notifications</Icon>
+            </Badge>
+          </IconButton>
+          <IconButton color="inherit">
+            <Icon>account_circle</Icon>
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+    </ThemeProvider>
   );
-}
+};
+
+export default TopBar;
