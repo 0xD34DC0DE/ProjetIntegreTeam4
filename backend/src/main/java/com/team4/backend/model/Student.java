@@ -30,8 +30,7 @@ public class Student extends User {
                    String schoolName,
                    String phoneNumber,
                    StudentState studentState) {
-        super(id, email, firstName, lastName, password, registrationNumber, Role.STUDENT);
-        super.setIsEnabled(true);
+        super(id, email, firstName, lastName, password, registrationNumber, Role.STUDENT, true);
         this.schoolName = schoolName;
         this.phoneNumber = phoneNumber;
         this.studentState = studentState;

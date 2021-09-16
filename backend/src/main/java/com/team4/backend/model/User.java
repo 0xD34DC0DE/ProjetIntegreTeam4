@@ -38,7 +38,7 @@ public class User implements UserDetails, Serializable {
     private Boolean isEnabled;
 
     @Builder
-    public User(String id, String email,String firstName,String lastName,String password,String registrationNumber,Role role){
+    public User(String id, String email, String firstName,String lastName,String password,String registrationNumber,Role role, Boolean isEnabled){
         this.id = id; // Auto generated
         this.firstName = firstName;
         this.lastName = lastName;
@@ -47,6 +47,7 @@ public class User implements UserDetails, Serializable {
         this.registrationNumber = registrationNumber;
         this.role = role;
         this.registrationDate = LocalDate.now();
+        this.isEnabled = isEnabled;
     }
 
     @Override
