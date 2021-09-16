@@ -22,7 +22,7 @@ import java.util.UUID;
 public class User implements UserDetails, Serializable {
 
     @Id
-    @Getter
+    @Getter @Setter
     private String id;
 
     @Getter @Setter
@@ -38,8 +38,8 @@ public class User implements UserDetails, Serializable {
     private Boolean isEnabled;
 
     @Builder
-    public User(String email,String firstName,String lastName,String password,String registrationNumber,Role role){
-        this.id = null; // Auto generated
+    public User(String id, String email,String firstName,String lastName,String password,String registrationNumber,Role role){
+        this.id = id; // Auto generated
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
