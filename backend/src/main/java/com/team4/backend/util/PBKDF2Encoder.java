@@ -1,6 +1,7 @@
 package com.team4.backend.util;
 
 import lombok.Data;
+import lombok.SneakyThrows;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,15 +28,12 @@ public class PBKDF2Encoder implements PasswordEncoder {
     private Integer keyLength;
 
     @Override
+    @SneakyThrows
     public String encode(CharSequence cs) {
-        try {
-            byte[] result = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512")
-                    .generateSecret(new PBEKeySpec(cs.toString().toCharArray(), secret.getBytes(), iteration, keyLength))
-                    .getEncoded();
-            return Base64.getEncoder().encodeToString(result);
-        } catch (NoSuchAlgorithmException | InvalidKeySpecException ex) {
-            throw new RuntimeException(ex);
-        }
+        byte[] result = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512")
+                .generateSecret(new PBEKeySpec(cs.toString().toCharArray(), secret.getBytes(), iteration, keyLength))
+                .getEncoded();
+        return Base64.getEncoder().encodeToString(result);
     }
 
     @Override

@@ -46,7 +46,6 @@ public class SecurityContextRepositoryTest {
     @Test
     void load(){
         //ARRANGE
-
         //First mock request with a valid token, should be able to get principal
         String token1 = "ds8a8dha89y8dha88df98asfa";
         Authentication authentication1 = new UsernamePasswordAuthenticationToken("123456789@gmail.com",null, Arrays.asList(new SimpleGrantedAuthority(Role.STUDENT.toString())));
@@ -71,7 +70,6 @@ public class SecurityContextRepositoryTest {
                 MockServerHttpRequest.get("/test2/tes2t")
                         .headers(headers2)
         );
-
 
         //ACT
         Mono<SecurityContext> securityContextMono1 = securityContextRepository.load(mockServerWebExchange1);
