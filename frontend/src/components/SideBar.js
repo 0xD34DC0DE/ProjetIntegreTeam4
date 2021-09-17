@@ -10,6 +10,7 @@ import IconButton from "@mui/material/IconButton";
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import * as React from "react";
+import { useHistory } from "react-router";
 import { drawerListItems } from "../modals/drawerListItems";
 
 const Drawer = styled(MuiDrawer, {
@@ -39,6 +40,13 @@ const Drawer = styled(MuiDrawer, {
 const mdTheme = createTheme();
 
 function SideBar({ setOpen, open }) {
+  const history = useHistory();
+
+  const routeChange = (path) => {
+    console.log("path", path);
+    history.push(path);
+  };
+
   const toggleDrawer = () => {
     setOpen(!open);
   };
@@ -61,7 +69,7 @@ function SideBar({ setOpen, open }) {
         <List>
           {drawerListItems.map((item, key) => {
             return (
-              <ListItemButton key={key}>
+              <ListItemButton key={key} onClick={() => routeChange(item[2])}>
                 <ListItemIcon>
                   <Icon>{item[1]}</Icon>
                 </ListItemIcon>
