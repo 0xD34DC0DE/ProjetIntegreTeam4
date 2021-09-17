@@ -51,7 +51,7 @@ const Home = () => {
                 account_type: form.account_type
             },
             responseType: "json",
-            withCredentials: true,
+            withCredentials: true
         })
         .then((response) => {
             console.log(response);
@@ -64,21 +64,80 @@ const Home = () => {
     const displayTextFormFields = () => {
         return (
             <React.Fragment>
-                {step === 0 && <TextFormField id="email" dialogContentText="Enter your e-mail" label="E-mail" onChange={handleFormChange} value={form.email} type="email"/>}
-                {step === 1 && 
-                    <React.Fragment>
-                        <TextFormField id="first_name" dialogContentText="Enter your first name and your last name" label="First name" onChange={handleFormChange} value={form.first_name} type="text"/>
-                        <TextFormField id="last_name" dialogContentText="" label="Last name" onChange={handleFormChange} value={form.last_name} type="text"/>
-                    </React.Fragment>
-                }
-                {step === 2 && <TextFormField id="phone_number" dialogContentText="Enter your phone number" label="Phone number" onChange={handleFormChange} value={form.phone_number} type="tel"/>}
-                {step === 3 &&
-                    <React.Fragment>
-                        <TextFormField id="password" dialogContentText="Enter your password and confirm it" label="Password" onChange={handleFormChange} value={form.password} type="password"/>
-                        <TextFormField id="confirm_password" dialogContentText="" label="Confirm password" onChange={handleFormChange} value={form.confirm_password} type="password"/>
-                    </React.Fragment>
-                }
-                {step === 4 && <SelectFormField id="account_type" items={accountTypes} dialogContentText="Select your account type" label="Account type" name="account_type" onChange={handleFormChange} value={form.account_type} labelId="account_type_label"/>}
+                <TextFormField 
+                    focus={true} 
+                    id="email"
+                    dialogContentText="Enter your e-mail" 
+                    label="E-mail" 
+                    onChange={handleFormChange} 
+                    value={form.email} 
+                    type="email"
+                    visible={(step === 0)}
+                />
+                <React.Fragment>
+                    <TextFormField
+                        focus={true} 
+                        id="first_name" 
+                        dialogContentText="Enter your first name and your last name" 
+                        label="First name" 
+                        onChange={handleFormChange} 
+                        value={form.first_name} 
+                        type="text"
+                        visible={(step === 1)}
+                    />
+                    <TextFormField 
+                        id="last_name" 
+                        dialogContentText="" 
+                        label="Last name" 
+                        onChange={handleFormChange} 
+                        value={form.last_name} 
+                        type="text"
+                        visible={(step === 1)}
+                    />
+                </React.Fragment>
+                <TextFormField 
+                    focus={true} 
+                    id="phone_number" 
+                    dialogContentText="Enter your phone number" 
+                    label="Phone number" 
+                    onChange={handleFormChange} 
+                    value={form.phone_number} 
+                    type="tel"
+                    visible={(step === 2)}
+                />
+                <React.Fragment>
+                    <TextFormField 
+                        focus={true} 
+                        id="password" 
+                        dialogContentText="Enter your password and confirm it" 
+                        label="Password" 
+                        onChange={handleFormChange} 
+                        value={form.password} 
+                        type="password"
+                        visible={(step === 3)}
+                    />
+                    <TextFormField 
+                        id="confirm_password" 
+                        dialogContentText=""
+                        label="Confirm password" 
+                        onChange={handleFormChange} 
+                        value={form.confirm_password} 
+                        type="password"
+                        visible={(step === 3)}
+                    />
+                </React.Fragment>
+                <SelectFormField 
+                    focus={true} 
+                    id="account_type" 
+                    items={accountTypes} 
+                    dialogContentText="Select your account type" 
+                    label="Account type" 
+                    name="account_type"
+                    onChange={handleFormChange} 
+                    value={form.account_type} 
+                    labelId="account_type_label"
+                    visible={(step === 4)}
+                />
             </React.Fragment>
         )
     }
