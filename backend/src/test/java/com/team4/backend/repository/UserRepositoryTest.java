@@ -68,8 +68,8 @@ public class UserRepositoryTest {
         String password2 = "dsd2e32";
 
         //ACT
-        Mono<User> userMono1 = userRepository.findByEmailAndPassword(email1,password1);
-        Mono<User> userMono2 = userRepository.findByEmailAndPassword(email2,password2);
+        Mono<User> userMono1 = userRepository.findByEmailAndPasswordAndIsEnabledTrue(email1,password1);
+        Mono<User> userMono2 = userRepository.findByEmailAndPasswordAndIsEnabledTrue(email2,password2);
 
         //ASSERT
 
