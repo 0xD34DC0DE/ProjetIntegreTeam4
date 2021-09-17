@@ -48,7 +48,15 @@ public class User implements UserDetails, Serializable {
     private Boolean isEnabled;
 
     @Builder
-    public User(String id, String email, String firstName,String lastName,String password,String registrationNumber,Role role, Boolean isEnabled){
+    public User(String id,
+                String email,
+                String firstName,
+                String lastName,
+                String password,
+                String registrationNumber,
+                Role role,
+                Boolean isEnabled,
+                LocalDate registrationDate){
         this.id = id; // Auto generated
         this.firstName = firstName;
         this.lastName = lastName;
