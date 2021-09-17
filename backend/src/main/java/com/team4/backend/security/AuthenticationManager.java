@@ -13,12 +13,15 @@ import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
 
-@Component
 @Log
+@Component
 public class AuthenticationManager implements ReactiveAuthenticationManager {
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
+
+    public AuthenticationManager(JwtUtil jwtUtil) {
+        this.jwtUtil = jwtUtil;
+    }
 
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {

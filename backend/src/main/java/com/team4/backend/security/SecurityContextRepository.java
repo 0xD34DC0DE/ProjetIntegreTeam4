@@ -13,12 +13,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
-@Component
 @Log
+@Component
 public class SecurityContextRepository implements ServerSecurityContextRepository {
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final AuthenticationManager authenticationManager;
+
+    public SecurityContextRepository(AuthenticationManager authenticationManager) {
+        this.authenticationManager = authenticationManager;
+    }
 
     @Override
     public Mono<Void> save(ServerWebExchange serverWebExchange, SecurityContext securityContext) {
