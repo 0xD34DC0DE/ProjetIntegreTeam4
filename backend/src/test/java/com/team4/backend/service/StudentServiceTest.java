@@ -4,6 +4,7 @@ import com.team4.backend.dto.StudentDto;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.StudentRepository;
+import com.team4.backend.testdata.StudentMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -31,26 +32,8 @@ public class StudentServiceTest {
     void shouldCreateUser()
     {
         //ARRANGE
-        final String registrationNumber = "123456789";
-        final String email = "123456789@gmail.com";
-        final String password = "passwd";
-        final String firstName = "John";
-        final String lastName = "Doe";
-        final String schoolName = "Example school";
-        final String phoneNumber = "123-456-7890";
-
-        final StudentState studentState = StudentState.REGISTERED;
-
-        Student student = Student.studentBuilder()
-                .registrationNumber(registrationNumber)
-                .email(email)
-                .password(password)
-                .firstName(firstName)
-                .lastName(lastName)
-                .schoolName(schoolName)
-                .phoneNumber(phoneNumber)
-                .studentState(studentState)
-                .build();
+        Student student = StudentMockData.getMockStudent();
+        student.setId(null); // Id is null when coming from frontend
 
         when(studentRepository.save(student)).thenReturn(Mono.just(student).map(s -> {s.setId("aaaaa"); return s;}));
 
