@@ -24,4 +24,10 @@ public class StudentService {
         student.setPassword(pbkdf2Encoder.encode(student.getPassword()));
         return studentRepository.save(student);
     }
+
+    public Mono<Student> findByEmail(String email) {
+        return studentRepository.findByEmail(email);
+    }
+
+
 }
