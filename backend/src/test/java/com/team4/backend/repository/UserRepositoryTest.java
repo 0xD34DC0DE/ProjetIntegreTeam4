@@ -31,8 +31,8 @@ public class UserRepositoryTest {
     @BeforeAll
     void init(){
         Flux<User> users = Flux.just(
-                User.builder().registrationNumber("123456789").email("123456789@gmail.com").password("araa").build(),
-                User.builder().registrationNumber("423423432").build()
+                User.builder().registrationNumber("123456789").email("123456789@gmail.com").password("araa").isEnabled(true).build(),
+                User.builder().registrationNumber("423423432").email("423423432@gmail.com").password("lalal").isEnabled(false).build()
         );
 
         userRepository.saveAll(users);
@@ -59,7 +59,7 @@ public class UserRepositoryTest {
     }
 
     @Test
-    void findByEmailAndPassword(){
+    void findByEmailAndPasswordAndIsEnabledTrue(){
         //ARRANGE
         String email1 = "123456789@gmail.com";
         String password1 = "araa";
@@ -67,14 +67,19 @@ public class UserRepositoryTest {
         String email2 = "4esdad@gmail.com";
         String password2 = "dsd2e32";
 
+        String email3 = "423423432@gmail.com";
+        String password3 = "lalal";
+
         //ACT
         Mono<User> userMono1 = userRepository.findByEmailAndPasswordAndIsEnabledTrue(email1,password1);
         Mono<User> userMono2 = userRepository.findByEmailAndPasswordAndIsEnabledTrue(email2,password2);
+        Mono<User> userMono3 = userRepository.findByEmailAndPasswordAndIsEnabledTrue(email3,password3);
 
         //ASSERT
 
         userMono1.subscribe( user -> assertEquals(email1,user.getEmail()));
         userMono2.subscribe(Assertions::assertNull);
+        userMono3.subscribe(Assertions::assertNull);
     }
 
 
