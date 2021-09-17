@@ -2,7 +2,6 @@ package com.team4.backend.repository;
 
 import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.StudentState;
-import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,7 +27,7 @@ public class StudentRepositoryTest {
 
     @Test
     void CreateAccount() {
-
+        // TODO remove this test -> not testing "save" functionality of repository
         final String registrationNumber = "123456789";
         final String email = "123456789@gmail.com";
         final String password = "passwd";
@@ -52,9 +51,11 @@ public class StudentRepositoryTest {
 
         Mono<Student> studentMono = studentRepository.save(student);
 
+
         StepVerifier
                 .create(studentMono)
                 .assertNext(s -> {
+                    s.setPassword("encrypted");
                     assertNotNull(s.getId());
                     assertEquals(s.getRegistrationNumber(), registrationNumber);
                     assertEquals(s.getEmail(), email);
