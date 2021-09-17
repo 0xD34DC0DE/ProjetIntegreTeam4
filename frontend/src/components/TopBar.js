@@ -22,7 +22,14 @@ const TopBar = ({ open }) => {
   return (
     <ThemeProvider theme={mdTheme}>
       <AppBar position="static" open={open}>
-        <Toolbar>
+        <Toolbar
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+            px: [1],
+          }}
+        >
           <IconButton color="inherit">
             <Badge badgeContent={4} color="secondary">
               <Icon>notifications</Icon>

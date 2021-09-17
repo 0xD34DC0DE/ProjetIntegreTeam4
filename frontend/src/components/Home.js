@@ -11,7 +11,15 @@ const Home = () => {
     <>
       <TopBar setOpen={setOpen} open={open} />
       <SideBar setOpen={setOpen} open={open} />
-      <Typography variant="h1">Home</Typography>
+      <Typography
+        variant="h1"
+        component="h1"
+        sx={{
+          clear: "right",
+        }}
+      >
+        Home
+      </Typography>
       <StickyFooter />
     </>
   );
