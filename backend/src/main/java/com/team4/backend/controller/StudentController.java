@@ -22,10 +22,10 @@ public class StudentController {
     }
 
     @PostMapping("/register")
-    public Mono<ResponseEntity<Void>> register(@RequestBody StudentDto studentDto) {
-        ResponseEntity<Void> createdResponse = new ResponseEntity<>(HttpStatus.OK);
-        studentDto.setPassword(pbkdf2Encoder.encode(studentDto.getPassword()));
-        return studentService.registerStudent(StudentDto.dtoToEntity(studentDto)).map(s -> createdResponse);
+    public Mono<ServerResponse> register(@RequestBody StudentDto studentDto) {
+        return Mono.just( StudentDto.dtoToEntity(studentDto)) studentService.findByEmail(studentDto.getEmail())
+                .switchIfEmpty(studentService.registerStudent(StudentDto.dtoToEntity(studentDto))).then();
+
     }
 
 }
