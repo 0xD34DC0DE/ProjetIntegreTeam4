@@ -1,8 +1,8 @@
 
-import React, {useEffect, useState} from 'react'
-import { DialogContentText, FormControl, TextField } from '@mui/material'
+import React from "react"
+import { DialogContentText, FormControl, TextField } from "@mui/material"
 
-const FormField = (props) => {
+const TextFormField = (props) => {
     return (
         <div>
             <DialogContentText>
@@ -25,4 +25,4 @@ const FormField = (props) => {
     )
 }
 
-export default FormField
+export default TextFormField
