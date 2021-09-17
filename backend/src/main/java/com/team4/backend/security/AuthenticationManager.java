@@ -20,11 +20,10 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
     @Autowired
     private JwtUtil jwtUtil;
 
-
     @Override
     public Mono<Authentication> authenticate(Authentication authentication) {
         String authToken = authentication.getCredentials().toString();
-       String email = jwtUtil.isTokenValid(authToken) && !jwtUtil.isTokenExpired(authToken) ?jwtUtil.getEmailFromToken(authToken): "";
+        String email = jwtUtil.isTokenValid(authToken) && !jwtUtil.isTokenExpired(authToken) ? jwtUtil.getEmailFromToken(authToken) : "";
 
         return Mono.just(jwtUtil.isTokenValid(authToken) && !jwtUtil.isTokenExpired(authToken))
                 .filter(valid -> valid)

@@ -1,5 +1,6 @@
 package com.team4.backend.controller;
 
+import com.team4.backend.dto.AuthRequestDto;
 import com.team4.backend.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping("/login")
-    public Mono<String> login(@RequestParam("email") String email, @RequestParam("password") String password){
-        return userService.login(email,password);
+    public Mono<String> login(@RequestBody AuthRequestDto authRequestDto){
+        return userService.login(authRequestDto);
     }
 }

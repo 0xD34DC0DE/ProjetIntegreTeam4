@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.team4.backend.dto.AuthRequestDto;
 import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.JwtUtil;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -21,8 +22,9 @@ public class UserService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public Mono<String> login(String email, String password){
-        return userRepository.findByEmailAndPassword(email, pbkdf2Encoder.encode(password))
+    public Mono<String> login(AuthRequestDto authRequestDto){
+        return userRepository.findByEmailAndPasswordAndIsEnabledTrue(authRequestDto.getEmail(),
+                pbkdf2Encoder.encode(authRequestDto.getPassword()))
                 .map(user -> jwtUtil.generateToken(user));
 
     }
