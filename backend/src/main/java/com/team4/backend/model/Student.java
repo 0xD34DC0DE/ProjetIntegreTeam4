@@ -3,7 +3,6 @@ package com.team4.backend.model;
 import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 
