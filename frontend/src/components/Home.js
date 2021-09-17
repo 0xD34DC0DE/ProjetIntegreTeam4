@@ -1,14 +1,3 @@
-<<<<<<< HEAD
-import React from 'react';
-
-const Home = () => {
-    return (
-        <div>
-
-        </div>
-    )
-}
-=======
 import { Typography } from "@mui/material";
 import React from "react";
 import StickyFooter from "./Footer";
@@ -35,6 +24,5 @@ const Home = () => {
     </>
   );
 };
->>>>>>> d51002cce0abf4c38b8d730f5ed561a5690e28e4
 
 export default Home;
