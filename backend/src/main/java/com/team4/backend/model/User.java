@@ -64,8 +64,8 @@ public class User implements UserDetails, Serializable {
         this.password = password;
         this.registrationNumber = registrationNumber;
         this.role = role;
-        this.registrationDate = LocalDate.now();
         this.isEnabled = isEnabled;
+        this.registrationDate = Optional.ofNullable(registrationDate).orElse(LocalDate.now());
     }
 
     @Override
