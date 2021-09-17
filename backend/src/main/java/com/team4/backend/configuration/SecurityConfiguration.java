@@ -50,14 +50,5 @@ public class SecurityConfiguration {
                 .anyExchange().authenticated()
                 .and().build();
     }
-    /*
-
-
-    @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-        return http.authorizeExchange().anyExchange().permitAll().and().build();
-    }
-     */
-
 }
 
