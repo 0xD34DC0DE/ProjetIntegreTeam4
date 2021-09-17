@@ -45,15 +45,6 @@ public class StudentServiceTest {
 
         StepVerifier.create(studentMono).consumeNextWith(s -> {
             assertNotNull(s.getId());
-            assertNull(s.getPassword()); // Don't give password back to frontend
-            assertEquals(s.getRegistrationNumber(), registrationNumber);
-            assertEquals(s.getEmail(), email);
-            assertEquals(s.getFirstName(), firstName);
-            assertEquals(s.getLastName(), lastName);
-            assertEquals(s.getSchoolName(), schoolName);
-            assertEquals(s.getPhoneNumber(), phoneNumber);
-            assertEquals(s.getStudentState(), studentState);
         }).verifyComplete();
-
     }
 }
