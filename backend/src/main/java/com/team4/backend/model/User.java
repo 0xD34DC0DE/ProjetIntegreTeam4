@@ -26,7 +26,19 @@ public class User implements UserDetails, Serializable {
     private String id;
 
     @Getter @Setter
-    private String registrationNumber,email,password,firstName,lastName;
+    private String registrationNumber;
+
+    @Getter @Setter
+    private String email;
+
+    @Setter
+    private String password;
+
+    @Getter @Setter
+    private String firstName;
+
+    @Getter @Setter
+    private String lastName;
 
     @Getter @Setter
     private LocalDate registrationDate;
