@@ -5,12 +5,8 @@ import SideBar from "./SideBar";
 import TopBar from "./TopBar";
 
 const Home = () => {
-  const [open, setOpen] = React.useState(true);
-
   return (
     <>
-      <TopBar setOpen={setOpen} open={open} />
-      <SideBar setOpen={setOpen} open={open} />
       <Typography
         variant="h1"
         component="h1"
@@ -20,7 +16,6 @@ const Home = () => {
       >
         Home
       </Typography>
-      <StickyFooter />
     </>
   );
 };

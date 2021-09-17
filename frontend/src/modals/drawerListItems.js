@@ -11,5 +11,5 @@ export const drawerListItems = [
   ["Accueil", "home", "home"],
   ["Rapports", "article", "#"],
   ["Téléverser des fichiers", "upload_file", "#"],
-  ["Déposer des offres de stage", "note_add", "register"],
+  ["Déposer des offres de stage", "note_add", "offerForm"],
 ];
