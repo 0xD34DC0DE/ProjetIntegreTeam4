@@ -1,9 +1,7 @@
 package com.team4.backend.security;
 
 import com.team4.backend.util.JwtUtil;
-import io.jsonwebtoken.Claims;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.ReactiveAuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -27,8 +25,7 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
     public Mono<Authentication> authenticate(Authentication authentication) {
         String authToken = authentication.getCredentials().toString();
 
-        return Mono.just(jwtUtil.isTokenValid(authToken) && !jwtUtil.isTokenExpired(authToken))
-                .filter(isValid -> isValid)
+        return Mono.justOrEmpty(jwtUtil.isTokenValid(authToken) && !jwtUtil.isTokenExpired(authToken))
                 .map(isValid -> isValid ?
                         new UsernamePasswordAuthenticationToken(
                                 jwtUtil.getEmailFromToken(authToken),
