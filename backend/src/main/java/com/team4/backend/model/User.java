@@ -2,6 +2,8 @@ package com.team4.backend.model;
 
 import com.team4.backend.model.enums.Role;
 import lombok.*;
+import org.springframework.cglib.core.Local;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -10,18 +12,31 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @ToString
 @NoArgsConstructor
 @Document(collection = "users")
 public class User implements UserDetails, Serializable {
 
+    @Id
     @Getter @Setter
-    private String registrationNumber,email,password,firstName,lastName;
+    private String id;
+
+    @Getter @Setter
+    private String registrationNumber;
+
+    @Getter @Setter
+    private String email;
+
+    @Setter
+    private String password;
+
+    @Getter @Setter
+    private String firstName;
+
+    @Getter @Setter
+    private String lastName;
 
     @Getter @Setter
     private LocalDate registrationDate;
@@ -33,15 +48,24 @@ public class User implements UserDetails, Serializable {
     private Boolean isEnabled;
 
     @Builder
-    public User(String email,String firstName,String lastName,String password,String registrationNumber,Role role,boolean isEnabled){
+    public User(String id,
+                String email,
+                String firstName,
+                String lastName,
+                String password,
+                String registrationNumber,
+                Role role,
+                Boolean isEnabled,
+                LocalDate registrationDate){
+        this.id = id; // Auto generated
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.registrationNumber = registrationNumber;
         this.role = role;
-        this.registrationDate = LocalDate.now();
         this.isEnabled = isEnabled;
+        this.registrationDate = Optional.ofNullable(registrationDate).orElse(LocalDate.now());
     }
 
     @Override
@@ -51,7 +75,7 @@ public class User implements UserDetails, Serializable {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override

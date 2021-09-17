@@ -1,6 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.model.dto.AuthRequest;
+import com.team4.backend.dto.AuthRequestDto;
 import com.team4.backend.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -20,7 +20,7 @@ import static org.mockito.Mockito.*;
 
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
-@WebFluxTest(value = UserController.class,excludeAutoConfiguration = ReactiveSecurityAutoConfiguration.class)
+@WebFluxTest(value = UserController.class, excludeAutoConfiguration = ReactiveSecurityAutoConfiguration.class)
 public class UserControllerTest {
 
     @Autowired
@@ -29,28 +29,25 @@ public class UserControllerTest {
     @MockBean
     UserService userService;
 
-
     @Test
     public void login(){
         //ARRANGE
-        AuthRequest authRequest = new AuthRequest("12345678@gmail.com","massou123");
+        AuthRequestDto authRequestDto = new AuthRequestDto("12345678@gmail.com", "massou123");
 
-        when(userService.login(authRequest)).thenReturn(Mono.just("sadasdadsas"));
+        when(userService.login(authRequestDto)).thenReturn(Mono.just("sadasdadsas"));
 
         //ACT
         HttpStatus httpStatus= webTestClient
-                .post().uri("/user/login")
-                .bodyValue(authRequest)
+                .post()
+                .uri("/user/login")
+                .bodyValue(authRequestDto)
                 .exchange()
                 .expectStatus()
                 .isOk()
                 .expectBody(String.class).returnResult().getStatus();
 
-
         //ASSERT
         assertEquals(HttpStatus.OK,httpStatus);
     }
-
-
 
 }

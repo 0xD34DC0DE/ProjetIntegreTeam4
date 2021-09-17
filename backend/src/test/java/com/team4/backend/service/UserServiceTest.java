@@ -1,7 +1,7 @@
 package com.team4.backend.service;
 
+import com.team4.backend.dto.AuthRequestDto;
 import com.team4.backend.model.User;
-import com.team4.backend.model.dto.AuthRequest;
 import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.JwtUtil;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -35,22 +35,22 @@ public class UserServiceTest {
     @Test
     void login() {
         //ARRANGE
-        User user1 = User.builder().registrationNumber("123456789").email("123456789@gmail.com").isEnabled(true).password("araa").build();
-        AuthRequest authRequest1 = new AuthRequest(user1.getEmail(),user1.getPassword());
-        String token = "adasdadadsas";
+        User user1 = User.builder().registrationNumber("123456789").email("123456789@gmail.com").password("p@22w0rd").build();
+        AuthRequestDto authRequestDto1 = new AuthRequestDto(user1.getEmail(), user1.getPassword());
+        String token = "123456789";
 
         when(userRepository.findByEmailAndPasswordAndIsEnabledTrue(user1.getEmail(), pbkdf2Encoder.encode(user1.getPassword()))).thenReturn(Mono.just(user1));
-        when(jwtUtil.generateToken(user1)).thenReturn("adasdadadsas");
+        when(jwtUtil.generateToken(user1)).thenReturn("123456789");
 
 
-        User user2 = User.builder().registrationNumber("342432423").email("342432423@gmail.com").password("fdsfsd").isEnabled(true).build();
-        AuthRequest authRequest2 = new AuthRequest(user2.getEmail(),user2.getPassword());
+        User user2 = User.builder().registrationNumber("342432423").email("342432423@gmail.com").password("p@ssw0rd").build();
+        AuthRequestDto authRequestDto2 = new AuthRequestDto(user2.getEmail(), user2.getPassword());
 
         when(userRepository.findByEmailAndPasswordAndIsEnabledTrue(user2.getEmail(), pbkdf2Encoder.encode(user2.getPassword()))).thenReturn(Mono.empty());
 
         //ACT
-        Mono<String> returnedToken1 = userService.login(authRequest1);
-        Mono<String> returnedToken2 = userService.login(authRequest2);
+        Mono<String> returnedToken1 = userService.login(authRequestDto1);
+        Mono<String> returnedToken2 = userService.login(authRequestDto2);
 
         //ASSERT
         returnedToken1.subscribe(subToken -> assertEquals(token, subToken));
