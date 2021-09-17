@@ -6,6 +6,8 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
+
 
 @Data
 @NoArgsConstructor
@@ -29,8 +31,17 @@ public class Student extends User {
                    String registrationNumber,
                    String schoolName,
                    String phoneNumber,
-                   StudentState studentState) {
-        super(id, email, firstName, lastName, password, registrationNumber, Role.STUDENT, true);
+                   StudentState studentState,
+                   LocalDate registrationDate) {
+        super(id,
+                email,
+                firstName,
+                lastName,
+                password,
+                registrationNumber,
+                Role.STUDENT,
+                true,
+                registrationDate);
         this.schoolName = schoolName;
         this.phoneNumber = phoneNumber;
         this.studentState = studentState;
