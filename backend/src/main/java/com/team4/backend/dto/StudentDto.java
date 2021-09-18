@@ -31,7 +31,7 @@ public class StudentDto extends UserDto {
                       String schoolName,
                       String phoneNumber,
                       StudentState studentState) {
-        super(id, registrationNumber, email, password, firstName, lastName, registrationDate, role);
+        super(id, registrationNumber, email, password, firstName, lastName, registrationDate,phoneNumber, role);
         this.schoolName = schoolName;
         this.phoneNumber = phoneNumber;
         this.studentState = studentState;
