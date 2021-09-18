@@ -33,14 +33,14 @@ public class AuthenticationManagerTest {
     @Test
     void authenticate() {
         //ARRANGE
-        String token1 = "dsaouaau3r0quea-2342";
+        String token1 = "validToken";
         String email1 = "123456789@gmail.com";
 
         when(jwtUtil.isTokenValid(token1) && !jwtUtil.isTokenExpired(token1)).thenReturn(true);
         when(jwtUtil.getEmailFromToken(token1)).thenReturn(email1);
         when(jwtUtil.getAllClaimsFromToken(token1)).thenReturn(new DefaultClaims(Collections.singletonMap("role", Role.STUDENT)));
 
-        String token2 = "sdio89afoishajasl";
+        String token2 = "invalidToken";
 
         when(jwtUtil.isTokenValid(token2) && !jwtUtil.isTokenExpired(token2)).thenReturn(false);
 
