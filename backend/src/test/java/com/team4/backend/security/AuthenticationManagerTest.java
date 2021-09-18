@@ -1,15 +1,14 @@
 package com.team4.backend.security;
 
 import com.team4.backend.model.enums.Role;
+import com.team4.backend.testdata.SecurityMockData;
 import com.team4.backend.util.JwtUtil;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.impl.DefaultClaims;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import reactor.core.publisher.Mono;
 
@@ -45,8 +44,8 @@ public class AuthenticationManagerTest {
         when(jwtUtil.isTokenValid(token2) && !jwtUtil.isTokenExpired(token2)).thenReturn(false);
 
         //ACT
-        Mono<Authentication> authentication1 = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(token1,token1));
-        Mono<Authentication> authentication2 = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(token2,token2));
+        Mono<Authentication> authentication1 = authenticationManager.authenticate(SecurityMockData.createAuthentication(token1));
+        Mono<Authentication> authentication2 = authenticationManager.authenticate(SecurityMockData.createAuthentication(token2));
 
         //ASSERT
         authentication1.subscribe(auth -> assertEquals(email1,auth.getPrincipal()));

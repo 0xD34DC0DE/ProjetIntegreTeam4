@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Log
 @ExtendWith(SpringExtension.class)
 @DataMongoTest
-@ContextConfiguration(classes ={PBKDF2Encoder.class})
+@ContextConfiguration(classes = {PBKDF2Encoder.class})
 @EnableAutoConfiguration
 public class PBKDF2EncoderTest {
 
@@ -53,8 +53,8 @@ public class PBKDF2EncoderTest {
                 .getEncoded());
 
         //ACT
-        boolean passwordMatches = pbkdf2Encoder.matches(passwordEntered,encodedPassword);
-        boolean passwordNotMatching = pbkdf2Encoder.matches(wrongPassword,encodedPassword);
+        boolean passwordMatches = pbkdf2Encoder.matches(passwordEntered, encodedPassword);
+        boolean passwordNotMatching = pbkdf2Encoder.matches(wrongPassword, encodedPassword);
 
         //ASSERT
         assertTrue(passwordMatches);
