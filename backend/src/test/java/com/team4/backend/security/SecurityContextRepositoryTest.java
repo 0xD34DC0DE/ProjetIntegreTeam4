@@ -11,6 +11,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import java.util.Arrays;
 
@@ -27,18 +28,18 @@ public class SecurityContextRepositoryTest {
     SecurityContextRepository securityContextRepository;
 
     @Test
-    void save(){
+    void save() {
         //ASSERT
-        assertThrows(UnsupportedOperationException.class,()->securityContextRepository.save(null,null));
+        assertThrows(UnsupportedOperationException.class, () -> securityContextRepository.save(null, null));
     }
 
 
     @Test
-    void load(){
+    void load() {
         //ARRANGE
         //First mock request with a valid token, should be able to get principal
         String token1 = "ds8a8dha89y8dha88df98asfa";
-        Authentication authentication1 = SecurityMockData.createAuthentication("123456789@gmail.com",null,Arrays.asList(new SimpleGrantedAuthority(Role.STUDENT.toString())));
+        Authentication authentication1 = SecurityMockData.createAuthentication("123456789@gmail.com", null, Arrays.asList(new SimpleGrantedAuthority(Role.STUDENT.toString())));
 
         when(authenticationManager.authenticate(SecurityMockData.createAuthentication(token1))).thenReturn(Mono.just(authentication1));
 
@@ -48,11 +49,16 @@ public class SecurityContextRepositoryTest {
         when(authenticationManager.authenticate(SecurityMockData.createAuthentication(token2))).thenReturn(Mono.just(authentication2));
 
         //ACT
-        Mono<SecurityContext> securityContextMono1 = securityContextRepository.load(SecurityMockData.createMockWebExchange("/test1/test1",token1));
-        Mono<SecurityContext> securityContextMono2 = securityContextRepository.load(SecurityMockData.createMockWebExchange("/test2/test2",token2));
+        Mono<SecurityContext> securityContextMono1 = securityContextRepository.load(SecurityMockData.createMockWebExchange("/test1/test1", token1));
+        Mono<SecurityContext> securityContextMono2 = securityContextRepository.load(SecurityMockData.createMockWebExchange("/test2/test2", token2));
 
         //ASSERT
-        securityContextMono1.subscribe(securityContext -> assertFalse(securityContext.getAuthentication().getPrincipal().toString().isEmpty()));
-        securityContextMono2.subscribe(securityContext -> assertTrue(securityContext.getAuthentication().getPrincipal().toString().isEmpty()));
+        StepVerifier.create(securityContextMono1)
+                .consumeNextWith(securityContext -> assertFalse(securityContext.getAuthentication().getPrincipal().toString().isEmpty()))
+                .verifyComplete();
+
+        StepVerifier.create(securityContextMono2)
+                .consumeNextWith(securityContext -> assertTrue(securityContext.getAuthentication().getPrincipal().toString().isEmpty()))
+                .verifyComplete();
     }
 }

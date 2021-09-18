@@ -17,6 +17,7 @@ import reactor.test.StepVerifier;
 
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -56,11 +57,10 @@ public class UserServiceTest {
 
         //ASSERT
         StepVerifier.create(returnedToken1)
-                .assertNext(subToken -> assertEquals(token,subToken))
-                .expectComplete().verify();
+                .consumeNextWith(subToken -> assertEquals(token,subToken))
+                .verifyComplete();
 
-        StepVerifier.create(returnedToken2)
-                .expectError(ResponseStatusException.class).verify();
+        StepVerifier.create(returnedToken2).verifyError(ResponseStatusException.class);
     }
 
 

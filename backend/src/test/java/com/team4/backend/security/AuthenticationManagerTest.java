@@ -11,6 +11,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 
 import java.util.Collections;
@@ -48,7 +49,11 @@ public class AuthenticationManagerTest {
         Mono<Authentication> authentication2 = authenticationManager.authenticate(SecurityMockData.createAuthentication(token2));
 
         //ASSERT
-        authentication1.subscribe(auth -> assertEquals(email1,auth.getPrincipal()));
-        authentication2.subscribe(auth -> assertTrue(auth.getPrincipal().toString().isEmpty()));
+        StepVerifier.create(authentication1)
+                .consumeNextWith(auth -> assertEquals(email1,auth.getPrincipal()))
+                .verifyComplete();
+
+        StepVerifier.create(authentication2)
+                .consumeNextWith(auth -> assertTrue(auth.getPrincipal().toString().isEmpty())).verifyComplete();
     }
 }

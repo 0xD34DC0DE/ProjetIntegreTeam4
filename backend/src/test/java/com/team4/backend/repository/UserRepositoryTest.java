@@ -14,6 +14,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -53,8 +54,7 @@ public class UserRepositoryTest {
         Mono<User> userMono2 = userRepository.findByRegistrationNumberAndPassword(registrationNumber2,password2);
 
         //ASSERT
-
-        userMono1.subscribe( user -> assertEquals(registrationNumber1,user.getRegistrationNumber()));
+        userMono1.subscribe(user -> assertEquals(registrationNumber1,user.getRegistrationNumber()));
         userMono2.subscribe(Assertions::assertNull);
     }
 
