@@ -1,8 +1,8 @@
 package com.team4.backend.model;
 
+import com.team4.backend.meta.ExcludeFromGeneratedCoverage;
 import com.team4.backend.model.enums.Role;
 import lombok.*;
-import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,40 +11,32 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.*;
 
 @ToString
+@Data
 @NoArgsConstructor
 @Document(collection = "users")
 public class User implements UserDetails, Serializable {
 
     @Id
-    @Getter @Setter
     private String id;
 
-    @Getter @Setter
     private String registrationNumber;
 
-    @Getter @Setter
     private String email;
 
     @Setter
     private String password;
 
-    @Getter @Setter
     private String firstName;
 
-    @Getter @Setter
     private String lastName;
 
-    @Getter @Setter
     private LocalDate registrationDate;
 
-    @Getter @Setter
     private Role role;
 
-    @Getter @Setter
     private Boolean isEnabled;
 
     @Builder
@@ -70,7 +62,7 @@ public class User implements UserDetails, Serializable {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority(role.name()));
+        return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
     }
 
     @Override
@@ -79,21 +71,25 @@ public class User implements UserDetails, Serializable {
     }
 
     @Override
+    @ExcludeFromGeneratedCoverage
     public String getUsername() {
         return null;
     }
 
     @Override
+    @ExcludeFromGeneratedCoverage
     public boolean isAccountNonExpired() {
         return false;
     }
 
     @Override
+    @ExcludeFromGeneratedCoverage
     public boolean isAccountNonLocked() {
         return false;
     }
 
     @Override
+    @ExcludeFromGeneratedCoverage
     public boolean isCredentialsNonExpired() {
         return false;
     }
