@@ -38,13 +38,13 @@ public class SecurityContextRepositoryTest {
     void load() {
         //ARRANGE
         //First mock request with a valid token, should be able to get principal
-        String token1 = "ds8a8dha89y8dha88df98asfa";
+        String token1 = "validToken";
         Authentication authentication1 = SecurityMockData.createAuthentication("123456789@gmail.com", null, Arrays.asList(new SimpleGrantedAuthority(Role.STUDENT.toString())));
 
         when(authenticationManager.authenticate(SecurityMockData.createAuthentication(token1))).thenReturn(Mono.just(authentication1));
 
         //Second mock request with invalid token/empty headers, should not initialize a security context
-        String token2 = "324fdw345rewq23432123123";
+        String token2 = "invalidToken";
         Authentication authentication2 = SecurityMockData.createAuthentication("");
         when(authenticationManager.authenticate(SecurityMockData.createAuthentication(token2))).thenReturn(Mono.just(authentication2));
 
