@@ -1,10 +1,9 @@
 package com.team4.backend.service;
 
-import com.team4.backend.dto.StudentDto;
 import com.team4.backend.model.Student;
-import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.testdata.StudentMockData;
+import com.team4.backend.util.PBKDF2Encoder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +15,7 @@ import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
@@ -24,6 +24,9 @@ public class StudentServiceTest {
 
     @Mock
     StudentRepository studentRepository;
+
+    @Mock
+    PBKDF2Encoder pbkdf2Encoder;
 
     @InjectMocks
     StudentService studentService;
@@ -36,6 +39,8 @@ public class StudentServiceTest {
         student.setId(null); // Id is null when coming from frontend
 
         when(studentRepository.save(student)).thenReturn(Mono.just(student).map(s -> {s.setId("aaaaa"); return s;}));
+
+        when(pbkdf2Encoder.encode(any(String.class))).thenReturn("encrypted");
 
         //ACT
 
