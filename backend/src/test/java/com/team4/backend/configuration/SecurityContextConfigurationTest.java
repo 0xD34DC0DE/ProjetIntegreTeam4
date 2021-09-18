@@ -46,7 +46,7 @@ public class SecurityContextConfigurationTest {
     @Test
     void securityWebFilterChainWithInvalidToken() {
         //ARRANGE
-        String token1 = "dasdasdaaqwrqq3dsa";
+        String token1 = "invalidToken";
         Authentication authentication = SecurityMockData.createAuthentication("");
 
         when(authenticationManager.authenticate(any())).thenReturn(Mono.just(authentication));
