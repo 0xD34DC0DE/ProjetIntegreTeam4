@@ -44,7 +44,7 @@ public class SecurityContextConfigurationTest {
     WebTestClient webTestClient;
 
     @Test
-    void securityWebFilterChainWithInvalidToken(){
+    void securityWebFilterChainWithInvalidToken() {
         //ARRANGE
         String token1 = "dasdasdaaqwrqq3dsa";
         Authentication authentication = SecurityMockData.createAuthentication("");
@@ -54,16 +54,15 @@ public class SecurityContextConfigurationTest {
 
         //ACT
         HttpStatus httpStatus1 = webTestClient.get().uri("/person/personByNameFirstLetter/W")
-                .header(HttpHeaders.AUTHORIZATION,"Bearer " + token1)
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + token1)
                 .exchange().returnResult(ExamplePerson.class).getStatus();
 
-
         //ASSERT
-        assertEquals(HttpStatus.FORBIDDEN,httpStatus1);
+        assertEquals(HttpStatus.FORBIDDEN, httpStatus1);
     }
 
     @Test
-    void securityWebFilterChainWithNoAuthorizationHeader(){
+    void securityWebFilterChainWithNoAuthorizationHeader() {
         //ARRANGE
         when(authenticationManager.authenticate(any())).thenReturn(Mono.empty());
         when(securityContextRepository.load(any())).thenReturn(Mono.empty());
@@ -73,6 +72,6 @@ public class SecurityContextConfigurationTest {
                 .exchange().returnResult(ExamplePerson.class).getStatus();
 
         //ASSERT
-        assertEquals(HttpStatus.UNAUTHORIZED,httpStatus1);
+        assertEquals(HttpStatus.UNAUTHORIZED, httpStatus1);
     }
 }

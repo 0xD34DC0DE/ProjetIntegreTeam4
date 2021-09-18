@@ -5,7 +5,6 @@ import com.team4.backend.model.User;
 import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.JwtUtil;
 import com.team4.backend.util.PBKDF2Encoder;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -17,7 +16,6 @@ import reactor.test.StepVerifier;
 
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -57,7 +55,7 @@ public class UserServiceTest {
 
         //ASSERT
         StepVerifier.create(returnedToken1)
-                .consumeNextWith(subToken -> assertEquals(token,subToken))
+                .consumeNextWith(t -> assertEquals(token,t))
                 .verifyComplete();
 
         StepVerifier.create(returnedToken2).verifyError(ResponseStatusException.class);
