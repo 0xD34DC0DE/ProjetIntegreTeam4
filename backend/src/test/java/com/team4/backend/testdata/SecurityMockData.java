@@ -12,12 +12,12 @@ import java.util.List;
 
 public abstract class SecurityMockData {
 
-    public static UsernamePasswordAuthenticationToken createAuthentication(String token){
-        return new UsernamePasswordAuthenticationToken(token,token);
+    public static UsernamePasswordAuthenticationToken createAuthentication(String principal){
+        return new UsernamePasswordAuthenticationToken(principal,principal);
     }
 
-    public static UsernamePasswordAuthenticationToken createAuthentication(String username, String credentials, List<SimpleGrantedAuthority> simpleGrantedAuthorities){
-        return new UsernamePasswordAuthenticationToken(username,credentials,simpleGrantedAuthorities);
+    public static UsernamePasswordAuthenticationToken createAuthentication(String principal, String credentials, List<SimpleGrantedAuthority> simpleGrantedAuthorities){
+        return new UsernamePasswordAuthenticationToken(principal,credentials,simpleGrantedAuthorities);
     }
 
 

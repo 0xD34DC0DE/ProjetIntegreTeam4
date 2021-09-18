@@ -14,7 +14,6 @@ import reactor.core.publisher.Mono;
 
 @RestController
 @RequestMapping("/person")
-@Log
 public class PersonController {
 
     private final PersonService personService;
