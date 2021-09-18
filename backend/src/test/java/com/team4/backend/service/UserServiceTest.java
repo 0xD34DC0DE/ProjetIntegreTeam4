@@ -11,7 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -53,8 +55,12 @@ public class UserServiceTest {
         Mono<String> returnedToken2 = userService.login(authRequestDto2);
 
         //ASSERT
-        returnedToken1.subscribe(subToken -> assertEquals(token, subToken));
-        returnedToken2.subscribe(Assertions::assertNull);
+        StepVerifier.create(returnedToken1)
+                .assertNext(subToken -> assertEquals(token,subToken))
+                .expectComplete().verify();
+
+        StepVerifier.create(returnedToken2)
+                .expectError(ResponseStatusException.class).verify();
     }
 
 

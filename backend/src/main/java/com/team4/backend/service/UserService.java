@@ -5,7 +5,9 @@ import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.JwtUtil;
 import com.team4.backend.util.PBKDF2Encoder;
 import lombok.extern.java.Log;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 @Log
@@ -25,9 +27,9 @@ public class UserService {
     }
 
     public Mono<String> login(AuthRequestDto authRequestDto) {
-        return userRepository.findByEmailAndPasswordAndIsEnabledTrue(authRequestDto.getEmail(),
-                pbkdf2Encoder.encode(authRequestDto.getPassword()))
-                .map(jwtUtil::generateToken);
+        return userRepository.findByEmailAndPasswordAndIsEnabledTrue(authRequestDto.getEmail(), pbkdf2Encoder.encode(authRequestDto.getPassword()))
+                .map(jwtUtil::generateToken)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Can't find user with this credentials")));
 
     }
 
