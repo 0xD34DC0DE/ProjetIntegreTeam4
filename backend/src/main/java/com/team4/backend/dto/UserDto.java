@@ -3,12 +3,13 @@ package com.team4.backend.dto;
 import com.team4.backend.model.enums.Role;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Optional;
 
 @Data
 @NoArgsConstructor
-public class UserDto {
+public class UserDto implements Serializable {
 
     protected String id;
 
