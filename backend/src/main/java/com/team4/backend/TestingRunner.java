@@ -4,6 +4,7 @@ import com.team4.backend.model.ExamplePerson;
 import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;
 import com.team4.backend.repository.PersonRepository;
+import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.slf4j.Logger;
@@ -34,6 +35,9 @@ public class TestingRunner implements ApplicationRunner {
     private UserRepository userRepository;
 
     @Autowired
+    private StudentRepository studentRepository;
+
+    @Autowired
     private PBKDF2Encoder pbkdf2Encoder;
 
     //@Autowired
@@ -44,6 +48,7 @@ public class TestingRunner implements ApplicationRunner {
     @Override
     public void run(final ApplicationArguments args) {
         userRepository.deleteAll().block();
+        studentRepository.deleteAll().block();
 
         personRepository.deleteAll().block();
         String[] names = new String[]{
