@@ -1,10 +1,7 @@
-import { Typography } from "@mui/material";
 import React from "react";
-import StickyFooter from "./Footer";
-import SideBar from "./SideBar";
-import TopBar from "./TopBar";
+import { Typography } from "@mui/material";
 
-const Home = () => {
+function Home() {
   return (
     <>
       <Typography
@@ -18,6 +15,6 @@ const Home = () => {
       </Typography>
     </>
   );
-};
+}
 
 export default Home;
