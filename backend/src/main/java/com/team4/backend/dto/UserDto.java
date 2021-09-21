@@ -3,28 +3,31 @@ package com.team4.backend.dto;
 import com.team4.backend.model.enums.Role;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Optional;
 
 @Data
 @NoArgsConstructor
-public class UserDto {
+public class UserDto implements Serializable {
 
-    private String id;
+    protected String id;
 
-    private String registrationNumber;
+    protected String registrationNumber;
 
-    private String email;
+    protected String email;
 
-    private String password;
+    protected String password;
 
-    private String firstName;
+    protected String firstName;
 
-    private String lastName;
+    protected String lastName;
 
-    private LocalDate registrationDate;
+    protected String phoneNumber;
 
-    private Role role;
+    protected LocalDate registrationDate;
+
+    protected Role role;
 
     public UserDto(String id,
                    String registrationNumber,
@@ -33,6 +36,7 @@ public class UserDto {
                    String firstName,
                    String lastName,
                    LocalDate registrationDate,
+                   String phoneNumber,
                    Role role) {
         this.id = id;
         this.registrationNumber = registrationNumber;
@@ -40,6 +44,7 @@ public class UserDto {
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
         this.registrationDate = Optional.ofNullable(registrationDate).orElse(LocalDate.now());
         this.role = role;
     }

@@ -6,27 +6,31 @@ import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.JwtUtil;
 import com.team4.backend.util.PBKDF2Encoder;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
-@Service
 @Log
+@Service
 public class UserService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private PBKDF2Encoder pbkdf2Encoder;
+    private final PBKDF2Encoder pbkdf2Encoder;
 
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
 
-    public Mono<String> login(AuthRequestDto authRequestDto){
-        return userRepository.findByEmailAndPasswordAndIsEnabledTrue(authRequestDto.getEmail(),
-                pbkdf2Encoder.encode(authRequestDto.getPassword()))
-                .map(user -> jwtUtil.generateToken(user));
+    public UserService(UserRepository userRepository, PBKDF2Encoder pbkdf2Encoder, JwtUtil jwtUtil) {
+        this.userRepository = userRepository;
+        this.pbkdf2Encoder = pbkdf2Encoder;
+        this.jwtUtil = jwtUtil;
+    }
+
+    public Mono<String> login(AuthRequestDto authRequestDto) {
+        return userRepository.findByEmailAndPasswordAndIsEnabledTrue(authRequestDto.getEmail(), pbkdf2Encoder.encode(authRequestDto.getPassword()))
+                .map(jwtUtil::generateToken)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Can't find user with this credentials")));
 
     }
 

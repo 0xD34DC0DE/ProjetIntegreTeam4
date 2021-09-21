@@ -1,8 +1,8 @@
 package com.team4.backend.model;
 
-import com.team4.backend.meta.ExcludeFromGeneratedCoverage;
 import com.team4.backend.model.enums.Role;
 import lombok.*;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,33 +11,35 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @ToString
 @Data
 @NoArgsConstructor
 @Document(collection = "users")
-public class User implements UserDetails, Serializable {
+public class User implements  Serializable {
 
     @Id
-    private String id;
+    protected String id;
 
-    private String registrationNumber;
+    protected String registrationNumber;
 
-    private String email;
+    protected String email;
 
-    @Setter
-    private String password;
+    protected String password;
 
-    private String firstName;
+    protected String firstName;
 
-    private String lastName;
+    protected String lastName;
 
-    private LocalDate registrationDate;
+    protected String phoneNumber;
 
-    private Role role;
+    protected LocalDate registrationDate;
 
-    private Boolean isEnabled;
+    protected Role role;
+
+    protected Boolean isEnabled;
 
     @Builder
     public User(String id,
@@ -46,6 +48,7 @@ public class User implements UserDetails, Serializable {
                 String lastName,
                 String password,
                 String registrationNumber,
+                String phoneNumber,
                 Role role,
                 Boolean isEnabled,
                 LocalDate registrationDate){
@@ -55,47 +58,10 @@ public class User implements UserDetails, Serializable {
         this.email = email;
         this.password = password;
         this.registrationNumber = registrationNumber;
+        this.phoneNumber = phoneNumber;
         this.role = role;
         this.isEnabled = isEnabled;
         this.registrationDate = Optional.ofNullable(registrationDate).orElse(LocalDate.now());
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Collections.singletonList(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    @ExcludeFromGeneratedCoverage
-    public String getUsername() {
-        return null;
-    }
-
-    @Override
-    @ExcludeFromGeneratedCoverage
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    @ExcludeFromGeneratedCoverage
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    @ExcludeFromGeneratedCoverage
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.isEnabled;
-    }
 }

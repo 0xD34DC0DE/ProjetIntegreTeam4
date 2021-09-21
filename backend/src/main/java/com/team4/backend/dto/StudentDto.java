@@ -5,17 +5,16 @@ import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
 import lombok.*;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class StudentDto extends UserDto {
+public class StudentDto extends UserDto implements Serializable {
 
     private String schoolName;
-
-    private String phoneNumber;
 
     private StudentState studentState;
 
@@ -31,9 +30,8 @@ public class StudentDto extends UserDto {
                       String schoolName,
                       String phoneNumber,
                       StudentState studentState) {
-        super(id, registrationNumber, email, password, firstName, lastName, registrationDate, role);
+        super(id, registrationNumber, email, password, firstName, lastName, registrationDate,phoneNumber, role);
         this.schoolName = schoolName;
-        this.phoneNumber = phoneNumber;
         this.studentState = studentState;
     }
 

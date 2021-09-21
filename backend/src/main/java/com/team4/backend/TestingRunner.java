@@ -4,7 +4,6 @@ import com.team4.backend.model.ExamplePerson;
 import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;
 import com.team4.backend.repository.PersonRepository;
-import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.slf4j.Logger;
@@ -26,29 +25,21 @@ public class TestingRunner implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(TestingRunner.class);
 
-    //private final PersonRepository personRepository;
+    private final PersonRepository personRepository;
 
-    @Autowired
-    private PersonRepository personRepository;
+    private final UserRepository userRepository;
 
-    @Autowired
-    private UserRepository userRepository;
+    private final PBKDF2Encoder pbkdf2Encoder;
 
-    @Autowired
-    private StudentRepository studentRepository;
-
-    @Autowired
-    private PBKDF2Encoder pbkdf2Encoder;
-
-    //@Autowired
-    //TestingRunner(PersonRepository personRepository) {
-    //    this.personRepository = personRepository;
-    //}
+    TestingRunner(PersonRepository personRepository,UserRepository userRepository,PBKDF2Encoder pbkdf2Encoder) {
+        this.personRepository = personRepository;
+        this.userRepository = userRepository;
+        this.pbkdf2Encoder = pbkdf2Encoder;
+    }
 
     @Override
     public void run(final ApplicationArguments args) {
         userRepository.deleteAll().block();
-        studentRepository.deleteAll().block();
 
         personRepository.deleteAll().block();
         String[] names = new String[]{
