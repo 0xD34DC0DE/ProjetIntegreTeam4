@@ -9,6 +9,7 @@ import axios from "axios"
 const Home = () => {
     const [step, setStep] = useState(0)
     const [formValid, setFormValid] = useState(false)
+    const [open, setOpen] = useState(true)
 
     const [form, setForm] = useState({
         email: "",
@@ -75,10 +76,10 @@ const Home = () => {
                 const re = /(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?/g
                 !re.test(form.phone_number) ? updateErrorMessage("phone_number", "Invalid phone number") : updateErrorMessage("phone_number", "") 
             } break;
-            case 3:
-                // What length should registration be and regex to allow only numbers?
-                form.registration_number.length > 0  ? updateErrorMessage("registration_number", "") : updateErrorMessage("registration_number", "Registration number cannot be empty")
-            break;
+            case 3: {
+                const re = /^[0-9]+$/
+                re.test(form.registration_number) && form.registration_number.length > 0  ? updateErrorMessage("registration_number", "") : updateErrorMessage("registration_number", "Registration number cannot be empty or contain characters")
+            } break;
             case 4:
                 // Allow spaces?
                 form.password.length > 0 ? updateErrorMessage("password", "") : updateErrorMessage("password", "Password cannot be empty")
@@ -92,7 +93,7 @@ const Home = () => {
     const register = () => {
         axios({
             method: "POST",
-            url: "http://localhost:8080/user/register",
+            url: "http://localhost:8080/student/register",
             data: {
                 email: form.email,
                 password: form.password,
@@ -102,10 +103,10 @@ const Home = () => {
                 last_name: form.last_name,
                 account_type: form.account_type
             },
-            responseType: "json",
-            withCredentials: true
+            responseType: "json"
         })
         .then((response) => {
+            setOpen(false)
             console.log(response);
         })
         .catch((error) => {
@@ -213,7 +214,7 @@ const Home = () => {
 
     return (
         <>
-            <Dialog open={true}>
+            <Dialog open={open}>
                 <Typography variant="h4" sx={{ml: 3, mt: 3}}>Register <Create sx={{ml: 1}}/></Typography>
                 <DialogContent sx={{minWidth: 425}}>
                     {displayTextFormFields()}
