@@ -2,7 +2,6 @@ package com.team4.backend.repository;
 
 import com.team4.backend.model.User;
 import lombok.extern.java.Log;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -14,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -22,25 +22,25 @@ import static org.junit.jupiter.api.Assertions.*;
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ContextConfiguration(classes ={UserRepository.class})
+@ContextConfiguration(classes = {UserRepository.class})
 public class UserRepositoryTest {
 
     @Autowired
     UserRepository userRepository;
 
     @BeforeAll
-    void init(){
+    void init() {
         Flux<User> users = Flux.just(
                 User.builder().registrationNumber("123456789").email("123456789@gmail.com").password("araa").isEnabled(true).build(),
                 User.builder().registrationNumber("423423432").email("423423432@gmail.com").password("lalal").isEnabled(false).build()
         );
 
-        userRepository.saveAll(users);
+        userRepository.saveAll(users).subscribe();
 
     }
 
     @Test
-    void findByRegistrationNumberAndPassword(){
+    void findByRegistrationNumberAndPassword() {
         //ARRANGE
         String registrationNumber1 = "123456789";
         String password1 = "araa";
@@ -49,17 +49,18 @@ public class UserRepositoryTest {
         String password2 = "dsd2e32";
 
         //ACT
-        Mono<User> userMono1 = userRepository.findByRegistrationNumberAndPassword(registrationNumber1,password1);
-        Mono<User> userMono2 = userRepository.findByRegistrationNumberAndPassword(registrationNumber2,password2);
+        Mono<User> userMono1 = userRepository.findByRegistrationNumberAndPassword(registrationNumber1, password1);
+        Mono<User> userMono2 = userRepository.findByRegistrationNumberAndPassword(registrationNumber2, password2);
 
         //ASSERT
-
-        userMono1.subscribe( user -> assertEquals(registrationNumber1,user.getRegistrationNumber()));
-        userMono2.subscribe(Assertions::assertNull);
+        StepVerifier.create(userMono1)
+                .consumeNextWith(user -> assertEquals(registrationNumber1, user.getRegistrationNumber()))
+                .verifyComplete();
+        StepVerifier.create(userMono2).expectNextCount(0).verifyComplete();
     }
 
     @Test
-    void findByEmailAndPasswordAndIsEnabledTrue(){
+    void findByEmailAndPasswordAndIsEnabledTrue() {
         //ARRANGE
         String email1 = "123456789@gmail.com";
         String password1 = "araa";
@@ -71,16 +72,16 @@ public class UserRepositoryTest {
         String password3 = "lalal";
 
         //ACT
-        Mono<User> userMono1 = userRepository.findByEmailAndPasswordAndIsEnabledTrue(email1,password1);
-        Mono<User> userMono2 = userRepository.findByEmailAndPasswordAndIsEnabledTrue(email2,password2);
-        Mono<User> userMono3 = userRepository.findByEmailAndPasswordAndIsEnabledTrue(email3,password3);
+        Mono<User> userMono1 = userRepository.findByEmailAndPasswordAndIsEnabledTrue(email1, password1);
+        Mono<User> userMono2 = userRepository.findByEmailAndPasswordAndIsEnabledTrue(email2, password2);
+        Mono<User> userMono3 = userRepository.findByEmailAndPasswordAndIsEnabledTrue(email3, password3);
 
         //ASSERT
 
-        userMono1.subscribe( user -> assertEquals(email1,user.getEmail()));
-        userMono2.subscribe(Assertions::assertNull);
-        userMono3.subscribe(Assertions::assertNull);
+        StepVerifier.create(userMono1)
+                .consumeNextWith(user -> assertEquals(email1, user.getEmail()))
+                .verifyComplete();
+        StepVerifier.create(userMono2).expectNextCount(0).verifyComplete();
+        StepVerifier.create(userMono3).expectNextCount(0).verifyComplete();
     }
-
-
 }

@@ -17,8 +17,6 @@ public class Student extends User {
 
     private String schoolName;
 
-    private String phoneNumber;
-
     private StudentState studentState;
 
     @Builder(builderMethodName = "studentBuilder")
@@ -38,6 +36,7 @@ public class Student extends User {
                 lastName,
                 password,
                 registrationNumber,
+                phoneNumber,
                 Role.STUDENT,
                 true,
                 registrationDate);
