@@ -11,6 +11,12 @@ const Home = () => {
     const [formValid, setFormValid] = useState(false)
     const [open, setOpen] = useState(true)
 
+    const validationRegex = {
+        email: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+        phoneNumber: /(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?/g,
+        registrationNumber: /^[0-9]+$/
+    }
+
     const [form, setForm] = useState({
         email: "",
         password: "",
@@ -34,7 +40,10 @@ const Home = () => {
 
     const stepCount = 6;
 
-    const accountTypes = [{value: 1, type: "Étudiant"}, {value: 2, type: "Superviseur"}]
+    const accountTypes = [
+        {value: 1, type: "Étudiant"}, 
+        {value: 2, type: "Superviseur"}
+    ]
 
     const nextStep = () => {
         if(step === stepCount - 1)
@@ -64,8 +73,7 @@ const Home = () => {
         switch(step){
             case 0: {
                 // DB call to check if e-mail is not taken
-                const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-                !re.test(form.email) ? updateErrorMessage("email", "Invalid e-mail") : updateErrorMessage("email", "")
+                !validationRegex.email.test(form.email) ? updateErrorMessage("email", "Invalid e-mail") : updateErrorMessage("email", "")
             } 
             break;
             case 1:
@@ -73,12 +81,10 @@ const Home = () => {
                 form.last_name.trim().length > 0 ? updateErrorMessage("last_name", "") : updateErrorMessage("last_name", "Last name cannot be empty")
             break;
             case 2: {
-                const re = /(\+\d{1,3}\s?)?((\(\d{3}\)\s?)|(\d{3})(\s|-?))(\d{3}(\s|-?))(\d{4})(\s?(([E|e]xt[:|.|]?)|x|X)(\s?\d+))?/g
-                !re.test(form.phone_number) ? updateErrorMessage("phone_number", "Invalid phone number") : updateErrorMessage("phone_number", "") 
+                !validationRegex.phoneNumber.test(form.phone_number) ? updateErrorMessage("phone_number", "Invalid phone number") : updateErrorMessage("phone_number", "") 
             } break;
             case 3: {
-                const re = /^[0-9]+$/
-                re.test(form.registration_number) && form.registration_number.length > 0  ? updateErrorMessage("registration_number", "") : updateErrorMessage("registration_number", "Registration number cannot be empty or contain characters")
+                validationRegex.registrationNumber.test(form.registration_number) && form.registration_number.length > 0  ? updateErrorMessage("registration_number", "") : updateErrorMessage("registration_number", "Registration number cannot be empty or contain characters")
             } break;
             case 4:
                 // Allow spaces?
@@ -98,10 +104,9 @@ const Home = () => {
                 email: form.email,
                 password: form.password,
                 phone_number: form.phone_number,
-                first_name: form.first_name,
+                firstName: form.first_name,
                 registration_number: form.registration_number,
-                last_name: form.last_name,
-                account_type: form.account_type
+                last_name: form.last_name
             },
             responseType: "json"
         })
@@ -116,7 +121,7 @@ const Home = () => {
 
     const displayTextFormFields = () => {
         return (
-            <React.Fragment>
+            <>
                 <TextFormField 
                     focus={true} 
                     id="email"
@@ -128,7 +133,7 @@ const Home = () => {
                     type="email"
                     visible={(step === 0)}
                 />
-                <React.Fragment>
+                <>
                     <TextFormField
                         focus={true} 
                         id="first_name" 
@@ -150,7 +155,7 @@ const Home = () => {
                         type="text"
                         visible={(step === 1)}
                     />
-                </React.Fragment>
+                </>
                 <TextFormField 
                     focus={true} 
                     id="phone_number" 
@@ -173,7 +178,7 @@ const Home = () => {
                     type="tel"
                     visible={(step === 3)}
                 />
-                <React.Fragment>
+                <>
                     <TextFormField 
                         focus={true} 
                         id="password" 
@@ -195,7 +200,7 @@ const Home = () => {
                         type="password"
                         visible={(step === 4)}
                     />
-                </React.Fragment>
+                </>
                 <SelectFormField 
                     focus={true} 
                     id="account_type" 
@@ -208,7 +213,7 @@ const Home = () => {
                     labelId="account_type_label"
                     visible={(step === 5)}
                 />
-            </React.Fragment>
+            </>
         )
     }
 
