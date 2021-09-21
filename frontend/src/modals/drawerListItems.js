@@ -10,6 +10,6 @@
 export const drawerListItems = [
   ["Accueil", "home", ""],
   ["Rapports", "article", "#"],
-  ["Téléverser des fichiers", "upload_file", "#"],
+  ["Téléverser des fichiers", "upload_file", "register"],
   ["Déposer des offres de stage", "note_add", "offerForm"],
 ];

@@ -1,12 +1,9 @@
-export const IntershipOffer  = {
+export const IntershipOffer = {
   id,
   limitDateToApply,
-  poste,
-  dateDebut,
-  dateFin,
-  monitorName,
+  beginningDate,
+  endingDate,
+  emailOfMonitor,
   companyName,
   description,
-  isValidated,
-  path?
 };
