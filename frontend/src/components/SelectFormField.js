@@ -16,6 +16,7 @@ const SelectFormField = (props) => {
                     value={props.value}
                     label={props.label}
                     name={props.name}
+                    variant="standard"
                     sx={{flexGrow: 1, width: "100%"}}
                     onChange={props.onChange}
                 >

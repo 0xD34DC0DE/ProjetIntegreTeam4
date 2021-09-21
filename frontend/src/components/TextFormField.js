@@ -17,9 +17,11 @@ const TextFormField = (props) => {
                         id={props.id}
                         label={props.label}
                         type={props.type}
+                        helperText = {props.error}
                         variant="standard"
                         sx={{flexGrow: 1}}
                         value = {props.value}
+                        error = {props.error !== ""}
                         onChange={props.onChange}
                     />
                 </FormControl>
