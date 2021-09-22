@@ -32,7 +32,7 @@ public class UserControllerTest {
     @Test
     public void login(){
         //ARRANGE
-        AuthRequestDto authRequestDto = new AuthRequestDto("12345678@gmail.com", "massou123");
+        AuthRequestDto authRequestDto = new AuthRequestDto("444555@gmail.com", "massou123");
 
         when(userService.login(authRequestDto)).thenReturn(Mono.just("sadasdadsas"));
 

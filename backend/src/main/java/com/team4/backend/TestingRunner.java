@@ -1,8 +1,10 @@
 package com.team4.backend;
 
 import com.team4.backend.model.ExamplePerson;
+import com.team4.backend.model.Monitor;
 import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;
+import com.team4.backend.repository.MonitorRepository;
 import com.team4.backend.repository.PersonRepository;
 import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -17,6 +19,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Random;
 
 @Component
@@ -25,25 +28,29 @@ public class TestingRunner implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(TestingRunner.class);
 
-    //private final PersonRepository personRepository;
+    @Autowired
+    private final PersonRepository personRepository;
 
     @Autowired
-    private PersonRepository personRepository;
+    private final MonitorRepository monitorRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
-    private PBKDF2Encoder pbkdf2Encoder;
+    private final PBKDF2Encoder pbkdf2Encoder;
 
-    //@Autowired
-    //TestingRunner(PersonRepository personRepository) {
-    //    this.personRepository = personRepository;
-    //}
+    public TestingRunner(PersonRepository personRepository, MonitorRepository monitorRepository, UserRepository userRepository, PBKDF2Encoder pbkdf2Encoder) {
+        this.personRepository = personRepository;
+        this.monitorRepository = monitorRepository;
+        this.userRepository = userRepository;
+        this.pbkdf2Encoder = pbkdf2Encoder;
+    }
 
     @Override
     public void run(final ApplicationArguments args) {
-        userRepository.deleteAll().block();
+        userRepository.deleteAll().subscribe();
+        monitorRepository.deleteAll().subscribe();
 
         personRepository.deleteAll().block();
         String[] names = new String[]{
@@ -78,12 +85,28 @@ public class TestingRunner implements ApplicationRunner {
                 ))
                 .subscribe(p -> log.info("new person created: {}", p.block()));
 
+        insertUsers();
 
-        userRepository.save(User.builder().email("123456789@gmail.com").role(Role.STUDENT).password(pbkdf2Encoder.encode("massou123")).isEnabled(true).build())
-                .subscribe(user -> log.info("Entity has been saved: {}", user));
+        insertMonitors();
 
-        userRepository.save(User.builder().email("45673234@gmail.com").role(Role.SUPERVISOR).password(pbkdf2Encoder.encode("sasuke123")).isEnabled(true).build())
-                .subscribe(user -> log.info("Entity has been saved: {}", user));
+    }
 
+    private void insertUsers() {
+
+        List<User> users = Arrays.asList(
+                User.builder().email("123456789@gmail.com").role(Role.STUDENT).password(pbkdf2Encoder.encode("massou123")).isEnabled(true).build(),
+                User.builder().email("45673234@gmail.com").role(Role.SUPERVISOR).password(pbkdf2Encoder.encode("sasuke123")).isEnabled(true).build(),
+                User.builder().email("francoisLacoursiere@gmail.com").role(Role.INTERNSHIP_MANAGER).password(pbkdf2Encoder.encode("francois123")).isEnabled(true).build()
+        );
+
+        userRepository.saveAll(users).subscribe(u -> log.info("new user created: {}", u));
+
+    }
+
+    private void insertMonitors() {
+        Monitor monitor = Monitor.monitorBuilder().email("marcAndre@desjardins.com").role(Role.MONITOR).password(pbkdf2Encoder.encode("marc123")).isEnabled(true).build();
+
+        userRepository.save(monitor).subscribe(user -> log.info("User has been saved: {}", user));
+        monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
 }
