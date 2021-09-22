@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 @Service
-public class StudentService {
+public class  StudentService {
 
     private final StudentRepository studentRepository;
 
