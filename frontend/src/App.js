@@ -1,28 +1,28 @@
-import "./App.css";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import Home from "./components/Home";
-import Register from "./components/Register";
 import React from "react";
+import { Route, Switch, BrowserRouter } from "react-router-dom";
+import Register from "./components/Register";
+import OfferForm from "./components/OfferForm";
 import StickyFooter from "./components/Footer";
 import SideBar from "./components/SideBar";
 import TopBar from "./components/TopBar";
+import Home from "./components/Home";
+import "./App.css";
 
 function App() {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
   return (
-    <>
-      <TopBar setOpen={setOpen} open={open} />
-      <SideBar setOpen={setOpen} open={open} />
-      <Router>
-        <div className="App">
-          <Switch>
-            <Route path="/home" exact component={Home} />
-            <Route path="/register" extact component={Register} />
-          </Switch>
-        </div>
-      </Router>
-      <StickyFooter />
-    </>
+    <BrowserRouter>
+      <div className="App">
+        <TopBar setOpen={setOpen} open={open} />
+        <SideBar setOpen={setOpen} open={open} />
+        <Switch>
+          <Route path="/" exact component={Home} />
+          <Route path="/register" exact component={Register} />
+          <Route path="/offerForm" exact component={OfferForm} />
+        </Switch>
+        <StickyFooter />
+      </div>
+    </BrowserRouter>
   );
 }
 
