@@ -14,38 +14,32 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.*;
 
+@Data
 @ToString
 @NoArgsConstructor
 @Document(collection = "users")
-public class User implements UserDetails, Serializable {
+public class User implements Serializable {
 
     @Id
-    @Getter @Setter
-    private String id;
+    protected String id;
 
-    @Getter @Setter
-    private String registrationNumber;
+    protected String registrationNumber;
 
-    @Getter @Setter
-    private String email;
+    protected String email;
 
-    @Setter
-    private String password;
+    protected String password;
 
-    @Getter @Setter
-    private String firstName;
+    protected String firstName;
 
-    @Getter @Setter
-    private String lastName;
+    protected String lastName;
 
-    @Getter @Setter
-    private LocalDate registrationDate;
+    protected String phoneNumber;
 
-    @Getter @Setter
-    private Role role;
+    protected LocalDate registrationDate;
 
-    @Getter @Setter
-    private Boolean isEnabled;
+    protected Role role;
+
+    protected Boolean isEnabled;
 
     @Builder
     public User(String id,
@@ -54,52 +48,20 @@ public class User implements UserDetails, Serializable {
                 String lastName,
                 String password,
                 String registrationNumber,
+                String phoneNumber,
                 Role role,
                 Boolean isEnabled,
-                LocalDate registrationDate){
+                LocalDate registrationDate) {
         this.id = id; // Auto generated
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.registrationNumber = registrationNumber;
+        this.phoneNumber = phoneNumber;
         this.role = role;
         this.isEnabled = isEnabled;
         this.registrationDate = Optional.ofNullable(registrationDate).orElse(LocalDate.now());
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.isEnabled;
-    }
 }
