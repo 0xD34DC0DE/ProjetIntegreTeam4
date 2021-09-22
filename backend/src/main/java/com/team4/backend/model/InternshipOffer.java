@@ -18,13 +18,18 @@ public class InternshipOffer implements Serializable {
 
     @Id
     private String id;
-    private LocalDate limitDateToApply,beginningDate,endingDate;
-    private Monitor monitor;
-    private String companyName,description;
-    private boolean isValidated,isExclusive;
-    private List<Student> listInterestedStudents,listExclusiveStudents;
 
-    public InternshipOffer(InternshipOfferDTO internshipOfferDTO,Monitor monitor){
+    private LocalDate limitDateToApply, beginningDate, endingDate;
+
+    private Monitor monitor;
+
+    private String companyName, description;
+
+    private boolean isValidated, isExclusive;
+
+    private List<Student> listInterestedStudents, listExclusiveStudents;
+
+    public InternshipOffer(InternshipOfferDTO internshipOfferDTO, Monitor monitor) {
         this.limitDateToApply = internshipOfferDTO.getLimitDateToApply();
         this.beginningDate = internshipOfferDTO.getBeginningDate();
         this.endingDate = internshipOfferDTO.getEndingDate();

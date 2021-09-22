@@ -26,12 +26,12 @@ public class MonitorServiceTest {
     @Test
     void findMonitorByEmail() {
         //ARRANGE
+
         String email1 = "marcM@desjardin.com";
         Mono<Monitor> existingMonitor = Mono.just(Monitor.monitorBuilder().email(email1).build());
         when(monitorRepository.findByEmailAndIsEnabledTrue(email1)).thenReturn(existingMonitor);
 
         String email2 = "inexistantEmail@gmail.com";
-        Mono<Monitor> nonExistingMonitor = Mono.just(Monitor.monitorBuilder().email(email2).build());
         when(monitorRepository.findByEmailAndIsEnabledTrue(email2)).thenReturn(Mono.empty());
 
         //ACT
@@ -42,6 +42,6 @@ public class MonitorServiceTest {
         StepVerifier.create(existingMonitor)
                 .assertNext(monitor -> assertEquals(email1, monitor.getEmail())).verifyComplete();
 
-        //StepVerifier.create(nonExistingMonitor).verifyError(ResponseStatusException.class);
+        StepVerifier.create(noMonitorReturned).verifyError(ResponseStatusException.class);
     }
 }

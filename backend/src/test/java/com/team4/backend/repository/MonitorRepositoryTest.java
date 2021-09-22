@@ -37,11 +37,11 @@ public class MonitorRepositoryTest {
                 Monitor.monitorBuilder().email("johnnyJ@cae-tech.com").password("johnny123").isEnabled(false).build()
         );
 
-        monitorRepository.saveAll(users).subscribe();
+        monitorRepository.saveAll(users).subscribe().dispose();
     }
 
     @Test
-    void findByEmailAndIsEnabledTrue(){
+    void findByEmailAndIsEnabledTrue() {
         //ARRANGE
         String email1 = "marcM@desjardin.com";
         String email2 = "johnnyJ@cae-tech.com";
@@ -54,7 +54,7 @@ public class MonitorRepositoryTest {
 
         //ASSERT
         StepVerifier.create(existingMonitorEnabledTrue)
-                .assertNext(monitor -> assertEquals(email1,monitor.getEmail())).verifyComplete();
+                .assertNext(monitor -> assertEquals(email1, monitor.getEmail())).verifyComplete();
         StepVerifier.create(existingMonitorEnabledFalse).expectNextCount(0).verifyComplete();
         StepVerifier.create(nonExistentMonitor).expectNextCount(0).verifyComplete();
 
