@@ -17,6 +17,7 @@ import java.util.*;
 
 @Data
 @ToString
+@Data
 @NoArgsConstructor
 @Document(collection = "users")
 public class User implements Serializable {
