@@ -35,10 +35,15 @@ public class StudentServiceTest {
     void shouldCreateUser()
     {
         //ARRANGE
+
         Student student = StudentMockData.getMockStudent();
         student.setId(null); // Id is null when coming from frontend
 
-        when(studentRepository.save(student)).thenReturn(Mono.just(student).map(s -> {s.setId("aaaaa"); return s;}));
+        when(studentRepository.save(student))
+                .thenReturn(Mono.just(student).map(value -> {
+                    value.setId("not_null_id");
+                    return value;
+                }));
 
         when(pbkdf2Encoder.encode(any(String.class))).thenReturn("encrypted");
 
@@ -50,6 +55,7 @@ public class StudentServiceTest {
 
         StepVerifier.create(studentMono).consumeNextWith(s -> {
             assertNotNull(s.getId());
+            assertNotEquals(StudentMockData.getMockStudent().getPassword(), s.getPassword());
         }).verifyComplete();
     }
 }
