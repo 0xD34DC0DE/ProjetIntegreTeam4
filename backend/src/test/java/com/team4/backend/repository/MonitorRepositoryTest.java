@@ -34,30 +34,27 @@ public class MonitorRepositoryTest {
 
         Flux<Monitor> users = Flux.just(
                 Monitor.monitorBuilder().email("marcM@desjardin.com").password("marc123").isEnabled(true).build(),
-                Monitor.monitorBuilder().email("johnnyJ@cae-tech.com").password("johnny123").isEnabled(false).build()
+                Monitor.monitorBuilder().email("johnnyJ@cae-tech.com").password("johnny123").isEnabled(true).build()
         );
 
         monitorRepository.saveAll(users).subscribe().dispose();
     }
 
     @Test
-    void findByEmailAndIsEnabledTrue() {
+    void findByEmail() {
         //ARRANGE
         String email1 = "marcM@desjardin.com";
-        String email2 = "johnnyJ@cae-tech.com";
-        String email3 = "inexistantEmail@gmail.com";
+        String email2 = "inexistantEmail@gmail.com";
 
         //ACT
-        Mono<Monitor> existingMonitorEnabledTrue = monitorRepository.findByEmailAndIsEnabledTrue(email1);
-        Mono<Monitor> existingMonitorEnabledFalse = monitorRepository.findByEmailAndIsEnabledTrue(email2);
-        Mono<Monitor> nonExistentMonitor = monitorRepository.findByEmailAndIsEnabledTrue(email3);
+        Mono<Monitor> existingMonitor = monitorRepository.findByEmail(email1);
+        Mono<Monitor> nonExistentMonitor = monitorRepository.findByEmail(email2);
 
         //ASSERT
-        StepVerifier.create(existingMonitorEnabledTrue)
+        StepVerifier.create(existingMonitor)
                 .assertNext(monitor -> assertEquals(email1, monitor.getEmail())).verifyComplete();
-        StepVerifier.create(existingMonitorEnabledFalse).expectNextCount(0).verifyComplete();
-        StepVerifier.create(nonExistentMonitor).expectNextCount(0).verifyComplete();
 
+        StepVerifier.create(nonExistentMonitor).expectNextCount(0).verifyComplete();
     }
 
 }

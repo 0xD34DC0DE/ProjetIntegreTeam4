@@ -15,7 +15,6 @@ import java.time.LocalDate;
 public class Monitor extends User implements Serializable {
 
     @Builder(builderMethodName = "monitorBuilder")
-
     public Monitor(String id, String email, String firstName, String lastName, String password, String registrationNumber, String phoneNumber, Role role, Boolean isEnabled, LocalDate registrationDate) {
         super(id, email, firstName, lastName, password, registrationNumber, phoneNumber, role, isEnabled, registrationDate);
     }

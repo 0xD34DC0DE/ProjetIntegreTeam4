@@ -8,4 +8,5 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface MonitorRepository extends ReactiveMongoRepository<Monitor,String> {
     Mono<Monitor> findByEmailAndIsEnabledTrue(String email);
+    Mono<Monitor> findByEmail(String email);
 }
