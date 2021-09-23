@@ -38,6 +38,8 @@ public class UserService {
         return userRepository.findByEmail(email);
     }
 
+    public Mono<Boolean> isEmailTaken(String email) { return userRepository.existsByEmail(email); }
+
     /*
     TODO --> resetPassword() --> Nice To Have
             -take email of user

@@ -103,10 +103,10 @@ const Home = () => {
             data: {
                 email: form.email,
                 password: form.password,
-                phone_number: form.phone_number,
+                phoneNumber: form.phone_number,
                 firstName: form.first_name,
-                registration_number: form.registration_number,
-                last_name: form.last_name
+                registrationNumber: form.registration_number,
+                lastName: form.last_name
             },
             responseType: "json"
         })

@@ -2,6 +2,7 @@ package com.team4.backend.repository;
 
 import com.team4.backend.model.User;
 import lombok.extern.java.Log;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,7 +16,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Log
 @DataMongoTest
@@ -83,5 +84,25 @@ public class UserRepositoryTest {
                 .verifyComplete();
         StepVerifier.create(userMono2).expectNextCount(0).verifyComplete();
         StepVerifier.create(userMono3).expectNextCount(0).verifyComplete();
+    }
+
+    @Test
+    void existsByEmail() {
+        // ARRANGE
+        String email1 = "123456789@gmail.com";
+        String email2 = "asdf@gmail.com";
+
+        // ACT
+        Mono<Boolean> booleanMono1 = userRepository.existsByEmail(email1);
+        Mono<Boolean> booleanMono2 = userRepository.existsByEmail(email2);
+
+        // ASSERT
+        StepVerifier.create(booleanMono1)
+                .assertNext(Assertions::assertTrue)
+                .verifyComplete();
+
+        StepVerifier.create(booleanMono2)
+                .assertNext(Assertions::assertFalse)
+                .verifyComplete();
     }
 }

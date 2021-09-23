@@ -14,9 +14,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
@@ -30,14 +29,14 @@ public class UserControllerTest {
     UserService userService;
 
     @Test
-    public void login(){
+    public void login() {
         //ARRANGE
         AuthRequestDto authRequestDto = new AuthRequestDto("12345678@gmail.com", "massou123");
 
         when(userService.login(authRequestDto)).thenReturn(Mono.just("sadasdadsas"));
 
         //ACT
-        HttpStatus httpStatus= webTestClient
+        HttpStatus httpStatus = webTestClient
                 .post()
                 .uri("/user/login")
                 .bodyValue(authRequestDto)
@@ -47,7 +46,26 @@ public class UserControllerTest {
                 .expectBody(String.class).returnResult().getStatus();
 
         //ASSERT
-        assertEquals(HttpStatus.OK,httpStatus);
+        assertEquals(HttpStatus.OK, httpStatus);
     }
 
+    @Test
+    public void isEmailTaken() {
+        // ARRANGE
+        String email = "123456789@gmail.com";
+
+        // ACT
+        when(userService.isEmailTaken(email)).thenReturn(Mono.just(true));
+
+        HttpStatus httpStatus = webTestClient
+                .get()
+                .uri("/user/email/123456789@gmail.com")
+                .exchange()
+                .expectStatus()
+                .isOk()
+                .expectBody(Boolean.class).returnResult().getStatus();
+
+        // ASSERT
+        assertEquals(HttpStatus.OK, httpStatus);
+    }
 }
