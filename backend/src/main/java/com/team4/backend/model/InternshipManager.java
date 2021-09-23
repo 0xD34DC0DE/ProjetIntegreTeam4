@@ -1,7 +1,10 @@
 package com.team4.backend.model;
 
 import com.team4.backend.model.enums.Role;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;

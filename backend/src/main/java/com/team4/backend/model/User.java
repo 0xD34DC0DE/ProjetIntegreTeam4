@@ -1,24 +1,22 @@
 package com.team4.backend.model;
 
 import com.team4.backend.model.enums.Role;
-import lombok.*;
-import org.springframework.cglib.core.Local;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Optional;
 
 @ToString
 @Data
 @NoArgsConstructor
 @Document(collection = "users")
-public class User implements  Serializable {
+public class User implements Serializable {
 
     @Id
     protected String id;
@@ -51,7 +49,7 @@ public class User implements  Serializable {
                 String phoneNumber,
                 Role role,
                 Boolean isEnabled,
-                LocalDate registrationDate){
+                LocalDate registrationDate) {
         this.id = id; // Auto generated
         this.firstName = firstName;
         this.lastName = lastName;
