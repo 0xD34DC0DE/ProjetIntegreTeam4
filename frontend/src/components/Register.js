@@ -133,7 +133,7 @@ const Home = () => {
   const validateFirstName = () => {
     if (form.first_name.trim().length > 0) {
       clearErrorMessage("first_name");
-    } else if (form.first_name.trim().length === 0) {
+    } else if (isFieldEmpty("first_name")) {
       clearErrorMessageAndInvalidate("first_name");
     } else {
       updateErrorMessage("first_name", "First name cannot be empty");
@@ -142,8 +142,8 @@ const Home = () => {
 
   const validateLastName = () => {
     if (form.last_name.trim().length > 0) {
-      clearErrorMessage("first_name");
-    } else if (form.last_name.trim().length === 0) {
+      clearErrorMessage("last_name");
+    } else if (isFieldEmpty("last_name")) {
       clearErrorMessageAndInvalidate("last_name");
     } else {
       updateErrorMessage("last_name", "Last name cannot be empty");
@@ -153,7 +153,7 @@ const Home = () => {
   const validatePhoneNumber = () => {
     if (validationRegexes.phoneNumber.test(form.phone_number)) {
       clearErrorMessage("phone_number");
-    } else if (form.phone_number.trim().length === 0) {
+    } else if (isFieldEmpty("phone_number")) {
       clearErrorMessageAndInvalidate("phone_number");
     } else {
       updateErrorMessage("phone_number", "Invalid phone number");
@@ -163,7 +163,7 @@ const Home = () => {
   const validateRegistrationNumber = () => {
     if (validationRegexes.registrationNumber.test(form.registration_number)) {
       clearErrorMessage("registration_number");
-    } else if (form.registration_number.trim().length === 0) {
+    } else if (isFieldEmpty("registration_number")) {
       clearErrorMessageAndInvalidate("registration_number");
     } else {
       updateErrorMessage(
@@ -212,7 +212,7 @@ const Home = () => {
       },
       responseType: "json",
     })
-      .then((response) => {
+      .then(() => {
         setOpen(false);
       })
       .catch((error) => {
