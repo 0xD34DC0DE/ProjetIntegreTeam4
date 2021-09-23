@@ -3,7 +3,7 @@ import TextFormField from "./TextFormField";
 
 const registrationNumberRegexValidation = /^[0-9]*$/;
 
-const RegistrationNumberFormField = ({ valid, value, step }) => {
+const RegistrationNumberFormField = ({ valid, onFieldChange, step }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [registrationNumber, setRegistrationNumber] = useState("");
 
@@ -24,7 +24,7 @@ const RegistrationNumberFormField = ({ valid, value, step }) => {
 
   const handleRegistrationNumberChange = (event) => {
     setRegistrationNumber(event.target.value);
-    value(event);
+    onFieldChange(event);
   };
 
   return (

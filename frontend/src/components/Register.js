@@ -74,33 +74,33 @@ const Home = () => {
     }));
   };
 
-  const displayTextFormFields = () => {
+  const displayFormFields = () => {
     return (
       <>
         <EmailFormField
           valid={setFormValid}
           step={step}
-          value={handleFormChange}
+          onFieldChange={handleFormChange}
         />
         <NameFormField
           valid={setFormValid}
           step={step}
-          value={handleFormChange}
+          onFieldChange={handleFormChange}
         />
         <PhoneNumberFormField
           valid={setFormValid}
           step={step}
-          value={handleFormChange}
+          onFieldChange={handleFormChange}
         />
         <RegistrationNumberFormField
           valid={setFormValid}
           step={step}
-          value={handleFormChange}
+          onFieldChange={handleFormChange}
         />
         <PasswordFormField
           valid={setFormValid}
           step={step}
-          value={handleFormChange}
+          onFieldChange={handleFormChange}
         />
       </>
     );
@@ -113,7 +113,7 @@ const Home = () => {
           Enregistrement <Create sx={{ ml: 1 }} />
         </Typography>
         <DialogContent sx={{ minWidth: 425 }}>
-          {displayTextFormFields()}
+          {displayFormFields()}
         </DialogContent>
         <DialogActions sx={{ mt: 0 }}>
           <MobileStepper

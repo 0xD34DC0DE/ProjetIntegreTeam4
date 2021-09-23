@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TextFormField from "./TextFormField";
 
-const PasswordFormField = ({ valid, value, step }) => {
+const PasswordFormField = ({ valid, onFieldChange, step }) => {
   const [errorMessage, setErrorMessage] = useState({
     password: "",
     confirmPassword: "",
@@ -36,7 +36,7 @@ const PasswordFormField = ({ valid, value, step }) => {
       ...fields,
       [event.target.id || event.target.name]: event.target.value,
     }));
-    value(event);
+    onFieldChange(event);
   };
 
   return (

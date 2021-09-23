@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TextFormField from "./TextFormField";
 
-const NameFormField = ({ valid, step, value }) => {
+const NameFormField = ({ valid, step, onFieldChange }) => {
   const [errorMessage, setErrorMessage] = useState({
     firstName: "",
     lastName: "",
@@ -18,14 +18,14 @@ const NameFormField = ({ valid, step, value }) => {
     } else {
       valid(false);
     }
-  }, [field.firstName, field.lastName, step]);
+  }, [field.firstName, field.lastName, step, valid]);
 
   const handleFieldChange = (event) => {
     setField((fields) => ({
       ...fields,
       [event.target.id || event.target.name]: event.target.value,
     }));
-    value(event);
+    onFieldChange(event);
   };
 
   return (
