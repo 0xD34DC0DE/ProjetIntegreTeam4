@@ -1,52 +1,59 @@
-import React from "react";
+import { Create } from "@mui/icons-material";
 import {
-  Typography,
   Button,
   Dialog,
-  DialogContent,
-  MobileStepper,
   DialogActions,
+  DialogContent,
+  FormGroup,
+  Typography,
 } from "@mui/material";
-import {
-  KeyboardArrowRight,
-  KeyboardArrowLeft,
-  Create,
-} from "@mui/icons-material";
-
-import TextFormField from "./TextFormField";
+import axios from "axios";
+import React from "react";
 import { OFFER_FORM_VALUES } from "../modals/TextFormFieldValues";
+import TextFormField from "./TextFormField";
+
 function OfferForm() {
-  const [step, setStep] = React.useState(0);
-  const [offer, setOffer] = React.useState({
+  const emptyOffer = {
     limitDateToApply: "",
     beginningDate: "",
     endingDate: "",
     emailOfMonitor: "",
     companyName: "",
     description: "",
-  });
-
-  const STEP_COUNT = Object.keys(offer).length;
-
-  const nextStep = () => {
-    setStep((previousStep) => (previousStep += 1));
   };
-
-  const prevStep = () => {
-    setStep((previousStep) => (previousStep -= 1));
-  };
+  const [offer, setOffer] = React.useState(emptyOffer);
+  const [isValid, setIsValid] = React.useState(false);
 
   const handleFormChange = (event) => {
     setOffer((previousForm) => ({
       ...previousForm,
       [event.target.id || event.target.name]: event.target.value,
     }));
+
+    Object.values(offer).map((value, key, array) =>
+      setIsValid(!array.includes("" || null))
+    );
   };
 
+  // CHANGE TOKEN AND LOGIN ON POSTMAN BEFORE TESTING
   const saveInternshipOffer = () => {
-    Object.values(offer).map((value, key) => {
-      if (value === null || value === "") console.log("isEmpty", key);
-    });
+    axios({
+      method: "POST",
+      url: "http://localhost:8080/internshipOffer/addAnInternshipOffer",
+      headers: {
+        Authorization:
+          "Bearer eyJhbGciOiJIUzUxMiJ9.eyJyb2xlIjoiSU5URVJOU0hJUF9NQU5BR0VSIiwic3ViIjoiZnJhbmNvaXNMYWNvdXJzaWVyZUBnbWFpbC5jb20iLCJpYXQiOjE2MzIzNjY4MzIsImV4cCI6MTYzMjM5NTYzMn0.3BJ6pGi_OTdq-W8LT9roTao-YfXptyvEWJR1tARuNju1k6X8232cdQEQQS-PnVU2LVm9UJnhGKE0fT3SSTa7WA",
+      },
+      data: offer,
+      responseType: "json",
+    })
+      .then((response) => {
+        setOffer(emptyOffer);
+        console.log(response);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   return (
@@ -56,49 +63,28 @@ function OfferForm() {
           Déposer une offre de stage <Create sx={{ mx: 1 }} />
         </Typography>
         <DialogContent sx={{ minWidth: 425 }}>
-          {Object.keys(offer).map((value, key) => {
-            let currentField = OFFER_FORM_VALUES[key];
-            return (
-              <TextFormField
-                key={key}
-                id={value}
-                dialogContentText={currentField.contentText}
-                onChange={handleFormChange}
-                value={Object.values(offer)[key]}
-                type={currentField.type}
-                visible={step === key}
-              />
-            );
-          })}
+          <FormGroup>
+            {Object.keys(offer).map((offerKey, key) => {
+              let currentField = OFFER_FORM_VALUES[key];
+              return (
+                <TextFormField
+                  key={key}
+                  id={offerKey}
+                  dialogContentText={currentField.contentText}
+                  onChange={handleFormChange}
+                  value={Object.values(offer)[key]}
+                  type={currentField.type}
+                  visible={true}
+                />
+              );
+            })}
+          </FormGroup>
         </DialogContent>
         <DialogActions sx={{ mt: 0 }}>
-          <MobileStepper
-            variant="dots"
-            steps={STEP_COUNT}
-            position="static"
-            activeStep={step}
-            sx={{ flexGrow: 1 }}
-            nextButton={
-              <Button
-                size="small"
-                onClick={nextStep}
-                disabled={step === STEP_COUNT - 1}
-              >
-                Next
-                <KeyboardArrowRight />
-              </Button>
-            }
-            backButton={
-              <Button size="small" onClick={prevStep} disabled={step === 0}>
-                <KeyboardArrowLeft />
-                Back
-              </Button>
-            }
-          ></MobileStepper>
           <Button
             size="small"
             onClick={saveInternshipOffer}
-            disabled={step !== STEP_COUNT - 1}
+            disabled={!isValid}
           >
             Envoyer
           </Button>
