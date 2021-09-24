@@ -6,6 +6,8 @@ import com.team4.backend.util.PBKDF2Encoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.net.UnknownServiceException;
+
 @Service
 public class StudentService {
 
@@ -13,14 +15,23 @@ public class StudentService {
 
     private final PBKDF2Encoder pbkdf2Encoder;
 
-    public StudentService(StudentRepository studentRepository, PBKDF2Encoder pbkdf2Encoder) {
+    private final UserService userService;
+
+    public StudentService(StudentRepository studentRepository, PBKDF2Encoder pbkdf2Encoder, UserService userService) {
         this.studentRepository = studentRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
+        this.userService = userService;
     }
 
     public Mono<Student> registerStudent(Student student) {
-        student.setPassword(pbkdf2Encoder.encode(student.getPassword()));
-        return studentRepository.save(student);
+        return userService.existsByEmail(student.getEmail()).flatMap(exists -> {
+            if(!exists) {
+                student.setPassword(pbkdf2Encoder.encode(student.getPassword()));
+                return studentRepository.save(student);
+            } else {
+                return Mono.error(new UnknownServiceException());
+            }
+        });
     }
 
 }

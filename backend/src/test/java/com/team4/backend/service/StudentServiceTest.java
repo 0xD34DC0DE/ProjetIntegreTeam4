@@ -28,11 +28,14 @@ public class StudentServiceTest {
     @Mock
     PBKDF2Encoder pbkdf2Encoder;
 
+    @Mock
+    UserService userService;
+
     @InjectMocks
     StudentService studentService;
 
     @Test
-    void shouldCreateUser()
+    void shouldCreateStudent()
     {
         //ARRANGE
 
@@ -47,6 +50,8 @@ public class StudentServiceTest {
 
         when(pbkdf2Encoder.encode(any(String.class))).thenReturn("encrypted");
 
+        when(userService.existsByEmail(StudentMockData.getMockStudent().getEmail())).thenReturn(Mono.just(false));
+
         //ACT
 
         Mono<Student> studentMono = studentService.registerStudent(student);
@@ -57,5 +62,24 @@ public class StudentServiceTest {
             assertNotNull(s.getId());
             assertNotEquals(StudentMockData.getMockStudent().getPassword(), s.getPassword());
         }).verifyComplete();
+    }
+
+    @Test
+    void shouldNotCreateStudent()
+    {
+        //ARRANGE
+
+        Student student = StudentMockData.getMockStudent();
+        student.setId(null); // Id is null when coming from frontend
+
+        when(userService.existsByEmail(StudentMockData.getMockStudent().getEmail())).thenReturn(Mono.just(true));
+
+        //ACT
+
+        Mono<Student> studentMono = studentService.registerStudent(student);
+
+        //ASSERT
+
+        StepVerifier.create(studentMono).expectNextCount(0).verifyComplete();
     }
 }

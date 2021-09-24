@@ -2,6 +2,8 @@ package com.team4.backend.controller;
 
 
 import com.team4.backend.dto.StudentDto;
+import com.team4.backend.exception.UserAlreadyExistsException;
+import com.team4.backend.model.Student;
 import com.team4.backend.model.User;
 import com.team4.backend.service.StudentService;
 import com.team4.backend.service.UserService;
@@ -19,27 +21,16 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    private final UserService userService;
-
-    public StudentController(StudentService studentService, UserService userService) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
-        this.userService = userService;
     }
 
     @PostMapping("/register")
     public Mono<ResponseEntity<String>> register(@RequestBody StudentDto studentDto) {
-
-        Mono<User> existingUser = userService.findByEmail(studentDto.getEmail());
-
-        return existingUser.hasElement().map(hasElement -> {
-            if (!hasElement) {
-                studentService.registerStudent(StudentDto.dtoToEntity(studentDto)).subscribe().dispose();
-                return ResponseEntity.status(HttpStatus.CREATED).body("");
-            } else {
-                return ResponseEntity.status(HttpStatus.CONFLICT).body("");
-            }
-        });
-
+        return studentService.registerStudent(StudentDto.dtoToEntity(studentDto))
+                .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
+                .onErrorReturn(UserAlreadyExistsException.class, ResponseEntity.status(HttpStatus.CONFLICT).body(""));
+        //TODO add a non-handled exception to make sure it returns 500 and not 409
     }
 
 }

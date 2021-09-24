@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.StudentDto;
+import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Student;
 import com.team4.backend.service.StudentService;
 import com.team4.backend.service.UserService;
@@ -70,10 +71,7 @@ public class StudentControllerTest {
 
         studentDto.setId(null);
 
-        Student alreadyExistingStudent = StudentMockData.getMockStudent();
-        Student student = StudentMockData.getMockStudent();
-
-        when(userService.findByEmail(any(String.class))).thenReturn(Mono.just(alreadyExistingStudent));
+        when(studentService.registerStudent(any(Student.class))).thenReturn(Mono.error(new UserAlreadyExistsException()));
 
         //ACT
         webTestClient
