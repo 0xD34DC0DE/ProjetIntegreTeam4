@@ -1,6 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.InternshipOfferDTO;
+import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.service.InternshipOfferService;
@@ -35,7 +35,7 @@ public class InternshipOfferControllerTest {
     @Test
     void addAnInternshipOffer() {
         //ARRANGE
-        InternshipOfferDTO internshipOfferDTO = new InternshipOfferDTO(InternshipOffer.builder()
+        InternshipOfferDto internshipOfferDTO = new InternshipOfferDto(InternshipOffer.builder()
                 .limitDateToApply(LocalDate.now().plusMonths(1))
                 .beginningDate(LocalDate.now().plusMonths(2))
                 .endingDate(LocalDate.now().plusMonths(6))
@@ -56,7 +56,7 @@ public class InternshipOfferControllerTest {
                 .exchange()
                 .expectStatus()
                 .isOk()
-                .expectBody(InternshipOfferDTO.class).returnResult().getStatus();
+                .expectBody(InternshipOfferDto.class).returnResult().getStatus();
 
 
         //ASSERT

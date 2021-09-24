@@ -1,10 +1,8 @@
 package com.team4.backend.service;
 
-import com.team4.backend.dto.InternshipOfferDTO;
+import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.model.InternshipOffer;
-import com.team4.backend.model.Monitor;
 import com.team4.backend.repository.InternshipOfferRepository;
-import org.springframework.data.mongodb.core.aggregation.ArrayOperators;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -20,11 +18,11 @@ public class InternshipOfferService {
         this.monitorService = monitorService;
     }
 
-    public Mono<InternshipOfferDTO> addAnInternshipOffer(InternshipOfferDTO internshipOfferDTO) {
+    public Mono<InternshipOfferDto> addAnInternshipOffer(InternshipOfferDto internshipOfferDTO) {
 
         return monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor())
                 .flatMap(monitor -> internshipOfferRepository.save(new InternshipOffer(internshipOfferDTO, monitor)))
-                .map(InternshipOfferDTO::new);
+                .map(InternshipOfferDto::new);
 
     }
 }

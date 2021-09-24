@@ -1,6 +1,6 @@
 package com.team4.backend.service;
 
-import com.team4.backend.dto.InternshipOfferDTO;
+import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.repository.InternshipOfferRepository;
@@ -44,13 +44,14 @@ public class InternshipOfferServiceTest {
                 .monitor(Monitor.monitorBuilder().email("rickJones@desjardins.com").build())
                 .description("Développeur Web")
                 .build();
-        InternshipOfferDTO internshipOfferDTO = new InternshipOfferDTO(internshipOffer);
+
+        InternshipOfferDto internshipOfferDTO = new InternshipOfferDto(internshipOffer);
 
         when(monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor())).thenReturn(Mono.just(internshipOffer.getMonitor()));
         when(internshipOfferRepository.save(new InternshipOffer(internshipOfferDTO, internshipOffer.getMonitor()))).thenReturn(Mono.just(internshipOffer));
 
         //ACT
-        Mono<InternshipOfferDTO> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
+        Mono<InternshipOfferDto> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
 
         //ASSERT
         StepVerifier.create(savedInternshipOffer)
