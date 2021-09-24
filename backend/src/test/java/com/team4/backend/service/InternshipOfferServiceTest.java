@@ -15,7 +15,7 @@ import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @Log
@@ -47,7 +47,7 @@ public class InternshipOfferServiceTest {
         InternshipOfferDTO internshipOfferDTO = new InternshipOfferDTO(internshipOffer);
 
         when(monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor())).thenReturn(Mono.just(internshipOffer.getMonitor()));
-        when(internshipOfferRepository.save(new InternshipOffer(internshipOfferDTO,internshipOffer.getMonitor()))).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferRepository.save(new InternshipOffer(internshipOfferDTO, internshipOffer.getMonitor()))).thenReturn(Mono.just(internshipOffer));
 
         //ACT
         Mono<InternshipOfferDTO> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);

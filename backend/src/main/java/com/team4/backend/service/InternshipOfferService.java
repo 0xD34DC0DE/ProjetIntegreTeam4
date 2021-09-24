@@ -27,5 +27,4 @@ public class InternshipOfferService {
                 .map(InternshipOfferDTO::new);
 
     }
-
 }
