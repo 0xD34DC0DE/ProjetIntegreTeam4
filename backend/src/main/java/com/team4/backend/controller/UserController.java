@@ -15,9 +15,13 @@ public class UserController {
         this.userService = userService;
     }
 
-
     @PostMapping("/login")
     public Mono<String> login(@RequestBody AuthRequestDto authRequestDto){
         return userService.login(authRequestDto);
+    }
+
+    @GetMapping("/email/{email}")
+    public Mono<Boolean> userExistsByEmail(@PathVariable String email) {
+        return userService.existsByEmail(email);
     }
 }

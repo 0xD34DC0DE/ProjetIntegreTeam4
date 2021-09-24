@@ -43,9 +43,10 @@ public class SecurityConfiguration {
                 .securityContextRepository(securityContextRepository)
                 .authorizeExchange()
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
-                .pathMatchers("/user/login").permitAll()
+                .pathMatchers("/user/login", "/student/register", "/user/email/*").permitAll()
                 .anyExchange().authenticated()
-                .and().build();
+                .and().cors().and().csrf().disable()
+                .build();
     }
 }
 

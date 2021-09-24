@@ -12,157 +12,108 @@ import {
   Create,
 } from "@mui/icons-material";
 import React, { useState } from "react";
-import TextFormField from "./TextFormField";
-import SelectFormField from "./SelectFormField";
+import EmailFormField from "./EmailFormField";
+import NameFormField from "./NameFormField";
+import PhoneNumberFormField from "./PhoneNumberFormField";
+import RegistrationNumberFormField from "./RegistrationNumberFormField";
+import PasswordFormField from "./PasswordFormField";
 import axios from "axios";
 
-const Register = () => {
+const Home = () => {
   const [step, setStep] = useState(0);
-
+  const [formValid, setFormValid] = useState(false);
+  const [open, setOpen] = useState(true);
   const [form, setForm] = useState({
     email: "",
     password: "",
-    confirm_password: "",
-    first_name: "",
-    last_name: "",
-    phone_number: "",
-    account_type: 1,
+    confirmPassword: "",
+    registrationNumber: "",
+    phoneNumber: "",
+    firstName: "",
+    lastName: "",
   });
 
   const stepCount = 5;
 
-  const accountTypes = [
-    { value: 1, type: "Étudiant" },
-    { value: 2, type: "Superviseur" },
-  ];
-
   const nextStep = () => {
-    setStep((lastStep) => (lastStep += 1));
+    if (step === stepCount - 1) register();
+    else setStep((lastStep) => (lastStep += 1));
   };
 
   const prevStep = () => {
     setStep((lastStep) => (lastStep -= 1));
-  };
-
-  const handleFormChange = (event) => {
-    setForm((lastForm) => ({
-      ...lastForm,
-      [event.target.id || event.target.name]: event.target.value,
-    }));
+    setFormValid(true);
   };
 
   const register = () => {
     axios({
       method: "POST",
-      url: "http://localhost:8080/user/register",
+      url: "http://localhost:8080/student/register",
       data: {
         email: form.email,
         password: form.password,
-        phone_number: form.phone_number,
-        first_name: form.first_name,
-        last_name: form.last_name,
-        account_type: form.account_type,
+        phoneNumber: form.phoneNumber,
+        firstName: form.firstName,
+        registrationNumber: form.registrationNumber,
+        lastName: form.lastName,
       },
       responseType: "json",
-      withCredentials: true,
     })
-      .then((response) => {
-        console.log(response);
+      .then(() => {
+        setOpen(false);
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  const displayTextFormFields = () => {
+  const handleFormChange = (event) => {
+    setForm((form) => ({
+      ...form,
+      [event.target.id || event.target.name]: event.target.value,
+    }));
+  };
+
+  const displayFormFields = () => {
     return (
-      <React.Fragment>
-        <TextFormField
-          focus={true}
-          id="email"
-          dialogContentText="Enter your e-mail"
-          label="E-mail"
-          onChange={handleFormChange}
-          value={form.email}
-          type="email"
-          visible={step === 0}
+      <>
+        <EmailFormField
+          valid={setFormValid}
+          step={step}
+          onFieldChange={handleFormChange}
         />
-        <React.Fragment>
-          <TextFormField
-            focus={true}
-            id="first_name"
-            dialogContentText="Enter your first name and your last name"
-            label="First name"
-            onChange={handleFormChange}
-            value={form.first_name}
-            type="text"
-            visible={step === 1}
-          />
-          <TextFormField
-            id="last_name"
-            dialogContentText=""
-            label="Last name"
-            onChange={handleFormChange}
-            value={form.last_name}
-            type="text"
-            visible={step === 1}
-          />
-        </React.Fragment>
-        <TextFormField
-          focus={true}
-          id="phone_number"
-          dialogContentText="Enter your phone number"
-          label="Phone number"
-          onChange={handleFormChange}
-          value={form.phone_number}
-          type="tel"
-          visible={step === 2}
+        <NameFormField
+          valid={setFormValid}
+          step={step}
+          onFieldChange={handleFormChange}
         />
-        <React.Fragment>
-          <TextFormField
-            focus={true}
-            id="password"
-            dialogContentText="Enter your password and confirm it"
-            label="Password"
-            onChange={handleFormChange}
-            value={form.password}
-            type="password"
-            visible={step === 3}
-          />
-          <TextFormField
-            id="confirm_password"
-            dialogContentText=""
-            label="Confirm password"
-            onChange={handleFormChange}
-            value={form.confirm_password}
-            type="password"
-            visible={step === 3}
-          />
-        </React.Fragment>
-        <SelectFormField
-          focus={true}
-          id="account_type"
-          items={accountTypes}
-          dialogContentText="Select your account type"
-          label="Account type"
-          name="account_type"
-          onChange={handleFormChange}
-          value={form.account_type}
-          labelId="account_type_label"
-          visible={step === 4}
+        <PhoneNumberFormField
+          valid={setFormValid}
+          step={step}
+          onFieldChange={handleFormChange}
         />
-      </React.Fragment>
+        <RegistrationNumberFormField
+          valid={setFormValid}
+          step={step}
+          onFieldChange={handleFormChange}
+        />
+        <PasswordFormField
+          valid={setFormValid}
+          step={step}
+          onFieldChange={handleFormChange}
+        />
+      </>
     );
   };
 
   return (
     <>
-      <Dialog open={true}>
+      <Dialog open={open}>
         <Typography variant="h4" sx={{ ml: 3, mt: 3 }}>
-          Register <Create sx={{ ml: 1 }} />
+          Enregistrement <Create sx={{ ml: 1 }} />
         </Typography>
         <DialogContent sx={{ minWidth: 425 }}>
-          {displayTextFormFields()}
+          {displayFormFields()}
         </DialogContent>
         <DialogActions sx={{ mt: 0 }}>
           <MobileStepper
@@ -172,22 +123,18 @@ const Register = () => {
             activeStep={step}
             sx={{ flexGrow: 1 }}
             nextButton={
-              <Button
-                size="small"
-                onClick={nextStep}
-                disabled={step === stepCount - 1}
-              >
-                Next
+              <Button size="small" onClick={nextStep} disabled={!formValid}>
+                {step === stepCount - 1 ? "Envoyer" : "Suivant"}
                 <KeyboardArrowRight />
               </Button>
             }
             backButton={
               <Button size="small" onClick={prevStep} disabled={step === 0}>
                 <KeyboardArrowLeft />
-                Back
+                Retour
               </Button>
             }
-          ></MobileStepper>
+          />
         </DialogActions>
       </Dialog>
     </>

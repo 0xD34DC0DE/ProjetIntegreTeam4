@@ -5,6 +5,7 @@ import com.team4.backend.model.User;
 import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.JwtUtil;
 import com.team4.backend.util.PBKDF2Encoder;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,8 +15,7 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -55,11 +55,32 @@ public class UserServiceTest {
 
         //ASSERT
         StepVerifier.create(returnedToken1)
-                .consumeNextWith(t -> assertEquals(token,t))
+                .consumeNextWith(t -> assertEquals(token, t))
                 .verifyComplete();
 
         StepVerifier.create(returnedToken2).verifyError(ResponseStatusException.class);
     }
 
+    @Test
+    void isEmailTaken() {
+        // ARRANGE
+        String email1 = "123456789@gmail.com";
+        String email2 = "test@gmail.com";
 
+        when(userRepository.existsByEmail(email1)).thenReturn(Mono.just(true));
+        when(userRepository.existsByEmail(email2)).thenReturn(Mono.just(false));
+
+        // ACT
+        Mono<Boolean> booleanMono1 = userService.existsByEmail(email1);
+        Mono<Boolean> booleanMono2 = userService.existsByEmail(email2);
+
+        // ASSERT
+        StepVerifier.create(booleanMono1)
+                .assertNext(Assertions::assertTrue)
+                .verifyComplete();
+
+        StepVerifier.create(booleanMono2)
+                .assertNext(Assertions::assertFalse)
+                .verifyComplete();
+    }
 }

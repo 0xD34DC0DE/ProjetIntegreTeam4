@@ -2,8 +2,11 @@ package com.team4.backend.controller;
 
 
 import com.team4.backend.dto.StudentDto;
+import com.team4.backend.exception.UserAlreadyExistsException;
+import com.team4.backend.model.Student;
+import com.team4.backend.model.User;
 import com.team4.backend.service.StudentService;
-import com.team4.backend.util.PBKDF2Encoder;
+import com.team4.backend.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -18,18 +21,16 @@ public class StudentController {
 
     private final StudentService studentService;
 
-    private final PBKDF2Encoder pbkdf2Encoder;
-
-    public StudentController(StudentService studentService, PBKDF2Encoder pbkdf2Encoder) {
+    public StudentController(StudentService studentService) {
         this.studentService = studentService;
-        this.pbkdf2Encoder = pbkdf2Encoder;
     }
 
     @PostMapping("/register")
-    public Mono<ResponseEntity<Void>> register(@RequestBody StudentDto studentDto) {
-        ResponseEntity<Void> createdResponse = new ResponseEntity<>(HttpStatus.OK);
-        studentDto.setPassword(pbkdf2Encoder.encode(studentDto.getPassword()));
-        return studentService.registerStudent(StudentDto.dtoToEntity(studentDto)).map(s -> createdResponse);
+    public Mono<ResponseEntity<String>> register(@RequestBody StudentDto studentDto) {
+        return studentService.registerStudent(StudentDto.dtoToEntity(studentDto))
+                .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
+                .onErrorReturn(UserAlreadyExistsException.class, ResponseEntity.status(HttpStatus.CONFLICT).body(""));
+        //TODO add a non-handled exception to make sure it returns 500 and not 409
     }
 
 }
