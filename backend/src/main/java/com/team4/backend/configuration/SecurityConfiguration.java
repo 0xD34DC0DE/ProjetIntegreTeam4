@@ -45,7 +45,8 @@ public class SecurityConfiguration {
                 .pathMatchers(HttpMethod.OPTIONS).permitAll()
                 .pathMatchers("/user/login").permitAll()
                 .anyExchange().authenticated()
-                .and().build();
+                .and().cors().and().csrf().disable()
+                .build();
     }
 }
 
