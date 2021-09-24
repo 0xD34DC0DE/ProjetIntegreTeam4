@@ -1,9 +1,8 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferDto;
-import com.team4.backend.model.InternshipOffer;
-import com.team4.backend.model.Monitor;
 import com.team4.backend.service.InternshipOfferService;
+import com.team4.backend.testdata.InternshipOfferMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,8 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
-
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
@@ -35,16 +32,7 @@ public class InternshipOfferControllerTest {
     @Test
     void addAnInternshipOffer() {
         //ARRANGE
-        InternshipOfferDto internshipOfferDTO = new InternshipOfferDto(InternshipOffer.builder()
-                .limitDateToApply(LocalDate.now().plusMonths(1))
-                .beginningDate(LocalDate.now().plusMonths(2))
-                .endingDate(LocalDate.now().plusMonths(6))
-                .minSalary(22.5f)
-                .maxSalary(23.5f)
-                .companyName("desjardins")
-                .monitor(Monitor.monitorBuilder().email("rickJones@desjardins.com").build())
-                .description("Développeur Web")
-                .build());
+        InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
 
         when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.just(internshipOfferDTO));
 
@@ -57,7 +45,6 @@ public class InternshipOfferControllerTest {
                 .expectStatus()
                 .isOk()
                 .expectBody(InternshipOfferDto.class).returnResult().getStatus();
-
 
         //ASSERT
         assertEquals(HttpStatus.OK, httpStatus);
