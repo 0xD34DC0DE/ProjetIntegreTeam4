@@ -34,7 +34,6 @@ public class StudentControllerTest {
     @MockBean
     UserService userService;
 
-
     @Test
     public void shouldCreateStudent() {
         //ARRANGE
@@ -55,16 +54,18 @@ public class StudentControllerTest {
 
         when(userService.findByEmail(any(String.class))).thenReturn(Mono.empty());
 
+        //ACT
         webTestClient
                 .post().uri("/student/register").bodyValue(studentDto)
                 .exchange()
+                //ASSERT
                 .expectStatus().isCreated()
                 .expectBody().isEmpty();
-
     }
 
     @Test
     public void shouldNotCreateStudent() {
+        //ARRANGE
         StudentDto studentDto = StudentMockData.getMockStudentDto();
 
         studentDto.setId(null);
@@ -74,12 +75,12 @@ public class StudentControllerTest {
 
         when(userService.findByEmail(any(String.class))).thenReturn(Mono.just(alreadyExistingStudent));
 
+        //ACT
         webTestClient
                 .post().uri("/student/register").bodyValue(studentDto)
                 .exchange()
+                // ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
                 .expectBody().isEmpty();
-
     }
-
 }

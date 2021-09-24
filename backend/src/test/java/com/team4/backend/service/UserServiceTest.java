@@ -71,8 +71,8 @@ public class UserServiceTest {
         when(userRepository.existsByEmail(email2)).thenReturn(Mono.just(false));
 
         // ACT
-        Mono<Boolean> booleanMono1 = userService.isEmailTaken(email1);
-        Mono<Boolean> booleanMono2 = userService.isEmailTaken(email2);
+        Mono<Boolean> booleanMono1 = userService.existsByEmail(email1);
+        Mono<Boolean> booleanMono2 = userService.existsByEmail(email2);
 
         // ASSERT
         StepVerifier.create(booleanMono1)

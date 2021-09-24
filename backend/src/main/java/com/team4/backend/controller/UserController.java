@@ -21,7 +21,7 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public Mono<Boolean> isEmailTaken(@PathVariable String email) {
-        return userService.isEmailTaken(email);
+    public Mono<Boolean> userExistsByEmail(@PathVariable String email) {
+        return userService.existsByEmail(email);
     }
 }

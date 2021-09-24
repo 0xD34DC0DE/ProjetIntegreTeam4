@@ -48,7 +48,7 @@ public class InternshipManagerRegistration implements ApplicationRunner {
 
             managers.forEach(internshipManager -> {
 
-                Boolean managerAlreadyExists = userService.isEmailTaken(internshipManager.getEmail()).block();
+                Boolean managerAlreadyExists = userService.existsByEmail(internshipManager.getEmail()).block();
 
                 if (managerAlreadyExists == null) {
                     throw new RuntimeException(

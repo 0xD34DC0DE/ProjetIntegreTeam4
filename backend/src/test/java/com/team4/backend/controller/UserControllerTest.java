@@ -54,9 +54,9 @@ public class UserControllerTest {
         // ARRANGE
         String email = "123456789@gmail.com";
 
-        // ACT
-        when(userService.isEmailTaken(email)).thenReturn(Mono.just(true));
+        when(userService.existsByEmail(email)).thenReturn(Mono.just(true));
 
+        // ACT
         HttpStatus httpStatus = webTestClient
                 .get()
                 .uri("/user/email/123456789@gmail.com")
