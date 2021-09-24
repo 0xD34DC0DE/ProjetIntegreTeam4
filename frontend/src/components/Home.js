@@ -1,16 +1,9 @@
-import { Typography } from "@mui/material";
 import React from "react";
-import StickyFooter from "./Footer";
-import SideBar from "./SideBar";
-import TopBar from "./TopBar";
+import { Typography } from "@mui/material";
 
-const Home = () => {
-  const [open, setOpen] = React.useState(true);
-
+function Home() {
   return (
     <>
-      <TopBar setOpen={setOpen} open={open} />
-      <SideBar setOpen={setOpen} open={open} />
       <Typography
         variant="h1"
         component="h1"
@@ -20,9 +13,8 @@ const Home = () => {
       >
         Home
       </Typography>
-      <StickyFooter />
     </>
   );
-};
+}
 
 export default Home;

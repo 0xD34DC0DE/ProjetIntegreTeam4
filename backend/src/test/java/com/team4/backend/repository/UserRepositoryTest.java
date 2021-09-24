@@ -1,5 +1,6 @@
 package com.team4.backend.repository;
 
+import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.User;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Assertions;

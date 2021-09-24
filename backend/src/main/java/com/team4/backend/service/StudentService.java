@@ -7,8 +7,6 @@ import com.team4.backend.util.PBKDF2Encoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
-import java.net.UnknownServiceException;
-
 @Service
 public class StudentService {
 
@@ -26,7 +24,7 @@ public class StudentService {
 
     public Mono<Student> registerStudent(Student student) {
         return userService.existsByEmail(student.getEmail()).flatMap(exists -> {
-            if(!exists) {
+            if (!exists) {
                 student.setPassword(pbkdf2Encoder.encode(student.getPassword()));
                 return studentRepository.save(student);
             } else {
@@ -34,5 +32,4 @@ public class StudentService {
             }
         });
     }
-
 }

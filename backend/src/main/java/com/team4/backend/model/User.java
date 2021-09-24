@@ -12,8 +12,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Optional;
 
-@ToString
 @Data
+@ToString
 @NoArgsConstructor
 @Document(collection = "users")
 public class User implements Serializable {
