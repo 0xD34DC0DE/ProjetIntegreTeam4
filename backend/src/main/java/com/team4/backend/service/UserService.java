@@ -22,7 +22,7 @@ public class UserService {
     @Autowired
     private JwtUtil jwtUtil;
 
-    public Mono<String> login(AuthRequestDto authRequestDto){
+    public Mono<String> login(AuthRequestDto authRequestDto) {
         return userRepository.findByEmailAndPasswordAndIsEnabledTrue(authRequestDto.getEmail(),
                 pbkdf2Encoder.encode(authRequestDto.getPassword()))
                 .map(user -> jwtUtil.generateToken(user));

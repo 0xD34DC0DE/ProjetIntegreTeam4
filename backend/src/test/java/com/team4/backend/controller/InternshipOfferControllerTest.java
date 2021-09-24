@@ -19,7 +19,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
@@ -32,9 +32,8 @@ public class InternshipOfferControllerTest {
     @MockBean
     InternshipOfferService internshipOfferService;
 
-
     @Test
-    void addAnInternshipOffer(){
+    void addAnInternshipOffer() {
         //ARRANGE
         InternshipOfferDTO internshipOfferDTO = new InternshipOfferDTO(InternshipOffer.builder()
                 .limitDateToApply(LocalDate.now().plusMonths(1))
@@ -50,7 +49,7 @@ public class InternshipOfferControllerTest {
         when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.just(internshipOfferDTO));
 
         //ACT
-        HttpStatus httpStatus= webTestClient
+        HttpStatus httpStatus = webTestClient
                 .post()
                 .uri("/internshipOffer/addAnInternshipOffer")
                 .bodyValue(internshipOfferDTO)
@@ -61,7 +60,6 @@ public class InternshipOfferControllerTest {
 
 
         //ASSERT
-        assertEquals(HttpStatus.OK,httpStatus);
+        assertEquals(HttpStatus.OK, httpStatus);
     }
-
 }
