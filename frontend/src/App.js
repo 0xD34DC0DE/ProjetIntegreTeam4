@@ -4,6 +4,10 @@ import "./App.css";
 import StickyFooter from "./components/Footer";
 import Home from "./components/Home";
 import Login from "./components/Login";
+<<<<<<< HEAD
+=======
+import OfferForm from "./components/OfferForm";
+>>>>>>> fc644374082e40720fd48cdacbe90aededfa0f86
 import SideBar from "./components/SideBar";
 import TopBar from "./components/TopBar";
 
@@ -26,6 +30,7 @@ function App() {
         <SideBar setOpen={setOpen} open={open} />
         <Switch>
           <Route path="/" exact component={Home} />
+          <Route path="/offerForm" exact component={OfferForm} />
           <Route
             path="/login"
             extact

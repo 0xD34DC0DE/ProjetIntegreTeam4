@@ -8,7 +8,6 @@ class OfferFormField {
   }
 }
 
-// Not sure for the names
 export const OFFER_FORM_VALUES = [
   new OfferFormField("Date limite pour appliquer", "date"),
   new OfferFormField("Date de début", "date"),
