@@ -19,10 +19,9 @@ import RegistrationNumberFormField from "./RegistrationNumberFormField";
 import PasswordFormField from "./PasswordFormField";
 import axios from "axios";
 
-const Register = () => {
+const Register = ({ open, setOpen }) => {
   const [step, setStep] = useState(0);
   const [formValid, setFormValid] = useState(false);
-  const [open, setOpen] = useState(true);
   const [form, setForm] = useState({
     email: "",
     password: "",
@@ -67,6 +66,12 @@ const Register = () => {
       });
   };
 
+  const handleClose = (event, reason) => {
+    console.log("reason", reason);
+    console.log("open", open);
+    if (reason === "backdropClick") setOpen(false);
+  };
+
   const handleFormChange = (event) => {
     setForm((form) => ({
       ...form,
@@ -108,7 +113,7 @@ const Register = () => {
 
   return (
     <>
-      <Dialog open={open}>
+      <Dialog open={open} onClose={handleClose}>
         <Typography variant="h4" sx={{ ml: 3, mt: 3 }}>
           Enregistrement <Create sx={{ ml: 1 }} />
         </Typography>

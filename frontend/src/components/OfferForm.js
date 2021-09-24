@@ -6,13 +6,14 @@ import {
   DialogContent,
   FormGroup,
   Typography,
+  DialogTitle,
 } from "@mui/material";
 import axios from "axios";
 import React from "react";
 import { OFFER_FORM_VALUES } from "../modals/TextFormFieldValues";
 import TextFormField from "./TextFormField";
 
-function OfferForm({ userInformations }) {
+function OfferForm({ isMounted }) {
   const emptyOffer = {
     limitDateToApply: new Date(),
     beginningDate: new Date(),
@@ -58,7 +59,7 @@ function OfferForm({ userInformations }) {
 
   return (
     <>
-      <Dialog open={true}>
+      <Dialog open={isMounted} disable>
         <Typography variant="h4" sx={{ ml: 3, mt: 3 }}>
           Déposer une offre de stage <Create sx={{ mx: 1 }} />
         </Typography>

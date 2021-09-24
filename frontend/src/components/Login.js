@@ -1,5 +1,7 @@
 import {
   Button,
+  Dialog,
+  DialogContent,
   DialogContentText,
   Grid,
   TextField,
@@ -9,7 +11,7 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import React, { useState } from "react";
 
-const Login = ({ userInformations, setUserInformations }) => {
+const Login = ({ open, userInformations, setUserInformations }) => {
   const [errorMessage, setErrorMessage] = useState();
 
   const logUserIn = (evt) => {
@@ -57,15 +59,8 @@ const Login = ({ userInformations, setUserInformations }) => {
 
   if (!userInformations.loggedIn) {
     return (
-      <div>
-        <Grid
-          container
-          spacing={10}
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-          style={{ minHeight: "100vh" }}
-        >
+      <Dialog open={open}>
+        <DialogContent>
           <Typography variant="h4" align="center" style={{ minHeight: "5vh" }}>
             Connexion
           </Typography>
@@ -102,20 +97,13 @@ const Login = ({ userInformations, setUserInformations }) => {
               Envoyer
             </Button>
           </form>
-        </Grid>
-      </div>
+        </DialogContent>
+      </Dialog>
     );
   } else {
     return (
-      <div>
-        <Grid
-          container
-          spacing={10}
-          direction="column"
-          alignItems="center"
-          justifyContent="center"
-          style={{ minHeight: "100vh" }}
-        >
+      <Dialog>
+        <DialogContent>
           <Typography variant="h4" align="center">
             Connexion
           </Typography>
@@ -131,8 +119,8 @@ const Login = ({ userInformations, setUserInformations }) => {
           >
             Se Déconnecter
           </Button>
-        </Grid>
-      </div>
+        </DialogContent>
+      </Dialog>
     );
   }
 };
