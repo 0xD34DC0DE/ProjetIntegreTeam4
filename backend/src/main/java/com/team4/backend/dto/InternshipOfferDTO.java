@@ -2,11 +2,9 @@ package com.team4.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.team4.backend.model.InternshipOffer;
-import com.team4.backend.model.Student;
 import com.team4.backend.model.User;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import reactor.core.publisher.Mono;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -25,6 +23,8 @@ public class InternshipOfferDTO implements Serializable {
 
     private String companyName, emailOfMonitor, description;
 
+    private Float minSalary, maxSalary;
+
     private List<String> listEmailInterestedStudents, listEmailExclusiveStudents;
 
     private boolean isValidated;
@@ -37,6 +37,8 @@ public class InternshipOfferDTO implements Serializable {
         this.companyName = internshipOffer.getCompanyName();
         this.emailOfMonitor = internshipOffer.getMonitor().getEmail();
         this.description = internshipOffer.getDescription();
+        this.minSalary = internshipOffer.getMinSalary();
+        this.maxSalary = internshipOffer.getMaxSalary();
         this.listEmailInterestedStudents = internshipOffer.getListInterestedStudents() == null ? Collections.emptyList() :
                 internshipOffer.getListInterestedStudents().stream().map(User::getEmail).collect(Collectors.toList());
         this.listEmailExclusiveStudents = internshipOffer.getListExclusiveStudents() == null ? Collections.emptyList() :

@@ -38,6 +38,8 @@ public class InternshipOfferServiceTest {
                 .limitDateToApply(LocalDate.now().plusMonths(1))
                 .beginningDate(LocalDate.now().plusMonths(2))
                 .endingDate(LocalDate.now().plusMonths(6))
+                .minSalary(22.5f)
+                .maxSalary(23.5f)
                 .companyName("desjardins")
                 .monitor(Monitor.monitorBuilder().email("rickJones@desjardins.com").build())
                 .description("Développeur Web")
@@ -58,6 +60,8 @@ public class InternshipOfferServiceTest {
                     assertEquals(internshipOfferDTO.getEndingDate(), s.getEndingDate());
                     assertEquals(internshipOfferDTO.getCompanyName(), s.getCompanyName());
                     assertEquals(internshipOfferDTO.getDescription(), s.getDescription());
+                    assertEquals(internshipOfferDTO.getMinSalary(), s.getMinSalary());
+                    assertEquals(internshipOfferDTO.getMaxSalary(), s.getMaxSalary());
                 }).verifyComplete();
     }
 }
