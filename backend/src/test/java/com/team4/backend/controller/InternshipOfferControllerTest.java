@@ -40,6 +40,8 @@ public class InternshipOfferControllerTest {
                 .limitDateToApply(LocalDate.now().plusMonths(1))
                 .beginningDate(LocalDate.now().plusMonths(2))
                 .endingDate(LocalDate.now().plusMonths(6))
+                .minSalary(22.5f)
+                .maxSalary(23.5f)
                 .companyName("desjardins")
                 .monitor(Monitor.monitorBuilder().email("rickJones@desjardins.com").build())
                 .description("Développeur Web")
