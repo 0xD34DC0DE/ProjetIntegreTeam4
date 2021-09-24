@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import "./App.css";
 import StickyFooter from "./components/Footer";
 import Home from "./components/Home";
 import Login from "./components/Login";
 import OfferForm from "./components/OfferForm";
-import Register from "./components/Register";
 import SideBar from "./components/SideBar";
 import TopBar from "./components/TopBar";
 
