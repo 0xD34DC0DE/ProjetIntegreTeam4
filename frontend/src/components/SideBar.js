@@ -12,6 +12,7 @@ import Toolbar from "@mui/material/Toolbar";
 import * as React from "react";
 import { useHistory } from "react-router";
 import { drawerListItems } from "../modals/drawerListItems";
+import OfferForm from "./OfferForm";
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop,
@@ -41,7 +42,7 @@ const mdTheme = createTheme();
 
 function SideBar({ setOpen, open }) {
   const history = useHistory();
-
+  const [mountedForm, setMountForm] = React.useState(false);
   const routeChange = (path) => {
     history.push(path);
   };
@@ -68,7 +69,7 @@ function SideBar({ setOpen, open }) {
         <List>
           {drawerListItems.map((item, key) => {
             return (
-              <ListItemButton key={key} onClick={() => routeChange(item[2])}>
+              <ListItemButton key={key} onClick={() => setMountForm(true)}>
                 <ListItemIcon>
                   <Icon>{item[1]}</Icon>
                 </ListItemIcon>
@@ -78,6 +79,7 @@ function SideBar({ setOpen, open }) {
           })}
         </List>
       </Drawer>
+      <OfferForm isMounted={mountedForm} />
     </ThemeProvider>
   );
 }

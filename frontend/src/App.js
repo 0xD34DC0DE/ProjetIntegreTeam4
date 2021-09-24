@@ -22,22 +22,17 @@ function App() {
   return (
     <BrowserRouter>
       <div className="App">
-        <TopBar setOpen={setOpen} open={open} />
+        <TopBar
+          setOpen={setOpen}
+          open={open}
+          userInformations={userInformations}
+          setUserInformations={setUserInformations}
+        />
         <SideBar setOpen={setOpen} open={open} />
         <Switch>
           <Route path="/" exact component={Home} />
-          <Route
-            path="/login"
-            extact
-            component={() => (
-              <Login
-                userInformations={userInformations}
-                setUserInformations={setUserInformations}
-              />
-            )}
-          />
         </Switch>
-        {userInformations.loggedIn ? <Redirect push to="/home" /> : null}
+        {userInformations.loggedIn ? <Redirect push to="/" /> : null}
         <StickyFooter />
       </div>
     </BrowserRouter>
