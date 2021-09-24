@@ -1,23 +1,19 @@
 package com.team4.backend.model;
 
 import com.team4.backend.model.enums.Role;
-import lombok.*;
-import org.springframework.cglib.core.Local;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
-import java.lang.annotation.Inherited;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Optional;
 
 @Data
 @ToString
-@Data
 @NoArgsConstructor
 @Document(collection = "users")
 public class User implements Serializable {
