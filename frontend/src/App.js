@@ -28,6 +28,7 @@ function App() {
         <SideBar setOpen={setOpen} open={open} />
         <Switch>
           <Route path="/" exact component={Home} />
+          <Route path="/offerForm" exact component={OfferForm} />
           <Route
             path="/login"
             extact

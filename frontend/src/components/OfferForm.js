@@ -12,7 +12,7 @@ import React from "react";
 import { OFFER_FORM_VALUES } from "../modals/TextFormFieldValues";
 import TextFormField from "./TextFormField";
 
-function OfferForm() {
+function OfferForm({ userInformations }) {
   const emptyOffer = {
     limitDateToApply: new Date(),
     beginningDate: new Date(),
@@ -25,7 +25,7 @@ function OfferForm() {
   };
   const [offer, setOffer] = React.useState(emptyOffer);
   const [isValid, setIsValid] = React.useState(false);
-  const [token, setToken] = React.useState("");
+  const [token, setToken] = React.useState(sessionStorage.getItem("jwt"));
 
   const handleFormChange = (event) => {
     setOffer((previousForm) => ({
@@ -43,7 +43,7 @@ function OfferForm() {
       method: "POST",
       url: "http://localhost:8080/internshipOffer/addAnInternshipOffer",
       headers: {
-        Authorization: `Bearer ${token}`,
+        Authorization: token,
       },
       data: offer,
       responseType: "json",
@@ -74,6 +74,7 @@ function OfferForm() {
                   onChange={handleFormChange}
                   value={Object.values(offer)[key]}
                   type={currentField.type}
+                  error={""}
                   visible={true}
                 />
               );

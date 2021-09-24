@@ -25,12 +25,12 @@ const TextFormField = ({
               label={label}
               type={type}
               helperText={error}
-              variant="standard"
               sx={{ flexGrow: 1 }}
               value={value}
               error={error !== ""}
               onChange={onChange}
               visible={visible.toString()}
+              variant="standard"
             />
           </FormControl>
         </>
