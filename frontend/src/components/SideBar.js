@@ -43,7 +43,6 @@ function SideBar({ setOpen, open }) {
   const history = useHistory();
 
   const routeChange = (path) => {
-    console.log("path", path);
     history.push(path);
   };
 

@@ -13,15 +13,12 @@ const Login = ({ userInformations, setUserInformations }) => {
   const [errorMessage, setErrorMessage] = useState();
 
   const logUserIn = (evt) => {
-    // Prevents the form from being submitted
     evt.nativeEvent.preventDefault();
 
-    // Get the form fields
     const formElements = evt.nativeEvent.target.elements;
     const email = formElements.email.value;
     const password = formElements.password.value;
 
-    // TODO : use application context to get the service url
     axios({
       method: "POST",
       baseURL: "http://localhost:8080",
