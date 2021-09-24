@@ -1,7 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.InternshipOfferDTO;
-import com.team4.backend.model.InternshipOffer;
+import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.service.InternshipOfferService;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +21,7 @@ public class InternshipOfferController {
 
     @PostMapping("/addAnInternshipOffer")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER','MONITOR')")
-    public Mono<InternshipOfferDTO> addAnInternshipOffer(@RequestBody InternshipOfferDTO internshipOfferDTO){
+    public Mono<InternshipOfferDto> addAnInternshipOffer(@RequestBody InternshipOfferDto internshipOfferDTO){
         return internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
     }
 }

@@ -1,6 +1,6 @@
 package com.team4.backend.model;
 
-import com.team4.backend.dto.InternshipOfferDTO;
+import com.team4.backend.dto.InternshipOfferDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,19 +22,25 @@ public class InternshipOffer implements Serializable {
     @Id
     private String id;
 
-    private LocalDate limitDateToApply, beginningDate, endingDate;
+    private LocalDate limitDateToApply;
+
+    private LocalDate beginningDate;
+
+    private LocalDate endingDate;
 
     private Monitor monitor;
 
     private String companyName, description;
 
-    private Float minSalary,maxSalary;
+    private Float minSalary, maxSalary;
 
     private boolean isValidated, isExclusive;
 
-    private List<Student> listInterestedStudents, listExclusiveStudents;
+    private List<Student> listInterestedStudents;
 
-    public InternshipOffer(InternshipOfferDTO internshipOfferDTO, Monitor monitor) {
+    private List<Student> listExclusiveStudents;
+
+    public InternshipOffer(InternshipOfferDto internshipOfferDTO, Monitor monitor) {
         this.limitDateToApply = internshipOfferDTO.getLimitDateToApply();
         this.beginningDate = internshipOfferDTO.getBeginningDate();
         this.endingDate = internshipOfferDTO.getEndingDate();
