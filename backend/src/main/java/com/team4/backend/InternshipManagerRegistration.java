@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-@Order(1)
+@Order(2)
 public class InternshipManagerRegistration implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(InternshipManagerRegistration.class);
