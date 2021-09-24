@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.testdata.StudentMockData;
@@ -80,6 +81,6 @@ public class StudentServiceTest {
 
         //ASSERT
 
-        StepVerifier.create(studentMono).expectNextCount(0).verifyComplete();
+        StepVerifier.create(studentMono).expectError(UserAlreadyExistsException.class).verify();
     }
 }

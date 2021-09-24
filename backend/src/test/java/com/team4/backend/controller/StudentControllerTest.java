@@ -53,8 +53,6 @@ public class StudentControllerTest {
                                 })
                 );
 
-        when(userService.findByEmail(any(String.class))).thenReturn(Mono.empty());
-
         //ACT
         webTestClient
                 .post().uri("/student/register").bodyValue(studentDto)

@@ -31,9 +31,9 @@ public class UserControllerTest {
     @Test
     public void login() {
         //ARRANGE
-        AuthRequestDto authRequestDto = new AuthRequestDto("12345678@gmail.com", "massou123");
+        AuthRequestDto authRequestDto = new AuthRequestDto("testing@gmail.com", "p@77w0rd");
 
-        when(userService.login(authRequestDto)).thenReturn(Mono.just("sadasdadsas"));
+        when(userService.login(authRequestDto)).thenReturn(Mono.just("token_string"));
 
         //ACT
         HttpStatus httpStatus = webTestClient
@@ -41,31 +41,52 @@ public class UserControllerTest {
                 .uri("/user/login")
                 .bodyValue(authRequestDto)
                 .exchange()
+                //ASSERT
                 .expectStatus()
                 .isOk()
                 .expectBody(String.class).returnResult().getStatus();
 
-        //ASSERT
+
         assertEquals(HttpStatus.OK, httpStatus);
     }
 
     @Test
-    public void isEmailTaken() {
+    public void isEmailTakenTrue() {
         // ARRANGE
-        String email = "123456789@gmail.com";
+        String email = "testing@gmail.com";
 
         when(userService.existsByEmail(email)).thenReturn(Mono.just(true));
 
         // ACT
         HttpStatus httpStatus = webTestClient
                 .get()
-                .uri("/user/email/123456789@gmail.com")
+                .uri("/user/email/testing@gmail.com")
                 .exchange()
+                //ASSERT
                 .expectStatus()
                 .isOk()
                 .expectBody(Boolean.class).returnResult().getStatus();
 
-        // ASSERT
+        assertEquals(HttpStatus.OK, httpStatus);
+    }
+
+    @Test
+    public void isEmailTakenFalse() {
+        // ARRANGE
+        String email = "non_existing@gmail.com";
+
+        when(userService.existsByEmail(email)).thenReturn(Mono.just(false));
+
+        // ACT
+        HttpStatus httpStatus = webTestClient
+                .get()
+                .uri("/user/email/non_existing@gmail.com")
+                .exchange()
+                //ASSERT
+                .expectStatus()
+                .isOk()
+                .expectBody(Boolean.class).returnResult().getStatus();
+
         assertEquals(HttpStatus.OK, httpStatus);
     }
 }

@@ -33,10 +33,6 @@ public class UserService {
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Can't find user with this credentials")));
     }
 
-    public Mono<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
-    }
-
     public Mono<Boolean> existsByEmail(String email) { return userRepository.existsByEmail(email); }
 
     /*

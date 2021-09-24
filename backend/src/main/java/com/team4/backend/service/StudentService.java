@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -29,7 +30,7 @@ public class StudentService {
                 student.setPassword(pbkdf2Encoder.encode(student.getPassword()));
                 return studentRepository.save(student);
             } else {
-                return Mono.error(new UnknownServiceException());
+                return Mono.error(new UserAlreadyExistsException());
             }
         });
     }
