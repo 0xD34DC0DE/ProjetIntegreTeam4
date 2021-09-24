@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-@Document(collection = "students")
+@Document(collection = "users")
 public class Student extends User {
 
     private String schoolName;

@@ -1,0 +1,16 @@
+[
+  {
+    "email": "manager1@gmail.com",
+    "password": "p@77w0rd",
+    "firstName": "John",
+    "lastName": "Doe",
+    "phoneNumber": "123-123-1234"
+  },
+  {
+    "email": "manager2@gmail.com",
+    "password": "p@77w0rd",
+    "firstName": "Steve",
+    "lastName": "Mineson",
+    "phoneNumber": "123-123-1234"
+  }
+]

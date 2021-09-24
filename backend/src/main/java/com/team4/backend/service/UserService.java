@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.AuthRequestDto;
+import com.team4.backend.model.User;
 import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.JwtUtil;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -30,8 +31,9 @@ public class UserService {
         return userRepository.findByEmailAndPasswordAndIsEnabledTrue(authRequestDto.getEmail(), pbkdf2Encoder.encode(authRequestDto.getPassword()))
                 .map(jwtUtil::generateToken)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Can't find user with this credentials")));
-
     }
+
+    public Mono<Boolean> existsByEmail(String email) { return userRepository.existsByEmail(email); }
 
     /*
     TODO --> resetPassword() --> Nice To Have

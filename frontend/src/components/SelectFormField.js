@@ -1,36 +1,44 @@
+import React from "react";
+import { DialogContentText, MenuItem, Select } from "@mui/material";
 
-import React from "react"
-import { DialogContentText, MenuItem, Select } from "@mui/material"
+const SelectFormField = ({
+  visible,
+  dialogContentText,
+  labelId,
+  id,
+  value,
+  label,
+  name,
+  onChange,
+  items,
+}) => {
+  return (
+    <>
+      {visible && (
+        <>
+          <DialogContentText>{dialogContentText}</DialogContentText>
+          <Select
+            labelId={labelId}
+            id={id}
+            value={value}
+            label={label}
+            name={name}
+            variant="standard"
+            sx={{ flexGrow: 1, width: "100%" }}
+            onChange={onChange}
+          >
+            {items.map((item) => {
+              return (
+                <MenuItem key={item.value} value={item.value}>
+                  {item.type}
+                </MenuItem>
+              );
+            })}
+          </Select>
+        </>
+      )}
+    </>
+  );
+};
 
-const SelectFormField = (props) => {
-    return (
-        <React.Fragment>
-        {props.visible &&
-            <React.Fragment>
-                <DialogContentText>
-                    {props.dialogContentText}
-                </DialogContentText>
-                <Select
-                    labelId={props.labelId}
-                    id={props.id}
-                    value={props.value}
-                    label={props.label}
-                    name={props.name}
-                    sx={{flexGrow: 1, width: "100%"}}
-                    onChange={props.onChange}
-                >
-                {
-                    props.items.map((item) => {
-                        return (
-                            <MenuItem key={item.value} value={item.value}>{item.type}</MenuItem>
-                        )
-                    })
-                }
-                </Select>
-            </React.Fragment>
-        }
-        </React.Fragment>
-    )
-}
-
-export default SelectFormField
+export default SelectFormField;
