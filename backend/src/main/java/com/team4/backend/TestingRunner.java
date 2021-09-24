@@ -10,7 +10,6 @@ import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
