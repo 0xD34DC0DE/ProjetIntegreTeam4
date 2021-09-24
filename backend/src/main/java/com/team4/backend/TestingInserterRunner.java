@@ -22,9 +22,9 @@ import java.util.Random;
 
 @Component
 @Order(1)
-public class TestingRunner implements ApplicationRunner {
+public class TestingInserterRunner implements ApplicationRunner {
 
-    private static final Logger log = LoggerFactory.getLogger(TestingRunner.class);
+    private static final Logger log = LoggerFactory.getLogger(TestingInserterRunner.class);
 
     private final PersonRepository personRepository;
 
@@ -34,7 +34,7 @@ public class TestingRunner implements ApplicationRunner {
 
     private final PBKDF2Encoder pbkdf2Encoder;
 
-    public TestingRunner(PersonRepository personRepository, MonitorRepository monitorRepository, UserRepository userRepository, PBKDF2Encoder pbkdf2Encoder) {
+    public TestingInserterRunner(PersonRepository personRepository, MonitorRepository monitorRepository, UserRepository userRepository, PBKDF2Encoder pbkdf2Encoder) {
         this.personRepository = personRepository;
         this.monitorRepository = monitorRepository;
         this.userRepository = userRepository;

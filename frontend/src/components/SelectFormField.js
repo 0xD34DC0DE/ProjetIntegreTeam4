@@ -1,22 +1,33 @@
 import React from "react";
 import { DialogContentText, MenuItem, Select } from "@mui/material";
 
-const SelectFormField = (props) => {
+const SelectFormField = ({
+  visible,
+  dialogContentText,
+  labelId,
+  id,
+  value,
+  label,
+  name,
+  onChange,
+  items,
+}) => {
   return (
-    <React.Fragment>
-      {props.visible && (
-        <React.Fragment>
-          <DialogContentText>{props.dialogContentText}</DialogContentText>
+    <>
+      {visible && (
+        <>
+          <DialogContentText>{dialogContentText}</DialogContentText>
           <Select
-            labelId={props.labelId}
-            id={props.id}
-            value={props.value}
-            label={props.label}
-            name={props.name}
+            labelId={labelId}
+            id={id}
+            value={value}
+            label={label}
+            name={name}
+            variant="standard"
             sx={{ flexGrow: 1, width: "100%" }}
-            onChange={props.onChange}
+            onChange={onChange}
           >
-            {props.items.map((item) => {
+            {items.map((item) => {
               return (
                 <MenuItem key={item.value} value={item.value}>
                   {item.type}
@@ -24,9 +35,9 @@ const SelectFormField = (props) => {
               );
             })}
           </Select>
-        </React.Fragment>
+        </>
       )}
-    </React.Fragment>
+    </>
   );
 };
 

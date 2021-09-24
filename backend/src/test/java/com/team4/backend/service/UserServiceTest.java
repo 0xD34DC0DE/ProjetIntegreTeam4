@@ -11,10 +11,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -53,9 +54,33 @@ public class UserServiceTest {
         Mono<String> returnedToken2 = userService.login(authRequestDto2);
 
         //ASSERT
-        returnedToken1.subscribe(subToken -> assertEquals(token, subToken));
-        returnedToken2.subscribe(Assertions::assertNull);
+        StepVerifier.create(returnedToken1)
+                .consumeNextWith(t -> assertEquals(token, t))
+                .verifyComplete();
+
+        StepVerifier.create(returnedToken2).verifyError(ResponseStatusException.class);
     }
 
+    @Test
+    void isEmailTaken() {
+        // ARRANGE
+        String email1 = "123456789@gmail.com";
+        String email2 = "test@gmail.com";
 
+        when(userRepository.existsByEmail(email1)).thenReturn(Mono.just(true));
+        when(userRepository.existsByEmail(email2)).thenReturn(Mono.just(false));
+
+        // ACT
+        Mono<Boolean> booleanMono1 = userService.existsByEmail(email1);
+        Mono<Boolean> booleanMono2 = userService.existsByEmail(email2);
+
+        // ASSERT
+        StepVerifier.create(booleanMono1)
+                .assertNext(Assertions::assertTrue)
+                .verifyComplete();
+
+        StepVerifier.create(booleanMono2)
+                .assertNext(Assertions::assertFalse)
+                .verifyComplete();
+    }
 }
