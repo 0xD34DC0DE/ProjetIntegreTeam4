@@ -19,7 +19,7 @@ import RegistrationNumberFormField from "./RegistrationNumberFormField";
 import PasswordFormField from "./PasswordFormField";
 import axios from "axios";
 
-const Home = () => {
+const Register = () => {
   const [step, setStep] = useState(0);
   const [formValid, setFormValid] = useState(false);
   const [open, setOpen] = useState(true);
