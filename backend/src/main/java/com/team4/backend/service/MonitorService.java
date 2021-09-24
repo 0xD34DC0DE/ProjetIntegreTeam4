@@ -16,11 +16,9 @@ public class MonitorService {
     @Autowired
     private MonitorRepository monitorRepository;
 
-
     public Mono<Monitor> findMonitorByEmail(String email) {
         return monitorRepository.findByEmail(email)
                 .filter(Objects::nonNull)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.BAD_REQUEST, "Can't find monitor with this email!")));
     }
-
 }
