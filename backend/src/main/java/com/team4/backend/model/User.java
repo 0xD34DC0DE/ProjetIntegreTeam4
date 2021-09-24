@@ -1,83 +1,65 @@
 package com.team4.backend.model;
 
 import com.team4.backend.model.enums.Role;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
+@Data
 @ToString
 @NoArgsConstructor
 @Document(collection = "users")
-public class User implements UserDetails, Serializable {
+public class User implements Serializable {
 
-    private UUID uuid;
+    @Id
+    protected String id;
 
-    @Getter @Setter
-    private String registrationNumber,email,password,firstName,lastName;
+    protected String registrationNumber;
 
-    @Getter @Setter
-    private LocalDate registrationDate;
+    protected String email;
 
-    @Getter @Setter
-    private Role role;
+    protected String password;
 
-    @Getter @Setter
-    private Boolean isEnabled;
+    protected String firstName;
+
+    protected String lastName;
+
+    protected String phoneNumber;
+
+    protected LocalDate registrationDate;
+
+    protected Role role;
+
+    protected Boolean isEnabled;
 
     @Builder
-    public User(String email,String firstName,String lastName,String password,String registrationNumber,Role role){
-        this.uuid = UUID.randomUUID();
+    public User(String id,
+                String email,
+                String firstName,
+                String lastName,
+                String password,
+                String registrationNumber,
+                String phoneNumber,
+                Role role,
+                Boolean isEnabled,
+                LocalDate registrationDate) {
+        this.id = id; // Auto generated
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.password = password;
         this.registrationNumber = registrationNumber;
+        this.phoneNumber = phoneNumber;
         this.role = role;
-        this.registrationDate = LocalDate.now();
+        this.isEnabled = isEnabled;
+        this.registrationDate = Optional.ofNullable(registrationDate).orElse(LocalDate.now());
     }
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority(role.name()));
-    }
-
-    @Override
-    public String getPassword() {
-        return null;
-    }
-
-    @Override
-    public String getUsername() {
-        return null;
-    }
-
-    @Override
-    public boolean isAccountNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isAccountNonLocked() {
-        return false;
-    }
-
-    @Override
-    public boolean isCredentialsNonExpired() {
-        return false;
-    }
-
-    @Override
-    public boolean isEnabled() {
-        return this.isEnabled;
-    }
 }

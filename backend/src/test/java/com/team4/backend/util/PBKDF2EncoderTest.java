@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Log
 @ExtendWith(SpringExtension.class)
 @DataMongoTest
-@ContextConfiguration(classes ={PBKDF2Encoder.class})
+@ContextConfiguration(classes = {PBKDF2Encoder.class})
 @EnableAutoConfiguration
 public class PBKDF2EncoderTest {
 
@@ -31,13 +31,16 @@ public class PBKDF2EncoderTest {
     @Test
     void encode() {
         //ARRANGE
-        CharSequence charSequence = "myPassword";
+        CharSequence charSequence1 = "myPassword";
 
         //ACT
-        String myPassEncoded = pbkdf2Encoder.encode(charSequence);
+        String myPassEncoded1 = pbkdf2Encoder.encode(charSequence1);
+        String encodedPassNull = pbkdf2Encoder.encode(null);
 
         //ASSERT
-        assertNotNull(myPassEncoded);
+        assertNotNull(myPassEncoded1);
+        assertFalse(myPassEncoded1.isEmpty());
+        assertTrue(encodedPassNull.isEmpty());
     }
 
     @Test
@@ -50,8 +53,8 @@ public class PBKDF2EncoderTest {
                 .getEncoded());
 
         //ACT
-        boolean passwordMatches = pbkdf2Encoder.matches(passwordEntered,encodedPassword);
-        boolean passwordNotMatching = pbkdf2Encoder.matches(wrongPassword,encodedPassword);
+        boolean passwordMatches = pbkdf2Encoder.matches(passwordEntered, encodedPassword);
+        boolean passwordNotMatching = pbkdf2Encoder.matches(wrongPassword, encodedPassword);
 
         //ASSERT
         assertTrue(passwordMatches);

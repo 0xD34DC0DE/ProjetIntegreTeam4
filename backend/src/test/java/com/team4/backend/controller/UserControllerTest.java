@@ -1,5 +1,6 @@
 package com.team4.backend.controller;
 
+import com.team4.backend.dto.AuthRequestDto;
 import com.team4.backend.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,13 +14,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
-@WebFluxTest(value = UserController.class,excludeAutoConfiguration = ReactiveSecurityAutoConfiguration.class)
+@WebFluxTest(value = UserController.class, excludeAutoConfiguration = ReactiveSecurityAutoConfiguration.class)
 public class UserControllerTest {
 
     @Autowired
@@ -28,32 +28,65 @@ public class UserControllerTest {
     @MockBean
     UserService userService;
 
-
     @Test
-    public void login(){
+    public void login() {
         //ARRANGE
-        String email = "12345678@gmail.com";
-        String password = "massou123";
+        AuthRequestDto authRequestDto = new AuthRequestDto("testing@gmail.com", "p@77w0rd");
 
-        when(userService.login(email,password)).thenReturn(Mono.just("sadasdadsas"));
+        when(userService.login(authRequestDto)).thenReturn(Mono.just("token_string"));
 
         //ACT
-        HttpStatus httpStatus= webTestClient
+        HttpStatus httpStatus = webTestClient
                 .post()
-                .uri(uriBuilder ->
-                        uriBuilder.path("/user/login")
-                .queryParam("email",email)
-                .queryParam("password",password).build())
+                .uri("/user/login")
+                .bodyValue(authRequestDto)
                 .exchange()
+                //ASSERT
                 .expectStatus()
                 .isOk()
                 .expectBody(String.class).returnResult().getStatus();
 
 
-        //ASSERT
-        assertEquals(HttpStatus.OK,httpStatus);
+        assertEquals(HttpStatus.OK, httpStatus);
     }
 
+    @Test
+    public void isEmailTakenTrue() {
+        // ARRANGE
+        String email = "testing@gmail.com";
 
+        when(userService.existsByEmail(email)).thenReturn(Mono.just(true));
 
+        // ACT
+        HttpStatus httpStatus = webTestClient
+                .get()
+                .uri("/user/email/testing@gmail.com")
+                .exchange()
+                //ASSERT
+                .expectStatus()
+                .isOk()
+                .expectBody(Boolean.class).returnResult().getStatus();
+
+        assertEquals(HttpStatus.OK, httpStatus);
+    }
+
+    @Test
+    public void isEmailTakenFalse() {
+        // ARRANGE
+        String email = "non_existing@gmail.com";
+
+        when(userService.existsByEmail(email)).thenReturn(Mono.just(false));
+
+        // ACT
+        HttpStatus httpStatus = webTestClient
+                .get()
+                .uri("/user/email/non_existing@gmail.com")
+                .exchange()
+                //ASSERT
+                .expectStatus()
+                .isOk()
+                .expectBody(Boolean.class).returnResult().getStatus();
+
+        assertEquals(HttpStatus.OK, httpStatus);
+    }
 }
