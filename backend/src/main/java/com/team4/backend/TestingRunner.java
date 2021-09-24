@@ -27,16 +27,12 @@ public class TestingRunner implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(TestingRunner.class);
 
-    @Autowired
     private final PersonRepository personRepository;
 
-    @Autowired
     private final MonitorRepository monitorRepository;
 
-    @Autowired
     private final UserRepository userRepository;
 
-    @Autowired
     private final PBKDF2Encoder pbkdf2Encoder;
 
     public TestingRunner(PersonRepository personRepository, MonitorRepository monitorRepository, UserRepository userRepository, PBKDF2Encoder pbkdf2Encoder) {
