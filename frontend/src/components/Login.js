@@ -19,6 +19,7 @@ const Login = ({userInformations, setUserInformations}) => {
         const email = formElements.email.value;
         const password = formElements.password.value;
 
+        // TODO : use application context to get the service url
         axios ({
             method: 'POST',
             baseURL: 'http://localhost:8080',
@@ -29,23 +30,18 @@ const Login = ({userInformations, setUserInformations}) => {
             },
           })
           .then(function (response) {
-            if (response.data !== ''){
-                sessionStorage.setItem('jwt', `Bearer ${response.data}`);
+            sessionStorage.setItem('jwt', `Bearer ${response.data}`);
 
-                const decodedJWT = jwt_decode(response.data);
-                setUserInformations({
-                    email: email,
-                    role: decodedJWT.role,
-                    loggedIn: true
-                });
-                setErrorMessage();
-              } else {
-                let errorMessage = 'Informations ne correspondent à aucun utilisateur sauvegardé'
-                setErrorMessage(errorMessage);
-              }
+            const decodedJWT = jwt_decode(response.data);
+            setUserInformations({
+                email: email,
+                role: decodedJWT.role,
+                loggedIn: true
+            });
+            setErrorMessage();
         })
         .catch(function (error) {
-            let errorMessage = 'Informations ne correspondent à aucun utilisateur sauvegardé'
+            let errorMessage = 'Votre connexion a échoué. L’identifiant ou le mot de passe que vous avez entré n’est pas valide. Réessayez.'
             setErrorMessage(errorMessage);
         });
     }
@@ -54,7 +50,6 @@ const Login = ({userInformations, setUserInformations}) => {
         sessionStorage.setItem('jwt', '');
         setUserInformations({
             email: "",
-            // username: "",
             role: "",
             loggedIn: false
         });

@@ -8,7 +8,6 @@ import {useState} from 'react'
 function App() {
   const userInformationsObject = {
     email: "",
-    // username: "",
     role: "",
     loggedIn: false
   }
