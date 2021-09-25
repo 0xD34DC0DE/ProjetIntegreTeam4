@@ -82,9 +82,9 @@ public class InternshipOfferDto implements Serializable {
                 .minSalary(internshipOffer.getMinSalary())
                 .maxSalary(internshipOffer.getMaxSalary())
                 .listEmailInterestedStudents(internshipOffer.getListInterestedStudents() == null ? Collections.emptyList() :
-                        internshipOffer.getListInterestedStudents().stream().map(User::getId).collect(Collectors.toList()))
+                        internshipOffer.getListInterestedStudents().stream().map(User::getEmail).collect(Collectors.toList()))
                 .listEmailExclusiveStudents(internshipOffer.getListExclusiveStudents() == null ? Collections.emptyList() :
-                        internshipOffer.getListExclusiveStudents().stream().map(User::getId).collect(Collectors.toList()))
+                        internshipOffer.getListExclusiveStudents().stream().map(User::getEmail).collect(Collectors.toList()))
                 .isValidated(internshipOffer.isValidated()).build();
     }
 
