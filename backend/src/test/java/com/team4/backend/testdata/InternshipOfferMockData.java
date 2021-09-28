@@ -40,4 +40,20 @@ public abstract class InternshipOfferMockData {
 
         return internshipOfferDto;
     }
+
+    public static InternshipOfferDto getInternshipOfferDtoWithNonExistentMonitor() {
+        final InternshipOfferDto internshipOfferDto =  InternshipOfferDto.builder()
+                .id("das0924kdads")
+                .limitDateToApply(LocalDate.now().plusMonths(1))
+                .beginningDate(LocalDate.now().plusMonths(2))
+                .endingDate(LocalDate.now().plusMonths(6))
+                .minSalary(22.5f)
+                .maxSalary(23.5f)
+                .companyName("desjardins")
+                .emailOfMonitor("noneExistent@desjardins.com")
+                .description("Développeur Web")
+                .build();
+
+        return internshipOfferDto;
+    }
 }

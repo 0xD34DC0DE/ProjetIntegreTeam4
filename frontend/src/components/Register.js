@@ -19,7 +19,7 @@ import RegistrationNumberFormField from "./RegistrationNumberFormField";
 import PasswordFormField from "./PasswordFormField";
 import axios from "axios";
 
-const Register = ({ open, setOpen }) => {
+const Register = ({ open, toggleDialogs }) => {
   const [step, setStep] = useState(0);
   const [formValid, setFormValid] = useState(false);
   const [form, setForm] = useState({
@@ -59,17 +59,15 @@ const Register = ({ open, setOpen }) => {
       responseType: "json",
     })
       .then(() => {
-        setOpen(false);
+        toggleDialogs("registerDialog", true);
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  const handleClose = (event, reason) => {
-    console.log("reason", reason);
-    console.log("open", open);
-    if (reason === "backdropClick") setOpen(false);
+  const handleClose = (_, reason) => {
+    if (reason === "backdropClick") toggleDialogs("registerDialog", false);
   };
 
   const handleFormChange = (event) => {
@@ -117,7 +115,7 @@ const Register = ({ open, setOpen }) => {
         <Typography variant="h4" sx={{ ml: 3, mt: 3 }}>
           Enregistrement <Create sx={{ ml: 1 }} />
         </Typography>
-        <DialogContent sx={{ minWidth: 425 }}>
+        <DialogContent sx={{ minWidth: "380px" }}>
           {displayFormFields()}
         </DialogContent>
         <DialogActions sx={{ mt: 0 }}>
