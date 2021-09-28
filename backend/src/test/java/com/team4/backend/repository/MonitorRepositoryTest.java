@@ -41,20 +41,31 @@ public class MonitorRepositoryTest {
     }
 
     @Test
-    void findByEmail() {
+    void shouldFindByEmail() {
         //ARRANGE
-        String email1 = "marcM@desjardin.com";
-        String email2 = "inexistantEmail@gmail.com";
+        String email = "marcM@desjardin.com";
 
         //ACT
-        Mono<Monitor> existingMonitor = monitorRepository.findByEmail(email1);
-        Mono<Monitor> nonExistentMonitor = monitorRepository.findByEmail(email2);
+        Mono<Monitor> monitorMono = monitorRepository.findByEmail(email);
 
         //ASSERT
-        StepVerifier.create(existingMonitor)
-                .assertNext(monitor -> assertEquals(email1, monitor.getEmail())).verifyComplete();
+        StepVerifier.create(monitorMono)
+                .assertNext(monitor -> assertEquals(email, monitor.getEmail()))
+                .verifyComplete();
+    }
 
-        StepVerifier.create(nonExistentMonitor).expectNextCount(0).verifyComplete();
+    @Test
+    void shouldNotFindByEmail() {
+        //ARRANGE
+        String email = "inexistantEmail@gmail.com";
+
+        //ACT
+        Mono<Monitor> nonExistentMonitor = monitorRepository.findByEmail(email);
+
+        //ACT
+        StepVerifier.create(nonExistentMonitor)
+                .expectNextCount(0)
+                .verifyComplete();
     }
 
 }
