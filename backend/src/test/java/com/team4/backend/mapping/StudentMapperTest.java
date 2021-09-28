@@ -5,13 +5,12 @@ import com.team4.backend.model.Student;
 import com.team4.backend.testdata.StudentMockData;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class StudentMapperTest {
 
     @Test
-    void convertStudentEntityToStudentDto() {
+    void mapEntityToDto() {
         //ARANGE
         Student entity = StudentMockData.getMockStudent();
 
@@ -33,7 +32,7 @@ public class StudentMapperTest {
     }
 
     @Test
-    void convertStudentDtoToStudentEntity() {
+    void mapDtoToEntity() {
         //ARANGE
         StudentDto dto = StudentMockData.getMockStudentDto();
 
