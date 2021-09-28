@@ -58,16 +58,13 @@ public class UserControllerTest {
         when(userService.existsByEmail(email)).thenReturn(Mono.just(true));
 
         // ACT
-        HttpStatus httpStatus = webTestClient
+        webTestClient
                 .get()
                 .uri("/user/email/testing@gmail.com")
                 .exchange()
                 //ASSERT
-                .expectStatus()
-                .isOk()
-                .expectBody(Boolean.class).returnResult().getStatus();
-
-        assertEquals(HttpStatus.OK, httpStatus);
+                .expectStatus().isOk()
+                .expectBody(Boolean.class);
     }
 
     @Test
@@ -78,15 +75,12 @@ public class UserControllerTest {
         when(userService.existsByEmail(email)).thenReturn(Mono.just(false));
 
         // ACT
-        HttpStatus httpStatus = webTestClient
+        webTestClient
                 .get()
                 .uri("/user/email/non_existing@gmail.com")
                 .exchange()
                 //ASSERT
-                .expectStatus()
-                .isOk()
-                .expectBody(Boolean.class).returnResult().getStatus();
-
-        assertEquals(HttpStatus.OK, httpStatus);
+                .expectStatus().isOk()
+                .expectBody(Boolean.class);
     }
 }
