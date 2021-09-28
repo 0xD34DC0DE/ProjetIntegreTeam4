@@ -9,8 +9,7 @@ import java.time.LocalDate;
 public abstract class InternshipOfferMockData {
 
     public static InternshipOffer getInternshipOffer() {
-
-        final InternshipOffer internshipOffer=  InternshipOffer.builder()
+        return InternshipOffer.builder()
                 .id("234dsd2egd54ter")
                 .limitDateToApply(LocalDate.now().plusMonths(1))
                 .beginningDate(LocalDate.now().plusMonths(2))
@@ -21,12 +20,10 @@ public abstract class InternshipOfferMockData {
                 .monitor(Monitor.monitorBuilder().email("rickJones@desjardins.com").build())
                 .description("Développeur Web")
                 .build();
-
-        return internshipOffer;
     }
 
     public static InternshipOfferDto getInternshipOfferDto() {
-        final InternshipOfferDto internshipOfferDto =  InternshipOfferDto.builder()
+        return InternshipOfferDto.builder()
                 .id("234dsd2egd54ter")
                 .limitDateToApply(LocalDate.now().plusMonths(1))
                 .beginningDate(LocalDate.now().plusMonths(2))
