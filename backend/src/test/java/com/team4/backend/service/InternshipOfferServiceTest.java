@@ -43,7 +43,7 @@ public class InternshipOfferServiceTest {
         when(monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor())).thenReturn(Mono.just(internshipOffer.getMonitor()));
         when(internshipOfferRepository.save(any(InternshipOffer.class)))
                 .thenReturn(Mono.just(internshipOffer).map(offer -> {
-                    offer.setId(InternshipManagerMockData.GetInternshipManager().getId());
+                    offer.setId(InternshipOfferMockData.getInternshipOffer().getId());
                     return offer;
                 }));
 
