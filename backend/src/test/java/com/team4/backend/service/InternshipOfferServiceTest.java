@@ -3,21 +3,21 @@ package com.team4.backend.service;
 import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.repository.InternshipOfferRepository;
-import com.team4.backend.testdata.InternshipManagerMockData;
 import com.team4.backend.testdata.InternshipOfferMockData;
 import lombok.extern.java.Log;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @Log
@@ -40,27 +40,39 @@ public class InternshipOfferServiceTest {
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
         internshipOffer.setId(null);
 
-        when(monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor())).thenReturn(Mono.just(internshipOffer.getMonitor()));
+        when(monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor()))
+                .thenReturn(Mono.just(internshipOffer.getMonitor()));
+
         when(internshipOfferRepository.save(any(InternshipOffer.class)))
                 .thenReturn(Mono.just(internshipOffer).map(offer -> {
                     offer.setId(InternshipOfferMockData.getInternshipOffer().getId());
                     return offer;
                 }));
 
-        InternshipOfferDto internshipOfferDtoWithNonExistentMonitor = InternshipOfferMockData.getInternshipOfferDtoWithNonExistentMonitor();
+        //ACT
+        Mono<InternshipOfferDto> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
 
-        when(monitorService.findMonitorByEmail(internshipOfferDtoWithNonExistentMonitor.getEmailOfMonitor())).thenThrow(ResponseStatusException.class);
+        //ASSERT
+        StepVerifier.create(savedInternshipOffer)
+                .assertNext(Assertions::assertNotNull)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotCreateInternshipOffer() {
+        //ARRANGE
+        InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+
+        when(monitorService.findMonitorByEmail(any(String.class)))
+                .thenReturn(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
 
         //ACT
         Mono<InternshipOfferDto> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
 
         //ASSERT
         StepVerifier.create(savedInternshipOffer)
-                .assertNext(s -> {
-                    assertNotNull(s.getId());
-                }).verifyComplete();
-
-        assertThrows(ResponseStatusException.class,()->internshipOfferService.addAnInternshipOffer(internshipOfferDtoWithNonExistentMonitor));
-
+                .expectError(ResponseStatusException.class)
+                .verify();
     }
+
 }
