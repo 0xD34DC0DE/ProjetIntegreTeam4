@@ -10,10 +10,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @Log
@@ -35,8 +37,13 @@ public class InternshipOfferServiceTest {
         InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
+
         when(monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor())).thenReturn(Mono.just(internshipOffer.getMonitor()));
         when(internshipOfferRepository.save(new InternshipOffer(internshipOfferDTO, internshipOffer.getMonitor()))).thenReturn(Mono.just(internshipOffer));
+
+        InternshipOfferDto internshipOfferDtoWithNonExistentMonitor = InternshipOfferMockData.getInternshipOfferDtoWithNonExistentMonitor();
+
+        when(monitorService.findMonitorByEmail(internshipOfferDtoWithNonExistentMonitor.getEmailOfMonitor())).thenThrow(ResponseStatusException.class);
 
         //ACT
         Mono<InternshipOfferDto> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
@@ -52,5 +59,8 @@ public class InternshipOfferServiceTest {
                     assertEquals(internshipOfferDTO.getMinSalary(), s.getMinSalary());
                     assertEquals(internshipOfferDTO.getMaxSalary(), s.getMaxSalary());
                 }).verifyComplete();
+
+        assertThrows(ResponseStatusException.class,()->internshipOfferService.addAnInternshipOffer(internshipOfferDtoWithNonExistentMonitor));
+
     }
 }
