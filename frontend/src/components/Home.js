@@ -1,20 +1,21 @@
-import React from "react";
 import { Typography } from "@mui/material";
+import React from "react";
 
-function Home() {
+const Home = ({ userInformation }) => {
   return (
     <>
-      <Typography
-        variant="h1"
-        component="h1"
-        sx={{
-          clear: "right",
-        }}
-      >
-        Home
+      <Typography variant="h4">
+        {userInformation.loggedIn ? (
+          <>
+            {" "}
+            Hello {userInformation.role.toLowerCase()}, {userInformation.email}{" "}
+          </>
+        ) : (
+          "Hello visitor."
+        )}
       </Typography>
     </>
   );
-}
+};
 
 export default Home;
