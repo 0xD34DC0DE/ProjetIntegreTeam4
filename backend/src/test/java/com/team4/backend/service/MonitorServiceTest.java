@@ -35,11 +35,11 @@ public class MonitorServiceTest {
         when(monitorRepository.findByEmail(email2)).thenReturn(Mono.empty());
 
         //ACT
-        Mono<Monitor> returnedMonitor = monitorService.findMonitorByEmail(email1);
+        Mono<Monitor> monitorMono = monitorService.findMonitorByEmail(email1);
         Mono<Monitor> noMonitorReturned = monitorService.findMonitorByEmail(email2);
 
         //ASSERT
-        StepVerifier.create(returnedMonitor)
+        StepVerifier.create(monitorMono)
                 .assertNext(monitor -> assertEquals(email1, monitor.getEmail())).verifyComplete();
 
         StepVerifier.create(noMonitorReturned).verifyError(ResponseStatusException.class);
