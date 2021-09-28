@@ -9,10 +9,10 @@ import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
-import * as React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router";
-import { drawerListItems } from "../modals/drawerListItems";
-import OfferForm from "./OfferForm";
+import { drawerListItems } from "../models/drawerListItems";
+import OfferForm from "../components/OfferForm";
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop,
@@ -20,7 +20,7 @@ const Drawer = styled(MuiDrawer, {
   "& .MuiDrawer-paper": {
     position: "relative",
     float: "left",
-    width: theme.spacing(50),
+    width: theme.spacing(40),
     transition: theme.transitions.create("width", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.enteringScreen,
@@ -40,12 +40,13 @@ const Drawer = styled(MuiDrawer, {
 
 const mdTheme = createTheme();
 
-function SideBar({ setOpen, open }) {
+function SideBar({
+  setOpen,
+  open,
+  intershipOfferDialogVisible,
+  toggleDialogs,
+}) {
   const history = useHistory();
-  const [mountedForm, setMountForm] = React.useState(false);
-  const routeChange = (path) => {
-    history.push(path);
-  };
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -69,7 +70,12 @@ function SideBar({ setOpen, open }) {
         <List>
           {drawerListItems.map((item, key) => {
             return (
-              <ListItemButton key={key} onClick={() => setMountForm(true)}>
+              <ListItemButton
+                key={key}
+                onClick={() => {
+                  toggleDialogs("internshipOfferDialog", true);
+                }}
+              >
                 <ListItemIcon>
                   <Icon>{item[1]}</Icon>
                 </ListItemIcon>
@@ -79,7 +85,10 @@ function SideBar({ setOpen, open }) {
           })}
         </List>
       </Drawer>
-      <OfferForm isMounted={mountedForm} />
+      <OfferForm
+        isMounted={intershipOfferDialogVisible}
+        toggleDialogs={toggleDialogs}
+      />
     </ThemeProvider>
   );
 }
