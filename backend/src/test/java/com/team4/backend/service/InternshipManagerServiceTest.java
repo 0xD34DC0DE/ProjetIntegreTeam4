@@ -33,7 +33,7 @@ public class InternshipManagerServiceTest {
     private InternshipManagerService internshipManagerService;
 
     @Test
-    void shouldCreateIntershipManager() {
+    void shouldCreateInternshipManager() {
 
         // ARRANGE
         InternshipManager internshipManager = InternshipManagerMockData.GetInternshipManager();
@@ -57,4 +57,5 @@ public class InternshipManagerServiceTest {
         }).verifyComplete();
 
     }
+
 }
