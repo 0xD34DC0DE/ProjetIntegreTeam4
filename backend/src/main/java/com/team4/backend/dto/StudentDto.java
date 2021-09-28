@@ -26,41 +26,20 @@ public class StudentDto extends UserDto implements Serializable {
                       String firstName,
                       String lastName,
                       LocalDate registrationDate,
-                      Role role,
                       String schoolName,
                       String phoneNumber,
                       StudentState studentState) {
-        super(id, registrationNumber, email, password, firstName, lastName, registrationDate,phoneNumber, role);
+        super(id,
+                registrationNumber,
+                email,
+                password,
+                firstName,
+                lastName,
+                registrationDate,
+                phoneNumber,
+                Role.STUDENT);
         this.schoolName = schoolName;
         this.studentState = studentState;
     }
 
-    public static Student dtoToEntity(StudentDto studentDto) {
-        return Student.studentBuilder()
-                .id(studentDto.getId())
-                .registrationNumber(studentDto.getRegistrationNumber())
-                .email(studentDto.getEmail())
-                .password(studentDto.getPassword())
-                .firstName(studentDto.getFirstName())
-                .lastName(studentDto.getLastName())
-                .registrationDate(studentDto.getRegistrationDate())
-                .schoolName(studentDto.getSchoolName())
-                .phoneNumber(studentDto.getPhoneNumber())
-                .studentState(studentDto.getStudentState())
-                .build();
-    }
-
-    public static StudentDto entityToDto(Student student) {
-        return StudentDto.builder()
-                .id(student.getId())
-                .registrationNumber(student.getRegistrationNumber())
-                .email(student.getEmail())
-                .firstName(student.getFirstName())
-                .lastName(student.getLastName())
-                .registrationDate(student.getRegistrationDate())
-                .schoolName(student.getSchoolName())
-                .phoneNumber(student.getPhoneNumber())
-                .studentState(student.getStudentState())
-                .build();
-    }
 }

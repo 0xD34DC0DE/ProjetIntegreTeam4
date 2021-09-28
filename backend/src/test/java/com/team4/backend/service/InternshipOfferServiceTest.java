@@ -3,6 +3,7 @@ package com.team4.backend.service;
 import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.repository.InternshipOfferRepository;
+import com.team4.backend.testdata.InternshipManagerMockData;
 import com.team4.backend.testdata.InternshipOfferMockData;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,8 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
@@ -32,14 +34,18 @@ public class InternshipOfferServiceTest {
     InternshipOfferService internshipOfferService;
 
     @Test
-    void addAnInternshipOffer() {
+    void shouldCreateInternshipOffer() {
         //ARRANGE
         InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
-
+        internshipOffer.setId(null);
 
         when(monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor())).thenReturn(Mono.just(internshipOffer.getMonitor()));
-        when(internshipOfferRepository.save(new InternshipOffer(internshipOfferDTO, internshipOffer.getMonitor()))).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferRepository.save(any(InternshipOffer.class)))
+                .thenReturn(Mono.just(internshipOffer).map(offer -> {
+                    offer.setId(InternshipOfferMockData.getInternshipOffer().getId());
+                    return offer;
+                }));
 
         InternshipOfferDto internshipOfferDtoWithNonExistentMonitor = InternshipOfferMockData.getInternshipOfferDtoWithNonExistentMonitor();
 
@@ -51,13 +57,7 @@ public class InternshipOfferServiceTest {
         //ASSERT
         StepVerifier.create(savedInternshipOffer)
                 .assertNext(s -> {
-                    assertEquals(internshipOfferDTO.getLimitDateToApply(), s.getLimitDateToApply());
-                    assertEquals(internshipOfferDTO.getBeginningDate(), s.getBeginningDate());
-                    assertEquals(internshipOfferDTO.getEndingDate(), s.getEndingDate());
-                    assertEquals(internshipOfferDTO.getCompanyName(), s.getCompanyName());
-                    assertEquals(internshipOfferDTO.getDescription(), s.getDescription());
-                    assertEquals(internshipOfferDTO.getMinSalary(), s.getMinSalary());
-                    assertEquals(internshipOfferDTO.getMaxSalary(), s.getMaxSalary());
+                    assertNotNull(s.getId());
                 }).verifyComplete();
 
         assertThrows(ResponseStatusException.class,()->internshipOfferService.addAnInternshipOffer(internshipOfferDtoWithNonExistentMonitor));

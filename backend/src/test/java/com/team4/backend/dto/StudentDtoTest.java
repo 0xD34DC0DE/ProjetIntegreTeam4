@@ -1,5 +1,6 @@
 package com.team4.backend.dto;
 
+import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.model.Student;
 import org.junit.jupiter.api.Test;
@@ -14,7 +15,7 @@ public class StudentDtoTest {
         Student entity = StudentMockData.getMockStudent();
 
         //ACT
-        StudentDto dto = StudentDto.entityToDto(entity);
+        StudentDto dto = StudentMapper.toDto(entity);
 
         //ASSERT
         assertNull(dto.getPassword()); // password shouldn't be given to frontend
@@ -36,7 +37,7 @@ public class StudentDtoTest {
         StudentDto dto = StudentMockData.getMockStudentDto();
 
         //ACT
-        Student entity = StudentDto.dtoToEntity(dto);
+        Student entity = StudentMapper.toEntity(dto);
 
         //ASSERT
         assertEquals(dto.getId(), entity.getId());

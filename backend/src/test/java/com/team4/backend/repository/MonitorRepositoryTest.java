@@ -33,8 +33,8 @@ public class MonitorRepositoryTest {
     void init() {
 
         Flux<Monitor> users = Flux.just(
-                Monitor.monitorBuilder().email("marcM@desjardin.com").password("marc123").isEnabled(true).build(),
-                Monitor.monitorBuilder().email("johnnyJ@cae-tech.com").password("johnny123").isEnabled(true).build()
+                Monitor.monitorBuilder().email("marcM@desjardin.com").password("marc123").build(),
+                Monitor.monitorBuilder().email("johnnyJ@cae-tech.com").password("johnny123").build()
         );
 
         monitorRepository.saveAll(users).subscribe().dispose();
