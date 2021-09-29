@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { Container } from "@mui/material";
+import { BrowserRouter, Redirect, Switch } from "react-router-dom";
 import "./App.css";
 import SideBar from "./components/SideBar";
 import TopBar from "./components/TopBar";
@@ -62,9 +63,11 @@ function App() {
           open={open}
           toggleDialogs={handleDialogs}
         />
-        <Switch>
-          <Home userInformation={userInformation} />
-        </Switch>
+        <Container fluid>
+          <Switch>
+            <Home userInformation={userInformation} />
+          </Switch>
+        </Container>
         {userInformation.loggedIn ? <Redirect push to="/" /> : null}
       </div>
     </BrowserRouter>
