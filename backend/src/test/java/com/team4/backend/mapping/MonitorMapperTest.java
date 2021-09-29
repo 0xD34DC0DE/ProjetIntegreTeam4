@@ -1,43 +1,42 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.StudentDto;
-import com.team4.backend.model.Student;
-import com.team4.backend.testdata.StudentMockData;
+import com.team4.backend.dto.MonitorDto;
+import com.team4.backend.model.Monitor;
+import com.team4.backend.testdata.MonitorMockData;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
-public class StudentMapperTest {
+public class MonitorMapperTest {
 
     @Test
     void mapEntityToDto() {
-        //ARANGE
-        Student entity = StudentMockData.getMockStudent();
+        //ARRANGE
+        Monitor entity = MonitorMockData.getMockMonitor();
 
         //ACT
-        StudentDto dto = StudentMapper.toDto(entity);
+        MonitorDto dto = MonitorMapper.toDto(entity);
 
         //ASSERT
-        assertNull(dto.getPassword()); // password shouldn't be given to frontend
+        assertNull(dto.getPassword());
 
         assertEquals(entity.getId(), dto.getId());
         assertEquals(entity.getEmail(), dto.getEmail());
         assertEquals(entity.getFirstName(), dto.getFirstName());
         assertEquals(entity.getLastName(), dto.getLastName());
         assertEquals(entity.getRegistrationNumber(), dto.getRegistrationNumber());
-        assertEquals(entity.getSchoolName(), dto.getSchoolName());
         assertEquals(entity.getPhoneNumber(), dto.getPhoneNumber());
-        assertEquals(entity.getStudentState(), dto.getStudentState());
         assertEquals(entity.getRegistrationDate(), dto.getRegistrationDate());
     }
 
     @Test
     void mapDtoToEntity() {
-        //ARANGE
-        StudentDto dto = StudentMockData.getMockStudentDto();
+        //ARRANGE
+        MonitorDto dto = MonitorMockData.getMockMonitorDto();
 
         //ACT
-        Student entity = StudentMapper.toEntity(dto);
+        Monitor entity = MonitorMapper.toEntity(dto);
 
         //ASSERT
         assertEquals(dto.getId(), entity.getId());
@@ -46,9 +45,7 @@ public class StudentMapperTest {
         assertEquals(dto.getFirstName(), entity.getFirstName());
         assertEquals(dto.getLastName(), entity.getLastName());
         assertEquals(dto.getRegistrationNumber(), entity.getRegistrationNumber());
-        assertEquals(dto.getSchoolName(), entity.getSchoolName());
         assertEquals(dto.getPhoneNumber(), entity.getPhoneNumber());
-        assertEquals(dto.getStudentState(), entity.getStudentState());
         assertEquals(dto.getRegistrationDate(), entity.getRegistrationDate());
     }
 
