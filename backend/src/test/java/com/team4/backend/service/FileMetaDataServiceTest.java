@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -23,7 +24,7 @@ public class FileMetaDataServiceTest {
     FileMetaDataService fileMetaDataService;
 
     @Test
-    void countAllInvalidCvNotSeen(){
+    void countAllInvalidCvNotSeen() {
         //ARRANGE
         Mono<Long> nbrOfInvalidCvNotSeen = Mono.just(5L);
 
@@ -34,7 +35,24 @@ public class FileMetaDataServiceTest {
 
         //ASSERT
         StepVerifier.create(nbrOfInvalidCvNotSeenReturned)
-                .assertNext(n -> Assertions.assertEquals(5L,n))
+                .assertNext(n -> Assertions.assertEquals(5L, n))
                 .verifyComplete();
+    }
+
+    @Test
+    void getListInvalidCvNotSeen(){
+        //ARRANGE
+        when(fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse())
+                .thenReturn(Flux.just(
+                        FileMetaData.builder().build(),
+                        FileMetaData.builder().build(),
+                        FileMetaData.builder().build()
+                ));
+
+        //ACT
+        Flux<FileMetaData> fileMetaDataFlux = fileMetaDataService.getListInvalidCvNotSeen();
+
+        //ASSERT
+        StepVerifier.create(fileMetaDataFlux).expectNextCount(3).verifyComplete();
     }
 }

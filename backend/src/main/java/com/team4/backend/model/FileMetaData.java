@@ -17,6 +17,8 @@ public class FileMetaData {
     @Id
     private String id;
 
+    private String assetId;
+
     private String userId;
 
     private String filename;
