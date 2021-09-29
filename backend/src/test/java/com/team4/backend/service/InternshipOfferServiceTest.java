@@ -38,16 +38,14 @@ public class InternshipOfferServiceTest {
         //ARRANGE
         InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
-        internshipOffer.setId(null);
+
+        internshipOfferDTO.setId(null);
 
         when(monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor()))
                 .thenReturn(Mono.just(internshipOffer.getMonitor()));
 
         when(internshipOfferRepository.save(any(InternshipOffer.class)))
-                .thenReturn(Mono.just(internshipOffer).map(offer -> {
-                    offer.setId(InternshipOfferMockData.getInternshipOffer().getId());
-                    return offer;
-                }));
+                .thenReturn(Mono.just(internshipOffer));
 
         //ACT
         Mono<InternshipOfferDto> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
