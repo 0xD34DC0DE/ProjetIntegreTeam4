@@ -52,4 +52,13 @@ public class FileMetaDataRepositoryTest {
                 .assertNext(n -> Assertions.assertEquals(4L, n))
                 .verifyComplete();
     }
+
+    @Test
+    void findAllByIsValidFalseAndIsSeenFalse() {
+        //ACT
+        Flux<FileMetaData> fileMetaDataFlux = fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse();
+
+        //ASSERT
+        StepVerifier.create(fileMetaDataFlux).expectNextCount(4).verifyComplete();
+    }
 }
