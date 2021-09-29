@@ -41,11 +41,9 @@ public class InternshipOfferServiceTest {
 
         internshipOfferDTO.setId(null);
 
-        when(monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor()))
-                .thenReturn(Mono.just(internshipOffer.getMonitor()));
+        when(monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor())).thenReturn(Mono.just(internshipOffer.getMonitor()));
 
-        when(internshipOfferRepository.save(any(InternshipOffer.class)))
-                .thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
 
         //ACT
         Mono<InternshipOfferDto> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
@@ -61,8 +59,7 @@ public class InternshipOfferServiceTest {
         //ARRANGE
         InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
 
-        when(monitorService.findMonitorByEmail(any(String.class)))
-                .thenReturn(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        when(monitorService.findMonitorByEmail(any(String.class))).thenReturn(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
 
         //ACT
         Mono<InternshipOfferDto> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
