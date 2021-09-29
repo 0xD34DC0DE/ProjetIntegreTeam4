@@ -31,7 +31,7 @@ const Drawer = styled(MuiDrawer, {
       transition: theme.transitions.create("width", {
         duration: theme.transitions.duration.leavingScreen,
       }),
-      [theme.breakpoints.up("sm")]: {
+      [theme.breakpoints.up("xs")]: {
         width: theme.spacing(9),
       },
     }),
