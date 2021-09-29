@@ -14,12 +14,10 @@ public class FileMetadataService {
     @Autowired
     FileMetadataRepository fileMetadataRepository;
 
-    public Mono<String> create(FileMetadata fileMetadata) {
+    public Mono<FileMetadata> create(FileMetadata fileMetadata) {
         Mono<FileMetadata> data = fileMetadataRepository.save(fileMetadata);
 
-        String id = data.block().getId();
-
-        return Mono.just(id);
+        return data;
     }
 
     public Mono<FileMetadata> get(String id) {

@@ -4,10 +4,15 @@ import com.team4.backend.repository.FileAssetRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import java.io.IOException;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -17,20 +22,20 @@ public class FileAssetService {
     @Autowired
     FileAssetRepository fileAssetRepository;
 
-    public String create(MultipartFile file, String userId) throws IOException {
-        if (file.isEmpty()) {
-            throw new IllegalStateException("File empty");
-        }
+    public Mono<String> create(String filePath, String userId) throws IOException {
+
+        FileInputStream file = new FileInputStream(filePath);
+
 
         Map<String, String> metadata = new HashMap<>();
-        metadata.put(HttpHeaders.CONTENT_TYPE, file.getContentType());
-        metadata.put(HttpHeaders.CONTENT_LENGTH, file.getSize() + "");
+        metadata.put(HttpHeaders.CONTENT_TYPE, Files.probeContentType(Path.of(filePath)));
+        metadata.put(HttpHeaders.CONTENT_LENGTH, String.valueOf(Files.size(Path.of(filePath))));
 
         UUID assetId = UUID.randomUUID();
         String location = userId + "/" + assetId;
 
-        fileAssetRepository.create(location, file.getInputStream(), metadata);
+        fileAssetRepository.create(location, file, metadata);
 
-        return assetId.toString();
+        return Mono.just(location);
     }
 }

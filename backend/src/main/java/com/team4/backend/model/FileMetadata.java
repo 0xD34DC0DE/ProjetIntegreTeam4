@@ -25,6 +25,7 @@ public class FileMetadata {
     private boolean validCV;
 
     private FileType type;
+    private String path;
 
     private LocalDateTime creationDate;
 }

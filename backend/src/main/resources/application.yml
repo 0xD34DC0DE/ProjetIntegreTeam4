@@ -1,5 +1,4 @@
 
-
 security:
   password:
     encoder:
@@ -14,8 +13,6 @@ security:
 server:
   error:
     include-message: always
-
-
 
 spring:
   servlet:
