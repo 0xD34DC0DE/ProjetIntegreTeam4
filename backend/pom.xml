@@ -90,6 +90,14 @@
             <version>2.12.5</version>
         </dependency>
 
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-aws -->
+        <dependency>
+            <groupId>com.amazonaws</groupId>
+            <artifactId>aws-java-sdk</artifactId>
+            <version>1.12.75</version>
+        </dependency>
+
     </dependencies>
 
     <build>

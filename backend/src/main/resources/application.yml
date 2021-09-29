@@ -15,3 +15,13 @@ server:
   error:
     include-message: always
 
+
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 500KB
+      max-request-size: 500KB
+      resolve-lazily: true
+      enabled: true
+      location: /tmp
