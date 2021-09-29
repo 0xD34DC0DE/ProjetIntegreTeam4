@@ -10,7 +10,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -33,7 +32,7 @@ public class InternshipManagerServiceTest {
     private InternshipManagerService internshipManagerService;
 
     @Test
-    void shouldCreateIntershipManager() {
+    void shouldCreateInternshipManager() {
 
         // ARRANGE
         InternshipManager internshipManager = InternshipManagerMockData.GetInternshipManager();
@@ -55,6 +54,6 @@ public class InternshipManagerServiceTest {
             assertNotNull(result.getId());
             assertNotEquals(InternshipManagerMockData.GetInternshipManager().getPassword(), result.getPassword());
         }).verifyComplete();
-
     }
+
 }

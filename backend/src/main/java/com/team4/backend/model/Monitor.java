@@ -22,9 +22,16 @@ public class Monitor extends User implements Serializable {
                    String password,
                    String registrationNumber,
                    String phoneNumber,
-                   Role role,
-                   Boolean isEnabled,
                    LocalDate registrationDate) {
-        super(id, email, firstName, lastName, password, registrationNumber, phoneNumber, role, isEnabled, registrationDate);
+        super(id,
+                email,
+                firstName,
+                lastName,
+                password,
+                registrationNumber,
+                phoneNumber,
+                Role.MONITOR,
+                true,
+                registrationDate);
     }
 }

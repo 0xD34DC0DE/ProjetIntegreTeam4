@@ -2,6 +2,7 @@ package com.team4.backend;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.team4.backend.meta.ExcludeFromGeneratedCoverage;
 import com.team4.backend.model.InternshipManager;
 import com.team4.backend.service.InternshipManagerService;
 import com.team4.backend.service.UserService;
@@ -19,7 +20,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-@Order(1)
+@Order(2)
 public class InternshipManagerRegistration implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(InternshipManagerRegistration.class);
@@ -37,6 +38,7 @@ public class InternshipManagerRegistration implements ApplicationRunner {
     }
 
     @Override
+    @ExcludeFromGeneratedCoverage
     public void run(final ApplicationArguments args) {
         Resource resource = resourceLoader.getResource("classpath:internship_managers.json");
         ObjectMapper mapper = new ObjectMapper();

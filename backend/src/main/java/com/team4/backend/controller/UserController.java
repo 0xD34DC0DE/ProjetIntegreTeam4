@@ -24,4 +24,5 @@ public class UserController {
     public Mono<Boolean> userExistsByEmail(@PathVariable String email) {
         return userService.existsByEmail(email);
     }
+
 }

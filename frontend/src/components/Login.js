@@ -1,6 +1,7 @@
 import {
   Button,
   Dialog,
+  DialogActions,
   DialogContent,
   DialogContentText,
   Grid,
@@ -11,117 +12,116 @@ import axios from "axios";
 import jwt_decode from "jwt-decode";
 import React, { useState } from "react";
 
-const Login = ({ open, userInformations, setUserInformations }) => {
+const Login = ({
+  open,
+  userInformation,
+  setUserInformation,
+  toggleDialogs,
+}) => {
   const [errorMessage, setErrorMessage] = useState();
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+  });
 
-  const logUserIn = (evt) => {
-    evt.nativeEvent.preventDefault();
+  const handleFormChange = (event) => {
+    setForm((form) => ({
+      ...form,
+      [event.target.id || event.target.name]: event.target.value,
+    }));
+  };
 
-    const formElements = evt.nativeEvent.target.elements;
-    const email = formElements.email.value;
-    const password = formElements.password.value;
-
+  const logUserIn = () => {
     axios({
       method: "POST",
       baseURL: "http://localhost:8080",
       url: "/user/login",
-      data: JSON.stringify({ email: email, password: password }),
+      data: JSON.stringify({ email: form.email, password: form.password }),
       headers: {
         "content-type": "application/json",
       },
     })
-      .then(function (response) {
+      .then((response) => {
         sessionStorage.setItem("jwt", `Bearer ${response.data}`);
 
         const decodedJWT = jwt_decode(response.data);
-        setUserInformations({
-          email: email,
+        setUserInformation({
+          email: form.email,
           role: decodedJWT.role,
           loggedIn: true,
         });
+        resetForm();
         setErrorMessage();
+        toggleDialogs("loginDialog", false);
       })
-      .catch(function (error) {
+      .catch((error) => {
         let errorMessage =
           "Votre connexion a échoué. L’identifiant ou le mot de passe que vous avez entré n’est pas valide. Réessayez.";
         setErrorMessage(errorMessage);
+        console.error(error);
       });
   };
 
-  const deleteLocalUserInfo = () => {
-    sessionStorage.setItem("jwt", "");
-    setUserInformations({
-      email: "",
-      role: "",
-      loggedIn: false,
-    });
+  const resetForm = () => {
+    setForm({ email: "", password: "" });
   };
 
-  if (!userInformations.loggedIn) {
+  const handleClose = (_, reason) => {
+    if (reason === "backdropClick") toggleDialogs("loginDialog", false);
+  };
+
+  if (!userInformation.loggedIn) {
     return (
-      <Dialog open={open}>
+      <Dialog open={open} onClose={handleClose}>
         <DialogContent>
-          <Typography variant="h4" align="center" style={{ minHeight: "5vh" }}>
+          <Typography variant="h4" align="center" sx={{ minHeight: "5vh" }}>
             Connexion
           </Typography>
-          <DialogContentText style={{ color: "red" }}>
+          <DialogContentText sx={{ color: "red" }}>
             {errorMessage}
           </DialogContentText>
-          <form noValidate autoComplete="off" onSubmit={logUserIn}>
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              id="email"
-              label="Adresse courriel"
-              name="email"
-              autoComplete="email"
-              autoFocus
-            />
-            <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Mot de passe"
-              type="password"
-              id="password"
-              autoComplete="current-password"
-            />
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              style={{ marginTop: "10px" }}
-            >
-              Envoyer
-            </Button>
-          </form>
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            id="email"
+            label="Adresse courriel"
+            name="email"
+            onChange={handleFormChange}
+            value={form.email}
+            autoComplete="email"
+            variant="standard"
+            autoFocus
+          />
+          <TextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            variant="standard"
+            onChange={handleFormChange}
+            label="Mot de passe"
+            type="password"
+            value={form.password}
+            id="password"
+            autoComplete="current-password"
+          />
         </DialogContent>
+        <DialogActions>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            sx={{ m: "0 auto", mt: "10px", display: "flex" }}
+            onClick={logUserIn}
+          >
+            Envoyer
+          </Button>
+        </DialogActions>
       </Dialog>
     );
   } else {
-    return (
-      <Dialog>
-        <DialogContent>
-          <Typography variant="h4" align="center">
-            Connexion
-          </Typography>
-          <DialogContentText>
-            On dirait que vous êtes déjà connecté, voulez-vous vous déconnecter
-            ?
-          </DialogContentText>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={deleteLocalUserInfo}
-            style={{ marginTop: "5vh" }}
-          >
-            Se Déconnecter
-          </Button>
-        </DialogContent>
-      </Dialog>
-    );
+    return <></>;
   }
 };
 

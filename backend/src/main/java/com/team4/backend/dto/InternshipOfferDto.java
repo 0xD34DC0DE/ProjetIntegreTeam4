@@ -70,35 +70,4 @@ public class InternshipOfferDto implements Serializable {
         this.listEmailExclusiveStudents = listEmailExclusiveStudents;
     }
 
-    public static InternshipOfferDto entityToDto(InternshipOffer internshipOffer) {
-        return InternshipOfferDto.builder()
-                .id(internshipOffer.getId())
-                .limitDateToApply(internshipOffer.getLimitDateToApply())
-                .beginningDate(internshipOffer.getBeginningDate())
-                .endingDate(internshipOffer.getEndingDate())
-                .companyName(internshipOffer.getCompanyName())
-                .emailOfMonitor(internshipOffer.getMonitor().getEmail())
-                .description(internshipOffer.getDescription())
-                .minSalary(internshipOffer.getMinSalary())
-                .maxSalary(internshipOffer.getMaxSalary())
-                .listEmailInterestedStudents(internshipOffer.getListInterestedStudents() == null ? Collections.emptyList() :
-                        internshipOffer.getListInterestedStudents().stream().map(User::getId).collect(Collectors.toList()))
-                .listEmailExclusiveStudents(internshipOffer.getListExclusiveStudents() == null ? Collections.emptyList() :
-                        internshipOffer.getListExclusiveStudents().stream().map(User::getId).collect(Collectors.toList()))
-                .isValidated(internshipOffer.isValidated()).build();
-    }
-
-    public static InternshipOffer dtoToEntity(InternshipOfferDto internshipOfferDto, Monitor monitor) {
-        return InternshipOffer.builder()
-                .limitDateToApply(internshipOfferDto.getLimitDateToApply())
-                .beginningDate(internshipOfferDto.getBeginningDate())
-                .endingDate(internshipOfferDto.getEndingDate())
-                .companyName(internshipOfferDto.getCompanyName())
-                .monitor(monitor)
-                .description(internshipOfferDto.getDescription())
-                .minSalary(internshipOfferDto.getMinSalary())
-                .maxSalary(internshipOfferDto.getMaxSalary())
-                .build();
-    }
-
 }

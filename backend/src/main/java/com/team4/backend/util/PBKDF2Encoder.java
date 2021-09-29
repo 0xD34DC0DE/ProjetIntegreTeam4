@@ -28,19 +28,16 @@ public class PBKDF2Encoder implements PasswordEncoder {
     private Integer keyLength;
 
     @Override
+    @SneakyThrows({InvalidKeySpecException.class, NoSuchAlgorithmException.class})
     public String encode(CharSequence cs) {
         if (cs == null)
             return "";
 
-        try {
-            byte[] result = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512")
-                    .generateSecret(new PBEKeySpec(cs.toString().toCharArray(), secret.getBytes(), iteration, keyLength))
-                    .getEncoded();
-            return Base64.getEncoder().encodeToString(result);
-        } catch (InvalidKeySpecException | NoSuchAlgorithmException e) {
-            log.warning(e.getMessage().toUpperCase());
-            return "";
-        }
+        byte[] result = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA512")
+                .generateSecret(new PBEKeySpec(cs.toString().toCharArray(), secret.getBytes(), iteration, keyLength))
+                .getEncoded();
+        return Base64.getEncoder().encodeToString(result);
+
     }
 
     @Override

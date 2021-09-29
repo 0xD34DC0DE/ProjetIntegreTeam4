@@ -69,7 +69,8 @@ public class StudentControllerTest {
 
         studentDto.setId(null);
 
-        when(studentService.registerStudent(any(Student.class))).thenReturn(Mono.error(new UserAlreadyExistsException()));
+        when(studentService.registerStudent(any(Student.class)))
+                .thenReturn(Mono.error(new UserAlreadyExistsException()));
 
         //ACT
         webTestClient

@@ -24,24 +24,34 @@ public class MonitorServiceTest {
     MonitorService monitorService;
 
     @Test
-    void findMonitorByEmail() {
+    void findMonitorByEmailExists() {
         //ARRANGE
+        String email = "marcM@desjardin.com";
+        Mono<Monitor> existingMonitor = Mono.just(Monitor.monitorBuilder().email(email).build());
 
-        String email1 = "marcM@desjardin.com";
-        Mono<Monitor> existingMonitor = Mono.just(Monitor.monitorBuilder().email(email1).build());
-        when(monitorRepository.findByEmail(email1)).thenReturn(existingMonitor);
-
-        String email2 = "inexistantEmail@gmail.com";
-        when(monitorRepository.findByEmail(email2)).thenReturn(Mono.empty());
+        when(monitorRepository.findByEmail(email)).thenReturn(existingMonitor);
 
         //ACT
-        Mono<Monitor> returnedMonitor = monitorService.findMonitorByEmail(email1);
-        Mono<Monitor> noMonitorReturned = monitorService.findMonitorByEmail(email2);
+        Mono<Monitor> monitorMono = monitorService.findMonitorByEmail(email);
 
         //ASSERT
-        StepVerifier.create(returnedMonitor)
-                .assertNext(monitor -> assertEquals(email1, monitor.getEmail())).verifyComplete();
+        StepVerifier.create(monitorMono)
+                .assertNext(monitor -> assertEquals(email, monitor.getEmail()))
+                .verifyComplete();
+    }
 
-        StepVerifier.create(noMonitorReturned).verifyError(ResponseStatusException.class);
+    @Test
+    void findMonitorByEmailDoesNotExists() {
+        //ARRANGE
+        String email = "inexistantEmail@gmail.com";
+
+        when(monitorRepository.findByEmail(email)).thenReturn(Mono.empty());
+
+        //ACT
+        Mono<Monitor> monitorMono = monitorService.findMonitorByEmail(email);
+
+        //ASSERT
+        StepVerifier.create(monitorMono)
+                .verifyError(ResponseStatusException.class);
     }
 }

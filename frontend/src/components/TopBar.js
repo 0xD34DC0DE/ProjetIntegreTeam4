@@ -1,20 +1,18 @@
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { Icon, MenuItem, Select, Toolbar } from "@mui/material";
+import { IconButton, Toolbar, MenuItem, Menu, Typography } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
-import Badge from "@mui/material/Badge";
-import IconButton from "@mui/material/IconButton";
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
-import React from "react";
-import OfferForm from "./OfferForm";
-import Register from "./Register";
-import Login from "./Login";
+import React, { useState, useRef } from "react";
+import LoginIcon from "@mui/icons-material/Login";
+import Login from "../components/Login";
+import Register from "../components/Register";
+import PersonIcon from "@mui/icons-material/Person";
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop,
 })(({ theme, open }) => ({
   overflowX: "hidden",
   float: "right",
-  width: `calc(100% - ${theme.spacing(50)})`,
+  width: `calc(100% - ${theme.spacing(40)})`,
   ...(!open && {
     width: `calc(100% - ${theme.spacing(9)})`,
   }),
@@ -22,20 +20,29 @@ const AppBar = styled(MuiAppBar, {
 
 const mdTheme = createTheme();
 
-const TopBar = ({ open, setOpen, userInformations, setUserInformations }) => {
-  const [mountedForm, setMountedForm] = React.useState(0);
-  const connectionSelect = (
-    <>
-      <Select IconComponent={AccountCircleIcon}>
-        <MenuItem value={1} onClick={() => setMountedForm(1)}>
-          S'enregistrer
-        </MenuItem>
-        <MenuItem value={2} onClick={() => setMountedForm(2)}>
-          Se Connecter
-        </MenuItem>
-      </Select>
-    </>
-  );
+const TopBar = ({
+  open,
+  toggleDialogs,
+  userInformation,
+  setUserInformation,
+  registerVisible,
+  logout,
+  loginVisible,
+}) => {
+  const [menuVisible, setMenuVisible] = useState(false);
+  const menuAnchor = useRef();
+
+  const handleClose = () => {
+    menuAnchor.current = undefined;
+    setMenuVisible(false);
+  };
+
+  const handleOpen = (event) => {
+    menuAnchor.current = event.currentTarget;
+    setMenuVisible(true);
+    console.log(userInformation);
+  };
+
   return (
     <ThemeProvider theme={mdTheme}>
       <AppBar position="static" open={open}>
@@ -47,21 +54,63 @@ const TopBar = ({ open, setOpen, userInformations, setUserInformations }) => {
             px: [1],
           }}
         >
-          <IconButton color="inherit">
-            <Badge badgeContent={4} color="secondary">
-              <Icon>notifications</Icon>
-            </Badge>
+          <Typography variant="caption" sx={{ ml: "auto" }}>
+            {userInformation.email}
+          </Typography>
+          <IconButton color="inherit" onClick={handleOpen}>
+            {userInformation.loggedIn ? <LoginIcon /> : <PersonIcon />}
           </IconButton>
-          <div className="selectConnection"></div>
-          {connectionSelect}
+          <Menu
+            id="demo-positioned-menu"
+            aria-labelledby="demo-positioned-button"
+            anchorEl={menuAnchor.current}
+            ml={"auto"}
+            open={menuVisible}
+            onClose={handleClose}
+          >
+            {!userInformation.loggedIn
+              ? [
+                  [
+                    <MenuItem
+                      onClick={() => {
+                        toggleDialogs("registerDialog", true);
+                        setMenuVisible(false);
+                      }}
+                    >
+                      Enregistrement
+                    </MenuItem>,
+                  ],
+                  [
+                    <MenuItem
+                      onClick={() => {
+                        toggleDialogs("loginDialog", true);
+                        setMenuVisible(false);
+                      }}
+                    >
+                      Connexion
+                    </MenuItem>,
+                  ],
+                ]
+              : [
+                  <MenuItem
+                    onClick={() => {
+                      setMenuVisible(false);
+                      logout();
+                    }}
+                  >
+                    Déconnexion
+                  </MenuItem>,
+                ]}
+          </Menu>
         </Toolbar>
       </AppBar>
-      <Register open={mountedForm === 1} setOpen={setOpen} />
+      <Register toggleDialogs={toggleDialogs} open={registerVisible}></Register>
       <Login
-        open={mountedForm === 2}
-        userInformations={userInformations}
-        setUserInformations={setUserInformations}
-      />
+        open={loginVisible}
+        toggleDialogs={toggleDialogs}
+        userInformation={userInformation}
+        setUserInformation={setUserInformation}
+      ></Login>
     </ThemeProvider>
   );
 };

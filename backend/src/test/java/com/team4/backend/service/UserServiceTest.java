@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -34,52 +35,75 @@ public class UserServiceTest {
     UserService userService;
 
     @Test
-    void login() {
+    void loginSuccess() {
         //ARRANGE
-        User user1 = User.builder().registrationNumber("123456789").email("123456789@gmail.com").password("p@22w0rd").build();
-        AuthRequestDto authRequestDto1 = new AuthRequestDto(user1.getEmail(), user1.getPassword());
+        User user = User.builder().registrationNumber("123456789").email("123456789@gmail.com").password("p@22w0rd").build();
+        AuthRequestDto authRequestDto = new AuthRequestDto(user.getEmail(), user.getPassword());
         String token = "123456789";
 
-        when(userRepository.findByEmailAndPasswordAndIsEnabledTrue(user1.getEmail(), pbkdf2Encoder.encode(user1.getPassword()))).thenReturn(Mono.just(user1));
-        when(jwtUtil.generateToken(user1)).thenReturn("123456789");
+        when(userRepository.findByEmailAndPasswordAndIsEnabledTrue(user.getEmail(),
+                pbkdf2Encoder.encode(user.getPassword()))).thenReturn(Mono.just(user));
 
-
-        User user2 = User.builder().registrationNumber("342432423").email("342432423@gmail.com").password("p@ssw0rd").build();
-        AuthRequestDto authRequestDto2 = new AuthRequestDto(user2.getEmail(), user2.getPassword());
-
-        when(userRepository.findByEmailAndPasswordAndIsEnabledTrue(user2.getEmail(), pbkdf2Encoder.encode(user2.getPassword()))).thenReturn(Mono.empty());
+        when(jwtUtil.generateToken(user)).thenReturn("123456789");
 
         //ACT
-        Mono<String> returnedToken1 = userService.login(authRequestDto1);
-        Mono<String> returnedToken2 = userService.login(authRequestDto2);
+        Mono<String> tokenMono = userService.login(authRequestDto);
 
         //ASSERT
-        StepVerifier.create(returnedToken1)
+        StepVerifier.create(tokenMono)
                 .consumeNextWith(t -> assertEquals(token, t))
                 .verifyComplete();
-
-        StepVerifier.create(returnedToken2).verifyError(ResponseStatusException.class);
     }
 
     @Test
-    void isEmailTaken() {
-        // ARRANGE
-        String email1 = "123456789@gmail.com";
-        String email2 = "test@gmail.com";
+    void loginNoSuccess() {
+        //ARRANGE
+        User user = User.builder()
+                .registrationNumber("342432423")
+                .email("342432423@gmail.com")
+                .password("p@ssw0rd")
+                .build();
 
-        when(userRepository.existsByEmail(email1)).thenReturn(Mono.just(true));
-        when(userRepository.existsByEmail(email2)).thenReturn(Mono.just(false));
+        AuthRequestDto authRequestDto = new AuthRequestDto(user.getEmail(), user.getPassword());
 
-        // ACT
-        Mono<Boolean> booleanMono1 = userService.existsByEmail(email1);
-        Mono<Boolean> booleanMono2 = userService.existsByEmail(email2);
+        when(userRepository.findByEmailAndPasswordAndIsEnabledTrue(user.getEmail(),
+                pbkdf2Encoder.encode(user.getPassword()))).thenReturn(Mono.empty());
 
-        // ASSERT
-        StepVerifier.create(booleanMono1)
+        //ACT
+        Mono<String> tokenMono = userService.login(authRequestDto);
+
+        //ASSERT
+        StepVerifier.create(tokenMono).verifyError(ResponseStatusException.class);
+    }
+
+    @Test
+    void emailTaken() {
+        //ARRANGE
+        String email = "123456789@gmail.com";
+
+        when(userRepository.existsByEmail(email)).thenReturn(Mono.just(true));
+
+        //ACT
+        Mono<Boolean> existsMono = userService.existsByEmail(email);
+
+        //ASSERT
+        StepVerifier.create(existsMono)
                 .assertNext(Assertions::assertTrue)
                 .verifyComplete();
+    }
 
-        StepVerifier.create(booleanMono2)
+    @Test
+    void emailNotTaken() {
+        //ARRANGE
+        String email = "test@gmail.com";
+
+        when(userRepository.existsByEmail(any(String.class))).thenReturn(Mono.just(false));
+
+        //ACT
+        Mono<Boolean> existsMono = userService.existsByEmail(email);
+
+        //ASSERT
+        StepVerifier.create(existsMono)
                 .assertNext(Assertions::assertFalse)
                 .verifyComplete();
     }

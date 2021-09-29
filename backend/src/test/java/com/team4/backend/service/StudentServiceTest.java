@@ -39,7 +39,6 @@ public class StudentServiceTest {
     void shouldCreateStudent()
     {
         //ARRANGE
-
         Student student = StudentMockData.getMockStudent();
         student.setId(null); // Id is null when coming from frontend
 
@@ -54,11 +53,9 @@ public class StudentServiceTest {
         when(userService.existsByEmail(StudentMockData.getMockStudent().getEmail())).thenReturn(Mono.just(false));
 
         //ACT
-
         Mono<Student> studentMono = studentService.registerStudent(student);
 
         //ASSERT
-
         StepVerifier.create(studentMono).consumeNextWith(s -> {
             assertNotNull(s.getId());
             assertNotEquals(StudentMockData.getMockStudent().getPassword(), s.getPassword());
@@ -69,18 +66,15 @@ public class StudentServiceTest {
     void shouldNotCreateStudent()
     {
         //ARRANGE
-
         Student student = StudentMockData.getMockStudent();
         student.setId(null); // Id is null when coming from frontend
 
         when(userService.existsByEmail(StudentMockData.getMockStudent().getEmail())).thenReturn(Mono.just(true));
 
         //ACT
-
         Mono<Student> studentMono = studentService.registerStudent(student);
 
         //ASSERT
-
         StepVerifier.create(studentMono).expectError(UserAlreadyExistsException.class).verify();
     }
 }
