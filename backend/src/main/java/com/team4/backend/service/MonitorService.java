@@ -34,7 +34,6 @@ public class MonitorService {
 
     public Mono<Monitor> registerMonitor(Monitor monitor) {
         return userService.existsByEmail(monitor.getEmail()).flatMap(exists -> {
-            assert(false);
             if (!exists) {
                 monitor.setPassword(pbkdf2Encoder.encode(monitor.getPassword()));
                 return monitorRepository.save(monitor);

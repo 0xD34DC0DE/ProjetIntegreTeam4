@@ -71,14 +71,14 @@ public class MonitorServiceTest {
         Monitor monitor = MonitorMockData.getMockMonitor();
         monitor.setId(null); // Frontend gives null id
 
-//        when(monitorRepository.save(any(Monitor.class)))
-//                .thenReturn(Mono.just(monitor).map(v -> {
-//                            v.setId("615259e03835be1f53bd49e4");
-//                            return v;
-//                        }
-//                ));
-//
-//        when(pbkdf2Encoder.encode(any(String.class))).thenReturn("base64encryptedtoken");
+        when(monitorRepository.save(any(Monitor.class)))
+                .thenReturn(Mono.just(monitor).map(v -> {
+                            v.setId("615259e03835be1f53bd49e4");
+                            return v;
+                        }
+                ));
+
+        when(pbkdf2Encoder.encode(any(String.class))).thenReturn("base64encryptedtoken");
         when(userService.existsByEmail(monitor.getEmail())).thenReturn(Mono.just(false));
 
         //ACT
@@ -88,7 +88,7 @@ public class MonitorServiceTest {
         StepVerifier.create(monitorMono).consumeNextWith(m -> {
             assertNotNull(m.getId());
             assertNotEquals(MonitorMockData.getMockMonitor().getPassword(), m.getPassword());
-        });
+        }).verifyComplete();
     }
 
     @Test
