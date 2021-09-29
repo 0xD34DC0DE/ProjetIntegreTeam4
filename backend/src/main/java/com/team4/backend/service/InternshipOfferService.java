@@ -4,6 +4,7 @@ import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.repository.InternshipOfferRepository;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -22,5 +23,9 @@ public class InternshipOfferService {
         return monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor())
                 .flatMap(monitor -> internshipOfferRepository.save(InternshipOfferMapper.toEntity(internshipOfferDTO, monitor)))
                 .map(InternshipOfferMapper::toDto);
+    }
+
+    public Flux<InternshipOfferDto> getNonValidatedInternshipOffers() {
+        return internshipOfferRepository.findAllInternshipOfferByIsValidatedFalse().map(InternshipOfferMapper::toDto);
     }
 }

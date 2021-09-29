@@ -37,7 +37,7 @@ public class InternshipOfferRepositoryTest {
     @Test
     void shouldFindValidatedInternshipOffer() {
         //ACT
-        Flux<InternshipOffer> validatedIntershipOffers = internshipOfferRepository.getAllInternshipOfferByIsValidatedFalse();
+        Flux<InternshipOffer> validatedIntershipOffers = internshipOfferRepository.findAllInternshipOfferByIsValidatedFalse();
 
         //ASSERT
         StepVerifier.create(validatedIntershipOffers)

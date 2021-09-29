@@ -13,10 +13,11 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -75,4 +76,20 @@ public class InternshipOfferServiceTest {
                 .verify();
     }
 
+    @Test
+    void shouldOnlyGetNonValidatedInternshipOffers(){
+        // ARRANGE
+        when(internshipOfferRepository.findAllInternshipOfferByIsValidatedFalse())
+                .thenReturn(InternshipOfferMockData.getNonValidatedInternshipOffers());
+
+        // ACT
+        Flux<InternshipOfferDto> validIntershipOfferDTO = internshipOfferService.getNonValidatedInternshipOffers();
+
+        // ASSERT
+        StepVerifier
+                .create(validIntershipOfferDTO)
+                .assertNext(o -> assertFalse(o.isValidated()))
+                .assertNext(o -> assertFalse(o.isValidated()))
+                .verifyComplete();
+    }
 }

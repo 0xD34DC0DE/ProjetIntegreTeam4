@@ -39,7 +39,7 @@ public abstract class InternshipOfferMockData {
             .companyName("umaknow")
             .monitor(Monitor.monitorBuilder().email("maxime@umaknow.com").build())
             .description("Développeur Frontend")
-            .isValidated(false)
+            .isValidated(true)
             .isExclusive(true)
             .listInterestedStudents(getInterestedStudentsList())
             .build(),
@@ -57,6 +57,37 @@ public abstract class InternshipOfferMockData {
             .isExclusive(false)
             .listInterestedStudents(getInterestedStudentsList())
             .build());
+    }
+
+    public static Flux<InternshipOffer> getNonValidatedInternshipOffers() {
+        return Flux.just(InternshipOffer.builder()
+                        .id("123abc4def56ghi")
+                        .limitDateToApply(LocalDate.now().plusMonths(1))
+                        .beginningDate(LocalDate.now().plusMonths(2))
+                        .endingDate(LocalDate.now().plusMonths(6))
+                        .minSalary(19.0f)
+                        .maxSalary(22.0f)
+                        .companyName("umaknow")
+                        .monitor(Monitor.monitorBuilder().email("maxime@umaknow.com").build())
+                        .description("Développeur Frontend")
+                        .isValidated(false)
+                        .isExclusive(true)
+                        .listInterestedStudents(getInterestedStudentsList())
+                        .build(),
+                InternshipOffer.builder()
+                        .id("234abc2def54ghi")
+                        .limitDateToApply(LocalDate.now().plusMonths(1))
+                        .beginningDate(LocalDate.now().plusMonths(2))
+                        .endingDate(LocalDate.now().plusMonths(6))
+                        .minSalary(20.0f)
+                        .maxSalary(25.0f)
+                        .companyName("CGI")
+                        .monitor(Monitor.monitorBuilder().email("patrickNormand@cgi.com").build())
+                        .description("Technicien en Informatique")
+                        .isValidated(false)
+                        .isExclusive(false)
+                        .listInterestedStudents(getInterestedStudentsList())
+                        .build());
     }
 
     public static InternshipOfferDto getInternshipOfferDto() {

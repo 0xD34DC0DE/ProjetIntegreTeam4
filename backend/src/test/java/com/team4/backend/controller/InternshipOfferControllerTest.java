@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferDto;
+import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.service.InternshipOfferService;
 import com.team4.backend.testdata.InternshipOfferMockData;
 import org.junit.jupiter.api.Test;
@@ -13,6 +14,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,7 +29,7 @@ public class InternshipOfferControllerTest {
     WebTestClient webTestClient;
 
     @MockBean
-    InternshipOfferService internshipOfferService;
+    com.team4.backend.service.InternshipOfferService internshipOfferService;
 
     @Test
     void addAnInternshipOffer() {
@@ -45,5 +47,22 @@ public class InternshipOfferControllerTest {
                 //ASSERT
                 .expectStatus().isOk()
                 .expectBody(InternshipOfferDto.class);
+    }
+
+    @Test
+    void getNonValidatedIntershipOffer(){
+        // ARRANGE
+        Flux<InternshipOfferDto> internshipOfferDtoFlux = InternshipOfferMockData.getNonValidatedInternshipOffers()
+                .map(InternshipOfferMapper::toDto);
+        when(internshipOfferService.getNonValidatedInternshipOffers()).thenReturn(internshipOfferDtoFlux);
+
+        // ACT
+        webTestClient
+                .get()
+                .uri("/internshipOffer/unvalidatedOffers")
+                .exchange()
+                // ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(InternshipOfferDto.class);
     }
 }
