@@ -100,7 +100,6 @@ public class TestingInserterRunner implements ApplicationRunner {
     private void insertMonitors() {
         Monitor monitor = Monitor.monitorBuilder().email("marcAndre@desjardins.com").role(Role.MONITOR).password(pbkdf2Encoder.encode("marc123")).isEnabled(true).build();
 
-        userRepository.save(monitor).subscribe(user -> log.info("User has been saved: {}", user));
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
 }

@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 @ToString
 @NoArgsConstructor
-@Document("monitors")
+@Document("users")
 @EqualsAndHashCode(callSuper = true)
 public class Monitor extends User implements Serializable {
 
