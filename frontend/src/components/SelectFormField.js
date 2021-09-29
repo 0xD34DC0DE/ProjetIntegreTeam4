@@ -27,9 +27,9 @@ const SelectFormField = ({
             sx={{ flexGrow: 1, width: "100%" }}
             onChange={onChange}
           >
-            {items.map((item) => {
+            {items.map((item, index) => {
               return (
-                <MenuItem key={item.value} value={item.value}>
+                <MenuItem key={index} value={item.type}>
                   {item.type}
                 </MenuItem>
               );
