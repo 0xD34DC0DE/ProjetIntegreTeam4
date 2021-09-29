@@ -6,11 +6,10 @@ import com.team4.backend.model.Monitor;
 import com.team4.backend.testdata.InternshipOfferMockData;
 import org.junit.jupiter.api.Test;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class InternshipOfferMapperTest {
 
@@ -50,7 +49,6 @@ public class InternshipOfferMapperTest {
         InternshipOffer internshipOffer = InternshipOfferMapper.toEntity(internshipOfferDto, monitor);
 
         //ASSERT
-        assertEquals(internshipOfferDto.getId(), internshipOffer.getId());
         assertEquals(internshipOfferDto.getLimitDateToApply(), internshipOffer.getLimitDateToApply());
         assertEquals(internshipOfferDto.getBeginningDate(), internshipOffer.getBeginningDate());
         assertEquals(internshipOfferDto.getEndingDate(), internshipOffer.getEndingDate());
