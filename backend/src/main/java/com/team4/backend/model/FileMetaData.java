@@ -1,5 +1,6 @@
 package com.team4.backend.model;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -17,18 +18,22 @@ public class FileMetaData {
     private String id;
 
     private String userId;
-    private String assetId;
+
     private String filename;
-    private boolean validCV;
+
+    private Boolean isValid;
+
+    private Boolean isSeen;
 
     private LocalDateTime creationDate;
 
-    public FileMetaData(String id, String userId, String assetId, String filename) {
+    @Builder
+    public FileMetaData(String id, String userId, String filename) {
         this.id = id;
         this.userId = userId;
-        this.assetId = assetId;
         this.filename = filename;
-        this.validCV = false;
+        this.isValid = false;
+        this.isSeen = false;
         this.creationDate = LocalDateTime.now();
     }
 }
