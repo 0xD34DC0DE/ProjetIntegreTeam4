@@ -15,7 +15,7 @@ const AccountFormField = ({ onFieldChange, step, valid, visibleStep }) => {
   useEffect(() => {
     if (step !== visibleStep) return;
 
-    if (accountType !== undefined) valid(true);
+    if (accountType !== "") valid(true);
     else valid(false);
   }, [accountType, step, visibleStep]);
 

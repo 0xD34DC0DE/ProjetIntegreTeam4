@@ -38,11 +38,10 @@ function App() {
             open={open}
             toggleDialogs={handleDialogs}
           />
-          <Container fluid="true">
-            <Switch>
-              <Content></Content>
-            </Switch>
-          </Container>
+
+          <Switch>
+            <Content></Content>
+          </Switch>
           <UserInfoContext.Consumer>
             {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}
           </UserInfoContext.Consumer>

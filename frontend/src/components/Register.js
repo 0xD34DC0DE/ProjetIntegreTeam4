@@ -42,12 +42,16 @@ const Register = ({ open, toggleDialogs }) => {
   };
 
   const prevStep = () => {
+    if (step === 0) {
+      toggleDialogs("registerDialog", false);
+      return;
+    }
     setStep((lastStep) => (lastStep -= 1));
     setFormValid(true);
   };
 
   const register = () => {
-    // Student and monitor uses the same model fields for now it will change in the future
+    // Student and monitor uses the same model fields for now, it will change in the future
 
     axios({
       method: "POST",
@@ -149,9 +153,9 @@ const Register = ({ open, toggleDialogs }) => {
               </Button>
             }
             backButton={
-              <Button size="small" onClick={prevStep} disabled={step === 0}>
+              <Button size="small" onClick={prevStep}>
                 <KeyboardArrowLeft />
-                Retour
+                {step === 0 ? "Quitter" : "Retour"}
               </Button>
             }
           />

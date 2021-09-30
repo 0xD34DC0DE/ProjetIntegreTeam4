@@ -6,7 +6,7 @@ const Content = () => {
   const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
 
   return (
-    <Container sx={{ clear: "right" }}>
+    <Container sx={{ clear: "right", ml: "0" }}>
       <Typography variant="h4">
         {userInfo.loggedIn ? (
           <>
