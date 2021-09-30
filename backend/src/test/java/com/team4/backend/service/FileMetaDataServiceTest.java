@@ -2,6 +2,7 @@ package com.team4.backend.service;
 
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.repository.FileMetaDataRepository;
+import com.team4.backend.testdata.FileMetaDataMockData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,17 +64,13 @@ public class FileMetaDataServiceTest {
     @Test
     void shouldValidateCv() {
         //ARRANGE
-        String id = "90ksj30sak2";
-        FileMetaData fileMetaData = FileMetaData.builder().build();
+        FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
 
-        fileMetaData.setId(id);
-
-        when(fileMetaDataRepository.findById(id)).thenReturn(Mono.just(fileMetaData));
-
+        when(fileMetaDataRepository.findById(any(String.class))).thenReturn(Mono.just(fileMetaData));
         when(fileMetaDataRepository.save(any(FileMetaData.class))).thenReturn(Mono.just(fileMetaData));
 
         //ACT
-        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(id, true);
+        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(fileMetaData.getId(), true);
 
         //ASSERT
         StepVerifier.create(fileMetaDataMono)
@@ -86,15 +83,12 @@ public class FileMetaDataServiceTest {
     @Test
     void shouldNotValidateCv() {
         //ARRANGE
-        String id = "4jfs230ask2";
-        FileMetaData fileMetaData = FileMetaData.builder().build();
+        FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
 
-        fileMetaData.setId(id);
-
-        when(fileMetaDataRepository.findById(id)).thenReturn(Mono.empty());
+        when(fileMetaDataRepository.findById(any(String.class))).thenReturn(Mono.empty());
 
         //ACT
-        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(id, true);
+        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(fileMetaData.getId(), true);
 
         //ASSERT
         StepVerifier.create(fileMetaDataMono)

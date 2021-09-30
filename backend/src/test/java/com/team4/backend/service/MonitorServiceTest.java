@@ -12,6 +12,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +30,7 @@ public class MonitorServiceTest {
         String email = "marcM@desjardin.com";
         Mono<Monitor> existingMonitor = Mono.just(Monitor.monitorBuilder().email(email).build());
 
-        when(monitorRepository.findByEmail(email)).thenReturn(existingMonitor);
+        when(monitorRepository.findByEmail(any(String.class))).thenReturn(existingMonitor);
 
         //ACT
         Mono<Monitor> monitorMono = monitorService.findMonitorByEmail(email);
@@ -45,7 +46,7 @@ public class MonitorServiceTest {
         //ARRANGE
         String email = "inexistantEmail@gmail.com";
 
-        when(monitorRepository.findByEmail(email)).thenReturn(Mono.empty());
+        when(monitorRepository.findByEmail(any(String.class))).thenReturn(Mono.empty());
 
         //ACT
         Mono<Monitor> monitorMono = monitorService.findMonitorByEmail(email);

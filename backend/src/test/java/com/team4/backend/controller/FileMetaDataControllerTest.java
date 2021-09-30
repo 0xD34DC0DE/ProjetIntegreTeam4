@@ -3,6 +3,7 @@ package com.team4.backend.controller;
 import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.service.FileMetaDataService;
+import com.team4.backend.testdata.FileMetaDataMockData;
 import com.team4.backend.testdata.InternshipOfferMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -51,13 +52,35 @@ public class FileMetaDataControllerTest {
     @Test
     void getListInvalidCvNotSeen() {
         //ARRANGE
-
-        when(fileMetaDataService.getListInvalidCvNotSeen()).thenReturn(Flux.just(FileMetaData.builder().build()));
+        when(fileMetaDataService.getListInvalidCvNotSeen()).thenReturn(Flux.just(FileMetaDataMockData.getFileMetaData()));
 
         //ACT
         webTestClient
                 .get()
                 .uri("/fileMetaData/getListInvalidCvNotSeen")
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(FileMetaData.class);
+    }
+
+
+    @Test
+    void validateCv() {
+        //ARRANGE
+        FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
+
+        when(fileMetaDataService.validateCv(fileMetaData.getId(), true)).thenReturn(Mono.just(fileMetaData));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/fileMetaData/validateCv")
+                                .queryParam("id", fileMetaData.getId())
+                                .queryParam("isValid", true)
+                                .build())
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()

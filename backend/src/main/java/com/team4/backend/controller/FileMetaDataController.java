@@ -3,9 +3,7 @@ package com.team4.backend.controller;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.service.FileMetaDataService;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -29,6 +27,12 @@ public class FileMetaDataController {
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
     public Flux<FileMetaData> getListInvalidCvNotSeen(){
         return fileMetaDataService.getListInvalidCvNotSeen();
+    }
+
+    @PatchMapping("/validateCv")
+    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
+    public Mono<FileMetaData> validateCv(@RequestParam("id") String id, @RequestParam("isValid") Boolean isValid){
+        return fileMetaDataService.validateCv(id,isValid);
     }
 
 
