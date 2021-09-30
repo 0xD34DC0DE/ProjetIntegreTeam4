@@ -7,7 +7,6 @@ public abstract class StudentMapper {
 
     public static Student toEntity(StudentDto studentDto) {
         return Student.studentBuilder()
-                .id(studentDto.getId())
                 .registrationNumber(studentDto.getRegistrationNumber())
                 .email(studentDto.getEmail())
                 .password(studentDto.getPassword())

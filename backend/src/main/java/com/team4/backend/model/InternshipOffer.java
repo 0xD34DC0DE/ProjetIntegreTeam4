@@ -29,8 +29,7 @@ public class InternshipOffer implements Serializable {
 
     private LocalDate endingDate;
 
-    @DBRef
-    private Monitor monitor;
+    private String emailOfMonitor;
 
     private String companyName;
 
@@ -44,33 +43,29 @@ public class InternshipOffer implements Serializable {
 
     private boolean isExclusive;
 
-    @DBRef
-    private List<Student> listInterestedStudents;
-
-    @DBRef
-    private List<Student> listExclusiveStudents;
+    private List<String> listEmailInterestedStudents;
 
     public InternshipOffer(String id,
                            LocalDate limitDateToApply,
                            LocalDate beginningDate,
                            LocalDate endingDate,
-                           Monitor monitor,
                            String companyName,
                            String description,
                            Float minSalary,
                            Float maxSalary,
                            boolean isValidated,
-                           boolean isExclusive) {
+                           boolean isExclusive,
+                           String emailOfMonitor) {
         this.id = id;
         this.limitDateToApply = limitDateToApply;
         this.beginningDate = beginningDate;
         this.endingDate = endingDate;
-        this.monitor = monitor;
         this.companyName = companyName;
         this.description = description;
         this.minSalary = minSalary;
         this.maxSalary = maxSalary;
         this.isValidated = isValidated;
         this.isExclusive = isExclusive;
+        this.emailOfMonitor = emailOfMonitor;
     }
 }

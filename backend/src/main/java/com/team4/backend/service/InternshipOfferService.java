@@ -1,7 +1,6 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferDto;
-import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.repository.InternshipOfferRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -19,8 +18,10 @@ public class InternshipOfferService {
     }
 
     public Mono<InternshipOfferDto> addAnInternshipOffer(InternshipOfferDto internshipOfferDTO) {
-        return monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor())
-                .flatMap(monitor -> internshipOfferRepository.save(InternshipOfferMapper.toEntity(internshipOfferDTO, monitor)))
-                .map(InternshipOfferMapper::toDto);
+       // return monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor())
+                //.flatMap(monitor -> internshipOfferRepository.save(InternshipOfferMapper.toEntity(internshipOfferDTO, monitor)))
+               // .map(InternshipOfferMapper::toDto);
+
+        return null;
     }
 }

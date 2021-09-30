@@ -20,9 +20,9 @@ public abstract class InternshipOfferMockData {
                 .minSalary(22.5f)
                 .maxSalary(23.5f)
                 .companyName("desjardins")
-                .monitor(Monitor.monitorBuilder().email("rickJones@desjardins.com").build())
+                .emailOfMonitor("rickJones@desjardins.com")
                 .description("Développeur Web")
-                .listInterestedStudents(getInterestedStudentsList())
+                .listEmailInterestedStudents(getInterestedStudentsEmailList())
                 .build();
     }
 
