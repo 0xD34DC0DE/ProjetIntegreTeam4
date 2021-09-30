@@ -1,6 +1,6 @@
 package com.team4.backend.model;
 
-import com.team4.backend.dto.InternshipOfferDto;
+import com.team4.backend.meta.ExcludeFromGeneratedCoverage;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

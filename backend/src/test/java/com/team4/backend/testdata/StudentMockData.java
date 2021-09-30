@@ -4,7 +4,7 @@ import com.team4.backend.dto.StudentDto;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.StudentState;
 
-public class StudentMockData {
+public abstract class StudentMockData {
 
     public static Student getMockStudent() {
         return Student.studentBuilder()

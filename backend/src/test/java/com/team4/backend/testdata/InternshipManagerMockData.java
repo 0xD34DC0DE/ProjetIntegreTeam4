@@ -3,7 +3,7 @@ package com.team4.backend.testdata;
 import com.team4.backend.dto.InternshipManagerDto;
 import com.team4.backend.model.InternshipManager;
 
-public class InternshipManagerMockData {
+public abstract class InternshipManagerMockData {
 
     public static InternshipManager GetInternshipManager() {
         return InternshipManager.internshipManagerBuilder()

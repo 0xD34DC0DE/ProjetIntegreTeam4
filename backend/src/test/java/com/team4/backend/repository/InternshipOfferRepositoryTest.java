@@ -12,11 +12,9 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ContextConfiguration(classes ={StudentRepository.class})
-public class StudentRepositoryTest {
+@ContextConfiguration(classes ={InternshipOfferRepository.class})
+public class InternshipOfferRepositoryTest {
 
     @Autowired
-    StudentRepository studentRepository;
-
-
+    InternshipOfferRepository internshipOfferRepository;
 }
