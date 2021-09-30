@@ -1,8 +1,8 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.Monitor;
-import com.team4.backend.model.User;
 import lombok.extern.java.Log;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,7 +16,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Log
 @DataMongoTest
@@ -37,7 +37,7 @@ public class MonitorRepositoryTest {
                 Monitor.monitorBuilder().email("johnnyJ@cae-tech.com").password("johnny123").build()
         );
 
-        monitorRepository.saveAll(users).subscribe().dispose();
+        monitorRepository.saveAll(users).subscribe();
     }
 
     @Test
@@ -66,6 +66,34 @@ public class MonitorRepositoryTest {
         StepVerifier.create(nonExistentMonitor)
                 .expectNextCount(0)
                 .verifyComplete();
+    }
+
+    @Test
+    void shouldExistByEmailAndEnabledTrue(){
+        //ARRANGE
+        String email = "marcM@desjardin.com";
+        //ACT
+        Mono<Boolean> existentMonitor = monitorRepository.existsByEmailAndIsEnabledTrue(email);
+
+        //ASSERT
+        StepVerifier.create(existentMonitor)
+                .assertNext(Assertions::assertTrue)
+                .verifyComplete();
+
+    }
+
+    @Test
+    void shouldNotExistByEmailAndEnabledTrue(){
+        //ARRANGE
+        String email = "inexistantEmail@gmail.com";
+        //ACT
+        Mono<Boolean> existentMonitor = monitorRepository.existsByEmailAndIsEnabledTrue(email);
+
+        //ASSERT
+        StepVerifier.create(existentMonitor)
+                .assertNext(Assertions::assertFalse)
+                .verifyComplete();
+
     }
 
 }
