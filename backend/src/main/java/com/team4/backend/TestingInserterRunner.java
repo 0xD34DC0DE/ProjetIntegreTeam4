@@ -1,8 +1,10 @@
 package com.team4.backend;
 
+import com.team4.backend.model.FileMetaData;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;
+import com.team4.backend.repository.FileMetaDataRepository;
 import com.team4.backend.repository.MonitorRepository;
 import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -28,20 +30,29 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final PBKDF2Encoder pbkdf2Encoder;
 
-    public TestingInserterRunner( MonitorRepository monitorRepository, UserRepository userRepository, PBKDF2Encoder pbkdf2Encoder) {
+    private final FileMetaDataRepository fileMetaDataRepository;
+
+    public TestingInserterRunner(MonitorRepository monitorRepository,
+                                 UserRepository userRepository,
+                                 PBKDF2Encoder pbkdf2Encoder,
+                                 FileMetaDataRepository fileMetaDataRepository) {
         this.monitorRepository = monitorRepository;
         this.userRepository = userRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
+        this.fileMetaDataRepository = fileMetaDataRepository;
     }
 
     @Override
     public void run(final ApplicationArguments args) {
         userRepository.deleteAll().subscribe();
         monitorRepository.deleteAll().subscribe();
+        fileMetaDataRepository.deleteAll().subscribe();
 
         insertUsers();
 
         insertMonitors();
+
+        insertCvs();
     }
 
     private void insertUsers() {
@@ -58,5 +69,16 @@ public class TestingInserterRunner implements ApplicationRunner {
         Monitor monitor = Monitor.monitorBuilder().email("marcAndre@desjardins.com").password(pbkdf2Encoder.encode("marc123")).build();
 
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
+    }
+
+    private void insertCvs(){
+        List<FileMetaData> fileMetaDataList = Arrays.asList(
+                FileMetaData.builder().filename("cv1.pdf").build(),
+                FileMetaData.builder().filename("cv2.pdf").build(),
+                FileMetaData.builder().filename("cv3.pdf").build()
+        );
+
+        fileMetaDataRepository.saveAll(fileMetaDataList).subscribe(f -> log.info("new cv file created: {}", f));
+
     }
 }
