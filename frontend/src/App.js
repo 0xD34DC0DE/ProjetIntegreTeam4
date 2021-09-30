@@ -9,7 +9,6 @@ import OfferViews from "./components/OfferViews";
 
 function App() {
   const [open, setOpen] = useState(false);
-  const [userInformation] = useState({});
 
   const handleDialogs = (dialogName, show) => {
     setDialogVisibility((dialogs) => ({ ...dialogs, [dialogName]: show }));
