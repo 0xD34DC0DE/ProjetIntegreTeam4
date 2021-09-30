@@ -1,11 +1,12 @@
 import { IconButton, Toolbar, MenuItem, Menu, Typography } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import LoginIcon from "@mui/icons-material/Login";
 import Login from "../components/Login";
 import Register from "../components/Register";
 import PersonIcon from "@mui/icons-material/Person";
+import { UserInfoContext } from "../stores/UserInfoStore";
 
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop,
@@ -23,14 +24,12 @@ const mdTheme = createTheme();
 const TopBar = ({
   open,
   toggleDialogs,
-  userInformation,
-  setUserInformation,
   registerVisible,
-  logout,
   loginVisible,
 }) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const menuAnchor = useRef();
+  const [userInfo, userInfoDispatch] = useContext(UserInfoContext)
 
   const handleClose = () => {
     menuAnchor.current = undefined;
@@ -40,7 +39,7 @@ const TopBar = ({
   const handleOpen = (event) => {
     menuAnchor.current = event.currentTarget;
     setMenuVisible(true);
-    console.log(userInformation);
+    console.log(userInfo);
   };
 
   return (
@@ -55,10 +54,10 @@ const TopBar = ({
           }}
         >
           <Typography variant="caption" sx={{ ml: "auto" }}>
-            {userInformation.email}
+            {userInfo.email}
           </Typography>
           <IconButton color="inherit" onClick={handleOpen}>
-            {userInformation.loggedIn ? <LoginIcon /> : <PersonIcon />}
+            {userInfo.loggedIn ? <LoginIcon /> : <PersonIcon />}
           </IconButton>
           <Menu
             id="demo-positioned-menu"
@@ -68,10 +67,10 @@ const TopBar = ({
             open={menuVisible}
             onClose={handleClose}
           >
-            {!userInformation.loggedIn
+            {!userInfo.loggedIn
               ? [
                   [
-                    <MenuItem
+                    <MenuItem key={0}
                       onClick={() => {
                         toggleDialogs("registerDialog", true);
                         setMenuVisible(false);
@@ -81,7 +80,7 @@ const TopBar = ({
                     </MenuItem>,
                   ],
                   [
-                    <MenuItem
+                    <MenuItem key={1}
                       onClick={() => {
                         toggleDialogs("loginDialog", true);
                         setMenuVisible(false);
@@ -92,10 +91,10 @@ const TopBar = ({
                   ],
                 ]
               : [
-                  <MenuItem
+                  <MenuItem key={2}
                     onClick={() => {
                       setMenuVisible(false);
-                      logout();
+                      userInfoDispatch({type: 'LOGOUT'});
                     }}
                   >
                     Déconnexion
@@ -108,8 +107,6 @@ const TopBar = ({
       <Login
         open={loginVisible}
         toggleDialogs={toggleDialogs}
-        userInformation={userInformation}
-        setUserInformation={setUserInformation}
       ></Login>
     </ThemeProvider>
   );
