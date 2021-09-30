@@ -15,12 +15,13 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Document(collection = "fileMetadata")
 public class FileMetaData {
+
     @Id
     private String id;
 
     private String assetId;
 
-    private String userId;
+    private String userId;//TODO --> change for email
 
     private String filename;
 
