@@ -23,4 +23,10 @@ public class MonitorService {
                 .filter(Objects::nonNull)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find monitor with this email.")));
     }
+
+    public Mono<Boolean> existsByEmailAndIsEnabledTrue(String email) {
+        return monitorRepository.existsByEmailAndIsEnabledTrue(email)
+                .filter(exist -> exist)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find monitor with this email.")));
+    }
 }
