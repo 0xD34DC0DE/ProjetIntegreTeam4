@@ -6,9 +6,10 @@ const AccountFormField = ({ onFieldChange, step, valid, visibleStep }) => {
 
   const accountTypes = [
     {
-      type: "Student",
+      type: "Étudiant",
+      value: "student",
     },
-    { type: "Monitor" },
+    { type: "Moniteur", value: "monitor" },
   ];
 
   useEffect(() => {

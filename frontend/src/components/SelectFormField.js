@@ -29,7 +29,7 @@ const SelectFormField = ({
           >
             {items.map((item, index) => {
               return (
-                <MenuItem key={index} value={item.type}>
+                <MenuItem key={index} value={item.value}>
                   {item.type}
                 </MenuItem>
               );

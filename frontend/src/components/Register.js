@@ -65,6 +65,7 @@ const Register = ({ open, toggleDialogs }) => {
     })
       .then(() => {
         toggleDialogs("registerDialog", false);
+        setStep(0);
       })
       .catch((error) => {
         console.error(error);

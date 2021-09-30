@@ -13,23 +13,18 @@ const AppBar = styled(MuiAppBar, {
 })(({ theme, open }) => ({
   overflowX: "hidden",
   float: "right",
-  width: `calc(100% - ${theme.spacing(40)})`,
+  width: `calc(100% - theme.spacing(40))`,
   ...(!open && {
-    width: `calc(100% - ${theme.spacing(9)})`,
+    width: `calc(100% - theme.spacing(9))`,
   }),
 }));
 
 const mdTheme = createTheme();
 
-const TopBar = ({
-  open,
-  toggleDialogs,
-  registerVisible,
-  loginVisible,
-}) => {
+const TopBar = ({ open, toggleDialogs, registerVisible, loginVisible }) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const menuAnchor = useRef();
-  const [userInfo, userInfoDispatch] = useContext(UserInfoContext)
+  const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
 
   const handleClose = () => {
     menuAnchor.current = undefined;
@@ -39,7 +34,6 @@ const TopBar = ({
   const handleOpen = (event) => {
     menuAnchor.current = event.currentTarget;
     setMenuVisible(true);
-    console.log(userInfo);
   };
 
   return (
@@ -70,7 +64,7 @@ const TopBar = ({
             {!userInfo.loggedIn
               ? [
                   [
-                    <MenuItem key={0}
+                    <MenuItem
                       onClick={() => {
                         toggleDialogs("registerDialog", true);
                         setMenuVisible(false);
@@ -80,7 +74,7 @@ const TopBar = ({
                     </MenuItem>,
                   ],
                   [
-                    <MenuItem key={1}
+                    <MenuItem
                       onClick={() => {
                         toggleDialogs("loginDialog", true);
                         setMenuVisible(false);
@@ -91,10 +85,10 @@ const TopBar = ({
                   ],
                 ]
               : [
-                  <MenuItem key={2}
+                  <MenuItem
                     onClick={() => {
                       setMenuVisible(false);
-                      userInfoDispatch({type: 'LOGOUT'});
+                      userInfoDispatch({ type: "LOGOUT" });
                     }}
                   >
                     Déconnexion
@@ -104,10 +98,7 @@ const TopBar = ({
         </Toolbar>
       </AppBar>
       <Register toggleDialogs={toggleDialogs} open={registerVisible}></Register>
-      <Login
-        open={loginVisible}
-        toggleDialogs={toggleDialogs}
-      ></Login>
+      <Login open={loginVisible} toggleDialogs={toggleDialogs}></Login>
     </ThemeProvider>
   );
 };

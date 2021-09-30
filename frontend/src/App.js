@@ -6,6 +6,7 @@ import SideBar from "./components/SideBar";
 import TopBar from "./components/TopBar";
 import UserInfoStore, { UserInfoContext } from "./stores/UserInfoStore";
 import OfferViews from "./components/OfferViews";
+import Content from "./components/Content";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -38,14 +39,12 @@ function App() {
             toggleDialogs={handleDialogs}
           />
           <Container fluid="true">
-
             <Switch>
-              <OfferViews />
+              <Content></Content>
             </Switch>
-
           </Container>
           <UserInfoContext.Consumer>
-            {({loggedIn}) => (loggedIn ? <Redirect push to="/"/> : null)}
+            {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}
           </UserInfoContext.Consumer>
         </div>
       </UserInfoStore>
