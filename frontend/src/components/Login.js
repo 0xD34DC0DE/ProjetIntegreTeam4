@@ -4,18 +4,15 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  Grid,
   TextField,
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import jwt_decode from "jwt-decode";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserInfoContext } from "../stores/UserInfoStore";
 
 const Login = ({
   open,
-  userInformation,
-  setUserInformation,
   toggleDialogs,
 }) => {
   const [errorMessage, setErrorMessage] = useState();
@@ -23,6 +20,7 @@ const Login = ({
     email: "",
     password: "",
   });
+  const [userInfo, userInfoDispatch] = useContext(UserInfoContext)
 
   const handleFormChange = (event) => {
     setForm((form) => ({
@@ -42,14 +40,7 @@ const Login = ({
       },
     })
       .then((response) => {
-        sessionStorage.setItem("jwt", `Bearer ${response.data}`);
-
-        const decodedJWT = jwt_decode(response.data);
-        setUserInformation({
-          email: form.email,
-          role: decodedJWT.role,
-          loggedIn: true,
-        });
+        userInfoDispatch({type: 'LOGIN', payload: {token: response.data}})
         resetForm();
         setErrorMessage();
         toggleDialogs("loginDialog", false);
@@ -70,7 +61,7 @@ const Login = ({
     if (reason === "backdropClick") toggleDialogs("loginDialog", false);
   };
 
-  if (!userInformation.loggedIn) {
+  if (!userInfo.loggedIn) {
     return (
       <Dialog open={open} onClose={handleClose}>
         <DialogContent>
