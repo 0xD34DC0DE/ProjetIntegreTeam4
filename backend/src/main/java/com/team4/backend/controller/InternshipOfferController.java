@@ -28,4 +28,10 @@ public class InternshipOfferController {
     public Flux<InternshipOfferDto> getAllNonValidatedInternshipOffer() {
         return internshipOfferService.getNonValidatedInternshipOffers();
     }
+
+    @PatchMapping("/validateInternshipOffer")
+    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
+    public Mono<InternshipOfferDto> validateInternshipOffer(@RequestParam("id") String id){
+        return internshipOfferService.validateInternshipOffer(id);
+    }
 }

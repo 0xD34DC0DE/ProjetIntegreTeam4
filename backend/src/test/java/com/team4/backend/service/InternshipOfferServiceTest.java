@@ -92,4 +92,21 @@ public class InternshipOfferServiceTest {
                 .assertNext(o -> assertFalse(o.isValidated()))
                 .verifyComplete();
     }
+
+    @Test
+    void shouldValidateIntershipOffer(){
+        // ARRANGE
+        String id = "234dsd2egd54ter";
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+        when(internshipOfferRepository.findById(id)).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
+
+        // ACT
+        Mono<InternshipOfferDto> internshipOfferDtoMono = internshipOfferService.validateInternshipOffer(id);
+
+        // ASSERT
+        StepVerifier.create(internshipOfferDtoMono)
+                .assertNext(e -> assertTrue(e.isValidated()))
+                .verifyComplete();
+    }
 }
