@@ -48,5 +48,6 @@ public class SecurityConfiguration {
                 .and().cors().and().csrf().disable()
                 .build();
     }
+
 }
 

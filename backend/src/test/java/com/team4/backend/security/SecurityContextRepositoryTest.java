@@ -61,4 +61,5 @@ public class SecurityContextRepositoryTest {
                 .consumeNextWith(securityContext -> assertTrue(securityContext.getAuthentication().getPrincipal().toString().isEmpty()))
                 .verifyComplete();
     }
+
 }

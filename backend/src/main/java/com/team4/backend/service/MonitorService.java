@@ -4,12 +4,8 @@ import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.repository.MonitorRepository;
 import com.team4.backend.util.PBKDF2Encoder;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
-
-import java.util.Objects;
 
 @Service
 public class MonitorService {
@@ -26,10 +22,8 @@ public class MonitorService {
         this.pbkdf2Encoder = pbkdf2Encoder;
     }
 
-    public Mono<Monitor> findMonitorByEmail(String email) {
-        return monitorRepository.findByEmail(email)
-                .filter(Objects::nonNull)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find monitor with this email.")));
+    public Mono<Boolean> existsByEmailAndIsEnabledTrue(String email) {
+        return monitorRepository.existsByEmailAndIsEnabledTrue(email);
     }
 
     public Mono<Monitor> registerMonitor(Monitor monitor) {
@@ -38,7 +32,7 @@ public class MonitorService {
                 monitor.setPassword(pbkdf2Encoder.encode(monitor.getPassword()));
                 return monitorRepository.save(monitor);
             } else {
-                return Mono.error(new UserAlreadyExistsException());
+                return Mono.error(new UserAlreadyExistsException("User already exist!"));
             }
         });
     }

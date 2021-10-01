@@ -3,9 +3,9 @@ package com.team4.backend.exception;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class UserAlreadyExistsException extends Exception {
+public class UserDoNotExistException extends Exception {
 
-    public UserAlreadyExistsException(String message) {
+    public UserDoNotExistException(String message) {
         super(message);
     }
 }

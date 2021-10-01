@@ -5,9 +5,29 @@ import com.team4.backend.model.Student;
 import com.team4.backend.testdata.StudentMockData;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class StudentMapperTest {
+
+    @Test
+    void mapDtoToEntity() {
+        //ARANGE
+        StudentDto dto = StudentMockData.getMockStudentDto();
+
+        //ACT
+        Student entity = StudentMapper.toEntity(dto);
+
+        //ASSERT
+        assertNull(entity.getId());
+        assertEquals(dto.getEmail(), entity.getEmail());
+        assertEquals(dto.getPassword(), entity.getPassword());
+        assertEquals(dto.getFirstName(), entity.getFirstName());
+        assertEquals(dto.getLastName(), entity.getLastName());
+        assertEquals(dto.getPhoneNumber(), entity.getPhoneNumber());
+        assertEquals(dto.getStudentState(), entity.getStudentState());
+        assertEquals(dto.getRegistrationDate(), entity.getRegistrationDate());
+    }
 
     @Test
     void mapEntityToDto() {
@@ -27,25 +47,6 @@ public class StudentMapperTest {
         assertEquals(entity.getPhoneNumber(), dto.getPhoneNumber());
         assertEquals(entity.getStudentState(), dto.getStudentState());
         assertEquals(entity.getRegistrationDate(), dto.getRegistrationDate());
-    }
-
-    @Test
-    void mapDtoToEntity() {
-        //ARANGE
-        StudentDto dto = StudentMockData.getMockStudentDto();
-
-        //ACT
-        Student entity = StudentMapper.toEntity(dto);
-
-        //ASSERT
-        assertNull(entity.getId());
-        assertEquals(dto.getEmail(), entity.getEmail());
-        assertEquals(dto.getPassword(), entity.getPassword());
-        assertEquals(dto.getFirstName(), entity.getFirstName());
-        assertEquals(dto.getLastName(), entity.getLastName());
-        assertEquals(dto.getPhoneNumber(), entity.getPhoneNumber());
-        assertEquals(dto.getStudentState(), entity.getStudentState());
-        assertEquals(dto.getRegistrationDate(), entity.getRegistrationDate());
     }
 
 }

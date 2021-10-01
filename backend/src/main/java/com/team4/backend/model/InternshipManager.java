@@ -33,4 +33,5 @@ public class InternshipManager extends User {
                 true,
                 registrationDate);
     }
+
 }

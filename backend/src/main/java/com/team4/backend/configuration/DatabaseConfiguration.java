@@ -8,7 +8,6 @@ import org.springframework.data.mongodb.config.AbstractReactiveMongoConfiguratio
 import org.springframework.data.mongodb.repository.config.EnableReactiveMongoRepositories;
 
 
-
 @Configuration
 @EnableReactiveMongoRepositories("com.team4.backend.repository")
 public class DatabaseConfiguration extends AbstractReactiveMongoConfiguration {
@@ -22,4 +21,5 @@ public class DatabaseConfiguration extends AbstractReactiveMongoConfiguration {
     protected String getDatabaseName() {
         return "projet_integre";
     }
+    
 }

@@ -1,8 +1,8 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.Monitor;
-import com.team4.backend.model.User;
 import lombok.extern.java.Log;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,8 +15,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Log
 @DataMongoTest
@@ -37,35 +35,35 @@ public class MonitorRepositoryTest {
                 Monitor.monitorBuilder().email("johnnyJ@cae-tech.com").password("johnny123").build()
         );
 
-        monitorRepository.saveAll(users).subscribe().dispose();
+        monitorRepository.saveAll(users).subscribe();
     }
 
     @Test
-    void shouldFindByEmail() {
+    void shouldExistByEmailAndEnabledTrue() {
         //ARRANGE
         String email = "marcM@desjardin.com";
-
         //ACT
-        Mono<Monitor> monitorMono = monitorRepository.findByEmail(email);
+        Mono<Boolean> existentMonitor = monitorRepository.existsByEmailAndIsEnabledTrue(email);
 
         //ASSERT
-        StepVerifier.create(monitorMono)
-                .assertNext(monitor -> assertEquals(email, monitor.getEmail()))
+        StepVerifier.create(existentMonitor)
+                .assertNext(Assertions::assertTrue)
                 .verifyComplete();
+
     }
 
     @Test
-    void shouldNotFindByEmail() {
+    void shouldNotExistByEmailAndEnabledTrue() {
         //ARRANGE
         String email = "inexistantEmail@gmail.com";
-
         //ACT
-        Mono<Monitor> nonExistentMonitor = monitorRepository.findByEmail(email);
+        Mono<Boolean> existentMonitor = monitorRepository.existsByEmailAndIsEnabledTrue(email);
 
-        //ACT
-        StepVerifier.create(nonExistentMonitor)
-                .expectNextCount(0)
+        //ASSERT
+        StepVerifier.create(existentMonitor)
+                .assertNext(Assertions::assertFalse)
                 .verifyComplete();
+
     }
 
 }

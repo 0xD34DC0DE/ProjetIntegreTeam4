@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.AuthRequestDto;
+import com.team4.backend.exception.WrongCredentialsException;
 import com.team4.backend.model.User;
 import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.JwtUtil;
@@ -11,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -72,7 +72,7 @@ public class UserServiceTest {
         Mono<String> tokenMono = userService.login(authRequestDto);
 
         //ASSERT
-        StepVerifier.create(tokenMono).verifyError(ResponseStatusException.class);
+        StepVerifier.create(tokenMono).verifyError(WrongCredentialsException.class);
     }
 
     @Test
@@ -106,4 +106,5 @@ public class UserServiceTest {
                 .assertNext(Assertions::assertFalse)
                 .verifyComplete();
     }
+
 }
