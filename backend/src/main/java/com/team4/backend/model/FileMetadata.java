@@ -1,6 +1,7 @@
 package com.team4.backend.model;
 
 import com.team4.backend.model.enums.FileType;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -19,12 +20,28 @@ public class FileMetadata {
     private String id;
 
     private String userEmail;
+
     private String assetId;
+
     private String filename;
+
     private boolean validCV;
 
     private FileType type;
+
     private String path;
 
     private LocalDateTime creationDate;
+
+    @Builder
+    public FileMetadata(String id, String userEmail, String assetId, String filename, boolean validCV, FileType type, String path, LocalDateTime creationDate) {
+        this.id = id;
+        this.userEmail = userEmail;
+        this.assetId = assetId;
+        this.filename = filename;
+        this.validCV = validCV;
+        this.type = type;
+        this.path = path;
+        this.creationDate = creationDate;
+    }
 }
