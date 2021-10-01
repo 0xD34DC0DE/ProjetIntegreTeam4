@@ -28,6 +28,5 @@ public class MonitorController {
         return monitorService.registerMonitor(MonitorMapper.toEntity(monitorDto))
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
                 .onErrorReturn(UserAlreadyExistsException.class, ResponseEntity.status(HttpStatus.CONFLICT).body(""));
-        //TODO add a non-handled exception to make sure it returns 500 and not 409
     }
 }

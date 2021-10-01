@@ -48,9 +48,9 @@ public class MonitorControllerTest {
         when(monitorService.registerMonitor(any(Monitor.class)))
                 .thenReturn(
                         Mono.just(monitor)
-                                .map(s -> {
-                                    s.setId("615259e03835be1f53bd49e4");
-                                    return s;
+                                .map(m -> {
+                                    m.setId("615259e03835be1f53bd49e4");
+                                    return m;
                                 })
                 );
 

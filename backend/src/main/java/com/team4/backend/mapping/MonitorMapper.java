@@ -7,7 +7,6 @@ public abstract class MonitorMapper {
 
     public static Monitor toEntity(MonitorDto monitorDto) {
         return Monitor.monitorBuilder()
-                .id(monitorDto.getId())
                 .registrationNumber(monitorDto.getRegistrationNumber())
                 .email(monitorDto.getEmail())
                 .password(monitorDto.getPassword())

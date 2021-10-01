@@ -9,6 +9,7 @@ import {
   ListItemText,
   Tooltip,
   Avatar,
+  Button,
   ListItemAvatar,
 } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
@@ -128,7 +129,15 @@ const TopBar = ({ open, toggleDialogs, registerVisible, loginVisible }) => {
                       <ListItemAvatar>
                         <Avatar>AL</Avatar>
                       </ListItemAvatar>
-                      <ListItemText>{userInfo.email}</ListItemText>
+                      <ListItemText
+                        secondary={
+                          <Typography variant="caption">
+                            {userInfo.role}
+                          </Typography>
+                        }
+                      >
+                        {userInfo.email}
+                      </ListItemText>
                     </MenuItem>,
                   ],
                   [<Divider />],

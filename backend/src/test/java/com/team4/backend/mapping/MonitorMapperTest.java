@@ -39,7 +39,7 @@ public class MonitorMapperTest {
         Monitor entity = MonitorMapper.toEntity(dto);
 
         //ASSERT
-        assertEquals(dto.getId(), entity.getId());
+        assertNull(entity.getId());
         assertEquals(dto.getEmail(), entity.getEmail());
         assertEquals(dto.getPassword(), entity.getPassword());
         assertEquals(dto.getFirstName(), entity.getFirstName());
