@@ -1,20 +1,15 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Container } from "@mui/material";
+import React, { useState } from "react";
 import { BrowserRouter, Redirect, Switch } from "react-router-dom";
 import "./App.css";
-import SideBar from "./components/SideBar";
+import Content from "./components/Content";
 import TopBar from "./components/TopBar";
 import UserInfoStore, { UserInfoContext } from "./stores/UserInfoStore";
-import OfferViews from "./components/OfferViews";
-import Content from "./components/Content";
 
 function App() {
-  const [open, setOpen] = useState(false);
-
   const handleDialogs = (dialogName, show) => {
     setDialogVisibility((dialogs) => ({ ...dialogs, [dialogName]: show }));
   };
-
+  const [open, setOpen] = useState(false);
   const [dialogVisibility, setDialogVisibility] = useState({
     loginDialog: false,
     registerDialog: false,
@@ -27,20 +22,15 @@ function App() {
       <UserInfoStore>
         <div className="App">
           <TopBar
-            open={open}
+            openDrawer={open}
+            setOpenDrawer={setOpen}
             loginVisible={dialogVisibility.loginDialog}
             registerVisible={dialogVisibility.registerDialog}
             toggleDialogs={handleDialogs}
-          />
-          <SideBar
             intershipOfferDialogVisible={dialogVisibility.internshipOfferDialog}
-            setOpen={setOpen}
-            open={open}
-            toggleDialogs={handleDialogs}
           />
-
           <Switch>
-            <Content></Content>
+            <Content open={open} setOpen={setOpen}></Content>
           </Switch>
           <UserInfoContext.Consumer>
             {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}

@@ -1,104 +1,92 @@
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import PropTypes from "prop-types";
 import {
+  Divider,
   List,
-  ListItemButton,
   ListItemIcon,
   ListItemText,
+  ListItemButton,
+  ThemeProvider,
+  Toolbar,
+  Icon,
 } from "@mui/material";
-import MuiDrawer from "@mui/material/Drawer";
-import Icon from "@mui/material/Icon";
+import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
-import Toolbar from "@mui/material/Toolbar";
+import { createTheme, styled } from "@mui/material/styles";
 import React, { useContext } from "react";
-import { useHistory } from "react-router";
-import { drawerListDialogs } from "../models/drawerListItems";
-import OfferForm from "../components/OfferForm";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import { drawerListDialogs } from "../models/drawerListItems";
+import OfferForm from "./OfferForm";
 
-const Drawer = styled(MuiDrawer, {
-  shouldForwardProp: (prop) => prop,
-})(({ theme, open }) => ({
-  "& .MuiDrawer-paper": {
-    position: "relative",
-    float: "left",
-    width: theme.spacing(40),
-    transition: theme.transitions.create("width", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.enteringScreen,
-    }),
-    boxSizing: "border-box",
-    ...(!open && {
-      overflowX: "hidden",
-      transition: theme.transitions.create("width", {
-        duration: theme.transitions.duration.leavingScreen,
-      }),
-      [theme.breakpoints.up("xs")]: {
-        width: theme.spacing(9),
-      },
-    }),
-  },
+const drawerWidth = 25;
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
+  justifyContent: "flex-end",
 }));
 
 const mdTheme = createTheme();
 
 function SideBar({
-  setOpen,
   open,
+  setOpen,
   intershipOfferDialogVisible,
   toggleDialogs,
 }) {
-  const history = useHistory();
   const [userInfo] = useContext(UserInfoContext);
 
   const toggleDrawer = () => {
+    console.log("open", open);
     setOpen(!open);
   };
 
   return (
-    <>
-      {userInfo.loggedIn && (
-        <ThemeProvider theme={mdTheme}>
-          <Drawer variant="permanent" open={open} anchor="left">
-            <Toolbar
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "flex-end",
-                px: [1],
-              }}
-            >
-              <IconButton onClick={toggleDrawer}>
-                {open ? <Icon>chevron_left</Icon> : <Icon>chevron_right</Icon>}
-              </IconButton>
-            </Toolbar>
-            <List>
-              {drawerListDialogs
-                .filter((item) => item.roles.includes(userInfo.role))
-                .map((item, key) => {
-                  return (
-                    <ListItemButton
-                      key={key}
-                      onClick={() => {
-                        console.log("item name", item.name);
-                        console.log("visible?", intershipOfferDialogVisible);
-                        toggleDialogs(item.name, true);
-                      }}
-                    >
-                      <ListItemIcon>{item.icon}</ListItemIcon>
-                      <ListItemText>{item.text}</ListItemText>
-                    </ListItemButton>
-                  );
-                })}
-            </List>
-          </Drawer>
-          <OfferForm
-            dialogVisible={intershipOfferDialogVisible}
-            toggleDialogs={toggleDialogs}
-          />
-        </ThemeProvider>
-      )}
-    </>
+    <ThemeProvider theme={mdTheme}>
+      <Drawer
+        sx={{
+          width: `${drawerWidth}rem`,
+          flexShrink: 0,
+          "& .MuiDrawer-paper": {
+            width: `${drawerWidth}rem`,
+            boxSizing: "border-box",
+          },
+        }}
+        variant="persistent"
+        anchor="left"
+        open={open}
+      >
+        <DrawerHeader>
+          <IconButton onClick={toggleDrawer}>
+            <ChevronLeftIcon />
+          </IconButton>
+        </DrawerHeader>
+        <Divider />
+        <List>
+          {drawerListDialogs
+            .filter((item) => item.roles.includes(userInfo.role))
+            .map((item, key) => {
+              return (
+                <ListItemButton
+                  key={key}
+                  onClick={() => {
+                    toggleDialogs(item.name, true);
+                  }}
+                >
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText>{item.text}</ListItemText>
+                </ListItemButton>
+              );
+            })}
+        </List>
+      </Drawer>
+      <OfferForm
+        dialogVisible={intershipOfferDialogVisible}
+        toggleDialogs={toggleDialogs}
+      />
+    </ThemeProvider>
   );
 }
-
 export default SideBar;
