@@ -6,7 +6,6 @@ import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
-import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
@@ -90,11 +89,11 @@ public class JwtUtilTest {
         Claims returnedClaims = jwtUtil.getAllClaimsFromToken(token);
 
         //ASSERT
-        assertEquals(user.getEmail(),returnedClaims.getSubject());
-        assertEquals(user.getFirstName(),returnedClaims.get("firstName"));
-        assertEquals(user.getLastName(),returnedClaims.get("lastName"));
-        assertEquals(user.getPhoneNumber(),returnedClaims.get("phoneNumber"));
-        assertEquals(user.getRole().toString(),returnedClaims.get("role"));
+        assertEquals(user.getEmail(), returnedClaims.getSubject());
+        assertEquals(user.getFirstName(), returnedClaims.get("firstName"));
+        assertEquals(user.getLastName(), returnedClaims.get("lastName"));
+        assertEquals(user.getPhoneNumber(), returnedClaims.get("phoneNumber"));
+        assertEquals(user.getRole().toString(), returnedClaims.get("role"));
         assertNull(returnedClaims.get("companyName"));
     }
 
@@ -125,12 +124,12 @@ public class JwtUtilTest {
         Claims returnedClaims = jwtUtil.getAllClaimsFromToken(token);
 
         //ASSERT
-        assertEquals(monitor.getEmail(),returnedClaims.getSubject());
-        assertEquals(monitor.getFirstName(),returnedClaims.get("firstName"));
-        assertEquals(monitor.getLastName(),returnedClaims.get("lastName"));
-        assertEquals(monitor.getRole().toString(),returnedClaims.get("role"));
-        assertEquals(monitor.getPhoneNumber(),returnedClaims.get("phoneNumber"));
-        assertEquals(monitor.getCompanyName(),returnedClaims.get("companyName"));
+        assertEquals(monitor.getEmail(), returnedClaims.getSubject());
+        assertEquals(monitor.getFirstName(), returnedClaims.get("firstName"));
+        assertEquals(monitor.getLastName(), returnedClaims.get("lastName"));
+        assertEquals(monitor.getRole().toString(), returnedClaims.get("role"));
+        assertEquals(monitor.getPhoneNumber(), returnedClaims.get("phoneNumber"));
+        assertEquals(monitor.getCompanyName(), returnedClaims.get("companyName"));
     }
 
     @Test
@@ -140,7 +139,7 @@ public class JwtUtilTest {
         Map<String, Role> claims = new HashMap<>();
         Date creationDate = new Date();
 
-        claims.put("role",user.getRole());
+        claims.put("role", user.getRole());
 
         String token1 = Jwts.builder()
                 .setClaims(claims)
@@ -168,12 +167,12 @@ public class JwtUtilTest {
     }
 
     @Test
-    void getEmailFromToken(){
+    void getEmailFromToken() {
         //ARRANGE
         User user = User.builder().email("123456789@claurendeau.qc.ca").role(Role.STUDENT).build();
         Map<String, Role> claims = new HashMap<>();
 
-        claims.put("role",user.getRole());
+        claims.put("role", user.getRole());
 
         String token = Jwts.builder()
                 .setClaims(claims)
@@ -185,11 +184,11 @@ public class JwtUtilTest {
         String returnedEmail = jwtUtil.getEmailFromToken(token);
 
         //ASSERT
-        assertEquals(user.getEmail(),returnedEmail);
+        assertEquals(user.getEmail(), returnedEmail);
     }
 
     @Test
-    void isTokenValid(){
+    void isTokenValid() {
         //ARRANGE
         String token1 = Jwts.builder()
                 .signWith(jwtUtil.getKey())
@@ -203,6 +202,5 @@ public class JwtUtilTest {
         //ASSERT
         assertTrue(isTokenValid1);
         assertFalse(isTokenValid2);
-
     }
 }

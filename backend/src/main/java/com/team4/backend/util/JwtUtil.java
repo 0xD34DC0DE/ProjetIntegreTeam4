@@ -46,8 +46,8 @@ public class JwtUtil {
         claims.put("lastName", user.getLastName());
         claims.put("phoneNumber", user.getPhoneNumber());
 
-        if(user.getRole().equals(Role.MONITOR))
-            claims.put("companyName",((Monitor) user).getCompanyName());
+        if (user.getRole().equals(Role.MONITOR))
+            claims.put("companyName", ((Monitor) user).getCompanyName());
 
 
         return Jwts.builder()
@@ -68,7 +68,7 @@ public class JwtUtil {
         try {
 
             return getAllClaimsFromToken(token).getExpiration().before(new Date());
-        }catch (Exception e){
+        } catch (Exception e) {
             log.info(e.getMessage());
             return true;
         }
