@@ -18,5 +18,4 @@ public class StudentRepositoryTest {
     @Autowired
     StudentRepository studentRepository;
 
-
 }

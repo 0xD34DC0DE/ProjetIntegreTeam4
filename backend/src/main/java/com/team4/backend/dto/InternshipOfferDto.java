@@ -41,7 +41,6 @@ public class InternshipOfferDto implements Serializable {
 
     private List<String> listEmailInterestedStudents;
 
-    private List<String> listEmailExclusiveStudents;
 
     @Builder
     public InternshipOfferDto(String id,
@@ -54,8 +53,7 @@ public class InternshipOfferDto implements Serializable {
                               Float minSalary,
                               Float maxSalary,
                               boolean isValidated,
-                              List<String> listEmailInterestedStudents,
-                              List<String> listEmailExclusiveStudents) {
+                              List<String> listEmailInterestedStudents) {
         this.id = id;
         this.limitDateToApply = limitDateToApply;
         this.beginningDate = beginningDate;
@@ -67,7 +65,6 @@ public class InternshipOfferDto implements Serializable {
         this.maxSalary = maxSalary;
         this.isValidated = isValidated;
         this.listEmailInterestedStudents = listEmailInterestedStudents;
-        this.listEmailExclusiveStudents = listEmailExclusiveStudents;
     }
 
 }

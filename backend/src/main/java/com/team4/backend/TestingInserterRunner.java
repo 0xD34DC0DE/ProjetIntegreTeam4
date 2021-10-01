@@ -5,6 +5,7 @@ import com.team4.backend.model.Monitor;
 import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;
 import com.team4.backend.repository.FileMetaDataRepository;
+import com.team4.backend.repository.InternshipOfferRepository;
 import com.team4.backend.repository.MonitorRepository;
 import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -26,6 +27,8 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final MonitorRepository monitorRepository;
 
+    private final InternshipOfferRepository internshipOfferRepository;
+
     private final UserRepository userRepository;
 
     private final PBKDF2Encoder pbkdf2Encoder;
@@ -33,10 +36,12 @@ public class TestingInserterRunner implements ApplicationRunner {
     private final FileMetaDataRepository fileMetaDataRepository;
 
     public TestingInserterRunner(MonitorRepository monitorRepository,
+                                 InternshipOfferRepository internshipOfferRepository,
                                  UserRepository userRepository,
                                  PBKDF2Encoder pbkdf2Encoder,
                                  FileMetaDataRepository fileMetaDataRepository) {
         this.monitorRepository = monitorRepository;
+        this.internshipOfferRepository = internshipOfferRepository;
         this.userRepository = userRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.fileMetaDataRepository = fileMetaDataRepository;
@@ -47,6 +52,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         userRepository.deleteAll().subscribe();
         monitorRepository.deleteAll().subscribe();
         fileMetaDataRepository.deleteAll().subscribe();
+        internshipOfferRepository.deleteAll().subscribe();
 
         insertUsers();
 
@@ -57,7 +63,7 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private void insertUsers() {
         List<User> users = Arrays.asList(
-                User.builder().email("123456789@gmail.com").role(Role.STUDENT).password(pbkdf2Encoder.encode("massou123")).isEnabled(true).build(),
+                User.builder().email("123456789@gmail.com").firstName("Travis").lastName("Scott").phoneNumber("4387650987").role(Role.STUDENT).password(pbkdf2Encoder.encode("massou123")).isEnabled(true).build(),
                 User.builder().email("45673234@gmail.com").role(Role.SUPERVISOR).password(pbkdf2Encoder.encode("sasuke123")).isEnabled(true).build(),
                 User.builder().email("francoisLacoursiere@gmail.com").role(Role.INTERNSHIP_MANAGER).password(pbkdf2Encoder.encode("francois123")).isEnabled(true).build()
         );
@@ -66,12 +72,13 @@ public class TestingInserterRunner implements ApplicationRunner {
     }
 
     private void insertMonitors() {
-        Monitor monitor = Monitor.monitorBuilder().email("marcAndre@desjardins.com").password(pbkdf2Encoder.encode("marc123")).build();
+        Monitor monitor = Monitor.monitorBuilder()
+                .email("9182738492@gmail.com").password(pbkdf2Encoder.encode("lao@dkv23")).build();
 
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
 
-    private void insertCvs(){
+    private void insertCvs() {
         List<FileMetaData> fileMetaDataList = Arrays.asList(
                 FileMetaData.builder().filename("cv1.pdf").build(),
                 FileMetaData.builder().filename("cv2.pdf").build(),
@@ -79,6 +86,5 @@ public class TestingInserterRunner implements ApplicationRunner {
         );
 
         fileMetaDataRepository.saveAll(fileMetaDataList).subscribe(f -> log.info("new cv file created: {}", f));
-
     }
 }

@@ -1,5 +1,6 @@
 package com.team4.backend.util;
 
+import com.team4.backend.model.Monitor;
 import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;
 import io.jsonwebtoken.Claims;
@@ -40,6 +41,15 @@ public class JwtUtil {
         final Date createdDate = new Date();
         final Date expirationDate = new Date(createdDate.getTime() + expirationTimeLong * 1000);
 
+        claims.put("role", user.getRole().toString());
+        claims.put("firstName", user.getFirstName());
+        claims.put("lastName", user.getLastName());
+        claims.put("phoneNumber", user.getPhoneNumber());
+
+        if (user.getRole().equals(Role.MONITOR))
+            claims.put("companyName", ((Monitor) user).getCompanyName());
+
+
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getEmail())
@@ -58,7 +68,7 @@ public class JwtUtil {
         try {
 
             return getAllClaimsFromToken(token).getExpiration().before(new Date());
-        }catch (Exception e){
+        } catch (Exception e) {
             log.info(e.getMessage());
             return true;
         }

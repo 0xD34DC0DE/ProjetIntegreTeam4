@@ -15,24 +15,25 @@ import React, { useState } from "react";
 import EmailFormField from "./EmailFormField";
 import NameFormField from "./NameFormField";
 import PhoneNumberFormField from "./PhoneNumberFormField";
-import RegistrationNumberFormField from "./RegistrationNumberFormField";
 import PasswordFormField from "./PasswordFormField";
 import axios from "axios";
+import AccountFormField from "./AccountFormField";
+import CompanyNameFormField from "./CompanyNameFormField";
 
 const Register = ({ open, toggleDialogs }) => {
   const [step, setStep] = useState(0);
+  const [stepCount, setStepCount] = useState(5);
   const [formValid, setFormValid] = useState(false);
   const [form, setForm] = useState({
     email: "",
     password: "",
     confirmPassword: "",
-    registrationNumber: "",
+    companyName: "",
     phoneNumber: "",
     firstName: "",
     lastName: "",
+    accountType: "",
   });
-
-  const stepCount = 5;
 
   const nextStep = () => {
     if (step === stepCount - 1) register();
@@ -40,26 +41,34 @@ const Register = ({ open, toggleDialogs }) => {
   };
 
   const prevStep = () => {
+    if (step === 0) {
+      toggleDialogs("registerDialog", false);
+      return;
+    }
     setStep((lastStep) => (lastStep -= 1));
     setFormValid(true);
   };
 
   const register = () => {
+    // Student and monitor uses the same model fields for now, it will change in the future
+
     axios({
       method: "POST",
-      url: "http://localhost:8080/student/register",
+      url:
+        "http://localhost:8080/" + form.accountType.toLowerCase() + "/register",
       data: {
         email: form.email,
         password: form.password,
         phoneNumber: form.phoneNumber,
         firstName: form.firstName,
-        registrationNumber: form.registrationNumber,
+        companyName: form.companyName,
         lastName: form.lastName,
       },
       responseType: "json",
     })
       .then(() => {
-        toggleDialogs("registerDialog", true);
+        toggleDialogs("registerDialog", false);
+        setStep(0);
       })
       .catch((error) => {
         console.error(error);
@@ -77,34 +86,61 @@ const Register = ({ open, toggleDialogs }) => {
     }));
   };
 
+  const handleAccountTypeChange = (event) => {
+    setForm((form) => ({
+      ...form,
+      accountType: event.target.value,
+    }));
+    changeStepCount(event.target.value);
+  };
+
+  const changeStepCount = (accountType) => {
+    if (accountType === "student") setStepCount(5);
+    else if (accountType === "monitor") setStepCount(6);
+  };
+
   const displayFormFields = () => {
     return (
       <>
+        <AccountFormField
+          valid={setFormValid}
+          step={step}
+          visibleStep={0}
+          onFieldChange={handleAccountTypeChange}
+        />
         <EmailFormField
           valid={setFormValid}
           step={step}
+          visibleStep={1}
           onFieldChange={handleFormChange}
         />
         <NameFormField
           valid={setFormValid}
           step={step}
+          visibleStep={2}
           onFieldChange={handleFormChange}
         />
         <PhoneNumberFormField
           valid={setFormValid}
           step={step}
-          onFieldChange={handleFormChange}
-        />
-        <RegistrationNumberFormField
-          valid={setFormValid}
-          step={step}
+          visibleStep={3}
           onFieldChange={handleFormChange}
         />
         <PasswordFormField
           valid={setFormValid}
           step={step}
+          visibleStep={4}
           onFieldChange={handleFormChange}
         />
+        {/* Special form field for each individual role */}
+        {form.accountType === "monitor" && (
+          <CompanyNameFormField
+            valid={setFormValid}
+            step={step}
+            visibleStep={5}
+            onFieldChange={handleFormChange}
+          />
+        )}
       </>
     );
   };
@@ -132,9 +168,9 @@ const Register = ({ open, toggleDialogs }) => {
               </Button>
             }
             backButton={
-              <Button size="small" onClick={prevStep} disabled={step === 0}>
+              <Button size="small" onClick={prevStep}>
                 <KeyboardArrowLeft />
-                Retour
+                {step === 0 ? "Quitter" : "Retour"}
               </Button>
             }
           />

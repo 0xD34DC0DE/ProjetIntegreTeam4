@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TextFormField from "./TextFormField";
 
-const NameFormField = ({ valid, step, onFieldChange }) => {
+const NameFormField = ({ valid, step, onFieldChange, visibleStep }) => {
   const [errorMessage, setErrorMessage] = useState({
     firstName: "",
     lastName: "",
@@ -9,7 +9,7 @@ const NameFormField = ({ valid, step, onFieldChange }) => {
   const [field, setField] = useState({ firstName: "", lastName: "" });
 
   useEffect(() => {
-    if (step !== 1) return;
+    if (step !== visibleStep) return;
     const firstName = field.firstName.trim();
     const lastName = field.lastName.trim();
 
@@ -18,7 +18,7 @@ const NameFormField = ({ valid, step, onFieldChange }) => {
     } else {
       valid(false);
     }
-  }, [field.firstName, field.lastName, step, valid]);
+  }, [field.firstName, field.lastName, step, valid, visibleStep]);
 
   const handleFieldChange = (event) => {
     setField((fields) => ({
@@ -39,7 +39,7 @@ const NameFormField = ({ valid, step, onFieldChange }) => {
         value={field.firstName}
         error={errorMessage.firstName}
         type="text"
-        visible={step === 1}
+        visible={step === visibleStep}
       />
       <TextFormField
         focus={false}
@@ -50,7 +50,7 @@ const NameFormField = ({ valid, step, onFieldChange }) => {
         value={field.lastName}
         error={errorMessage.lastName}
         type="text"
-        visible={step === 1}
+        visible={step === visibleStep}
       />
     </>
   );

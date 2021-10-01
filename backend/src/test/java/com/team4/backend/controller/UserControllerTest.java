@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.AuthRequestDto;
+import com.team4.backend.exception.WrongCredentialsException;
 import com.team4.backend.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -9,12 +10,10 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
@@ -29,14 +28,14 @@ public class UserControllerTest {
     UserService userService;
 
     @Test
-    public void login() {
+    public void loginSuccess() {
         //ARRANGE
         AuthRequestDto authRequestDto = new AuthRequestDto("testing@gmail.com", "p@77w0rd");
 
         when(userService.login(authRequestDto)).thenReturn(Mono.just("token_string"));
 
         //ACT
-        HttpStatus httpStatus = webTestClient
+        webTestClient
                 .post()
                 .uri("/user/login")
                 .bodyValue(authRequestDto)
@@ -46,8 +45,26 @@ public class UserControllerTest {
                 .isOk()
                 .expectBody(String.class).returnResult().getStatus();
 
+    }
 
-        assertEquals(HttpStatus.OK, httpStatus);
+    @Test
+    public void loginNoSuccess() {
+        //ARRANGE
+        AuthRequestDto authRequestDto = new AuthRequestDto("testing@gmail.com", "p@77w0rd");
+
+        when(userService.login(authRequestDto)).thenReturn(Mono.error(WrongCredentialsException::new));
+
+        //ACT
+        webTestClient
+                .post()
+                .uri("/user/login")
+                .bodyValue(authRequestDto)
+                .exchange()
+                //ASSERT
+                .expectStatus()
+                .isUnauthorized()
+                .expectBody(String.class).returnResult().getStatus();
+
     }
 
     @Test

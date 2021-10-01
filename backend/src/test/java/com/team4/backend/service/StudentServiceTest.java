@@ -14,8 +14,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -35,8 +35,7 @@ public class StudentServiceTest {
     StudentService studentService;
 
     @Test
-    void shouldCreateStudent()
-    {
+    void shouldCreateStudent() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
         student.setId(null); // Id is null when coming from frontend
@@ -62,8 +61,7 @@ public class StudentServiceTest {
     }
 
     @Test
-    void shouldNotCreateStudent()
-    {
+    void shouldNotCreateStudent() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
         student.setId(null); // Id is null when coming from frontend

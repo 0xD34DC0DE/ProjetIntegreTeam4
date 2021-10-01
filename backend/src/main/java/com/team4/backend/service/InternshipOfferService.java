@@ -19,8 +19,8 @@ public class InternshipOfferService {
     }
 
     public Mono<InternshipOfferDto> addAnInternshipOffer(InternshipOfferDto internshipOfferDTO) {
-        return monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor())
-                .flatMap(monitor -> internshipOfferRepository.save(InternshipOfferMapper.toEntity(internshipOfferDTO, monitor)))
+        return monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getEmailOfMonitor())
+                .flatMap(monitor -> internshipOfferRepository.save(InternshipOfferMapper.toEntity(internshipOfferDTO)))
                 .map(InternshipOfferMapper::toDto);
     }
 }

@@ -1,11 +1,12 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.StudentDto;
+import com.team4.backend.dto.MonitorDto;
 import com.team4.backend.exception.UserAlreadyExistsException;
-import com.team4.backend.model.Student;
-import com.team4.backend.service.StudentService;
+import com.team4.backend.model.Monitor;
+import com.team4.backend.service.MonitorService;
 import com.team4.backend.service.UserService;
-import com.team4.backend.testdata.StudentMockData;
+import com.team4.backend.testdata.MonitorMockData;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,39 +24,39 @@ import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
-@WebFluxTest(value = StudentController.class, excludeAutoConfiguration = ReactiveSecurityAutoConfiguration.class)
-public class StudentControllerTest {
+@WebFluxTest(value = MonitorController.class, excludeAutoConfiguration = ReactiveSecurityAutoConfiguration.class)
+public class MonitorControllerTest {
 
     @Autowired
     private WebTestClient webTestClient;
 
     @MockBean
-    StudentService studentService;
+    MonitorService monitorService;
 
     @MockBean
     UserService userService;
 
     @Test
-    public void shouldCreateStudent() {
+    public void shouldCreateMonitor() {
         //ARRANGE
-        StudentDto studentDto = StudentMockData.getMockStudentDto();
+        MonitorDto monitorDto = MonitorMockData.getMockMonitorDto();
 
-        studentDto.setId(null);
+        monitorDto.setId(null); // Frontend gives null id
 
-        Student student = StudentMockData.getMockStudent();
+        Monitor monitor = MonitorMockData.getMockMonitor();
 
-        when(studentService.registerStudent(any(Student.class)))
+        when(monitorService.registerMonitor(any(Monitor.class)))
                 .thenReturn(
-                        Mono.just(student)
-                                .map(s -> {
-                                    s.setId("some_id");
-                                    return s;
+                        Mono.just(monitor)
+                                .map(m -> {
+                                    m.setId("615259e03835be1f53bd49e4");
+                                    return m;
                                 })
                 );
 
         //ACT
         webTestClient
-                .post().uri("/student/register").bodyValue(studentDto)
+                .post().uri("/monitor/register").bodyValue(monitorDto)
                 .exchange()
                 //ASSERT
                 .expectStatus().isCreated()
@@ -63,21 +64,23 @@ public class StudentControllerTest {
     }
 
     @Test
-    public void shouldNotCreateStudent() {
+    public void shouldNotCreateMonitor() {
         //ARRANGE
-        StudentDto studentDto = StudentMockData.getMockStudentDto();
+        MonitorDto monitorDto = MonitorMockData.getMockMonitorDto();
 
-        studentDto.setId(null);
+        monitorDto.setId(null); // Frontend gives null id
 
-        when(studentService.registerStudent(any(Student.class)))
-                .thenReturn(Mono.error(UserAlreadyExistsException::new));
+        when(monitorService.registerMonitor(any(Monitor.class)))
+                .thenReturn(Mono.error(new UserAlreadyExistsException()));
 
         //ACT
         webTestClient
-                .post().uri("/student/register").bodyValue(studentDto)
+                .post().uri("/monitor/register").bodyValue(monitorDto)
                 .exchange()
                 // ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
                 .expectBody().isEmpty();
+
     }
+
 }

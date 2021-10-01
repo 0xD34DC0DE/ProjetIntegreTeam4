@@ -13,7 +13,6 @@ public abstract class InternshipManagerMapper {
                 .lastName(internshipManager.getLastName())
                 .phoneNumber(internshipManager.getPhoneNumber())
                 .registrationDate(internshipManager.getRegistrationDate())
-                .registrationNumber(internshipManager.getRegistrationNumber())
                 .build();
     }
 
@@ -26,7 +25,6 @@ public abstract class InternshipManagerMapper {
                 .lastName(internshipManagerDto.getLastName())
                 .phoneNumber(internshipManagerDto.getPhoneNumber())
                 .registrationDate(internshipManagerDto.getRegistrationDate())
-                .registrationNumber(internshipManagerDto.getRegistrationNumber())
                 .build();
     }
 
