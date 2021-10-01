@@ -8,20 +8,21 @@ import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @ToString
 @NoArgsConstructor
 @Document(collection = "fileMetadata")
-public class FileMetaData {
+public class FileMetaData implements Serializable {
 
     @Id
     private String id;
 
     private String assetId;
 
-    private String userId;//TODO --> change for email
+    private String userEmail;//TODO --> change for email
 
     private String filename;
 
@@ -32,10 +33,12 @@ public class FileMetaData {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime creationDate;
 
+    private LocalDateTime seenDate;
+
     @Builder
-    public FileMetaData(String id, String userId, String filename) {
+    public FileMetaData(String id, String userEmail, String filename) {
         this.id = id;
-        this.userId = userId;
+        this.userEmail = userEmail;
         this.filename = filename;
         this.isValid = false;
         this.isSeen = false;

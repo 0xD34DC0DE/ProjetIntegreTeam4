@@ -7,7 +7,7 @@ public abstract class FileMetaDataMockData {
     public static FileMetaData getFileMetaData(){
         return FileMetaData.builder()
                 .id("90ksj30sak2")
-                .userId("7dah39a03hd")
+                .userEmail("123456@gmail.com")
                 .filename("CV.pdf")
                 .build();
     }

@@ -8,6 +8,8 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+
 @Service
 public class FileMetaDataService {
 
@@ -32,6 +34,7 @@ public class FileMetaDataService {
                 .map(file -> {
                     file.setIsValid(isValid);
                     file.setIsSeen(true);
+                    file.setSeenDate(LocalDateTime.now());
                     return file;
                 }).flatMap(fileMetaDataRepository::save);
     }
