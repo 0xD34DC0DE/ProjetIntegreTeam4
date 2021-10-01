@@ -14,23 +14,18 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 public class StudentDto extends UserDto implements Serializable {
 
-    private String schoolName;
-
     private StudentState studentState;
 
     @Builder
     public StudentDto(String id,
-                      String registrationNumber,
                       String email,
                       String password,
                       String firstName,
                       String lastName,
                       LocalDate registrationDate,
-                      String schoolName,
                       String phoneNumber,
                       StudentState studentState) {
         super(id,
-                registrationNumber,
                 email,
                 password,
                 firstName,
@@ -38,7 +33,6 @@ public class StudentDto extends UserDto implements Serializable {
                 registrationDate,
                 phoneNumber,
                 Role.STUDENT);
-        this.schoolName = schoolName;
         this.studentState = studentState;
     }
 

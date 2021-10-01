@@ -14,17 +14,18 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 public class MonitorDto extends UserDto implements Serializable {
 
+    private String companyName;
+
     @Builder
     public MonitorDto(String id,
-                      String registrationNumber,
                       String email,
                       String password,
                       String firstName,
                       String lastName,
+                      String companyName,
                       LocalDate registrationDate,
                       String phoneNumber) {
         super(id,
-                registrationNumber,
                 email,
                 password,
                 firstName,
@@ -32,6 +33,7 @@ public class MonitorDto extends UserDto implements Serializable {
                 registrationDate,
                 phoneNumber,
                 Role.MONITOR);
+        this.companyName = companyName;
     }
 
 }
