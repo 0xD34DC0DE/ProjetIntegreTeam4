@@ -49,6 +49,7 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <TopBar
+          sx={{ margin: 0 }}
           open={open}
           loginVisible={dialogVisibility.loginDialog}
           registerVisible={dialogVisibility.registerDialog}
@@ -63,7 +64,7 @@ function App() {
           open={open}
           toggleDialogs={handleDialogs}
         />
-        <Container fluid>
+        <Container fluid={true} sx={{ float: "right" }}>
           <Switch>
             <Home userInformation={userInformation} />
           </Switch>

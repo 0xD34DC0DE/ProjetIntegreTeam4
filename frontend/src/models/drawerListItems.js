@@ -8,8 +8,9 @@
  * @author Maxime Dupuis
  * */
 export const drawerListItems = [
-  ["Accueil", "home", ""],
+  ["Accueil", "home", "#"],
   ["Rapports", "article", "#"],
-  ["Téléverser des fichiers", "upload_file", "register"],
-  ["Déposer des offres de stage", "note_add", "offerForm"],
+  ["Téléverser des fichiers", "upload_file", "uploadFile"],
+  ["Déposer des offres de stage", "note_add", "internshipOfferDialog"],
+  ["Valider des offres de stage", "rule", "validateOffer"],
 ];

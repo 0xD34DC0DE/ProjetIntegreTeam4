@@ -73,7 +73,7 @@ function SideBar({
               <ListItemButton
                 key={key}
                 onClick={() => {
-                  toggleDialogs("internshipOfferDialog", true);
+                  toggleDialogs(item[2], true);
                 }}
               >
                 <ListItemIcon>
