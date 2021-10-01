@@ -1,18 +1,13 @@
 package com.team4.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.team4.backend.model.InternshipOffer;
-import com.team4.backend.model.Monitor;
-import com.team4.backend.model.User;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Data
 @NoArgsConstructor

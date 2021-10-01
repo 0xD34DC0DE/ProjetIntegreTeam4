@@ -5,7 +5,8 @@ import com.team4.backend.model.Student;
 import com.team4.backend.testdata.StudentMockData;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class StudentMapperTest {
 

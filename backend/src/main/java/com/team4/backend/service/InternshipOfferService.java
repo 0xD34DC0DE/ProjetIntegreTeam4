@@ -23,4 +23,5 @@ public class InternshipOfferService {
                 .flatMap(monitor -> internshipOfferRepository.save(InternshipOfferMapper.toEntity(internshipOfferDTO)))
                 .map(InternshipOfferMapper::toDto);
     }
+
 }

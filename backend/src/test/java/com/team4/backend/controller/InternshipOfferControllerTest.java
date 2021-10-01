@@ -36,7 +36,7 @@ public class InternshipOfferControllerTest {
         when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.just(internshipOfferDTO));
 
         //ACT
-         webTestClient
+        webTestClient
                 .post()
                 .uri("/internshipOffer/addAnInternshipOffer")
                 .bodyValue(internshipOfferDTO)
@@ -63,4 +63,5 @@ public class InternshipOfferControllerTest {
                 .expectStatus().isNotFound()
                 .expectBody(InternshipOfferDto.class);
     }
+
 }

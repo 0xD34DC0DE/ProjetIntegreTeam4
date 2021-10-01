@@ -82,5 +82,4 @@ public class JwtUtil {
         return Jwts.parserBuilder().setSigningKey(key).build().isSigned(token);
     }
 
-
 }
