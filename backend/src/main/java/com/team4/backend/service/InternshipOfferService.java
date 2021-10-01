@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferDto;
+import com.team4.backend.exception.UserDoNotExistException;
 import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.repository.InternshipOfferRepository;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,9 @@ public class InternshipOfferService {
 
     public Mono<InternshipOfferDto> addAnInternshipOffer(InternshipOfferDto internshipOfferDTO) {
         return monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getEmailOfMonitor())
-                .flatMap(monitor -> internshipOfferRepository.save(InternshipOfferMapper.toEntity(internshipOfferDTO)))
+                .flatMap(exist -> exist ?
+                        internshipOfferRepository.save(InternshipOfferMapper.toEntity(internshipOfferDTO))
+                        : Mono.error(UserDoNotExistException::new))
                 .map(InternshipOfferMapper::toDto);
     }
 

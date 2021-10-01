@@ -1,7 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferDto;
-import com.team4.backend.exception.DoNotExistException;
+import com.team4.backend.exception.UserDoNotExistException;
 import com.team4.backend.service.InternshipOfferService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,7 @@ public class InternshipOfferController {
     public Mono<ResponseEntity<InternshipOfferDto>> addAnInternshipOffer(@RequestBody InternshipOfferDto internshipOfferDTO) {
         return internshipOfferService.addAnInternshipOffer(internshipOfferDTO)
                 .flatMap(internshipOffer -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body(internshipOffer)))
-                .onErrorReturn(DoNotExistException.class, ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                .onErrorReturn(UserDoNotExistException.class, ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
 }
