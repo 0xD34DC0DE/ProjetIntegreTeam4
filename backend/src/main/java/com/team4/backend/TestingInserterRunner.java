@@ -60,7 +60,8 @@ public class TestingInserterRunner implements ApplicationRunner {
     }
 
     private void insertMonitors() {
-        Monitor monitor = Monitor.monitorBuilder().email("marcAndre@desjardins.com").password(pbkdf2Encoder.encode("marc123")).build();
+        Monitor monitor = Monitor.monitorBuilder()
+                .email("9182738492@gmail.com").password(pbkdf2Encoder.encode("lao@dkv23")).build();
 
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }

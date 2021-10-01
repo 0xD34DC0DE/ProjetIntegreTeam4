@@ -31,7 +31,9 @@ public class UserService {
                 .switchIfEmpty(Mono.error(WrongCredentialsException::new));
     }
 
-    public Mono<Boolean> existsByEmail(String email) { return userRepository.existsByEmail(email); }
+    public Mono<Boolean> existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 
     /*
     TODO --> resetPassword() --> Nice To Have
