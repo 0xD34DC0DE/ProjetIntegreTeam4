@@ -1,8 +1,7 @@
 package com.team4.backend.repository;
 
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.ObjectMetadata;
-import com.amazonaws.services.s3.model.PutObjectResult;
+import com.amazonaws.services.s3.model.*;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
@@ -20,7 +19,11 @@ public class FileAssetRepository {
         ObjectMetadata metadata = new ObjectMetadata();
         options.forEach(metadata::addUserMetadata);
 
-        return Mono.just(amazonS3.putObject("projetintegreteam4", location, fileStream, metadata));
+        return Mono.just(
+                amazonS3.putObject(
+                        new PutObjectRequest("projetintegreteam4", location, fileStream, metadata)
+                                .withCannedAcl(CannedAccessControlList.PublicRead))
+        );
     }
 
 }
