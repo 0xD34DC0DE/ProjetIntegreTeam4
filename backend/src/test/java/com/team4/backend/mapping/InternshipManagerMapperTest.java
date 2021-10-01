@@ -25,7 +25,6 @@ public class InternshipManagerMapperTest {
         assertEquals(internshipManager.getFirstName(), internshipManagerDto.getFirstName());
         assertEquals(internshipManager.getLastName(), internshipManagerDto.getLastName());
         assertEquals(internshipManager.getPhoneNumber(), internshipManagerDto.getPhoneNumber());
-        assertEquals(internshipManager.getRegistrationNumber(), internshipManagerDto.getRegistrationNumber());
         assertEquals(internshipManager.getRegistrationDate(), internshipManagerDto.getRegistrationDate());
     }
 
@@ -44,7 +43,6 @@ public class InternshipManagerMapperTest {
         assertEquals(internshipManagerDto.getFirstName(), internshipManager.getFirstName());
         assertEquals(internshipManagerDto.getLastName(), internshipManager.getLastName());
         assertEquals(internshipManagerDto.getPhoneNumber(), internshipManager.getPhoneNumber());
-        assertEquals(internshipManagerDto.getRegistrationNumber(), internshipManager.getRegistrationNumber());
         assertEquals(internshipManagerDto.getRegistrationDate(), internshipManager.getRegistrationDate());
     }
 }

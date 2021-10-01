@@ -25,7 +25,7 @@ public class MonitorMapperTest {
         assertEquals(entity.getEmail(), dto.getEmail());
         assertEquals(entity.getFirstName(), dto.getFirstName());
         assertEquals(entity.getLastName(), dto.getLastName());
-        assertEquals(entity.getRegistrationNumber(), dto.getRegistrationNumber());
+        assertEquals(entity.getCompanyName(), dto.getCompanyName());
         assertEquals(entity.getPhoneNumber(), dto.getPhoneNumber());
         assertEquals(entity.getRegistrationDate(), dto.getRegistrationDate());
     }
@@ -44,7 +44,7 @@ public class MonitorMapperTest {
         assertEquals(dto.getPassword(), entity.getPassword());
         assertEquals(dto.getFirstName(), entity.getFirstName());
         assertEquals(dto.getLastName(), entity.getLastName());
-        assertEquals(dto.getRegistrationNumber(), entity.getRegistrationNumber());
+        assertEquals(dto.getCompanyName(), entity.getCompanyName());
         assertEquals(dto.getPhoneNumber(), entity.getPhoneNumber());
         assertEquals(dto.getRegistrationDate(), entity.getRegistrationDate());
     }
