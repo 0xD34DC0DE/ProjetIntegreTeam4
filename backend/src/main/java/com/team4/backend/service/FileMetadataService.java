@@ -15,9 +15,7 @@ public class FileMetadataService {
     FileMetadataRepository fileMetadataRepository;
 
     public Mono<FileMetadata> create(FileMetadata fileMetadata) {
-        Mono<FileMetadata> data = fileMetadataRepository.save(fileMetadata);
-
-        return data;
+        return fileMetadataRepository.save(fileMetadata);
     }
 
     public Mono<FileMetadata> get(String id) {
