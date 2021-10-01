@@ -2,6 +2,7 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.exception.UserDoNotExistException;
+import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.service.InternshipOfferService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +25,10 @@ public class InternshipOfferController {
 
     @PostMapping("/addAnInternshipOffer")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER','MONITOR')")
-    public Mono<ResponseEntity<InternshipOfferDto>> addAnInternshipOffer(@RequestBody InternshipOfferDto internshipOfferDTO) {
+    public Mono<ResponseEntity<String>> addAnInternshipOffer(@RequestBody InternshipOfferDto internshipOfferDTO) {
         return internshipOfferService.addAnInternshipOffer(internshipOfferDTO)
-                .flatMap(internshipOffer -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body(internshipOffer)))
-                .onErrorReturn(UserDoNotExistException.class, ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+                .flatMap(internshipOffer -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
+                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
     }
 
 }

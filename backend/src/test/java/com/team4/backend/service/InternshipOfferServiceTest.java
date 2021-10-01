@@ -2,7 +2,6 @@ package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.exception.UserDoNotExistException;
-import com.team4.backend.exception.WrongCredentialsException;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.repository.InternshipOfferRepository;
 import com.team4.backend.testdata.InternshipOfferMockData;
@@ -44,7 +43,7 @@ public class InternshipOfferServiceTest {
         when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
 
         //ACT
-        Mono<InternshipOfferDto> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
+        Mono<InternshipOffer> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
 
         //ASSERT
         StepVerifier.create(savedInternshipOffer)
@@ -60,7 +59,7 @@ public class InternshipOfferServiceTest {
         when(monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getEmailOfMonitor())).thenReturn(Mono.just(false));
 
         //ACT
-        Mono<InternshipOfferDto> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
+        Mono<InternshipOffer> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
 
         //ASSERT
         StepVerifier.create(savedInternshipOffer)

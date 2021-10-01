@@ -2,6 +2,7 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.exception.UserDoNotExistException;
+import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.service.InternshipOfferService;
 import com.team4.backend.testdata.InternshipOfferMockData;
 import org.junit.jupiter.api.Test;
@@ -32,8 +33,9 @@ public class InternshipOfferControllerTest {
     void shouldAddAnInternshipOffer() {
         //ARRANGE
         InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.just(internshipOfferDTO));
+        when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.just(internshipOffer));
 
         //ACT
         webTestClient
