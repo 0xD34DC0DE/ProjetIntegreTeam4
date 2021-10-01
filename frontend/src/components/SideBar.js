@@ -55,43 +55,49 @@ function SideBar({
   };
 
   return (
-    <ThemeProvider theme={mdTheme}>
-      <Drawer variant="permanent" open={open} anchor="left">
-        <Toolbar
-          sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-            px: [1],
-          }}
-        >
-          <IconButton onClick={toggleDrawer}>
-            {open ? <Icon>chevron_left</Icon> : <Icon>chevron_right</Icon>}
-          </IconButton>
-        </Toolbar>
-        <List>
-          {drawerListDialogs
-            .filter((item) => item.roles.includes(userInfo.role))
-            .map((item, key) => {
-              return (
-                <ListItemButton
-                  key={key}
-                  onClick={() => {
-                    toggleDialogs(item.name, true);
-                  }}
-                >
-                  <ListItemIcon>{item.icon}</ListItemIcon>
-                  <ListItemText>{item.text}</ListItemText>
-                </ListItemButton>
-              );
-            })}
-        </List>
-      </Drawer>
-      <OfferForm
-        dialogVisibile={intershipOfferDialogVisible}
-        toggleDialogs={toggleDialogs}
-      />
-    </ThemeProvider>
+    <>
+      {userInfo.loggedIn && (
+        <ThemeProvider theme={mdTheme}>
+          <Drawer variant="permanent" open={open} anchor="left">
+            <Toolbar
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "flex-end",
+                px: [1],
+              }}
+            >
+              <IconButton onClick={toggleDrawer}>
+                {open ? <Icon>chevron_left</Icon> : <Icon>chevron_right</Icon>}
+              </IconButton>
+            </Toolbar>
+            <List>
+              {drawerListDialogs
+                .filter((item) => item.roles.includes(userInfo.role))
+                .map((item, key) => {
+                  return (
+                    <ListItemButton
+                      key={key}
+                      onClick={() => {
+                        console.log("item name", item.name);
+                        console.log("visible?", intershipOfferDialogVisible);
+                        toggleDialogs(item.name, true);
+                      }}
+                    >
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText>{item.text}</ListItemText>
+                    </ListItemButton>
+                  );
+                })}
+            </List>
+          </Drawer>
+          <OfferForm
+            dialogVisible={intershipOfferDialogVisible}
+            toggleDialogs={toggleDialogs}
+          />
+        </ThemeProvider>
+      )}
+    </>
   );
 }
 

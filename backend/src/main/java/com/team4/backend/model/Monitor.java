@@ -14,13 +14,15 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 public class Monitor extends User implements Serializable {
 
+    private String companyName;
+
     @Builder(builderMethodName = "monitorBuilder")
     public Monitor(String id,
                    String email,
                    String firstName,
                    String lastName,
+                   String companyName,
                    String password,
-                   String registrationNumber,
                    String phoneNumber,
                    LocalDate registrationDate) {
         super(id,
@@ -28,10 +30,11 @@ public class Monitor extends User implements Serializable {
                 firstName,
                 lastName,
                 password,
-                registrationNumber,
                 phoneNumber,
                 Role.MONITOR,
                 true,
                 registrationDate);
+        this.companyName = companyName;
     }
+
 }

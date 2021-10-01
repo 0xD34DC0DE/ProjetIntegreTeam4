@@ -14,8 +14,6 @@ public class UserDto implements Serializable {
 
     protected String id;
 
-    protected String registrationNumber;
-
     protected String email;
 
     protected String password;
@@ -31,7 +29,6 @@ public class UserDto implements Serializable {
     protected Role role;
 
     public UserDto(String id,
-                   String registrationNumber,
                    String email,
                    String password,
                    String firstName,
@@ -40,7 +37,6 @@ public class UserDto implements Serializable {
                    String phoneNumber,
                    Role role) {
         this.id = id;
-        this.registrationNumber = registrationNumber;
         this.email = email;
         this.password = password;
         this.firstName = firstName;

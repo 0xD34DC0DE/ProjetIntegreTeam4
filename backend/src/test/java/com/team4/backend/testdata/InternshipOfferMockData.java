@@ -37,11 +37,11 @@ public abstract class InternshipOfferMockData {
             .minSalary(19.0f)
             .maxSalary(22.0f)
             .companyName("umaknow")
-            .monitor(Monitor.monitorBuilder().email("maxime@umaknow.com").build())
+            .emailOfMonitor("maxime@umaknow.com")
             .description("Développeur Frontend")
             .isValidated(true)
             .isExclusive(true)
-            .listInterestedStudents(getInterestedStudentsList())
+            .listEmailInterestedStudents(getInterestedStudentsEmailList())
             .build(),
         InternshipOffer.builder()
             .id("234abc2def54ghi")
@@ -51,11 +51,11 @@ public abstract class InternshipOfferMockData {
             .minSalary(20.0f)
             .maxSalary(25.0f)
             .companyName("CGI")
-            .monitor(Monitor.monitorBuilder().email("patrickNormand@cgi.com").build())
+            .emailOfMonitor("patrickNormand@cgi.com")
             .description("Technicien en Informatique")
             .isValidated(false)
             .isExclusive(false)
-            .listInterestedStudents(getInterestedStudentsList())
+            .listEmailInterestedStudents(getInterestedStudentsEmailList())
             .build());
     }
 
@@ -68,11 +68,11 @@ public abstract class InternshipOfferMockData {
                         .minSalary(19.0f)
                         .maxSalary(22.0f)
                         .companyName("umaknow")
-                        .monitor(Monitor.monitorBuilder().email("maxime@umaknow.com").build())
+                        .emailOfMonitor("maxime@umaknow.com")
                         .description("Développeur Frontend")
                         .isValidated(false)
                         .isExclusive(true)
-                        .listInterestedStudents(getInterestedStudentsList())
+                        .listEmailInterestedStudents(getInterestedStudentsEmailList())
                         .build(),
                 InternshipOffer.builder()
                         .id("234abc2def54ghi")
@@ -82,11 +82,11 @@ public abstract class InternshipOfferMockData {
                         .minSalary(20.0f)
                         .maxSalary(25.0f)
                         .companyName("CGI")
-                        .monitor(Monitor.monitorBuilder().email("patrickNormand@cgi.com").build())
+                        .emailOfMonitor("patrickNormand@cgi.com")
                         .description("Technicien en Informatique")
                         .isValidated(false)
                         .isExclusive(false)
-                        .listInterestedStudents(getInterestedStudentsList())
+                        .listEmailInterestedStudents(getInterestedStudentsEmailList())
                         .build());
     }
 

@@ -15,8 +15,6 @@ import java.time.LocalDate;
 @Document(collection = "users")
 public class Student extends User {
 
-    private String schoolName;
-
     private StudentState studentState;
 
     @Builder(builderMethodName = "studentBuilder")
@@ -25,8 +23,6 @@ public class Student extends User {
                    String firstName,
                    String lastName,
                    String password,
-                   String registrationNumber,
-                   String schoolName,
                    String phoneNumber,
                    StudentState studentState,
                    LocalDate registrationDate) {
@@ -35,12 +31,10 @@ public class Student extends User {
                 firstName,
                 lastName,
                 password,
-                registrationNumber,
                 phoneNumber,
                 Role.STUDENT,
                 true,
                 registrationDate);
-        this.schoolName = schoolName;
         this.phoneNumber = phoneNumber;
         this.studentState = studentState;
     }
