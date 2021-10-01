@@ -9,7 +9,7 @@ import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
-import React, { useState } from "react";
+import React from "react";
 import { useHistory } from "react-router";
 import { drawerListItems } from "../models/drawerListItems";
 import OfferForm from "../components/OfferForm";

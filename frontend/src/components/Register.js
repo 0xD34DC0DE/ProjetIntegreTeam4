@@ -18,6 +18,7 @@ import PhoneNumberFormField from "./PhoneNumberFormField";
 import RegistrationNumberFormField from "./RegistrationNumberFormField";
 import PasswordFormField from "./PasswordFormField";
 import axios from "axios";
+import AccountFormField from "./AccountFormField";
 
 const Register = ({ open, toggleDialogs }) => {
   const [step, setStep] = useState(0);
@@ -30,9 +31,10 @@ const Register = ({ open, toggleDialogs }) => {
     phoneNumber: "",
     firstName: "",
     lastName: "",
+    accountType: "",
   });
 
-  const stepCount = 5;
+  const stepCount = 6;
 
   const nextStep = () => {
     if (step === stepCount - 1) register();
@@ -40,14 +42,21 @@ const Register = ({ open, toggleDialogs }) => {
   };
 
   const prevStep = () => {
+    if (step === 0) {
+      toggleDialogs("registerDialog", false);
+      return;
+    }
     setStep((lastStep) => (lastStep -= 1));
     setFormValid(true);
   };
 
   const register = () => {
+    // Student and monitor uses the same model fields for now, it will change in the future
+
     axios({
       method: "POST",
-      url: "http://localhost:8080/student/register",
+      url:
+        "http://localhost:8080/" + form.accountType.toLowerCase() + "/register",
       data: {
         email: form.email,
         password: form.password,
@@ -59,7 +68,8 @@ const Register = ({ open, toggleDialogs }) => {
       responseType: "json",
     })
       .then(() => {
-        toggleDialogs("registerDialog", true);
+        toggleDialogs("registerDialog", false);
+        setStep(0);
       })
       .catch((error) => {
         console.error(error);
@@ -80,29 +90,40 @@ const Register = ({ open, toggleDialogs }) => {
   const displayFormFields = () => {
     return (
       <>
+        <AccountFormField
+          valid={setFormValid}
+          step={step}
+          visibleStep={0}
+          onFieldChange={handleFormChange}
+        />
         <EmailFormField
           valid={setFormValid}
           step={step}
+          visibleStep={1}
           onFieldChange={handleFormChange}
         />
         <NameFormField
           valid={setFormValid}
           step={step}
+          visibleStep={2}
           onFieldChange={handleFormChange}
         />
         <PhoneNumberFormField
           valid={setFormValid}
           step={step}
+          visibleStep={3}
           onFieldChange={handleFormChange}
         />
         <RegistrationNumberFormField
           valid={setFormValid}
           step={step}
+          visibleStep={4}
           onFieldChange={handleFormChange}
         />
         <PasswordFormField
           valid={setFormValid}
           step={step}
+          visibleStep={5}
           onFieldChange={handleFormChange}
         />
       </>
@@ -132,9 +153,9 @@ const Register = ({ open, toggleDialogs }) => {
               </Button>
             }
             backButton={
-              <Button size="small" onClick={prevStep} disabled={step === 0}>
+              <Button size="small" onClick={prevStep}>
                 <KeyboardArrowLeft />
-                Retour
+                {step === 0 ? "Quitter" : "Retour"}
               </Button>
             }
           />
