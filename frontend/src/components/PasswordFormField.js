@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import TextFormField from "./TextFormField";
 
-const PasswordFormField = ({ valid, onFieldChange, step }) => {
+const PasswordFormField = ({ valid, onFieldChange, step, visibleStep }) => {
   const [errorMessage, setErrorMessage] = useState({
     password: "",
     confirmPassword: "",
@@ -9,7 +9,7 @@ const PasswordFormField = ({ valid, onFieldChange, step }) => {
   const [field, setField] = useState({ password: "", confirmPassword: "" });
 
   useEffect(() => {
-    if (step !== 4) return;
+    if (step !== visibleStep) return;
     const password = field.password.trim();
     const confirmPassword = field.confirmPassword.trim();
 
@@ -29,7 +29,7 @@ const PasswordFormField = ({ valid, onFieldChange, step }) => {
       }));
       valid(false);
     }
-  }, [field.password, field.confirmPassword, step, valid]);
+  }, [field.password, field.confirmPassword, step, valid, visibleStep]);
 
   const handleFieldChange = (event) => {
     setField((fields) => ({
@@ -50,7 +50,7 @@ const PasswordFormField = ({ valid, onFieldChange, step }) => {
         value={field.password}
         error={errorMessage.password}
         type="password"
-        visible={step === 4}
+        visible={step === visibleStep}
       />
       <TextFormField
         focus={false}
@@ -61,7 +61,7 @@ const PasswordFormField = ({ valid, onFieldChange, step }) => {
         value={field.confirmPassword}
         error={errorMessage.confirmPassword}
         type="password"
-        visible={step === 4}
+        visible={step === visibleStep}
       />
     </>
   );

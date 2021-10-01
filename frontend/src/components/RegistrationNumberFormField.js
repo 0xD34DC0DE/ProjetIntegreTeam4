@@ -3,12 +3,17 @@ import TextFormField from "./TextFormField";
 
 const registrationNumberRegexValidation = /^[0-9]*$/;
 
-const RegistrationNumberFormField = ({ valid, onFieldChange, step }) => {
+const RegistrationNumberFormField = ({
+  valid,
+  onFieldChange,
+  step,
+  visibleStep,
+}) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [registrationNumber, setRegistrationNumber] = useState("");
 
   useEffect(() => {
-    if (step !== 3) return;
+    if (step !== visibleStep) return;
 
     if (registrationNumber.length === 0) {
       setErrorMessage("");
@@ -20,7 +25,7 @@ const RegistrationNumberFormField = ({ valid, onFieldChange, step }) => {
       setErrorMessage("Le numéro de matricule est invalide");
       valid(false);
     }
-  }, [registrationNumber, step, valid]);
+  }, [registrationNumber, step, valid, visibleStep]);
 
   const handleRegistrationNumberChange = (event) => {
     setRegistrationNumber(event.target.value);
@@ -38,7 +43,7 @@ const RegistrationNumberFormField = ({ valid, onFieldChange, step }) => {
         value={registrationNumber}
         error={errorMessage}
         type="text"
-        visible={step === 3}
+        visible={step === visibleStep}
       />
     </>
   );
