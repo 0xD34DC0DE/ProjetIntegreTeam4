@@ -18,7 +18,6 @@ public class StudentMapperTest {
         Student entity = StudentMapper.toEntity(dto);
 
         //ASSERT
-        assertEquals(dto.getId(), entity.getId());
         assertEquals(dto.getEmail(), entity.getEmail());
         assertEquals(dto.getPassword(), entity.getPassword());
         assertEquals(dto.getFirstName(), entity.getFirstName());

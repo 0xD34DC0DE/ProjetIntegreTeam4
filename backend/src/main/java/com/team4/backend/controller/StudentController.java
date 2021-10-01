@@ -30,7 +30,7 @@ public class StudentController {
     public Mono<ResponseEntity<String>> register(@RequestBody StudentDto studentDto) {
         return studentService.registerStudent(StudentMapper.toEntity(studentDto))
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
-                .onErrorReturn(UserAlreadyExistsException.class, ResponseEntity.status(HttpStatus.CONFLICT).body(""));
+                .onErrorReturn(UserAlreadyExistsException.class, ResponseEntity.status(HttpStatus.CONFLICT).build());
         //TODO add a non-handled exception to make sure it returns 500 and not 409
     }
 

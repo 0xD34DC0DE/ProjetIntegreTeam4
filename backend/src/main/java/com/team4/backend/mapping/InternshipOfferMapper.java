@@ -2,9 +2,10 @@ package com.team4.backend.mapping;
 
 import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.model.InternshipOffer;
-import com.team4.backend.model.Monitor;
 
-public class InternshipOfferMapper {
+import java.util.Collections;
+
+public abstract class InternshipOfferMapper {
 
     public static InternshipOffer toEntity(InternshipOfferDto internshipOfferDto) {
         return InternshipOffer.builder()
@@ -16,6 +17,9 @@ public class InternshipOfferMapper {
                 .description(internshipOfferDto.getDescription())
                 .minSalary(internshipOfferDto.getMinSalary())
                 .maxSalary(internshipOfferDto.getMaxSalary())
+                .listEmailInterestedStudents(Collections.emptyList())
+                .isValidated(false)
+                .isExclusive(false)
                 .build();
     }
 

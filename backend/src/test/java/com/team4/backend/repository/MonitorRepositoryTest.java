@@ -16,8 +16,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 @Log
 @DataMongoTest
 @EnableAutoConfiguration
@@ -41,35 +39,7 @@ public class MonitorRepositoryTest {
     }
 
     @Test
-    void shouldFindByEmail() {
-        //ARRANGE
-        String email = "marcM@desjardin.com";
-
-        //ACT
-        Mono<Monitor> monitorMono = monitorRepository.findByEmail(email);
-
-        //ASSERT
-        StepVerifier.create(monitorMono)
-                .assertNext(monitor -> assertEquals(email, monitor.getEmail()))
-                .verifyComplete();
-    }
-
-    @Test
-    void shouldNotFindByEmail() {
-        //ARRANGE
-        String email = "inexistantEmail@gmail.com";
-
-        //ACT
-        Mono<Monitor> nonExistentMonitor = monitorRepository.findByEmail(email);
-
-        //ACT
-        StepVerifier.create(nonExistentMonitor)
-                .expectNextCount(0)
-                .verifyComplete();
-    }
-
-    @Test
-    void shouldExistByEmailAndEnabledTrue(){
+    void shouldExistByEmailAndEnabledTrue() {
         //ARRANGE
         String email = "marcM@desjardin.com";
         //ACT
@@ -83,7 +53,7 @@ public class MonitorRepositoryTest {
     }
 
     @Test
-    void shouldNotExistByEmailAndEnabledTrue(){
+    void shouldNotExistByEmailAndEnabledTrue() {
         //ARRANGE
         String email = "inexistantEmail@gmail.com";
         //ACT
@@ -95,5 +65,4 @@ public class MonitorRepositoryTest {
                 .verifyComplete();
 
     }
-
 }

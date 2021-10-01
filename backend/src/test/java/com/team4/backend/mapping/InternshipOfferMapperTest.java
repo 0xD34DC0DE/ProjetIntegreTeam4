@@ -57,22 +57,4 @@ public class InternshipOfferMapperTest {
         assertEquals(InternshipOfferMockData.getInterestedStudentsEmailList(),
                 internshipOfferDto.getListEmailInterestedStudents());
     }
-
-    /*
-
-
-    @Test
-    void mapEntityToDto_nullInterestedStudent() {
-        //ARRANGE
-        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
-        internshipOffer.setListInterestedStudents(null);
-
-        //ACT
-        InternshipOfferDto internshipOfferDto = InternshipOfferMapper.toDto(internshipOffer);
-
-        //ASSERT
-        List<String> emptyList = Collections.emptyList();
-        assertEquals(emptyList, internshipOfferDto.getListEmailInterestedStudents());
-    }
-     */
 }

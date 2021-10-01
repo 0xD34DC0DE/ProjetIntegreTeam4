@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -23,6 +24,7 @@ public class User implements Serializable {
 
     protected String registrationNumber;
 
+    @Indexed(unique = true)
     protected String email;
 
     protected String password;
