@@ -1,10 +1,12 @@
 package com.team4.backend.service;
 
+import com.team4.backend.exception.DoNotExistException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.repository.MonitorRepository;
 import com.team4.backend.testdata.MonitorMockData;
 import com.team4.backend.util.PBKDF2Encoder;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -5,6 +5,8 @@ import com.team4.backend.model.Monitor;
 import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.JwtParserBuilder;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
@@ -32,7 +34,7 @@ public class JwtUtilTest {
     JwtUtil jwtUtil;
 
     @Test
-    void generateToken() {
+    void generateTokenForNormalUser() {
         //ARRANGE
         User user = User.builder().email("123456789@claurendeau.qc.ca").role(Role.STUDENT).build();
 
@@ -41,6 +43,24 @@ public class JwtUtilTest {
 
         //ASSERT
         assertEquals(user.getEmail(), Jwts.parserBuilder().setSigningKey(jwtUtil.getKey()).build().parseClaimsJws(token).getBody().getSubject());
+    }
+
+    @Test
+    void generateTokenForMonitor() {
+        //ARRANGE
+        User user = Monitor.monitorBuilder()
+                .email("123456789@claurendeau.qc.ca")
+                .firstName("Rejean")
+                .phoneNumber("514547938423")
+                .lastName("Signon").build();
+
+        JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(jwtUtil.getKey()).build();
+
+        //ACT
+        String token = jwtUtil.generateToken(user);
+
+        //ASSERT
+        assertEquals(user.getEmail(), jwtParser.parseClaimsJws(token).getBody().getSubject());
     }
 
     @Test
@@ -75,6 +95,7 @@ public class JwtUtilTest {
         assertEquals(user.getLastName(),returnedClaims.get("lastName"));
         assertEquals(user.getPhoneNumber(),returnedClaims.get("phoneNumber"));
         assertEquals(user.getRole().toString(),returnedClaims.get("role"));
+        assertNull(returnedClaims.get("companyName"));
     }
 
     @Test
