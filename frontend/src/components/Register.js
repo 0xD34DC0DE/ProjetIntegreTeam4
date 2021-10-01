@@ -15,10 +15,10 @@ import React, { useState } from "react";
 import EmailFormField from "./EmailFormField";
 import NameFormField from "./NameFormField";
 import PhoneNumberFormField from "./PhoneNumberFormField";
-import RegistrationNumberFormField from "./RegistrationNumberFormField";
 import PasswordFormField from "./PasswordFormField";
 import axios from "axios";
 import AccountFormField from "./AccountFormField";
+import CompanyNameFormField from "./CompanyNameFormField";
 
 const Register = ({ open, toggleDialogs }) => {
   const [step, setStep] = useState(0);
@@ -27,7 +27,7 @@ const Register = ({ open, toggleDialogs }) => {
     email: "",
     password: "",
     confirmPassword: "",
-    registrationNumber: "",
+    companyName: "",
     phoneNumber: "",
     firstName: "",
     lastName: "",
@@ -62,7 +62,7 @@ const Register = ({ open, toggleDialogs }) => {
         password: form.password,
         phoneNumber: form.phoneNumber,
         firstName: form.firstName,
-        registrationNumber: form.registrationNumber,
+        companyName: form.companyName,
         lastName: form.lastName,
       },
       responseType: "json",
@@ -87,6 +87,13 @@ const Register = ({ open, toggleDialogs }) => {
     }));
   };
 
+  const handleAccountTypeChange = (event) => {
+    setForm((form) => ({
+      ...form,
+      accountType: event.target.value,
+    }));
+  };
+
   const displayFormFields = () => {
     return (
       <>
@@ -94,7 +101,7 @@ const Register = ({ open, toggleDialogs }) => {
           valid={setFormValid}
           step={step}
           visibleStep={0}
-          onFieldChange={handleFormChange}
+          onFieldChange={handleAccountTypeChange}
         />
         <EmailFormField
           valid={setFormValid}
@@ -114,18 +121,20 @@ const Register = ({ open, toggleDialogs }) => {
           visibleStep={3}
           onFieldChange={handleFormChange}
         />
-        <RegistrationNumberFormField
+        <PasswordFormField
           valid={setFormValid}
           step={step}
           visibleStep={4}
           onFieldChange={handleFormChange}
         />
-        <PasswordFormField
-          valid={setFormValid}
-          step={step}
-          visibleStep={5}
-          onFieldChange={handleFormChange}
-        />
+        {form.accountType === "monitor" && (
+          <CompanyNameFormField
+            valid={setFormValid}
+            step={step}
+            visibleStep={5}
+            onFieldChange={handleFormChange}
+          />
+        )}
       </>
     );
   };
