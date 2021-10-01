@@ -12,23 +12,23 @@ import java.util.List;
 
 public abstract class SecurityMockData {
 
-    public static UsernamePasswordAuthenticationToken createAuthentication(String principal){
-        return new UsernamePasswordAuthenticationToken(principal,principal);
+    public static UsernamePasswordAuthenticationToken createAuthentication(String principal) {
+        return new UsernamePasswordAuthenticationToken(principal, principal);
     }
 
-    public static UsernamePasswordAuthenticationToken createAuthentication(String principal, String credentials, List<SimpleGrantedAuthority> simpleGrantedAuthorities){
-        return new UsernamePasswordAuthenticationToken(principal,credentials,simpleGrantedAuthorities);
+    public static UsernamePasswordAuthenticationToken createAuthentication(String principal, String credentials, List<SimpleGrantedAuthority> simpleGrantedAuthorities) {
+        return new UsernamePasswordAuthenticationToken(principal, credentials, simpleGrantedAuthorities);
     }
 
+    public static MockServerWebExchange createMockWebExchange(String url, String token) {
+        MultiValueMap<String, String> headers1 = new LinkedMultiValueMap<>();
 
-    public static MockServerWebExchange createMockWebExchange(String url,String token){
-        MultiValueMap<String,String> headers1 = new LinkedMultiValueMap<>();
-
-        headers1.add(HttpHeaders.AUTHORIZATION,"Bearer " + token);
+        headers1.add(HttpHeaders.AUTHORIZATION, "Bearer " + token);
 
         return MockServerWebExchange.from(
                 MockServerHttpRequest.get(url)
                         .headers(headers1)
         );
     }
+
 }

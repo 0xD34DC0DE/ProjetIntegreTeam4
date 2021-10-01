@@ -9,10 +9,11 @@ import Icon from "@mui/material/Icon";
 import IconButton from "@mui/material/IconButton";
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import { useHistory } from "react-router";
 import { drawerListItems } from "../models/drawerListItems";
 import OfferForm from "../components/OfferForm";
+import { UserInfoContext } from "../stores/UserInfoStore";
 
 const Drawer = styled(MuiDrawer, {
   shouldForwardProp: (prop) => prop,
@@ -47,6 +48,7 @@ function SideBar({
   toggleDialogs,
 }) {
   const history = useHistory();
+  const [userInfo] = useContext(UserInfoContext);
 
   const toggleDrawer = () => {
     setOpen(!open);
@@ -68,21 +70,27 @@ function SideBar({
           </IconButton>
         </Toolbar>
         <List>
-          {drawerListItems.map((item, key) => {
-            return (
-              <ListItemButton
-                key={key}
-                onClick={() => {
-                  toggleDialogs(item[2], true);
-                }}
-              >
-                <ListItemIcon>
-                  <Icon>{item[1]}</Icon>
-                </ListItemIcon>
-                <ListItemText>{item[0]}</ListItemText>
-              </ListItemButton>
-            );
-          })}
+          {drawerListItems
+            .filter((item) => {
+              console.log("item 0", item[0]);
+              console.log("user info", userInfo.role);
+              return item[0] === userInfo.role;
+            })
+            .map((item, key) => {
+              return (
+                <ListItemButton
+                  key={key}
+                  onClick={() => {
+                    toggleDialogs(item[3], true);
+                  }}
+                >
+                  <ListItemIcon>
+                    <Icon>{item[2]}</Icon>
+                  </ListItemIcon>
+                  <ListItemText>{item[1]}</ListItemText>
+                </ListItemButton>
+              );
+            })}
         </List>
       </Drawer>
       <OfferForm

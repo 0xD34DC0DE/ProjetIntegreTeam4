@@ -1,3 +1,5 @@
+import OfferViews from "../components/OfferViews";
+
 /**
  * [ListItemText, Icon, path]
  * Ex: <ListItemText>Accueil</ListItemText> --> The List Text Element
@@ -8,9 +10,16 @@
  * @author Maxime Dupuis
  * */
 export const drawerListItems = [
-  ["Accueil", "home", "#"],
-  ["Rapports", "article", "#"],
-  ["Téléverser des fichiers", "upload_file", "uploadFile"],
-  ["Déposer des offres de stage", "note_add", "internshipOfferDialog"],
-  ["Valider des offres de stage", "rule", "validateOffer"],
+  [
+    "INTERNSHIP_MANAGER",
+    "Déposer des offres de stage",
+    "note_add",
+    "internshipOfferDialog",
+  ],
+  [
+    "INTERNSHIP_MANAGER",
+    "Valider des offres de stage",
+    "rule",
+    "validateOffer",
+  ],
 ];
