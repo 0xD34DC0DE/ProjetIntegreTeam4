@@ -8,5 +8,4 @@ import reactor.core.publisher.Flux;
 @Repository
 public interface FileMetadataRepository extends ReactiveMongoRepository<FileMetadata, String> {
     Flux<FileMetadata> findFileMetadataById(String id);
-
 }

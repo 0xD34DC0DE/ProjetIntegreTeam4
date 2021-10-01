@@ -2,7 +2,6 @@ package com.team4.backend.model;
 
 import com.team4.backend.model.enums.FileType;
 import lombok.Data;
-import lombok.Generated;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
@@ -19,7 +18,7 @@ public class FileMetadata {
     @Id
     private String id;
 
-    private String userId;
+    private String userEmail;
     private String assetId;
     private String filename;
     private boolean validCV;

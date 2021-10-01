@@ -1,15 +1,14 @@
-package com.team4.backend.model;
+package com.team4.backend.dto;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Data
 @ToString
 @NoArgsConstructor
-public class FileAsset {
+public class FileAssetDto {
 
     @Id
     private String id;
