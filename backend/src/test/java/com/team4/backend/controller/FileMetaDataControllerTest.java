@@ -1,10 +1,9 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.InternshipOfferDto;
+import com.team4.backend.dto.FileMetaDataDto;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.service.FileMetaDataService;
 import com.team4.backend.testdata.FileMetaDataMockData;
-import com.team4.backend.testdata.InternshipOfferMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 import static org.mockito.Mockito.when;
 
@@ -52,16 +49,17 @@ public class FileMetaDataControllerTest {
     @Test
     void getListInvalidCvNotSeen() {
         //ARRANGE
-        when(fileMetaDataService.getListInvalidCvNotSeen()).thenReturn(Flux.just(FileMetaDataMockData.getFileMetaData()));
+        Integer noPage = 0;
+        when(fileMetaDataService.getListInvalidCvNotSeen(noPage)).thenReturn(Flux.just(FileMetaDataMockData.getFileMetaDataDto()));
 
         //ACT
         webTestClient
                 .get()
-                .uri("/fileMetaData/getListInvalidCvNotSeen")
+                .uri("/fileMetaData/getListInvalidCvNotSeen/" + noPage)
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
-                .expectBodyList(FileMetaData.class);
+                .expectBodyList(FileMetaDataDto.class);
     }
 
 

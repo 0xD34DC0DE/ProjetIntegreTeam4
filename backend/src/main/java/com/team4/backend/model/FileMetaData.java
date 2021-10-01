@@ -1,6 +1,7 @@
 package com.team4.backend.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import de.flapdoodle.embed.process.config.store.FileType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +26,8 @@ public class FileMetaData implements Serializable {
     private String userEmail;//TODO --> change for email
 
     private String filename;
+
+    private FileType type;
 
     private Boolean isValid;
 

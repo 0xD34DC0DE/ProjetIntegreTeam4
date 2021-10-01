@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.team4.backend.dto.FileMetaDataDto;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.repository.FileMetaDataRepository;
 import com.team4.backend.testdata.FileMetaDataMockData;
@@ -9,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -45,7 +48,8 @@ public class FileMetaDataServiceTest {
     @Test
     void getListInvalidCvNotSeen() {
         //ARRANGE
-        when(fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse())
+        Integer noPage = 0;
+        when(fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("creationDate"))))
                 .thenReturn(Flux.just(
                         FileMetaData.builder().build(),
                         FileMetaData.builder().build(),
@@ -53,10 +57,10 @@ public class FileMetaDataServiceTest {
                 ));
 
         //ACT
-        Flux<FileMetaData> fileMetaDataFlux = fileMetaDataService.getListInvalidCvNotSeen();
+        Flux<FileMetaDataDto> fileMetaDataDtoFlux = fileMetaDataService.getListInvalidCvNotSeen(noPage);
 
         //ASSERT
-        StepVerifier.create(fileMetaDataFlux)
+        StepVerifier.create(fileMetaDataDtoFlux)
                 .expectNextCount(3)
                 .verifyComplete();
     }

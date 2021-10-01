@@ -1,7 +1,11 @@
 package com.team4.backend.service;
 
+import com.team4.backend.dto.FileMetaDataDto;
+import com.team4.backend.mapping.FileMetaDataMapper;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.repository.FileMetaDataRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -23,8 +27,9 @@ public class FileMetaDataService {
         return fileMetaDataRepository.countAllByIsValidFalseAndIsSeenFalse();
     }
 
-    public Flux<FileMetaData> getListInvalidCvNotSeen() {
-        return fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse();
+    public Flux<FileMetaDataDto> getListInvalidCvNotSeen(Integer noPage) {
+        return fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("creationDate")))
+                .map(FileMetaDataMapper::toDto);
     }
 
     public Mono<FileMetaData> validateCv(String id, Boolean isValid) {

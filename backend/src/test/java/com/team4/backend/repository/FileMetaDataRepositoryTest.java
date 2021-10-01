@@ -10,6 +10,8 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Flux;
@@ -54,7 +56,7 @@ public class FileMetaDataRepositoryTest {
     @Test
     void findAllByIsValidFalseAndIsSeenFalse() {
         //ACT
-        Flux<FileMetaData> fileMetaDataFlux = fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse();
+        Flux<FileMetaData> fileMetaDataFlux = fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(0, 5, Sort.by("creationDate")));
 
         //ASSERT
         StepVerifier.create(fileMetaDataFlux).expectNextCount(4).verifyComplete();

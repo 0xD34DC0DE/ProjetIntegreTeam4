@@ -1,5 +1,6 @@
 package com.team4.backend.controller;
 
+import com.team4.backend.dto.FileMetaDataDto;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.service.FileMetaDataService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,23 +20,21 @@ public class FileMetaDataController {
 
     @GetMapping("/countAllInvalidCvNotSeen")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Mono<Long> countAllInvalidCvNotSeen(){
+    public Mono<Long> countAllInvalidCvNotSeen() {
         return fileMetaDataService.countAllInvalidCvNotSeen();
     }
 
-    @GetMapping("/getListInvalidCvNotSeen")
+    @GetMapping("/getListInvalidCvNotSeen/{noPage}")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Flux<FileMetaData> getListInvalidCvNotSeen(){
-        return fileMetaDataService.getListInvalidCvNotSeen();
+    public Flux<FileMetaDataDto> getListInvalidCvNotSeen(@PathVariable Integer noPage) {
+        return fileMetaDataService.getListInvalidCvNotSeen(noPage);
     }
 
     @PatchMapping("/validateCv")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Mono<FileMetaData> validateCv(@RequestParam("id") String id, @RequestParam("isValid") Boolean isValid){
-        return fileMetaDataService.validateCv(id,isValid);
+    public Mono<FileMetaData> validateCv(@RequestParam("id") String id, @RequestParam("isValid") Boolean isValid) {
+        return fileMetaDataService.validateCv(id, isValid);
     }
-
-
 
 
 }

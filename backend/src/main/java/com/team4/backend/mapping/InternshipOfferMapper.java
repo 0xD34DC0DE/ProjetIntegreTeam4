@@ -8,7 +8,7 @@ import com.team4.backend.model.User;
 import java.util.Collections;
 import java.util.stream.Collectors;
 
-public class InternshipOfferMapper {
+public abstract class InternshipOfferMapper {
 
     public static InternshipOfferDto toDto(InternshipOffer internshipOffer) {
         return InternshipOfferDto.builder()
