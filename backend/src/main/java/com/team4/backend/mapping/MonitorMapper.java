@@ -4,10 +4,12 @@ import com.team4.backend.model.Monitor;
 
 public abstract class MonitorMapper {
 
-    public static Monitor toEntity() {
-        //TODO implementation
-        return new Monitor();
-    }
+    //TODO add tests
+
+//    public static Monitor toEntity() {
+//        //TODO implementation
+//        return new Monitor();
+//    }
 
     /*
     TODO

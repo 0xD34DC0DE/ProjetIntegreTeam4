@@ -37,16 +37,13 @@ public class InternshipOfferControllerTest {
         when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.just(internshipOfferDTO));
 
         //ACT
-        HttpStatus httpStatus = webTestClient
+         webTestClient
                 .post()
                 .uri("/internshipOffer/addAnInternshipOffer")
                 .bodyValue(internshipOfferDTO)
                 .exchange()
-                .expectStatus()
-                .isOk()
-                .expectBody(InternshipOfferDto.class).returnResult().getStatus();
-
-        //ASSERT
-        assertEquals(HttpStatus.OK, httpStatus);
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBody(InternshipOfferDto.class);
     }
 }

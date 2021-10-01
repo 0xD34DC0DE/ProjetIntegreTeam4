@@ -30,6 +30,7 @@ public class InternshipOfferMapper {
 
     public static InternshipOffer toEntity(InternshipOfferDto internshipOfferDto, Monitor monitor) {
         return InternshipOffer.builder()
+                .id(internshipOfferDto.getId())
                 .limitDateToApply(internshipOfferDto.getLimitDateToApply())
                 .beginningDate(internshipOfferDto.getBeginningDate())
                 .endingDate(internshipOfferDto.getEndingDate())

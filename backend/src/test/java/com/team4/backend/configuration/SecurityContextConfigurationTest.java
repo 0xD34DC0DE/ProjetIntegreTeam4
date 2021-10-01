@@ -53,9 +53,9 @@ public class SecurityContextConfigurationTest {
         when(securityContextRepository.load(any())).thenReturn(Mono.just(new SecurityContextImpl(authentication)));
 
         //ACT
-        HttpStatus httpStatus1 = webTestClient.get().uri("/person/personByNameFirstLetter/W")
+        HttpStatus httpStatus1 = webTestClient.get().uri("/non_existent")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token1)
-                .exchange().returnResult(ExamplePerson.class).getStatus();
+                .exchange().returnResult(User.class).getStatus();
 
         //ASSERT
         assertEquals(HttpStatus.FORBIDDEN, httpStatus1);
@@ -68,8 +68,8 @@ public class SecurityContextConfigurationTest {
         when(securityContextRepository.load(any())).thenReturn(Mono.empty());
 
         //ACT
-        HttpStatus httpStatus1 = webTestClient.get().uri("/person/personByName/Wilona Frohock")
-                .exchange().returnResult(ExamplePerson.class).getStatus();
+        HttpStatus httpStatus1 = webTestClient.get().uri("/non_existent")
+                .exchange().returnResult(User.class).getStatus();
 
         //ASSERT
         assertEquals(HttpStatus.UNAUTHORIZED, httpStatus1);

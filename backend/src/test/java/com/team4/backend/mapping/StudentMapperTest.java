@@ -1,16 +1,16 @@
-package com.team4.backend.dto;
+package com.team4.backend.mapping;
 
-import com.team4.backend.mapping.StudentMapper;
-import com.team4.backend.testdata.StudentMockData;
+import com.team4.backend.dto.StudentDto;
 import com.team4.backend.model.Student;
+import com.team4.backend.testdata.StudentMockData;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class StudentDtoTest {
+public class StudentMapperTest {
 
     @Test
-    void convertStudentEntityToStudentDto_correct() {
+    void mapEntityToDto() {
         //ARANGE
         Student entity = StudentMockData.getMockStudent();
 
@@ -32,7 +32,7 @@ public class StudentDtoTest {
     }
 
     @Test
-    void convertStudentDtoToStudentEntity_correct() {
+    void mapDtoToEntity() {
         //ARANGE
         StudentDto dto = StudentMockData.getMockStudentDto();
 

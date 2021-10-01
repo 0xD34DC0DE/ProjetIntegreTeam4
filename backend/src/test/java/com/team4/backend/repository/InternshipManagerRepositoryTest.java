@@ -26,18 +26,4 @@ public class InternshipManagerRepositoryTest {
     @Autowired
     private InternshipManagerRepository internshipManagerRepository;
 
-    @Test
-    void shouldCreateIntershipManager() {
-        // ARRANGE
-        InternshipManager internshipManager = InternshipManagerMockData.GetInternshipManager();
-        internshipManager.setId(null);
-
-        // ACT
-        Mono<InternshipManager> internshipManagerMono = internshipManagerRepository.save(internshipManager);
-
-        // ASSERT
-        StepVerifier.create(internshipManagerMono)
-                .assertNext(value -> assertNotNull(value.getId()))
-                .verifyComplete();
-    }
 }
