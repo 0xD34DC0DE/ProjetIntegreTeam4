@@ -1,6 +1,5 @@
 package com.team4.backend.service;
 
-import com.team4.backend.exception.DoNotExistException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.repository.MonitorRepository;
@@ -63,7 +62,8 @@ public class MonitorServiceTest {
 
         //ASSERT
         StepVerifier.create(monitorDoNotExist)
-                .verifyError(DoNotExistException.class);
+                .assertNext(Assertions::assertFalse)
+                .verifyComplete();
     }
 
     @Test

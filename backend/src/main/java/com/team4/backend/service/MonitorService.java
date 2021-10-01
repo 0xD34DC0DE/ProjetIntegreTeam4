@@ -1,6 +1,5 @@
 package com.team4.backend.service;
 
-import com.team4.backend.exception.DoNotExistException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.repository.MonitorRepository;
@@ -24,9 +23,7 @@ public class MonitorService {
     }
 
     public Mono<Boolean> existsByEmailAndIsEnabledTrue(String email) {
-        return monitorRepository.existsByEmailAndIsEnabledTrue(email)
-                .filter(exist -> exist)
-                .switchIfEmpty(Mono.error(DoNotExistException::new));
+        return monitorRepository.existsByEmailAndIsEnabledTrue(email);
     }
 
     public Mono<Monitor> registerMonitor(Monitor monitor) {
