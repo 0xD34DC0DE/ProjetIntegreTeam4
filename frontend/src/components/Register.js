@@ -22,6 +22,7 @@ import CompanyNameFormField from "./CompanyNameFormField";
 
 const Register = ({ open, toggleDialogs }) => {
   const [step, setStep] = useState(0);
+  const [stepCount, setStepCount] = useState(5);
   const [formValid, setFormValid] = useState(false);
   const [form, setForm] = useState({
     email: "",
@@ -33,8 +34,6 @@ const Register = ({ open, toggleDialogs }) => {
     lastName: "",
     accountType: "",
   });
-
-  const stepCount = 6;
 
   const nextStep = () => {
     if (step === stepCount - 1) register();
@@ -92,6 +91,12 @@ const Register = ({ open, toggleDialogs }) => {
       ...form,
       accountType: event.target.value,
     }));
+    changeStepCount(event.target.value);
+  };
+
+  const changeStepCount = (accountType) => {
+    if (accountType === "student") setStepCount(5);
+    else if (accountType === "monitor") setStepCount(6);
   };
 
   const displayFormFields = () => {
@@ -127,6 +132,7 @@ const Register = ({ open, toggleDialogs }) => {
           visibleStep={4}
           onFieldChange={handleFormChange}
         />
+        {/* Special form field for each individual role */}
         {form.accountType === "monitor" && (
           <CompanyNameFormField
             valid={setFormValid}
