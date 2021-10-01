@@ -29,7 +29,6 @@ public class InternshipOffer implements Serializable {
 
     private LocalDate endingDate;
 
-    @DBRef
     private Monitor monitor;
 
     private String companyName;
@@ -44,10 +43,8 @@ public class InternshipOffer implements Serializable {
 
     private boolean isExclusive;
 
-    @DBRef
     private List<Student> listInterestedStudents;
 
-    @DBRef
     private List<Student> listExclusiveStudents;
 
     public InternshipOffer(String id,

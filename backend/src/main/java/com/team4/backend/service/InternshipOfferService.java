@@ -2,7 +2,6 @@ package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.mapping.InternshipOfferMapper;
-import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.repository.InternshipOfferRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -41,6 +40,4 @@ public class InternshipOfferService {
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Can't find InternshipOffer with this id.")));
     }
-
-
 }

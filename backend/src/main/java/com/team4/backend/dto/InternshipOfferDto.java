@@ -29,9 +29,9 @@ public class InternshipOfferDto implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endingDate;
 
-    private String emailOfMonitor;
-
     private String companyName;
+
+    private String emailOfMonitor;
 
     private String description;
 
