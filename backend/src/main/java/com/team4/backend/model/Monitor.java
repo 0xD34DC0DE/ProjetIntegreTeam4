@@ -24,7 +24,6 @@ public class Monitor extends User implements Serializable {
                    String companyName,
                    String password,
                    String phoneNumber,
-                   String companyName,
                    LocalDate registrationDate) {
         super(id,
                 email,

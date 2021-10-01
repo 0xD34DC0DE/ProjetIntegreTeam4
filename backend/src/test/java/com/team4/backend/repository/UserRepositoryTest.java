@@ -1,6 +1,5 @@
 package com.team4.backend.repository;
 
-import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.User;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Assertions;
@@ -58,7 +57,6 @@ public class UserRepositoryTest {
         Mono<User> userMono3 = userRepository.findByEmailAndPasswordAndIsEnabledTrue(email3, password3);
 
         //ASSERT
-
         StepVerifier.create(userMono1)
                 .consumeNextWith(user -> assertEquals(email1, user.getEmail()))
                 .verifyComplete();
@@ -85,4 +83,5 @@ public class UserRepositoryTest {
                 .assertNext(Assertions::assertFalse)
                 .verifyComplete();
     }
+
 }

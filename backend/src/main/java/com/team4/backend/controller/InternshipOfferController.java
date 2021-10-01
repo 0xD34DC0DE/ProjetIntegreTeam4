@@ -29,4 +29,5 @@ public class InternshipOfferController {
                 .flatMap(internshipOffer -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body(internshipOffer)))
                 .onErrorReturn(DoNotExistException.class, ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
+
 }

@@ -45,4 +45,5 @@ public class UserDto implements Serializable {
         this.registrationDate = Optional.ofNullable(registrationDate).orElse(LocalDate.now());
         this.role = role;
     }
+
 }

@@ -65,4 +65,5 @@ public class TestingInserterRunner implements ApplicationRunner {
 
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
+
 }
