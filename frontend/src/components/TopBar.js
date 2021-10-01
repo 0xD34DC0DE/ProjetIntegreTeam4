@@ -10,10 +10,9 @@ import {
   Tooltip,
   Avatar,
   Button,
+  AppBar,
   ListItemAvatar,
 } from "@mui/material";
-import MuiAppBar from "@mui/material/AppBar";
-import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
 import React, { useState, useRef, useContext } from "react";
 import Login from "../components/Login";
 import Register from "../components/Register";
@@ -25,19 +24,6 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DashboardCustomizeOutlinedIcon from "@mui/icons-material/DashboardCustomizeOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop,
-})(({ theme, open }) => ({
-  overflowX: "hidden",
-  float: "right",
-  width: `calc(100% - theme.spacing(40))`,
-  ...(!open && {
-    width: `calc(100% - theme.spacing(9))`,
-  }),
-}));
-
-const mdTheme = createTheme();
 
 const TopBar = ({ open, toggleDialogs, registerVisible, loginVisible }) => {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -55,7 +41,7 @@ const TopBar = ({ open, toggleDialogs, registerVisible, loginVisible }) => {
   };
 
   return (
-    <ThemeProvider theme={mdTheme}>
+    <>
       <AppBar position="static" open={open}>
         <Toolbar
           sx={{
@@ -95,7 +81,7 @@ const TopBar = ({ open, toggleDialogs, registerVisible, loginVisible }) => {
                       }}
                     >
                       <ListItemIcon>
-                        <PersonAddOutlinedIcon fontSize="small" />
+                        <PersonAddOutlinedIcon />
                       </ListItemIcon>
                       <ListItemText>Enregistrement</ListItemText>
                       <Typography
@@ -199,7 +185,7 @@ const TopBar = ({ open, toggleDialogs, registerVisible, loginVisible }) => {
       </AppBar>
       <Register toggleDialogs={toggleDialogs} open={registerVisible}></Register>
       <Login open={loginVisible} toggleDialogs={toggleDialogs}></Login>
-    </ThemeProvider>
+    </>
   );
 };
 

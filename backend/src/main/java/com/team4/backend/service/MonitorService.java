@@ -5,11 +5,10 @@ import com.team4.backend.model.Monitor;
 import com.team4.backend.repository.MonitorRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.springframework.http.HttpStatus;
+import com.team4.backend.exception.DoNotExistException;
+import com.team4.backend.repository.MonitorRepository;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
-
-import java.util.Objects;
 
 @Service
 public class MonitorService {
@@ -26,10 +25,10 @@ public class MonitorService {
         this.pbkdf2Encoder = pbkdf2Encoder;
     }
 
-    public Mono<Monitor> findMonitorByEmail(String email) {
-        return monitorRepository.findByEmail(email)
-                .filter(Objects::nonNull)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find monitor with this email.")));
+    public Mono<Boolean> existsByEmailAndIsEnabledTrue(String email) {
+        return monitorRepository.existsByEmailAndIsEnabledTrue(email)
+                .filter(exist -> exist)
+                .switchIfEmpty(Mono.error(DoNotExistException::new));
     }
 
     public Mono<Monitor> registerMonitor(Monitor monitor) {

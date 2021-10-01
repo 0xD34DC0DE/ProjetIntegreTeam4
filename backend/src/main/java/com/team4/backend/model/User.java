@@ -3,6 +3,7 @@ package com.team4.backend.model;
 import com.team4.backend.model.enums.Role;
 import lombok.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
@@ -20,7 +21,7 @@ public class User implements Serializable {
 
     protected String registrationNumber;
 
-    @Getter
+    @Indexed(unique = true)
     protected String email;
 
     protected String password;

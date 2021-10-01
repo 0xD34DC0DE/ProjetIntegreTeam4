@@ -1,7 +1,10 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferDto;
+import com.team4.backend.exception.DoNotExistException;
 import com.team4.backend.service.InternshipOfferService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -19,8 +22,10 @@ public class InternshipOfferController {
 
     @PostMapping("/addAnInternshipOffer")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER','MONITOR')")
-    public Mono<InternshipOfferDto> addAnInternshipOffer(@RequestBody InternshipOfferDto internshipOfferDTO){
-        return internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
+    public Mono<ResponseEntity<InternshipOfferDto>> addAnInternshipOffer(@RequestBody InternshipOfferDto internshipOfferDTO) {
+        return internshipOfferService.addAnInternshipOffer(internshipOfferDTO)
+                .flatMap(internshipOffer -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body(internshipOffer)))
+                .onErrorReturn(DoNotExistException.class, ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @GetMapping("/unvalidatedOffers")

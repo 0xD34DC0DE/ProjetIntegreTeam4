@@ -3,6 +3,7 @@ package com.team4.backend;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;
+import com.team4.backend.repository.InternshipOfferRepository;
 import com.team4.backend.repository.MonitorRepository;
 import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -24,12 +25,15 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final MonitorRepository monitorRepository;
 
+    private final InternshipOfferRepository internshipOfferRepository;
+
     private final UserRepository userRepository;
 
     private final PBKDF2Encoder pbkdf2Encoder;
 
-    public TestingInserterRunner( MonitorRepository monitorRepository, UserRepository userRepository, PBKDF2Encoder pbkdf2Encoder) {
+    public TestingInserterRunner(MonitorRepository monitorRepository, InternshipOfferRepository internshipOfferRepository, UserRepository userRepository, PBKDF2Encoder pbkdf2Encoder) {
         this.monitorRepository = monitorRepository;
+        this.internshipOfferRepository = internshipOfferRepository;
         this.userRepository = userRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
     }
@@ -38,6 +42,7 @@ public class TestingInserterRunner implements ApplicationRunner {
     public void run(final ApplicationArguments args) {
         userRepository.deleteAll().subscribe();
         monitorRepository.deleteAll().subscribe();
+        internshipOfferRepository.deleteAll().subscribe();
 
         insertUsers();
 

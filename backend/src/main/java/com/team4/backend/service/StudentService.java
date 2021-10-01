@@ -28,7 +28,7 @@ public class StudentService {
                 student.setPassword(pbkdf2Encoder.encode(student.getPassword()));
                 return studentRepository.save(student);
             } else {
-                return Mono.error(new UserAlreadyExistsException());
+                return Mono.error(UserAlreadyExistsException::new);
             }
         });
     }

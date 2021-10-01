@@ -1,25 +1,17 @@
-import OfferViews from "../components/OfferViews";
+import AddIcon from "@mui/icons-material/Add";
+import RuleIcon from "@mui/icons-material/Rule";
 
-/**
- * [ListItemText, Icon, path]
- * Ex: <ListItemText>Accueil</ListItemText> --> The List Text Element
- * Ex: <Icon>home</Icon> --> To render the Google Font Icon home
- * Ex: history.push("home") --> To path to /home
- * @description Un tableau de tableaux qui contiennent
- * les chaînes de caractères requis pour afficher chaque item d'une list
- * @author Maxime Dupuis
- * */
-export const drawerListItems = [
-  [
-    "INTERNSHIP_MANAGER",
-    "Déposer des offres de stage",
-    "note_add",
-    "internshipOfferDialog",
-  ],
-  [
-    "INTERNSHIP_MANAGER",
-    "Valider des offres de stage",
-    "rule",
-    "validateOffer",
-  ],
+export const drawerListDialogs = [
+  {
+    roles: ["INTERNSHIP_MANAGER", "MONITOR"],
+    name: "internshipOfferDialog",
+    icon: <AddIcon />,
+    text: "Déposer des offres de stage",
+  },
+  {
+    roles: ["INTERNSHIP_MANAGER"],
+    name: "internshipOfferDialog",
+    icon: <RuleIcon />,
+    text: "Valider des offres de stage",
+  },
 ];

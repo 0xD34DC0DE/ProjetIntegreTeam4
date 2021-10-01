@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferDto;
+import com.team4.backend.exception.WrongCredentialsException;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.repository.InternshipOfferRepository;
 import com.team4.backend.testdata.InternshipOfferMockData;
@@ -39,16 +40,11 @@ public class InternshipOfferServiceTest {
         //ARRANGE
         InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
-        internshipOffer.setId(null);
 
-        when(monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor()))
-                .thenReturn(Mono.just(internshipOffer.getMonitor()));
+        internshipOfferDTO.setId(null);
 
-        when(internshipOfferRepository.save(any(InternshipOffer.class)))
-                .thenReturn(Mono.just(internshipOffer).map(offer -> {
-                    offer.setId(InternshipOfferMockData.getInternshipOffer().getId());
-                    return offer;
-                }));
+        when(monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getEmailOfMonitor())).thenReturn(Mono.just(true));
+        when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
 
         //ACT
         Mono<InternshipOfferDto> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
@@ -64,15 +60,14 @@ public class InternshipOfferServiceTest {
         //ARRANGE
         InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
 
-        when(monitorService.findMonitorByEmail(any(String.class)))
-                .thenReturn(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND)));
+        when(monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getEmailOfMonitor())).thenReturn(Mono.error(WrongCredentialsException::new));
 
         //ACT
         Mono<InternshipOfferDto> savedInternshipOffer = internshipOfferService.addAnInternshipOffer(internshipOfferDTO);
 
         //ASSERT
         StepVerifier.create(savedInternshipOffer)
-                .expectError(ResponseStatusException.class)
+                .expectError(WrongCredentialsException.class)
                 .verify();
     }
 

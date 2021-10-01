@@ -11,7 +11,7 @@ import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import React, { useContext } from "react";
 import { useHistory } from "react-router";
-import { drawerListItems } from "../models/drawerListItems";
+import { drawerListDialogs } from "../models/drawerListItems";
 import OfferForm from "../components/OfferForm";
 import { UserInfoContext } from "../stores/UserInfoStore";
 
@@ -70,31 +70,25 @@ function SideBar({
           </IconButton>
         </Toolbar>
         <List>
-          {drawerListItems
-            .filter((item) => {
-              console.log("item 0", item[0]);
-              console.log("user info", userInfo.role);
-              return item[0] === userInfo.role;
-            })
+          {drawerListDialogs
+            .filter((item) => item.roles.includes(userInfo.role))
             .map((item, key) => {
               return (
                 <ListItemButton
                   key={key}
                   onClick={() => {
-                    toggleDialogs(item[3], true);
+                    toggleDialogs(item.name, true);
                   }}
                 >
-                  <ListItemIcon>
-                    <Icon>{item[2]}</Icon>
-                  </ListItemIcon>
-                  <ListItemText>{item[1]}</ListItemText>
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText>{item.text}</ListItemText>
                 </ListItemButton>
               );
             })}
         </List>
       </Drawer>
       <OfferForm
-        isMounted={intershipOfferDialogVisible}
+        dialogVisibile={intershipOfferDialogVisible}
         toggleDialogs={toggleDialogs}
       />
     </ThemeProvider>

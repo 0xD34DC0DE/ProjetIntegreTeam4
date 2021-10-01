@@ -2,13 +2,26 @@ package com.team4.backend.mapping;
 
 import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.model.InternshipOffer;
-import com.team4.backend.model.Monitor;
-import com.team4.backend.model.User;
 
 import java.util.Collections;
-import java.util.stream.Collectors;
 
-public class InternshipOfferMapper {
+public abstract class InternshipOfferMapper {
+
+    public static InternshipOffer toEntity(InternshipOfferDto internshipOfferDto) {
+        return InternshipOffer.builder()
+                .limitDateToApply(internshipOfferDto.getLimitDateToApply())
+                .beginningDate(internshipOfferDto.getBeginningDate())
+                .endingDate(internshipOfferDto.getEndingDate())
+                .companyName(internshipOfferDto.getCompanyName())
+                .emailOfMonitor(internshipOfferDto.getEmailOfMonitor())
+                .description(internshipOfferDto.getDescription())
+                .minSalary(internshipOfferDto.getMinSalary())
+                .maxSalary(internshipOfferDto.getMaxSalary())
+                .listEmailInterestedStudents(Collections.emptyList())
+                .isValidated(false)
+                .isExclusive(false)
+                .build();
+    }
 
     public static InternshipOfferDto toDto(InternshipOffer internshipOffer) {
         return InternshipOfferDto.builder()
@@ -17,28 +30,11 @@ public class InternshipOfferMapper {
                 .beginningDate(internshipOffer.getBeginningDate())
                 .endingDate(internshipOffer.getEndingDate())
                 .companyName(internshipOffer.getCompanyName())
-                .emailOfMonitor(internshipOffer.getMonitor().getEmail())
+                .emailOfMonitor(internshipOffer.getEmailOfMonitor())
                 .description(internshipOffer.getDescription())
                 .minSalary(internshipOffer.getMinSalary())
                 .maxSalary(internshipOffer.getMaxSalary())
-                .listEmailInterestedStudents(internshipOffer.getListInterestedStudents() == null ? Collections.emptyList() :
-                        internshipOffer.getListInterestedStudents().stream().map(User::getEmail).collect(Collectors.toList()))
-                .listEmailExclusiveStudents(internshipOffer.getListExclusiveStudents() == null ? Collections.emptyList() :
-                        internshipOffer.getListExclusiveStudents().stream().map(User::getEmail).collect(Collectors.toList()))
+                .listEmailInterestedStudents(internshipOffer.getListEmailInterestedStudents())
                 .isValidated(internshipOffer.isValidated()).build();
-    }
-
-    public static InternshipOffer toEntity(InternshipOfferDto internshipOfferDto, Monitor monitor) {
-        return InternshipOffer.builder()
-                .id(internshipOfferDto.getId())
-                .limitDateToApply(internshipOfferDto.getLimitDateToApply())
-                .beginningDate(internshipOfferDto.getBeginningDate())
-                .endingDate(internshipOfferDto.getEndingDate())
-                .companyName(internshipOfferDto.getCompanyName())
-                .monitor(monitor)
-                .description(internshipOfferDto.getDescription())
-                .minSalary(internshipOfferDto.getMinSalary())
-                .maxSalary(internshipOfferDto.getMaxSalary())
-                .build();
     }
 }

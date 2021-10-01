@@ -12,7 +12,7 @@ import React, { useState } from "react";
 import { OFFER_FORM_VALUES } from "../models/TextFormFieldValues";
 import TextFormField from "./TextFormField";
 
-const OfferForm = ({ isMounted, toggleDialogs }) => {
+const OfferForm = ({ dialogVisible, toggleDialogs }) => {
   const emptyOffer = {
     limitDateToApply: new Date(),
     beginningDate: new Date(),
@@ -63,7 +63,7 @@ const OfferForm = ({ isMounted, toggleDialogs }) => {
 
   return (
     <>
-      <Dialog open={isMounted} disable onClose={handleClose}>
+      <Dialog open={dialogVisible} onClose={handleClose}>
         <Typography variant="h4" sx={{ ml: 3, mt: 3 }}>
           Déposer une offre de stage <Create sx={{ mx: 1 }} />
         </Typography>
