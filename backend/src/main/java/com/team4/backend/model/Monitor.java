@@ -21,8 +21,8 @@ public class Monitor extends User implements Serializable {
                    String email,
                    String firstName,
                    String lastName,
+                   String companyName,
                    String password,
-                   String registrationNumber,
                    String phoneNumber,
                    String companyName,
                    LocalDate registrationDate) {
@@ -31,11 +31,11 @@ public class Monitor extends User implements Serializable {
                 firstName,
                 lastName,
                 password,
-                registrationNumber,
                 phoneNumber,
                 Role.MONITOR,
                 true,
                 registrationDate);
         this.companyName = companyName;
     }
+
 }
