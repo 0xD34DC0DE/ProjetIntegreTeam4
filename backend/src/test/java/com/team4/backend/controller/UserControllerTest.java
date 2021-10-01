@@ -100,4 +100,5 @@ public class UserControllerTest {
                 .expectStatus().isOk()
                 .expectBody(Boolean.class);
     }
+
 }

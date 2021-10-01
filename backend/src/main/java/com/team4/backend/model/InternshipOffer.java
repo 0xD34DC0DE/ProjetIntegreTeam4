@@ -42,4 +42,5 @@ public class InternshipOffer implements Serializable {
     private boolean isExclusive;
 
     private List<String> listEmailInterestedStudents;
+
 }

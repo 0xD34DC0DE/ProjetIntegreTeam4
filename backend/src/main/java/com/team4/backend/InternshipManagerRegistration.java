@@ -14,7 +14,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Mono;
 
 import java.io.IOException;
 import java.util.List;
@@ -71,4 +70,5 @@ public class InternshipManagerRegistration implements ApplicationRunner {
             throw new RuntimeException("Failed to read internship_managers.json for automatic insertion");
         }
     }
+
 }

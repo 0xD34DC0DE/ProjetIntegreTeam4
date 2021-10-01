@@ -13,10 +13,10 @@ import org.springframework.security.core.Authentication;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-
 import java.util.Collections;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 
@@ -28,7 +28,6 @@ public class AuthenticationManagerTest {
 
     @InjectMocks
     AuthenticationManager authenticationManager;
-
 
     @Test
     void authenticate() {
@@ -57,4 +56,5 @@ public class AuthenticationManagerTest {
         StepVerifier.create(authentication2)
                 .consumeNextWith(auth -> assertTrue(auth.getPrincipal().toString().isEmpty())).verifyComplete();
     }
+
 }

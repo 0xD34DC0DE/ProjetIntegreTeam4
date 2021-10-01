@@ -13,8 +13,8 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -32,7 +32,6 @@ public class InternshipManagerServiceTest {
 
     @Test
     void shouldCreateInternshipManager() {
-
         // ARRANGE
         InternshipManager internshipManager = InternshipManagerMockData.GetInternshipManager();
         internshipManager.setId(null); // Id is null when coming from auto-register

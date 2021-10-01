@@ -44,4 +44,5 @@ public class PBKDF2Encoder implements PasswordEncoder {
     public boolean matches(CharSequence cs, String string) {
         return encode(cs).equals(string);
     }
+
 }

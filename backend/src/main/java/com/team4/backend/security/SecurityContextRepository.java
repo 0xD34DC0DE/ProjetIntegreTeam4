@@ -36,4 +36,5 @@ public class SecurityContextRepository implements ServerSecurityContextRepositor
                     return this.authenticationManager.authenticate(auth).map(SecurityContextImpl::new);
                 });
     }
+
 }
