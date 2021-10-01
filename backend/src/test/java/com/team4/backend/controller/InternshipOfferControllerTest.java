@@ -45,7 +45,7 @@ public class InternshipOfferControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isCreated()
-                .expectBody(InternshipOfferDto.class);
+                .expectBody(String.class);
     }
 
     @Test
@@ -63,7 +63,7 @@ public class InternshipOfferControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isNotFound()
-                .expectBody(InternshipOfferDto.class);
+                .expectBody(String.class);
     }
 
 }

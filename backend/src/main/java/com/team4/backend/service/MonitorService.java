@@ -32,7 +32,7 @@ public class MonitorService {
                 monitor.setPassword(pbkdf2Encoder.encode(monitor.getPassword()));
                 return monitorRepository.save(monitor);
             } else {
-                return Mono.error(new UserAlreadyExistsException());
+                return Mono.error(new UserAlreadyExistsException("User already exist!"));
             }
         });
     }

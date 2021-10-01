@@ -1,8 +1,6 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferDto;
-import com.team4.backend.exception.UserDoNotExistException;
-import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.service.InternshipOfferService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

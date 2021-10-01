@@ -26,7 +26,7 @@ public class MonitorController {
     public Mono<ResponseEntity<String>> register(@RequestBody MonitorDto monitorDto) {
         return monitorService.registerMonitor(MonitorMapper.toEntity(monitorDto))
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
-                .onErrorReturn(UserAlreadyExistsException.class, ResponseEntity.status(HttpStatus.CONFLICT).body(""));
+                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(error.getMessage())));
     }
 
 }
