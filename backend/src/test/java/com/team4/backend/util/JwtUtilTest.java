@@ -1,6 +1,7 @@
 package com.team4.backend.util;
 
 
+import com.team4.backend.model.Monitor;
 import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;
 import io.jsonwebtoken.Claims;
@@ -43,12 +44,20 @@ public class JwtUtilTest {
     }
 
     @Test
-    void getAllClaimsFromToken() {
+    void getAllClaimsFromTokenForNormalUser() {
         //ARRANGE
-        User user = User.builder().email("123456789@claurendeau.qc.ca").role(Role.STUDENT).build();
-        Map<String, Role> claims = new HashMap<>();
+        User user = User.builder()
+                .email("123456789@claurendeau.qc.ca")
+                .firstName("Rejean")
+                .lastName("Signon")
+                .phoneNumber("514547938423")
+                .role(Role.STUDENT).build();
+        Map<String, String> claims = new HashMap<>();
 
-        claims.put("role",user.getRole());
+        claims.put("role", user.getRole().toString());
+        claims.put("firstName", user.getFirstName());
+        claims.put("lastName", user.getLastName());
+        claims.put("phoneNumber", user.getPhoneNumber());
 
         String token = Jwts.builder()
                 .setClaims(claims)
@@ -62,6 +71,45 @@ public class JwtUtilTest {
 
         //ASSERT
         assertEquals(user.getEmail(),returnedClaims.getSubject());
+        assertEquals(user.getFirstName(),returnedClaims.get("firstName"));
+        assertEquals(user.getLastName(),returnedClaims.get("lastName"));
+        assertEquals(user.getPhoneNumber(),returnedClaims.get("phoneNumber"));
+        assertEquals(user.getRole().toString(),returnedClaims.get("role"));
+    }
+
+    @Test
+    void getAllClaimsFromTokenForMonitor() {
+        //ARRANGE
+        Monitor monitor = Monitor.monitorBuilder()
+                .email("123456789@claurendeau.qc.ca")
+                .firstName("Rejean")
+                .phoneNumber("514547938423")
+                .lastName("Signon").build();
+        Map<String, String> claims = new HashMap<>();
+
+        claims.put("role", monitor.getRole().toString());
+        claims.put("firstName", monitor.getFirstName());
+        claims.put("lastName", monitor.getLastName());
+        claims.put("phoneNumber", monitor.getPhoneNumber());
+        claims.put("companyName", monitor.getCompanyName());
+
+        String token = Jwts.builder()
+                .setClaims(claims)
+                .setSubject(monitor.getEmail())
+                .setIssuedAt(new Date())
+                .signWith(jwtUtil.getKey())
+                .compact();
+
+        //ACT
+        Claims returnedClaims = jwtUtil.getAllClaimsFromToken(token);
+
+        //ASSERT
+        assertEquals(monitor.getEmail(),returnedClaims.getSubject());
+        assertEquals(monitor.getFirstName(),returnedClaims.get("firstName"));
+        assertEquals(monitor.getLastName(),returnedClaims.get("lastName"));
+        assertEquals(monitor.getRole().toString(),returnedClaims.get("role"));
+        assertEquals(monitor.getPhoneNumber(),returnedClaims.get("phoneNumber"));
+        assertEquals(monitor.getCompanyName(),returnedClaims.get("companyName"));
     }
 
     @Test
