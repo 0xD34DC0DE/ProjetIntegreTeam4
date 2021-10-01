@@ -35,7 +35,7 @@ public class UserServiceTest {
     UserService userService;
 
     @Test
-    void loginSuccess() {
+    void shouldLogin() {
         //ARRANGE
         User user = User.builder().email("123456789@gmail.com").password("p@22w0rd").build();
         AuthRequestDto authRequestDto = new AuthRequestDto(user.getEmail(), user.getPassword());
@@ -56,7 +56,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void loginNoSuccess() {
+    void shouldNotLogin() {
         //ARRANGE
         User user = User.builder()
                 .email("342432423@gmail.com")
