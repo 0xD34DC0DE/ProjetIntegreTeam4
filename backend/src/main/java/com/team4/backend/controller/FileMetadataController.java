@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.model.FileMetadata;
+import com.team4.backend.model.enums.FileType;
 import com.team4.backend.service.FileAssetService;
 import com.team4.backend.service.FileMetadataService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
@@ -37,8 +39,9 @@ public class FileMetadataController {
 
     @PostMapping("/asset")
     @PreAuthorize("hasAnyAuthority('STUDENT')")
-    public Mono<ResponseEntity<Void>> storeAssetLocally(@RequestPart("file") Mono<FilePart> filePartMono, Principal loggedUser) {
-        return Mono.fromCallable(() -> File.createTempFile("projet-integre-team-4-", ".tmp"))
+    public Mono<ResponseEntity<Void>> storeAssetLocally(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("file") Mono<FilePart> filePartMono, Principal loggedUser) {
+        return Mono.fromCallable(() ->
+                File.createTempFile("projet-integre-team-4-", ".tmp"))
                 .publishOn(Schedulers.boundedElastic())
                 .flatMap(tempFile -> filePartMono
                         .flatMap(fp -> fp.transferTo(tempFile)
@@ -57,12 +60,14 @@ public class FileMetadataController {
                                         .userEmail(loggedUser.getName())
                                         .validCV(false)
                                         .assetId(assetId)
-                                        .path(null)
+                                        .type(FileType.valueOf(type))
+                                        .creationDate(LocalDateTime.now())
+                                        .filename(filename)
                                         .build()))
                                 .flatMap(fileMetadata1 -> pushAssetOnS3AndCreateMetadata(fileMetadata1, loggedUser)));
     }
 
-    public Mono<ResponseEntity<Void>> pushAssetOnS3AndCreateMetadata(@RequestBody FileMetadata fileMetadata, Principal loggedUser) {
+    public Mono<ResponseEntity<Void>>  pushAssetOnS3AndCreateMetadata(@RequestBody FileMetadata fileMetadata, Principal loggedUser) {
         // Store asset on S3 from the buffer created from a local file
         return fileMetadataService.create(fileMetadata)
                 .map(metadata -> {

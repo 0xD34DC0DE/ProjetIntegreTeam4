@@ -1,5 +1,6 @@
 import { Typography } from "@mui/material";
 import React from "react";
+import FileUpload from "./FileUpload";
 
 const Home = ({ userInformation }) => {
   return (
@@ -13,6 +14,7 @@ const Home = ({ userInformation }) => {
         ) : (
           "Hello visitor."
         )}
+        <FileUpload />
       </Typography>
     </>
   );

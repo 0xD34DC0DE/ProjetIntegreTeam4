@@ -29,19 +29,16 @@ public class FileMetadata {
 
     private FileType type;
 
-    private String path;
-
     private LocalDateTime creationDate;
 
     @Builder
-    public FileMetadata(String id, String userEmail, String assetId, String filename, boolean validCV, FileType type, String path, LocalDateTime creationDate) {
+    public FileMetadata(String id, String userEmail, String assetId, String filename, boolean validCV, FileType type, LocalDateTime creationDate) {
         this.id = id;
         this.userEmail = userEmail;
         this.assetId = assetId;
         this.filename = filename;
         this.validCV = validCV;
         this.type = type;
-        this.path = path;
         this.creationDate = creationDate;
     }
 }
