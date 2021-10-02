@@ -6,6 +6,8 @@ import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 
 @Data
@@ -17,6 +19,10 @@ public class Student extends User {
 
     private StudentState studentState;
 
+    private List<String> appliedOffersId;
+
+    private Set<String> exclusiveOffersId;
+
     @Builder(builderMethodName = "studentBuilder")
     public Student(String id,
                    String email,
@@ -25,7 +31,9 @@ public class Student extends User {
                    String password,
                    String phoneNumber,
                    StudentState studentState,
-                   LocalDate registrationDate) {
+                   LocalDate registrationDate,
+                   List<String> appliedOffersId,
+                   Set<String> exclusiveOffersId) {
         super(id,
                 email,
                 firstName,
@@ -37,6 +45,8 @@ public class Student extends User {
                 registrationDate);
         this.phoneNumber = phoneNumber;
         this.studentState = studentState;
+        this.appliedOffersId = appliedOffersId;
+        this.exclusiveOffersId = exclusiveOffersId;
     }
 
 }
