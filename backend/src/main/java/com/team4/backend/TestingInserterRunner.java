@@ -3,15 +3,15 @@ package com.team4.backend;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.model.Student;
-import com.team4.backend.model.User;
-import com.team4.backend.model.enums.Role;
-import com.team4.backend.repository.*;
+import com.team4.backend.repository.FileMetaDataRepository;
+import com.team4.backend.repository.InternshipOfferRepository;
+import com.team4.backend.repository.MonitorRepository;
+import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.cglib.core.Local;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -61,7 +61,6 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertCvs();
     }
 
-
     private void insertStudents() {
         List<Student> students = Arrays.asList(
                 Student.studentBuilder().email("123456789@gmail.com").firstName("Travis").lastName("Scott").phoneNumber("4387650987").password(pbkdf2Encoder.encode("travis123")).build(),
@@ -79,11 +78,12 @@ public class TestingInserterRunner implements ApplicationRunner {
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
 
+    //TODO --> will have to remove it to test real upload and download
     private void insertCvs() {
         List<FileMetaData> fileMetaDataList = Arrays.asList(
-                FileMetaData.builder().userEmail("123456789@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().userEmail("123456789@gmail.com").filename("cv2.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().userEmail("123456789@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build()
+                FileMetaData.builder().assetId("edsa09923easdas").userEmail("123456789@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("p90sjifkk32nk").userEmail("123456789@gmail.com").filename("cv2.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("123456789@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build()
         );
 
         fileMetaDataRepository.saveAll(fileMetaDataList).subscribe(f -> log.info("new cv file has been created: {}", f));
