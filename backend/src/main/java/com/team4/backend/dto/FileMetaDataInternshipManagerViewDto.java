@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class FileMetaDataDto implements Serializable {
+public class FileMetaDataInternshipManagerViewDto implements Serializable {
 
     @Id
     private String id;
@@ -23,11 +23,7 @@ public class FileMetaDataDto implements Serializable {
 
     private String filename;
 
-    private Boolean isValid;
-
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime creationDate;
+    private LocalDateTime uploadDate;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime seenDate;
 }

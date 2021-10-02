@@ -1,6 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.FileMetaDataDto;
+import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.service.FileMetaDataService;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +26,7 @@ public class FileMetaDataController {
 
     @GetMapping("/getListInvalidCvNotSeen/{noPage}")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Flux<FileMetaDataDto> getListInvalidCvNotSeen(@PathVariable Integer noPage) {
+    public Flux<FileMetaDataInternshipManagerViewDto> getListInvalidCvNotSeen(@PathVariable Integer noPage) {
         return fileMetaDataService.getListInvalidCvNotSeen(noPage);
     }
 

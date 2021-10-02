@@ -18,7 +18,6 @@ import java.time.LocalDateTime;
 @Document(collection = "fileMetadata")
 public class FileMetaData implements Serializable {
 
-    @Id
     private String id;
 
     private String assetId;

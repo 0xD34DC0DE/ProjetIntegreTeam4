@@ -1,6 +1,6 @@
 package com.team4.backend.service;
 
-import com.team4.backend.dto.FileMetaDataDto;
+import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.repository.FileMetaDataRepository;
 import com.team4.backend.testdata.FileMetaDataMockData;
@@ -57,7 +57,7 @@ public class FileMetaDataServiceTest {
                 ));
 
         //ACT
-        Flux<FileMetaDataDto> fileMetaDataDtoFlux = fileMetaDataService.getListInvalidCvNotSeen(noPage);
+        Flux<FileMetaDataInternshipManagerViewDto> fileMetaDataDtoFlux = fileMetaDataService.getListInvalidCvNotSeen(noPage);
 
         //ASSERT
         StepVerifier.create(fileMetaDataDtoFlux)

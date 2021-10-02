@@ -1,6 +1,6 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.FileMetaDataDto;
+import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.testdata.FileMetaDataMockData;
 import org.junit.jupiter.api.Test;
@@ -15,14 +15,12 @@ public class FileMetaDataMapperTest {
         FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
 
         //ACT
-        FileMetaDataDto fileMetaDataDto = FileMetaDataMapper.toDto(fileMetaData);
+        FileMetaDataInternshipManagerViewDto fileMetaDataInternshipManagerViewDto = FileMetaDataMapper.toDto(fileMetaData);
 
         //ASSERT
-        assertEquals(fileMetaData.getId(), fileMetaDataDto.getId());
-        assertEquals(fileMetaData.getUserEmail(), fileMetaDataDto.getUserEmail());
-        assertEquals(fileMetaData.getFilename(), fileMetaDataDto.getFilename());
-        assertEquals(fileMetaData.getIsValid(), fileMetaDataDto.getIsValid());
-        assertEquals(fileMetaData.getCreationDate(), fileMetaDataDto.getCreationDate());
-        assertEquals(fileMetaData.getSeenDate(), fileMetaDataDto.getSeenDate());
+        assertEquals(fileMetaData.getId(), fileMetaDataInternshipManagerViewDto.getId());
+        assertEquals(fileMetaData.getUserEmail(), fileMetaDataInternshipManagerViewDto.getUserEmail());
+        assertEquals(fileMetaData.getFilename(), fileMetaDataInternshipManagerViewDto.getFilename());
+        assertEquals(fileMetaData.getCreationDate(), fileMetaDataInternshipManagerViewDto.getUploadDate());
     }
 }

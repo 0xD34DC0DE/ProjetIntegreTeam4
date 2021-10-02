@@ -1,6 +1,6 @@
 package com.team4.backend.service;
 
-import com.team4.backend.dto.FileMetaDataDto;
+import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
 import com.team4.backend.mapping.FileMetaDataMapper;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.repository.FileMetaDataRepository;
@@ -27,7 +27,7 @@ public class FileMetaDataService {
         return fileMetaDataRepository.countAllByIsValidFalseAndIsSeenFalse();
     }
 
-    public Flux<FileMetaDataDto> getListInvalidCvNotSeen(Integer noPage) {
+    public Flux<FileMetaDataInternshipManagerViewDto> getListInvalidCvNotSeen(Integer noPage) {
         return fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("creationDate")))
                 .map(FileMetaDataMapper::toDto);
     }

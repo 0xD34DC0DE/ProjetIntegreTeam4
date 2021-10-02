@@ -3,10 +3,14 @@ import { ListItemIcon, ListItemAvatar } from "@mui/material";
 import DashboardCustomizeOutlinedIcon from "@mui/icons-material/DashboardCustomizeOutlined";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 
-const CvView = () => {
+const CvView = ({id,userEmail,fileName,creationDate}) => {
   return (
     <>
-      <FileCopyIcon fontSize="small" color="info" sx={} />
+      <Container>
+        <Typography>Email de l'élève: {userEmail}</Typography>
+        <Typography>Nom du fichier : {fileName}</Typography>
+        <Typography>Date de dépôt: {creationDate}</Typography>
+      </Container>
     </>
   );
 };

@@ -1,6 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.FileMetaDataDto;
+import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.service.FileMetaDataService;
 import com.team4.backend.testdata.FileMetaDataMockData;
@@ -59,7 +59,7 @@ public class FileMetaDataControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
-                .expectBodyList(FileMetaDataDto.class);
+                .expectBodyList(FileMetaDataInternshipManagerViewDto.class);
     }
 
 
