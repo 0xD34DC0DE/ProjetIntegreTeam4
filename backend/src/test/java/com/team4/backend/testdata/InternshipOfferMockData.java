@@ -1,6 +1,6 @@
 package com.team4.backend.testdata;
 
-import com.team4.backend.dto.InternshipOfferDto;
+import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.model.InternshipOffer;
 
 import java.time.LocalDate;
@@ -24,9 +24,8 @@ public abstract class InternshipOfferMockData {
                 .build();
     }
 
-    public static InternshipOfferDto getInternshipOfferDto() {
-        return InternshipOfferDto.builder()
-                .id("234dsd2egd54ter")
+    public static InternshipOfferCreationDto getInternshipOfferDto() {
+        return InternshipOfferCreationDto.builder()
                 .limitDateToApply(LocalDate.now().plusMonths(1))
                 .beginningDate(LocalDate.now().plusMonths(2))
                 .endingDate(LocalDate.now().plusMonths(6))
@@ -35,7 +34,6 @@ public abstract class InternshipOfferMockData {
                 .companyName("desjardins")
                 .emailOfMonitor("rickJones@desjardins.com")
                 .description("Développeur Web")
-                .listEmailInterestedStudents(getInterestedStudentsEmailList())
                 .build();
     }
 
