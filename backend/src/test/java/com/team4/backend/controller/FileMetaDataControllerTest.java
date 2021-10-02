@@ -50,7 +50,7 @@ public class FileMetaDataControllerTest {
     void getListInvalidCvNotSeen() {
         //ARRANGE
         Integer noPage = 0;
-        when(fileMetaDataService.getListInvalidCvNotSeen(noPage)).thenReturn(Flux.just(FileMetaDataMockData.getFileMetaDataDto()));
+        when(fileMetaDataService.getListInvalidCvNotSeen(noPage)).thenReturn(Flux.just(FileMetaDataMockData.getFileMetaDataInternshipManagerViewDto()));
 
         //ACT
         webTestClient

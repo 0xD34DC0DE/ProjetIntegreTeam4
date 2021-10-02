@@ -1,9 +1,15 @@
 import React from "react";
-import { ListItemIcon, ListItemAvatar } from "@mui/material";
-import DashboardCustomizeOutlinedIcon from "@mui/icons-material/DashboardCustomizeOutlined";
-import FileCopyIcon from "@mui/icons-material/FileCopy";
+import { Container, Typography } from "@mui/material";
 
-const CvView = ({id,userEmail,fileName,creationDate}) => {
+
+/*
+    TODO
+        1) add a condition based on role of current user connected
+            ->FileMetaDataInternshipManagerViewDto
+            ->FileMetaDataStudentViewDto
+
+*/
+const CvView = ({ id, userEmail, fileName, creationDate }) => {
   return (
     <>
       <Container>
