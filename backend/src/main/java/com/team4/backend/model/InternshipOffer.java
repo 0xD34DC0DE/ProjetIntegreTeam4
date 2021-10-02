@@ -39,7 +39,7 @@ public class InternshipOffer implements Serializable {
 
     private boolean isValidated;
 
-    private boolean isExclusive;
+    private Boolean isExclusive;
 
     private List<String> listEmailInterestedStudents;
 
