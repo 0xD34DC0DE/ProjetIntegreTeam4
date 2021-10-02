@@ -24,7 +24,7 @@ const CvInternshipManagerView = ({
   assetId,
   userEmail,
   fileName,
-  creationDate,
+  uploadDate,
 }) => {
   const download = () => {
     const url =
@@ -70,7 +70,7 @@ const CvInternshipManagerView = ({
               style={{ textDecoration: "underline", fontWeight: "bold" }}
               variant="overline"
             >
-              Date de dépôt : {creationDate}
+              Date de dépôt : {uploadDate}
             </Typography>
           </Grid>
         </CardContent>

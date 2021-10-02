@@ -25,7 +25,6 @@ public class FileMetaDataController {
     }
 
     @GetMapping("/getListInvalidCvNotSeen/{noPage}")
-    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Flux<FileMetaDataInternshipManagerViewDto> getListInvalidCvNotSeen(@PathVariable Integer noPage) {
         return fileMetaDataService.getListInvalidCvNotSeen(noPage);
     }

@@ -1,8 +1,10 @@
 package com.team4.backend;
 
 import com.team4.backend.model.FileMetaData;
+import com.team4.backend.model.InternshipManager;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.model.Student;
+import com.team4.backend.model.enums.Role;
 import com.team4.backend.repository.FileMetaDataRepository;
 import com.team4.backend.repository.InternshipOfferRepository;
 import com.team4.backend.repository.MonitorRepository;

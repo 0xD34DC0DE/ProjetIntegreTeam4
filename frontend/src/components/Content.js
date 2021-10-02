@@ -1,7 +1,7 @@
 import { Container, Typography } from "@mui/material";
 import React, { useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
-import CvInternshipManagerView from "./CvInternshipManagerView";
+import ListCvInternshipManagerView from "./ListCvInternshipManagerView";
 
 const Content = () => {
   const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
@@ -17,8 +17,7 @@ const Content = () => {
           "Hello visitor."
         )}
       </Typography>
-
-      <CvInternshipManagerView></CvInternshipManagerView>
+      <ListCvInternshipManagerView></ListCvInternshipManagerView>
     </Container>
   );
 };
