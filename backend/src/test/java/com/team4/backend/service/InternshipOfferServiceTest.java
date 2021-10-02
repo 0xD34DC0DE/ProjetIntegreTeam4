@@ -1,7 +1,7 @@
 package com.team4.backend.service;
 
-import com.team4.backend.dto.InternshipOfferDto;
-import com.team4.backend.exception.UserDoNotExistException;
+import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.repository.InternshipOfferRepository;
 import com.team4.backend.testdata.InternshipOfferMockData;
@@ -34,10 +34,8 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldCreateInternshipOffer() {
         //ARRANGE
-        InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
-
-        internshipOfferDTO.setId(null);
 
         when(monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getEmailOfMonitor())).thenReturn(Mono.just(true));
         when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
@@ -54,7 +52,7 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldNotCreateInternshipOffer() {
         //ARRANGE
-        InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
 
         when(monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getEmailOfMonitor())).thenReturn(Mono.just(false));
 
@@ -63,7 +61,7 @@ public class InternshipOfferServiceTest {
 
         //ASSERT
         StepVerifier.create(savedInternshipOffer)
-                .expectError(UserDoNotExistException.class)
+                .expectError(UserNotFoundException.class)
                 .verify();
     }
 }
