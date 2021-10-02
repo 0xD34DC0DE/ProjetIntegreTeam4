@@ -2,12 +2,10 @@ package com.team4.backend;
 
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.model.Monitor;
+import com.team4.backend.model.Student;
 import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;
-import com.team4.backend.repository.FileMetaDataRepository;
-import com.team4.backend.repository.InternshipOfferRepository;
-import com.team4.backend.repository.MonitorRepository;
-import com.team4.backend.repository.UserRepository;
+import com.team4.backend.repository.*;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +27,7 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final InternshipOfferRepository internshipOfferRepository;
 
-    private final UserRepository userRepository;
+    private final StudentRepository studentRepository;
 
     private final PBKDF2Encoder pbkdf2Encoder;
 
@@ -37,38 +35,39 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     public TestingInserterRunner(MonitorRepository monitorRepository,
                                  InternshipOfferRepository internshipOfferRepository,
-                                 UserRepository userRepository,
+                                 StudentRepository studentRepository,
                                  PBKDF2Encoder pbkdf2Encoder,
                                  FileMetaDataRepository fileMetaDataRepository) {
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
-        this.userRepository = userRepository;
+        this.studentRepository = studentRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.fileMetaDataRepository = fileMetaDataRepository;
     }
 
     @Override
     public void run(final ApplicationArguments args) {
-        userRepository.deleteAll().subscribe();
+        studentRepository.deleteAll().subscribe();
         monitorRepository.deleteAll().subscribe();
         fileMetaDataRepository.deleteAll().subscribe();
         internshipOfferRepository.deleteAll().subscribe();
 
-        insertUsers();
+        insertStudents();
 
         insertMonitors();
 
         insertCvs();
     }
 
-    private void insertUsers() {
-        List<User> users = Arrays.asList(
-                User.builder().email("123456789@gmail.com").firstName("Travis").lastName("Scott").phoneNumber("4387650987").role(Role.STUDENT).password(pbkdf2Encoder.encode("massou123")).isEnabled(true).build(),
-                User.builder().email("45673234@gmail.com").role(Role.SUPERVISOR).password(pbkdf2Encoder.encode("sasuke123")).isEnabled(true).build(),
-                User.builder().email("francoisLacoursiere@gmail.com").role(Role.INTERNSHIP_MANAGER).password(pbkdf2Encoder.encode("francois123")).isEnabled(true).build()
+
+    private void insertStudents() {
+        List<Student> students = Arrays.asList(
+                Student.studentBuilder().email("123456789@gmail.com").firstName("Travis").lastName("Scott").phoneNumber("4387650987").password(pbkdf2Encoder.encode("travis123")).build(),
+                Student.studentBuilder().email("6754358234@gmail.com").firstName("Jean").lastName("Jordan").phoneNumber("5143245678").password(pbkdf2Encoder.encode("jean123")).build(),
+                Student.studentBuilder().email("09237732@gmail.com").firstName("Farid").lastName("Shalom").phoneNumber("4385738764").password(pbkdf2Encoder.encode("farid123")).build()
         );
 
-        userRepository.saveAll(users).subscribe(u -> log.info("new user created: {}", u));
+        studentRepository.saveAll(students).subscribe(student -> log.info("Student has been saved : {}", student));
     }
 
     private void insertMonitors() {
@@ -80,11 +79,11 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private void insertCvs() {
         List<FileMetaData> fileMetaDataList = Arrays.asList(
-                FileMetaData.builder().filename("cv1.pdf").build(),
-                FileMetaData.builder().filename("cv2.pdf").build(),
-                FileMetaData.builder().filename("cv3.pdf").build()
+                FileMetaData.builder().userEmail("123456789@gmail.com").filename("cv1.pdf").build(),
+                FileMetaData.builder().userEmail("123456789@gmail.com").filename("cv2.pdf").build(),
+                FileMetaData.builder().userEmail("123456789@gmail.com").filename("cv3.pdf").build()
         );
 
-        fileMetaDataRepository.saveAll(fileMetaDataList).subscribe(f -> log.info("new cv file created: {}", f));
+        fileMetaDataRepository.saveAll(fileMetaDataList).subscribe(f -> log.info("new cv file has been created: {}", f));
     }
 }

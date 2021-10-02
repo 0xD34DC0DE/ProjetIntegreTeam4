@@ -32,7 +32,6 @@ public class FileMetaData implements Serializable {
 
     private Boolean isSeen;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime creationDate;
 
     private LocalDateTime seenDate;
