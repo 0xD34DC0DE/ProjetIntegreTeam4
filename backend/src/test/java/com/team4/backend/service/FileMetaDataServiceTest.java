@@ -49,7 +49,7 @@ public class FileMetaDataServiceTest {
     void getListInvalidCvNotSeen() {
         //ARRANGE
         Integer noPage = 0;
-        when(fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("creationDate"))))
+        when(fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("uploadDate"))))
                 .thenReturn(Flux.just(
                         FileMetaData.builder().build(),
                         FileMetaData.builder().build(),

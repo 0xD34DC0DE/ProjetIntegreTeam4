@@ -8,7 +8,7 @@ public abstract class FileMetaDataMapper {
 
     public static FileMetaDataInternshipManagerViewDto toInternshipManagerViewDto(FileMetaData fileMetaData){
         return FileMetaDataInternshipManagerViewDto.builder()
-                .id(fileMetaData.getId())
+                .assetId(fileMetaData.getAssetId())
                 .userEmail(fileMetaData.getUserEmail())
                 .filename(fileMetaData.getFilename())
                 .uploadDate(fileMetaData.getUploadDate())

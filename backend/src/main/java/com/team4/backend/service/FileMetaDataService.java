@@ -29,12 +29,11 @@ public class FileMetaDataService {
 
     //Exclusive to internshipManager so wont be used any other service or role
     public Flux<FileMetaDataInternshipManagerViewDto> getListInvalidCvNotSeen(Integer noPage) {
-        return fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("creationDate")))
+        return fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("uploadDate")))
                 .map(FileMetaDataMapper::toInternshipManagerViewDto);
     }
 
     public Mono<FileMetaData> validateCv(String id, Boolean isValid) {
-
         return fileMetaDataRepository.findById(id)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND, "Can't find cv")))
                 .map(file -> {

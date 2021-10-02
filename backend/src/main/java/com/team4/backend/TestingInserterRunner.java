@@ -11,9 +11,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.cglib.core.Local;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -79,9 +81,9 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private void insertCvs() {
         List<FileMetaData> fileMetaDataList = Arrays.asList(
-                FileMetaData.builder().userEmail("123456789@gmail.com").filename("cv1.pdf").build(),
-                FileMetaData.builder().userEmail("123456789@gmail.com").filename("cv2.pdf").build(),
-                FileMetaData.builder().userEmail("123456789@gmail.com").filename("cv3.pdf").build()
+                FileMetaData.builder().userEmail("123456789@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().userEmail("123456789@gmail.com").filename("cv2.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().userEmail("123456789@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build()
         );
 
         fileMetaDataRepository.saveAll(fileMetaDataList).subscribe(f -> log.info("new cv file has been created: {}", f));

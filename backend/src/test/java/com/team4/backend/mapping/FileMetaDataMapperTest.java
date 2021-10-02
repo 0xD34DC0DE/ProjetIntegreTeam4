@@ -6,8 +6,6 @@ import com.team4.backend.model.FileMetaData;
 import com.team4.backend.testdata.FileMetaDataMockData;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDateTime;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class FileMetaDataMapperTest {
@@ -21,7 +19,7 @@ public class FileMetaDataMapperTest {
         FileMetaDataInternshipManagerViewDto fileMetaDataInternshipManagerViewDto = FileMetaDataMapper.toInternshipManagerViewDto(fileMetaData);
 
         //ASSERT
-        assertEquals(fileMetaData.getId(), fileMetaDataInternshipManagerViewDto.getId());
+        assertEquals(fileMetaData.getAssetId(), fileMetaDataInternshipManagerViewDto.getAssetId());
         assertEquals(fileMetaData.getUserEmail(), fileMetaDataInternshipManagerViewDto.getUserEmail());
         assertEquals(fileMetaData.getFilename(), fileMetaDataInternshipManagerViewDto.getFilename());
         assertEquals(fileMetaData.getUploadDate(), fileMetaDataInternshipManagerViewDto.getUploadDate());

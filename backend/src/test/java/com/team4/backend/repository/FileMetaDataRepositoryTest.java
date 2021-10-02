@@ -33,10 +33,10 @@ public class FileMetaDataRepositoryTest {
     void init() {
 
         Flux<FileMetaData> fileMetaDataFlux = Flux.just(
-                FileMetaData.builder().build(),
-                FileMetaData.builder().build(),
-                FileMetaData.builder().build(),
-                FileMetaData.builder().build()
+                FileMetaData.builder().isValid(false).isSeen(false).build(),
+                FileMetaData.builder().isValid(false).isSeen(false).build(),
+                FileMetaData.builder().isValid(false).isSeen(true).build(),
+                FileMetaData.builder().isValid(true).isSeen(true).build()
         );
 
         fileMetaDataRepository.saveAll(fileMetaDataFlux).subscribe();
@@ -49,16 +49,16 @@ public class FileMetaDataRepositoryTest {
 
         //ASSERT
         StepVerifier.create(nbrOfFileInvalidAndNotSeen)
-                .assertNext(n -> Assertions.assertEquals(4L, n))
+                .assertNext(n -> Assertions.assertEquals(2L, n))
                 .verifyComplete();
     }
 
     @Test
     void findAllByIsValidFalseAndIsSeenFalse() {
         //ACT
-        Flux<FileMetaData> fileMetaDataFlux = fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(0, 5, Sort.by("creationDate")));
+        Flux<FileMetaData> fileMetaDataFlux = fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(0, 5, Sort.by("uploadDate")));
 
         //ASSERT
-        StepVerifier.create(fileMetaDataFlux).expectNextCount(4).verifyComplete();
+        StepVerifier.create(fileMetaDataFlux).expectNextCount(2).verifyComplete();
     }
 }

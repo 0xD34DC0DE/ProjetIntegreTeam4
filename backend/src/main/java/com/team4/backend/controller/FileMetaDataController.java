@@ -19,19 +19,19 @@ public class FileMetaDataController {
     }
 
     @GetMapping("/countAllInvalidCvNotSeen")
-    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Mono<Long> countAllInvalidCvNotSeen() {
         return fileMetaDataService.countAllInvalidCvNotSeen();
     }
 
     @GetMapping("/getListInvalidCvNotSeen/{noPage}")
-    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Flux<FileMetaDataInternshipManagerViewDto> getListInvalidCvNotSeen(@PathVariable Integer noPage) {
         return fileMetaDataService.getListInvalidCvNotSeen(noPage);
     }
 
     @PatchMapping("/validateCv")
-    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Mono<FileMetaData> validateCv(@RequestParam("id") String id, @RequestParam("isValid") Boolean isValid) {
         return fileMetaDataService.validateCv(id, isValid);
     }
