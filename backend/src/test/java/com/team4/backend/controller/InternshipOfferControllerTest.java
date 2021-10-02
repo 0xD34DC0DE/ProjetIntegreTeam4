@@ -1,7 +1,7 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.InternshipOfferDto;
-import com.team4.backend.exception.UserDoNotExistException;
+import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.service.InternshipOfferService;
 import com.team4.backend.testdata.InternshipOfferMockData;
@@ -32,7 +32,7 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldAddAnInternshipOffer() {
         //ARRANGE
-        InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
         when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.just(internshipOffer));
@@ -51,9 +51,9 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldNotAddAnInternshipOffer() {
         //ARRANGE
-        InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
 
-        when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.error(UserDoNotExistException::new));
+        when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
         webTestClient
