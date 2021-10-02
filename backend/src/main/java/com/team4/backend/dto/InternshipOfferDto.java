@@ -1,19 +1,15 @@
 package com.team4.backend.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
 
 @Data
 @NoArgsConstructor
 public class InternshipOfferDto implements Serializable {
-
-    private String id;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate limitDateToApply;
@@ -24,42 +20,27 @@ public class InternshipOfferDto implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endingDate;
 
-    private String emailOfMonitor;
-
     private String companyName;
 
     private String description;
 
-    private Float minSalary, maxSalary;
+    private Float minSalary;
 
-    private boolean isValidated;
+    private Float maxSalary;
 
-    private List<String> listEmailInterestedStudents;
-
-
-    @Builder
-    public InternshipOfferDto(String id,
-                              LocalDate limitDateToApply,
+    public InternshipOfferDto(LocalDate limitDateToApply,
                               LocalDate beginningDate,
                               LocalDate endingDate,
-                              String emailOfMonitor,
                               String companyName,
                               String description,
                               Float minSalary,
-                              Float maxSalary,
-                              boolean isValidated,
-                              List<String> listEmailInterestedStudents) {
-        this.id = id;
+                              Float maxSalary) {
         this.limitDateToApply = limitDateToApply;
         this.beginningDate = beginningDate;
         this.endingDate = endingDate;
-        this.emailOfMonitor = emailOfMonitor;
         this.companyName = companyName;
         this.description = description;
         this.minSalary = minSalary;
         this.maxSalary = maxSalary;
-        this.isValidated = isValidated;
-        this.listEmailInterestedStudents = listEmailInterestedStudents;
     }
-
 }
