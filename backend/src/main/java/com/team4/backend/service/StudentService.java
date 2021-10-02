@@ -33,4 +33,7 @@ public class StudentService {
         });
     }
 
+    public Mono<Student> getStudent(String studentEmail) {
+        return studentRepository.findByEmailAndIsEnabledTrue(studentEmail);
+    }
 }
