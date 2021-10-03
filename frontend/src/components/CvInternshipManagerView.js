@@ -1,4 +1,4 @@
-import * as React from "react";
+import React from "react";
 import {
   Card,
   CardActions,
@@ -11,6 +11,7 @@ import {
 import { blueGrey } from "@mui/material/colors";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import ApprovalIcon from "@mui/icons-material/Approval";
+import CvValidationDialog from "./CvValidationDialog";
 
 const CvInternshipManagerView = ({
   id,
@@ -18,19 +19,17 @@ const CvInternshipManagerView = ({
   userEmail,
   fileName,
   uploadDate,
-  removeCv
+  removeCv,
 }) => {
-
   const download = () => {
     const url = ""; //TODO confirm url with Erwan
     window.open("https://www.youtube.com"); //TODO --> need to change it for amazonURl
   };
 
-  const validate = () =>{
+  const validate = () => {
     //TODO call dialog
     removeCv(id);
-    
-  }
+  };
 
   return (
     <>
@@ -83,15 +82,7 @@ const CvInternshipManagerView = ({
             alignItems="center"
             justify="center"
           >
-            <Button
-              size="medium"
-              variant="contained"
-              color="success"
-              sx={{ mb: "6px" }}
-              onClick={validate}
-            >
-              VALIDER <ApprovalIcon></ApprovalIcon>
-            </Button>
+            <CvValidationDialog id={id} removeCv={removeCv}></CvValidationDialog>
             <Button
               size="medium"
               variant="contained"

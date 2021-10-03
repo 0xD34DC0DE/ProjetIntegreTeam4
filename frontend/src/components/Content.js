@@ -7,7 +7,7 @@ const Content = () => {
   const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
 
   return (
-    <Container sx={{ clear: "right", margin: "auto",textAlign: "center" }}>
+    <Container sx={{ clear: "right", margin: "auto", textAlign: "center" }}>
       <Typography variant="h4">
         {userInfo.loggedIn ? (
           <>
@@ -17,10 +17,9 @@ const Content = () => {
           "Hello visitor."
         )}
       </Typography>
-      {/* 
-      <CvValidationDialog id={"61592af0c1198a3d5a45c96e"}></CvValidationDialog>
-    */}
-    <ListCvInternshipManagerView></ListCvInternshipManagerView>
+      <div style={{overflowX:"auto",overflowY:"auto",width: "100%"}}>
+        <ListCvInternshipManagerView></ListCvInternshipManagerView>
+      </div>
     </Container>
   );
 };

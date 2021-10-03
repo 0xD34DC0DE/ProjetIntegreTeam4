@@ -7,16 +7,14 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@mui/material";
+import ApprovalIcon from "@mui/icons-material/Approval";
 import axios from "axios";
 
-const CvValidationDialog = ({ id }) => {
+const CvValidationDialog = ({ id, removeCv }) => {
   const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const validateCv = (valid) => {
+    setOpen(true);
     console.log(valid);
     {
       axios({
@@ -33,6 +31,7 @@ const CvValidationDialog = ({ id }) => {
       })
         .then((response) => {
           console.log(response);
+          removeCv(id);
           handleClose();
         })
         .catch((error) => {
@@ -47,8 +46,14 @@ const CvValidationDialog = ({ id }) => {
 
   return (
     <>
-      <Button variant="outlined" onClick={handleClickOpen}>
-        Open alert dialog
+      <Button
+        size="medium"
+        variant="contained"
+        color="success"
+        sx={{ mb: "6px" }}
+        onClick={validateCv}
+      >
+        VALIDER <ApprovalIcon></ApprovalIcon>
       </Button>
       <Dialog
         open={open}
