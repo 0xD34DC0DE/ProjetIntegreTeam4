@@ -18,7 +18,7 @@ const ListCvInternshipManagerView = () => {
       method: "GET",
       url: `http://localhost:8080/fileMetaData/getListInvalidCvNotSeen/${noPage}`,
       headers: {
-        Authorization: sessionStorage.getItem('jwt'),
+        Authorization: sessionStorage.getItem("jwt"),
       },
       responseType: "json",
     })
@@ -33,8 +33,8 @@ const ListCvInternshipManagerView = () => {
 
   return (
     <>
-      <Stack spacing={1}>
-        {cvs.map((cv,key) => (
+      <div style={{overflowY:"auto",overflowX:"auto"}}>
+        {cvs.map((cv, key) => (
           <CvInternshipManagerView
             key={key}
             assetId={cv.assetId}
@@ -43,7 +43,7 @@ const ListCvInternshipManagerView = () => {
             uploadDate={cv.uploadDate}
           />
         ))}
-      </Stack>
+      </div>
     </>
   );
 };

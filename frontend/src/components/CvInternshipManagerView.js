@@ -11,6 +11,7 @@ import {
 import { blueGrey } from "@mui/material/colors";
 import { shadows } from "@mui/system";
 import SimCardDownloadIcon from "@mui/icons-material/SimCardDownload";
+import ApprovalIcon from "@mui/icons-material/Approval";
 
 /*
     TODO
@@ -34,18 +35,20 @@ const CvInternshipManagerView = ({
       assetId; //TODO confirm url with Erwan
     window.open("https://www.youtube.com"); //TODO --> need to change it for amazonURl
   };
-  
+
   const card = (
     <>
       <Card
         variant="outlined"
         sx={{
           backgroundColor: `${blueGrey[100]}`,
-          border:"3px solid white",
+          border: "3px solid white",
           borderRadius: 4,
           width: "50%",
           boxShadow: 3,
-          margin: "auto"
+          margin: "auto",
+          marginTop: "20px",
+          marginBottom: "20px",
         }}
       >
         <CardContent>
@@ -57,19 +60,19 @@ const CvInternshipManagerView = ({
             justify="start"
           >
             <Typography
-              style={{ textDecoration: "underline", fontWeight: "bold" }}
+              style={{ fontWeight: "bold", textAlign: "start" }}
               variant="overline"
             >
               Email de l'étudiant : {userEmail}
             </Typography>
             <Typography
-              style={{ textDecoration: "underline", fontWeight: "bold" }}
+              style={{ fontWeight: "bold", textAlign: "start" }}
               variant="overline"
             >
               Nom du fichier : {fileName}
             </Typography>
             <Typography
-              style={{ textDecoration: "underline", fontWeight: "bold" }}
+              style={{ fontWeight: "bold", textAlign: "start" }}
               variant="overline"
             >
               Date de dépôt : {uploadDate}
@@ -87,11 +90,20 @@ const CvInternshipManagerView = ({
             <Button
               size="medium"
               variant="contained"
+              color="success"
+              sx={{ mb: "6px" }}
+              onClick={download}
+            >
+              VALIDER<ApprovalIcon></ApprovalIcon>
+            </Button>
+            <Button
+              size="medium"
+              variant="contained"
               color="primary"
               sx={{ mb: "6px" }}
               onClick={download}
             >
-              DOWNLOAD<SimCardDownloadIcon></SimCardDownloadIcon>
+              TÉLÉCHARGER<SimCardDownloadIcon></SimCardDownloadIcon>
             </Button>
           </Grid>
         </CardActions>
