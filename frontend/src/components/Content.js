@@ -17,9 +17,7 @@ const Content = () => {
           "Hello visitor."
         )}
       </Typography>
-      <div style={{overflowX:"auto",overflowY:"auto",width: "100%"}}>
         <ListCvInternshipManagerView></ListCvInternshipManagerView>
-      </div>
     </Container>
   );
 };

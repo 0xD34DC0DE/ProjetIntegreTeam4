@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Button } from "@mui/material";
+import { Button, Hidden } from "@mui/material";
 import axios from "axios";
 import CvInternshipManagerView from "./CvInternshipManagerView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -49,7 +49,7 @@ const ListCvInternshipManagerView = () => {
 
   return (
     <>
-      <div style={{ overflow: "auto" }}>
+      <div style={{ overflow: "auto", height: "600px",margin:"auto" }}>
         {cvs.map((cv, key) => (
           <CvInternshipManagerView
             key={key}
@@ -62,7 +62,6 @@ const ListCvInternshipManagerView = () => {
           />
         ))}
       </div>
-
       <div>
         {hasMoreElement ? (
           <Button
