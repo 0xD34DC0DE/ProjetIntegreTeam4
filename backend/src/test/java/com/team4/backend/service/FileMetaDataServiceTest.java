@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
+import com.team4.backend.exception.FileDoNotExistException;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.repository.FileMetaDataRepository;
 import com.team4.backend.testdata.FileMetaDataMockData;
@@ -96,7 +97,7 @@ public class FileMetaDataServiceTest {
 
         //ASSERT
         StepVerifier.create(fileMetaDataMono)
-                .expectError(ResponseStatusException.class)
+                .expectError(FileDoNotExistException.class)
                 .verify();
     }
 }

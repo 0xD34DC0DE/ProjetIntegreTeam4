@@ -1,11 +1,10 @@
-import React, {useState, useEffect, useContext} from "react";
-import { Stack } from '@mui/material'
+import React, { useState, useEffect, useContext } from "react";
+import { Stack } from "@mui/material";
 import axios from "axios";
 import CvInternshipManagerView from "./CvInternshipManagerView";
-import { UserInfoContext } from '../stores/UserInfoStore';
+import { UserInfoContext } from "../stores/UserInfoStore";
 
 const ListCvInternshipManagerView = () => {
-    const [userInfo] = useContext(UserInfoContext)
   const [cvs, setCvs] = useState([]);
   const noPage = 0;
 
@@ -14,12 +13,12 @@ const ListCvInternshipManagerView = () => {
   }, []);
 
   const getCvs = () => {
-      console.log(global.token);
+    console.log(global.token);
     axios({
       method: "GET",
       url: `http://localhost:8080/fileMetaData/getListInvalidCvNotSeen/${noPage}`,
       headers: {
-        Authorization: global.token,
+        Authorization: sessionStorage.getItem('jwt'),
       },
       responseType: "json",
     })
@@ -34,9 +33,10 @@ const ListCvInternshipManagerView = () => {
 
   return (
     <>
-      <Stack>
-        {cvs.map((cv) => (
+      <Stack spacing={1}>
+        {cvs.map((cv,key) => (
           <CvInternshipManagerView
+            key={key}
             assetId={cv.assetId}
             userEmail={cv.userEmail}
             fileName={cv.fileName}

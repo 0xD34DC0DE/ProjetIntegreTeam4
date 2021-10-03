@@ -38,12 +38,14 @@ const CvInternshipManagerView = ({
   const card = (
     <>
       <Card
-        style={{ margin: "auto", width: "50%", border: "3px solid white" }}
         variant="outlined"
         sx={{
           backgroundColor: `${blueGrey[100]}`,
+          border:"3px solid white",
           borderRadius: 4,
+          width: "50%",
           boxShadow: 3,
+          margin: "auto"
         }}
       >
         <CardContent>

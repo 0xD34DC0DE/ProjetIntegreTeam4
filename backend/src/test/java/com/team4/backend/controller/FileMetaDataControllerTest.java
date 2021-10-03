@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
+import com.team4.backend.exception.FileDoNotExistException;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.service.FileMetaDataService;
 import com.team4.backend.testdata.FileMetaDataMockData;
@@ -49,10 +50,12 @@ public class FileMetaDataControllerTest {
     @Test
     void getListInvalidCvNotSeen() {
         //ARRANGE
+
         Integer noPage = 0;
         when(fileMetaDataService.getListInvalidCvNotSeen(noPage)).thenReturn(Flux.just(FileMetaDataMockData.getFileMetaDataInternshipManagerViewDto()));
 
         //ACT
+
         webTestClient
                 .get()
                 .uri("/fileMetaData/getListInvalidCvNotSeen/" + noPage)
@@ -64,7 +67,7 @@ public class FileMetaDataControllerTest {
 
 
     @Test
-    void validateCv() {
+    void shouldValidateCv() {
         //ARRANGE
         FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
 
@@ -82,6 +85,28 @@ public class FileMetaDataControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
-                .expectBodyList(FileMetaData.class);
+                .expectBodyList(String.class);
+    }
+
+    @Test
+    void shouldNotValidateCv() {
+        //ARRANGE
+        FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
+
+        when(fileMetaDataService.validateCv(fileMetaData.getId(), true)).thenReturn(Mono.error(FileDoNotExistException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/fileMetaData/validateCv")
+                                .queryParam("id", fileMetaData.getId())
+                                .queryParam("isValid", true)
+                                .build())
+                .exchange()
+                //ASSERT
+                .expectStatus().isNotFound()
+                .expectBodyList(String.class);
     }
 }
