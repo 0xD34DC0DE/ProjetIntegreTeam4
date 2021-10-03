@@ -13,16 +13,24 @@ import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import ApprovalIcon from "@mui/icons-material/Approval";
 
 const CvInternshipManagerView = ({
+  id,
   assetId,
   userEmail,
   fileName,
   uploadDate,
+  removeCv
 }) => {
 
   const download = () => {
     const url = ""; //TODO confirm url with Erwan
     window.open("https://www.youtube.com"); //TODO --> need to change it for amazonURl
   };
+
+  const validate = () =>{
+    //TODO call dialog
+    removeCv(id);
+    
+  }
 
   return (
     <>
@@ -80,7 +88,7 @@ const CvInternshipManagerView = ({
               variant="contained"
               color="success"
               sx={{ mb: "6px" }}
-              onClick={download}
+              onClick={validate}
             >
               VALIDER <ApprovalIcon></ApprovalIcon>
             </Button>

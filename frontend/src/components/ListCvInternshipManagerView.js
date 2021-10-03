@@ -41,16 +41,24 @@ const ListCvInternshipManagerView = () => {
     getCvs();
   };
 
+  const removeCv = (id) => {
+    console.log(id);
+    setCvs(cvs.filter((cv) => cv.id != id));
+    console.log(cvs);
+  };
+
   return (
     <>
       <div style={{ overflow: "auto" }}>
         {cvs.map((cv, key) => (
           <CvInternshipManagerView
             key={key}
+            id={cv.id}
             assetId={cv.assetId}
             userEmail={cv.userEmail}
             fileName={cv.fileName}
             uploadDate={cv.uploadDate}
+            removeCv={removeCv}
           />
         ))}
       </div>
