@@ -1,7 +1,7 @@
 import { Container, Typography } from "@mui/material";
 import React, { useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
-import ListCvInternshipManagerView from "./ListCvInternshipManagerView";
+import CvValidationDialog from "./CvValidationDialog";
 
 const Content = () => {
   const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
@@ -17,7 +17,7 @@ const Content = () => {
           "Hello visitor."
         )}
       </Typography>
-      <ListCvInternshipManagerView></ListCvInternshipManagerView>
+      <CvValidationDialog id={"61592af0c1198a3d5a45c96e"}></CvValidationDialog>
     </Container>
   );
 };

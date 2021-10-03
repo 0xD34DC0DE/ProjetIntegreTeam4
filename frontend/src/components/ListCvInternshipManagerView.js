@@ -14,7 +14,6 @@ const ListCvInternshipManagerView = () => {
   }, []);
 
   const getCvs = () => {
-    console.log(global.token);
     axios({
       method: "GET",
       url: `http://localhost:8080/fileMetaData/getListInvalidCvNotSeen/${noPage}`,
@@ -44,7 +43,7 @@ const ListCvInternshipManagerView = () => {
 
   return (
     <>
-      <div style={{ overflowY: "auto", overflowX: "auto" }}>
+      <div style={{ overflow: "auto" }}>
         {cvs.map((cv, key) => (
           <CvInternshipManagerView
             key={key}
@@ -62,10 +61,10 @@ const ListCvInternshipManagerView = () => {
             size="medium"
             variant="contained"
             color="primary"
-            sx={{ mb: "6px" }}
+            sx={{ mb: "100px", mt: "50px" }}
             onClick={loadMore}
           >
-            LOAD MORE<ExpandMoreIcon></ExpandMoreIcon>
+            LOAD MORE <ExpandMoreIcon></ExpandMoreIcon>
           </Button>
         ) : null}
       </div>

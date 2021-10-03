@@ -19,6 +19,7 @@ public class FileMetaDataMapperTest {
         FileMetaDataInternshipManagerViewDto fileMetaDataInternshipManagerViewDto = FileMetaDataMapper.toInternshipManagerViewDto(fileMetaData);
 
         //ASSERT
+        assertEquals(fileMetaData.getId(),fileMetaDataInternshipManagerViewDto.getId());
         assertEquals(fileMetaData.getAssetId(), fileMetaDataInternshipManagerViewDto.getAssetId());
         assertEquals(fileMetaData.getUserEmail(), fileMetaDataInternshipManagerViewDto.getUserEmail());
         assertEquals(fileMetaData.getFilename(), fileMetaDataInternshipManagerViewDto.getFilename());

@@ -21,6 +21,7 @@ public abstract class FileMetaDataMockData {
 
     public static FileMetaDataInternshipManagerViewDto getFileMetaDataInternshipManagerViewDto() {
         return FileMetaDataInternshipManagerViewDto.builder()
+                .id("90ksj30sak2")
                 .assetId("90osd0=34329dsk342")
                 .userEmail("123456@gmail.com")
                 .filename("CV.pdf")

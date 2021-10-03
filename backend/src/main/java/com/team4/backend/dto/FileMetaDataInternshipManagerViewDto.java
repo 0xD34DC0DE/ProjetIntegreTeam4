@@ -15,6 +15,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class FileMetaDataInternshipManagerViewDto implements Serializable {
 
+    public String id;
+
     private String assetId;
 
     private String userEmail;

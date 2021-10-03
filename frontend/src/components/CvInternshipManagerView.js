@@ -9,17 +9,8 @@ import {
   Button,
 } from "@mui/material";
 import { blueGrey } from "@mui/material/colors";
-import { shadows } from "@mui/system";
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import ApprovalIcon from "@mui/icons-material/Approval";
-
-/*
-    TODO
-        1) add a condition based on role of current user connected it will return necessary fields
-            ->FileMetaDataInternshipManagerViewDto
-            ->FileMetaDataStudentViewDto
-
-*/
 
 const CvInternshipManagerView = ({
   assetId,
@@ -27,16 +18,13 @@ const CvInternshipManagerView = ({
   fileName,
   uploadDate,
 }) => {
+
   const download = () => {
-    const url =
-      "https://907028119533.signin.aws.amazon.com/console/" +
-      userEmail +
-      "/" +
-      assetId; //TODO confirm url with Erwan
+    const url = ""; //TODO confirm url with Erwan
     window.open("https://www.youtube.com"); //TODO --> need to change it for amazonURl
   };
 
-  const card = (
+  return (
     <>
       <Card
         variant="outlined"
@@ -94,7 +82,7 @@ const CvInternshipManagerView = ({
               sx={{ mb: "6px" }}
               onClick={download}
             >
-              VALIDER<ApprovalIcon></ApprovalIcon>
+              VALIDER <ApprovalIcon></ApprovalIcon>
             </Button>
             <Button
               size="medium"
@@ -103,15 +91,13 @@ const CvInternshipManagerView = ({
               sx={{ mb: "6px" }}
               onClick={download}
             >
-              TÉLÉCHARGER<CloudDownloadIcon></CloudDownloadIcon>
+              TÉLÉCHARGER <CloudDownloadIcon></CloudDownloadIcon>
             </Button>
           </Grid>
         </CardActions>
       </Card>
     </>
   );
-
-  return <>{card}</>;
 };
 
 export default CvInternshipManagerView;
