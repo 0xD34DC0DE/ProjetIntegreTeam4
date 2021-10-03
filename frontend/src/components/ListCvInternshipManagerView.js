@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
-import { Stack } from "@mui/material";
+import { Button } from "@mui/material";
 import axios from "axios";
 import CvInternshipManagerView from "./CvInternshipManagerView";
-import { UserInfoContext } from "../stores/UserInfoStore";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const ListCvInternshipManagerView = () => {
+  const [noPage, setNoPage] = useState(0);
   const [cvs, setCvs] = useState([]);
-  const noPage = 0;
+  const [hasMoreElement, setHasMoreElement] = useState(true);
 
   useEffect(() => {
     getCvs();
@@ -23,17 +24,27 @@ const ListCvInternshipManagerView = () => {
       responseType: "json",
     })
       .then((response) => {
-        setCvs(response.data);
-        console.log(response.data);
+        if (response.data.length > 0) {
+          setCvs(cvs.concat(response.data));
+          setNoPage(noPage + 1);
+          console.log(noPage);
+          console.log(response.data);
+        } else {
+          setHasMoreElement(false);
+        }
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
+  const loadMore = () => {
+    getCvs();
+  };
+
   return (
     <>
-      <div style={{overflowY:"auto",overflowX:"auto"}}>
+      <div style={{ overflowY: "auto", overflowX: "auto" }}>
         {cvs.map((cv, key) => (
           <CvInternshipManagerView
             key={key}
@@ -43,6 +54,20 @@ const ListCvInternshipManagerView = () => {
             uploadDate={cv.uploadDate}
           />
         ))}
+      </div>
+
+      <div>
+        {hasMoreElement ? (
+          <Button
+            size="medium"
+            variant="contained"
+            color="primary"
+            sx={{ mb: "6px" }}
+            onClick={loadMore}
+          >
+            LOAD MORE<ExpandMoreIcon></ExpandMoreIcon>
+          </Button>
+        ) : null}
       </div>
     </>
   );

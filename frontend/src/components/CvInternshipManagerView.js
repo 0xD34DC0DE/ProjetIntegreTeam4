@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { blueGrey } from "@mui/material/colors";
 import { shadows } from "@mui/system";
-import SimCardDownloadIcon from "@mui/icons-material/SimCardDownload";
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import ApprovalIcon from "@mui/icons-material/Approval";
 
 /*
@@ -103,7 +103,7 @@ const CvInternshipManagerView = ({
               sx={{ mb: "6px" }}
               onClick={download}
             >
-              TÉLÉCHARGER<SimCardDownloadIcon></SimCardDownloadIcon>
+              TÉLÉCHARGER<CloudDownloadIcon></CloudDownloadIcon>
             </Button>
           </Grid>
         </CardActions>
