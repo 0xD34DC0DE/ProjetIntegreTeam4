@@ -15,6 +15,8 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -48,6 +50,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertUsers();
 
         insertMonitors();
+        insertInternshipOffers();
     }
 
     private void insertUsers() {
@@ -65,6 +68,37 @@ public class TestingInserterRunner implements ApplicationRunner {
                 .email("9182738492@gmail.com").password(pbkdf2Encoder.encode("lao@dkv23")).build();
 
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
+    }
+
+    private void insertInternshipOffers(){
+        List<InternshipOffer> internshipOffers = Arrays.asList(
+                    InternshipOffer.builder()
+                        .limitDateToApply(LocalDate.now())
+                        .beginningDate(LocalDate.now().plusDays(30))
+                        .endingDate(LocalDate.now().plusMonths(3))
+                        .emailOfMonitor("9182738492@gmail.com")
+                        .companyName("Umaknow")
+                        .description("React FrontEnd Developper")
+                        .minSalary(19.0f)
+                        .maxSalary(22.0f)
+                        .isValidated(false)
+                        .isExclusive(false)
+                        .build(),
+                InternshipOffer.builder()
+                        .limitDateToApply(LocalDate.now())
+                        .beginningDate(LocalDate.now().plusDays(30))
+                        .endingDate(LocalDate.now().plusMonths(3))
+                        .emailOfMonitor("9182738492@gmail.com")
+                        .companyName("Umaknow")
+                        .description(".NET Developper")
+                        .minSalary(19.0f)
+                        .maxSalary(22.0f)
+                        .isValidated(false)
+                        .isExclusive(false)
+                        .build()
+        );
+
+        internshipOfferRepository.saveAll(internshipOffers).subscribe();
     }
 
 }

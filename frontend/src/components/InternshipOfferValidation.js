@@ -13,6 +13,7 @@ import {
 import { fontWeight } from "@mui/system";
 import axios from "axios";
 import React from "react";
+import { useHistory } from "react-router";
 import { UserInfoContext } from "../stores/UserInfoStore";
 const emptyOffer = {
   limitDateToApply: new Date(),
@@ -26,7 +27,8 @@ const emptyOffer = {
 };
 function InternshipOfferValidation() {
   const [unvalidatedOffers, setUnvalidatedOffers] = React.useState([]);
-  const [userInformation] = React.useContext(UserInfoContext);
+  const history = useHistory();
+  const [userInfo] = React.useContext(UserInfoContext);
   const [token, setToken] = React.useState(sessionStorage.getItem("jwt"));
   React.useEffect(() => {
     const getUnvalidatedInternshipOffers = async () => {
@@ -41,16 +43,24 @@ function InternshipOfferValidation() {
       console.log("res data", response.data);
       setUnvalidatedOffers(response.data);
     };
+
+    const goBackToHome = () => {
+      if (!userInfo.loggedIn) {
+        history.push("/");
+      }
+    };
+    goBackToHome();
     getUnvalidatedInternshipOffers();
-  }, []);
+  }, [userInfo]);
+
   return (
     <>
       {unvalidatedOffers.length > 0 && (
         <Table>
-          <TableHead>
+          <TableHead sx={{ textAlign: "center" }}>
             {Object.keys(emptyOffer).map((offerKey, key) => {
               return (
-                <TableCell sx={{ font: "bold" }} key={key}>
+                <TableCell key={key} sx={{ borderBottom: 0 }}>
                   {offerKey}
                 </TableCell>
               );
@@ -59,14 +69,11 @@ function InternshipOfferValidation() {
           {unvalidatedOffers.map((offer, key) => {
             return (
               <>
-                <TableBody key={key}>
-                  <TableCell>
-                    {Object.values(offer).map((offerKey, key) => {
-                      return <ListItemText key={key}>{offerKey}</ListItemText>;
-                    })}
-                  </TableCell>
+                <TableBody key={key} sx={{ textAlign: "center" }}>
+                  {Object.values(offer).map((offerValue, key) => {
+                    return <TableCell key={key}>{offerValue}</TableCell>;
+                  })}
                 </TableBody>
-                <Divider />
               </>
             );
           })}
