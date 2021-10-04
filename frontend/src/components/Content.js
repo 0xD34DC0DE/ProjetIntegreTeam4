@@ -2,6 +2,7 @@ import { Container, Typography } from "@mui/material";
 import React, { useContext } from "react";
 import { styled, useTheme } from "@mui/material/styles";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import InternshipOfferValidation from "./InternshipOfferValidation";
 
 const drawerWidth = 25;
 const Main = styled("main", { shouldForwardProp: (prop) => prop })(
@@ -12,7 +13,8 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop })(
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: 0,
+    margin: "auto",
+    textAlign: "center",
     ...(open && {
       transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.easeOut,
@@ -26,7 +28,6 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop })(
 // Ici je n'ai pas déconstruit, ça provoque une erreur dans la console.
 const Content = (props) => {
   const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
-
   return (
     <Main open={props.open}>
       <Typography
@@ -37,7 +38,7 @@ const Content = (props) => {
       >
         {userInfo.loggedIn ? (
           <>
-            Hello {userInfo.role.toLowerCase()}, {userInfo.email}{" "}
+            Hello {userInfo.role.toLowerCase()}, {userInfo.email}
           </>
         ) : (
           "Hello visitor."

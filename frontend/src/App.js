@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { BrowserRouter, Redirect, Switch } from "react-router-dom";
 import "./App.css";
 import Content from "./components/Content";
+import InternshipOfferValidation from "./components/InternshipOfferValidation";
 import TopBar from "./components/TopBar";
 import UserInfoStore, { UserInfoContext } from "./stores/UserInfoStore";
 
@@ -30,7 +31,8 @@ function App() {
             intershipOfferDialogVisible={dialogVisibility.internshipOfferDialog}
           />
           <Switch>
-            <Content open={open} setOpen={setOpen}></Content>
+            <Content open={open} setOpen={setOpen} exact path="/"></Content>
+            <InternshipOfferValidation exact path="/offer" />
           </Switch>
           <UserInfoContext.Consumer>
             {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}

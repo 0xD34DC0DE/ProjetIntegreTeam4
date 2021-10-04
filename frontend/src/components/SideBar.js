@@ -17,6 +17,7 @@ import React, { useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { drawerListDialogs } from "../models/drawerListItems";
 import OfferForm from "./OfferForm";
+import { useHistory } from "react-router-dom";
 
 const drawerWidth = 25;
 const DrawerHeader = styled("div")(({ theme }) => ({
@@ -37,6 +38,7 @@ function SideBar({
   toggleDialogs,
 }) {
   const [userInfo] = useContext(UserInfoContext);
+  const history = useHistory();
 
   const toggleDrawer = () => {
     console.log("open", open);
@@ -72,7 +74,8 @@ function SideBar({
                 <ListItemButton
                   key={key}
                   onClick={() => {
-                    toggleDialogs(item.name, true);
+                    history.push("/offer");
+                    //toggleDialogs(item.name, true);
                   }}
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>
