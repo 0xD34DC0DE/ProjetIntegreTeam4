@@ -1,5 +1,6 @@
 package com.team4.backend;
 
+import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;

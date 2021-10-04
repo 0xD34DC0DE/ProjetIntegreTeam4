@@ -22,8 +22,6 @@ public class StudentMapperTest {
         assertEquals(dto.getPassword(), entity.getPassword());
         assertEquals(dto.getFirstName(), entity.getFirstName());
         assertEquals(dto.getLastName(), entity.getLastName());
-        assertEquals(dto.getRegistrationNumber(), entity.getRegistrationNumber());
-        assertEquals(dto.getSchoolName(), entity.getSchoolName());
         assertEquals(dto.getPhoneNumber(), entity.getPhoneNumber());
         assertEquals(dto.getStudentState(), entity.getStudentState());
         assertEquals(dto.getRegistrationDate(), entity.getRegistrationDate());
