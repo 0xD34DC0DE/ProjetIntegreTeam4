@@ -28,7 +28,7 @@ public class UserService {
     public Mono<String> login(AuthRequestDto authRequestDto) {
         return userRepository.findByEmailAndPasswordAndIsEnabledTrue(authRequestDto.getEmail(), pbkdf2Encoder.encode(authRequestDto.getPassword()))
                 .map(jwtUtil::generateToken)
-                .switchIfEmpty(Mono.error(WrongCredentialsException::new));
+                .switchIfEmpty(Mono.error(new WrongCredentialsException("Wrong credentials!")));
     }
 
     public Mono<Boolean> existsByEmail(String email) {

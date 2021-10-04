@@ -1,9 +1,11 @@
 package com.team4.backend.dto;
 
-import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;

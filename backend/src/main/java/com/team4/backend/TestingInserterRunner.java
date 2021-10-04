@@ -52,7 +52,7 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private void insertUsers() {
         List<User> users = Arrays.asList(
-                User.builder().email("123456789@gmail.com").role(Role.STUDENT).password(pbkdf2Encoder.encode("massou123")).isEnabled(true).build(),
+                User.builder().email("123456789@gmail.com").firstName("Travis").lastName("Scott").phoneNumber("4387650987").role(Role.STUDENT).password(pbkdf2Encoder.encode("massou123")).isEnabled(true).build(),
                 User.builder().email("45673234@gmail.com").role(Role.SUPERVISOR).password(pbkdf2Encoder.encode("sasuke123")).isEnabled(true).build(),
                 User.builder().email("francoisLacoursiere@gmail.com").role(Role.INTERNSHIP_MANAGER).password(pbkdf2Encoder.encode("francois123")).isEnabled(true).build()
         );
@@ -66,4 +66,5 @@ public class TestingInserterRunner implements ApplicationRunner {
 
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
+
 }

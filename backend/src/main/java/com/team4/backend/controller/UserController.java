@@ -14,15 +14,15 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService){
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
     @PostMapping("/login")
-    public Mono<ResponseEntity<String>> login(@RequestBody AuthRequestDto authRequestDto){
+    public Mono<ResponseEntity<String>> login(@RequestBody AuthRequestDto authRequestDto) {
         return userService.login(authRequestDto)
                 .flatMap(token -> Mono.just(ResponseEntity.ok().body(token)))
-                .onErrorReturn(WrongCredentialsException.class,ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error.getMessage())));
     }
 
     @GetMapping("/email/{email}")

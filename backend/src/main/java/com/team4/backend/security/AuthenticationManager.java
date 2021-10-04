@@ -33,4 +33,5 @@ public class AuthenticationManager implements ReactiveAuthenticationManager {
                                 Arrays.asList(new SimpleGrantedAuthority(jwtUtil.getAllClaimsFromToken(authToken).get("role").toString())))
                         : new UsernamePasswordAuthenticationToken("", ""));
     }
+
 }

@@ -108,4 +108,5 @@ public abstract class InternshipOfferMockData {
     public static List<String> getInterestedStudentsEmailList() {
         return Arrays.asList("student1@email.com", "student2@email.com");
     }
+    
 }

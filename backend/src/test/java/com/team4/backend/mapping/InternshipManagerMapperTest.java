@@ -5,7 +5,8 @@ import com.team4.backend.model.InternshipManager;
 import com.team4.backend.testdata.InternshipManagerMockData;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class InternshipManagerMapperTest {
 
@@ -45,4 +46,5 @@ public class InternshipManagerMapperTest {
         assertEquals(internshipManagerDto.getPhoneNumber(), internshipManager.getPhoneNumber());
         assertEquals(internshipManagerDto.getRegistrationDate(), internshipManager.getRegistrationDate());
     }
+
 }

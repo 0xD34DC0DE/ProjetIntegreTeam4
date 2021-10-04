@@ -6,7 +6,6 @@ import com.team4.backend.model.Monitor;
 import com.team4.backend.service.MonitorService;
 import com.team4.backend.service.UserService;
 import com.team4.backend.testdata.MonitorMockData;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

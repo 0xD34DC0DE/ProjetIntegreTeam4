@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ContextConfiguration(classes ={InternshipManagerRepository.class})
+@ContextConfiguration(classes = {InternshipManagerRepository.class})
 public class InternshipManagerRepositoryTest {
 
     @Autowired

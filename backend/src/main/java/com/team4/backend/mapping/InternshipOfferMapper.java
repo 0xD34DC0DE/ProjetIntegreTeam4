@@ -37,4 +37,5 @@ public abstract class InternshipOfferMapper {
                 .listEmailInterestedStudents(internshipOffer.getListEmailInterestedStudents())
                 .isValidated(internshipOffer.isValidated()).build();
     }
+
 }

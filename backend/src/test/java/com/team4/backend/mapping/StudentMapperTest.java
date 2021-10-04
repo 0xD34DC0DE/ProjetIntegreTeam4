@@ -5,7 +5,8 @@ import com.team4.backend.model.Student;
 import com.team4.backend.testdata.StudentMockData;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class StudentMapperTest {
 
@@ -18,6 +19,7 @@ public class StudentMapperTest {
         Student entity = StudentMapper.toEntity(dto);
 
         //ASSERT
+        assertNull(entity.getId());
         assertEquals(dto.getEmail(), entity.getEmail());
         assertEquals(dto.getPassword(), entity.getPassword());
         assertEquals(dto.getFirstName(), entity.getFirstName());
@@ -46,4 +48,5 @@ public class StudentMapperTest {
         assertEquals(entity.getStudentState(), dto.getStudentState());
         assertEquals(entity.getRegistrationDate(), dto.getRegistrationDate());
     }
+
 }

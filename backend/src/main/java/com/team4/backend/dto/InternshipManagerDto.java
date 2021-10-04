@@ -31,4 +31,5 @@ public class InternshipManagerDto extends UserDto implements Serializable {
                 phoneNumber,
                 Role.INTERNSHIP_MANAGER);
     }
+
 }

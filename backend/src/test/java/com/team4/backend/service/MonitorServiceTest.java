@@ -5,8 +5,6 @@ import com.team4.backend.model.Monitor;
 import com.team4.backend.repository.MonitorRepository;
 import com.team4.backend.testdata.MonitorMockData;
 import com.team4.backend.util.PBKDF2Encoder;
-import com.team4.backend.exception.DoNotExistException;
-import com.team4.backend.repository.MonitorRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -63,7 +61,8 @@ public class MonitorServiceTest {
 
         //ASSERT
         StepVerifier.create(monitorDoNotExist)
-                .verifyError(DoNotExistException.class);
+                .assertNext(Assertions::assertFalse)
+                .verifyComplete();
     }
 
     @Test
@@ -73,9 +72,9 @@ public class MonitorServiceTest {
         monitor.setId(null); // Frontend gives null id
 
         when(monitorRepository.save(any(Monitor.class)))
-                .thenReturn(Mono.just(monitor).map(v -> {
-                            v.setId("615259e03835be1f53bd49e4");
-                            return v;
+                .thenReturn(Mono.just(monitor).map(m -> {
+                            m.setId("615259e03835be1f53bd49e4");
+                            return m;
                         }
                 ));
 
