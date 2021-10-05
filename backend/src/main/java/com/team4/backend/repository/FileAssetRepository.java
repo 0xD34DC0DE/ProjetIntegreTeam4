@@ -3,6 +3,7 @@ package com.team4.backend.repository;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.*;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
@@ -17,8 +18,8 @@ public class FileAssetRepository {
 
     public Mono<PutObjectResult> create(String location, InputStream fileStream, Map<String, String> options) throws FileNotFoundException {
         ObjectMetadata metadata = new ObjectMetadata();
-        options.forEach(metadata::addUserMetadata);
-
+//        options.forEach(metadata::addUserMetadata);
+        metadata.setContentType(options.get(HttpHeaders.CONTENT_TYPE));
         return Mono.just(
                 amazonS3.putObject(
                         new PutObjectRequest("projetintegreteam4", location, fileStream, metadata)

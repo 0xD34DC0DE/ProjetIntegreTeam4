@@ -37,9 +37,9 @@ public class FileMetadataController {
         return Mono.just(ResponseEntity.status(HttpStatus.OK).body(fileMetadata));
     }
 
-    @PostMapping("/asset")
+    @PostMapping
     @PreAuthorize("hasAnyAuthority('STUDENT')")
-    public Mono<ResponseEntity<Void>> storeAssetLocally(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("file") Mono<FilePart> filePartMono, Principal loggedUser) {
+    public Mono<ResponseEntity<Void>> uploadFile(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("mimeType") String mimeType, @RequestPart("file") Mono<FilePart> filePartMono, Principal loggedUser) {
         return Mono.fromCallable(() ->
                 File.createTempFile("projet-integre-team-4-", ".tmp"))
                 .publishOn(Schedulers.boundedElastic())
@@ -54,7 +54,7 @@ public class FileMetadataController {
                                 .switchIfEmpty(Mono.just(tempFile)))
                 )
                 .flatMap(tempFile ->
-                        fileAssetService.create(tempFile.getPath(), loggedUser.getName())
+                        fileAssetService.create(tempFile.getPath(), loggedUser.getName(), mimeType)
                                 .flatMap(assetId -> Mono.just(FileMetadata.builder()
                                         .id(UUID.randomUUID().toString())
                                         .userEmail(loggedUser.getName())
@@ -64,7 +64,7 @@ public class FileMetadataController {
                                         .creationDate(LocalDateTime.now())
                                         .filename(filename)
                                         .build()))
-                                .flatMap(fileMetadata1 -> pushAssetOnS3AndCreateMetadata(fileMetadata1, loggedUser)));
+                                .flatMap(fileMetadata -> pushAssetOnS3AndCreateMetadata(fileMetadata, loggedUser)));
     }
 
     public Mono<ResponseEntity<Void>>  pushAssetOnS3AndCreateMetadata(@RequestBody FileMetadata fileMetadata, Principal loggedUser) {

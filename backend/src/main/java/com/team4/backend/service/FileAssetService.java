@@ -21,14 +21,17 @@ public class FileAssetService {
     @Autowired
     FileAssetRepository fileAssetRepository;
 
-    public Mono<String> create(String filePath, String userId) {
+    public Mono<String> create(String filePath, String userId, String mimeType) {
+
+        System.out.println(mimeType);
 
         return Mono.fromCallable(() -> {
             FileInputStream file = new FileInputStream(filePath);
 
             Map<String, String> metadata = new HashMap<>();
-            metadata.put(HttpHeaders.CONTENT_TYPE, String.valueOf(Files.size(Path.of(filePath))));
-            metadata.put(HttpHeaders.CONTENT_LENGTH, String.valueOf(Files.size(Path.of(filePath))));
+            metadata.put(HttpHeaders.CONTENT_TYPE, mimeType);
+            metadata.put(HttpHeaders.ETAG, "comme tu veux");
+//            metadata.put(HttpHeaders.CONTENT_LENGTH, String.valueOf(Files.size(Path.of(filePath))));
 
             UUID assetId = UUID.randomUUID();
             String location = userId + "/" + assetId;

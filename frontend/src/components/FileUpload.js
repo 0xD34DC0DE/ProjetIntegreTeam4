@@ -9,17 +9,18 @@ const FileUpload = () => {
         let pathFilenameExtension = document.getElementById('file').value;
         let filenameExtension = pathFilenameExtension.split(/(\\|\/)/g).pop();
         let filename = filenameExtension.substr(0, filenameExtension.lastIndexOf('.')) || filenameExtension;
-        console.log('filename', filename);
+        let mimeType = 'application/pdf';
 
         const data = new FormData(evt.target);
         data.append('filename', filename);
+        data.append('mimeType', mimeType);
         axios({
             method: "POST",
             baseURL: "http://localhost:8080",
             url: "/file/asset",
             data: data,
             headers: {
-                Authorization: sessionStorage.getItem("jwt"),
+                Authorization: sessionStorage.getItem("jwt") ,
             },
         })
         .then((response) => {
@@ -34,7 +35,7 @@ const FileUpload = () => {
         <form action="/action_page.php" onSubmit={uploadFile}>
             <div>
                 <label>Type : 
-                    <input type="text" id="type" name="type" defaultValue="CV"/>
+                    <input type="text" id="type" name="type" defaultValue="CV" readOnly />
                 </label>
             </div>
             <div>
