@@ -40,7 +40,7 @@ function App() {
           />
 
           <Switch>
-            <Content></Content>
+              <OfferViews/>
           </Switch>
           <UserInfoContext.Consumer>
             {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}
