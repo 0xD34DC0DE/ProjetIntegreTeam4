@@ -11,6 +11,7 @@ const UserInfoReducer = (state, action) => {
         email: decodedJWT.sub,
         role: decodedJWT.role,
         loggedIn: true,
+        jwt:  `Bearer ${action.payload.token}`
       };
     case "LOGOUT":
       sessionStorage.removeItem("jwt");
@@ -19,6 +20,7 @@ const UserInfoReducer = (state, action) => {
         email: "",
         role: "",
         loggedIn: false,
+        jwt: ""
       };
     case "REFRESH":
       const jwtToken = sessionStorage.getItem("jwt");
@@ -28,6 +30,7 @@ const UserInfoReducer = (state, action) => {
           email: "",
           role: "",
           loggedIn: false,
+          jwt: ""
         };
       } else {
         const decodedJwtToken = jwt_decode(jwtToken);
@@ -36,6 +39,7 @@ const UserInfoReducer = (state, action) => {
           email: decodedJwtToken.sub,
           role: decodedJwtToken.role,
           loggedIn: true,
+          jwt: jwtToken
         };
       }
     default:

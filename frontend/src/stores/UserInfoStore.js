@@ -4,7 +4,8 @@ import UserInfoReducer from './UserInfoReducer'
 const initialState = {
   email: "",
   role: "",
-  loggedIn: false
+  loggedIn: false,
+  jwt: ""
 }
 
 const UserInfoStore = ({children}) =>  {

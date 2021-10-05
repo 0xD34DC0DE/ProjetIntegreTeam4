@@ -10,15 +10,17 @@ function OfferViews() {
   const [intershipOffers, setInternshipOffers] = useState([])
 
   useEffect(() => {
-    getInternshipOffers();
-  }, [])
+    if (userInfo.loggedIn) {
+      getInternshipOffers();
+    }
+  }, [userInfo])
 
   const getInternshipOffers = () => {
     axios({
       method: "GET",
-      url: `http://localhost:8080/internshipOffers/${userInfo.email}`,
+      url: `http://localhost:8080/internshipOffer/studentInternshipOffers/${userInfo.email}`,
       headers: {
-        Authorization: global.token,
+        Authorization: userInfo.jwt,
       },
       responseType: "json",
     })
@@ -37,7 +39,14 @@ function OfferViews() {
       <Stack>
         {
           intershipOffers.map((offer, index) =>
-            <OfferView key={index} companyName={offer.companyName} />
+            <OfferView key={index}
+              companyName={offer.companyName}
+              beginningDate={offer.beginningDate}
+              endingDate={offer.endingDate}
+              limitDateToApply={offer.limitDateToApply}
+              minSalary={offer.minSalary}
+              maxSalary={offer.maxSalary}
+              description={offer.description} />
           )
         }
       </Stack>
