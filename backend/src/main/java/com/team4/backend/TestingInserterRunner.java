@@ -82,9 +82,10 @@ public class TestingInserterRunner implements ApplicationRunner {
     }
 
     private void insertStudents(String exclusiveOfferId) {
+        String password = pbkdf2Encoder.encode("student");
         Student student = Student.studentBuilder()
                 .email("student@gmail.com")
-                .password("student")
+                .password(password)
                 .firstName("John")
                 .lastName("Doe")
                 .registrationDate(LocalDate.now())
