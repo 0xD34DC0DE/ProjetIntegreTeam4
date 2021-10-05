@@ -40,43 +40,7 @@ public class FileMetadataController {
     @PostMapping
     @PreAuthorize("hasAnyAuthority('STUDENT')")
     public Mono<ResponseEntity<Void>> uploadFile(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("mimeType") String mimeType, @RequestPart("file") Mono<FilePart> filePartMono, Principal loggedUser) {
-        return Mono.fromCallable(() ->
-                File.createTempFile("projet-integre-team-4-", ".tmp"))
-                .publishOn(Schedulers.boundedElastic())
-                .flatMap(tempFile -> filePartMono
-                        .flatMap(fp -> fp.transferTo(tempFile)
-                                // Hack to transform Mono<Void> into another Mono type since Void is treated the
-                                // same as an empty Mono and it stops the chain.
-                                // map -> changes the object signature (Mono<Void> -> Mono<File>)
-                                .map(dummy -> tempFile)
-                                // switchIfEmpty -> since the Mono<File> is still empty, create another one with
-                                // the file inside
-                                .switchIfEmpty(Mono.just(tempFile)))
-                )
-                .flatMap(tempFile ->
-                        fileAssetService.create(tempFile.getPath(), loggedUser.getName(), mimeType)
-                                .flatMap(assetId -> Mono.just(FileMetadata.builder()
-                                        .id(UUID.randomUUID().toString())
-                                        .userEmail(loggedUser.getName())
-                                        .validCV(false)
-                                        .assetId(assetId)
-                                        .type(FileType.valueOf(type))
-                                        .creationDate(LocalDateTime.now())
-                                        .filename(filename)
-                                        .build()))
-                                .flatMap(fileMetadata -> pushAssetOnS3AndCreateMetadata(fileMetadata, loggedUser)));
-    }
-
-    public Mono<ResponseEntity<Void>>  pushAssetOnS3AndCreateMetadata(@RequestBody FileMetadata fileMetadata, Principal loggedUser) {
-        // Store asset on S3 from the buffer created from a local file
-        return fileMetadataService.create(fileMetadata)
-                .map(metadata -> {
-                    try {
-                        return ResponseEntity.created(new URI(metadata.getId())).build();
-                    } catch (URISyntaxException e) {
-                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-                    }
-                });
+        return fileMetadataService.uploadFile(filename, type, mimeType, filePartMono, loggedUser.getName());
     }
 
 }

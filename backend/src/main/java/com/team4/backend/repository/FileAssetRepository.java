@@ -18,7 +18,6 @@ public class FileAssetRepository {
 
     public Mono<PutObjectResult> create(String location, InputStream fileStream, Map<String, String> options) throws FileNotFoundException {
         ObjectMetadata metadata = new ObjectMetadata();
-//        options.forEach(metadata::addUserMetadata);
         metadata.setContentType(options.get(HttpHeaders.CONTENT_TYPE));
         return Mono.just(
                 amazonS3.putObject(

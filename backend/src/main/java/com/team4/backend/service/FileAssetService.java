@@ -30,8 +30,6 @@ public class FileAssetService {
 
             Map<String, String> metadata = new HashMap<>();
             metadata.put(HttpHeaders.CONTENT_TYPE, mimeType);
-            metadata.put(HttpHeaders.ETAG, "comme tu veux");
-//            metadata.put(HttpHeaders.CONTENT_LENGTH, String.valueOf(Files.size(Path.of(filePath))));
 
             UUID assetId = UUID.randomUUID();
             String location = userId + "/" + assetId;

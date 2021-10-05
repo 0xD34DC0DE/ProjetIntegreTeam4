@@ -17,7 +17,7 @@ const FileUpload = () => {
         axios({
             method: "POST",
             baseURL: "http://localhost:8080",
-            url: "/file/asset",
+            url: "/file",
             data: data,
             headers: {
                 Authorization: sessionStorage.getItem("jwt") ,
