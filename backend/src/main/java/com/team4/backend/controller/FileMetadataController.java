@@ -30,13 +30,6 @@ public class FileMetadataController {
     @Autowired
     FileAssetService fileAssetService;
 
-    @GetMapping("/{id}")
-    public Mono<ResponseEntity<FileMetadata>> get(@PathVariable("id") String id) {
-
-        FileMetadata fileMetadata = fileMetadataService.get(id).block();
-        return Mono.just(ResponseEntity.status(HttpStatus.OK).body(fileMetadata));
-    }
-
     @PostMapping
     @PreAuthorize("hasAnyAuthority('STUDENT')")
     public Mono<ResponseEntity<Void>> uploadFile(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("mimeType") String mimeType, @RequestPart("file") Mono<FilePart> filePartMono, Principal loggedUser) {
