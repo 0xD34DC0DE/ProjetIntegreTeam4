@@ -64,7 +64,7 @@ const Login = ({ open, toggleDialogs }) => {
   };
 
   const handleFieldKeyUp = (event) => {
-    logUserIn();
+    if (event.code === "Enter") logUserIn();
   };
 
   if (!userInfo.loggedIn) {
