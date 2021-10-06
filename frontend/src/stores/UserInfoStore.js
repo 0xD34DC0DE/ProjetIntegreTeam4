@@ -12,7 +12,7 @@ const UserInfoStore = ({children}) =>  {
   const [state, dispatch] = useReducer(UserInfoReducer, initialState);
   
   useEffect(() => {
-    dispatch({type: 'REFRESH'})
+    dispatch({type: 'REFRESH'});
   }, [])
 
   return (
