@@ -22,6 +22,7 @@ public class Supervisor extends User implements Serializable {
                       String email,
                       String firstName,
                       String lastName,
+                      List<Student> students,
                       String password,
                       String phoneNumber,
                       LocalDate registrationDate) {
@@ -34,6 +35,7 @@ public class Supervisor extends User implements Serializable {
                 Role.SUPERVISOR,
                 true,
                 registrationDate);
+        this.students = students;
     }
 
 }

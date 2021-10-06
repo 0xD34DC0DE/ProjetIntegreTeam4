@@ -24,6 +24,7 @@ public class SupervisorDto extends UserDto implements Serializable {
                          String password,
                          String firstName,
                          String lastName,
+                         List<Student> students,
                          LocalDate registrationDate,
                          String phoneNumber) {
         super(id,
@@ -34,6 +35,7 @@ public class SupervisorDto extends UserDto implements Serializable {
                 registrationDate,
                 phoneNumber,
                 Role.SUPERVISOR);
+        this.students = students;
     }
 
 }
