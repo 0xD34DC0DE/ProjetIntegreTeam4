@@ -6,21 +6,18 @@ import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.InternshipOfferRepository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
 import java.time.LocalDate;
 
 @Service
 public class InternshipOfferService {
 
     private final InternshipOfferRepository internshipOfferRepository;
-
     private final MonitorService monitorService;
-
     private final StudentService studentService;
 
     public InternshipOfferService(InternshipOfferRepository internshipOfferRepository,
@@ -38,30 +35,29 @@ public class InternshipOfferService {
                         : Mono.error(new UserNotFoundException("Can't find monitor!")));
     }
 
-    private static Logger logger = LoggerFactory.getLogger(InternshipOfferService.class);
-    public Flux<InternshipOffer> getStudentInternshipOffers(String studentEmail) {
-        return Flux.mergeSequential(
-                studentService.getStudent(studentEmail)
-                        .switchIfEmpty(
-                                Mono.error(
-                                        new UserNotFoundException("Could not find student with email: " + studentEmail)
-                                )
+    public Flux<InternshipOffer> getStudentExclusiveOffers(String studentEmail) {
+        return studentService.getStudent(studentEmail)
+                .switchIfEmpty(
+                        Mono.error(
+                                new UserNotFoundException("Could not find student with email: " + studentEmail)
                         )
-                        .map(Student::getExclusiveOffersId)
-                        .flatMapMany(offerIdList ->
-                                Flux.fromIterable(offerIdList)
-                                        .flatMap(offerId ->
-                                                internshipOfferRepository.
-                                                        findByIdAndIsExclusiveTrueAndLimitDateToApplyAfter(
-                                                                offerId,
-                                                                LocalDate.now()
-                                                        ).map(s -> {
-                                                            logger.warn(s.toString()); return s;})
-                                                .switchIfEmpty(Mono.error(new Exception("Fak")))
-                                        )
-                        ),
-                internshipOfferRepository
-                        .findAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now())
-        );
+                )
+                .map(Student::getExclusiveOffersId)
+                .flatMapMany(offerIdList ->
+                        Flux.fromIterable(offerIdList)
+                                .flatMap(offerId ->
+                                        internshipOfferRepository.
+                                                findByIdAndIsExclusiveTrueAndLimitDateToApplyAfter(
+                                                        offerId,
+                                                        LocalDate.now()
+                                                )
+                                )
+                ).delayElements(Duration.ofSeconds(3));
+    }
+
+    public Flux<InternshipOffer> getGeneralInternshipOffers() {
+        return internshipOfferRepository
+                .findAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now());
+
     }
 }
