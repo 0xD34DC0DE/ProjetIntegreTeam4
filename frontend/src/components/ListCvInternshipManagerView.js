@@ -16,6 +16,7 @@ const ListCvInternshipManagerView = () => {
 
   const handleChangePage = (event, newPage) => {
     console.log("nouvelle page => " + newPage);
+    getNbrCvs();
     getCvs(newPage);
     setNoPage(newPage);
   };
@@ -81,16 +82,16 @@ const ListCvInternshipManagerView = () => {
           />
         ))}
       </div>
-        <TablePagination
+      <TablePagination
         disabled
-          sx={{border:"1px"}}
-          component="div"
-          count={nbrCvs}
-          page={noPage}
-          onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
+        sx={{ border: "1px" }}
+        component="div"
+        count={nbrCvs}
+        page={noPage}
+        onPageChange={handleChangePage}
+        rowsPerPage={rowsPerPage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </>
   );
 };

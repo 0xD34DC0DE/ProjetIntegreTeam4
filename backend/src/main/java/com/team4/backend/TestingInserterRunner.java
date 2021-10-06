@@ -84,10 +84,17 @@ public class TestingInserterRunner implements ApplicationRunner {
     //TODO --> will have to remove it to test real upload and download
     private void insertCvs() {
         List<FileMetaData> fileMetaDataList = Arrays.asList(
-                FileMetaData.builder().assetId("123456789%40gmail.com/06708b00-52fe-4054-90d0-a1cd4579b0e9").userEmail("123456789@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("3643283423@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("123667713@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("902938912@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build()
+                FileMetaData.builder().assetId("123456789@gmail.com/06708b00-52fe-4054-90d0-a1cd4579b0e9").userEmail("123456789@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusDays(2)).build(),
+                FileMetaData.builder().assetId("123456789@gmail.com/3b134033-2463-41b2-b9d8-05238856bfef").userEmail("123456789@gmail.com").filename("cv2.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusWeeks(2)).build(),
+                FileMetaData.builder().assetId("123456789@gmail.com/8164ae59-a072-4bfe-8f03-2f350dd8086e").userEmail("123456789@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusDays(3)).build(),
+                FileMetaData.builder().assetId("123456789@gmail.com/c31a51c5-74b0-4ecb-87a3-554bf5290dac").userEmail("123456789@gmail.com").filename("cv4.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusMonths(1)).build(),
+                FileMetaData.builder().assetId("123456789@gmail.com/c31a51c5-74b0-4ecb-87a3-554bf5290dac").userEmail("123456789@gmail.com").filename("cv5.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusMonths(1)).build(),
+                FileMetaData.builder().assetId("123667713@gmail.com/PlanCoursProjet.pdf").userEmail("123667713@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusWeeks(2)).build(),
+                FileMetaData.builder().assetId("123667713@gmail.com/PlanCoursVeilleTechnologique.pdf").userEmail("123667713@gmail.com").filename("cv2.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("3643283423@gmail.com/PlanCoursProjet.pdf").userEmail("3643283423@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusDays(6)).build(),
+                FileMetaData.builder().assetId("3643283423@gmail.com/PlanCoursVeilleTechnologique.pdf").userEmail("3643283423@gmail.com").filename("cv2.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusDays(2)).build(),
+                FileMetaData.builder().assetId("902938912@gmail.com/PlanCoursProjet.pdf").userEmail("902938912@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("902938912@gmail.com/PlanCoursVeilleTechnologique.pdf").userEmail("902938912@gmail.com").filename("cv2.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build()
         );
 
         fileMetaDataRepository.saveAll(fileMetaDataList).subscribe(f -> log.info("new cv file has been created: {}", f));

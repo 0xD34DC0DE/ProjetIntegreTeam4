@@ -39,9 +39,9 @@ public class FileMetaDataService {
                     file.setIsSeen(true);
                     file.setSeenDate(LocalDateTime.now());
 
-                    if(isValid){
+                    if (isValid)
                         studentService.updateCvValidity(file.getUserEmail(), true).subscribe();
-                    }
+
                     return file;
                 }).flatMap(fileMetaDataRepository::save);
     }

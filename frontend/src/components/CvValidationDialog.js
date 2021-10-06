@@ -11,11 +11,15 @@ import ApprovalIcon from "@mui/icons-material/Approval";
 import axios from "axios";
 
 const CvValidationDialog = ({ id, removeCv }) => {
+
   const [open, setOpen] = useState(false);
+
+  const handleOpen = () =>{
+    setOpen(true);
+  }
 
   const validateCv = (valid) => {
     {
-      setOpen(true);
       axios({
         method: "PATCH",
         url: "http://localhost:8080/fileMetaData/validateCv",
@@ -49,7 +53,7 @@ const CvValidationDialog = ({ id, removeCv }) => {
         variant="contained"
         color="success"
         sx={{ mb: "6px" }}
-        onClick={validateCv}
+        onClick={handleOpen}
       >
         VALIDER <ApprovalIcon></ApprovalIcon>
       </Button>
