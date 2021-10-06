@@ -1,6 +1,5 @@
 package com.team4.backend.repository;
 
-import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.User;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Assertions;
@@ -33,8 +32,8 @@ public class UserRepositoryTest {
     @BeforeAll
     void init() {
         Flux<User> users = Flux.just(
-                User.builder().registrationNumber("123456789").email("testing_1@gmail.com").password("password1").isEnabled(true).build(),
-                User.builder().registrationNumber("423423432").email("testing_2@gmail.com").password("password2").isEnabled(false).build()
+                User.builder().email("testing_1@gmail.com").password("password1").isEnabled(true).build(),
+                User.builder().email("testing_2@gmail.com").password("password2").isEnabled(false).build()
         );
 
         userRepository.saveAll(users).subscribe();
@@ -58,7 +57,6 @@ public class UserRepositoryTest {
         Mono<User> userMono3 = userRepository.findByEmailAndPasswordAndIsEnabledTrue(email3, password3);
 
         //ASSERT
-
         StepVerifier.create(userMono1)
                 .consumeNextWith(user -> assertEquals(email1, user.getEmail()))
                 .verifyComplete();
@@ -85,4 +83,5 @@ public class UserRepositoryTest {
                 .assertNext(Assertions::assertFalse)
                 .verifyComplete();
     }
+
 }

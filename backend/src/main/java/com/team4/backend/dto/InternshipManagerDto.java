@@ -16,7 +16,6 @@ public class InternshipManagerDto extends UserDto implements Serializable {
 
     @Builder
     public InternshipManagerDto(String id,
-                                String registrationNumber,
                                 String email,
                                 String password,
                                 String firstName,
@@ -24,7 +23,6 @@ public class InternshipManagerDto extends UserDto implements Serializable {
                                 LocalDate registrationDate,
                                 String phoneNumber) {
         super(id,
-                registrationNumber,
                 email,
                 password,
                 firstName,
@@ -33,4 +31,5 @@ public class InternshipManagerDto extends UserDto implements Serializable {
                 phoneNumber,
                 Role.INTERNSHIP_MANAGER);
     }
+
 }

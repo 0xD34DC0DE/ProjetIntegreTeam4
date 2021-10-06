@@ -1,7 +1,9 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferDto;
+import com.team4.backend.exception.UserDoNotExistException;
 import com.team4.backend.mapping.InternshipOfferMapper;
+import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.repository.InternshipOfferRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -18,9 +20,11 @@ public class InternshipOfferService {
         this.monitorService = monitorService;
     }
 
-    public Mono<InternshipOfferDto> addAnInternshipOffer(InternshipOfferDto internshipOfferDTO) {
-        return monitorService.findMonitorByEmail(internshipOfferDTO.getEmailOfMonitor())
-                .flatMap(monitor -> internshipOfferRepository.save(InternshipOfferMapper.toEntity(internshipOfferDTO, monitor)))
-                .map(InternshipOfferMapper::toDto);
+    public Mono<InternshipOffer> addAnInternshipOffer(InternshipOfferDto internshipOfferDTO) {
+        return monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getEmailOfMonitor())
+                .flatMap(exist -> exist ?
+                        internshipOfferRepository.save(InternshipOfferMapper.toEntity(internshipOfferDTO))
+                        : Mono.error(new UserDoNotExistException("Can't find monitor!")));
     }
+
 }

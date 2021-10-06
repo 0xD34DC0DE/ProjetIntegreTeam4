@@ -1,5 +1,6 @@
 package com.team4.backend.util;
 
+import com.team4.backend.model.Monitor;
 import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;
 import io.jsonwebtoken.Claims;
@@ -35,12 +36,19 @@ public class JwtUtil {
     }
 
     public String generateToken(User user) {
-        Map<String, Role> claims = new HashMap<>();
+        Map<String, String> claims = new HashMap<>();
         Long expirationTimeLong = Long.parseLong(expirationTime);
         final Date createdDate = new Date();
         final Date expirationDate = new Date(createdDate.getTime() + expirationTimeLong * 1000);
 
-        claims.put("role", user.getRole());
+        claims.put("role", user.getRole().toString());
+        claims.put("firstName", user.getFirstName());
+        claims.put("lastName", user.getLastName());
+        claims.put("phoneNumber", user.getPhoneNumber());
+
+        if (user.getRole().equals(Role.MONITOR))
+            claims.put("companyName", ((Monitor) user).getCompanyName());
+
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -60,7 +68,7 @@ public class JwtUtil {
         try {
 
             return getAllClaimsFromToken(token).getExpiration().before(new Date());
-        }catch (Exception e){
+        } catch (Exception e) {
             log.info(e.getMessage());
             return true;
         }
@@ -73,6 +81,5 @@ public class JwtUtil {
     public boolean isTokenValid(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().isSigned(token);
     }
-
 
 }

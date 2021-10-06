@@ -4,25 +4,21 @@ import {
   DialogActions,
   DialogContent,
   DialogContentText,
-  Grid,
   TextField,
   Typography,
 } from "@mui/material";
+import { KeyboardArrowRight, KeyboardArrowLeft } from "@mui/icons-material";
 import axios from "axios";
-import jwt_decode from "jwt-decode";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
+import { UserInfoContext } from "../stores/UserInfoStore";
 
-const Login = ({
-  open,
-  userInformation,
-  setUserInformation,
-  toggleDialogs,
-}) => {
+const Login = ({ open, toggleDialogs }) => {
   const [errorMessage, setErrorMessage] = useState();
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
+  const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
 
   const handleFormChange = (event) => {
     setForm((form) => ({
@@ -42,21 +38,14 @@ const Login = ({
       },
     })
       .then((response) => {
-        sessionStorage.setItem("jwt", `Bearer ${response.data}`);
-
-        const decodedJWT = jwt_decode(response.data);
-        setUserInformation({
-          email: form.email,
-          role: decodedJWT.role,
-          loggedIn: true,
-        });
+        userInfoDispatch({ type: "LOGIN", payload: { token: response.data } });
         resetForm();
         setErrorMessage();
         toggleDialogs("loginDialog", false);
       })
       .catch((error) => {
         let errorMessage =
-          "Votre connexion a échoué. L’identifiant ou le mot de passe que vous avez entré n’est pas valide. Réessayez.";
+          "L’identifiant ou le mot de passe que vous avez fourni n’est pas valide.";
         setErrorMessage(errorMessage);
         console.error(error);
       });
@@ -70,14 +59,18 @@ const Login = ({
     if (reason === "backdropClick") toggleDialogs("loginDialog", false);
   };
 
-  if (!userInformation.loggedIn) {
+  if (!userInfo.loggedIn) {
     return (
       <Dialog open={open} onClose={handleClose}>
         <DialogContent>
-          <Typography variant="h4" align="center" sx={{ minHeight: "5vh" }}>
+          <Typography
+            variant="h4"
+            align="left"
+            sx={{ minHeight: "5vh", p: 0, m: 0 }}
+          >
             Connexion
           </Typography>
-          <DialogContentText sx={{ color: "red" }}>
+          <DialogContentText sx={{ color: "red", p: 0, m: 0 }}>
             {errorMessage}
           </DialogContentText>
           <TextField
@@ -92,6 +85,7 @@ const Login = ({
             autoComplete="email"
             variant="standard"
             autoFocus
+            sx={{ p: 0, m: 0 }}
           />
           <TextField
             margin="normal"
@@ -101,21 +95,35 @@ const Login = ({
             variant="standard"
             onChange={handleFormChange}
             label="Mot de passe"
+            sx={{ p: 0, m: 0 }}
             type="password"
             value={form.password}
             id="password"
             autoComplete="current-password"
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{}}>
           <Button
             type="submit"
-            variant="contained"
+            variant="text"
+            sx={{ justifySelf: "flex-start", mr: 20, flexGrow: "1" }}
             color="primary"
-            sx={{ m: "0 auto", mt: "10px", display: "flex" }}
+            onClick={() => {
+              toggleDialogs("loginDialog", false);
+            }}
+          >
+            <KeyboardArrowLeft />
+            Quitter
+          </Button>
+          <Button
+            type="submit"
+            variant="text"
+            color="primary"
             onClick={logUserIn}
+            sx={{ justifySelf: "flex-end", ml: 20, flexGrow: "1" }}
           >
             Envoyer
+            <KeyboardArrowRight />
           </Button>
         </DialogActions>
       </Dialog>

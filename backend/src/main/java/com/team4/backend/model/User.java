@@ -21,8 +21,6 @@ public class User implements Serializable {
     @Id
     protected String id;
 
-    protected String registrationNumber;
-
     protected String email;
 
     protected String password;
@@ -45,7 +43,6 @@ public class User implements Serializable {
                 String firstName,
                 String lastName,
                 String password,
-                String registrationNumber,
                 String phoneNumber,
                 Role role,
                 Boolean isEnabled,
@@ -55,7 +52,6 @@ public class User implements Serializable {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.registrationNumber = registrationNumber;
         this.phoneNumber = phoneNumber;
         this.role = role;
         this.isEnabled = isEnabled;
