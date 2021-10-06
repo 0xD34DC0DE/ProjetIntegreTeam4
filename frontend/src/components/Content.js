@@ -1,6 +1,7 @@
 import { Container, Typography } from "@mui/material";
 import React, { useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import FileUpload from "./FileUpload";
 
 const Content = () => {
   const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
@@ -15,6 +16,7 @@ const Content = () => {
         ) : (
           "Hello visitor."
         )}
+        <FileUpload />
       </Typography>
     </Container>
   );

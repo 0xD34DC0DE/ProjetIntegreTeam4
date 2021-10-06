@@ -25,11 +25,16 @@ public class FileMetadata {
 
     private String filename;
 
-    private boolean validCV;
+    private Boolean isValid;
 
     private FileType type;
 
+    private Boolean isSeen;
+
     private LocalDateTime creationDate;
+
+    private LocalDateTime seenDate;
+
 
     @Builder
     public FileMetadata(String id, String userEmail, String assetId, String filename, boolean validCV, FileType type, LocalDateTime creationDate) {
@@ -37,7 +42,7 @@ public class FileMetadata {
         this.userEmail = userEmail;
         this.assetId = assetId;
         this.filename = filename;
-        this.validCV = validCV;
+        this.isValid = validCV;
         this.type = type;
         this.creationDate = creationDate;
     }

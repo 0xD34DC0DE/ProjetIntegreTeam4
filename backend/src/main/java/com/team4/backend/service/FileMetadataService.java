@@ -14,6 +14,7 @@ import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
 import java.io.File;
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
@@ -33,13 +34,16 @@ public class FileMetadataService {
         return fileMetadataRepository.save(fileMetadata);
     }
 
-    public Mono<FileMetadata> get(String id) {
-        return fileMetadataRepository.findById(id);
+    protected File getTempFile() throws IOException {
+        return File.createTempFile("projet-integre-team-4-", ".tmp");
+    }
+
+    protected String getUuid() {
+        return UUID.randomUUID().toString();
     }
 
     public Mono<ResponseEntity<Void>> uploadFile(String filename, String type, String mimeType, Mono<FilePart> filePartMono, String userEmail) {
-        return Mono.fromCallable(() ->
-                File.createTempFile("projet-integre-team-4-", ".tmp"))
+        return Mono.fromCallable(this::getTempFile)
                 .publishOn(Schedulers.boundedElastic())
                 .flatMap(tempFile -> filePartMono
                         .flatMap(fp -> fp.transferTo(tempFile)
@@ -52,9 +56,9 @@ public class FileMetadataService {
                                 .switchIfEmpty(Mono.just(tempFile)))
                 )
                 .flatMap(tempFile ->
-                        fileAssetService.create(tempFile.getPath(), userEmail, mimeType)
+                        fileAssetService.create(tempFile.getPath(), userEmail, mimeType, getUuid())
                                 .flatMap(assetId -> Mono.just(FileMetadata.builder()
-                                        .id(UUID.randomUUID().toString())
+                                        .id(getUuid())
                                         .userEmail(userEmail)
                                         .validCV(false)
                                         .assetId(assetId)

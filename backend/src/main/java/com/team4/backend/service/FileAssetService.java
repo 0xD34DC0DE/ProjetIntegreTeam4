@@ -21,18 +21,19 @@ public class FileAssetService {
     @Autowired
     FileAssetRepository fileAssetRepository;
 
-    public Mono<String> create(String filePath, String userId, String mimeType) {
+    protected FileInputStream getFileInputStream(String filePath) throws FileNotFoundException {
+        return new FileInputStream(filePath);
+    }
 
-        System.out.println(mimeType);
+    public Mono<String> create(String filePath, String userEmail, String mimeType, String assetId) {
 
         return Mono.fromCallable(() -> {
-            FileInputStream file = new FileInputStream(filePath);
+            FileInputStream file = getFileInputStream(filePath);
 
             Map<String, String> metadata = new HashMap<>();
             metadata.put(HttpHeaders.CONTENT_TYPE, mimeType);
 
-            UUID assetId = UUID.randomUUID();
-            String location = userId + "/" + assetId;
+            String location = userEmail + "/" + assetId;
 
             fileAssetRepository.create(location, file, metadata);
             return location;
