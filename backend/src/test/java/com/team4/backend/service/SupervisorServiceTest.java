@@ -68,7 +68,7 @@ public class SupervisorServiceTest {
         when(userService.existsByEmail(supervisor.getEmail())).thenReturn(Mono.just(true));
 
         //ACT
-        Mono<Supervisor> supervisorMono = supervisorService.registerMonitor(supervisor);
+        Mono<Supervisor> supervisorMono = supervisorService.registerSupervisor(supervisor);
 
         //ASSERT
         StepVerifier.create(supervisorMono).expectError(UserAlreadyExistsException.class).verify();
