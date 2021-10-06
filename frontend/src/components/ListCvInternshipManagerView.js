@@ -81,17 +81,16 @@ const ListCvInternshipManagerView = () => {
           />
         ))}
       </div>
-      <Container sx={{ m: "auto" }}>
         <TablePagination
+        disabled
+          sx={{border:"1px"}}
           component="div"
-          defaultValue={0}
           count={nbrCvs}
           page={noPage}
           onPageChange={handleChangePage}
           rowsPerPage={rowsPerPage}
           onRowsPerPageChange={handleChangeRowsPerPage}
         />
-      </Container>
     </>
   );
 };
