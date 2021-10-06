@@ -16,8 +16,11 @@ public class FileMetaDataService {
 
     private final FileMetaDataRepository fileMetaDataRepository;
 
-    public FileMetaDataService(FileMetaDataRepository fileMetaDataRepository) {
+    private final StudentService studentService;
+
+    public FileMetaDataService(FileMetaDataRepository fileMetaDataRepository, StudentService studentService) {
         this.fileMetaDataRepository = fileMetaDataRepository;
+        this.studentService = studentService;
     }
 
     public Mono<Long> countAllInvalidCvNotSeen() {
@@ -35,6 +38,9 @@ public class FileMetaDataService {
                     file.setIsValid(isValid);
                     file.setIsSeen(true);
                     file.setSeenDate(LocalDateTime.now());
+                    
+                    if(isValid)
+                        studentService.updateCvValidity(file.getUserEmail(), true);
                     return file;
                 }).flatMap(fileMetaDataRepository::save);
     }

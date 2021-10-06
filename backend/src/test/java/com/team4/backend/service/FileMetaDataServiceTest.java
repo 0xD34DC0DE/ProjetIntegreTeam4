@@ -1,10 +1,11 @@
 package com.team4.backend.service;
 
-import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
 import com.team4.backend.exception.FileDoNotExistException;
 import com.team4.backend.model.FileMetaData;
+import com.team4.backend.model.Student;
 import com.team4.backend.repository.FileMetaDataRepository;
 import com.team4.backend.testdata.FileMetaDataMockData;
+import com.team4.backend.testdata.StudentMockData;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,12 +14,12 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -26,6 +27,9 @@ public class FileMetaDataServiceTest {
 
     @Mock
     FileMetaDataRepository fileMetaDataRepository;
+
+    @Mock
+    StudentService studentService;
 
     @InjectMocks
     FileMetaDataService fileMetaDataService;
@@ -70,8 +74,10 @@ public class FileMetaDataServiceTest {
     void shouldValidateCv() {
         //ARRANGE
         FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
+        Student student = StudentMockData.getMockStudent();
 
         when(fileMetaDataRepository.findById(any(String.class))).thenReturn(Mono.just(fileMetaData));
+        when(studentService.updateCvValidity(fileMetaData.getUserEmail(),true)).thenReturn(Mono.just(student));
         when(fileMetaDataRepository.save(any(FileMetaData.class))).thenReturn(Mono.just(fileMetaData));
 
         //ACT
