@@ -34,9 +34,16 @@ public class StudentService {
         });
     }
 
-    public Mono<Student> findByEmail(String email){
+    public Mono<Student> findByEmail(String email) {
         return studentRepository.findByEmail(email)
                 .switchIfEmpty(Mono.error(new UserDoNotExistException("Can't find user with this email")));
+    }
+
+    public Mono<Student> updateCvValidity(String email, Boolean valid) {
+        return findByEmail(email).map(student -> {
+            student.setHasValidCv(valid);
+            return student;
+        }).flatMap(studentRepository::save);
     }
 
 }

@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
@@ -78,7 +79,7 @@ public class StudentServiceTest {
     }
 
     @Test
-    void shouldFindByEmail(){
+    void shouldFindByEmail() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
 
@@ -89,12 +90,12 @@ public class StudentServiceTest {
 
         //ASSERT
         StepVerifier.create(studentMono)
-                .assertNext(s -> Assertions.assertEquals(student.getEmail(),s.getEmail()))
+                .assertNext(s -> assertEquals(student.getEmail(), s.getEmail()))
                 .verifyComplete();
     }
 
     @Test
-    void shouldNotFindByEmail(){
+    void shouldNotFindByEmail() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
 
@@ -106,6 +107,37 @@ public class StudentServiceTest {
         //ASSERT
         StepVerifier.create(studentMono)
                 .verifyError(UserDoNotExistException.class);
+    }
+
+    @Test
+    void shouldUpdateCvValidity() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
+        when(studentRepository.save(any(Student.class))).thenReturn(Mono.just(student));
+
+        //ACT
+        Mono<Student> studentMono = studentService.updateCvValidity(student.getEmail(), true);
+
+        //ASSERT
+        StepVerifier.create(studentMono)
+                .assertNext(s -> assertTrue(s.getHasValidCv()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotUpdateCvValidity() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.empty());
+
+        //ACT
+        Mono<Student> studentMono = studentService.updateCvValidity(student.getEmail(), true);
+
+        //ASSERT
+        StepVerifier.create(studentMono).verifyError(UserDoNotExistException.class);
     }
 
 }
