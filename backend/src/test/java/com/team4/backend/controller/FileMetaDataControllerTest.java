@@ -52,7 +52,7 @@ public class FileMetaDataControllerTest {
         //ARRANGE
 
         Integer noPage = 0;
-        when(fileMetaDataService.getListInvalidCvNotSeen(noPage)).thenReturn(Flux.just(FileMetaDataMockData.getFileMetaDataInternshipManagerViewDto()));
+        when(fileMetaDataService.getListInvalidCvNotSeen(noPage)).thenReturn(Flux.just(FileMetaDataMockData.getFileMetaData()));
 
         //ACT
 

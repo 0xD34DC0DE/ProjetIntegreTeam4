@@ -50,7 +50,7 @@ public class FileMetaDataServiceTest {
     void getListInvalidCvNotSeen() {
         //ARRANGE
         Integer noPage = 0;
-        when(fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("uploadDate"))))
+        when(fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("uploadDate").ascending())))
                 .thenReturn(Flux.just(
                         FileMetaData.builder().build(),
                         FileMetaData.builder().build(),
@@ -58,7 +58,7 @@ public class FileMetaDataServiceTest {
                 ));
 
         //ACT
-        Flux<FileMetaDataInternshipManagerViewDto> fileMetaDataDtoFlux = fileMetaDataService.getListInvalidCvNotSeen(noPage);
+        Flux<FileMetaData> fileMetaDataDtoFlux = fileMetaDataService.getListInvalidCvNotSeen(noPage);
 
         //ASSERT
         StepVerifier.create(fileMetaDataDtoFlux)

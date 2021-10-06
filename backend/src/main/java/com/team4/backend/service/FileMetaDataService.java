@@ -1,8 +1,6 @@
 package com.team4.backend.service;
 
-import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
 import com.team4.backend.exception.FileDoNotExistException;
-import com.team4.backend.mapping.FileMetaDataMapper;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.repository.FileMetaDataRepository;
 import org.springframework.data.domain.PageRequest;
@@ -26,11 +24,9 @@ public class FileMetaDataService {
         return fileMetaDataRepository.countAllByIsValidFalseAndIsSeenFalse();
     }
 
-    public Flux<FileMetaDataInternshipManagerViewDto> getListInvalidCvNotSeen(Integer noPage) {
-        return fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("uploadDate")))
-                .map(FileMetaDataMapper::toInternshipManagerViewDto);
+    public Flux<FileMetaData> getListInvalidCvNotSeen(Integer noPage) {
+        return fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("uploadDate").ascending()));
     }
-    //Exclusive to internshipManager so wont be used any other service or role
 
     public Mono<FileMetaData> validateCv(String id, Boolean isValid) {
         return fileMetaDataRepository.findById(id)

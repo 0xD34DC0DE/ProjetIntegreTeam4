@@ -3,6 +3,8 @@ package com.team4.backend.mapping;
 import com.team4.backend.dto.StudentDto;
 import com.team4.backend.model.Student;
 
+import java.time.LocalDate;
+
 public abstract class StudentMapper {
 
     public static Student toEntity(StudentDto studentDto) {
@@ -11,9 +13,10 @@ public abstract class StudentMapper {
                 .password(studentDto.getPassword())
                 .firstName(studentDto.getFirstName())
                 .lastName(studentDto.getLastName())
-                .registrationDate(studentDto.getRegistrationDate())
+                .registrationDate(LocalDate.now())
                 .phoneNumber(studentDto.getPhoneNumber())
                 .studentState(studentDto.getStudentState())
+                .hasValidCv(false)
                 .build();
     }
 
@@ -26,6 +29,7 @@ public abstract class StudentMapper {
                 .registrationDate(student.getRegistrationDate())
                 .phoneNumber(student.getPhoneNumber())
                 .studentState(student.getStudentState())
+                .hasValidCv(student.getHasValidCv())
                 .build();
     }
 

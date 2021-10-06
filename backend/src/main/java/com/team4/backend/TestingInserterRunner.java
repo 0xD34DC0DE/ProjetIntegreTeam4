@@ -66,8 +66,9 @@ public class TestingInserterRunner implements ApplicationRunner {
     private void insertStudents() {
         List<Student> students = Arrays.asList(
                 Student.studentBuilder().email("123456789@gmail.com").firstName("Travis").lastName("Scott").phoneNumber("4387650987").password(pbkdf2Encoder.encode("travis123")).build(),
-                Student.studentBuilder().email("6754358234@gmail.com").firstName("Jean").lastName("Jordan").phoneNumber("5143245678").password(pbkdf2Encoder.encode("jean123")).build(),
-                Student.studentBuilder().email("09237732@gmail.com").firstName("Farid").lastName("Shalom").phoneNumber("4385738764").password(pbkdf2Encoder.encode("farid123")).build()
+                Student.studentBuilder().email("3643283423@gmail.com").firstName("Jean").lastName("Jordan").phoneNumber("5143245678").password(pbkdf2Encoder.encode("jean123")).build(),
+                Student.studentBuilder().email("123667713@gmail.com").firstName("Farid").lastName("Shalom").phoneNumber("4385738764").password(pbkdf2Encoder.encode("farid123")).build(),
+                Student.studentBuilder().email("902938912@gmail.com").firstName("Kevin").lastName("Alphonse").phoneNumber("4385738764").password(pbkdf2Encoder.encode("kevin123")).build()
         );
 
         studentRepository.saveAll(students).subscribe(student -> log.info("Student has been saved : {}", student));
@@ -83,23 +84,25 @@ public class TestingInserterRunner implements ApplicationRunner {
     //TODO --> will have to remove it to test real upload and download
     private void insertCvs() {
         List<FileMetaData> fileMetaDataList = Arrays.asList(
-                FileMetaData.builder().assetId("edsa09923easdas").userEmail("123456789@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("p90sjifkk32nk").userEmail("123456789@gmail.com").filename("cv2.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("2432rewr@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("fsdffsd@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("xsdfdsc@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("xzcer34r34r@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("4534fdsf@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("vcxrfdf@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("cxvdgreg@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("d345rfds@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("vcvs546t@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("sf334tds@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("fdsf43t@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("fsd34t@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("sdf43t43@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("123456789@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("123456789@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build()
+                FileMetaData.builder().assetId("123456789%40gmail.com/06708b00-52fe-4054-90d0-a1cd4579b0e9").userEmail("123456789@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("3643283423@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("123667713@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("902938912@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("!!!!!!@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("??????@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("!!!!!@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("???6@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("%%%%%%@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("0zjixj43jbj").userEmail("@gmail.com").filename("cv.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build()
         );
 
         fileMetaDataRepository.saveAll(fileMetaDataList).subscribe(f -> log.info("new cv file has been created: {}", f));

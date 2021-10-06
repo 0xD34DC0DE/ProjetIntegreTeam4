@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
+import com.team4.backend.mapping.FileMetaDataMapper;
 import com.team4.backend.service.FileMetaDataService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +30,7 @@ public class FileMetaDataController {
     @GetMapping("/getListInvalidCvNotSeen/{noPage}")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Flux<FileMetaDataInternshipManagerViewDto> getListInvalidCvNotSeen(@PathVariable Integer noPage) {
-        return fileMetaDataService.getListInvalidCvNotSeen(noPage);
+        return fileMetaDataService.getListInvalidCvNotSeen(noPage).map(FileMetaDataMapper::toInternshipManagerViewDto);
     }
 
     @PatchMapping("/validateCv")
