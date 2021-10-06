@@ -18,7 +18,7 @@ const CvInternshipManagerView = ({
   id,
   assetId,
   userEmail,
-  fileName,
+  filename,
   uploadDate,
   removeCv,
 }) => {
@@ -62,7 +62,7 @@ const CvInternshipManagerView = ({
                 style={{ fontWeight: "bold", textAlign: "start" }}
                 variant="overline"
               >
-                Nom du fichier : {fileName}
+                Nom du fichier : {filename}
               </Typography>
               <Typography
                 style={{ fontWeight: "bold", textAlign: "start" }}

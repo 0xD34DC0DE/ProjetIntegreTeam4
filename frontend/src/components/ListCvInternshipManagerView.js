@@ -14,9 +14,10 @@ const ListCvInternshipManagerView = () => {
     getNbrCvs();
   }, []);
 
-  const handleChangePage = (event, newPage) => {
+  const handleChangePage = (event, newPage,size) => {
     console.log("nouvelle page => " + newPage);
     getNbrCvs();
+    console.log(event);
     getCvs(newPage);
     setNoPage(newPage);
   };
@@ -24,7 +25,6 @@ const ListCvInternshipManagerView = () => {
   const handleChangeRowsPerPage = (event) => {
     console.log("handleChangeRows => " + event.target.value);
     setRowsPerPage(parseInt(event.target.value, 10));
-    setNoPage(0);
   };
 
   const getNbrCvs = () => {
@@ -76,7 +76,7 @@ const ListCvInternshipManagerView = () => {
             id={cv.id}
             assetId={cv.assetId}
             userEmail={cv.userEmail}
-            fileName={cv.fileName}
+            filename={cv.filename}
             uploadDate={cv.uploadDate}
             removeCv={removeCv}
           />
