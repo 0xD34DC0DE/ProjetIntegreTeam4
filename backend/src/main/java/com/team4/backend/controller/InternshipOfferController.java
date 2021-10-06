@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/internshipOffer")
@@ -37,12 +39,23 @@ public class InternshipOfferController {
     @GetMapping(value = "/studentInternshipOffers/{email}")
     @PreAuthorize("hasAuthority('STUDENT')")
     public Mono<ResponseEntity<List<InternshipOfferStudentViewDto>>> studentInternshipOffers(@PathVariable("email") String studentEmail) {
-        return internshipOfferService.getStudentInternshipOffers(studentEmail)
+        return internshipOfferService.getStudentExclusiveOffers(studentEmail)
                 .map(InternshipOfferMapper::toStudentViewDto)
                 .onErrorMap(
                         UserNotFoundException.class,
                         e -> new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage())
-                ).collectList().flatMap(offers -> Mono.just(ResponseEntity.status(HttpStatus.OK).body(offers)));
+                ).collectList().map(offers -> ResponseEntity.status(HttpStatus.OK).body(offers));
+    }
+
+    @GetMapping(value = "/studentInternshipOffers")
+    @PreAuthorize("hasAuthority('STUDENT')")
+    public Mono<ResponseEntity<List<InternshipOfferStudentViewDto>>> studentExclusiveInternshipOffers() {
+        return internshipOfferService.getGeneralInternshipOffers()
+                .map(InternshipOfferMapper::toStudentViewDto)
+                .onErrorMap(
+                        UserNotFoundException.class,
+                        e -> new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage())
+                ).collectList().map(offers -> ResponseEntity.status(HttpStatus.OK).body(offers));
     }
 
 }
