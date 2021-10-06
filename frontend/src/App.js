@@ -39,9 +39,10 @@ function App() {
             toggleDialogs={handleDialogs}
           />
 
-          <Switch>
-              <OfferViews/>
-          </Switch>
+          <Container maxWidth="lg">
+            <OfferViews />
+          </Container>
+
           <UserInfoContext.Consumer>
             {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}
           </UserInfoContext.Consumer>
