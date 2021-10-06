@@ -14,9 +14,8 @@ const CvValidationDialog = ({ id, removeCv }) => {
   const [open, setOpen] = useState(false);
 
   const validateCv = (valid) => {
-    setOpen(true);
-    console.log(valid);
     {
+      setOpen(true);
       axios({
         method: "PATCH",
         url: "http://localhost:8080/fileMetaData/validateCv",
@@ -24,13 +23,12 @@ const CvValidationDialog = ({ id, removeCv }) => {
           Authorization: sessionStorage.getItem("jwt"),
         },
         params: {
-          id: id,
-          isValid: valid,
+          "id": id,
+          "isValid": valid,
         },
         responseType: "json",
       })
-        .then((response) => {
-          console.log(response);
+        .then(() => {
           removeCv(id);
           handleClose();
         })

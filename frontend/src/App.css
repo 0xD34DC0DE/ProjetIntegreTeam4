@@ -2,5 +2,5 @@
 }
 
 ::-webkit-scrollbar{
-    display: none;
+    display: none;/*Find a better solution*/
 }

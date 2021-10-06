@@ -1,55 +1,74 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Button, Hidden } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import { Container, TablePagination } from "@mui/material";
 import axios from "axios";
 import CvInternshipManagerView from "./CvInternshipManagerView";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 const ListCvInternshipManagerView = () => {
-  const [noPage, setNoPage] = useState(0);
   const [cvs, setCvs] = useState([]);
-  const [hasMoreElement, setHasMoreElement] = useState(true);
+  const [nbrCvs, setNbrCvs] = useState(0);
+  const [noPage, setNoPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
-    getCvs();
+    getCvs(noPage);
+    getNbrCvs();
   }, []);
 
-  const getCvs = () => {
+  const handleChangePage = (event, newPage) => {
+    console.log("nouvelle page => " + newPage);
+    getCvs(newPage);
+    setNoPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    console.log("handleChangeRows => " + event.target.value);
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setNoPage(0);
+  };
+
+  const getNbrCvs = () => {
     axios({
       method: "GET",
-      url: `http://localhost:8080/fileMetaData/getListInvalidCvNotSeen/${noPage}`,
+      url: "http://localhost:8080/fileMetaData/countAllInvalidCvNotSeen/",
       headers: {
         Authorization: sessionStorage.getItem("jwt"),
       },
       responseType: "json",
     })
       .then((response) => {
-        if (response.data.length > 0) {
-          setCvs(cvs.concat(response.data));
-          setNoPage(noPage + 1);
-          console.log(noPage);
-          console.log(response.data);
-        } else {
-          setHasMoreElement(false);
-        }
+        setNbrCvs(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-  const loadMore = () => {
-    getCvs();
+  const getCvs = (newPage) => {
+    axios({
+      method: "GET",
+      url: `http://localhost:8080/fileMetaData/getListInvalidCvNotSeen/${newPage}`,
+      headers: {
+        Authorization: sessionStorage.getItem("jwt"),
+      },
+      responseType: "json",
+    })
+      .then((response) => {
+        setCvs(response.data);
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const removeCv = (id) => {
-    console.log(id);
     setCvs(cvs.filter((cv) => cv.id != id));
-    console.log(cvs);
+    setNbrCvs(nbrCvs - 1);
   };
 
   return (
     <>
-      <div style={{ overflow: "auto", height: "600px",margin:"auto" }}>
+      <div style={{ overflow: "auto", height: "800px", margin: "auto" }}>
         {cvs.map((cv, key) => (
           <CvInternshipManagerView
             key={key}
@@ -62,19 +81,17 @@ const ListCvInternshipManagerView = () => {
           />
         ))}
       </div>
-      <div>
-        {hasMoreElement ? (
-          <Button
-            size="medium"
-            variant="contained"
-            color="primary"
-            sx={{ mb: "100px", mt: "50px" }}
-            onClick={loadMore}
-          >
-            LOAD MORE <ExpandMoreIcon></ExpandMoreIcon>
-          </Button>
-        ) : null}
-      </div>
+      <Container sx={{ m: "auto" }}>
+        <TablePagination
+          component="div"
+          defaultValue={0}
+          count={nbrCvs}
+          page={noPage}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Container>
     </>
   );
 };
