@@ -1,4 +1,7 @@
-import { Stack } from '@mui/material'
+import { Skeleton, Stack, Typography } from '@mui/material'
+import Box from '@mui/material/Box'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
 import React, { useState, useEffect, useContext } from 'react'
 import OfferView from './OfferView';
 import axios from "axios";
@@ -7,18 +10,46 @@ import { UserInfoContext } from '../stores/UserInfoStore';
 function OfferViews() {
 
   const [userInfo] = useContext(UserInfoContext)
-  const [intershipOffers, setInternshipOffers] = useState([])
+  const [internshipOffers, setInternshipOffers] = useState(null)
+  const [currentTab, setCurrentTab] = useState(0);
+
 
   useEffect(() => {
     if (userInfo.loggedIn) {
+      setInternshipOffers(null);
+      getInternshipOffers();
+    } else {
+      console.log(userInfo);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (userInfo.loggedIn) {
+      console.log("Size effect");
+      setInternshipOffers(null);
       getInternshipOffers();
     }
-  }, [userInfo])
+  }, [currentTab]);
+
+  const handleTabChange = (event, selectedTab) => {
+    setCurrentTab(selectedTab);
+  };
+
+  const getEndpoint = (tabIndex) => {
+    if (tabIndex === 0) {
+      console.log("Getting with no email");
+      return "http://localhost:8080/internshipOffer/studentInternshipOffers/";
+    } else if (tabIndex === 1) {
+      console.log("Getting with email");
+      return `http://localhost:8080/internshipOffer/studentInternshipOffers/${userInfo.email}`;
+    }
+  }
 
   const getInternshipOffers = () => {
+    setInternshipOffers(null);
     axios({
       method: "GET",
-      url: `http://localhost:8080/internshipOffer/studentInternshipOffers/${userInfo.email}`,
+      url: getEndpoint(currentTab),
       headers: {
         Authorization: userInfo.jwt,
       },
@@ -26,30 +57,34 @@ function OfferViews() {
     })
       .then((response) => {
         setInternshipOffers(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);
       });
   };
 
-
   return (
     <>
-      <Stack>
-        {
-          intershipOffers.map((offer, index) =>
-            <OfferView key={index}
-              companyName={offer.companyName}
-              beginningDate={offer.beginningDate}
-              endingDate={offer.endingDate}
-              limitDateToApply={offer.limitDateToApply}
-              minSalary={offer.minSalary}
-              maxSalary={offer.maxSalary}
-              description={offer.description} />
-          )
-        }
-      </Stack>
+      <Box sx={{ width: '100%' }}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+          <Tabs value={currentTab} onChange={handleTabChange} aria-label="Affichage des offres">
+            <Tab label="Offres générales" index={0} />
+            <Tab label="Offres exclusives" index={1} />
+          </Tabs>
+        </Box>
+        <Stack mt={3}>
+          {
+            (internshipOffers == null) ?
+              <Skeleton variant="rectangular" height={100} />
+              :
+              (internshipOffers.length === 0) ?
+                <Typography>Aucune offre disponible pour l'instant.</Typography>
+                :
+                internshipOffers.map((offer, index) => <OfferView key={index} {...offer} />)
+          }
+
+        </Stack>
+      </Box>
     </>
   )
 }
