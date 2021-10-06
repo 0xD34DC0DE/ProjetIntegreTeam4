@@ -55,7 +55,7 @@ public class SupervisorServiceTest {
         //ASSERT
         StepVerifier.create(supervisorMono).consumeNextWith(s -> {
             assertNotNull(s.getId());
-            assertNotEquals(supervisor.getPassword(), s.getPassword());
+            assertNotEquals(SupervisorMockData.getMockSupervisor().getPassword(), s.getPassword());
         }).verifyComplete();
     }
 
