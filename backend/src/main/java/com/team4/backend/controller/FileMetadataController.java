@@ -2,7 +2,6 @@ package com.team4.backend.controller;
 
 import com.team4.backend.model.FileMetadata;
 import com.team4.backend.model.enums.FileType;
-import com.team4.backend.service.FileAssetService;
 import com.team4.backend.service.FileMetadataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,13 +26,18 @@ public class FileMetadataController {
     @Autowired
     FileMetadataService fileMetadataService;
 
-    @Autowired
-    FileAssetService fileAssetService;
+    protected String getLoggedUserName(Principal loggedUser) {
+        //
+        if (loggedUser == null) {
+            return "";
+        }
+        return loggedUser.getName();
+    }
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('STUDENT')")
     public Mono<ResponseEntity<Void>> uploadFile(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("mimeType") String mimeType, @RequestPart("file") Mono<FilePart> filePartMono, Principal loggedUser) {
-        return fileMetadataService.uploadFile(filename, type, mimeType, filePartMono, loggedUser.getName());
+        return fileMetadataService.uploadFile(filename, type, mimeType, filePartMono, getLoggedUserName(loggedUser));
     }
 
 }

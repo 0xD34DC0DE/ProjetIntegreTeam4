@@ -4,13 +4,11 @@ import com.team4.backend.model.FileMetadata;
 import com.team4.backend.model.enums.FileType;
 import com.team4.backend.repository.FileMetadataRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpStatus;
@@ -21,10 +19,7 @@ import reactor.test.StepVerifier;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,12 +40,12 @@ class FileMetadataServiceTest {
 
     private final String filepath = "/filepath";
     private final String userEmail = "test@gmail.com";
-    private final String mimeType = "application.pdf";
+    private final String mimeType = "application/pdf";
 
     private final String filename = "filename";
     private final FileType type = FileType.CV;
 
-    private String location = "/tmp";
+    private String location = "/location";
 
     private FilePart filePart;
 
