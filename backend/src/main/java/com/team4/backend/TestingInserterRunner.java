@@ -124,7 +124,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .listEmailInterestedStudents(Collections.emptyList())
                         .build();
 
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 30; i++) {
             internshipOffer1.setDescription(internshipOffer1.getDescription() + i);
             internshipOfferRepository.save(internshipOffer1).block();
             internshipOffer1.setId(null);
