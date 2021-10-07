@@ -17,7 +17,7 @@ const Content = () => {
           "Hello visitor."
         )}
       </Typography>
-        <ListCvInternshipManagerView style={{marginTop:"50px",marginBottom:"50px"}}></ListCvInternshipManagerView>
+        <ListCvInternshipManagerView style={{marginTop:"50px"}}></ListCvInternshipManagerView>
     </Container>
   );
 };

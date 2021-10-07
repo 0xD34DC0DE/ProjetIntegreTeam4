@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Container, TablePagination } from "@mui/material";
+import {TablePagination } from "@mui/material";
 import axios from "axios";
 import CvInternshipManagerView from "./CvInternshipManagerView";
 
@@ -10,15 +10,50 @@ const ListCvInternshipManagerView = () => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
 
   useEffect(() => {
-    getCvs(noPage);
+    const getNbrCvs = () => {
+      axios({
+        method: "GET",
+        url: "http://localhost:8080/fileMetaData/countAllInvalidCvNotSeen/",
+        headers: {
+          Authorization: sessionStorage.getItem("jwt"),
+        },
+        responseType: "json",
+      })
+        .then((response) => {
+          setNbrCvs(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+    
+    const getCvs = (newPage) => {
+      axios({
+        method: "GET",
+        url: `http://localhost:8080/fileMetaData/getListInvalidCvNotSeen/${newPage}`,
+        headers: {
+          Authorization: sessionStorage.getItem("jwt"),
+        },
+        responseType: "json",
+      })
+        .then((response) => {
+          setCvs(response.data);
+          console.log(response.data);
+        })
+        .catch((error) => {
+          console.error(error);
+        });
+    };
+
     getNbrCvs();
-  }, []);
+
+    getCvs(noPage);
+
+  },[noPage]);
 
   const handleChangePage = (event, newPage,size) => {
     console.log("nouvelle page => " + newPage);
-    getNbrCvs();
     console.log(event);
-    getCvs(newPage);
     setNoPage(newPage);
   };
 
@@ -27,43 +62,8 @@ const ListCvInternshipManagerView = () => {
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 
-  const getNbrCvs = () => {
-    axios({
-      method: "GET",
-      url: "http://localhost:8080/fileMetaData/countAllInvalidCvNotSeen/",
-      headers: {
-        Authorization: sessionStorage.getItem("jwt"),
-      },
-      responseType: "json",
-    })
-      .then((response) => {
-        setNbrCvs(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
-  const getCvs = (newPage) => {
-    axios({
-      method: "GET",
-      url: `http://localhost:8080/fileMetaData/getListInvalidCvNotSeen/${newPage}`,
-      headers: {
-        Authorization: sessionStorage.getItem("jwt"),
-      },
-      responseType: "json",
-    })
-      .then((response) => {
-        setCvs(response.data);
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  };
-
   const removeCv = (id) => {
-    setCvs(cvs.filter((cv) => cv.id != id));
+    setCvs(cvs.filter((cv) => cv.id !== id));
     setNbrCvs(nbrCvs - 1);
   };
 
