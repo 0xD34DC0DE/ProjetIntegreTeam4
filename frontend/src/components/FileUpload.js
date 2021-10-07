@@ -40,7 +40,7 @@ const FileUpload = () => {
             </div>
             <div>
                 <label>Fichier : 
-                    <input type="file" id="file" name="file" accept="application/pdf, text/plain" />
+                    <input type="file" id="file" name="file" accept="application/pdf" />
                 </label>
             </div>
             <div>
@@ -51,4 +51,3 @@ const FileUpload = () => {
 }
 
 export default FileUpload;
-
