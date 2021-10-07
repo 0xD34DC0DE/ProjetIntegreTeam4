@@ -63,4 +63,17 @@ public class InternshipOfferService {
                 .findAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now(), page);
 
     }
+
+    public Mono<Long> getInternshipOffersPageCount(String studentEmail, int size) {
+        if(studentEmail != null) {
+            return studentService.getStudent(studentEmail)
+                    .switchIfEmpty(
+                            Mono.error(new UserNotFoundException("Could not find student with email: " + studentEmail))
+                    )
+                    .map(student -> student.getExclusiveOffersId().size())
+                    .map(count -> (long)Math.ceil((double)count / (double)size));
+        }
+        return internshipOfferRepository.countAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now())
+                .map(count -> (long)Math.ceil((double)count / (double)size));
+    }
 }
