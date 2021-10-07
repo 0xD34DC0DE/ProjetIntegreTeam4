@@ -6,6 +6,7 @@ import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.InternshipOfferRepository;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -35,7 +36,7 @@ public class InternshipOfferService {
                         : Mono.error(new UserNotFoundException("Can't find monitor!")));
     }
 
-    public Flux<InternshipOffer> getStudentExclusiveOffers(String studentEmail) {
+    public Flux<InternshipOffer> getStudentExclusiveOffers(String studentEmail, Pageable page) {
         return studentService.getStudent(studentEmail)
                 .switchIfEmpty(
                         Mono.error(
@@ -45,6 +46,8 @@ public class InternshipOfferService {
                 .map(Student::getExclusiveOffersId)
                 .flatMapMany(offerIdList ->
                         Flux.fromIterable(offerIdList)
+                                .skip(page.getPageSize() * page.getPageNumber())
+                                .take(page.getPageSize())
                                 .flatMap(offerId ->
                                         internshipOfferRepository.
                                                 findByIdAndIsExclusiveTrueAndLimitDateToApplyAfter(
@@ -55,9 +58,9 @@ public class InternshipOfferService {
                 ).delayElements(Duration.ofSeconds(3));
     }
 
-    public Flux<InternshipOffer> getGeneralInternshipOffers() {
+    public Flux<InternshipOffer> getGeneralInternshipOffers(Pageable page) {
         return internshipOfferRepository
-                .findAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now());
+                .findAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now(), page);
 
     }
 }
