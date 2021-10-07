@@ -2,6 +2,7 @@ package com.team4.backend.repository;
 
 import com.team4.backend.model.InternshipOffer;
 import org.bson.types.ObjectId;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
@@ -12,6 +13,9 @@ import java.util.UUID;
 
 @Repository
 public interface InternshipOfferRepository extends ReactiveMongoRepository<InternshipOffer, String> {
-    Flux<InternshipOffer> findAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate date);
+    Flux<InternshipOffer> findAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate date, Pageable page);
+
     Mono<InternshipOffer> findByIdAndIsExclusiveTrueAndLimitDateToApplyAfter(String id, LocalDate date);
+
+    Mono<Long> countAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate date);
 }
