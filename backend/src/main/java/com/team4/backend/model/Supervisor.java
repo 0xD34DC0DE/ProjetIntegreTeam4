@@ -15,14 +15,14 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Supervisor extends User implements Serializable {
 
-    private List<Student> students;
+    private List<String> studentEmails;
 
     @Builder(builderMethodName = "supervisorBuilder")
     public Supervisor(String id,
                       String email,
                       String firstName,
                       String lastName,
-                      List<Student> students,
+                      List<String> studentEmails,
                       String password,
                       String phoneNumber,
                       LocalDate registrationDate) {
@@ -35,7 +35,7 @@ public class Supervisor extends User implements Serializable {
                 Role.SUPERVISOR,
                 true,
                 registrationDate);
-        this.students = students;
+        this.studentEmails = studentEmails;
     }
 
 }

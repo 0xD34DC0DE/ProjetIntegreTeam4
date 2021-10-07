@@ -25,7 +25,7 @@ public class SupervisorMapperTest {
         assertEquals(dto.getFirstName(), entity.getFirstName());
         assertEquals(dto.getLastName(), entity.getLastName());
         assertEquals(dto.getPhoneNumber(), entity.getPhoneNumber());
-        assertEquals(dto.getStudents(), entity.getStudents());
+        assertEquals(dto.getStudentEmails(), entity.getStudentEmails());
         assertEquals(dto.getRegistrationDate(), entity.getRegistrationDate());
     }
 
@@ -45,7 +45,7 @@ public class SupervisorMapperTest {
         assertEquals(entity.getFirstName(), dto.getFirstName());
         assertEquals(entity.getLastName(), dto.getLastName());
         assertEquals(entity.getPhoneNumber(), dto.getPhoneNumber());
-        assertEquals(entity.getStudents(), dto.getStudents());
+        assertEquals(entity.getStudentEmails(), dto.getStudentEmails());
         assertEquals(entity.getRegistrationDate(), dto.getRegistrationDate());
     }
 

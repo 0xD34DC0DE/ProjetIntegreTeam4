@@ -3,6 +3,9 @@ package com.team4.backend.testdata;
 import com.team4.backend.dto.SupervisorDto;
 import com.team4.backend.model.Supervisor;
 
+import java.util.Arrays;
+import java.util.List;
+
 public class SupervisorMockData {
 
     public static Supervisor getMockSupervisor() {
@@ -12,7 +15,7 @@ public class SupervisorMockData {
                 .password("soleil31@")
                 .firstName("Jonathan")
                 .lastName("Poulin")
-                .students(null)
+                .studentEmails(getStudentEmails())
                 .phoneNumber("438-999-1234")
                 .registrationDate(null) // Current date
                 .build();
@@ -25,10 +28,13 @@ public class SupervisorMockData {
                 .password("soleil31@")
                 .firstName("Jonathan")
                 .lastName("Poulin")
-                .students(null)
+                .studentEmails(getStudentEmails())
                 .phoneNumber("438-999-1234")
                 .registrationDate(null) // Current date
                 .build();
     }
 
+    public static List<String> getStudentEmails() {
+        return Arrays.asList("12395432@gmail.com", "toto23@outlook.com");
+    }
 }

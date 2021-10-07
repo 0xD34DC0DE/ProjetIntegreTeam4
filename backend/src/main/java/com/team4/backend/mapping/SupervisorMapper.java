@@ -11,7 +11,7 @@ public abstract class SupervisorMapper {
                 .password(supervisorDto.getPassword())
                 .firstName(supervisorDto.getFirstName())
                 .lastName(supervisorDto.getLastName())
-                .students(supervisorDto.getStudents())
+                .studentEmails(supervisorDto.getStudentEmails())
                 .registrationDate(supervisorDto.getRegistrationDate())
                 .phoneNumber(supervisorDto.getPhoneNumber())
                 .build();
@@ -23,7 +23,7 @@ public abstract class SupervisorMapper {
                 .email(supervisor.getEmail())
                 .firstName(supervisor.getFirstName())
                 .lastName(supervisor.getLastName())
-                .students(supervisor.getStudents())
+                .studentEmails(supervisor.getStudentEmails())
                 .registrationDate(supervisor.getRegistrationDate())
                 .phoneNumber(supervisor.getPhoneNumber())
                 .build();
