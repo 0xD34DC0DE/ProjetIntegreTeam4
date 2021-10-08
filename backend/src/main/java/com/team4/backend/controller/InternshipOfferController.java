@@ -2,6 +2,7 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
+import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.service.InternshipOfferService;
@@ -12,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
-import javax.validation.ConstraintViolationException;
 import java.util.List;
 
 @RestController
@@ -25,9 +25,9 @@ public class InternshipOfferController {
         this.internshipOfferService = internshipOfferService;
     }
 
-    @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<String> onException(ConstraintViolationException e) {
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+    @ExceptionHandler(InvalidPageRequestException.class)
+    public ResponseEntity<String> onException(InvalidPageRequestException e) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
     @PostMapping("/addAnInternshipOffer")

@@ -2,6 +2,7 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
+import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.service.InternshipOfferService;
@@ -18,8 +19,6 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.validation.ConstraintViolationException;
-import java.util.HashSet;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -114,7 +113,7 @@ public class InternshipOfferControllerTest {
     void shouldNotReturnGeneralInternshipOffersInvalidParametersSize() {
         //ARRANGE
         when(internshipOfferService.getGeneralInternshipOffers(any(Integer.class), any(Integer.class)))
-                .thenReturn(Flux.error(new ConstraintViolationException(new HashSet<>())));
+                .thenReturn(Flux.error(InvalidPageRequestException::new));
 
         //ACT
         webTestClient
@@ -123,7 +122,7 @@ public class InternshipOfferControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isBadRequest()
-                .expectBody().isEmpty();
+                .expectBody(String.class);
     }
 
     @Test
@@ -131,7 +130,7 @@ public class InternshipOfferControllerTest {
         //ARRANGE
         when(internshipOfferService.getStudentExclusiveOffers(
                 any(String.class), any(Integer.class), any(Integer.class))
-        ).thenReturn(Flux.error(new ConstraintViolationException(new HashSet<>())));
+        ).thenReturn(Flux.error(InvalidPageRequestException::new));
 
         //ACT
         webTestClient
@@ -140,7 +139,7 @@ public class InternshipOfferControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isBadRequest()
-                .expectBody().isEmpty();
+                .expectBody(String.class);
     }
 
     @Test
