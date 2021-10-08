@@ -10,6 +10,7 @@ import {
   Tooltip,
   Avatar,
   Button,
+  AppBar,
   ListItemAvatar,
   AppBar
 } from "@mui/material";
@@ -26,7 +27,6 @@ import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DashboardCustomizeOutlinedIcon from "@mui/icons-material/DashboardCustomizeOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-
 
 const mdTheme = createTheme();
 
@@ -186,10 +186,13 @@ const TopBar = ({ open, toggleDialogs, registerVisible, loginVisible }) => {
                   ],
                 ]}
           </Menu>
+          <Register
+            toggleDialogs={toggleDialogs}
+            open={registerVisible}
+          ></Register>
+          <Login open={loginVisible} toggleDialogs={toggleDialogs}></Login>
         </Toolbar>
       </AppBar>
-      <Register toggleDialogs={toggleDialogs} open={registerVisible}></Register>
-      <Login open={loginVisible} toggleDialogs={toggleDialogs}></Login>
     </ThemeProvider>
   );
 };

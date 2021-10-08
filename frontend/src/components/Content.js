@@ -1,21 +1,11 @@
-import { Container, Typography } from "@mui/material";
-import React, { useContext } from "react";
-import { UserInfoContext } from "../stores/UserInfoStore";
+import { Container } from "@mui/material";
+import React from "react";
+import UploadCV from "./UploadCV";
 
 const Content = () => {
-  const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
-
   return (
-    <Container sx={{ clear: "right", margin: "auto", textAlign: "center" }}>
-      <Typography variant="h4">
-        {userInfo.loggedIn ? (
-          <>
-            Hello {userInfo.role.toLowerCase()}, {userInfo.email}{" "}
-          </>
-        ) : (
-          "Hello visitor."
-        )}
-      </Typography>
+    <Container>
+      <UploadCV />
     </Container>
   );
 };

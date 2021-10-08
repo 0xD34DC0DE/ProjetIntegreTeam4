@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Container } from "@mui/material";
+import React, { useState } from "react";
 import { BrowserRouter, Redirect, Switch } from "react-router-dom";
 import "./App.css";
 import SideBar from "./components/SideBar";
