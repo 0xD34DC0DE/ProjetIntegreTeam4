@@ -33,7 +33,6 @@ public class SecurityContextRepositoryTest {
         assertThrows(UnsupportedOperationException.class, () -> securityContextRepository.save(null, null));
     }
 
-
     @Test
     void load() {
         //ARRANGE

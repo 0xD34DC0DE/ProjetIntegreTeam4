@@ -1,2 +1,6 @@
 .App {
 }
+
+::-webkit-scrollbar{
+    display: none;/*Find a better solution*/
+}

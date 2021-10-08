@@ -11,6 +11,7 @@ import {
   Avatar,
   Button,
   ListItemAvatar,
+  AppBar
 } from "@mui/material";
 import MuiAppBar from "@mui/material/AppBar";
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles";
@@ -26,16 +27,6 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import DashboardCustomizeOutlinedIcon from "@mui/icons-material/DashboardCustomizeOutlined";
 import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 
-const AppBar = styled(MuiAppBar, {
-  shouldForwardProp: (prop) => prop,
-})(({ theme, open }) => ({
-  overflowX: "hidden",
-  float: "right",
-  width: `calc(100% - theme.spacing(40))`,
-  ...(!open && {
-    width: `calc(100% - theme.spacing(9))`,
-  }),
-}));
 
 const mdTheme = createTheme();
 

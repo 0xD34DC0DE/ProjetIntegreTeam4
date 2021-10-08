@@ -27,6 +27,7 @@ public class StudentMapperTest {
         assertEquals(dto.getPhoneNumber(), entity.getPhoneNumber());
         assertEquals(dto.getStudentState(), entity.getStudentState());
         assertEquals(dto.getRegistrationDate(), entity.getRegistrationDate());
+        assertEquals(dto.getHasValidCv(),entity.getHasValidCv());
     }
 
     @Test
@@ -47,6 +48,7 @@ public class StudentMapperTest {
         assertEquals(entity.getPhoneNumber(), dto.getPhoneNumber());
         assertEquals(entity.getStudentState(), dto.getStudentState());
         assertEquals(entity.getRegistrationDate(), dto.getRegistrationDate());
+        assertEquals(entity.getHasValidCv(), dto.getHasValidCv());
     }
 
 }

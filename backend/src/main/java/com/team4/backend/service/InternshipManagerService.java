@@ -1,9 +1,15 @@
 package com.team4.backend.service;
 
+import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
+import com.team4.backend.mapping.FileMetaDataMapper;
+import com.team4.backend.model.FileMetaData;
 import com.team4.backend.model.InternshipManager;
 import com.team4.backend.repository.InternshipManagerRepository;
 import com.team4.backend.util.PBKDF2Encoder;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -22,5 +28,5 @@ public class InternshipManagerService {
         internshipManager.setPassword(pbkdf2Encoder.encode(internshipManager.getPassword()));
         return internshipManagerRepository.save(internshipManager);
     }
-    
+
 }

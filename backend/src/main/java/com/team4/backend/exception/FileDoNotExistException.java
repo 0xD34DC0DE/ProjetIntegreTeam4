@@ -3,9 +3,9 @@ package com.team4.backend.exception;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
-public class WrongCredentialsException extends Exception {
+public class FileDoNotExistException extends Exception {
 
-    public WrongCredentialsException(String message) {
+    public FileDoNotExistException(String message) {
         super(message);
     }
 
