@@ -71,6 +71,7 @@ public abstract class InternshipOfferMockData {
                         .emailOfMonitor("maxime@umaknow.com")
                         .description("Développeur Frontend")
                         .isValidated(false)
+                        .validationDate(null)
                         .isExclusive(true)
                         .listEmailInterestedStudents(getInterestedStudentsEmailList())
                         .build(),
@@ -85,6 +86,7 @@ public abstract class InternshipOfferMockData {
                         .emailOfMonitor("patrickNormand@cgi.com")
                         .description("Technicien en Informatique")
                         .isValidated(false)
+                        .validationDate(null)
                         .isExclusive(false)
                         .listEmailInterestedStudents(getInterestedStudentsEmailList())
                         .build());

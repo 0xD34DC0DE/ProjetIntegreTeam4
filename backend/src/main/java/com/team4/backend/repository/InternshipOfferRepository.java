@@ -12,4 +12,5 @@ import java.util.UUID;
 @Repository
 public interface InternshipOfferRepository extends ReactiveMongoRepository<InternshipOffer, String> {
     public Flux<InternshipOffer> findAllInternshipOfferByIsValidatedFalse();
+    public Flux<InternshipOffer> findAllByValidationDateNullAndIsValidatedFalse();
 }

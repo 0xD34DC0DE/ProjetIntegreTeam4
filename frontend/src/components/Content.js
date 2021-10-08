@@ -1,4 +1,4 @@
-import { Typography } from "@mui/material";
+import { Container, Typography } from "@mui/material";
 import React, { useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 
@@ -6,20 +6,23 @@ import { UserInfoContext } from "../stores/UserInfoStore";
 const Content = () => {
   const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
   return (
-    <Typography
-      variant="h4"
+    <Container
       sx={{
-        margin: "auto",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        mt: "10%",
+        textAlign: "center",
       }}
     >
       {userInfo.loggedIn ? (
-        <>
+        <Typography variant="h4">
           Hello {userInfo.role.toLowerCase()}, {userInfo.email}
-        </>
+        </Typography>
       ) : (
         "Hello visitor."
       )}
-    </Typography>
+    </Container>
   );
 };
 

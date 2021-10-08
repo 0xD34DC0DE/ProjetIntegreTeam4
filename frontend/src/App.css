@@ -1,6 +1,10 @@
 .App {
 }
 
+body::-webkit-scrollbar {
+  display: none;
+}
+
 header{
   margin:0
 }

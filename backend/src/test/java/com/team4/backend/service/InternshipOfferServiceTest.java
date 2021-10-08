@@ -78,7 +78,7 @@ public class InternshipOfferServiceTest {
                 .thenReturn(InternshipOfferMockData.getNonValidatedInternshipOffers());
 
         // ACT
-        Flux<InternshipOfferDto> validIntershipOfferDTO = internshipOfferService.getNonValidatedInternshipOffers();
+        Flux<InternshipOffer> validIntershipOfferDTO = internshipOfferService.getNonValidatedInternshipOffers();
 
         // ASSERT
         StepVerifier
@@ -97,11 +97,45 @@ public class InternshipOfferServiceTest {
         when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
 
         // ACT
-        Mono<InternshipOfferDto> internshipOfferDtoMono = internshipOfferService.validateInternshipOffer(id);
+        Mono<InternshipOffer> internshipOfferDtoMono = internshipOfferService.validateInternshipOffer(id);
 
         // ASSERT
         StepVerifier.create(internshipOfferDtoMono)
                 .assertNext(e -> assertTrue(e.isValidated()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldRefuseIntershipOffer(){
+        // ARRANGE
+        String id = "234dsd2egd54ter";
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+        when(internshipOfferRepository.findById(id)).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
+
+        // ACT
+        Mono<InternshipOffer> internshipOfferDtoMono = internshipOfferService.refuseInternshipOffer(id);
+
+        // ASSERT
+        StepVerifier.create(internshipOfferDtoMono)
+                .assertNext(e -> assertTrue(!e.isValidated() && e.getValidationDate() != null))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldGetNotYetValidatedInternshipOffer(){
+        // ARRANGE
+        when(internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse())
+                .thenReturn(InternshipOfferMockData.getNonValidatedInternshipOffers());
+
+        // ACT
+        Flux<InternshipOffer> validIntershipOffer = internshipOfferService.getNotYetValidatedInternshipOffers();
+
+        // ASSERT
+        StepVerifier
+                .create(validIntershipOffer)
+                .assertNext(o -> assertTrue(!o.isValidated() && o.getValidationDate() == null))
+                .assertNext(o -> assertTrue(!o.isValidated() && o.getValidationDate() == null))
                 .verifyComplete();
     }
 }

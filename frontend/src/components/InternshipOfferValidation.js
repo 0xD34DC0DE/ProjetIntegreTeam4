@@ -1,20 +1,17 @@
 import {
   List,
-  ListItemText,
   ListItem,
-  Divider,
   ListItemButton,
-  Table,
-  TableHead,
-  TableRow,
-  TableCell,
-  TableBody,
+  Tooltip,
+  Typography,
+  Paper,
 } from "@mui/material";
-import { fontWeight } from "@mui/system";
 import axios from "axios";
 import React from "react";
 import { useHistory } from "react-router";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import InternshipOfferDialog from "./InternshipOfferDialog";
+import { listLabels } from "./InternshipOfferLabels";
 const emptyOffer = {
   limitDateToApply: new Date(),
   beginningDate: new Date(),
@@ -25,62 +22,163 @@ const emptyOffer = {
   maxSalary: 0,
   description: "",
 };
-function InternshipOfferValidation() {
+
+const InternshipOfferValidation = ({
+  internshipOfferDialogVisible,
+  toggleDialogs,
+}) => {
   const [unvalidatedOffers, setUnvalidatedOffers] = React.useState([]);
+  const [companies, setCompanies] = React.useState([]);
   const history = useHistory();
   const [userInfo] = React.useContext(UserInfoContext);
   const [token, setToken] = React.useState(sessionStorage.getItem("jwt"));
+  const [selectedOffer, setSelectedOffer] = React.useState(null);
   React.useEffect(() => {
     const getUnvalidatedInternshipOffers = async () => {
       let response = await axios({
         method: "GET",
-        url: "http://localhost:8080/internshipOffer/unvalidatedOffers",
+        url: "http://localhost:8080/internshipOffer/getNotYetValidatedInternshipOffers",
         headers: {
           Authorization: token,
         },
         responseType: "json",
       });
       console.log("res data", response.data);
+      var companiesName = [
+        ...new Set(Array.from(response.data, ({ companyName }) => companyName)),
+      ];
+      setCompanies(companiesName);
       setUnvalidatedOffers(response.data);
     };
+    getUnvalidatedInternshipOffers();
+  }, []);
 
+  const removeInternshipOffer = (offer) => {
+    var index = unvalidatedOffers.indexOf(offer);
+    unvalidatedOffers.splice(index, 1);
+    setUnvalidatedOffers(unvalidatedOffers);
+    setCompanies(
+      Array.from(unvalidatedOffers, ({ companyName }) => companyName)
+    );
+  };
+
+  React.useEffect(() => {
     const goBackToHome = () => {
       if (!userInfo.loggedIn) {
         history.push("/");
+        console.log("time", new Date(performance.now()));
       }
     };
+
     goBackToHome();
-    getUnvalidatedInternshipOffers();
-  }, [userInfo]);
+  });
 
   return (
     <>
-      {unvalidatedOffers.length > 0 && (
-        <Table>
-          <TableHead sx={{ textAlign: "center" }}>
-            {Object.keys(emptyOffer).map((offerKey, key) => {
-              return (
-                <TableCell key={key} sx={{ borderBottom: 0 }}>
-                  {offerKey}
-                </TableCell>
-              );
-            })}
-          </TableHead>
-          {unvalidatedOffers.map((offer, key) => {
-            return (
-              <>
-                <TableBody key={key} sx={{ textAlign: "center" }}>
-                  {Object.values(offer).map((offerValue, key) => {
-                    return <TableCell key={key}>{offerValue}</TableCell>;
-                  })}
-                </TableBody>
-              </>
-            );
-          })}
-        </Table>
-      )}
+      <List
+        sx={{
+          width: "100vw",
+          mt: 10,
+          pt: 0,
+        }}
+      >
+        {companies.map((name, key) => {
+          return (
+            <Paper
+              className={name}
+              elevation={15}
+              sx={{
+                mx: "5vw",
+                my: "5vh",
+                px: "1vw",
+                py: "1vw",
+                overflow: "auto",
+                borderRadius: "10px",
+              }}
+            >
+              <Typography
+                variant="h4"
+                sx={{
+                  display: "inline-block",
+                  p: "1rem",
+                  color: "white",
+                  pt: 2,
+                  mx: 2,
+                  borderRadius: "15px",
+                  backgroundColor: "rgb(34, 167, 240)",
+                }}
+              >
+                {name}
+              </Typography>
+              {unvalidatedOffers.map((offer, key) => {
+                if (name === offer.companyName) {
+                  return (
+                    <Tooltip
+                      title="Voir les détails"
+                      placement="top"
+                      followCursor={true}
+                    >
+                      <ListItemButton
+                        key={key}
+                        sx={{
+                          margin: "auto",
+                          ":hover": {
+                            boxShadow: 6,
+                          },
+                        }}
+                        onClick={() => {
+                          toggleDialogs(
+                            "internshipOfferDialogValidation",
+                            true
+                          );
+                          setSelectedOffer(offer);
+                        }}
+                      >
+                        {Object.keys(offer).map((offerKey, key) => {
+                          return (
+                            <>
+                              {![
+                                "id",
+                                "listEmailInterestedStudents",
+                                "companyName",
+                                "description",
+                                "validated",
+                              ].includes(offerKey) && (
+                                <Tooltip
+                                  title={listLabels[key]}
+                                  sx={{
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <ListItem>
+                                    {Object.values(offer)[key]}
+                                    {offerKey.includes("Salary") && "$"}
+                                  </ListItem>
+                                </Tooltip>
+                              )}
+                            </>
+                          );
+                        })}
+                      </ListItemButton>
+                    </Tooltip>
+                  );
+                }
+              })}
+            </Paper>
+          );
+        })}
+      </List>
+      <InternshipOfferDialog
+        dialogVisible={internshipOfferDialogVisible}
+        toggleDialogs={toggleDialogs}
+        offer={selectedOffer}
+        unvalidatedOffers={unvalidatedOffers}
+        setUnvalidatedOffers={setUnvalidatedOffers}
+        removeInternshipOffer={removeInternshipOffer}
+      />
     </>
   );
-}
+};
 
 export default InternshipOfferValidation;

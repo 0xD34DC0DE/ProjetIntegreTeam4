@@ -1,3 +1,4 @@
+import { Container } from "@mui/material";
 import React, { useState } from "react";
 import { BrowserRouter, Redirect, Switch } from "react-router-dom";
 import "./App.css";
@@ -16,6 +17,7 @@ function App() {
     registerDialog: false,
     depositInternshipOfferDialog: false,
     internshipOfferDialog: false,
+    internshipOfferDialogValidation: false,
   });
 
   return (
@@ -32,7 +34,14 @@ function App() {
           />
           <Switch>
             <Content open={open} setOpen={setOpen} exact path="/"></Content>
-            <InternshipOfferValidation exact path="/offer" />
+            <InternshipOfferValidation
+              internshipOfferDialogVisible={
+                dialogVisibility.internshipOfferDialogValidation
+              }
+              toggleDialogs={handleDialogs}
+              exact
+              path="/internshipOfferValidation"
+            />
           </Switch>
           <UserInfoContext.Consumer>
             {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}

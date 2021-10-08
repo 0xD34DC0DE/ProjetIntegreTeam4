@@ -9,13 +9,14 @@ import {
   ThemeProvider,
   Toolbar,
   Icon,
+  Typography,
 } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import { createTheme, styled } from "@mui/material/styles";
 import React, { useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
-import { drawerListDialogs } from "../models/drawerListItems";
+import { drawerListDialogs, drawerListRoutes } from "../models/drawerListItems";
 import OfferForm from "./OfferForm";
 import { useHistory } from "react-router-dom";
 
@@ -73,10 +74,23 @@ function SideBar({
               return (
                 <ListItemButton
                   key={key}
-                  onClick={() => {
-                    history.push("/offer");
-                    //toggleDialogs(item.name, true);
-                  }}
+                  onClick={() => toggleDialogs(item.name, true)}
+                >
+                  <ListItemIcon>{item.icon}</ListItemIcon>
+                  <ListItemText>{item.text}</ListItemText>
+                </ListItemButton>
+              );
+            })}
+        </List>
+        <Divider />
+        <List>
+          {drawerListRoutes
+            .filter((item) => item.roles.includes(userInfo.role))
+            .map((item, key) => {
+              return (
+                <ListItemButton
+                  key={key}
+                  onClick={() => history.push(item.url)}
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>
                   <ListItemText>{item.text}</ListItemText>

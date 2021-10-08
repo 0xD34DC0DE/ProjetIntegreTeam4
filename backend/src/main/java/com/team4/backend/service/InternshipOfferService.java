@@ -12,6 +12,8 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
+
 @Service
 public class InternshipOfferService {
 
@@ -31,15 +33,29 @@ public class InternshipOfferService {
                         : Mono.error(new UserDoNotExistException("Can't find monitor!")));
     }
 
-    public Flux<InternshipOfferDto> getNonValidatedInternshipOffers() {
-        return internshipOfferRepository.findAllInternshipOfferByIsValidatedFalse().map(InternshipOfferMapper::toDto);
+    public Flux<InternshipOffer> getNonValidatedInternshipOffers() {
+        return internshipOfferRepository.findAllInternshipOfferByIsValidatedFalse();
+    }
+    public Flux<InternshipOffer> getNotYetValidatedInternshipOffers() {
+        return internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse();
     }
 
-    public Mono<InternshipOfferDto> validateInternshipOffer(@RequestParam String id){
-        return internshipOfferRepository.findById(id).map(offer -> {offer.setValidated(true);
+    public Mono<InternshipOffer> validateInternshipOffer(String id){
+        return internshipOfferRepository.findById(id).map(offer -> {
+            offer.setValidated(true);
+            offer.setValidationDate(LocalDateTime.now());
             return offer;
         }).flatMap(internshipOfferRepository::save)
-                .map(InternshipOfferMapper::toDto)
+                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Can't find InternshipOffer with this id.")));
+    }
+
+    public Mono<InternshipOffer> refuseInternshipOffer(String id){
+        return internshipOfferRepository.findById(id).map(offer -> {
+            offer.setValidated(false);
+            offer.setValidationDate(LocalDateTime.now());
+            return offer;
+        }).flatMap(internshipOfferRepository::save)
                 .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
                         "Can't find InternshipOffer with this id.")));
     }
