@@ -43,7 +43,6 @@ const InternshipOfferValidation = ({
         },
         responseType: "json",
       });
-      console.log("res data", response.data);
       var companiesName = [
         ...new Set(Array.from(response.data, ({ companyName }) => companyName)),
       ];
@@ -85,6 +84,7 @@ const InternshipOfferValidation = ({
         {companies.map((name, key) => {
           return (
             <Paper
+              key={key}
               className={name}
               elevation={15}
               sx={{
@@ -97,6 +97,7 @@ const InternshipOfferValidation = ({
               }}
             >
               <Typography
+                key={key}
                 variant="h4"
                 sx={{
                   display: "inline-block",
@@ -114,6 +115,7 @@ const InternshipOfferValidation = ({
                 if (name === offer.companyName) {
                   return (
                     <Tooltip
+                      key={key}
                       title="Voir les détails"
                       placement="top"
                       followCursor={true}
@@ -145,13 +147,14 @@ const InternshipOfferValidation = ({
                                 "validated",
                               ].includes(offerKey) && (
                                 <Tooltip
+                                key={key}
                                   title={listLabels[key]}
                                   sx={{
                                     alignItems: "center",
                                     justifyContent: "center",
                                   }}
                                 >
-                                  <ListItem>
+                                  <ListItem key={key}>
                                     {Object.values(offer)[key]}
                                     {offerKey.includes("Salary") && "$"}
                                   </ListItem>

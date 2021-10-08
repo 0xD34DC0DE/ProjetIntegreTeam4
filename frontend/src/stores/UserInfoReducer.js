@@ -1,10 +1,6 @@
 import jwt_decode from "jwt-decode";
-import { useHistory } from "react-router";
 
 const UserInfoReducer = (state, action) => {
-
-  const history = useHistory();
-
   switch (action.type) {
     case "LOGIN":
       sessionStorage.setItem("jwt", `Bearer ${action.payload.token}`);
@@ -19,8 +15,6 @@ const UserInfoReducer = (state, action) => {
       };
     case "LOGOUT":
       sessionStorage.removeItem("jwt");
-      history.push("/");
-      
       return {
         email: "",
         role: "",

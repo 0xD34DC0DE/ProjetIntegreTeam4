@@ -1,5 +1,4 @@
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import PropTypes from "prop-types";
 import {
   Divider,
   List,
@@ -7,9 +6,6 @@ import {
   ListItemText,
   ListItemButton,
   ThemeProvider,
-  Toolbar,
-  Icon,
-  Typography,
 } from "@mui/material";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
@@ -17,15 +13,15 @@ import { createTheme, styled } from "@mui/material/styles";
 import React, { useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { drawerListDialogs, drawerListRoutes } from "../models/drawerListItems";
-import OfferForm from "./OfferForm";
 import { useHistory } from "react-router-dom";
+import OfferForm from "./OfferForm";
+
 
 const drawerWidth = 25;
 const DrawerHeader = styled("div")(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
   ...theme.mixins.toolbar,
   justifyContent: "flex-end",
 }));
@@ -33,22 +29,27 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 const mdTheme = createTheme();
 
 function SideBar({
-  open,
-  setOpen,
-  intershipOfferDialogVisible,
+  openDrawer,
+  internshipOfferDialogVisible,
+  setOpenDrawer,
   toggleDialogs,
 }) {
   const [userInfo] = useContext(UserInfoContext);
   const history = useHistory();
 
   const toggleDrawer = () => {
-    console.log("open", open);
-    setOpen(!open);
+    setOpenDrawer(!openDrawer);
   };
+
+  const handleClose = (_, reason) => {
+    if(reason === "backdropClick")
+      toggleDrawer();
+  }
 
   return (
     <ThemeProvider theme={mdTheme}>
       <Drawer
+        onClose={handleClose}
         sx={{
           width: `${drawerWidth}rem`,
           flexShrink: 0,
@@ -59,15 +60,15 @@ function SideBar({
         }}
         variant="temporary"
         anchor="left"
-        open={open}
+        open={openDrawer}
       >
         <DrawerHeader>
           <IconButton onClick={toggleDrawer}>
             <ChevronLeftIcon />
           </IconButton>
         </DrawerHeader>
-        <Divider />
-        <List>
+        <Divider sx={{pb: 0}} />
+        <List sx={{mt: 0, pt: 0, pb: 0, mb: 0}}>
           {drawerListDialogs
             .filter((item) => item.roles.includes(userInfo.role))
             .map((item, key) => {
@@ -82,15 +83,18 @@ function SideBar({
               );
             })}
         </List>
-        <Divider />
-        <List>
+        <List sx={{mt: 0, pt: 0, pb: 0, mb: 0}}>
           {drawerListRoutes
             .filter((item) => item.roles.includes(userInfo.role))
             .map((item, key) => {
               return (
                 <ListItemButton
                   key={key}
-                  onClick={() => history.push(item.url)}
+                  onClick={() => {
+                    history.push(item.url);
+                    toggleDrawer();
+                  }}
+          
                 >
                   <ListItemIcon>{item.icon}</ListItemIcon>
                   <ListItemText>{item.text}</ListItemText>
@@ -100,9 +104,9 @@ function SideBar({
         </List>
       </Drawer>
       <OfferForm
-        dialogVisible={intershipOfferDialogVisible}
-        toggleDialogs={toggleDialogs}
-      />
+              dialogVisible={internshipOfferDialogVisible}
+              toggleDialogs={toggleDialogs}
+            />
     </ThemeProvider>
   );
 }
