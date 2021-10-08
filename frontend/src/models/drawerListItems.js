@@ -31,4 +31,10 @@ export const drawerListRoutes = [
     icon: <FileUploadIcon />,
     text: "Téléverser le C.V.",
   },
+  {
+    roles: ["STUDENT"],
+    url: "/offers",
+    icon: <FileUploadIcon />,
+    text: "Voir les offres",
+  },
 ];
