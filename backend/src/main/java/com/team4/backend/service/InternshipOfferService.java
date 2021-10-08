@@ -1,18 +1,18 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.InternshipOfferRepository;
+import com.team4.backend.util.ValidatingPageRequest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.LocalDate;
 
@@ -38,7 +38,14 @@ public class InternshipOfferService {
                         : Mono.error(new UserNotFoundException("Can't find monitor!")));
     }
 
-    public Flux<InternshipOffer> getStudentExclusiveOffers(String studentEmail, @Min(0) Integer page, @Min(1) Integer size) {
+    public Flux<InternshipOffer> getStudentExclusiveOffers(String studentEmail, Integer page, Integer size) {
+        PageRequest pageRequest;
+        try {
+            pageRequest = new ValidatingPageRequest(page, size).getPageRequest();
+        } catch (InvalidPageRequestException e) {
+            return Flux.error(e);
+        }
+
         return studentService.getStudent(studentEmail)
                 .switchIfEmpty(
                         Mono.error(
@@ -48,8 +55,8 @@ public class InternshipOfferService {
                 .map(Student::getExclusiveOffersId)
                 .flatMapMany(offerIdList ->
                         Flux.fromIterable(offerIdList)
-                                .skip(size * page)
-                                .take(size)
+                                .skip(pageRequest.getOffset())
+                                .take(pageRequest.getPageSize())
                                 .flatMap(offerId ->
                                         internshipOfferRepository.
                                                 findByIdAndIsExclusiveTrueAndLimitDateToApplyAfter(
@@ -60,18 +67,37 @@ public class InternshipOfferService {
                 ).delayElements(Duration.ofSeconds(3));
     }
 
-    public Flux<InternshipOffer> getGeneralInternshipOffers(@Min(0) Integer page, @Min(1) Integer size) {
+    public Flux<InternshipOffer> getGeneralInternshipOffers(Integer page, Integer size) {
+
+        PageRequest pageRequest;
+        try {
+            pageRequest = new ValidatingPageRequest(page, size).getPageRequest();
+        } catch (InvalidPageRequestException e) {
+            return Flux.error(e);
+        }
+
         return internshipOfferRepository
-                .findAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now(), PageRequest.of(page, size));
+                .findAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now(), pageRequest);
 
     }
 
-    public Mono<Long> getInternshipOffersPageCount(@Min(1) Integer size) {
+    public Mono<Long> getInternshipOffersPageCount(Integer size) {
+        if(size < 1) {
+            return Mono.error(InvalidPageRequestException::new);
+        }
+
         return internshipOfferRepository.countAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now())
                 .map(count -> (long)Math.ceil((double)count / (double)size));
     }
 
-    public Mono<Long> getInternshipOffersPageCount(@NotNull String studentEmail, @Min(1) Integer size) {
+    public Mono<Long> getInternshipOffersPageCount(String studentEmail, Integer size) {
+        if(size < 1) {
+            return Mono.error(InvalidPageRequestException::new);
+        }
+        if(studentEmail == null) {
+            return Mono.error(new UserNotFoundException("Email is null"));
+        }
+
         return studentService.getStudent(studentEmail)
                 .switchIfEmpty(
                         Mono.error(new UserNotFoundException("Could not find student with email: " + studentEmail))
