@@ -21,7 +21,7 @@ const CvValidationDialog = ({ id, removeCv }) => {
     {
       axios({
         method: "PATCH",
-        url: "http://localhost:8080/fileMetaData/validateCv",
+        url: "http://localhost:8080/file/validateCv",
         headers: {
           Authorization: sessionStorage.getItem("jwt"),
         },

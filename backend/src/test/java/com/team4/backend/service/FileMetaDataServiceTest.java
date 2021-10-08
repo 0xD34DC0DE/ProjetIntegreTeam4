@@ -1,108 +1,148 @@
 package com.team4.backend.service;
 
-import com.team4.backend.exception.FileDoNotExistException;
-import com.team4.backend.model.FileMetaData;
-import com.team4.backend.model.Student;
-import com.team4.backend.repository.FileMetaDataRepository;
-import com.team4.backend.testdata.FileMetaDataMockData;
-import com.team4.backend.testdata.StudentMockData;
-import org.junit.jupiter.api.Assertions;
+import com.team4.backend.model.FileMetadata;
+import com.team4.backend.model.enums.UploadType;
+import com.team4.backend.repository.FileMetadataRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
-import reactor.core.publisher.Flux;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.multipart.FilePart;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.io.File;
+import java.io.IOException;
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
+@EnableAutoConfiguration
 @ExtendWith(MockitoExtension.class)
-public class FileMetaDataServiceTest {
+class FileMetadataServiceTest {
 
     @Mock
-    FileMetaDataRepository fileMetaDataRepository;
+    FileMetadataRepository fileMetadataRepository;
 
     @Mock
-    StudentService studentService;
+    FileAssetService fileAssetService;
 
     @InjectMocks
-    FileMetaDataService fileMetaDataService;
+    FileMetadataService fileMetadataService;
 
-    @Test
-    void countAllInvalidCvNotSeen() {
-        //ARRANGE
-        Mono<Long> nbrOfInvalidCvNotSeen = Mono.just(5L);
+    private final String filepath = "/filepath";
+    private final String userEmail = "test@gmail.com";
+    private final String mimeType = "application/pdf";
 
-        when(fileMetaDataRepository.countAllByIsValidFalseAndIsSeenFalse()).thenReturn(nbrOfInvalidCvNotSeen);
+    private final String filename = "filename";
+    private final UploadType type = UploadType.CV;
 
-        //ACT
-        Mono<Long> nbrOfInvalidCvNotSeenReturned = fileMetaDataService.countAllInvalidCvNotSeen();
+    private String location = "/location";
 
-        //ASSERT
-        StepVerifier.create(nbrOfInvalidCvNotSeenReturned)
-                .assertNext(n -> Assertions.assertEquals(5L, n))
-                .verifyComplete();
+    private FilePart filePart;
+
+    private File tempFile;
+
+    private FileMetadata fileMetadata;
+
+    private final String uuid = "uuidForTests";
+
+    @BeforeEach
+    void setUp() {
+        fileMetadata = new FileMetadata();
+        fileMetadata.setId("id");
+        fileMetadata.setUserEmail("userEmail");
+        fileMetadata.setFilename("filename");
+        fileMetadata.setAssetId("assetId");
+        fileMetadata.setIsValid(false);
+        fileMetadata.setType(type);
+        fileMetadata.setCreationDate(LocalDateTime.MIN);
+
+        filePart = mock(FilePart.class);
+        tempFile = mock(File.class);
+
+        location = userEmail + "/" + uuid;
     }
 
     @Test
-    void getListInvalidCvNotSeen() {
+    void create() {
         //ARRANGE
-        Integer noPage = 0;
-        when(fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("uploadDate").ascending())))
-                .thenReturn(Flux.just(
-                        FileMetaData.builder().build(),
-                        FileMetaData.builder().build(),
-                        FileMetaData.builder().build()
-                ));
+        when(fileMetadataRepository.save(fileMetadata)).thenReturn(Mono.just(fileMetadata));
 
         //ACT
-        Flux<FileMetaData> fileMetaDataDtoFlux = fileMetaDataService.getListInvalidCvNotSeen(noPage);
+        Mono<FileMetadata> response = fileMetadataService.create(fileMetadata);
 
         //ASSERT
-        StepVerifier.create(fileMetaDataDtoFlux)
-                .expectNextCount(3)
-                .verifyComplete();
+        StepVerifier.create(response).consumeNextWith(s -> {
+            assertNotNull(s.getId());
+        }).verifyComplete();
+
     }
 
     @Test
-    void shouldValidateCv() {
+    void uploadFile() throws NoSuchMethodException, IOException {
         //ARRANGE
-        FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
-        Student student = StudentMockData.getMockStudent();
+        when(fileAssetService.create(filepath, userEmail, mimeType, uuid)).thenReturn(Mono.just(location));
 
-        when(fileMetaDataRepository.findById(any(String.class))).thenReturn(Mono.just(fileMetaData));
-        when(studentService.updateCvValidity(fileMetaData.getUserEmail(), true)).thenReturn(Mono.just(student));
-        when(fileMetaDataRepository.save(any(FileMetaData.class))).thenReturn(Mono.just(fileMetaData));
+        when(filePart.transferTo(any(File.class))).thenReturn(Mono.empty().then());
+
+
+        FileMetadataService fileMetadataServiceSpy = spy(fileMetadataService);
+        when(fileMetadataServiceSpy.getTempFile()).thenReturn(tempFile);
+        when(tempFile.getPath()).thenReturn(filepath);
+
+        when(fileMetadataServiceSpy.getUuid()).thenReturn(uuid);
+
+        ArgumentCaptor<FileMetadata> fileMetadataCaptor = ArgumentCaptor.forClass(FileMetadata.class);
+        when(fileMetadataRepository.save(fileMetadataCaptor.capture())).thenReturn(Mono.just(fileMetadata));
 
         //ACT
-        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(fileMetaData.getId(), true);
+        Mono<ResponseEntity<Void>> response = fileMetadataServiceSpy.uploadFile(filename, type.toString(), mimeType, Mono.just(filePart), userEmail);
 
         //ASSERT
-        StepVerifier.create(fileMetaDataMono)
-                .assertNext(f -> {
-                    Assertions.assertTrue(f.getIsSeen());
-                    Assertions.assertTrue(f.getIsValid());
-                }).verifyComplete();
+        StepVerifier.create(response).consumeNextWith(s -> {
+            assertEquals(HttpStatus.CREATED, s.getStatusCode());
+        }).verifyComplete();
+
+        assertEquals(uuid, fileMetadataCaptor.getValue().getId());
+        assertEquals(userEmail, fileMetadataCaptor.getValue().getUserEmail());
     }
 
     @Test
-    void shouldNotValidateCv() {
+    void shouldCreateMetadata() {
         //ARRANGE
-        FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
-
-        when(fileMetaDataRepository.findById(any(String.class))).thenReturn(Mono.empty());
+        when(fileMetadataRepository.save(fileMetadata)).thenReturn(Mono.just(fileMetadata));
 
         //ACT
-        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(fileMetaData.getId(), true);
+        Mono<ResponseEntity<Void>> response = fileMetadataService.createMetadata(fileMetadata);
 
         //ASSERT
-        StepVerifier.create(fileMetaDataMono)
-                .expectError(FileDoNotExistException.class)
-                .verify();
+        StepVerifier.create(response).consumeNextWith(s -> {
+            assertEquals(HttpStatus.CREATED, s.getStatusCode());
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldNotCreateMetadata() {
+        //ARRANGE
+        fileMetadata.setId("invalid URI");
+        when(fileMetadataRepository.save(fileMetadata)).thenReturn(Mono.just(fileMetadata));
+
+        //ACT
+        Mono<ResponseEntity<Void>> response = fileMetadataService.createMetadata(fileMetadata);
+
+        //ASSERT
+        StepVerifier.create(response).consumeNextWith(s -> {
+            assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, s.getStatusCode());
+        }).verifyComplete();
     }
 }

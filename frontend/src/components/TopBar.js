@@ -152,7 +152,6 @@ const TopBar = ({
                       onMouseEnter={() => {}}
                       onClick={() => {
                         setMenuVisible(false);
-                        userInfoDispatch({ type: "LOGOUT" });
                       }}
                     >
                       <ListItemIcon>
@@ -169,7 +168,6 @@ const TopBar = ({
                     <MenuItem
                       onClick={() => {
                         setMenuVisible(false);
-                        userInfoDispatch({ type: "LOGOUT" });
                       }}
                     >
                       <ListItemIcon>

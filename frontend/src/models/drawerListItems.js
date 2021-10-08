@@ -1,6 +1,7 @@
 import AddIcon from "@mui/icons-material/Add";
 import RuleIcon from "@mui/icons-material/Rule";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
+import FileUploadIcon from "@mui/icons-material/FileUpload";
 
 export const drawerListDialogs = [
   {
@@ -23,5 +24,11 @@ export const drawerListRoutes = [
     url: "/cvValidation",
     icon: <FileCopyIcon />,
     text: "Valider les C.V.",
+  },
+  {
+    roles: ["STUDENT"],
+    url: "/uploadCV",
+    icon: <FileUploadIcon />,
+    text: "Téléverser le C.V.",
   },
 ];

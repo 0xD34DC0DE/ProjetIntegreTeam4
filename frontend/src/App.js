@@ -4,6 +4,7 @@ import "./App.css";
 import Content from "./components/Content";
 import InternshipOfferValidation from "./components/InternshipOfferValidation";
 import ListCvInternshipManagerView from "./components/ListCvInternshipManagerView";
+import UploadCV from "./components/UploadCV";
 import TopBar from "./components/TopBar";
 import UserInfoStore, { UserInfoContext } from "./stores/UserInfoStore";
 
@@ -47,6 +48,7 @@ function App() {
               path="/cvValidation"
               sx={{ marginTop: "50px" }}
             ></ListCvInternshipManagerView>
+            <UploadCV exact path="/uploadCV" />
           </Switch>
           <UserInfoContext.Consumer>
             {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}
