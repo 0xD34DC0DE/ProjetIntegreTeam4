@@ -14,10 +14,14 @@ const Content = () => {
         textAlign: "center",
       }}
     >
-      {userInfo.loggedIn &&
+      {!userInfo.loggedIn ?
         <Typography variant="h3">
-          Bienvenu {userInfo.role.toLowerCase()}
+          Bienvenue visiteur.
         </Typography>
+      :
+      <Typography variant="h3">
+      Bienvenue {userInfo.email.toLowerCase()}
+    </Typography>
       }
     </Container>
   );
