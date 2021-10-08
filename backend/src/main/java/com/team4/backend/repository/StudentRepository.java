@@ -7,5 +7,6 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface StudentRepository extends ReactiveMongoRepository<Student, String> {
+    Mono<Student> findByEmailAndIsEnabledTrue(String studentEmail);
     Mono<Student> findByEmail(String email);
 }

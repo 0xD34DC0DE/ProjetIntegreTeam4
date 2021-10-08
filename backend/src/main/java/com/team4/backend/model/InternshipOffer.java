@@ -38,11 +38,11 @@ public class InternshipOffer implements Serializable {
 
     private Float maxSalary;
 
-    private boolean isValidated;
+    private Boolean isValidated;
 
     private LocalDateTime validationDate;
 
-    private boolean isExclusive;
+    private Boolean isExclusive;
 
     private List<String> listEmailInterestedStudents;
 

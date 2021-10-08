@@ -7,6 +7,7 @@ import ListCvInternshipManagerView from "./components/ListCvInternshipManagerVie
 import UploadCV from "./components/UploadCV";
 import TopBar from "./components/TopBar";
 import UserInfoStore, { UserInfoContext } from "./stores/UserInfoStore";
+import OfferViews from "./components/OfferViews";
 
 function App() {
   const handleDialogs = (dialogName, show) => {
@@ -49,6 +50,7 @@ function App() {
               sx={{ marginTop: "50px" }}
             ></ListCvInternshipManagerView>
             <UploadCV exact path="/uploadCV" />
+            <OfferViews exact path="/offers"/>
           </Switch>
           <UserInfoContext.Consumer>
             {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}

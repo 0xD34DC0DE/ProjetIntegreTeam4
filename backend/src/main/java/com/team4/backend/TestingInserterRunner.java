@@ -2,6 +2,16 @@ package com.team4.backend;
 
 import com.team4.backend.model.*;
 import com.team4.backend.repository.*;
+import com.team4.backend.model.InternshipOffer;
+import com.team4.backend.model.Monitor;
+import com.team4.backend.model.Student;
+import com.team4.backend.model.User;
+import com.team4.backend.model.enums.Role;
+import com.team4.backend.model.enums.StudentState;
+import com.team4.backend.repository.InternshipOfferRepository;
+import com.team4.backend.repository.MonitorRepository;
+import com.team4.backend.repository.StudentRepository;
+import com.team4.backend.repository.UserRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +21,10 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -36,7 +48,8 @@ public class TestingInserterRunner implements ApplicationRunner {
     public TestingInserterRunner(MonitorRepository monitorRepository,
                                  InternshipOfferRepository internshipOfferRepository,
                                  StudentRepository studentRepository,
-                                 SupervisorRepository supervisorRepository, PBKDF2Encoder pbkdf2Encoder,
+                                 SupervisorRepository supervisorRepository,
+                                 PBKDF2Encoder pbkdf2Encoder,
                                  FileMetaDataRepository fileMetaDataRepository) {
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
@@ -50,6 +63,7 @@ public class TestingInserterRunner implements ApplicationRunner {
     public void run(final ApplicationArguments args) {
         studentRepository.deleteAll().subscribe();
         monitorRepository.deleteAll().subscribe();
+        studentRepository.deleteAll().subscribe();
         fileMetaDataRepository.deleteAll().subscribe();
         internshipOfferRepository.deleteAll().subscribe();
 
@@ -58,6 +72,11 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertMonitors();
         insertSupervisors();
         insertCvs();
+
+        String exclusiveOfferId = insertInternshipOffers2();
+
+        insertStudents(exclusiveOfferId);
+
     }
 
     private void insertStudents() {
@@ -78,12 +97,65 @@ public class TestingInserterRunner implements ApplicationRunner {
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
     private void insertSupervisors(){
-        List<Supervisor> supervisorList = Arrays.asList(
+        List<Supervisor> supervisorList = Collections.singletonList(
                 Supervisor.supervisorBuilder()
                         .email("45673234@gmail.com").password(pbkdf2Encoder.encode("sasuke123")).build()
         );
 
         supervisorRepository.saveAll(supervisorList).subscribe();
+    }
+
+    private void insertStudents(String exclusiveOfferId) {
+        String password = pbkdf2Encoder.encode("student");
+        Student student = Student.studentBuilder()
+                .email("student@gmail.com")
+                .password(password)
+                .firstName("John")
+                .lastName("Doe")
+                .registrationDate(LocalDate.now())
+                .studentState(StudentState.REGISTERED)
+                .phoneNumber("123-123-1234")
+                .exclusiveOffersId(Collections.singleton(exclusiveOfferId))
+                .build();
+        studentRepository.save(student).subscribe();
+    }
+
+    private String insertInternshipOffers2() {
+        InternshipOffer internshipOffer1 =
+                InternshipOffer.builder()
+                        .beginningDate(LocalDate.now().plusMonths(1))
+                        .endingDate(LocalDate.now().plusMonths(2))
+                        .limitDateToApply(LocalDate.now().plusDays(15))
+                        .companyName("BestCo.")
+                        .description("Description")
+                        .isExclusive(false)
+                        .isValidated(true)
+                        .maxSalary(17.50f)
+                        .minSalary(16.25f)
+                        .emailOfMonitor("9182738492@gmail.com")
+                        .listEmailInterestedStudents(Collections.emptyList())
+                        .build();
+
+        InternshipOffer internshipOffer2 = InternshipOffer.builder()
+                        .beginningDate(LocalDate.now().plusMonths(3))
+                        .endingDate(LocalDate.now().plusMonths(6))
+                        .limitDateToApply(LocalDate.now().plusDays(11))
+                        .companyName("CAE")
+                        .description("Some Description")
+                        .isExclusive(true)
+                        .isValidated(true)
+                        .maxSalary(19.50f)
+                        .minSalary(19.50f)
+                        .emailOfMonitor("9182738492@gmail.com")
+                        .listEmailInterestedStudents(Collections.emptyList())
+                        .build();
+
+        for (int i = 0; i < 7; i++) {
+            internshipOffer1.setDescription(internshipOffer1.getDescription() + i);
+            internshipOfferRepository.save(internshipOffer1).block();
+            internshipOffer1.setId(null);
+        }
+        return internshipOfferRepository.save(internshipOffer2).block().getId();
     }
 
 

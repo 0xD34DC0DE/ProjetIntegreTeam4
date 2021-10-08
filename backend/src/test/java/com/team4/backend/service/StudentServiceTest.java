@@ -1,7 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.exception.UserAlreadyExistsException;
-import com.team4.backend.exception.UserDoNotExistException;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.testdata.StudentMockData;
@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -106,7 +107,7 @@ public class StudentServiceTest {
 
         //ASSERT
         StepVerifier.create(studentMono)
-                .verifyError(UserDoNotExistException.class);
+                .verifyError(UserNotFoundException.class);
     }
 
     @Test
@@ -137,7 +138,39 @@ public class StudentServiceTest {
         Mono<Student> studentMono = studentService.updateCvValidity(student.getEmail(), true);
 
         //ASSERT
-        StepVerifier.create(studentMono).verifyError(UserDoNotExistException.class);
+        StepVerifier.create(studentMono).verifyError(UserNotFoundException.class);
+    }
+
+    @Test
+    void shouldFindStudent() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentRepository.findByEmailAndIsEnabledTrue(same(student.getEmail()))).thenReturn(Mono.just(student));
+
+        //ACT
+        Mono<Student> studentMono = studentService.getStudent(student.getEmail());
+
+        //ASSERT
+        StepVerifier.create(studentMono)
+                .expectNextCount(1)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotFindStudent() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentRepository.findByEmailAndIsEnabledTrue(same(student.getEmail()))).thenReturn(Mono.empty());
+
+        //ACT
+        Mono<Student> studentMono = studentService.getStudent(student.getEmail());
+
+        //ASSERT
+        StepVerifier.create(studentMono)
+                .expectNextCount(0)
+                .verifyComplete();
     }
 
 }

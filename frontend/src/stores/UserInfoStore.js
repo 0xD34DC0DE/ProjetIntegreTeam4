@@ -4,14 +4,15 @@ import UserInfoReducer from './UserInfoReducer'
 const initialState = {
   email: "",
   role: "",
-  loggedIn: false
+  loggedIn: false,
+  jwt: ""
 }
 
 const UserInfoStore = ({children}) =>  {
   const [state, dispatch] = useReducer(UserInfoReducer, initialState);
   
   useEffect(() => {
-    dispatch({type: 'REFRESH'})
+    dispatch({type: 'REFRESH'});
   }, [])
 
   return (

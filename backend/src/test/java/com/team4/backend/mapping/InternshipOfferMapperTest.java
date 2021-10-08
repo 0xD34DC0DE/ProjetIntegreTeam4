@@ -1,6 +1,8 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.InternshipOfferDto;
+import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.dto.InternshipOfferMonitorViewDto;
+import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.testdata.InternshipOfferMockData;
 import org.junit.jupiter.api.Test;
@@ -10,9 +12,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class InternshipOfferMapperTest {
 
     @Test
-    void mapDtoToEntity() {
+    void mapInternshipCreationDtoToEntity() {
         //ARRANGE
-        InternshipOfferDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOfferCreationDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferCreationDto();
 
         //ACT
         InternshipOffer internshipOffer = InternshipOfferMapper.toEntity(internshipOfferDto);
@@ -25,31 +27,49 @@ public class InternshipOfferMapperTest {
         assertEquals(internshipOfferDto.getDescription(), internshipOffer.getDescription());
         assertEquals(internshipOfferDto.getMinSalary(), internshipOffer.getMinSalary());
         assertEquals(internshipOfferDto.getMaxSalary(), internshipOffer.getMaxSalary());
-        assertEquals(internshipOfferDto.isValidated(), internshipOffer.isValidated());
         assertEquals(internshipOfferDto.getEmailOfMonitor(), internshipOffer.getEmailOfMonitor());
     }
 
     @Test
-    void mapEntityToDto() {
+    void mapInternshipOfferEntityToInternshipOfferStudentViewDto() {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
         //ACT
-        InternshipOfferDto internshipOfferDto = InternshipOfferMapper.toDto(internshipOffer);
+        InternshipOfferStudentViewDto internshipOfferStudentViewDto = InternshipOfferMapper.toStudentViewDto(internshipOffer);
 
         //ASSERT
-        assertEquals(internshipOffer.getId(), internshipOfferDto.getId());
-        assertEquals(internshipOffer.getLimitDateToApply(), internshipOfferDto.getLimitDateToApply());
-        assertEquals(internshipOffer.getBeginningDate(), internshipOfferDto.getBeginningDate());
-        assertEquals(internshipOffer.getEndingDate(), internshipOfferDto.getEndingDate());
-        assertEquals(internshipOffer.getCompanyName(), internshipOfferDto.getCompanyName());
-        assertEquals(internshipOffer.getDescription(), internshipOfferDto.getDescription());
-        assertEquals(internshipOffer.getMinSalary(), internshipOfferDto.getMinSalary());
-        assertEquals(internshipOffer.getMaxSalary(), internshipOfferDto.getMaxSalary());
-        assertEquals(internshipOffer.isValidated(), internshipOfferDto.isValidated());
+        assertEquals(internshipOffer.getId(), internshipOfferStudentViewDto.getId());
+        assertEquals(internshipOffer.getIsExclusive(), internshipOfferStudentViewDto.getIsExclusive());
+        assertEquals(internshipOffer.getLimitDateToApply(), internshipOfferStudentViewDto.getLimitDateToApply());
+        assertEquals(internshipOffer.getBeginningDate(), internshipOfferStudentViewDto.getBeginningDate());
+        assertEquals(internshipOffer.getEndingDate(), internshipOfferStudentViewDto.getEndingDate());
+        assertEquals(internshipOffer.getCompanyName(), internshipOfferStudentViewDto.getCompanyName());
+        assertEquals(internshipOffer.getDescription(), internshipOfferStudentViewDto.getDescription());
+        assertEquals(internshipOffer.getMinSalary(), internshipOfferStudentViewDto.getMinSalary());
+        assertEquals(internshipOffer.getMaxSalary(), internshipOfferStudentViewDto.getMaxSalary());
+    }
 
-        assertEquals(InternshipOfferMockData.getInterestedStudentsEmailList(),
-                internshipOfferDto.getListEmailInterestedStudents());
+    @Test
+    void mapInternshipOfferEntityToInternshipOfferMonitorViewDto() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        //ACT
+        InternshipOfferMonitorViewDto internshipOfferMonitorViewDto =
+                InternshipOfferMapper.toMonitorView(internshipOffer);
+
+        //ASSERT
+        assertEquals(internshipOffer.getId(), internshipOfferMonitorViewDto.getId());
+        assertEquals(internshipOffer.getLimitDateToApply(), internshipOfferMonitorViewDto.getLimitDateToApply());
+        assertEquals(internshipOffer.getBeginningDate(), internshipOfferMonitorViewDto.getBeginningDate());
+        assertEquals(internshipOffer.getEndingDate(), internshipOfferMonitorViewDto.getEndingDate());
+        assertEquals(internshipOffer.getCompanyName(), internshipOfferMonitorViewDto.getCompanyName());
+        assertEquals(internshipOffer.getDescription(), internshipOfferMonitorViewDto.getDescription());
+        assertEquals(internshipOffer.getMinSalary(), internshipOfferMonitorViewDto.getMinSalary());
+        assertEquals(internshipOffer.getMaxSalary(), internshipOfferMonitorViewDto.getMaxSalary());
+        assertEquals(internshipOffer.getListEmailInterestedStudents(),
+                internshipOfferMonitorViewDto.getListEmailInterestedStudents());
     }
 
 }
