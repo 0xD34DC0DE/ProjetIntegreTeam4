@@ -4,6 +4,7 @@ import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.service.InternshipOfferService;
 import com.team4.backend.testdata.InternshipOfferMockData;
@@ -70,6 +71,75 @@ public class InternshipOfferControllerTest {
                 //ASSERT
                 .expectStatus().isNotFound()
                 .expectBody(String.class);
+    }
+
+    @Test
+    void getNonValidatedIntershipOffer() {
+        // ARRANGE
+        Flux<InternshipOffer> internshipOfferFlux = InternshipOfferMockData.getNonValidatedInternshipOffers();
+        when(internshipOfferService.getNonValidatedInternshipOffers()).thenReturn(internshipOfferFlux);
+
+        // ACT
+        webTestClient
+                .get()
+                .uri("/internshipOffer/unvalidatedOffers")
+                .exchange()
+                // ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(InternshipOfferDto.class);
+    }
+
+    @Test
+    void shouldValidateInternshipOffer() {
+        //ARRANGE
+        InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.validateInternshipOffer(internshipOfferDTO.getId())).thenReturn(Mono.just(internshipOffer));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/internshipOffer/validateInternshipOffer?id="+internshipOfferDTO.getId())
+                .bodyValue(internshipOfferDTO)
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBody(InternshipOfferDto.class);
+    }
+
+    @Test
+    void shouldGetNotYetValidatedInternshipOffer() {
+        // ARRANGE
+        Flux<InternshipOffer> internshipOfferFlux = InternshipOfferMockData.getNonValidatedInternshipOffers();
+        when(internshipOfferService.getNotYetValidatedInternshipOffers()).thenReturn(internshipOfferFlux);
+
+        // ACT
+        webTestClient
+                .get()
+                .uri("/internshipOffer/getNotYetValidatedInternshipOffers")
+                .exchange()
+                // ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(InternshipOfferDto.class);
+    }
+    @Test
+    void shouldRefuseInternshipOffer() {
+        //ARRANGE
+        InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.refuseInternshipOffer(internshipOfferDTO.getId())).thenReturn(Mono.just(internshipOffer));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/internshipOffer/refuseInternshipOffer?id="+internshipOfferDTO.getId())
+                .bodyValue(internshipOfferDTO)
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBody(InternshipOfferDto.class);
     }
 
     @Test

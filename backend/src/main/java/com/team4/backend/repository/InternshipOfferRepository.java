@@ -7,7 +7,9 @@ import org.springframework.data.mongodb.repository.ReactiveMongoRepository;
 import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
+import java.util.List;
 import java.time.LocalDate;
 import java.util.UUID;
 
@@ -18,4 +20,6 @@ public interface InternshipOfferRepository extends ReactiveMongoRepository<Inter
     Mono<InternshipOffer> findByIdAndIsExclusiveTrueAndLimitDateToApplyAfter(String id, LocalDate date);
 
     Mono<Long> countAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate date);
+    public Flux<InternshipOffer> findAllInternshipOfferByIsValidatedFalse();
+    public Flux<InternshipOffer> findAllByValidationDateNullAndIsValidatedFalse();
 }

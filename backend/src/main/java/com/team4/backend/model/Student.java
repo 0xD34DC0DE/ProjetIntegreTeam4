@@ -19,6 +19,8 @@ public class Student extends User {
 
     private StudentState studentState;
 
+    private Boolean hasValidCv;
+
     private List<String> appliedOffersId;
 
     private Set<String> exclusiveOffersId;
@@ -34,6 +36,8 @@ public class Student extends User {
                    LocalDate registrationDate,
                    List<String> appliedOffersId,
                    Set<String> exclusiveOffersId) {
+                   LocalDate registrationDate,
+                   Boolean hasValidCv) {
         super(id,
                 email,
                 firstName,
@@ -47,6 +51,7 @@ public class Student extends User {
         this.studentState = studentState;
         this.appliedOffersId = appliedOffersId;
         this.exclusiveOffersId = exclusiveOffersId;
+        this.hasValidCv = hasValidCv;
     }
 
 }

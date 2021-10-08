@@ -10,6 +10,7 @@ const AccountFormField = ({ onFieldChange, step, valid, visibleStep }) => {
       value: "student",
     },
     { type: "Moniteur", value: "monitor" },
+    { type: "Superviseur", value: "supervisor" },
   ];
 
   useEffect(() => {

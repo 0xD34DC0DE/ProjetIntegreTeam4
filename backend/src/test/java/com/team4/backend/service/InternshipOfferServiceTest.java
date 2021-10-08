@@ -18,9 +18,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Flux;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -282,5 +286,73 @@ public class InternshipOfferServiceTest {
         StepVerifier.create(pageCountMono)
                 .expectError(UserNotFoundException.class)
                 .verify();
+    }
+
+    @Test
+    void shouldOnlyGetNonValidatedInternshipOffers(){
+        // ARRANGE
+        when(internshipOfferRepository.findAllInternshipOfferByIsValidatedFalse())
+                .thenReturn(InternshipOfferMockData.getNonValidatedInternshipOffers());
+
+        // ACT
+        Flux<InternshipOffer> validIntershipOfferDTO = internshipOfferService.getNonValidatedInternshipOffers();
+
+        // ASSERT
+        StepVerifier
+                .create(validIntershipOfferDTO)
+                .assertNext(o -> assertFalse(o.isValidated()))
+                .assertNext(o -> assertFalse(o.isValidated()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldValidateIntershipOffer(){
+        // ARRANGE
+        String id = "234dsd2egd54ter";
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+        when(internshipOfferRepository.findById(id)).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
+
+        // ACT
+        Mono<InternshipOffer> internshipOfferDtoMono = internshipOfferService.validateInternshipOffer(id);
+
+        // ASSERT
+        StepVerifier.create(internshipOfferDtoMono)
+                .assertNext(e -> assertTrue(e.isValidated()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldRefuseIntershipOffer(){
+        // ARRANGE
+        String id = "234dsd2egd54ter";
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+        when(internshipOfferRepository.findById(id)).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
+
+        // ACT
+        Mono<InternshipOffer> internshipOfferDtoMono = internshipOfferService.refuseInternshipOffer(id);
+
+        // ASSERT
+        StepVerifier.create(internshipOfferDtoMono)
+                .assertNext(e -> assertTrue(!e.isValidated() && e.getValidationDate() != null))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldGetNotYetValidatedInternshipOffer(){
+        // ARRANGE
+        when(internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse())
+                .thenReturn(InternshipOfferMockData.getNonValidatedInternshipOffers());
+
+        // ACT
+        Flux<InternshipOffer> validIntershipOffer = internshipOfferService.getNotYetValidatedInternshipOffers();
+
+        // ASSERT
+        StepVerifier
+                .create(validIntershipOffer)
+                .assertNext(o -> assertTrue(!o.isValidated() && o.getValidationDate() == null))
+                .assertNext(o -> assertTrue(!o.isValidated() && o.getValidationDate() == null))
+                .verifyComplete();
     }
 }

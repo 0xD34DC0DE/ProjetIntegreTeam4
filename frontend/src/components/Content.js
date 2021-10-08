@@ -1,21 +1,27 @@
 import { Container, Typography } from "@mui/material";
-import React, { useContext } from "react";
+import React from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 
+// Ici je n'ai pas déconstruit, ça provoque une erreur dans la console.
 const Content = () => {
-  const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
-
+  const [userInfo, userInfoDispatch] = React.useContext(UserInfoContext);
   return (
-    <Container sx={{ clear: "right", ml: "0" }}>
-      <Typography variant="h4">
-        {userInfo.loggedIn ? (
-          <>
-            Hello {userInfo.role.toLowerCase()}, {userInfo.email}{" "}
-          </>
-        ) : (
-          "Hello visitor."
-        )}
-      </Typography>
+    <Container
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        mt: "10%",
+        textAlign: "center",
+      }}
+    >
+      {userInfo.loggedIn ? (
+        <Typography variant="h4">
+          Hello {userInfo.role.toLowerCase()}, {userInfo.email}
+        </Typography>
+      ) : (
+        "Hello visitor."
+      )}
     </Container>
   );
 };

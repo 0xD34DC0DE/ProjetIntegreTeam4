@@ -1,2 +1,9 @@
 .App {
 }
+::-webkit-scrollbar {
+  display: none;
+}
+
+header{
+  margin:0
+}

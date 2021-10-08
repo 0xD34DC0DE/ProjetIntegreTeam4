@@ -5,10 +5,15 @@ import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.InternshipOfferMapper;
+import com.team4.backend.mapping.InternshipOfferMapper;
+import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.service.InternshipOfferService;
+import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
@@ -16,6 +21,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 @RestController
+@Log
 @RequestMapping("/internshipOffer")
 public class InternshipOfferController {
 
@@ -90,4 +96,27 @@ public class InternshipOfferController {
                 .map(ResponseEntity::ok);
     }
 
+    @GetMapping("/unvalidatedOffers")
+    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
+    public Flux<InternshipOfferDto> getUnvalidatedInternshipOffers() {
+        return internshipOfferService.getNonValidatedInternshipOffers().map(InternshipOfferMapper::toDto);
+    }
+
+    @PatchMapping("/validateInternshipOffer")
+    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
+    public Mono<InternshipOfferDto> validateInternshipOffer(@RequestParam("id") String id){
+        return internshipOfferService.validateInternshipOffer(id).map(InternshipOfferMapper::toDto);
+    }
+
+    @PatchMapping("/refuseInternshipOffer")
+    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
+    public Mono<InternshipOfferDto> refuseInternshipOffer(@RequestParam("id") String id){
+        return internshipOfferService.refuseInternshipOffer(id).map(InternshipOfferMapper::toDto);
+    }
+
+    @GetMapping("/getNotYetValidatedInternshipOffers")
+    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
+    public Flux<InternshipOfferDto> getNotYetValidatedInternshipOffers() {
+        return internshipOfferService.getNotYetValidatedInternshipOffers().map(InternshipOfferMapper::toDto);
+    }
 }

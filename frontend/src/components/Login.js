@@ -53,10 +53,18 @@ const Login = ({ open, toggleDialogs }) => {
 
   const resetForm = () => {
     setForm({ email: "", password: "" });
+    setErrorMessage("");
   };
 
   const handleClose = (_, reason) => {
-    if (reason === "backdropClick") toggleDialogs("loginDialog", false);
+    if (reason === "backdropClick") {
+      toggleDialogs("loginDialog", false);
+      resetForm();
+    }
+  };
+
+  const handleFieldKeyUp = (event) => {
+    if (event.code === "Enter") logUserIn();
   };
 
   if (!userInfo.loggedIn) {
@@ -85,6 +93,7 @@ const Login = ({ open, toggleDialogs }) => {
             autoComplete="email"
             variant="standard"
             autoFocus
+            onKeyUp={handleFieldKeyUp}
             sx={{ p: 0, m: 0 }}
           />
           <TextField
@@ -99,6 +108,7 @@ const Login = ({ open, toggleDialogs }) => {
             type="password"
             value={form.password}
             id="password"
+            onKeyUp={handleFieldKeyUp}
             autoComplete="current-password"
           />
         </DialogContent>
