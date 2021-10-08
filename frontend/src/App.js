@@ -1,9 +1,9 @@
-import { Container } from "@mui/material";
 import React, { useState } from "react";
 import { BrowserRouter, Redirect, Switch } from "react-router-dom";
 import "./App.css";
 import Content from "./components/Content";
 import InternshipOfferValidation from "./components/InternshipOfferValidation";
+import ListCvInternshipManagerView from "./components/ListCvInternshipManagerView";
 import TopBar from "./components/TopBar";
 import UserInfoStore, { UserInfoContext } from "./stores/UserInfoStore";
 
@@ -42,6 +42,11 @@ function App() {
               exact
               path="/internshipOfferValidation"
             />
+            <ListCvInternshipManagerView
+              exact
+              path="/cvValidation"
+              sx={{ marginTop: "50px" }}
+            ></ListCvInternshipManagerView>
           </Switch>
           <UserInfoContext.Consumer>
             {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}

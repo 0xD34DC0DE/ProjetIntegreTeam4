@@ -2,10 +2,10 @@ package com.team4.backend;
 
 import com.team4.backend.model.*;
 import com.team4.backend.model.enums.Role;
+import com.team4.backend.repository.FileMetaDataRepository;
 import com.team4.backend.repository.InternshipOfferRepository;
 import com.team4.backend.repository.MonitorRepository;
-import com.team4.backend.repository.SupervisorRepository;
-import com.team4.backend.repository.UserRepository;
+import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,43 +28,55 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final MonitorRepository monitorRepository;
 
-    private final SupervisorRepository supervisorRepository;
-
     private final InternshipOfferRepository internshipOfferRepository;
 
-    private final UserRepository userRepository;
+    private final StudentRepository studentRepository;
 
     private final PBKDF2Encoder pbkdf2Encoder;
 
-    public TestingInserterRunner(MonitorRepository monitorRepository, InternshipOfferRepository internshipOfferRepository, UserRepository userRepository, SupervisorRepository supervisorRepository, PBKDF2Encoder pbkdf2Encoder) {
+    private final FileMetaDataRepository fileMetaDataRepository;
+
+    public TestingInserterRunner(MonitorRepository monitorRepository,
+                                 InternshipOfferRepository internshipOfferRepository,
+                                 StudentRepository studentRepository,
+                                 PBKDF2Encoder pbkdf2Encoder,
+                                 FileMetaDataRepository fileMetaDataRepository) {
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
-        this.userRepository = userRepository;
-        this.supervisorRepository = supervisorRepository;
+        this.studentRepository = studentRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
+        this.fileMetaDataRepository = fileMetaDataRepository;
     }
 
     @Override
     public void run(final ApplicationArguments args) {
-        userRepository.deleteAll().subscribe();
+        studentRepository.deleteAll().subscribe();
         monitorRepository.deleteAll().subscribe();
-        supervisorRepository.deleteAll().subscribe();
+        fileMetaDataRepository.deleteAll().subscribe();
         internshipOfferRepository.deleteAll().subscribe();
 
-        insertUsers();
-
         insertInternshipOffers();
+        insertStudents();
+        insertMonitors();
+        insertCvs();
     }
 
-    private void insertUsers() {
-        List<User> users = Arrays.asList(
-                Student.studentBuilder().email("123456789@gmail.com").firstName("Travis").lastName("Scott").phoneNumber("4387650987").password(pbkdf2Encoder.encode("massou123")).build(),
-                InternshipManager.internshipManagerBuilder().email("francoisLacoursiere@gmail.com").password(pbkdf2Encoder.encode("francois123")).build(),
-                Monitor.monitorBuilder().email("9182738492@gmail.com").password(pbkdf2Encoder.encode("lao@dkv23")).build(),
-                Supervisor.supervisorBuilder().email("45673234@gmail.com").password(pbkdf2Encoder.encode("sasuke123")).build()
+    private void insertStudents() {
+        List<Student> students = Arrays.asList(
+                Student.studentBuilder().email("123456789@gmail.com").firstName("Travis").lastName("Scott").phoneNumber("4387650987").password(pbkdf2Encoder.encode("travis123")).hasValidCv(false).build(),
+                Student.studentBuilder().email("3643283423@gmail.com").firstName("Jean").lastName("Jordan").phoneNumber("5143245678").password(pbkdf2Encoder.encode("jean123")).hasValidCv(false).build(),
+                Student.studentBuilder().email("123667713@gmail.com").firstName("Farid").lastName("Shalom").phoneNumber("4385738764").password(pbkdf2Encoder.encode("farid123")).hasValidCv(false).build(),
+                Student.studentBuilder().email("902938912@gmail.com").firstName("Kevin").lastName("Alphonse").phoneNumber("4385738764").password(pbkdf2Encoder.encode("kevin123")).hasValidCv(false).build()
         );
 
-        userRepository.saveAll(users).subscribe(u -> log.info("New users created: {}", u));
+        studentRepository.saveAll(students).subscribe(student -> log.info("Student has been saved : {}", student));
+    }
+
+    private void insertMonitors() {
+        Monitor monitor = Monitor.monitorBuilder()
+                .email("9182738492@gmail.com").password(pbkdf2Encoder.encode("lao@dkv23")).build();
+
+        monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
 
     private void insertInternshipOffers(){
@@ -213,4 +226,22 @@ public class TestingInserterRunner implements ApplicationRunner {
         internshipOfferRepository.saveAll(internshipOffers).subscribe();
     }
 
+    //TODO --> will have to remove it to test real upload and download
+    private void insertCvs() {
+        List<FileMetaData> fileMetaDataList = Arrays.asList(
+                FileMetaData.builder().assetId("123456789@gmail.com/06708b00-52fe-4054-90d0-a1cd4579b0e9").userEmail("123456789@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusDays(2)).build(),
+                FileMetaData.builder().assetId("123456789@gmail.com/3b134033-2463-41b2-b9d8-05238856bfef").userEmail("123456789@gmail.com").filename("cv2.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusWeeks(2)).build(),
+                FileMetaData.builder().assetId("123456789@gmail.com/8164ae59-a072-4bfe-8f03-2f350dd8086e").userEmail("123456789@gmail.com").filename("cv3.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusDays(3)).build(),
+                FileMetaData.builder().assetId("123456789@gmail.com/c31a51c5-74b0-4ecb-87a3-554bf5290dac").userEmail("123456789@gmail.com").filename("cv4.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusMonths(1)).build(),
+                FileMetaData.builder().assetId("123456789@gmail.com/c31a51c5-74b0-4ecb-87a3-554bf5290dac").userEmail("123456789@gmail.com").filename("cv5.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusMonths(1)).build(),
+                FileMetaData.builder().assetId("123456789@gmail.com/06708b00-52fe-4054-90d0-a1cd4579b0e9").userEmail("123667713@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusWeeks(2)).build(),
+                FileMetaData.builder().assetId("123456789@gmail.com/3b134033-2463-41b2-b9d8-05238856bfef").userEmail("123667713@gmail.com").filename("cv2.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("123456789@gmail.com/8164ae59-a072-4bfe-8f03-2f350dd8086e").userEmail("3643283423@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusDays(6)).build(),
+                FileMetaData.builder().assetId("123456789@gmail.com/06708b00-52fe-4054-90d0-a1cd4579b0e9").userEmail("3643283423@gmail.com").filename("cv2.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusDays(2)).build(),
+                FileMetaData.builder().assetId("123456789@gmail.com/3b134033-2463-41b2-b9d8-05238856bfef").userEmail("902938912@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
+                FileMetaData.builder().assetId("123456789@gmail.com/8164ae59-a072-4bfe-8f03-2f350dd8086e").userEmail("902938912@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build()
+        );
+
+        fileMetaDataRepository.saveAll(fileMetaDataList).subscribe(f -> log.info("new cv file has been created: {}", f));
+    }
 }

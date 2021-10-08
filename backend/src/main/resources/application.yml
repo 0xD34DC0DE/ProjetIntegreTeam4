@@ -1,5 +1,3 @@
-
-
 security:
   password:
     encoder:
@@ -11,7 +9,4 @@ security:
     secret : ThisIsSecretForJWTHS512SignatureAlgorithmThatMUSTHave64ByteLength
     expiration : 28800
 
-server:
-  error:
-    include-message: always
 

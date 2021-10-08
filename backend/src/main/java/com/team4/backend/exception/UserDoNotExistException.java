@@ -8,4 +8,5 @@ public class UserDoNotExistException extends Exception {
     public UserDoNotExistException(String message) {
         super(message);
     }
+
 }

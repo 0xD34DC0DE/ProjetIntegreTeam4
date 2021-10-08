@@ -7,6 +7,7 @@ import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNone
 import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import {
+  AppBar,
   Avatar,
   Divider,
   IconButton,
@@ -19,9 +20,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import AppBar from "@mui/material/AppBar";
 import { useTheme } from "@mui/material/styles";
-import { ThemeProvider } from "@mui/private-theming";
 import React, { useContext, useRef, useState } from "react";
 import Login from "../components/Login";
 import Register from "../components/Register";
