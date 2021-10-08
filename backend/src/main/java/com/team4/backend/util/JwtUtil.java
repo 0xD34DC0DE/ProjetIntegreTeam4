@@ -36,19 +36,12 @@ public class JwtUtil {
     }
 
     public String generateToken(User user) {
-        Map<String, String> claims = new HashMap<>();
+        Map<String, Role> claims = new HashMap<>();
         Long expirationTimeLong = Long.parseLong(expirationTime);
         final Date createdDate = new Date();
         final Date expirationDate = new Date(createdDate.getTime() + expirationTimeLong * 1000);
 
-        claims.put("role", user.getRole().toString());
-        claims.put("firstName", user.getFirstName());
-        claims.put("lastName", user.getLastName());
-        claims.put("phoneNumber", user.getPhoneNumber());
-
-        if (user.getRole().equals(Role.MONITOR))
-            claims.put("companyName", ((Monitor) user).getCompanyName());
-
+        claims.put("role", user.getRole());
 
         return Jwts.builder()
                 .setClaims(claims)
@@ -66,7 +59,6 @@ public class JwtUtil {
 
     public boolean isTokenExpired(String token) {
         try {
-
             return getAllClaimsFromToken(token).getExpiration().before(new Date());
         } catch (Exception e) {
             log.info(e.getMessage());

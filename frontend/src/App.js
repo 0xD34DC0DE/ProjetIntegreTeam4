@@ -5,6 +5,7 @@ import SideBar from "./components/SideBar";
 import TopBar from "./components/TopBar";
 import UserInfoStore, { UserInfoContext } from "./stores/UserInfoStore";
 import Content from "./components/Content";
+import ListCvInternshipManagerView from "./components/ListCvInternshipManagerView";
 
 function App() {
   const [open, setOpen] = useState(false);
@@ -38,7 +39,11 @@ function App() {
           />
 
           <Switch>
-            <Content></Content>
+            <Content open={open} setOpen={setOpen} exact path="/"></Content>
+            <ListCvInternshipManagerView
+              exact path="/cvValidation"
+              sx={{ marginTop: "50px" }}
+            ></ListCvInternshipManagerView>
           </Switch>
           <UserInfoContext.Consumer>
             {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}

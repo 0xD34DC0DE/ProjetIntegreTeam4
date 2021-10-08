@@ -1,10 +1,12 @@
 package com.team4.backend.service;
 
 import com.team4.backend.exception.UserAlreadyExistsException;
+import com.team4.backend.exception.UserDoNotExistException;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.util.PBKDF2Encoder;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,12 +16,12 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@EnableAutoConfiguration
 @ExtendWith(MockitoExtension.class)
 public class StudentServiceTest {
 
@@ -74,6 +76,68 @@ public class StudentServiceTest {
 
         //ASSERT
         StepVerifier.create(studentMono).expectError(UserAlreadyExistsException.class).verify();
+    }
+
+    @Test
+    void shouldFindByEmail() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
+
+        //ACT
+        Mono<Student> studentMono = studentService.findByEmail(student.getEmail());
+
+        //ASSERT
+        StepVerifier.create(studentMono)
+                .assertNext(s -> assertEquals(student.getEmail(), s.getEmail()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotFindByEmail() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.empty());
+
+        //ACT
+        Mono<Student> studentMono = studentService.findByEmail(student.getEmail());
+
+        //ASSERT
+        StepVerifier.create(studentMono)
+                .verifyError(UserDoNotExistException.class);
+    }
+
+    @Test
+    void shouldUpdateCvValidity() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
+        when(studentRepository.save(any(Student.class))).thenReturn(Mono.just(student));
+
+        //ACT
+        Mono<Student> studentMono = studentService.updateCvValidity(student.getEmail(), true);
+
+        //ASSERT
+        StepVerifier.create(studentMono)
+                .assertNext(s -> assertTrue(s.getHasValidCv()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotUpdateCvValidity() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.empty());
+
+        //ACT
+        Mono<Student> studentMono = studentService.updateCvValidity(student.getEmail(), true);
+
+        //ASSERT
+        StepVerifier.create(studentMono).verifyError(UserDoNotExistException.class);
     }
 
 }

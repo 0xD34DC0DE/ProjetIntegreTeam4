@@ -10,6 +10,7 @@
 export const drawerListItems = [
   ["Accueil", "home", ""],
   ["Rapports", "article", "#"],
-  ["Téléverser des fichiers", "upload_file", "register"],
+  ["Téléverser des fichiers", "upload_file", "register"],//TODO rajouter Valider les Cv
   ["Déposer des offres de stage", "note_add", "offerForm"],
+  ["Valider les cv", "file_copy", "offerForm"],
 ];

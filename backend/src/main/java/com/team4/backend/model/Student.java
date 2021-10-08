@@ -17,6 +17,8 @@ public class Student extends User {
 
     private StudentState studentState;
 
+    private Boolean hasValidCv;
+
     @Builder(builderMethodName = "studentBuilder")
     public Student(String id,
                    String email,
@@ -25,7 +27,8 @@ public class Student extends User {
                    String password,
                    String phoneNumber,
                    StudentState studentState,
-                   LocalDate registrationDate) {
+                   LocalDate registrationDate,
+                   Boolean hasValidCv) {
         super(id,
                 email,
                 firstName,
@@ -37,6 +40,7 @@ public class Student extends User {
                 registrationDate);
         this.phoneNumber = phoneNumber;
         this.studentState = studentState;
+        this.hasValidCv = hasValidCv;
     }
 
 }

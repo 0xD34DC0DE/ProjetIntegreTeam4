@@ -1,6 +1,6 @@
 .App {
 }
 
-header {
-  margin: 0;
+::-webkit-scrollbar{
+    display: none;/*Find a better solution*/
 }
