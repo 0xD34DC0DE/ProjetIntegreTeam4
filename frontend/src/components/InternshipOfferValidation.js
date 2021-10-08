@@ -58,7 +58,7 @@ const InternshipOfferValidation = ({
     unvalidatedOffers.splice(index, 1);
     setUnvalidatedOffers(unvalidatedOffers);
     setCompanies(
-      Array.from(unvalidatedOffers, ({ companyName }) => companyName)
+      [...new Set(Array.from(unvalidatedOffers, ({ companyName }) => companyName))]
     );
   };
 
