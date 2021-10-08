@@ -11,12 +11,11 @@ import ApprovalIcon from "@mui/icons-material/Approval";
 import axios from "axios";
 
 const CvValidationDialog = ({ id, removeCv }) => {
-
   const [open, setOpen] = useState(false);
 
-  const handleOpen = () =>{
+  const handleOpen = () => {
     setOpen(true);
-  }
+  };
 
   const validateCv = (valid) => {
     {
@@ -27,8 +26,8 @@ const CvValidationDialog = ({ id, removeCv }) => {
           Authorization: sessionStorage.getItem("jwt"),
         },
         params: {
-          "id": id,
-          "isValid": valid,
+          id: id,
+          isValid: valid,
         },
         responseType: "json",
       })

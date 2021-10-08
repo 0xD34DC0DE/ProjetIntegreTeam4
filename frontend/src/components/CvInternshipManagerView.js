@@ -31,18 +31,14 @@ const CvInternshipManagerView = ({
     show: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.5
-      }
-    }
-  }
+        staggerChildren: 0.5,
+      },
+    },
+  };
 
   return (
     <>
-      <motion.div
-     variants={fadeIn}
-     initial="hidden"
-     animate="show"
-      >
+      <motion.div variants={fadeIn} initial="hidden" animate="show">
         <Container>
           <Card
             variant="outlined"
@@ -51,7 +47,7 @@ const CvInternshipManagerView = ({
               border: "3px solid white",
               borderRadius: 4,
               width: "50%",
-              boxShadow: 3,
+              boxShadow: 6,
               margin: "auto",
               marginTop: "20px",
               marginBottom: "20px",

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {TablePagination } from "@mui/material";
+import { TablePagination, Container } from "@mui/material";
 import axios from "axios";
 import CvInternshipManagerView from "./CvInternshipManagerView";
 
@@ -26,7 +26,7 @@ const ListCvInternshipManagerView = () => {
           console.error(error);
         });
     };
-    
+
     const getCvs = (newPage) => {
       axios({
         method: "GET",
@@ -48,10 +48,9 @@ const ListCvInternshipManagerView = () => {
     getNbrCvs();
 
     getCvs(noPage);
+  }, [noPage]);
 
-  },[noPage]);
-
-  const handleChangePage = (event, newPage,size) => {
+  const handleChangePage = (event, newPage, size) => {
     console.log("nouvelle page => " + newPage);
     console.log(event);
     setNoPage(newPage);
@@ -69,7 +68,14 @@ const ListCvInternshipManagerView = () => {
 
   return (
     <>
-      <div style={{ overflow: "auto", height: "800px", margin: "auto" }}>
+      <Container
+        sx={{
+          overflow: "auto",
+          height: "900px",
+          marginTop: "20px",
+          marginBottom: "20px"
+        }}
+      >
         {cvs.map((cv, key) => (
           <CvInternshipManagerView
             key={key}
@@ -81,17 +87,19 @@ const ListCvInternshipManagerView = () => {
             removeCv={removeCv}
           />
         ))}
-      </div>
-      <TablePagination
-        disabled
-        sx={{ border: "1px" }}
-        component="div"
-        count={nbrCvs}
-        page={noPage}
-        onPageChange={handleChangePage}
-        rowsPerPage={rowsPerPage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-      />
+      </Container>
+      <Container sx={{marginBottom:"50px"}}>
+        <TablePagination
+          disabled
+          component="div"
+          sx={{ boxShadow: 5 }}
+          count={nbrCvs}
+          page={noPage}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Container>
     </>
   );
 };
