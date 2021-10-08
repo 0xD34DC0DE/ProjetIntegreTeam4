@@ -1,7 +1,10 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.service.FileMetadataService;
-import org.junit.jupiter.api.BeforeEach;
+import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
+import com.team4.backend.exception.FileDoNotExistException;
+import com.team4.backend.model.FileMetaData;
+import com.team4.backend.service.FileMetaDataService;
+import com.team4.backend.testdata.FileMetaDataMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 
@@ -17,18 +20,15 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.MultipartBodyBuilder;
-import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import org.springframework.test.web.reactive.server.WebTestClientConfigurer;
 import org.springframework.util.MultiValueMap;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.security.Principal;
@@ -45,7 +45,7 @@ class FileMetadataControllerTest {
     WebTestClient webTestClient;
 
     @MockBean
-    FileMetadataService fileMetadataService;
+    FileMetaDataService fileMetaDataService;
 
     @InjectMocks
     FileMetadataController fileMetadataController;
@@ -60,7 +60,7 @@ class FileMetadataControllerTest {
         String filename = "filename";
         String type = "CV";
         String mimeType = "application/pdf";
-        when(fileMetadataService.uploadFile(any(), any(), any(), any(), any())).thenReturn(responseEntityMono);
+        when(fileMetaDataService.uploadFile(any(), any(), any(), any(), any())).thenReturn(responseEntityMono);
 
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
         builder.part("filename", filename);
@@ -98,4 +98,84 @@ class FileMetadataControllerTest {
         //ACT & ASSERT
         assertEquals("", fileMetadataController.getLoggedUserName(null));
     }
+
+    @Test
+    void countAllInvalidCvNotSeen() {
+        //ARRANGE
+
+        when(fileMetaDataService.countAllInvalidCvNotSeen()).thenReturn(Mono.just(0L));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/file/countAllInvalidCvNotSeen")
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBody(Long.class);
+    }
+
+    @Test
+    void getListInvalidCvNotSeen() {
+        //ARRANGE
+
+        Integer noPage = 0;
+        when(fileMetaDataService.getListInvalidCvNotSeen(noPage)).thenReturn(Flux.just(FileMetaDataMockData.getFileMetaData()));
+
+        //ACT
+
+        webTestClient
+                .get()
+                .uri("/file/getListInvalidCvNotSeen/" + noPage)
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(FileMetaDataInternshipManagerViewDto.class);
+    }
+
+
+    @Test
+    void shouldValidateCv() {
+        //ARRANGE
+        FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
+
+        when(fileMetaDataService.validateCv(fileMetaData.getId(), true)).thenReturn(Mono.just(fileMetaData));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/file/validateCv")
+                                .queryParam("id", fileMetaData.getId())
+                                .queryParam("isValid", true)
+                                .build())
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(String.class);
+    }
+
+    @Test
+    void shouldNotValidateCv() {
+        //ARRANGE
+        FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
+
+        when(fileMetaDataService.validateCv(fileMetaData.getId(), true)).thenReturn(Mono.error(FileDoNotExistException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/file/validateCv")
+                                .queryParam("id", fileMetaData.getId())
+                                .queryParam("isValid", true)
+                                .build())
+                .exchange()
+                //ASSERT
+                .expectStatus().isNotFound()
+                .expectBodyList(String.class);
+    }
+    
 }

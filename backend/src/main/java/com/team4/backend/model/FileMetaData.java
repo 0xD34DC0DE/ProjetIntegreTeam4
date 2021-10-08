@@ -1,49 +1,54 @@
 package com.team4.backend.model;
 
 import com.team4.backend.model.enums.UploadType;
+import de.flapdoodle.embed.process.config.store.FileType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @ToString
 @NoArgsConstructor
 @Document(collection = "fileMetadata")
-public class FileMetadata {
+public class FileMetaData implements Serializable {
 
-    @Id
     private String id;
-
-    private String userEmail;
 
     private String assetId;
 
+    private String userEmail;
+
     private String filename;
 
-    private Boolean isValid;
+    private String path;
 
     private UploadType type;
 
+    private Boolean isValid;
+
     private Boolean isSeen;
 
-    private LocalDateTime creationDate;
+    private LocalDateTime uploadDate;
 
     private LocalDateTime seenDate;
 
-
     @Builder
-    public FileMetadata(String id, String userEmail, String assetId, String filename, boolean validCV, UploadType type, LocalDateTime creationDate) {
+    public FileMetaData(String id, String assetId, String userEmail, String filename, String path, UploadType type, Boolean isValid, Boolean isSeen, LocalDateTime uploadDate, LocalDateTime seenDate) {
         this.id = id;
-        this.userEmail = userEmail;
         this.assetId = assetId;
+        this.userEmail = userEmail;
         this.filename = filename;
-        this.isValid = validCV;
+        this.path = path;
         this.type = type;
-        this.creationDate = creationDate;
+        this.isValid = isValid;
+        this.isSeen = isSeen;
+        this.uploadDate = uploadDate;
+        this.seenDate = seenDate;
     }
+
 }
