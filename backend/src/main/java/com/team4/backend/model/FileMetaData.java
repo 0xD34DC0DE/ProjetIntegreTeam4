@@ -49,4 +49,5 @@ public class FileMetaData implements Serializable {
         this.uploadDate = uploadDate;
         this.seenDate = seenDate;
     }
+
 }

@@ -8,4 +8,5 @@ public class FileDoNotExistException extends Exception {
     public FileDoNotExistException(String message) {
         super(message);
     }
+
 }
