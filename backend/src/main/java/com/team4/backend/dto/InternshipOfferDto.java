@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -24,9 +25,9 @@ public class InternshipOfferDto implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate endingDate;
 
-    private String emailOfMonitor;
-
     private String companyName;
+
+    private String emailOfMonitor;
 
     private String description;
 
@@ -35,7 +36,6 @@ public class InternshipOfferDto implements Serializable {
     private boolean isValidated;
 
     private List<String> listEmailInterestedStudents;
-
 
     @Builder
     public InternshipOfferDto(String id,

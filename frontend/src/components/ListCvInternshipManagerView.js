@@ -13,7 +13,7 @@ const ListCvInternshipManagerView = () => {
     const getNbrCvs = () => {
       axios({
         method: "GET",
-        url: "http://localhost:8080/fileMetaData/countAllInvalidCvNotSeen/",
+        url: "http://localhost:8080/file/countAllInvalidCvNotSeen/",
         headers: {
           Authorization: sessionStorage.getItem("jwt"),
         },
@@ -30,7 +30,7 @@ const ListCvInternshipManagerView = () => {
     const getCvs = (newPage) => {
       axios({
         method: "GET",
-        url: `http://localhost:8080/fileMetaData/getListInvalidCvNotSeen/${newPage}`,
+        url: `http://localhost:8080/file/getListInvalidCvNotSeen/${newPage}`,
         headers: {
           Authorization: sessionStorage.getItem("jwt"),
         },
@@ -68,8 +68,8 @@ const ListCvInternshipManagerView = () => {
         sx={{
           overflow: "auto",
           height: "900px",
-          marginTop: "20px",
-          marginBottom: "20px"
+          mt: "10vh",
+          mb: "10vh",
         }}
       >
         {cvs.map((cv, key) => (
@@ -84,7 +84,7 @@ const ListCvInternshipManagerView = () => {
           />
         ))}
       </Container>
-      <Container sx={{marginBottom:"50px"}}>
+      <Container sx={{ marginBottom: "50px" }}>
         <TablePagination
           disabled
           component="div"

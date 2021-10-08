@@ -21,7 +21,7 @@ const CvValidationDialog = ({ id, removeCv }) => {
     {
       axios({
         method: "PATCH",
-        url: "http://localhost:8080/fileMetaData/validateCv",
+        url: "http://localhost:8080/file/validateCv",
         headers: {
           Authorization: sessionStorage.getItem("jwt"),
         },
@@ -63,12 +63,12 @@ const CvValidationDialog = ({ id, removeCv }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Validation Du CV Étudiant(e)"}
+          {"Validation du C.V. étudiant(e)"}
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Chère gestionnaire de stage, est-ce que le cv de cette étudiant(e)
-            est valide?
+            Chère gestionnaire de stage, est-ce que le C.V. de cet(te)
+            étudiant(e) est valide?
           </DialogContentText>
         </DialogContent>
         <DialogActions>

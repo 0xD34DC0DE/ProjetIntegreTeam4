@@ -1,10 +1,7 @@
 package com.team4.backend.model;
 
 import com.team4.backend.model.enums.Role;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 

@@ -35,7 +35,8 @@ public abstract class InternshipOfferMapper {
                 .minSalary(internshipOffer.getMinSalary())
                 .maxSalary(internshipOffer.getMaxSalary())
                 .listEmailInterestedStudents(internshipOffer.getListEmailInterestedStudents())
-                .isValidated(internshipOffer.isValidated()).build();
+                .isValidated(internshipOffer.isValidated())
+                .build();
     }
 
 }

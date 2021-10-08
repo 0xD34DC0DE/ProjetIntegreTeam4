@@ -1,49 +1,80 @@
 package com.team4.backend.service;
 
-import com.team4.backend.exception.FileDoNotExistException;
-import com.team4.backend.model.FileMetaData;
-import com.team4.backend.repository.FileMetaDataRepository;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import com.team4.backend.model.FileMetadata;
+import com.team4.backend.model.enums.UploadType;
+import com.team4.backend.repository.FileMetadataRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
+import java.io.File;
+import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Service
-public class FileMetaDataService {
+public class FileMetadataService {
 
-    private final FileMetaDataRepository fileMetaDataRepository;
+    @Autowired
+    FileMetadataRepository fileMetadataRepository;
 
-    private final StudentService studentService;
+    @Autowired
+    FileAssetService fileAssetService;
 
-    public FileMetaDataService(FileMetaDataRepository fileMetaDataRepository, StudentService studentService) {
-        this.fileMetaDataRepository = fileMetaDataRepository;
-        this.studentService = studentService;
+    public Mono<FileMetadata> create(FileMetadata fileMetadata) {
+        return fileMetadataRepository.save(fileMetadata);
     }
 
-    public Mono<Long> countAllInvalidCvNotSeen() {
-        return fileMetaDataRepository.countAllByIsValidFalseAndIsSeenFalse();
+    protected File getTempFile() throws IOException {
+        return File.createTempFile("projet-integre-team-4-", ".tmp");
     }
 
-    public Flux<FileMetaData> getListInvalidCvNotSeen(Integer noPage) {
-        return fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("uploadDate").ascending()));
+    protected String getUuid() {
+        return UUID.randomUUID().toString();
     }
 
-    public Mono<FileMetaData> validateCv(String id, Boolean isValid) {
-        return fileMetaDataRepository.findById(id)
-                .switchIfEmpty(Mono.error(new FileDoNotExistException("This file do Not Exist")))
-                .map(file -> {
-                    file.setIsValid(isValid);
-                    file.setIsSeen(true);
-                    file.setSeenDate(LocalDateTime.now());
-
-                    if (isValid)
-                        studentService.updateCvValidity(file.getUserEmail(), true).subscribe();
-
-                    return file;
-                }).flatMap(fileMetaDataRepository::save);
+    public Mono<ResponseEntity<Void>> uploadFile(String filename, String type, String mimeType, Mono<FilePart> filePartMono, String userEmail) {
+        System.out.println("dans service");
+        return Mono.fromCallable(this::getTempFile)
+                .publishOn(Schedulers.boundedElastic())
+                .flatMap(tempFile -> filePartMono
+                        .flatMap(fp -> fp.transferTo(tempFile)
+                                // Hack to transform Mono<Void> into another Mono type since Void is treated the
+                                // same as an empty Mono and it stops the chain.
+                                // map -> changes the object signature (Mono<Void> -> Mono<File>)
+                                .map(dummy -> tempFile)
+                                // switchIfEmpty -> since the Mono<File> is still empty, create another one with
+                                // the file inside
+                                .switchIfEmpty(Mono.just(tempFile)))
+                )
+                .flatMap(tempFile ->
+                        fileAssetService.create(tempFile.getPath(), userEmail, mimeType, getUuid())
+                                .flatMap(assetId -> Mono.just(FileMetadata.builder()
+                                        .id(getUuid())
+                                        .userEmail(userEmail)
+                                        .validCV(false)
+                                        .assetId(assetId)
+                                        .type(UploadType.valueOf(type))
+                                        .creationDate(LocalDateTime.now())
+                                        .filename(filename)
+                                        .build()))
+                                .flatMap(this::createMetadata));
     }
 
+    public Mono<ResponseEntity<Void>> createMetadata(FileMetadata fileMetadata) {
+        return create(fileMetadata)
+                .map(metadata -> {
+                    try {
+                        return ResponseEntity.created(new URI(metadata.getId())).build();
+                    } catch (URISyntaxException e) {
+                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+                    }
+                });
+    }
 }

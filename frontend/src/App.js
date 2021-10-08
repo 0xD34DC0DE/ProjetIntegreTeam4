@@ -1,24 +1,24 @@
 import React, { useState } from "react";
 import { BrowserRouter, Redirect, Switch } from "react-router-dom";
 import "./App.css";
-import SideBar from "./components/SideBar";
+import Content from "./components/Content";
+import InternshipOfferValidation from "./components/InternshipOfferValidation";
+import ListCvInternshipManagerView from "./components/ListCvInternshipManagerView";
+import UploadCV from "./components/UploadCV";
 import TopBar from "./components/TopBar";
 import UserInfoStore, { UserInfoContext } from "./stores/UserInfoStore";
-import Content from "./components/Content";
-import ListCvInternshipManagerView from "./components/ListCvInternshipManagerView";
 
 function App() {
-  const [open, setOpen] = useState(false);
-
   const handleDialogs = (dialogName, show) => {
     setDialogVisibility((dialogs) => ({ ...dialogs, [dialogName]: show }));
   };
-
+  const [open, setOpen] = useState(false);
   const [dialogVisibility, setDialogVisibility] = useState({
     loginDialog: false,
     registerDialog: false,
     depositInternshipOfferDialog: false,
     internshipOfferDialog: false,
+    internshipOfferDialogValidation: false,
   });
 
   return (
@@ -26,24 +26,29 @@ function App() {
       <UserInfoStore>
         <div className="App">
           <TopBar
-            open={open}
+            openDrawer={open}
+            setOpenDrawer={setOpen}
             loginVisible={dialogVisibility.loginDialog}
             registerVisible={dialogVisibility.registerDialog}
             toggleDialogs={handleDialogs}
-          />
-          <SideBar
             intershipOfferDialogVisible={dialogVisibility.internshipOfferDialog}
-            setOpen={setOpen}
-            open={open}
-            toggleDialogs={handleDialogs}
           />
-
           <Switch>
             <Content open={open} setOpen={setOpen} exact path="/"></Content>
+            <InternshipOfferValidation
+              internshipOfferDialogVisible={
+                dialogVisibility.internshipOfferDialogValidation
+              }
+              toggleDialogs={handleDialogs}
+              exact
+              path="/internshipOfferValidation"
+            />
             <ListCvInternshipManagerView
-              exact path="/cvValidation"
+              exact
+              path="/cvValidation"
               sx={{ marginTop: "50px" }}
             ></ListCvInternshipManagerView>
+            <UploadCV exact path="/uploadCV" />
           </Switch>
           <UserInfoContext.Consumer>
             {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}
