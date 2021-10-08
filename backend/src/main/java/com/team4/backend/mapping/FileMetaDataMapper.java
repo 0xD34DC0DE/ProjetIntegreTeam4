@@ -23,7 +23,6 @@ public abstract class FileMetaDataMapper {
                 .uploadDate(fileMetaData.getUploadDate())
                 .seenDate(fileMetaData.getSeenDate())
                 .build();
-
     }
 
 }
