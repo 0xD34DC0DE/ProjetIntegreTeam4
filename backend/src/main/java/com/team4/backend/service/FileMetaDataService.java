@@ -48,7 +48,6 @@ public class FileMetaDataService {
     }
 
     public Mono<ResponseEntity<Void>> uploadFile(String filename, String type, String mimeType, Mono<FilePart> filePartMono, String userEmail) {
-        System.out.println("dans service");
         return Mono.fromCallable(this::getTempFile)
                 .publishOn(Schedulers.boundedElastic())
                 .flatMap(tempFile -> filePartMono

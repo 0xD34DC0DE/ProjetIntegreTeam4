@@ -2,6 +2,7 @@ import AddIcon from "@mui/icons-material/Add";
 import RuleIcon from "@mui/icons-material/Rule";
 import FileCopyIcon from "@mui/icons-material/FileCopy";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
+import SearchIcon from '@mui/icons-material/Search';
 
 export const drawerListDialogs = [
   {
@@ -15,26 +16,27 @@ export const drawerListDialogs = [
 export const drawerListRoutes = [
   {
     roles: ["INTERNSHIP_MANAGER"],
-    url: "/internshipOfferValidation",
+    url: "/validerOffreStage",
     icon: <RuleIcon />,
     text: "Valider des offres de stage",
   },
   {
     roles: ["INTERNSHIP_MANAGER"],
-    url: "/cvValidation",
+    url: "/validerCV",
     icon: <FileCopyIcon />,
     text: "Valider les C.V.",
   },
   {
     roles: ["STUDENT"],
-    url: "/uploadCV",
+    url: "/televerserCV",
     icon: <FileUploadIcon />,
     text: "Téléverser le C.V.",
   },
   {
     roles: ["STUDENT"],
-    url: "/offers",
-    icon: <FileUploadIcon />,
+    url: "/offres",
+    icon: <SearchIcon />,
     text: "Voir les offres",
   },
+  
 ];

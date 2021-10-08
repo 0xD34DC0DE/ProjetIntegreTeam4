@@ -13,19 +13,17 @@ import { CancelOutlined, CheckCircleOutline } from "@mui/icons-material";
 import { listLabels } from "./InternshipOfferLabels";
 import axios from "axios";
 
-const InternshipOfferDescriptionDialog = ({
+const InternshipOfferDialog = ({
   dialogVisible,
   toggleDialogs,
   offer,
   removeInternshipOffer,
 }) => {
-  const [token, setToken] = React.useState(sessionStorage.getItem("jwt"));
+  const [token] = React.useState(sessionStorage.getItem("jwt"));
 
   const handleClose = (_, reason) => {
-    console.log("reason", reason);
     if (reason === "backdropClick")
       toggleDialogs("internshipOfferDialogValidation", false);
-    console.log("dialogVisible", dialogVisible);
   };
 
   const validateInternshipOffer = async (id) => {
@@ -139,4 +137,4 @@ const InternshipOfferDescriptionDialog = ({
   );
 };
 
-export default InternshipOfferDescriptionDialog;
+export default InternshipOfferDialog;
