@@ -60,4 +60,5 @@ public class PBKDF2EncoderTest {
         assertTrue(passwordMatches);
         assertFalse(passwordNotMatching);
     }
+    
 }

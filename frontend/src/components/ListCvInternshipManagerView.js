@@ -38,7 +38,6 @@ const ListCvInternshipManagerView = () => {
       })
         .then((response) => {
           setCvs(response.data);
-          console.log(response.data);
         })
         .catch((error) => {
           console.error(error);
@@ -51,13 +50,10 @@ const ListCvInternshipManagerView = () => {
   }, [noPage]);
 
   const handleChangePage = (event, newPage, size) => {
-    console.log("nouvelle page => " + newPage);
-    console.log(event);
     setNoPage(newPage);
   };
 
   const handleChangeRowsPerPage = (event) => {
-    console.log("handleChangeRows => " + event.target.value);
     setRowsPerPage(parseInt(event.target.value, 10));
   };
 

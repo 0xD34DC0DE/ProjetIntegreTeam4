@@ -22,8 +22,7 @@ const CvInternshipManagerView = ({
   removeCv,
 }) => {
   const download = () => {
-    const url = ""; //TODO confirm url with Erwan
-    window.open("https://projetintegreteam4.s3.amazonaws.com/" + assetId); //TODO --> need to change it for amazonURl
+    window.open("https://projetintegreteam4.s3.amazonaws.com/" + assetId);
   };
 
   const fadeIn = {
@@ -62,19 +61,19 @@ const CvInternshipManagerView = ({
                 justify="start"
               >
                 <Typography
-                  style={{ fontWeight: "bold", textAlign: "start" }}
+                  sx={{ fontWeight: "bold", textAlign: "start" }}
                   variant="overline"
                 >
                   Email de l'étudiant : {userEmail}
                 </Typography>
                 <Typography
-                  style={{ fontWeight: "bold", textAlign: "start" }}
+                  sx={{ fontWeight: "bold", textAlign: "start" }}
                   variant="overline"
                 >
                   Nom du fichier : {filename}
                 </Typography>
                 <Typography
-                  style={{ fontWeight: "bold", textAlign: "start" }}
+                  sx={{ fontWeight: "bold", textAlign: "start" }}
                   variant="overline"
                 >
                   Date de dépôt : {uploadDate}

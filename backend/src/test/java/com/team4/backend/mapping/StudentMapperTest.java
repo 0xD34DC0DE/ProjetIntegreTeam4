@@ -50,4 +50,5 @@ public class StudentMapperTest {
         assertEquals(entity.getRegistrationDate(), dto.getRegistrationDate());
         assertEquals(entity.getHasValidCv(), dto.getHasValidCv());
     }
+
 }

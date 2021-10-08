@@ -30,7 +30,6 @@ public class FileMetaDataControllerTest {
     @MockBean
     FileMetaDataService fileMetaDataService;
 
-
     @Test
     void countAllInvalidCvNotSeen() {
         //ARRANGE
@@ -109,4 +108,5 @@ public class FileMetaDataControllerTest {
                 .expectStatus().isNotFound()
                 .expectBodyList(String.class);
     }
+
 }

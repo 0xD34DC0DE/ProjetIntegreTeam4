@@ -40,4 +40,5 @@ public class FileMetaDataMapperTest {
         assertEquals(fileMetaData.getUploadDate(), fileMetaDataStudentViewDto.getUploadDate());
         assertEquals(fileMetaData.getSeenDate(), fileMetaDataStudentViewDto.getSeenDate());
     }
+    
 }

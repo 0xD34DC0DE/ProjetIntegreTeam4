@@ -28,4 +28,5 @@ public class InternshipOfferController {
                 .flatMap(internshipOffer -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
     }
+
 }
