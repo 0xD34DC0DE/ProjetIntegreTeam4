@@ -9,6 +9,6 @@ import java.lang.annotation.Target;
  * Used to indicate that a method should not count towards coverage
  * */
 @Retention(RetentionPolicy.CLASS)
-@Target({ElementType.METHOD})
+@Target({ElementType.METHOD, ElementType.TYPE, ElementType.ANNOTATION_TYPE})
 public @interface ExcludeFromGeneratedCoverage {
 }
