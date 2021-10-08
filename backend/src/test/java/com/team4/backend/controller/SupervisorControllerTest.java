@@ -1,10 +1,10 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.StudentDto;
+import com.team4.backend.dto.SupervisorDto;
 import com.team4.backend.exception.UserAlreadyExistsException;
-import com.team4.backend.model.Student;
-import com.team4.backend.service.StudentService;
-import com.team4.backend.testdata.StudentMockData;
+import com.team4.backend.model.Supervisor;
+import com.team4.backend.service.SupervisorService;
+import com.team4.backend.testdata.SupervisorMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,27 +22,27 @@ import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
-@WebFluxTest(value = StudentController.class, excludeAutoConfiguration = ReactiveSecurityAutoConfiguration.class)
-public class StudentControllerTest {
+@WebFluxTest(value = SupervisorController.class, excludeAutoConfiguration = ReactiveSecurityAutoConfiguration.class)
+public class SupervisorControllerTest {
 
     @Autowired
     private WebTestClient webTestClient;
 
     @MockBean
-    StudentService studentService;
+    SupervisorService supervisorService;
 
     @Test
-    public void shouldCreateStudent() {
+    public void shouldCreateSupervisor() {
         //ARRANGE
-        StudentDto studentDto = StudentMockData.getMockStudentDto();
+        SupervisorDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
-        studentDto.setId(null);
+        supervisorDto.setId(null);
 
-        Student student = StudentMockData.getMockStudent();
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
 
-        when(studentService.registerStudent(any(Student.class)))
+        when(supervisorService.registerSupervisor(any(Supervisor.class)))
                 .thenReturn(
-                        Mono.just(student)
+                        Mono.just(supervisor)
                                 .map(s -> {
                                     s.setId("some_id");
                                     return s;
@@ -51,7 +51,7 @@ public class StudentControllerTest {
 
         //ACT
         webTestClient
-                .post().uri("/student/register").bodyValue(studentDto)
+                .post().uri("/supervisor/register").bodyValue(supervisorDto)
                 .exchange()
                 //ASSERT
                 .expectStatus().isCreated()
@@ -59,18 +59,18 @@ public class StudentControllerTest {
     }
 
     @Test
-    public void shouldNotCreateStudent() {
+    public void shouldNotSupervisor() {
         //ARRANGE
-        StudentDto studentDto = StudentMockData.getMockStudentDto();
+        SupervisorDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
-        studentDto.setId(null);
+        supervisorDto.setId(null);
 
-        when(studentService.registerStudent(any(Student.class)))
+        when(supervisorService.registerSupervisor(any(Supervisor.class)))
                 .thenReturn(Mono.error(UserAlreadyExistsException::new));
 
         //ACT
         webTestClient
-                .post().uri("/student/register").bodyValue(studentDto)
+                .post().uri("/supervisor/register").bodyValue(supervisorDto)
                 .exchange()
                 // ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
