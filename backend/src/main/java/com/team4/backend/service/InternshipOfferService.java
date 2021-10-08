@@ -6,11 +6,13 @@ import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.InternshipOfferRepository;
-import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
 import java.time.Duration;
 import java.time.LocalDate;
 
@@ -36,7 +38,7 @@ public class InternshipOfferService {
                         : Mono.error(new UserNotFoundException("Can't find monitor!")));
     }
 
-    public Flux<InternshipOffer> getStudentExclusiveOffers(String studentEmail, Pageable page) {
+    public Flux<InternshipOffer> getStudentExclusiveOffers(String studentEmail, @Min(0) Integer page, @Min(1) Integer size) {
         return studentService.getStudent(studentEmail)
                 .switchIfEmpty(
                         Mono.error(
@@ -46,8 +48,8 @@ public class InternshipOfferService {
                 .map(Student::getExclusiveOffersId)
                 .flatMapMany(offerIdList ->
                         Flux.fromIterable(offerIdList)
-                                .skip(page.getPageSize() * page.getPageNumber())
-                                .take(page.getPageSize())
+                                .skip(size * page)
+                                .take(size)
                                 .flatMap(offerId ->
                                         internshipOfferRepository.
                                                 findByIdAndIsExclusiveTrueAndLimitDateToApplyAfter(
@@ -58,22 +60,23 @@ public class InternshipOfferService {
                 ).delayElements(Duration.ofSeconds(3));
     }
 
-    public Flux<InternshipOffer> getGeneralInternshipOffers(Pageable page) {
+    public Flux<InternshipOffer> getGeneralInternshipOffers(@Min(0) Integer page, @Min(1) Integer size) {
         return internshipOfferRepository
-                .findAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now(), page);
+                .findAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now(), PageRequest.of(page, size));
 
     }
 
-    public Mono<Long> getInternshipOffersPageCount(String studentEmail, int size) {
-        if(studentEmail != null) {
-            return studentService.getStudent(studentEmail)
-                    .switchIfEmpty(
-                            Mono.error(new UserNotFoundException("Could not find student with email: " + studentEmail))
-                    )
-                    .map(student -> student.getExclusiveOffersId().size())
-                    .map(count -> (long)Math.ceil((double)count / (double)size));
-        }
+    public Mono<Long> getInternshipOffersPageCount(@Min(1) Integer size) {
         return internshipOfferRepository.countAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now())
+                .map(count -> (long)Math.ceil((double)count / (double)size));
+    }
+
+    public Mono<Long> getInternshipOffersPageCount(@NotNull String studentEmail, @Min(1) Integer size) {
+        return studentService.getStudent(studentEmail)
+                .switchIfEmpty(
+                        Mono.error(new UserNotFoundException("Could not find student with email: " + studentEmail))
+                )
+                .map(student -> student.getExclusiveOffersId().size())
                 .map(count -> (long)Math.ceil((double)count / (double)size));
     }
 }
