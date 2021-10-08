@@ -1,8 +1,6 @@
 package com.team4.backend;
 
-import com.team4.backend.model.InternshipOffer;
-import com.team4.backend.model.Monitor;
-import com.team4.backend.model.User;
+import com.team4.backend.model.*;
 import com.team4.backend.model.enums.Role;
 import com.team4.backend.repository.InternshipOfferRepository;
 import com.team4.backend.repository.MonitorRepository;
@@ -54,7 +52,6 @@ public class TestingInserterRunner implements ApplicationRunner {
 
         insertUsers();
 
-        insertMonitors();
         insertInternshipOffers();
     }
 
