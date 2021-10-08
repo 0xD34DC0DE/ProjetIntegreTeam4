@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useState, useRef } from "react";
 import { Button, Paper, Typography } from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 
 const UploadCV = () => {
   const [file, setFile] = useState();
@@ -59,6 +60,7 @@ const UploadCV = () => {
   };
 
   const openFileExplorer = (event) => {
+    if (cvSent) return;
     if (event.target.localName !== "button") inputFileRef.current.click();
   };
 
@@ -103,7 +105,11 @@ const UploadCV = () => {
             {!cvSent
               ? "Cliquer ou glisser votre CV dans la boite pour téléverser"
               : "CV téléversé avec succès!"}
-            <PictureAsPdfIcon sx={{ ml: 2 }} />
+            {!cvSent ? (
+              <PictureAsPdfIcon sx={{ ml: 3 }} />
+            ) : (
+              <CheckCircleOutlineIcon sx={{ ml: 3 }} color="success" />
+            )}
           </Typography>
           <Typography variant="caption" color="error">
             {errorMessage !== "" ? errorMessage : ""}
@@ -111,7 +117,7 @@ const UploadCV = () => {
           {!cvSent && (
             <Typography variant="caption">
               {file === undefined
-                ? "Aucune fichier spécifié"
+                ? "Aucun fichier spécifié"
                 : `Fichier choisi: ${file.name}`}
             </Typography>
           )}
