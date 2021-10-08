@@ -14,6 +14,9 @@ public class ValidatingPageRequest {
     Integer size;
 
     public ValidatingPageRequest(@Min(0) Integer page, @Min(1) Integer size) throws InvalidPageRequestException {
+        if(page == null || size == null) {
+            throw new InvalidPageRequestException("Arguments of page request can't be null");
+        }
         if(page < 0) {
             throw new InvalidPageRequestException("Page must be greater or equal to 0");
         }
