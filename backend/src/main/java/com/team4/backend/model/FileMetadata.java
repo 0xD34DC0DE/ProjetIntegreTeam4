@@ -1,6 +1,6 @@
 package com.team4.backend.model;
 
-import com.team4.backend.model.enums.FileType;
+import com.team4.backend.model.enums.UploadType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -27,7 +27,7 @@ public class FileMetadata {
 
     private Boolean isValid;
 
-    private FileType type;
+    private UploadType type;
 
     private Boolean isSeen;
 
@@ -37,7 +37,7 @@ public class FileMetadata {
 
 
     @Builder
-    public FileMetadata(String id, String userEmail, String assetId, String filename, boolean validCV, FileType type, LocalDateTime creationDate) {
+    public FileMetadata(String id, String userEmail, String assetId, String filename, boolean validCV, UploadType type, LocalDateTime creationDate) {
         this.id = id;
         this.userEmail = userEmail;
         this.assetId = assetId;

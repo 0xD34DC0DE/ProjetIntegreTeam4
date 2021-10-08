@@ -1,7 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.model.FileMetadata;
-import com.team4.backend.model.enums.FileType;
+import com.team4.backend.model.enums.UploadType;
 import com.team4.backend.repository.FileMetadataRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,7 +21,8 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -43,7 +44,7 @@ class FileMetadataServiceTest {
     private final String mimeType = "application/pdf";
 
     private final String filename = "filename";
-    private final FileType type = FileType.CV;
+    private final UploadType type = UploadType.CV;
 
     private String location = "/location";
 

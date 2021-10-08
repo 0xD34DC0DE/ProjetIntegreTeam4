@@ -1,11 +1,9 @@
-import React, { useState, useEffect, useContext } from "react";
-import { Container } from "@mui/material";
+import React, { useState } from "react";
 import { BrowserRouter, Redirect, Switch } from "react-router-dom";
 import "./App.css";
 import SideBar from "./components/SideBar";
 import TopBar from "./components/TopBar";
 import UserInfoStore, { UserInfoContext } from "./stores/UserInfoStore";
-import OfferViews from "./components/OfferViews";
 import Content from "./components/Content";
 
 function App() {

@@ -1,7 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.model.FileMetadata;
-import com.team4.backend.model.enums.FileType;
+import com.team4.backend.model.enums.UploadType;
 import com.team4.backend.repository.FileMetadataRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -60,7 +60,7 @@ public class FileMetadataService {
                                         .userEmail(userEmail)
                                         .validCV(false)
                                         .assetId(assetId)
-                                        .type(FileType.valueOf(type))
+                                        .type(UploadType.valueOf(type))
                                         .creationDate(LocalDateTime.now())
                                         .filename(filename)
                                         .build()))
