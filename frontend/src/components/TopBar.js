@@ -201,6 +201,11 @@ const TopBar = ({
                   ],
                 ]}
           </Menu>
+          <Register
+            toggleDialogs={toggleDialogs}
+            open={registerVisible}
+          ></Register>
+          <Login open={loginVisible} toggleDialogs={toggleDialogs}></Login>
         </Toolbar>
       </AppBar>
       <Register toggleDialogs={toggleDialogs} open={registerVisible}></Register>

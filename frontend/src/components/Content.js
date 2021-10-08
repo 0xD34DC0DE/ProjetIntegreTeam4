@@ -1,10 +1,10 @@
 import { Container, Typography } from "@mui/material";
-import React, { useContext } from "react";
+import React from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 
 // Ici je n'ai pas déconstruit, ça provoque une erreur dans la console.
 const Content = () => {
-  const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
+  const [userInfo, userInfoDispatch] = React.useContext(UserInfoContext);
   return (
     <Container
       sx={{
