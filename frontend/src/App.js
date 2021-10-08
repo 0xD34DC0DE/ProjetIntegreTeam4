@@ -1,40 +1,62 @@
 import React, { useState } from "react";
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import { BrowserRouter, Redirect, Switch } from "react-router-dom";
 import "./App.css";
-import StickyFooter from "./components/Footer";
-import Home from "./components/Home";
-import Login from "./components/Login";
-import SideBar from "./components/SideBar";
+import Content from "./components/Content";
+import InternshipOfferValidation from "./components/InternshipOfferValidation";
+import ListCvInternshipManagerView from "./components/ListCvInternshipManagerView";
+import UploadCV from "./components/UploadCV";
 import TopBar from "./components/TopBar";
+import UserInfoStore, { UserInfoContext } from "./stores/UserInfoStore";
+import OfferViews from "./components/OfferViews";
 
 function App() {
-  const [open, setOpen] = React.useState(false);
-  const userInformationsObject = {
-    email: "",
-    role: "",
-    loggedIn: false,
+  const handleDialogs = (dialogName, show) => {
+    setDialogVisibility((dialogs) => ({ ...dialogs, [dialogName]: show }));
   };
-
-  const [userInformations, setUserInformations] = useState(
-    userInformationsObject
-  );
+  const [open, setOpen] = useState(false);
+  const [dialogVisibility, setDialogVisibility] = useState({
+    loginDialog: false,
+    registerDialog: false,
+    depositInternshipOfferDialog: false,
+    internshipOfferDialog: false,
+    internshipOfferDialogValidation: false,
+  });
 
   return (
     <BrowserRouter>
-      <div className="App">
-        <TopBar
-          setOpen={setOpen}
-          open={open}
-          userInformations={userInformations}
-          setUserInformations={setUserInformations}
-        />
-        <SideBar setOpen={setOpen} open={open} />
-        <Switch>
-          <Route path="/" exact component={Home} />
-        </Switch>
-        {userInformations.loggedIn ? <Redirect push to="/" /> : null}
-        <StickyFooter />
-      </div>
+      <UserInfoStore>
+        <div className="App">
+          <TopBar
+            openDrawer={open}
+            setOpenDrawer={setOpen}
+            loginVisible={dialogVisibility.loginDialog}
+            registerVisible={dialogVisibility.registerDialog}
+            toggleDialogs={handleDialogs}
+            intershipOfferDialogVisible={dialogVisibility.internshipOfferDialog}
+          />
+          <Switch>
+            <Content open={open} setOpen={setOpen} exact path="/"></Content>
+            <InternshipOfferValidation
+              internshipOfferDialogVisible={
+                dialogVisibility.internshipOfferDialogValidation
+              }
+              toggleDialogs={handleDialogs}
+              exact
+              path="/internshipOfferValidation"
+            />
+            <ListCvInternshipManagerView
+              exact
+              path="/cvValidation"
+              sx={{ marginTop: "50px" }}
+            ></ListCvInternshipManagerView>
+            <UploadCV exact path="/uploadCV" />
+            <OfferViews exact path="/offers"/>
+          </Switch>
+          <UserInfoContext.Consumer>
+            {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}
+          </UserInfoContext.Consumer>
+        </div>
+      </UserInfoStore>
     </BrowserRouter>
   );
 }

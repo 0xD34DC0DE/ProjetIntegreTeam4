@@ -1,10 +1,7 @@
 package com.team4.backend.model;
 
 import com.team4.backend.model.enums.Role;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -20,8 +17,6 @@ public class User implements Serializable {
 
     @Id
     protected String id;
-
-    protected String registrationNumber;
 
     protected String email;
 
@@ -45,7 +40,6 @@ public class User implements Serializable {
                 String firstName,
                 String lastName,
                 String password,
-                String registrationNumber,
                 String phoneNumber,
                 Role role,
                 Boolean isEnabled,
@@ -55,7 +49,6 @@ public class User implements Serializable {
         this.lastName = lastName;
         this.email = email;
         this.password = password;
-        this.registrationNumber = registrationNumber;
         this.phoneNumber = phoneNumber;
         this.role = role;
         this.isEnabled = isEnabled;

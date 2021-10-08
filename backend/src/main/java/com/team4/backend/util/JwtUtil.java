@@ -1,5 +1,6 @@
 package com.team4.backend.util;
 
+import com.team4.backend.model.Monitor;
 import com.team4.backend.model.User;
 import com.team4.backend.model.enums.Role;
 import io.jsonwebtoken.Claims;
@@ -58,9 +59,8 @@ public class JwtUtil {
 
     public boolean isTokenExpired(String token) {
         try {
-
             return getAllClaimsFromToken(token).getExpiration().before(new Date());
-        }catch (Exception e){
+        } catch (Exception e) {
             log.info(e.getMessage());
             return true;
         }
@@ -73,6 +73,5 @@ public class JwtUtil {
     public boolean isTokenValid(String token) {
         return Jwts.parserBuilder().setSigningKey(key).build().isSigned(token);
     }
-
 
 }

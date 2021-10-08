@@ -1,9 +1,11 @@
 package com.team4.backend.dto;
 
-import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -14,53 +16,30 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 public class StudentDto extends UserDto implements Serializable {
 
-    private String schoolName;
-
     private StudentState studentState;
+
+    private Boolean hasValidCv;
 
     @Builder
     public StudentDto(String id,
-                      String registrationNumber,
                       String email,
                       String password,
                       String firstName,
                       String lastName,
                       LocalDate registrationDate,
-                      Role role,
-                      String schoolName,
                       String phoneNumber,
-                      StudentState studentState) {
-        super(id, registrationNumber, email, password, firstName, lastName, registrationDate,phoneNumber, role);
-        this.schoolName = schoolName;
+                      StudentState studentState,
+                      Boolean hasValidCv) {
+        super(id,
+                email,
+                password,
+                firstName,
+                lastName,
+                registrationDate,
+                phoneNumber,
+                Role.STUDENT);
         this.studentState = studentState;
+        this.hasValidCv = hasValidCv;
     }
 
-    public static Student dtoToEntity(StudentDto studentDto) {
-        return Student.studentBuilder()
-                .id(studentDto.getId())
-                .registrationNumber(studentDto.getRegistrationNumber())
-                .email(studentDto.getEmail())
-                .password(studentDto.getPassword())
-                .firstName(studentDto.getFirstName())
-                .lastName(studentDto.getLastName())
-                .registrationDate(studentDto.getRegistrationDate())
-                .schoolName(studentDto.getSchoolName())
-                .phoneNumber(studentDto.getPhoneNumber())
-                .studentState(studentDto.getStudentState())
-                .build();
-    }
-
-    public static StudentDto entityToDto(Student student) {
-        return StudentDto.builder()
-                .id(student.getId())
-                .registrationNumber(student.getRegistrationNumber())
-                .email(student.getEmail())
-                .firstName(student.getFirstName())
-                .lastName(student.getLastName())
-                .registrationDate(student.getRegistrationDate())
-                .schoolName(student.getSchoolName())
-                .phoneNumber(student.getPhoneNumber())
-                .studentState(student.getStudentState())
-                .build();
-    }
 }

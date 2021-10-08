@@ -4,7 +4,6 @@ import com.team4.backend.dto.StudentDto;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Student;
 import com.team4.backend.service.StudentService;
-import com.team4.backend.service.UserService;
 import com.team4.backend.testdata.StudentMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,9 +30,6 @@ public class StudentControllerTest {
 
     @MockBean
     StudentService studentService;
-
-    @MockBean
-    UserService userService;
 
     @Test
     public void shouldCreateStudent() {
@@ -69,7 +65,8 @@ public class StudentControllerTest {
 
         studentDto.setId(null);
 
-        when(studentService.registerStudent(any(Student.class))).thenReturn(Mono.error(new UserAlreadyExistsException()));
+        when(studentService.registerStudent(any(Student.class)))
+                .thenReturn(Mono.error(UserAlreadyExistsException::new));
 
         //ACT
         webTestClient
@@ -79,4 +76,5 @@ public class StudentControllerTest {
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
                 .expectBody().isEmpty();
     }
+
 }

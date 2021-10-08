@@ -6,14 +6,13 @@ import {
   DialogContent,
   FormGroup,
   Typography,
-  DialogTitle,
 } from "@mui/material";
 import axios from "axios";
-import React from "react";
-import { OFFER_FORM_VALUES } from "../modals/TextFormFieldValues";
+import React, { useState } from "react";
+import { OFFER_FORM_VALUES } from "../models/TextFormFieldValues";
 import TextFormField from "./TextFormField";
 
-function OfferForm({ isMounted }) {
+const OfferForm = ({ dialogVisible, toggleDialogs }) => {
   const emptyOffer = {
     limitDateToApply: new Date(),
     beginningDate: new Date(),
@@ -24,9 +23,9 @@ function OfferForm({ isMounted }) {
     maxSalary: 0,
     description: "",
   };
-  const [offer, setOffer] = React.useState(emptyOffer);
-  const [isValid, setIsValid] = React.useState(false);
-  const [token, setToken] = React.useState(sessionStorage.getItem("jwt"));
+  const [offer, setOffer] = useState(emptyOffer);
+  const [isValid, setIsValid] = useState(false);
+  const [token, setToken] = useState(sessionStorage.getItem("jwt"));
 
   const handleFormChange = (event) => {
     setOffer((previousForm) => ({
@@ -37,6 +36,11 @@ function OfferForm({ isMounted }) {
     Object.values(offer).map((value, key, array) =>
       setIsValid(!array.includes("" || null))
     );
+  };
+
+  const handleClose = (_, reason) => {
+    if (reason === "backdropClick")
+      toggleDialogs("internshipOfferDialog", false);
   };
 
   const saveInternshipOffer = () => {
@@ -59,7 +63,7 @@ function OfferForm({ isMounted }) {
 
   return (
     <>
-      <Dialog open={isMounted} disable>
+      <Dialog open={dialogVisible} onClose={handleClose}>
         <Typography variant="h4" sx={{ ml: 3, mt: 3 }}>
           Déposer une offre de stage <Create sx={{ mx: 1 }} />
         </Typography>
@@ -94,6 +98,6 @@ function OfferForm({ isMounted }) {
       </Dialog>
     </>
   );
-}
+};
 
 export default OfferForm;

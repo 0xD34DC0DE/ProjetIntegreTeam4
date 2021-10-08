@@ -33,7 +33,6 @@ public class SecurityContextRepositoryTest {
         assertThrows(UnsupportedOperationException.class, () -> securityContextRepository.save(null, null));
     }
 
-
     @Test
     void load() {
         //ARRANGE
@@ -61,4 +60,5 @@ public class SecurityContextRepositoryTest {
                 .consumeNextWith(securityContext -> assertTrue(securityContext.getAuthentication().getPrincipal().toString().isEmpty()))
                 .verifyComplete();
     }
+
 }

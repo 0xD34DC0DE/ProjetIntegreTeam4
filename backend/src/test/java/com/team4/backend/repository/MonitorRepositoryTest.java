@@ -1,8 +1,8 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.Monitor;
-import com.team4.backend.model.User;
 import lombok.extern.java.Log;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,8 +15,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @Log
 @DataMongoTest
@@ -33,28 +31,37 @@ public class MonitorRepositoryTest {
     void init() {
 
         Flux<Monitor> users = Flux.just(
-                Monitor.monitorBuilder().email("marcM@desjardin.com").password("marc123").isEnabled(true).build(),
-                Monitor.monitorBuilder().email("johnnyJ@cae-tech.com").password("johnny123").isEnabled(true).build()
+                Monitor.monitorBuilder().email("marcM@desjardin.com").password("marc123").build(),
+                Monitor.monitorBuilder().email("johnnyJ@cae-tech.com").password("johnny123").build()
         );
 
-        monitorRepository.saveAll(users).subscribe().dispose();
+        monitorRepository.saveAll(users).subscribe();
     }
 
     @Test
-    void findByEmail() {
+    void shouldExistByEmailAndEnabledTrue() {
         //ARRANGE
-        String email1 = "marcM@desjardin.com";
-        String email2 = "inexistantEmail@gmail.com";
-
+        String email = "marcM@desjardin.com";
         //ACT
-        Mono<Monitor> existingMonitor = monitorRepository.findByEmail(email1);
-        Mono<Monitor> nonExistentMonitor = monitorRepository.findByEmail(email2);
+        Mono<Boolean> existentMonitor = monitorRepository.existsByEmailAndIsEnabledTrue(email);
 
         //ASSERT
-        StepVerifier.create(existingMonitor)
-                .assertNext(monitor -> assertEquals(email1, monitor.getEmail())).verifyComplete();
+        StepVerifier.create(existentMonitor)
+                .assertNext(Assertions::assertTrue)
+                .verifyComplete();
+    }
 
-        StepVerifier.create(nonExistentMonitor).expectNextCount(0).verifyComplete();
+    @Test
+    void shouldNotExistByEmailAndEnabledTrue() {
+        //ARRANGE
+        String email = "inexistantEmail@gmail.com";
+        //ACT
+        Mono<Boolean> existentMonitor = monitorRepository.existsByEmailAndIsEnabledTrue(email);
+
+        //ASSERT
+        StepVerifier.create(existentMonitor)
+                .assertNext(Assertions::assertFalse)
+                .verifyComplete();
     }
 
 }

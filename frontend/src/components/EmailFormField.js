@@ -5,12 +5,12 @@ import axios from "axios";
 const emailRegexValidation =
   /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
-const EmailFormField = ({ valid, onFieldChange, step }) => {
+const EmailFormField = ({ valid, onFieldChange, step, visibleStep }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [email, setEmail] = useState("");
 
   useEffect(() => {
-    if (step !== 0) return;
+    if (step !== visibleStep) return;
     if (emailRegexValidation.test(email)) {
       axios({
         method: "GET",
@@ -35,7 +35,7 @@ const EmailFormField = ({ valid, onFieldChange, step }) => {
       setErrorMessage("L'adresse courriel est invalide");
       valid(false);
     }
-  }, [email, step, valid]);
+  }, [email, step, valid, visibleStep]);
 
   const handleEmailChange = (event) => {
     setEmail(event.target.value);
@@ -53,7 +53,7 @@ const EmailFormField = ({ valid, onFieldChange, step }) => {
         value={email}
         error={errorMessage}
         type="email"
-        visible={step === 0}
+        visible={step === visibleStep}
       />
     </>
   );

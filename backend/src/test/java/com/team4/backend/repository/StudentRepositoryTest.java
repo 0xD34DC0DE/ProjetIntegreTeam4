@@ -1,7 +1,9 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.Student;
-import com.team4.backend.model.enums.StudentState;
+import com.team4.backend.model.User;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,65 +12,57 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataMongoTest
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ContextConfiguration(classes ={StudentRepository.class})
+@ContextConfiguration(classes = {StudentRepository.class})
 public class StudentRepositoryTest {
 
     @Autowired
     StudentRepository studentRepository;
 
+    @BeforeAll
+    void init() {
+        Flux<Student> users = Flux.just(
+                Student.studentBuilder().email("testing_1@gmail.com").password("password1").build(),
+                Student.studentBuilder().email("testing_2@gmail.com").password("password2").build()
+        );
+
+        studentRepository.saveAll(users).subscribe();
+    }
+
     @Test
-    void CreateAccount() {
-        // TODO remove this test -> not testing "save" functionality of repository
-        final String registrationNumber = "123456789";
-        final String email = "123456789@gmail.com";
-        final String password = "passwd";
-        final String firstName = "John";
-        final String lastName = "Doe";
-        final String schoolName = "Example school";
-        final String phoneNumber = "123-456-7890";
+    void shouldFindByEmail(){
+        //ARRANGE
+        String email = "testing_1@gmail.com";
 
-        final StudentState studentState = StudentState.REGISTERED;
+        //ACT
+        Mono<Student> studentMono = studentRepository.findByEmail(email);
 
-        Student student = Student.studentBuilder()
-                .registrationNumber(registrationNumber)
-                .email(email)
-                .password(password)
-                .firstName(firstName)
-                .lastName(lastName)
-                .schoolName(schoolName)
-                .phoneNumber(phoneNumber)
-                .studentState(studentState)
-                .build();
+        //ASSERT
+        StepVerifier.create(studentMono)
+                .assertNext(s -> Assertions.assertEquals(email,s.getEmail()))
+                .verifyComplete();
 
-        Mono<Student> studentMono = studentRepository.save(student);
+    }
 
+    @Test
+    void shouldNotFindByEmail(){
+        //ARRANGE
+        String email = "non_existent_student@gmail.com";
 
-        StepVerifier
-                .create(studentMono)
-                .assertNext(s -> {
-                    s.setPassword("encrypted");
-                    assertNotNull(s.getId());
-                    assertEquals(s.getRegistrationNumber(), registrationNumber);
-                    assertEquals(s.getEmail(), email);
-                    assertNotEquals(s.getPassword(), password); // Password should be encrypted, not cleartext
-                    assertEquals(s.getFirstName(), firstName);
-                    assertEquals(s.getLastName(), lastName);
-                    assertEquals(s.getSchoolName(), schoolName);
-                    assertEquals(s.getPhoneNumber(), phoneNumber);
-                    assertEquals(s.getStudentState(), studentState);
-                })
-                .expectComplete()
-                .verify();
-        //TODO Add check for isEnable()
+        //ACT
+        Mono<Student> studentMono = studentRepository.findByEmail(email);
+
+        //ASSERT
+        StepVerifier.create(studentMono)
+                .expectNextCount(0)
+                .verifyComplete();
     }
 
 }

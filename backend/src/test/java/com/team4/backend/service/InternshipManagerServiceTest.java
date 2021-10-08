@@ -10,16 +10,14 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-@EnableAutoConfiguration
 @ExtendWith(MockitoExtension.class)
 public class InternshipManagerServiceTest {
 
@@ -33,8 +31,7 @@ public class InternshipManagerServiceTest {
     private InternshipManagerService internshipManagerService;
 
     @Test
-    void shouldCreateIntershipManager() {
-
+    void shouldCreateInternshipManager() {
         // ARRANGE
         InternshipManager internshipManager = InternshipManagerMockData.GetInternshipManager();
         internshipManager.setId(null); // Id is null when coming from auto-register
@@ -55,6 +52,6 @@ public class InternshipManagerServiceTest {
             assertNotNull(result.getId());
             assertNotEquals(InternshipManagerMockData.GetInternshipManager().getPassword(), result.getPassword());
         }).verifyComplete();
-
     }
+
 }

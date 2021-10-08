@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.exception.UserAlreadyExistsException;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -28,8 +29,24 @@ public class StudentService {
                 student.setPassword(pbkdf2Encoder.encode(student.getPassword()));
                 return studentRepository.save(student);
             } else {
-                return Mono.error(new UserAlreadyExistsException());
+                return Mono.error(new UserAlreadyExistsException("User already exist"));
             }
         });
     }
+
+    public Mono<Student> getStudent(String studentEmail) {
+        return studentRepository.findByEmailAndIsEnabledTrue(studentEmail);
+    }
+    public Mono<Student> findByEmail(String email) {
+        return studentRepository.findByEmail(email)
+                .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
+    }
+
+    public Mono<Student> updateCvValidity(String email, Boolean valid) {
+        return findByEmail(email).map(student -> {
+            student.setHasValidCv(valid);
+            return student;
+        }).flatMap(studentRepository::save);
+    }
+
 }

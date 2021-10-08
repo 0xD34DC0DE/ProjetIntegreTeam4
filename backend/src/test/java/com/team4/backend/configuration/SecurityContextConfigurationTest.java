@@ -1,9 +1,6 @@
 package com.team4.backend.configuration;
 
-import com.team4.backend.controller.UserController;
-import com.team4.backend.model.ExamplePerson;
 import com.team4.backend.model.User;
-import com.team4.backend.model.enums.Role;
 import com.team4.backend.security.AuthenticationManager;
 import com.team4.backend.security.SecurityContextRepository;
 import com.team4.backend.testdata.SecurityMockData;
@@ -22,7 +19,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -32,7 +29,6 @@ import static org.mockito.Mockito.when;
 @ExtendWith(SpringExtension.class)
 @WebFluxTest(value = {SecurityConfiguration.class})
 public class SecurityContextConfigurationTest {
-
 
     @MockBean
     AuthenticationManager authenticationManager;
@@ -53,9 +49,9 @@ public class SecurityContextConfigurationTest {
         when(securityContextRepository.load(any())).thenReturn(Mono.just(new SecurityContextImpl(authentication)));
 
         //ACT
-        HttpStatus httpStatus1 = webTestClient.get().uri("/person/personByNameFirstLetter/W")
+        HttpStatus httpStatus1 = webTestClient.get().uri("/non_existent")
                 .header(HttpHeaders.AUTHORIZATION, "Bearer " + token1)
-                .exchange().returnResult(ExamplePerson.class).getStatus();
+                .exchange().returnResult(User.class).getStatus();
 
         //ASSERT
         assertEquals(HttpStatus.FORBIDDEN, httpStatus1);
@@ -68,10 +64,11 @@ public class SecurityContextConfigurationTest {
         when(securityContextRepository.load(any())).thenReturn(Mono.empty());
 
         //ACT
-        HttpStatus httpStatus1 = webTestClient.get().uri("/person/personByName/Wilona Frohock")
-                .exchange().returnResult(ExamplePerson.class).getStatus();
+        HttpStatus httpStatus1 = webTestClient.get().uri("/non_existent")
+                .exchange().returnResult(User.class).getStatus();
 
         //ASSERT
         assertEquals(HttpStatus.UNAUTHORIZED, httpStatus1);
     }
+
 }

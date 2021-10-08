@@ -48,7 +48,7 @@ public class JwtUtilTest {
         User user = User.builder().email("123456789@claurendeau.qc.ca").role(Role.STUDENT).build();
         Map<String, Role> claims = new HashMap<>();
 
-        claims.put("role",user.getRole());
+        claims.put("role", user.getRole());
 
         String token = Jwts.builder()
                 .setClaims(claims)
@@ -61,7 +61,8 @@ public class JwtUtilTest {
         Claims returnedClaims = jwtUtil.getAllClaimsFromToken(token);
 
         //ASSERT
-        assertEquals(user.getEmail(),returnedClaims.getSubject());
+        assertEquals(user.getEmail(), returnedClaims.getSubject());
+        assertEquals(user.getRole().toString(), returnedClaims.get("role"));
     }
 
     @Test
@@ -71,7 +72,7 @@ public class JwtUtilTest {
         Map<String, Role> claims = new HashMap<>();
         Date creationDate = new Date();
 
-        claims.put("role",user.getRole());
+        claims.put("role", user.getRole());
 
         String token1 = Jwts.builder()
                 .setClaims(claims)
@@ -99,12 +100,12 @@ public class JwtUtilTest {
     }
 
     @Test
-    void getEmailFromToken(){
+    void getEmailFromToken() {
         //ARRANGE
         User user = User.builder().email("123456789@claurendeau.qc.ca").role(Role.STUDENT).build();
         Map<String, Role> claims = new HashMap<>();
 
-        claims.put("role",user.getRole());
+        claims.put("role", user.getRole());
 
         String token = Jwts.builder()
                 .setClaims(claims)
@@ -116,11 +117,11 @@ public class JwtUtilTest {
         String returnedEmail = jwtUtil.getEmailFromToken(token);
 
         //ASSERT
-        assertEquals(user.getEmail(),returnedEmail);
+        assertEquals(user.getEmail(), returnedEmail);
     }
 
     @Test
-    void isTokenValid(){
+    void isTokenValid() {
         //ARRANGE
         String token1 = Jwts.builder()
                 .signWith(jwtUtil.getKey())
@@ -134,6 +135,6 @@ public class JwtUtilTest {
         //ASSERT
         assertTrue(isTokenValid1);
         assertFalse(isTokenValid2);
-
     }
+
 }

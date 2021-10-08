@@ -1,6 +1,5 @@
 package com.team4.backend.model;
 
-import com.team4.backend.dto.InternshipOfferDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Data
@@ -28,26 +28,22 @@ public class InternshipOffer implements Serializable {
 
     private LocalDate endingDate;
 
-    private Monitor monitor;
+    private String emailOfMonitor;
 
-    private String companyName, description;
+    private String companyName;
 
-    private Float minSalary, maxSalary;
+    private String description;
 
-    private boolean isValidated, isExclusive;
+    private Float minSalary;
 
-    private List<Student> listInterestedStudents;
+    private Float maxSalary;
 
-    private List<Student> listExclusiveStudents;
+    private Boolean isValidated;
 
-    public InternshipOffer(InternshipOfferDto internshipOfferDTO, Monitor monitor) {
-        this.limitDateToApply = internshipOfferDTO.getLimitDateToApply();
-        this.beginningDate = internshipOfferDTO.getBeginningDate();
-        this.endingDate = internshipOfferDTO.getEndingDate();
-        this.companyName = internshipOfferDTO.getCompanyName();
-        this.description = internshipOfferDTO.getDescription();
-        this.minSalary = internshipOfferDTO.getMinSalary();
-        this.maxSalary = internshipOfferDTO.getMaxSalary();
-        this.monitor = monitor;
-    }
+    private LocalDateTime validationDate;
+
+    private Boolean isExclusive;
+
+    private List<String> listEmailInterestedStudents;
+
 }
