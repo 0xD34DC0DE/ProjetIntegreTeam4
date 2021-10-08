@@ -1,11 +1,7 @@
 package com.team4.backend;
 
 import com.team4.backend.model.*;
-import com.team4.backend.model.enums.Role;
-import com.team4.backend.repository.FileMetaDataRepository;
-import com.team4.backend.repository.InternshipOfferRepository;
-import com.team4.backend.repository.MonitorRepository;
-import com.team4.backend.repository.StudentRepository;
+import com.team4.backend.repository.*;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +11,6 @@ import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -32,6 +27,8 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final StudentRepository studentRepository;
 
+    private final SupervisorRepository supervisorRepository;
+
     private final PBKDF2Encoder pbkdf2Encoder;
 
     private final FileMetaDataRepository fileMetaDataRepository;
@@ -39,11 +36,12 @@ public class TestingInserterRunner implements ApplicationRunner {
     public TestingInserterRunner(MonitorRepository monitorRepository,
                                  InternshipOfferRepository internshipOfferRepository,
                                  StudentRepository studentRepository,
-                                 PBKDF2Encoder pbkdf2Encoder,
+                                 SupervisorRepository supervisorRepository, PBKDF2Encoder pbkdf2Encoder,
                                  FileMetaDataRepository fileMetaDataRepository) {
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
         this.studentRepository = studentRepository;
+        this.supervisorRepository = supervisorRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.fileMetaDataRepository = fileMetaDataRepository;
     }
@@ -58,6 +56,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertInternshipOffers();
         insertStudents();
         insertMonitors();
+        insertSupervisors();
         insertCvs();
     }
 
@@ -78,6 +77,15 @@ public class TestingInserterRunner implements ApplicationRunner {
 
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
+    private void insertSupervisors(){
+        List<Supervisor> supervisorList = Arrays.asList(
+                Supervisor.supervisorBuilder()
+                        .email("45673234@gmail.com").password(pbkdf2Encoder.encode("sasuke123")).build()
+        );
+
+        supervisorRepository.saveAll(supervisorList).subscribe();
+    }
+
 
     private void insertInternshipOffers(){
         List<InternshipOffer> internshipOffers = Arrays.asList(
