@@ -13,7 +13,7 @@ public abstract class InternshipOfferMockData {
 
     public static InternshipOffer getInternshipOffer() {
         return InternshipOffer.builder()
-                .id("234dsd2egd54ter")
+                .id("id")
                 .limitDateToApply(LocalDate.now().plusMonths(1))
                 .beginningDate(LocalDate.now().plusMonths(2))
                 .endingDate(LocalDate.now().plusMonths(6))
