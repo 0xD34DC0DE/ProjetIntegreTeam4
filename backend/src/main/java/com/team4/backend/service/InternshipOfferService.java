@@ -12,9 +12,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
@@ -65,12 +63,12 @@ public class InternshipOfferService {
                                 .take(pageRequest.getPageSize())
                                 .flatMap(offerId ->
                                         internshipOfferRepository.
-                                                findByIdAndIsExclusiveTrueAndLimitDateToApplyAfter(
+                                                findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
                                                         offerId,
                                                         LocalDate.now()
                                                 )
                                 )
-                ).delayElements(Duration.ofSeconds(3));
+                ).delayElements(Duration.ofSeconds(1)); // TODO remove after demo
     }
 
     public Flux<InternshipOffer> getGeneralInternshipOffers(Integer page, Integer size) {
@@ -83,7 +81,7 @@ public class InternshipOfferService {
         }
 
         return internshipOfferRepository
-                .findAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now(), pageRequest);
+                .findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(LocalDate.now(), pageRequest);
 
     }
 
@@ -96,7 +94,7 @@ public class InternshipOfferService {
 
     public Mono<InternshipOffer> validateInternshipOffer(String id){
         return internshipOfferRepository.findById(id).map(offer -> {
-            offer.setValidated(true);
+            offer.setIsValidated(true);
             offer.setValidationDate(LocalDateTime.now());
             return offer;
         }).flatMap(internshipOfferRepository::save)
@@ -106,7 +104,7 @@ public class InternshipOfferService {
 
     public Mono<InternshipOffer> refuseInternshipOffer(String id){
         return internshipOfferRepository.findById(id).map(offer -> {
-            offer.setValidated(false);
+            offer.setIsValidated(false);
             offer.setValidationDate(LocalDateTime.now());
             return offer;
         }).flatMap(internshipOfferRepository::save)

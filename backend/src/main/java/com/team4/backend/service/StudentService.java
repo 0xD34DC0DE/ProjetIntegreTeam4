@@ -1,7 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.exception.UserAlreadyExistsException;
-import com.team4.backend.exception.UserDoNotExistException;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -39,7 +39,7 @@ public class StudentService {
     }
     public Mono<Student> findByEmail(String email) {
         return studentRepository.findByEmail(email)
-                .switchIfEmpty(Mono.error(new UserDoNotExistException("Can't find user with this email")));
+                .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
     }
 
     public Mono<Student> updateCvValidity(String email, Boolean valid) {

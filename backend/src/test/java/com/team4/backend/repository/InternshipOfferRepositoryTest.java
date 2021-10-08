@@ -57,8 +57,8 @@ public class InternshipOfferRepositoryTest {
 
         //ASSERT
         StepVerifier.create(validatedIntershipOffers)
-                .assertNext(o -> assertTrue(!o.isValidated() && o.getValidationDate() == null))
-                .assertNext(o -> assertTrue(!o.isValidated() && o.getValidationDate() == null))
+                .assertNext(o -> assertTrue(!o.getIsValidated() && o.getValidationDate() == null))
+                .assertNext(o -> assertTrue(!o.getIsValidated() && o.getValidationDate() == null))
                 .verifyComplete();
     }
 }

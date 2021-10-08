@@ -1,7 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.exception.UserAlreadyExistsException;
-import com.team4.backend.exception.UserDoNotExistException;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.testdata.StudentMockData;
@@ -107,7 +107,7 @@ public class StudentServiceTest {
 
         //ASSERT
         StepVerifier.create(studentMono)
-                .verifyError(UserDoNotExistException.class);
+                .verifyError(UserNotFoundException.class);
     }
 
     @Test
@@ -138,7 +138,7 @@ public class StudentServiceTest {
         Mono<Student> studentMono = studentService.updateCvValidity(student.getEmail(), true);
 
         //ASSERT
-        StepVerifier.create(studentMono).verifyError(UserDoNotExistException.class);
+        StepVerifier.create(studentMono).verifyError(UserNotFoundException.class);
     }
 
     @Test

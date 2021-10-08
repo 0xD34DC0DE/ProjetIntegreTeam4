@@ -39,8 +39,6 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final StudentRepository studentRepository;
 
-    private final StudentRepository studentRepository;
-
     private final SupervisorRepository supervisorRepository;
 
     private final PBKDF2Encoder pbkdf2Encoder;
@@ -50,11 +48,11 @@ public class TestingInserterRunner implements ApplicationRunner {
     public TestingInserterRunner(MonitorRepository monitorRepository,
                                  InternshipOfferRepository internshipOfferRepository,
                                  StudentRepository studentRepository,
-                                 SupervisorRepository supervisorRepository, PBKDF2Encoder pbkdf2Encoder,
+                                 SupervisorRepository supervisorRepository,
+                                 PBKDF2Encoder pbkdf2Encoder,
                                  FileMetaDataRepository fileMetaDataRepository) {
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
-        this.studentRepository = studentRepository;
         this.studentRepository = studentRepository;
         this.supervisorRepository = supervisorRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
@@ -75,7 +73,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertSupervisors();
         insertCvs();
 
-        String exclusiveOfferId =insertInternshipOffers();
+        String exclusiveOfferId = insertInternshipOffers2();
 
         insertStudents(exclusiveOfferId);
 
@@ -99,7 +97,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
     private void insertSupervisors(){
-        List<Supervisor> supervisorList = Arrays.asList(
+        List<Supervisor> supervisorList = Collections.singletonList(
                 Supervisor.supervisorBuilder()
                         .email("45673234@gmail.com").password(pbkdf2Encoder.encode("sasuke123")).build()
         );
@@ -128,9 +126,10 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .beginningDate(LocalDate.now().plusMonths(1))
                         .endingDate(LocalDate.now().plusMonths(2))
                         .limitDateToApply(LocalDate.now().plusDays(15))
-                        .companyName("Company name")
+                        .companyName("BestCo.")
                         .description("Description")
                         .isExclusive(false)
+                        .isValidated(true)
                         .maxSalary(17.50f)
                         .minSalary(16.25f)
                         .emailOfMonitor("9182738492@gmail.com")
@@ -141,16 +140,17 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .beginningDate(LocalDate.now().plusMonths(3))
                         .endingDate(LocalDate.now().plusMonths(6))
                         .limitDateToApply(LocalDate.now().plusDays(11))
-                        .companyName("Company name2")
-                        .description("Description2")
+                        .companyName("CAE")
+                        .description("Some Description")
                         .isExclusive(true)
+                        .isValidated(true)
                         .maxSalary(19.50f)
                         .minSalary(19.50f)
                         .emailOfMonitor("9182738492@gmail.com")
                         .listEmailInterestedStudents(Collections.emptyList())
                         .build();
 
-        for (int i = 0; i < 30; i++) {
+        for (int i = 0; i < 7; i++) {
             internshipOffer1.setDescription(internshipOffer1.getDescription() + i);
             internshipOfferRepository.save(internshipOffer1).block();
             internshipOffer1.setId(null);

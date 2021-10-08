@@ -14,7 +14,7 @@ public class InternshipOfferMapperTest {
     @Test
     void mapInternshipCreationDtoToEntity() {
         //ARRANGE
-        InternshipOfferCreationDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOfferCreationDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferCreationDto();
 
         //ACT
         InternshipOffer internshipOffer = InternshipOfferMapper.toEntity(internshipOfferDto);

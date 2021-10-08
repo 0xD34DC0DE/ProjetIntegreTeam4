@@ -1,6 +1,7 @@
 package com.team4.backend.mapping;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.dto.InternshipOfferMonitorViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.model.InternshipOffer;
@@ -37,6 +38,21 @@ public abstract class InternshipOfferMapper {
                 .maxSalary(internshipOffer.getMaxSalary())
                 .isExclusive(internshipOffer.getIsExclusive())
                 .build();
+    }
+
+    public static InternshipOfferDto toDto(InternshipOffer internshipOffer) {
+        return InternshipOfferDto.builder()
+                .id(internshipOffer.getId())
+                .limitDateToApply(internshipOffer.getLimitDateToApply())
+                .beginningDate(internshipOffer.getBeginningDate())
+                .endingDate(internshipOffer.getEndingDate())
+                .companyName(internshipOffer.getCompanyName())
+                .emailOfMonitor(internshipOffer.getEmailOfMonitor())
+                .description(internshipOffer.getDescription())
+                .minSalary(internshipOffer.getMinSalary())
+                .maxSalary(internshipOffer.getMaxSalary())
+                .listEmailInterestedStudents(internshipOffer.getListEmailInterestedStudents())
+                .isValidated(internshipOffer.getIsValidated()).build();
     }
 
     public static InternshipOfferMonitorViewDto toMonitorView(InternshipOffer internshipOffer) {

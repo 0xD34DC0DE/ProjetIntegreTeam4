@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;

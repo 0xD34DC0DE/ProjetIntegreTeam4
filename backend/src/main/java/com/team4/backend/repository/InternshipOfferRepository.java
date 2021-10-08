@@ -15,11 +15,11 @@ import java.util.UUID;
 
 @Repository
 public interface InternshipOfferRepository extends ReactiveMongoRepository<InternshipOffer, String> {
-    Flux<InternshipOffer> findAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate date, Pageable page);
+    Flux<InternshipOffer> findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(LocalDate date, Pageable page);
 
-    Mono<InternshipOffer> findByIdAndIsExclusiveTrueAndLimitDateToApplyAfter(String id, LocalDate date);
+    Mono<InternshipOffer> findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(String id, LocalDate date);
 
     Mono<Long> countAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate date);
-    public Flux<InternshipOffer> findAllInternshipOfferByIsValidatedFalse();
-    public Flux<InternshipOffer> findAllByValidationDateNullAndIsValidatedFalse();
+    Flux<InternshipOffer> findAllInternshipOfferByIsValidatedFalse();
+    Flux<InternshipOffer> findAllByValidationDateNullAndIsValidatedFalse();
 }

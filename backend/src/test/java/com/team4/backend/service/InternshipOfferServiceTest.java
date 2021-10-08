@@ -18,9 +18,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Flux;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.server.ResponseStatusException;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -53,7 +50,7 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldCreateInternshipOffer() {
         //ARRANGE
-        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferCreationDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
         when(monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getEmailOfMonitor())).thenReturn(Mono.just(true));
@@ -71,7 +68,7 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldNotCreateInternshipOffer() {
         //ARRANGE
-        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferCreationDto();
 
         when(monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getEmailOfMonitor())).thenReturn(Mono.just(false));
 
@@ -98,11 +95,11 @@ public class InternshipOfferServiceTest {
 
         when(studentService.getStudent(any(String.class))).thenReturn(Mono.just(student));
 
-        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfter(
+        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
                 same(exclusiveOfferIds.get(0)), any(LocalDate.class))
         ).thenReturn(Mono.just(internshipOffer1));
 
-        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfter(
+        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
                 same(exclusiveOfferIds.get(1)), any(LocalDate.class))
         ).thenReturn(Mono.just(internshipOffer2));
 
@@ -128,7 +125,7 @@ public class InternshipOfferServiceTest {
 
         when(studentService.getStudent(any(String.class))).thenReturn(Mono.just(student));
 
-        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfter(
+        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
                 same(exclusiveOfferIds.get(1)), any(LocalDate.class))
         ).thenReturn(Mono.just(internshipOffer));
 
@@ -179,7 +176,7 @@ public class InternshipOfferServiceTest {
         List<InternshipOfferStudentViewDto> internshipOfferStudentViewDtos =
                 InternshipOfferMockData.getListInternshipOfferStudentViewDto(2);
 
-        when(internshipOfferRepository.findAllByIsExclusiveFalseAndLimitDateToApplyAfter(
+        when(internshipOfferRepository.findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(
                 any(LocalDate.class), any(Pageable.class))
         ).thenReturn(Flux.fromIterable(internshipOffers));
 
@@ -300,8 +297,8 @@ public class InternshipOfferServiceTest {
         // ASSERT
         StepVerifier
                 .create(validIntershipOfferDTO)
-                .assertNext(o -> assertFalse(o.isValidated()))
-                .assertNext(o -> assertFalse(o.isValidated()))
+                .assertNext(o -> assertFalse(o.getIsValidated()))
+                .assertNext(o -> assertFalse(o.getIsValidated()))
                 .verifyComplete();
     }
 
@@ -318,7 +315,7 @@ public class InternshipOfferServiceTest {
 
         // ASSERT
         StepVerifier.create(internshipOfferDtoMono)
-                .assertNext(e -> assertTrue(e.isValidated()))
+                .assertNext(e -> assertTrue(e.getIsValidated()))
                 .verifyComplete();
     }
 
@@ -335,7 +332,7 @@ public class InternshipOfferServiceTest {
 
         // ASSERT
         StepVerifier.create(internshipOfferDtoMono)
-                .assertNext(e -> assertTrue(!e.isValidated() && e.getValidationDate() != null))
+                .assertNext(e -> assertTrue(!e.getIsValidated() && e.getValidationDate() != null))
                 .verifyComplete();
     }
 
@@ -351,8 +348,8 @@ public class InternshipOfferServiceTest {
         // ASSERT
         StepVerifier
                 .create(validIntershipOffer)
-                .assertNext(o -> assertTrue(!o.isValidated() && o.getValidationDate() == null))
-                .assertNext(o -> assertTrue(!o.isValidated() && o.getValidationDate() == null))
+                .assertNext(o -> assertTrue(!o.getIsValidated() && o.getValidationDate() == null))
+                .assertNext(o -> assertTrue(!o.getIsValidated() && o.getValidationDate() == null))
                 .verifyComplete();
     }
 }

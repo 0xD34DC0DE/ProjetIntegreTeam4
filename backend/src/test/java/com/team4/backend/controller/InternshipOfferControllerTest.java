@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
@@ -39,7 +40,7 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldAddAnInternshipOffer() {
         //ARRANGE
-        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferCreationDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
         when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.just(internshipOffer));
@@ -58,7 +59,7 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldNotAddAnInternshipOffer() {
         //ARRANGE
-        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferCreationDto();
 
         when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.error(UserNotFoundException::new));
 

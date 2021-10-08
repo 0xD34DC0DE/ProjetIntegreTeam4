@@ -35,8 +35,7 @@ public class Student extends User {
                    StudentState studentState,
                    LocalDate registrationDate,
                    List<String> appliedOffersId,
-                   Set<String> exclusiveOffersId) {
-                   LocalDate registrationDate,
+                   Set<String> exclusiveOffersId,
                    Boolean hasValidCv) {
         super(id,
                 email,
