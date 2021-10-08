@@ -1,9 +1,10 @@
 package com.team4.backend.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import de.flapdoodle.embed.process.config.store.FileType;
-import lombok.*;
-import org.springframework.data.annotation.Id;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;

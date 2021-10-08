@@ -21,7 +21,7 @@ public class FileMetaDataController {
     }
 
     @GetMapping("/countAllInvalidCvNotSeen")
-    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Mono<Long> countAllInvalidCvNotSeen() {
         return fileMetaDataService.countAllInvalidCvNotSeen();
     }

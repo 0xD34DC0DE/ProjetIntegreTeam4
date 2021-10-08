@@ -19,7 +19,6 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -77,7 +76,7 @@ public class FileMetaDataServiceTest {
         Student student = StudentMockData.getMockStudent();
 
         when(fileMetaDataRepository.findById(any(String.class))).thenReturn(Mono.just(fileMetaData));
-        when(studentService.updateCvValidity(fileMetaData.getUserEmail(),true)).thenReturn(Mono.just(student));
+        when(studentService.updateCvValidity(fileMetaData.getUserEmail(), true)).thenReturn(Mono.just(student));
         when(fileMetaDataRepository.save(any(FileMetaData.class))).thenReturn(Mono.just(fileMetaData));
 
         //ACT
