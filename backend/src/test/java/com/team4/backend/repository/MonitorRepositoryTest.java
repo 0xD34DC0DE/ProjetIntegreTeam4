@@ -49,7 +49,6 @@ public class MonitorRepositoryTest {
         StepVerifier.create(existentMonitor)
                 .assertNext(Assertions::assertTrue)
                 .verifyComplete();
-
     }
 
     @Test
