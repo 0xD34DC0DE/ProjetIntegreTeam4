@@ -9,7 +9,7 @@ import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
-public class InternshipOfferDto implements Serializable {
+public class InternshipOfferBaseDto implements Serializable {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate limitDateToApply;
@@ -28,13 +28,13 @@ public class InternshipOfferDto implements Serializable {
 
     private Float maxSalary;
 
-    public InternshipOfferDto(LocalDate limitDateToApply,
-                              LocalDate beginningDate,
-                              LocalDate endingDate,
-                              String companyName,
-                              String description,
-                              Float minSalary,
-                              Float maxSalary) {
+    public InternshipOfferBaseDto(LocalDate limitDateToApply,
+                                  LocalDate beginningDate,
+                                  LocalDate endingDate,
+                                  String companyName,
+                                  String description,
+                                  Float minSalary,
+                                  Float maxSalary) {
         this.limitDateToApply = limitDateToApply;
         this.beginningDate = beginningDate;
         this.endingDate = endingDate;

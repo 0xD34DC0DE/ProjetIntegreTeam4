@@ -12,7 +12,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class InternshipOfferMonitorViewDto extends InternshipOfferDto implements Serializable {
+public class InternshipOfferMonitorViewDto extends InternshipOfferBaseDto implements Serializable {
 
     String id;
 

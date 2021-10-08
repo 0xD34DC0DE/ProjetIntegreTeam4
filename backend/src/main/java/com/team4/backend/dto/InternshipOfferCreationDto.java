@@ -1,6 +1,5 @@
 package com.team4.backend.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -8,12 +7,11 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.*;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class InternshipOfferCreationDto extends InternshipOfferDto implements Serializable {
+public class InternshipOfferCreationDto extends InternshipOfferBaseDto implements Serializable {
 
     private String emailOfMonitor;
 
