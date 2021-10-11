@@ -2,6 +2,7 @@ package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
+import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.InternshipOffer;
@@ -21,12 +22,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.when;
@@ -286,24 +286,24 @@ public class InternshipOfferServiceTest {
     }
 
     @Test
-    void shouldOnlyGetNonValidatedInternshipOffers(){
+    void shouldOnlyGetNonValidatedInternshipOffers() {
         // ARRANGE
         when(internshipOfferRepository.findAllInternshipOfferByIsValidatedFalse())
                 .thenReturn(InternshipOfferMockData.getNonValidatedInternshipOffers());
 
         // ACT
-        Flux<InternshipOffer> validIntershipOfferDTO = internshipOfferService.getNonValidatedInternshipOffers();
+        Flux<InternshipOffer> nonValidatedInternshipOffers = internshipOfferService.getNonValidatedInternshipOffers();
 
         // ASSERT
         StepVerifier
-                .create(validIntershipOfferDTO)
+                .create(nonValidatedInternshipOffers)
                 .assertNext(o -> assertFalse(o.getIsValidated()))
                 .assertNext(o -> assertFalse(o.getIsValidated()))
                 .verifyComplete();
     }
 
     @Test
-    void shouldValidateIntershipOffer(){
+    void shouldValidateInternshipOffer() {
         // ARRANGE
         String id = "234dsd2egd54ter";
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
@@ -311,7 +311,7 @@ public class InternshipOfferServiceTest {
         when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
 
         // ACT
-        Mono<InternshipOffer> internshipOfferDtoMono = internshipOfferService.validateInternshipOffer(id);
+        Mono<InternshipOffer> internshipOfferDtoMono = internshipOfferService.validateInternshipOffer(id, true);
 
         // ASSERT
         StepVerifier.create(internshipOfferDtoMono)
@@ -320,24 +320,23 @@ public class InternshipOfferServiceTest {
     }
 
     @Test
-    void shouldRefuseIntershipOffer(){
-        // ARRANGE
+    void shouldNotValidateInternshipOffer() {
+        //ARRANGE
         String id = "234dsd2egd54ter";
-        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
-        when(internshipOfferRepository.findById(id)).thenReturn(Mono.just(internshipOffer));
-        when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
 
-        // ACT
-        Mono<InternshipOffer> internshipOfferDtoMono = internshipOfferService.refuseInternshipOffer(id);
+        when(internshipOfferRepository.findById(id)).thenReturn(Mono.empty());
 
-        // ASSERT
-        StepVerifier.create(internshipOfferDtoMono)
-                .assertNext(e -> assertTrue(!e.getIsValidated() && e.getValidationDate() != null))
-                .verifyComplete();
+        //ACT
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.validateInternshipOffer(id, true);
+
+        //ASSERT
+        StepVerifier.create(internshipOfferMono)
+                .expectError(InternshipOfferNotFoundException.class)
+                .verify();
     }
 
     @Test
-    void shouldGetNotYetValidatedInternshipOffer(){
+    void shouldGetNotYetValidatedInternshipOffer() {
         // ARRANGE
         when(internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse())
                 .thenReturn(InternshipOfferMockData.getNonValidatedInternshipOffers());
@@ -352,4 +351,5 @@ public class InternshipOfferServiceTest {
                 .assertNext(o -> assertTrue(!o.getIsValidated() && o.getValidationDate() == null))
                 .verifyComplete();
     }
+
 }

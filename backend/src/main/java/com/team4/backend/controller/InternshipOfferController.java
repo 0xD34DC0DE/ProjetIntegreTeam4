@@ -82,10 +82,9 @@ public class InternshipOfferController {
 
     @GetMapping(value = "/pageCount")
     @PreAuthorize("hasAuthority('STUDENT')")
-    public Mono<ResponseEntity<Long>> getInternshipOffersCount(
+    public Mono<Long> getInternshipOffersCount(
             @RequestParam(value = "size", defaultValue = "5") Integer size) {
-        return internshipOfferService.getInternshipOffersPageCount(size)
-                .map(ResponseEntity::ok);
+        return internshipOfferService.getInternshipOffersPageCount(size);
     }
 
     @GetMapping("/unvalidatedOffers")
@@ -96,15 +95,12 @@ public class InternshipOfferController {
 
     @PatchMapping("/validateInternshipOffer")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Mono<InternshipOfferDto> validateInternshipOffer(@RequestParam("id") String id) {
-        return internshipOfferService.validateInternshipOffer(id).map(InternshipOfferMapper::toDto);
+    public Mono<ResponseEntity<String>> validateInternshipOffer(@RequestParam("id") String id, @RequestParam("isValid") Boolean isValid) {
+        return internshipOfferService.validateInternshipOffer(id, isValid)
+                .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")))
+                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
     }
 
-    @PatchMapping("/refuseInternshipOffer")
-    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Mono<InternshipOfferDto> refuseInternshipOffer(@RequestParam("id") String id) {
-        return internshipOfferService.refuseInternshipOffer(id).map(InternshipOfferMapper::toDto);
-    }
 
     @GetMapping("/getNotYetValidatedInternshipOffers")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")

@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.InternshipOfferMapper;
@@ -9,15 +10,12 @@ import com.team4.backend.model.Student;
 import com.team4.backend.repository.InternshipOfferRepository;
 import com.team4.backend.util.ValidatingPageRequest;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.LocalDate;
-
 import java.time.LocalDateTime;
 
 @Service
@@ -85,50 +83,39 @@ public class InternshipOfferService {
 
     }
 
-    //Is it need it?
     public Flux<InternshipOffer> getNonValidatedInternshipOffers() {
         return internshipOfferRepository.findAllInternshipOfferByIsValidatedFalse();
     }
+
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers() {
         return internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse();
     }
 
+    public Mono<InternshipOffer> validateInternshipOffer(String id, Boolean isValid) {
+        return internshipOfferRepository.findById(id)
+                .switchIfEmpty(Mono.error(new InternshipOfferNotFoundException("Can't find internship offer with this id")))
+                .map(offer -> {
+                    offer.setIsValidated(isValid);
+                    offer.setValidationDate(LocalDateTime.now());
 
-    //Need to combine
-    //Replace ResponseStatusException
-    public Mono<InternshipOffer> validateInternshipOffer(String id){
-        return internshipOfferRepository.findById(id).map(offer -> {
-            offer.setIsValidated(true);
-            offer.setValidationDate(LocalDateTime.now());
-            return offer;
-        }).flatMap(internshipOfferRepository::save)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Can't find InternshipOffer with this id.")));
+                    return offer;
+                }).flatMap(internshipOfferRepository::save);
     }
 
-    public Mono<InternshipOffer> refuseInternshipOffer(String id){
-        return internshipOfferRepository.findById(id).map(offer -> {
-            offer.setIsValidated(false);
-            offer.setValidationDate(LocalDateTime.now());
-            return offer;
-        }).flatMap(internshipOfferRepository::save)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Can't find InternshipOffer with this id.")));
-    }
     public Mono<Long> getInternshipOffersPageCount(Integer size) {
-        if(size < 1) {
+        if (size < 1) {
             return Mono.error(InvalidPageRequestException::new);
         }
 
         return internshipOfferRepository.countAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now())
-                .map(count -> (long)Math.ceil((double)count / (double)size));
+                .map(count -> (long) Math.ceil((double) count / (double) size));
     }
 
     public Mono<Long> getInternshipOffersPageCount(String studentEmail, Integer size) {
-        if(size < 1) {
+        if (size < 1) {
             return Mono.error(InvalidPageRequestException::new);
         }
-        if(studentEmail == null) {
+        if (studentEmail == null) {
             return Mono.error(new UserNotFoundException("Email is null"));
         }
 
@@ -137,6 +124,7 @@ public class InternshipOfferService {
                         Mono.error(new UserNotFoundException("Could not find student with email: " + studentEmail))
                 )
                 .map(student -> student.getExclusiveOffersId().size())
-                .map(count -> (long)Math.ceil((double)count / (double)size));
+                .map(count -> (long) Math.ceil((double) count / (double) size));
     }
+
 }

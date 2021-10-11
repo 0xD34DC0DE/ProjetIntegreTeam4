@@ -28,10 +28,21 @@ public class FileMetaDataController {
         return loggedUser.getName();
     }
 
+    /*
+
     @PostMapping
     @PreAuthorize("hasAnyAuthority('STUDENT')")
     public Mono<ResponseEntity<Void>> uploadFile(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("mimeType") String mimeType, @RequestPart("file") Mono<FilePart> filePartMono, Principal loggedUser) {
         return fileMetaDataService.uploadFile(filename, type, mimeType, filePartMono, getLoggedUserName(loggedUser));
+    }
+     */
+
+    @PostMapping
+    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    public Mono<ResponseEntity<String>> uploadFile(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("mimeType") String mimeType, @RequestPart("file") Mono<FilePart> filePartMono, Principal loggedUser) {
+        return fileMetaDataService.uploadFile(filename, type, mimeType, filePartMono, getLoggedUserName(loggedUser))
+                .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
+                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error.getMessage())));
     }
 
     @GetMapping("/countAllInvalidCvNotSeen")

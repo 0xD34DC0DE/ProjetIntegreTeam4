@@ -3,9 +3,9 @@ package com.team4.backend.controller;
 import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
+import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
-import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.service.InternshipOfferService;
 import com.team4.backend.testdata.InternshipOfferMockData;
@@ -23,8 +23,8 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
@@ -96,17 +96,46 @@ public class InternshipOfferControllerTest {
         InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.validateInternshipOffer(internshipOfferDTO.getId())).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferService.validateInternshipOffer(internshipOfferDTO.getId(), true)).thenReturn(Mono.just(internshipOffer));
 
         //ACT
         webTestClient
                 .patch()
-                .uri("/internshipOffer/validateInternshipOffer?id="+internshipOfferDTO.getId())
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/internshipOffer/validateInternshipOffer")
+                                .queryParam("id", internshipOfferDTO.getId())
+                                .queryParam("isValid", true)
+                                .build())
                 .bodyValue(internshipOfferDTO)
                 .exchange()
                 //ASSERT
-                .expectStatus().isOk()
-                .expectBody(InternshipOfferDto.class);
+                .expectStatus().isNoContent()
+                .expectBody(String.class);
+    }
+
+    @Test
+    void shouldNotValidateInternshipOffer() {
+        //ARRANGE
+        InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.validateInternshipOffer(internshipOfferDTO.getId(), true)).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/internshipOffer/validateInternshipOffer")
+                                .queryParam("id", internshipOfferDTO.getId())
+                                .queryParam("isValid", true)
+                                .build())
+                .bodyValue(internshipOfferDTO)
+                .exchange()
+                //ASSERT
+                .expectStatus().isNotFound()
+                .expectBody(String.class);
     }
 
     @Test
@@ -123,24 +152,6 @@ public class InternshipOfferControllerTest {
                 // ASSERT
                 .expectStatus().isOk()
                 .expectBodyList(InternshipOfferDto.class);
-    }
-    @Test
-    void shouldRefuseInternshipOffer() {
-        //ARRANGE
-        InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
-        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
-
-        when(internshipOfferService.refuseInternshipOffer(internshipOfferDTO.getId())).thenReturn(Mono.just(internshipOffer));
-
-        //ACT
-        webTestClient
-                .patch()
-                .uri("/internshipOffer/refuseInternshipOffer?id="+internshipOfferDTO.getId())
-                .bodyValue(internshipOfferDTO)
-                .exchange()
-                //ASSERT
-                .expectStatus().isOk()
-                .expectBody(InternshipOfferDto.class);
     }
 
     @Test

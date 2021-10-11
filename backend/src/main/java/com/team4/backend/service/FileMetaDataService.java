@@ -47,6 +47,8 @@ public class FileMetaDataService {
         return UUID.randomUUID().toString();
     }
 
+
+    /*
     public Mono<ResponseEntity<Void>> uploadFile(String filename, String type, String mimeType, Mono<FilePart> filePartMono, String userEmail) {
         System.out.println("dans service");
         return Mono.fromCallable(this::getTempFile)
@@ -73,6 +75,35 @@ public class FileMetaDataService {
                                         .filename(filename)
                                         .build()))
                                 .flatMap(this::createMetadata));
+    }
+     */
+
+    public Mono<FileMetaData> uploadFile(String filename, String type, String mimeType, Mono<FilePart> filePartMono, String userEmail) {
+        System.out.println("dans service");
+        return Mono.fromCallable(this::getTempFile)
+                .publishOn(Schedulers.boundedElastic())
+                .flatMap(tempFile -> filePartMono
+                        .flatMap(fp -> fp.transferTo(tempFile)
+                                // Hack to transform Mono<Void> into another Mono type since Void is treated the
+                                // same as an empty Mono and it stops the chain.
+                                // map -> changes the object signature (Mono<Void> -> Mono<File>)
+                                .map(dummy -> tempFile)
+                                // switchIfEmpty -> since the Mono<File> is still empty, create another one with
+                                // the file inside
+                                .switchIfEmpty(Mono.just(tempFile)))
+                )
+                .flatMap(tempFile ->
+                        fileAssetService.create(tempFile.getPath(), userEmail, mimeType, getUuid())
+                                .flatMap(assetId -> Mono.just(FileMetaData.builder()
+                                        .id(getUuid())
+                                        .userEmail(userEmail)
+                                        .isValid(false)
+                                        .assetId(assetId)
+                                        .type(UploadType.valueOf(type))
+                                        .uploadDate(LocalDateTime.now())
+                                        .filename(filename)
+                                        .build()))
+                                .flatMap(this::create));
     }
 
     public Mono<ResponseEntity<Void>> createMetadata(FileMetaData fileMetadata) {

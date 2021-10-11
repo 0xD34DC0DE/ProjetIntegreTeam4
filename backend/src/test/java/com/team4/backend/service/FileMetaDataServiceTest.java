@@ -117,6 +117,34 @@ class FileMetaDataServiceTest {
         when(fileMetaDataRepository.save(fileMetadataCaptor.capture())).thenReturn(Mono.just(fileMetadata));
 
         //ACT
+        Mono<FileMetaData> fileMetaDataMono = fileMetaDataServiceSpy.uploadFile(filename, type.toString(), mimeType, Mono.just(filePart), userEmail);
+
+        //ASSERT
+        StepVerifier.create(fileMetaDataMono).consumeNextWith(Assertions::assertNotNull).verifyComplete();
+
+        assertEquals(uuid, fileMetadataCaptor.getValue().getId());
+        assertEquals(userEmail, fileMetadataCaptor.getValue().getUserEmail());
+    }
+
+    /*
+    @Test
+    void uploadFile() throws NoSuchMethodException, IOException {
+        //ARRANGE
+        when(fileAssetService.create(filepath, userEmail, mimeType, uuid)).thenReturn(Mono.just(location));
+
+        when(filePart.transferTo(any(File.class))).thenReturn(Mono.empty().then());
+
+
+        FileMetaDataService fileMetaDataServiceSpy = spy(fileMetaDataService);
+        when(fileMetaDataServiceSpy.getTempFile()).thenReturn(tempFile);
+        when(tempFile.getPath()).thenReturn(filepath);
+
+        when(fileMetaDataServiceSpy.getUuid()).thenReturn(uuid);
+
+        ArgumentCaptor<FileMetaData> fileMetadataCaptor = ArgumentCaptor.forClass(FileMetaData.class);
+        when(fileMetaDataRepository.save(fileMetadataCaptor.capture())).thenReturn(Mono.just(fileMetadata));
+
+        //ACT
         Mono<ResponseEntity<Void>> response = fileMetaDataServiceSpy.uploadFile(filename, type.toString(), mimeType, Mono.just(filePart), userEmail);
 
         //ASSERT
@@ -127,6 +155,7 @@ class FileMetaDataServiceTest {
         assertEquals(uuid, fileMetadataCaptor.getValue().getId());
         assertEquals(userEmail, fileMetadataCaptor.getValue().getUserEmail());
     }
+     */
 
     @Test
     void shouldCreateMetadata() {
