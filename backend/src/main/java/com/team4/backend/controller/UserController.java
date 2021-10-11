@@ -26,9 +26,8 @@ public class UserController {
     }
 
     @GetMapping("/email/{email}")
-    public Mono<ResponseEntity<Boolean>> userExistsByEmail(@PathVariable String email) {
-        return userService.existsByEmail(email)
-                .flatMap(b -> Mono.just(ResponseEntity.ok().body(b)));
+    public Mono<Boolean> userExistsByEmail(@PathVariable String email) {
+        return userService.existsByEmail(email);
     }
 
 }

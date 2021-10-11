@@ -52,15 +52,13 @@ public class TestingInserterRunner implements ApplicationRunner {
                                  StudentRepository studentRepository,
                                  SupervisorRepository supervisorRepository,
                                  PBKDF2Encoder pbkdf2Encoder,
-                                 FileMetaDataRepository fileMetaDataRepository,
-                                 ResourceLoader resourceLoader) {
+                                 FileMetaDataRepository fileMetaDataRepository) {
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
         this.studentRepository = studentRepository;
         this.supervisorRepository = supervisorRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.fileMetaDataRepository = fileMetaDataRepository;
-        this.resourceLoader = resourceLoader;
         this.lorem = LoremIpsum.getInstance();
     }
 

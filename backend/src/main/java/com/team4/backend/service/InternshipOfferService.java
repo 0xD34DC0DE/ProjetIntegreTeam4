@@ -85,6 +85,7 @@ public class InternshipOfferService {
 
     }
 
+    //Is it need it?
     public Flux<InternshipOffer> getNonValidatedInternshipOffers() {
         return internshipOfferRepository.findAllInternshipOfferByIsValidatedFalse();
     }
@@ -92,6 +93,9 @@ public class InternshipOfferService {
         return internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse();
     }
 
+
+    //Need to combine
+    //Replace ResponseStatusException
     public Mono<InternshipOffer> validateInternshipOffer(String id){
         return internshipOfferRepository.findById(id).map(offer -> {
             offer.setIsValidated(true);
