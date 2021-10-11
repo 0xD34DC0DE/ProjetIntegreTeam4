@@ -12,7 +12,6 @@ import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
-import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
@@ -22,7 +21,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -46,8 +44,6 @@ public class TestingInserterRunner implements ApplicationRunner {
     private final PBKDF2Encoder pbkdf2Encoder;
 
     private final FileMetaDataRepository fileMetaDataRepository;
-
-    private final ResourceLoader resourceLoader;
 
     private final Lorem lorem;
 
@@ -76,7 +72,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         fileMetaDataRepository.deleteAll().subscribe();
         internshipOfferRepository.deleteAll().subscribe();
 
-        insertInternshipOffers();
+        insertInternshipOffersInternshipManagerView();
         insertStudents();
         insertMonitors();
         insertSupervisors();
@@ -89,16 +85,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 Student.studentBuilder().email("3643283423@gmail.com").firstName("Jean").lastName("Jordan").phoneNumber("5143245678").password(pbkdf2Encoder.encode("jean123")).hasValidCv(false).build(),
                 Student.studentBuilder().email("123667713@gmail.com").firstName("Farid").lastName("Shalom").phoneNumber("4385738764").password(pbkdf2Encoder.encode("farid123")).hasValidCv(false).build(),
                 Student.studentBuilder().email("902938912@gmail.com").firstName("Kevin").lastName("Alphonse").phoneNumber("4385738764").password(pbkdf2Encoder.encode("kevin123")).hasValidCv(false).build(),
-                Student.studentBuilder()
-                        .email("student@gmail.com")
-                        .password(pbkdf2Encoder.encode("student"))
-                        .firstName("John")
-                        .lastName("Doe")
-                        .registrationDate(LocalDate.now())
-                        .studentState(StudentState.REGISTERED)
-                        .phoneNumber("123-123-1234")
-                        .exclusiveOffersId(Collections.singleton(insertInternshipOffers2()))
-                        .build()
+                Student.studentBuilder().email("student@gmail.com").password(pbkdf2Encoder.encode("student")).firstName("John").lastName("Doe").registrationDate(LocalDate.now()).studentState(StudentState.REGISTERED).phoneNumber("123-123-1234").exclusiveOffersId(Collections.singleton(insertInternshipOffersStudentView())).build()
         );
 
         studentRepository.saveAll(students).subscribe(student -> log.info("Student has been saved : {}", student));
@@ -120,7 +107,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         supervisorRepository.saveAll(supervisorList).subscribe();
     }
 
-    private String insertInternshipOffers2() {
+    private String insertInternshipOffersStudentView() {
         InternshipOffer internshipOffer1 =
                 InternshipOffer.builder()
                         .beginningDate(LocalDate.now().plusMonths(1))
@@ -159,7 +146,7 @@ public class TestingInserterRunner implements ApplicationRunner {
     }
 
 
-    private void insertInternshipOffers() throws IOException {
+    private void insertInternshipOffersInternshipManagerView() throws IOException {
         List<InternshipOffer> internshipOffers = Arrays.asList(
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -229,7 +216,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .endingDate(LocalDate.now().plusMonths(3))
                         .emailOfMonitor("9182738492@gmail.com")
                         .companyName("Banque National")
-                        .description(lorem.getHtmlParagraphs(10,15))
+                        .description(lorem.getHtmlParagraphs(10, 15))
                         .minSalary(15.0f)
                         .maxSalary(20.0f)
                         .isValidated(false)
@@ -241,7 +228,6 @@ public class TestingInserterRunner implements ApplicationRunner {
         internshipOfferRepository.saveAll(internshipOffers).subscribe();
     }
 
-    //TODO --> will have to remove it to test real upload and download
     private void insertCvs() {
         List<FileMetaData> fileMetaDataList = Arrays.asList(
                 FileMetaData.builder().assetId("123456789@gmail.com/06708b00-52fe-4054-90d0-a1cd4579b0e9").userEmail("123456789@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusDays(2)).build(),
