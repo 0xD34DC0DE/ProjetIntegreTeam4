@@ -14,6 +14,7 @@ import java.util.Map;
 
 @Service
 public class FileAssetService {
+
     @Autowired
     FileAssetRepository fileAssetRepository;
 

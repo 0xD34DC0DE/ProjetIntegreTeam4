@@ -72,11 +72,6 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertMonitors();
         insertSupervisors();
         insertCvs();
-
-        String exclusiveOfferId = insertInternshipOffers2();
-
-        insertStudents(exclusiveOfferId);
-
     }
 
     private void insertStudents() {
@@ -84,7 +79,17 @@ public class TestingInserterRunner implements ApplicationRunner {
                 Student.studentBuilder().email("123456789@gmail.com").firstName("Travis").lastName("Scott").phoneNumber("4387650987").password(pbkdf2Encoder.encode("travis123")).hasValidCv(false).build(),
                 Student.studentBuilder().email("3643283423@gmail.com").firstName("Jean").lastName("Jordan").phoneNumber("5143245678").password(pbkdf2Encoder.encode("jean123")).hasValidCv(false).build(),
                 Student.studentBuilder().email("123667713@gmail.com").firstName("Farid").lastName("Shalom").phoneNumber("4385738764").password(pbkdf2Encoder.encode("farid123")).hasValidCv(false).build(),
-                Student.studentBuilder().email("902938912@gmail.com").firstName("Kevin").lastName("Alphonse").phoneNumber("4385738764").password(pbkdf2Encoder.encode("kevin123")).hasValidCv(false).build()
+                Student.studentBuilder().email("902938912@gmail.com").firstName("Kevin").lastName("Alphonse").phoneNumber("4385738764").password(pbkdf2Encoder.encode("kevin123")).hasValidCv(false).build(),
+                Student.studentBuilder()
+                        .email("student@gmail.com")
+                        .password(pbkdf2Encoder.encode("student"))
+                        .firstName("John")
+                        .lastName("Doe")
+                        .registrationDate(LocalDate.now())
+                        .studentState(StudentState.REGISTERED)
+                        .phoneNumber("123-123-1234")
+                        .exclusiveOffersId(Collections.singleton(insertInternshipOffers2()))
+                        .build()
         );
 
         studentRepository.saveAll(students).subscribe(student -> log.info("Student has been saved : {}", student));
@@ -96,28 +101,14 @@ public class TestingInserterRunner implements ApplicationRunner {
 
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
-    private void insertSupervisors(){
+
+    private void insertSupervisors() {
         List<Supervisor> supervisorList = Collections.singletonList(
                 Supervisor.supervisorBuilder()
                         .email("45673234@gmail.com").password(pbkdf2Encoder.encode("sasuke123")).build()
         );
 
         supervisorRepository.saveAll(supervisorList).subscribe();
-    }
-
-    private void insertStudents(String exclusiveOfferId) {
-        String password = pbkdf2Encoder.encode("student");
-        Student student = Student.studentBuilder()
-                .email("student@gmail.com")
-                .password(password)
-                .firstName("John")
-                .lastName("Doe")
-                .registrationDate(LocalDate.now())
-                .studentState(StudentState.REGISTERED)
-                .phoneNumber("123-123-1234")
-                .exclusiveOffersId(Collections.singleton(exclusiveOfferId))
-                .build();
-        studentRepository.save(student).subscribe();
     }
 
     private String insertInternshipOffers2() {
@@ -137,18 +128,18 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .build();
 
         InternshipOffer internshipOffer2 = InternshipOffer.builder()
-                        .beginningDate(LocalDate.now().plusMonths(3))
-                        .endingDate(LocalDate.now().plusMonths(6))
-                        .limitDateToApply(LocalDate.now().plusDays(11))
-                        .companyName("CAE")
-                        .description("Some Description")
-                        .isExclusive(true)
-                        .isValidated(true)
-                        .maxSalary(19.50f)
-                        .minSalary(19.50f)
-                        .emailOfMonitor("9182738492@gmail.com")
-                        .listEmailInterestedStudents(Collections.emptyList())
-                        .build();
+                .beginningDate(LocalDate.now().plusMonths(3))
+                .endingDate(LocalDate.now().plusMonths(6))
+                .limitDateToApply(LocalDate.now().plusDays(11))
+                .companyName("CAE")
+                .description("Some Description")
+                .isExclusive(true)
+                .isValidated(true)
+                .maxSalary(19.50f)
+                .minSalary(19.50f)
+                .emailOfMonitor("9182738492@gmail.com")
+                .listEmailInterestedStudents(Collections.emptyList())
+                .build();
 
         for (int i = 0; i < 7; i++) {
             internshipOffer1.setDescription(internshipOffer1.getDescription() + i);
@@ -159,9 +150,9 @@ public class TestingInserterRunner implements ApplicationRunner {
     }
 
 
-    private void insertInternshipOffers(){
+    private void insertInternshipOffers() {
         List<InternshipOffer> internshipOffers = Arrays.asList(
-                    InternshipOffer.builder()
+                InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
