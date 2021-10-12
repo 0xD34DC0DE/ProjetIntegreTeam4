@@ -4,12 +4,10 @@ import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
 import com.team4.backend.exception.FileDoNotExistException;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.model.FileMetaData;
-import com.team4.backend.security.OwnershipService;
 import com.team4.backend.service.FileMetaDataService;
 import com.team4.backend.testdata.FileMetaDataMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
@@ -26,7 +24,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 

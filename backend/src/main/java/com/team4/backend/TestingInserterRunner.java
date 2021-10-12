@@ -67,6 +67,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         studentRepository.deleteAll().subscribe();
         monitorRepository.deleteAll().subscribe();
         studentRepository.deleteAll().subscribe();
+        supervisorRepository.deleteAll().subscribe();
         fileMetaDataRepository.deleteAll().subscribe();
         internshipOfferRepository.deleteAll().subscribe();
 
