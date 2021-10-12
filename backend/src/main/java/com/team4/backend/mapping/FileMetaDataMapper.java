@@ -6,7 +6,8 @@ import com.team4.backend.model.FileMetaData;
 
 public abstract class FileMetaDataMapper {
 
-    public static FileMetaDataInternshipManagerViewDto toInternshipManagerViewDto(FileMetaData fileMetaData){
+
+    public static FileMetaDataInternshipManagerViewDto toInternshipManagerViewDto(FileMetaData fileMetaData) {
         return FileMetaDataInternshipManagerViewDto.builder()
                 .id(fileMetaData.getId())
                 .assetId(fileMetaData.getAssetId())
@@ -16,7 +17,7 @@ public abstract class FileMetaDataMapper {
                 .build();
     }
 
-    public static FileMetaDataStudentViewDto toStudentViewDto(FileMetaData fileMetaData){
+    public static FileMetaDataStudentViewDto toStudentViewDto(FileMetaData fileMetaData) {
         return FileMetaDataStudentViewDto.builder()
                 .filename(fileMetaData.getFilename())
                 .isValid(fileMetaData.getIsValid())

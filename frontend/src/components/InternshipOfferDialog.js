@@ -28,12 +28,16 @@ const InternshipOfferDescriptionDialog = ({
     console.log("dialogVisible", dialogVisible);
   };
 
-  const validateInternshipOffer = async (id) => {
+  const validateInternshipOffer = async (id,valid) => {
     await axios({
       method: "PATCH",
-      url: `http://localhost:8080/internshipOffer/validateInternshipOffer?id=${id}`,
+      url: "http://localhost:8080/internshipOffer/validateInternshipOffer",
       headers: {
         Authorization: token,
+      },
+      params: {
+        id: id,
+        isValid: valid
       },
       responseType: "json",
     });
@@ -119,7 +123,7 @@ const InternshipOfferDescriptionDialog = ({
                 <CheckCircleOutline
                   color="primary"
                   fontSize="large"
-                  onClick={() => validateInternshipOffer(offer.id)}
+                  onClick={() => validateInternshipOffer(offer.id,true)}
                 />
               </Button>
             </Tooltip>
@@ -128,7 +132,7 @@ const InternshipOfferDescriptionDialog = ({
                 <CancelOutlined
                   sx={{ color: "red" }}
                   fontSize="large"
-                  onClick={() => refuseInternshipOffer(offer.id)}
+                  onClick={() => validateInternshipOffer(offer.id,false)}
                 />
               </Button>
             </Tooltip>

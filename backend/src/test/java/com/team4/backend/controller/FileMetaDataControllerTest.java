@@ -7,11 +7,6 @@ import com.team4.backend.service.FileMetaDataService;
 import com.team4.backend.testdata.FileMetaDataMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
 import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -21,7 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.MultipartBodyBuilder;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
@@ -29,11 +23,12 @@ import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.security.Principal;
 
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 
 @EnableAutoConfiguration
@@ -50,25 +45,18 @@ class FileMetaDataControllerTest {
     @InjectMocks
     FileMetaDataController fileMetadataController;
 
-
-    /*
-
-    private Mono<ResponseEntity<Void>> responseEntityMono;
-
     @Test
-    void uploadFile() throws URISyntaxException {
+    void uploadFile() {
         //ARRANGE
-        responseEntityMono = Mono.just(ResponseEntity.created(new URI("location")).build());
+        FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
 
-        String filename = "filename";
-        String type = "CV";
-        String mimeType = "application/pdf";
-        when(fileMetaDataService.uploadFile(any(), any(), any(), any(), any())).thenReturn(responseEntityMono);
+        when(fileMetaDataService.uploadFile(any(), any(), any(), any(), any())).thenReturn(Mono.just(fileMetaData));
 
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
-        builder.part("filename", filename);
-        builder.part("type", type);
-        builder.part("mimeType", mimeType);
+
+        builder.part("filename", fileMetaData.getFilename());
+        builder.part("type", fileMetaData.getType());
+        builder.part("mimeType", "application/pdf");
 
         builder.part("file", new ClassPathResource("application.yml"))
                 .contentType(MediaType.MULTIPART_FORM_DATA);
@@ -83,9 +71,7 @@ class FileMetaDataControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isCreated();
-
     }
-     */
 
     @Test
     void shouldGetLoggerUserNameForRealUser() {
@@ -122,12 +108,10 @@ class FileMetaDataControllerTest {
     @Test
     void getListInvalidCvNotSeen() {
         //ARRANGE
-
         Integer noPage = 0;
         when(fileMetaDataService.getListInvalidCvNotSeen(noPage)).thenReturn(Flux.just(FileMetaDataMockData.getFileMetaData()));
 
         //ACT
-
         webTestClient
                 .get()
                 .uri("/file/getListInvalidCvNotSeen/" + noPage)
@@ -156,7 +140,7 @@ class FileMetaDataControllerTest {
                                 .build())
                 .exchange()
                 //ASSERT
-                .expectStatus().isOk()
+                .expectStatus().isNoContent()
                 .expectBodyList(String.class);
     }
 

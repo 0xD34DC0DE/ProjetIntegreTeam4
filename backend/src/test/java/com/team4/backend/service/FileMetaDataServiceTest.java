@@ -100,7 +100,7 @@ class FileMetaDataServiceTest {
     }
 
     @Test
-    void uploadFile() throws NoSuchMethodException, IOException {
+    void uploadFile() throws  IOException {
         //ARRANGE
         when(fileAssetService.create(filepath, userEmail, mimeType, uuid)).thenReturn(Mono.just(location));
 
@@ -124,66 +124,6 @@ class FileMetaDataServiceTest {
 
         assertEquals(uuid, fileMetadataCaptor.getValue().getId());
         assertEquals(userEmail, fileMetadataCaptor.getValue().getUserEmail());
-    }
-
-    /*
-    @Test
-    void uploadFile() throws NoSuchMethodException, IOException {
-        //ARRANGE
-        when(fileAssetService.create(filepath, userEmail, mimeType, uuid)).thenReturn(Mono.just(location));
-
-        when(filePart.transferTo(any(File.class))).thenReturn(Mono.empty().then());
-
-
-        FileMetaDataService fileMetaDataServiceSpy = spy(fileMetaDataService);
-        when(fileMetaDataServiceSpy.getTempFile()).thenReturn(tempFile);
-        when(tempFile.getPath()).thenReturn(filepath);
-
-        when(fileMetaDataServiceSpy.getUuid()).thenReturn(uuid);
-
-        ArgumentCaptor<FileMetaData> fileMetadataCaptor = ArgumentCaptor.forClass(FileMetaData.class);
-        when(fileMetaDataRepository.save(fileMetadataCaptor.capture())).thenReturn(Mono.just(fileMetadata));
-
-        //ACT
-        Mono<ResponseEntity<Void>> response = fileMetaDataServiceSpy.uploadFile(filename, type.toString(), mimeType, Mono.just(filePart), userEmail);
-
-        //ASSERT
-        StepVerifier.create(response).consumeNextWith(s -> {
-            assertEquals(HttpStatus.CREATED, s.getStatusCode());
-        }).verifyComplete();
-
-        assertEquals(uuid, fileMetadataCaptor.getValue().getId());
-        assertEquals(userEmail, fileMetadataCaptor.getValue().getUserEmail());
-    }
-     */
-
-    @Test
-    void shouldCreateMetadata() {
-        //ARRANGE
-        when(fileMetaDataRepository.save(fileMetadata)).thenReturn(Mono.just(fileMetadata));
-
-        //ACT
-        Mono<ResponseEntity<Void>> response = fileMetaDataService.createMetadata(fileMetadata);
-
-        //ASSERT
-        StepVerifier.create(response).consumeNextWith(s -> {
-            assertEquals(HttpStatus.CREATED, s.getStatusCode());
-        }).verifyComplete();
-    }
-
-    @Test
-    void shouldNotCreateMetadata() {
-        //ARRANGE
-        fileMetadata.setId("invalid URI");
-        when(fileMetaDataRepository.save(fileMetadata)).thenReturn(Mono.just(fileMetadata));
-
-        //ACT
-        Mono<ResponseEntity<Void>> response = fileMetaDataService.createMetadata(fileMetadata);
-
-        //ASSERT
-        StepVerifier.create(response).consumeNextWith(s -> {
-            assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, s.getStatusCode());
-        }).verifyComplete();
     }
 
     @Test

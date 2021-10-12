@@ -42,7 +42,7 @@ function SideBar({
   const history = useHistory();
 
   const toggleDrawer = () => {
-    console.log("open", open);
+    console.log("open SIdeBar", open);
     setOpen(!open);
   };
 

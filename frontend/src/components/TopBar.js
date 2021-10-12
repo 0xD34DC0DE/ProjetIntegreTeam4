@@ -64,7 +64,7 @@ const TopBar = ({
             <IconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={setOpenDrawer}
+              onClick={() => setOpenDrawer(!openDrawer)}
               edge="start"
               sx={{ mr: 2, ...(openDrawer && { display: "none" }) }}
             >

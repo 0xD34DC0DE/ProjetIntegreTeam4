@@ -38,7 +38,7 @@ public class FileMetaDataController {
      */
 
     @PostMapping
-    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    @PreAuthorize("hasAuthority('STUDENT')")
     public Mono<ResponseEntity<String>> uploadFile(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("mimeType") String mimeType, @RequestPart("file") Mono<FilePart> filePartMono, Principal loggedUser) {
         return fileMetaDataService.uploadFile(filename, type, mimeType, filePartMono, getLoggedUserName(loggedUser))
                 .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
@@ -62,7 +62,7 @@ public class FileMetaDataController {
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Mono<ResponseEntity<String>> validateCv(@RequestParam("id") String id, @RequestParam("isValid") Boolean isValid) {
         return fileMetaDataService.validateCv(id, isValid)
-                .flatMap(fileMetaData -> Mono.just(ResponseEntity.ok().body("")))
+                .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")))
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
     }
 
