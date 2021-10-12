@@ -76,5 +76,4 @@ public class SupervisorControllerTest {
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
                 .expectBody().isEmpty();
     }
-
 }

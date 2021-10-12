@@ -28,5 +28,4 @@ public class InternshipManagerService {
         internshipManager.setPassword(pbkdf2Encoder.encode(internshipManager.getPassword()));
         return internshipManagerRepository.save(internshipManager);
     }
-
 }

@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.team4.backend.exception.DuplicateEntryException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.repository.SupervisorRepository;
@@ -30,6 +31,15 @@ public class SupervisorService {
             } else {
                 return Mono.error(new UserAlreadyExistsException("User already exist"));
             }
+        });
+    }
+
+    public Mono<Supervisor> addStudentEmail(String supervisorId, String studentEmail) {
+        return supervisorRepository.findById(supervisorId).flatMap(supervisor -> {
+            if(!supervisor.getStudentEmails().contains(studentEmail))
+                return supervisorRepository.save(supervisor);
+            else
+                return Mono.error(new DuplicateEntryException("Student is already present in the supervisor's student lists"));
         });
     }
 
