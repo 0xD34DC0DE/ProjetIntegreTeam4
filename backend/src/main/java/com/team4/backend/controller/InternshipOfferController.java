@@ -87,12 +87,6 @@ public class InternshipOfferController {
         return internshipOfferService.getInternshipOffersPageCount(size);
     }
 
-    @GetMapping("/unvalidatedOffers")
-    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Flux<InternshipOfferDto> getUnvalidatedInternshipOffers() {
-        return internshipOfferService.getNonValidatedInternshipOffers().map(InternshipOfferMapper::toDto);
-    }
-
     @PatchMapping("/validateInternshipOffer")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
     public Mono<ResponseEntity<String>> validateInternshipOffer(@RequestParam("id") String id, @RequestParam("isValid") Boolean isValid) {

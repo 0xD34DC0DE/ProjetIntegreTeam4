@@ -83,10 +83,6 @@ public class InternshipOfferService {
 
     }
 
-    public Flux<InternshipOffer> getNonValidatedInternshipOffers() {
-        return internshipOfferRepository.findAllInternshipOfferByIsValidatedFalse();
-    }
-
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers() {
         return internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse();
     }

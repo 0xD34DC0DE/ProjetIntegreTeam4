@@ -75,22 +75,6 @@ public class InternshipOfferControllerTest {
     }
 
     @Test
-    void getNonValidatedIntershipOffer() {
-        // ARRANGE
-        Flux<InternshipOffer> internshipOfferFlux = InternshipOfferMockData.getNonValidatedInternshipOffers();
-        when(internshipOfferService.getNonValidatedInternshipOffers()).thenReturn(internshipOfferFlux);
-
-        // ACT
-        webTestClient
-                .get()
-                .uri("/internshipOffer/unvalidatedOffers")
-                .exchange()
-                // ASSERT
-                .expectStatus().isOk()
-                .expectBodyList(InternshipOfferDto.class);
-    }
-
-    @Test
     void shouldValidateInternshipOffer() {
         //ARRANGE
         InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
@@ -115,6 +99,22 @@ public class InternshipOfferControllerTest {
     }
 
     @Test
+    void shouldGetNotYetValidatedInternshipOffer() {
+        // ARRANGE
+        Flux<InternshipOffer> internshipOfferFlux = InternshipOfferMockData.getNonValidatedInternshipOffers();
+        when(internshipOfferService.getNotYetValidatedInternshipOffers()).thenReturn(internshipOfferFlux);
+
+        // ACT
+        webTestClient
+                .get()
+                .uri("/internshipOffer/getNotYetValidatedInternshipOffers")
+                .exchange()
+                // ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(InternshipOfferDto.class);
+    }
+
+    @Test
     void shouldNotValidateInternshipOffer() {
         //ARRANGE
         InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
@@ -136,22 +136,6 @@ public class InternshipOfferControllerTest {
                 //ASSERT
                 .expectStatus().isNotFound()
                 .expectBody(String.class);
-    }
-
-    @Test
-    void shouldGetNotYetValidatedInternshipOffer() {
-        // ARRANGE
-        Flux<InternshipOffer> internshipOfferFlux = InternshipOfferMockData.getNonValidatedInternshipOffers();
-        when(internshipOfferService.getNotYetValidatedInternshipOffers()).thenReturn(internshipOfferFlux);
-
-        // ACT
-        webTestClient
-                .get()
-                .uri("/internshipOffer/getNotYetValidatedInternshipOffers")
-                .exchange()
-                // ASSERT
-                .expectStatus().isOk()
-                .expectBodyList(InternshipOfferDto.class);
     }
 
     @Test

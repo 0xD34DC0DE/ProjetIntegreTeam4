@@ -2,6 +2,7 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
 import com.team4.backend.mapping.FileMetaDataMapper;
+import com.team4.backend.security.OwnershipService;
 import com.team4.backend.service.FileMetaDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,19 +29,10 @@ public class FileMetaDataController {
         return loggedUser.getName();
     }
 
-    /*
-
-    @PostMapping
-    @PreAuthorize("hasAnyAuthority('STUDENT')")
-    public Mono<ResponseEntity<Void>> uploadFile(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("mimeType") String mimeType, @RequestPart("file") Mono<FilePart> filePartMono, Principal loggedUser) {
-        return fileMetaDataService.uploadFile(filename, type, mimeType, filePartMono, getLoggedUserName(loggedUser));
-    }
-     */
-
     @PostMapping
     @PreAuthorize("hasAuthority('STUDENT')")
-    public Mono<ResponseEntity<String>> uploadFile(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("mimeType") String mimeType, @RequestPart("file") Mono<FilePart> filePartMono, Principal loggedUser) {
-        return fileMetaDataService.uploadFile(filename, type, mimeType, filePartMono, getLoggedUserName(loggedUser))
+    public Mono<ResponseEntity<String>> uploadFile(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("mimeType") String mimeType, @RequestPart("file") Mono<FilePart> filePartMono, Principal principal) {
+        return fileMetaDataService.uploadFile(filename, type, mimeType, filePartMono, OwnershipService.getLoggedUserName(principal))
                 .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error.getMessage())));
     }

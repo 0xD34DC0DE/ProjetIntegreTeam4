@@ -65,6 +65,7 @@ public class FileMetaDataService {
                                         .id(getUuid())
                                         .userEmail(userEmail)
                                         .isValid(false)
+                                        .isSeen(false)
                                         .assetId(assetId)
                                         .type(UploadType.valueOf(type))
                                         .uploadDate(LocalDateTime.now())

@@ -288,11 +288,11 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldOnlyGetNonValidatedInternshipOffers() {
         // ARRANGE
-        when(internshipOfferRepository.findAllInternshipOfferByIsValidatedFalse())
+        when(internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse())
                 .thenReturn(InternshipOfferMockData.getNonValidatedInternshipOffers());
 
         // ACT
-        Flux<InternshipOffer> nonValidatedInternshipOffers = internshipOfferService.getNonValidatedInternshipOffers();
+        Flux<InternshipOffer> nonValidatedInternshipOffers = internshipOfferService.getNotYetValidatedInternshipOffers();
 
         // ASSERT
         StepVerifier
