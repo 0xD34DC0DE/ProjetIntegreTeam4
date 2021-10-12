@@ -83,7 +83,7 @@ public class SupervisorServiceTest {
                 .thenReturn(Mono.just(supervisor));
 
         //ACT
-        Mono<Supervisor> supervisorMono = supervisorService.addStudentEmail(supervisor.getId(), studentEmail);
+        Mono<Supervisor> supervisorMono = supervisorService.addStudentEmailToStudentList(supervisor.getId(), studentEmail);
 
         // ASSERT
         StepVerifier.create(supervisorMono)
@@ -99,7 +99,7 @@ public class SupervisorServiceTest {
 
         //ACT
         Mono<Supervisor> supervisorMono = supervisorService
-                .addStudentEmail(supervisor.getId(), supervisor.getStudentEmails().get(0));
+                .addStudentEmailToStudentList(supervisor.getId(), supervisor.getStudentEmails().get(0));
 
         // ASSERT
         StepVerifier.create(supervisorMono).expectError().verify();
@@ -114,7 +114,7 @@ public class SupervisorServiceTest {
         when(supervisorRepository.findById(wrongId)).thenReturn(Mono.just(supervisor));
 
         //ACT
-        Mono<Supervisor> supervisorMono = supervisorService.addStudentEmail(wrongId, studentEmail);
+        Mono<Supervisor> supervisorMono = supervisorService.addStudentEmailToStudentList(wrongId, studentEmail);
 
         //ASSERT
         StepVerifier.create(supervisorMono)

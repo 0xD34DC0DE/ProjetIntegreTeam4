@@ -34,7 +34,7 @@ public class SupervisorService {
         });
     }
 
-    public Mono<Supervisor> addStudentEmail(String supervisorId, String studentEmail) {
+    public Mono<Supervisor> addStudentEmailToStudentList(String supervisorId, String studentEmail) {
         return supervisorRepository.findById(supervisorId).flatMap(supervisor -> {
             if(!supervisor.getStudentEmails().contains(studentEmail))
                 return supervisorRepository.save(supervisor);
