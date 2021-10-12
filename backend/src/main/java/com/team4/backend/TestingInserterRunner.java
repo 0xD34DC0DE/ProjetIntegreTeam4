@@ -238,7 +238,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 FileMetaData.builder().assetId("123456789@gmail.com/8164ae59-a072-4bfe-8f03-2f350dd8086e").userEmail("3643283423@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusDays(6)).build(),
                 FileMetaData.builder().assetId("123456789@gmail.com/06708b00-52fe-4054-90d0-a1cd4579b0e9").userEmail("3643283423@gmail.com").filename("cv2.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now().minusDays(2)).build(),
                 FileMetaData.builder().assetId("123456789@gmail.com/3b134033-2463-41b2-b9d8-05238856bfef").userEmail("902938912@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build(),
-                FileMetaData.builder().assetId("123456789@gmail.com/8164ae59-a072-4bfe-8f03-2f350dd8086e").userEmail("902938912@gmail.com").filename("cv1.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build()
+                FileMetaData.builder().assetId("123456789@gmail.com/8164ae59-a072-4bfe-8f03-2f350dd8086e").userEmail("902938912@gmail.com").filename("cv2.pdf").isValid(false).isSeen(false).uploadDate(LocalDateTime.now()).build()
         );
 
         fileMetaDataRepository.saveAll(fileMetaDataList).subscribe(f -> log.info("new cv file has been created: {}", f));

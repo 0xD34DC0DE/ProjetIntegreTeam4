@@ -1,9 +1,11 @@
 package com.team4.backend.service;
 
 import com.team4.backend.exception.FileDoNotExistException;
+import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.model.enums.UploadType;
 import com.team4.backend.repository.FileMetaDataRepository;
+import com.team4.backend.util.ValidatingPageRequest;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -78,9 +80,9 @@ public class FileMetaDataService {
         return fileMetaDataRepository.countAllByIsValidFalseAndIsSeenFalse();
     }
 
-    public Flux<FileMetaData> getListInvalidCvNotSeen(Integer noPage) {
+    public Flux<FileMetaData> getListInvalidCvNotSeen(Integer noPage) throws InvalidPageRequestException {
 
-        return fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("uploadDate").ascending()));
+        return fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(new ValidatingPageRequest(noPage, 10).getPageRequest(Sort.by("uploadDate").ascending()));
     }
 
     public Mono<FileMetaData> validateCv(String id, Boolean isValid) {

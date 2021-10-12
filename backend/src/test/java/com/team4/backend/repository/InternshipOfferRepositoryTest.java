@@ -30,7 +30,6 @@ public class InternshipOfferRepositoryTest {
 
     @BeforeAll
     void init() {
-        internshipOfferRepository.deleteAll().subscribe();
 
         Flux<InternshipOffer> internshipOffers = Flux.just(
                 InternshipOffer.builder().isValidated(true).validationDate(LocalDateTime.now()).build(),

@@ -2,12 +2,14 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
 import com.team4.backend.exception.FileDoNotExistException;
+import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.model.FileMetaData;
+import com.team4.backend.security.OwnershipService;
 import com.team4.backend.service.FileMetaDataService;
 import com.team4.backend.testdata.FileMetaDataMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
@@ -23,9 +25,6 @@ import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.security.Principal;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -42,11 +41,8 @@ class FileMetaDataControllerTest {
     @MockBean
     FileMetaDataService fileMetaDataService;
 
-    @InjectMocks
-    FileMetaDataController fileMetadataController;
-
     @Test
-    void uploadFile() {
+    void shouldUploadFile() {
         //ARRANGE
         FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
 
@@ -74,23 +70,7 @@ class FileMetaDataControllerTest {
     }
 
     @Test
-    void shouldGetLoggerUserNameForRealUser() {
-        //ASSERT
-        Principal user = mock(Principal.class);
-        when(user.getName()).thenReturn("username");
-
-        //ACT & ASSERT
-        assertEquals("username", fileMetadataController.getLoggedUserName(user));
-    }
-
-    @Test
-    void shouldNotGetLoggerUserNameNoUser() {
-        //ACT & ASSERT
-        assertEquals("", fileMetadataController.getLoggedUserName(null));
-    }
-
-    @Test
-    void countAllInvalidCvNotSeen() {
+    void shouldCountAllInvalidCvNotSeen() {
         //ARRANGE
 
         when(fileMetaDataService.countAllInvalidCvNotSeen()).thenReturn(Mono.just(0L));
@@ -106,7 +86,7 @@ class FileMetaDataControllerTest {
     }
 
     @Test
-    void getListInvalidCvNotSeen() {
+    void shouldGetListInvalidCvNotSeen() throws InvalidPageRequestException {
         //ARRANGE
         Integer noPage = 0;
         when(fileMetaDataService.getListInvalidCvNotSeen(noPage)).thenReturn(Flux.just(FileMetaDataMockData.getFileMetaData()));

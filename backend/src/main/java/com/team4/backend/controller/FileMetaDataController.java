@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
+import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.mapping.FileMetaDataMapper;
 import com.team4.backend.security.OwnershipService;
 import com.team4.backend.service.FileMetaDataService;
@@ -22,13 +23,6 @@ public class FileMetaDataController {
     @Autowired
     FileMetaDataService fileMetaDataService;
 
-    protected String getLoggedUserName(Principal loggedUser) {
-        if (loggedUser == null) {
-            return "";
-        }
-        return loggedUser.getName();
-    }
-
     @PostMapping
     @PreAuthorize("hasAuthority('STUDENT')")
     public Mono<ResponseEntity<String>> uploadFile(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("mimeType") String mimeType, @RequestPart("file") Mono<FilePart> filePartMono, Principal principal) {
@@ -46,7 +40,7 @@ public class FileMetaDataController {
 
     @GetMapping("/getListInvalidCvNotSeen/{noPage}")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Flux<FileMetaDataInternshipManagerViewDto> getListInvalidCvNotSeen(@PathVariable Integer noPage) {
+    public Flux<FileMetaDataInternshipManagerViewDto> getListInvalidCvNotSeen(@PathVariable Integer noPage) throws InvalidPageRequestException {
         return fileMetaDataService.getListInvalidCvNotSeen(noPage).map(FileMetaDataMapper::toInternshipManagerViewDto);
     }
 

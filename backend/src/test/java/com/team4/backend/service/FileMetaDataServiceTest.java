@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.exception.FileDoNotExistException;
+import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.UploadType;
@@ -85,7 +86,7 @@ class FileMetaDataServiceTest {
     }
 
     @Test
-    void create() {
+    void shouldCreate() {
         //ARRANGE
         when(fileMetaDataRepository.save(fileMetadata)).thenReturn(Mono.just(fileMetadata));
 
@@ -100,7 +101,7 @@ class FileMetaDataServiceTest {
     }
 
     @Test
-    void uploadFile() throws  IOException {
+    void shouldUploadFile() throws  IOException {
         //ARRANGE
         when(fileAssetService.create(filepath, userEmail, mimeType, uuid)).thenReturn(Mono.just(location));
 
@@ -127,7 +128,7 @@ class FileMetaDataServiceTest {
     }
 
     @Test
-    void countAllInvalidCvNotSeen() {
+    void shouldCountAllInvalidCvNotSeen() {
         //ARRANGE
         Mono<Long> nbrOfInvalidCvNotSeen = Mono.just(5L);
 
@@ -143,7 +144,7 @@ class FileMetaDataServiceTest {
     }
 
     @Test
-    void getListInvalidCvNotSeen() {
+    void shouldGetListInvalidCvNotSeen() throws InvalidPageRequestException {
         //ARRANGE
         Integer noPage = 0;
         when(fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("uploadDate").ascending())))

@@ -5,6 +5,6 @@ import java.security.Principal;
 public abstract class OwnershipService {
 
     public static String getLoggedUserName(Principal principal) {
-        return principal.getName();
+        return principal != null ? principal.getName() : "";
     }
 }
