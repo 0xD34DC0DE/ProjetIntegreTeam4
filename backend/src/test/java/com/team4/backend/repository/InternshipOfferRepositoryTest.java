@@ -22,14 +22,15 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-@ContextConfiguration(classes ={InternshipOfferRepository.class})
+@ContextConfiguration(classes = {InternshipOfferRepository.class})
 public class InternshipOfferRepositoryTest {
 
     @Autowired
     InternshipOfferRepository internshipOfferRepository;
 
     @BeforeAll
-    void init(){
+    void init() {
+
         Flux<InternshipOffer> internshipOffers = Flux.just(
                 InternshipOffer.builder().isValidated(true).validationDate(LocalDateTime.now()).build(),
                 InternshipOffer.builder().isValidated(false).validationDate(null).build(),
@@ -40,25 +41,13 @@ public class InternshipOfferRepositoryTest {
     }
 
     @Test
-    void shouldFindUnvalidatedInternshipOffer() {
-        //ACT
-        Flux<InternshipOffer> validatedIntershipOffers = internshipOfferRepository.findAllInternshipOfferByIsValidatedFalse();
-
-        //ASSERT
-        StepVerifier.create(validatedIntershipOffers)
-                .expectNextCount(2)
-                .verifyComplete();
-    }
-
-    @Test
     void shouldFindNotYetValidatedInternshipOffer() {
         //ACT
-        Flux<InternshipOffer> validatedIntershipOffers = internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse();
+        Flux<InternshipOffer> validatedInternshipOffers = internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse();
 
         //ASSERT
-        StepVerifier.create(validatedIntershipOffers)
-                .assertNext(o -> assertTrue(!o.getIsValidated() && o.getValidationDate() == null))
-                .assertNext(o -> assertTrue(!o.getIsValidated() && o.getValidationDate() == null))
+        StepVerifier.create(validatedInternshipOffers)
+                .expectNextCount(2)
                 .verifyComplete();
     }
 }

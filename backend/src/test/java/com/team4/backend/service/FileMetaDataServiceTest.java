@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.exception.FileDoNotExistException;
+import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.UploadType;
@@ -85,7 +86,7 @@ class FileMetaDataServiceTest {
     }
 
     @Test
-    void create() {
+    void shouldCreate() {
         //ARRANGE
         when(fileMetaDataRepository.save(fileMetadata)).thenReturn(Mono.just(fileMetadata));
 
@@ -100,7 +101,7 @@ class FileMetaDataServiceTest {
     }
 
     @Test
-    void uploadFile() throws NoSuchMethodException, IOException {
+    void shouldUploadFile() throws  IOException {
         //ARRANGE
         when(fileAssetService.create(filepath, userEmail, mimeType, uuid)).thenReturn(Mono.just(location));
 
@@ -117,48 +118,17 @@ class FileMetaDataServiceTest {
         when(fileMetaDataRepository.save(fileMetadataCaptor.capture())).thenReturn(Mono.just(fileMetadata));
 
         //ACT
-        Mono<ResponseEntity<Void>> response = fileMetaDataServiceSpy.uploadFile(filename, type.toString(), mimeType, Mono.just(filePart), userEmail);
+        Mono<FileMetaData> fileMetaDataMono = fileMetaDataServiceSpy.uploadFile(filename, type.toString(), mimeType, Mono.just(filePart), userEmail);
 
         //ASSERT
-        StepVerifier.create(response).consumeNextWith(s -> {
-            assertEquals(HttpStatus.CREATED, s.getStatusCode());
-        }).verifyComplete();
+        StepVerifier.create(fileMetaDataMono).consumeNextWith(Assertions::assertNotNull).verifyComplete();
 
         assertEquals(uuid, fileMetadataCaptor.getValue().getId());
         assertEquals(userEmail, fileMetadataCaptor.getValue().getUserEmail());
     }
 
     @Test
-    void shouldCreateMetadata() {
-        //ARRANGE
-        when(fileMetaDataRepository.save(fileMetadata)).thenReturn(Mono.just(fileMetadata));
-
-        //ACT
-        Mono<ResponseEntity<Void>> response = fileMetaDataService.createMetadata(fileMetadata);
-
-        //ASSERT
-        StepVerifier.create(response).consumeNextWith(s -> {
-            assertEquals(HttpStatus.CREATED, s.getStatusCode());
-        }).verifyComplete();
-    }
-
-    @Test
-    void shouldNotCreateMetadata() {
-        //ARRANGE
-        fileMetadata.setId("invalid URI");
-        when(fileMetaDataRepository.save(fileMetadata)).thenReturn(Mono.just(fileMetadata));
-
-        //ACT
-        Mono<ResponseEntity<Void>> response = fileMetaDataService.createMetadata(fileMetadata);
-
-        //ASSERT
-        StepVerifier.create(response).consumeNextWith(s -> {
-            assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, s.getStatusCode());
-        }).verifyComplete();
-    }
-
-    @Test
-    void countAllInvalidCvNotSeen() {
+    void shouldCountAllInvalidCvNotSeen() {
         //ARRANGE
         Mono<Long> nbrOfInvalidCvNotSeen = Mono.just(5L);
 
@@ -174,7 +144,7 @@ class FileMetaDataServiceTest {
     }
 
     @Test
-    void getListInvalidCvNotSeen() {
+    void shouldGetListInvalidCvNotSeen() throws InvalidPageRequestException {
         //ARRANGE
         Integer noPage = 0;
         when(fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("uploadDate").ascending())))
