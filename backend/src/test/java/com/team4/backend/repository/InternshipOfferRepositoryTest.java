@@ -49,4 +49,5 @@ public class InternshipOfferRepositoryTest {
                 .expectNextCount(2)
                 .verifyComplete();
     }
+
 }

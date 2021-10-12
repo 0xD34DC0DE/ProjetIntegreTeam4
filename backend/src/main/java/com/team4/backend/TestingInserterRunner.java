@@ -244,4 +244,5 @@ public class TestingInserterRunner implements ApplicationRunner {
 
         fileMetaDataRepository.saveAll(fileMetaDataList).subscribe(f -> log.info("new cv file has been created: {}", f));
     }
+
 }
