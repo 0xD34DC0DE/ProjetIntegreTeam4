@@ -31,7 +31,6 @@ public class FileMetaDataRepositoryTest {
 
     @BeforeAll
     void init() {
-
         Flux<FileMetaData> fileMetaDataFlux = Flux.just(
                 FileMetaData.builder().isValid(false).isSeen(false).build(),
                 FileMetaData.builder().isValid(false).isSeen(false).build(),
