@@ -1,12 +1,16 @@
 package com.team4.backend.service;
 
 import com.team4.backend.exception.DuplicateEntryException;
+import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.UserAlreadyExistsException;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.repository.SupervisorRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDateTime;
 
 @Service
 public class SupervisorService {
@@ -34,13 +38,17 @@ public class SupervisorService {
         });
     }
 
-    public Mono<Supervisor> addStudentEmailToStudentList(String supervisorId, String studentEmail) {
-        return supervisorRepository.findById(supervisorId).flatMap(supervisor -> {
-            if(!supervisor.getStudentEmails().contains(studentEmail))
+    public Mono<Supervisor> addStudentEmailToStudentList(String supervisorId, String studentEmail){
+        return supervisorRepository.findById(supervisorId)
+                .flatMap(supervisor -> {
+            if(!supervisor.getStudentEmails().contains(studentEmail)) {
+                supervisor.getStudentEmails().add(studentEmail);
                 return supervisorRepository.save(supervisor);
-            else
+            }
+            else {
                 return Mono.error(new DuplicateEntryException("Student is already present in the supervisor's student lists"));
-        });
+            }
+        }).switchIfEmpty(Mono.error(new UserNotFoundException("Can't find a supervisor with this id")));
     }
 
 }

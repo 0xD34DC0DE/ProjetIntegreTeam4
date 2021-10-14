@@ -6,10 +6,8 @@ import com.team4.backend.mapping.SupervisorMapper;
 import com.team4.backend.service.SupervisorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -28,5 +26,16 @@ public class SupervisorController {
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(error.getMessage())));
     }
+
+    @PatchMapping("/addEmailToStudentList")
+    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
+    public Mono<ResponseEntity<String>> addStudentEmailToStudentList(@RequestParam("id") String id, @RequestParam("studentEmail") String studentEmail) {
+        return supervisorService.addStudentEmailToStudentList(id, studentEmail)
+                .flatMap(supervisor -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")))
+                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
+    }
+
+
+
 
 }
