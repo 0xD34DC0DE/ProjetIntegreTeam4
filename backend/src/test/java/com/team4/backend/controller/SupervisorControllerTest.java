@@ -108,7 +108,6 @@ public class SupervisorControllerTest {
     void shouldNotAssignSupervisorToStudents(){
         // ARRANGE
         SupervisorDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
-        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
 
         when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), supervisorDto.getStudentEmails().get(0)))
                 .thenReturn(Mono.error(DuplicateEntryException::new));
@@ -125,7 +124,7 @@ public class SupervisorControllerTest {
                 .bodyValue(supervisorDto)
                 .exchange()
                 //ASSERT
-                .expectStatus().isNotFound()
+                .expectStatus().isEqualTo(HttpStatus.CONFLICT)
                 .expectBody(String.class);
     }
 }

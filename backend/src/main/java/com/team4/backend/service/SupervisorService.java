@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SupervisorService {
@@ -42,13 +45,15 @@ public class SupervisorService {
         return supervisorRepository.findById(supervisorId)
                 .flatMap(supervisor -> {
             if(!supervisor.getStudentEmails().contains(studentEmail)) {
-                supervisor.getStudentEmails().add(studentEmail);
+                List<String> studentEmails = new ArrayList<>(supervisor.getStudentEmails());
+                studentEmails.add(studentEmail);
+                supervisor.setStudentEmails(studentEmails);
                 return supervisorRepository.save(supervisor);
             }
             else {
                 return Mono.error(new DuplicateEntryException("Student is already present in the supervisor's student lists"));
             }
-        }).switchIfEmpty(Mono.error(new UserNotFoundException("Can't find a supervisor with this id")));
+        }).switchIfEmpty(Mono.error(new UserNotFoundException("Can't find a supervisor with given id: " + supervisorId)));
     }
 
 }

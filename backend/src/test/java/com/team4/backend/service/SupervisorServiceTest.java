@@ -78,6 +78,7 @@ public class SupervisorServiceTest {
         //ARRANGE
         String studentEmail = "teststudent@gmail.com";
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+
         when(supervisorRepository.findById(supervisor.getId())).thenReturn(Mono.just(supervisor));
         when(supervisorRepository.save(any(Supervisor.class)))
                 .thenReturn(Mono.just(supervisor));
@@ -87,7 +88,7 @@ public class SupervisorServiceTest {
 
         // ASSERT
         StepVerifier.create(supervisorMono)
-                .assertNext(s -> assertEquals(2, s.getStudentEmails().size()))
+                .assertNext(s -> assertEquals(3, s.getStudentEmails().size()))
                 .verifyComplete();
     }
 
@@ -109,7 +110,7 @@ public class SupervisorServiceTest {
     void shouldNotFindSupervisorWhenAddingStudentToList(){
         //ARRANGE
         String studentEmail = "teststudent@gmail.com";
-        String wrongId = "not_a_real_id";
+        String wrongId = "wrongId";
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
         when(supervisorRepository.findById(wrongId)).thenReturn(Mono.just(supervisor));
 
