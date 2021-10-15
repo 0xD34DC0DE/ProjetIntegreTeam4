@@ -55,7 +55,7 @@ public class InternshipOfferService {
                                                         offerId,
                                                         LocalDate.now()
                                                 )
-                                ).delayElements(Duration.ofMillis(20))); // TODO remove after demo
+                                ));
     }
 
     public Flux<InternshipOffer> getGeneralInternshipOffers(Integer page, Integer size) {
@@ -67,7 +67,6 @@ public class InternshipOfferService {
                                         pageRequest
                                 )
                 );
-
     }
 
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers() {
