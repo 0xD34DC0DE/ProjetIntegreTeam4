@@ -8,8 +8,7 @@ import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.InternshipOfferRepository;
-import com.team4.backend.util.ValidatingPageRequest;
-import org.springframework.data.domain.PageRequest;
+import com.team4.backend.util.ExperimentalValidatingPageRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -41,13 +40,6 @@ public class InternshipOfferService {
     }
 
     public Flux<InternshipOffer> getStudentExclusiveOffers(String studentEmail, Integer page, Integer size) {
-        PageRequest pageRequest;
-        try {
-            pageRequest = new ValidatingPageRequest(page, size).getPageRequest();
-        } catch (InvalidPageRequestException e) {
-            return Flux.error(e);
-        }
-
         return studentService.getStudent(studentEmail)
                 .switchIfEmpty(
                         Mono.error(
@@ -56,31 +48,25 @@ public class InternshipOfferService {
                 )
                 .map(Student::getExclusiveOffersId)
                 .flatMapMany(offerIdList ->
-                        Flux.fromIterable(offerIdList)
-                                .skip(pageRequest.getOffset())
-                                .take(pageRequest.getPageSize())
+                        ExperimentalValidatingPageRequest.applyPaging(offerIdList, page, size)
                                 .flatMap(offerId ->
                                         internshipOfferRepository.
                                                 findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
                                                         offerId,
                                                         LocalDate.now()
                                                 )
-                                )
-                ).delayElements(Duration.ofSeconds(1)); // TODO remove after demo
+                                ));
     }
 
     public Flux<InternshipOffer> getGeneralInternshipOffers(Integer page, Integer size) {
-
-        PageRequest pageRequest;
-        try {
-            pageRequest = new ValidatingPageRequest(page, size).getPageRequest();
-        } catch (InvalidPageRequestException e) {
-            return Flux.error(e);
-        }
-
-        return internshipOfferRepository
-                .findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(LocalDate.now(), pageRequest);
-
+        return ExperimentalValidatingPageRequest.getPageRequestMono(page, size)
+                .flatMapMany(pageRequest ->
+                        internshipOfferRepository
+                                .findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(
+                                        LocalDate.now(),
+                                        pageRequest
+                                )
+                );
     }
 
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers() {
