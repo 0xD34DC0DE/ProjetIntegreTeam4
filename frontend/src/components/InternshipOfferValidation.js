@@ -23,6 +23,16 @@ const emptyOffer = {
   description: "",
 };
 
+const isKeyIncluded = (offerKey) => {
+  return ![
+    "id",
+    "listEmailInterestedStudents",
+    "companyName",
+    "description",
+    "validated",
+  ].includes(offerKey);
+};
+
 const InternshipOfferValidation = ({
   internshipOfferDialogVisible,
   toggleDialogs,
@@ -56,9 +66,11 @@ const InternshipOfferValidation = ({
     var index = unvalidatedOffers.indexOf(offer);
     unvalidatedOffers.splice(index, 1);
     setUnvalidatedOffers(unvalidatedOffers);
-    setCompanies(
-      [...new Set(Array.from(unvalidatedOffers, ({ companyName }) => companyName))]
-    );
+    setCompanies([
+      ...new Set(
+        Array.from(unvalidatedOffers, ({ companyName }) => companyName)
+      ),
+    ]);
   };
 
   React.useEffect(() => {
@@ -139,15 +151,9 @@ const InternshipOfferValidation = ({
                         {Object.keys(offer).map((offerKey, key) => {
                           return (
                             <>
-                              {![
-                                "id",
-                                "listEmailInterestedStudents",
-                                "companyName",
-                                "description",
-                                "validated",
-                              ].includes(offerKey) && (
+                              {isKeyIncluded(offerKey) && (
                                 <Tooltip
-                                key={key}
+                                  key={key}
                                   title={listLabels[key]}
                                   sx={{
                                     alignItems: "center",
