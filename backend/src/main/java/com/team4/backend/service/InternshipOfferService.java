@@ -9,7 +9,6 @@ import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.InternshipOfferRepository;
 import com.team4.backend.util.ExperimentalValidatingPageRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;

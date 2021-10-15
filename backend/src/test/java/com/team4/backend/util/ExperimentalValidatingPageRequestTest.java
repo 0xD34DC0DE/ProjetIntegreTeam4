@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ExperimentalValidatingPageRequestTest {
 
-
     @Test
     void getPageRequestValid() {
         // ASSERT
@@ -141,5 +140,4 @@ public class ExperimentalValidatingPageRequestTest {
                 .expectError(InvalidPageRequestException.class)
                 .verify();
     }
-
 }
