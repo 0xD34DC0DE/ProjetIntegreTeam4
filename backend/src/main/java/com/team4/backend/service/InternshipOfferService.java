@@ -48,14 +48,15 @@ public class InternshipOfferService {
                         )
                 )
                 .map(Student::getExclusiveOffersId)
-                .flatMapMany(offerIdList -> ExperimentalValidatingPageRequest.applyPaging(offerIdList, page, size).log("PAGING")
-                .flatMap(offerId ->
-                        internshipOfferRepository.
-                                findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
-                                        offerId,
-                                        LocalDate.now()
-                                ).log("AFTER")
-                ).delayElements(Duration.ofMillis(20))); // TODO remove after demo
+                .flatMapMany(offerIdList ->
+                        ExperimentalValidatingPageRequest.applyPaging(offerIdList, page, size)
+                                .flatMap(offerId ->
+                                        internshipOfferRepository.
+                                                findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
+                                                        offerId,
+                                                        LocalDate.now()
+                                                )
+                                ).delayElements(Duration.ofMillis(20))); // TODO remove after demo
     }
 
     public Flux<InternshipOffer> getGeneralInternshipOffers(Integer page, Integer size) {
