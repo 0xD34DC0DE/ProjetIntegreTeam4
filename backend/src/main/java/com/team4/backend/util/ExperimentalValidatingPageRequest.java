@@ -37,13 +37,13 @@ public abstract class ExperimentalValidatingPageRequest {
     }
 
     private static void validateValues(Integer page, Integer size) throws InvalidPageRequestException {
-        if(page == null || size == null) {
+        if (page == null || size == null) {
             throw new InvalidPageRequestException("Arguments of page request can't be null");
         }
-        if(page < 0) {
+        if (page < 0) {
             throw new InvalidPageRequestException("Page must be greater or equal to 0");
         }
-        if(size < 1) {
+        if (size < 1) {
             throw new InvalidPageRequestException("Size must be greater or equal to 1");
         }
     }
