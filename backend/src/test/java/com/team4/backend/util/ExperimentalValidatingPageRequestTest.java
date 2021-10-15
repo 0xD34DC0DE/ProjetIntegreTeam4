@@ -9,6 +9,7 @@ import reactor.test.StepVerifier;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,12 +19,11 @@ public class ExperimentalValidatingPageRequestTest {
 
     @Test
     void getPageRequestValid() {
-        //ARRANGE
-
-        // ACT
+        // ASSERT
         assertDoesNotThrow(() ->
+                // ACT
                 ExperimentalValidatingPageRequest.getPageRequest(1, 1)
-        ); // ASSERT
+        );
     }
 
     @Test
@@ -42,58 +42,53 @@ public class ExperimentalValidatingPageRequestTest {
 
     @Test
     void getPageRequestInvalidSize() {
-        //ARRANGE
-
-        // ACT
-        assertThrows(InvalidPageRequestException.class ,() ->
+        // ASSERT
+        assertThrows(InvalidPageRequestException.class, () ->
+                // ACT
                 ExperimentalValidatingPageRequest.getPageRequest(1, 0)
-        ); // ASSERT
+        );
     }
 
     @Test
     void getPageRequestInvalidPage() {
-        //ARRANGE
-
-        // ACT
-        assertThrows(InvalidPageRequestException.class ,() ->
+        // ASSERT
+        assertThrows(InvalidPageRequestException.class, () ->
+                // ACT
                 ExperimentalValidatingPageRequest.getPageRequest(-1, 1)
-        ); // ASSERT
+        );
     }
 
     @Test
     void getPageRequestInvalidNullSize() {
-        //ARRANGE
-
-        // ACT
-        assertThrows(InvalidPageRequestException.class ,() ->
+        // ASSERT
+        assertThrows(InvalidPageRequestException.class, () ->
+                // ACT
                 ExperimentalValidatingPageRequest.getPageRequest(1, null)
-        ); // ASSERT
+        );
     }
 
     @Test
     void getPageRequestInvalidNullPage() {
-        //ARRANGE
-
-        // ACT
-        assertThrows(InvalidPageRequestException.class ,() ->
+        // ASSERT
+        assertThrows(InvalidPageRequestException.class, () ->
+                // ACT
                 ExperimentalValidatingPageRequest.getPageRequest(null, 1)
-        ); // ASSERT
+        );
     }
 
     @Test
     void getPageRequestInvalidNullPageNullSize() {
-        //ARRANGE
-
-        // ACT
-        assertThrows(InvalidPageRequestException.class ,() ->
+        // ASSERT
+        assertThrows(InvalidPageRequestException.class, () ->
+                // ACT
                 ExperimentalValidatingPageRequest.getPageRequest(null, null)
-        ); // ASSERT
+        );
     }
 
     @Test
     void applyPagingValid() {
         //ARRANGE
-        List<Integer> values = new ArrayList<>(){{add(1); add(2); add(3); add(4); add(5);}};
+        List<Integer> values = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
 
         // ACT
         Flux<Integer> pagedFlux = ExperimentalValidatingPageRequest.applyPaging(values, 1, 2);
@@ -108,7 +103,7 @@ public class ExperimentalValidatingPageRequestTest {
     @Test
     void applyPagingValidTruncate() {
         //ARRANGE
-        List<Integer> values = new ArrayList<>(){{add(1); add(2); add(3); add(4); add(5);}};
+        List<Integer> values = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
 
         // ACT
         Flux<Integer> pagedFlux = ExperimentalValidatingPageRequest.applyPaging(values, 2, 2);
@@ -122,7 +117,7 @@ public class ExperimentalValidatingPageRequestTest {
     @Test
     void applyPagingValidEndOfList() {
         //ARRANGE
-        List<Integer> values = new ArrayList<>(){{add(1); add(2); add(3); add(4); add(5);}};
+        List<Integer> values = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
 
         // ACT
         Flux<Integer> pagedFlux = ExperimentalValidatingPageRequest.applyPaging(values, 2, 3);
@@ -134,9 +129,9 @@ public class ExperimentalValidatingPageRequestTest {
     }
 
     @Test
-    void applyPagingInvalid(){
+    void applyPagingInvalid() {
         //ARRANGE
-        List<Integer> values = new ArrayList<>(){{add(1); add(2); add(3); add(4); add(5);}};
+        List<Integer> values = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
 
         // ACT
         Flux<Integer> pagedFlux = ExperimentalValidatingPageRequest.applyPaging(values, -1, 1);
