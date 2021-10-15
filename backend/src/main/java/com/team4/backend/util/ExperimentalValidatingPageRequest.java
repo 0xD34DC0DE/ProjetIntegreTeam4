@@ -32,8 +32,8 @@ public abstract class ExperimentalValidatingPageRequest {
             } catch (InvalidPageRequestException e) {
                 return Mono.error(e);
             }
-            return Flux.fromIterable(ts).skip(page * size).take(size);
-        }).log("VERIFY");
+            return Flux.fromIterable(ts).skip((long) page * size).take(size);
+        });
     }
 
     private static void validateValues(Integer page, Integer size) throws InvalidPageRequestException {
