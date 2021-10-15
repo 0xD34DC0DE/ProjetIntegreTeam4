@@ -123,4 +123,20 @@ public class InternshipOfferService {
                 .map(count -> (long) Math.ceil((double) count / (double) size));
     }
 
+    public Mono<Boolean> isStudentOnMonitorOffer(String studentEmail, String monitorEmail) {
+        System.out.println("dans le service dans internship offer service");
+        return internshipOfferRepository.findByEmailOfMonitor(monitorEmail)
+                .next()
+                .flatMap(internshipOffer -> {
+                    System.out.println("internshipOffer: " + internshipOffer);
+                    if (internshipOffer.getListEmailInterestedStudents().contains(studentEmail)) {
+                        System.out.println("contains");
+                        return Mono.just(true);
+                    } else {
+                        System.out.println("not contains");
+                        return Mono.just(false);
+                    }
+                });
+    }
+
 }
