@@ -17,7 +17,6 @@ function App() {
   const [dialogVisibility, setDialogVisibility] = useState({
     loginDialog: false,
     registerDialog: false,
-    depositInternshipOfferDialog: false,
     internshipOfferDialog: false,
     internshipOfferDialogValidation: false,
   });
@@ -29,28 +28,28 @@ function App() {
           <TopBar
             openDrawer={open}
             setOpenDrawer={setOpen}
+            internshipOfferDialogVisible={dialogVisibility.internshipOfferDialog}
             loginVisible={dialogVisibility.loginDialog}
             registerVisible={dialogVisibility.registerDialog}
             toggleDialogs={handleDialogs}
-            intershipOfferDialogVisible={dialogVisibility.internshipOfferDialog}
           />
           <Switch>
-            <Content open={open} setOpen={setOpen} exact path="/"></Content>
+            <Content exact path="/"></Content>
             <InternshipOfferValidation
               internshipOfferDialogVisible={
                 dialogVisibility.internshipOfferDialogValidation
               }
               toggleDialogs={handleDialogs}
               exact
-              path="/internshipOfferValidation"
+              path="/validerOffreStage"
             />
             <ListCvInternshipManagerView
               exact
-              path="/cvValidation"
+              path="/validerCV"
               sx={{ marginTop: "50px" }}
             ></ListCvInternshipManagerView>
-            <UploadCV exact path="/uploadCV" />
-            <OfferViews exact path="/offers"/>
+            <UploadCV exact path="/televerserCV" />
+            <OfferViews exact path="/offres"/>
           </Switch>
           <UserInfoContext.Consumer>
             {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}

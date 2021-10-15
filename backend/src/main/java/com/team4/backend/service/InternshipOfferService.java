@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.InternshipOfferMapper;
@@ -11,12 +12,10 @@ import com.team4.backend.util.ExperimentalValidatingPageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.LocalDate;
-
 import java.time.LocalDateTime;
 
 @Service
@@ -71,32 +70,19 @@ public class InternshipOfferService {
 
     }
 
-    public Flux<InternshipOffer> getNonValidatedInternshipOffers() {
-        return internshipOfferRepository.findAllInternshipOfferByIsValidatedFalse();
-    }
-
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers() {
         return internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse();
     }
 
-    public Mono<InternshipOffer> validateInternshipOffer(String id) {
-        return internshipOfferRepository.findById(id).map(offer -> {
-            offer.setIsValidated(true);
-            offer.setValidationDate(LocalDateTime.now());
-            return offer;
-        }).flatMap(internshipOfferRepository::save)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Can't find InternshipOffer with this id.")));
-    }
+    public Mono<InternshipOffer> validateInternshipOffer(String id, Boolean isValid) {
+        return internshipOfferRepository.findById(id)
+                .switchIfEmpty(Mono.error(new InternshipOfferNotFoundException("Can't find internship offer with this id")))
+                .map(offer -> {
+                    offer.setIsValidated(isValid);
+                    offer.setValidationDate(LocalDateTime.now());
 
-    public Mono<InternshipOffer> refuseInternshipOffer(String id) {
-        return internshipOfferRepository.findById(id).map(offer -> {
-            offer.setIsValidated(false);
-            offer.setValidationDate(LocalDateTime.now());
-            return offer;
-        }).flatMap(internshipOfferRepository::save)
-                .switchIfEmpty(Mono.error(new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Can't find InternshipOffer with this id.")));
+                    return offer;
+                }).flatMap(internshipOfferRepository::save);
     }
 
     public Mono<Long> getInternshipOffersPageCount(Integer size) {
@@ -123,4 +109,5 @@ public class InternshipOfferService {
                 .map(student -> student.getExclusiveOffersId().size())
                 .map(count -> (long) Math.ceil((double) count / (double) size));
     }
+
 }

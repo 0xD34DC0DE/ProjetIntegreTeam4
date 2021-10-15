@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from 'react'
-import { CircularProgress, Stack, Typography, Box, Tab, Tabs, Pagination } from '@mui/material'
+import { CircularProgress, Stack, Typography, Box, Tab, Tabs, Pagination, Container } from '@mui/material'
 import OfferView from './OfferView';
 import axios from "axios";
 import { UserInfoContext } from '../stores/UserInfoStore';
@@ -23,10 +23,10 @@ function OfferViews() {
       const getInternshipOffersPagingCount = () => {
 
         setPagingCount(1);
-        
+
         const email = (currentTab === 1) ? "/" + userInfo.email : "";
 
-        if(cancelPageCount.current) {
+        if (cancelPageCount.current) {
           cancelPageCount.current();
         }
         axios({
@@ -56,13 +56,13 @@ function OfferViews() {
   useEffect(() => {
     if (userInfo.loggedIn) {
       const getInternshipOffers = () => {
-        
+
         setInternshipOffers(null);
 
         const email = (currentTab === 1) ? "/" + userInfo.email : "";
         const endpoint = `http://localhost:8080/internshipOffer/studentInternshipOffers${email}?page=${currentPage - 1}&size=${offersPerPage}`;
 
-        if(cancelOffers.current) {
+        if (cancelOffers.current) {
           cancelOffers.current();
         }
 
@@ -101,26 +101,28 @@ function OfferViews() {
 
   return (
     <>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex' }}>
-        <Tabs sx={{ width: '100%' }} value={currentTab} onChange={handleTabChange} aria-label="Affichage des offres" centered>
-          <Tab label="Offres générales" index={0} sx={{ width: '50%' }} />
-          <Tab label="Offres exclusives" index={1} sx={{ width: '50%' }} />
-        </Tabs>
-      </Box>
-      <Stack mt={3} alignItems="center" justifyContent="center">
-        {
-          (internshipOffers == null) ?
-            <CircularProgress sx={{ mt: 10, mb: 5 }} />
-            :
-            (internshipOffers.length === 0) ?
-              <Typography>Aucune offre disponible pour l'instant.</Typography>
+      <Container maxWidth="lg" sx={{mt:10}}>
+        <Box sx={{ borderBottom: 1, borderColor: 'divider', display: 'flex' }}>
+          <Tabs sx={{ width: '100%' }} value={currentTab} onChange={handleTabChange} aria-label="Affichage des offres" centered>
+            <Tab label="Offres générales" index={0} sx={{ width: '50%' }} />
+            <Tab label="Offres exclusives" index={1} sx={{ width: '50%' }} />
+          </Tabs>
+        </Box>
+        <Stack mt={3} alignItems="center" justifyContent="center">
+          {
+            (internshipOffers == null) ?
+              <CircularProgress sx={{ mt: 10, mb: 5 }} />
               :
-              internshipOffers.map((offer, i) => <OfferView key={i} {...offer} />)
-        }
-        {
-          internshipOffers != null && <Pagination sx={{ mt: 5 }} count={pagingCount} page={currentPage} onChange={handlePageChange} />
-        }
-      </Stack>
+              (internshipOffers.length === 0) ?
+                <Typography>Aucune offre disponible pour l'instant.</Typography>
+                :
+                internshipOffers.map((offer, i) => <OfferView key={i} {...offer} />)
+          }
+          {
+            internshipOffers != null && <Pagination sx={{ mt: 5 }} count={pagingCount} page={currentPage} onChange={handlePageChange} />
+          }
+        </Stack>
+      </Container>
     </>
   )
 }

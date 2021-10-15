@@ -20,25 +20,25 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import { useTheme } from "@mui/material/styles";
 import React, { useContext, useRef, useState } from "react";
 import Login from "../components/Login";
 import Register from "../components/Register";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import SideBar from "./SideBar";
+import { useHistory } from "react-router-dom";
 
 const TopBar = ({
   openDrawer,
   setOpenDrawer,
   toggleDialogs,
+  internshipOfferDialogVisible,
   registerVisible,
-  loginVisible,
-  intershipOfferDialogVisible,
+  loginVisible
 }) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const menuAnchor = useRef();
   const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
-  const theme = useTheme();
+  const history = useHistory();
 
   const handleClose = () => {
     menuAnchor.current = undefined;
@@ -64,7 +64,7 @@ const TopBar = ({
             <IconButton
               color="inherit"
               aria-label="open drawer"
-              onClick={setOpenDrawer}
+              onClick={() => {setOpenDrawer(!openDrawer)}}
               edge="start"
               sx={{ mr: 2, ...(openDrawer && { display: "none" }) }}
             >
@@ -184,6 +184,7 @@ const TopBar = ({
                     <MenuItem
                       onClick={() => {
                         setMenuVisible(false);
+                        history.push("/");
                         userInfoDispatch({ type: "LOGOUT" });
                       }}
                     >
@@ -199,19 +200,14 @@ const TopBar = ({
                   ],
                 ]}
           </Menu>
-          <Register
-            toggleDialogs={toggleDialogs}
-            open={registerVisible}
-          ></Register>
-          <Login open={loginVisible} toggleDialogs={toggleDialogs}></Login>
         </Toolbar>
       </AppBar>
       <Register toggleDialogs={toggleDialogs} open={registerVisible}></Register>
       <Login open={loginVisible} toggleDialogs={toggleDialogs}></Login>
       <SideBar
-        intershipOfferDialogVisible={intershipOfferDialogVisible}
-        open={openDrawer}
-        setOpen={setOpenDrawer}
+        openDrawer={openDrawer}
+        setOpenDrawer={setOpenDrawer}
+        internshipOfferDialogVisible={internshipOfferDialogVisible}
         toggleDialogs={toggleDialogs}
       />
     </>
