@@ -1,6 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.StudentDto;
+import com.team4.backend.dto.StudentCreationDto;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Student;
 import com.team4.backend.service.StudentService;
@@ -34,9 +34,9 @@ public class StudentControllerTest {
     @Test
     public void shouldCreateStudent() {
         //ARRANGE
-        StudentDto studentDto = StudentMockData.getMockStudentDto();
+        StudentCreationDto studentCreationDto = StudentMockData.getMockStudentDto();
 
-        studentDto.setId(null);
+        studentCreationDto.setId(null);
 
         Student student = StudentMockData.getMockStudent();
 
@@ -51,7 +51,7 @@ public class StudentControllerTest {
 
         //ACT
         webTestClient
-                .post().uri("/student/register").bodyValue(studentDto)
+                .post().uri("/student/register").bodyValue(studentCreationDto)
                 .exchange()
                 //ASSERT
                 .expectStatus().isCreated()
@@ -61,16 +61,16 @@ public class StudentControllerTest {
     @Test
     public void shouldNotCreateStudent() {
         //ARRANGE
-        StudentDto studentDto = StudentMockData.getMockStudentDto();
+        StudentCreationDto studentCreationDto = StudentMockData.getMockStudentDto();
 
-        studentDto.setId(null);
+        studentCreationDto.setId(null);
 
         when(studentService.registerStudent(any(Student.class)))
                 .thenReturn(Mono.error(UserAlreadyExistsException::new));
 
         //ACT
         webTestClient
-                .post().uri("/student/register").bodyValue(studentDto)
+                .post().uri("/student/register").bodyValue(studentCreationDto)
                 .exchange()
                 // ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)

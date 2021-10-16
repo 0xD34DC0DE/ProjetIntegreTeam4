@@ -12,16 +12,16 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class InternshipManagerDto extends UserDto implements Serializable {
+public class InternshipManagerCreationDto extends UserCreationDto implements Serializable {
 
     @Builder
-    public InternshipManagerDto(String id,
-                                String email,
-                                String password,
-                                String firstName,
-                                String lastName,
-                                LocalDate registrationDate,
-                                String phoneNumber) {
+    public InternshipManagerCreationDto(String id,
+                                        String email,
+                                        String password,
+                                        String firstName,
+                                        String lastName,
+                                        LocalDate registrationDate,
+                                        String phoneNumber) {
         super(id,
                 email,
                 password,

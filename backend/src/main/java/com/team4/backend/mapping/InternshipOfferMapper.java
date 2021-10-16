@@ -27,7 +27,7 @@ public abstract class InternshipOfferMapper {
     }
 
     public static InternshipOfferStudentViewDto toStudentViewDto(InternshipOffer internshipOffer) {
-        return InternshipOfferStudentViewDto.builder()
+        return InternshipOfferStudentViewDto.internshipOfferStudentViewDtoBuilder()
                 .id(internshipOffer.getId())
                 .limitDateToApply(internshipOffer.getLimitDateToApply())
                 .beginningDate(internshipOffer.getBeginningDate())
@@ -54,7 +54,7 @@ public abstract class InternshipOfferMapper {
     }
 
     public static InternshipOfferMonitorViewDto toMonitorView(InternshipOffer internshipOffer) {
-        return InternshipOfferMonitorViewDto.builder()
+        return InternshipOfferMonitorViewDto.internshipOfferMonitorViewDtoBuilder()
                 .id(internshipOffer.getId())
                 .limitDateToApply(internshipOffer.getLimitDateToApply())
                 .beginningDate(internshipOffer.getBeginningDate())
