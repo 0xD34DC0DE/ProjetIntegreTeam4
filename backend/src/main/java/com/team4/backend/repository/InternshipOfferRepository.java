@@ -21,5 +21,5 @@ public interface InternshipOfferRepository extends ReactiveMongoRepository<Inter
 
     Flux<InternshipOffer> findAllByValidationDateNullAndIsValidatedFalse();
 
-    Flux<InternshipOffer> findByEmailOfMonitorAndIsValidatedTrue(String email);
+    Flux<InternshipOffer> findAllByEmailOfMonitorAndIsValidatedTrue(String email);
 }

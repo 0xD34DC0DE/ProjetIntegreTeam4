@@ -17,7 +17,6 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 public class InternshipOfferService {
@@ -124,8 +123,9 @@ public class InternshipOfferService {
                 .map(count -> (long) Math.ceil((double) count / (double) size));
     }
 
-    public Mono<Boolean> isStudentOnMonitorOffer(String studentEmail, String monitorEmail) {
-        return internshipOfferRepository.findByEmailOfMonitorAndIsValidatedTrue(monitorEmail)
+    
+    public Mono<Boolean> monitorOffersInterestedStudentsContainsStudentEmail(String studentEmail, String monitorEmail) {
+        return internshipOfferRepository.findAllByEmailOfMonitorAndIsValidatedTrue(monitorEmail)
                 .collectList()
                 .flatMapMany(allFoundInternshipOffer -> {
                     for (InternshipOffer internshipOffer : allFoundInternshipOffer) {
