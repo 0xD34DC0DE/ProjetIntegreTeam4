@@ -1,6 +1,6 @@
 package com.team4.backend.testdata;
 
-import com.team4.backend.dto.SupervisorDto;
+import com.team4.backend.dto.SupervisorCreationDto;
 import com.team4.backend.model.Supervisor;
 
 import java.util.Arrays;
@@ -21,8 +21,8 @@ public class SupervisorMockData {
                 .build();
     }
 
-    public static SupervisorDto getMockSupervisorDto() {
-        return SupervisorDto.builder()
+    public static SupervisorCreationDto getMockSupervisorDto() {
+        return SupervisorCreationDto.builder()
                 .id("615a32ce577ae63d7b159b17")
                 .email("jonathan_22@outlook.com")
                 .password("soleil31@")

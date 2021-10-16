@@ -157,6 +157,8 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldNotGetExclusiveInternshipOfferStudentViewsInvalidPageSize() {
         //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+        when(studentService.getStudent(any(String.class))).thenReturn(Mono.just(student));
 
         //ACT
         Flux<InternshipOffer> internshipOfferFlux =

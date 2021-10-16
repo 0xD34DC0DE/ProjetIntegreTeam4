@@ -1,6 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.SupervisorDto;
+import com.team4.backend.dto.SupervisorCreationDto;
 import com.team4.backend.exception.DuplicateEntryException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Supervisor;
@@ -35,7 +35,7 @@ public class SupervisorControllerTest {
     @Test
     public void shouldCreateSupervisor() {
         //ARRANGE
-        SupervisorDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
         supervisorDto.setId(null);
 
@@ -62,7 +62,7 @@ public class SupervisorControllerTest {
     @Test
     public void shouldNotSupervisor() {
         //ARRANGE
-        SupervisorDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
         supervisorDto.setId(null);
 
@@ -82,7 +82,7 @@ public class SupervisorControllerTest {
     void shouldAssignSupervisorToStudents(){
         // ARRANGE
         String studentEmail = "teststudent@gmail.com";
-        SupervisorDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
 
         when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), studentEmail))
@@ -107,7 +107,7 @@ public class SupervisorControllerTest {
     @Test
     void shouldNotAssignSupervisorToStudents(){
         // ARRANGE
-        SupervisorDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
         when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), supervisorDto.getStudentEmails().get(0)))
                 .thenReturn(Mono.error(DuplicateEntryException::new));

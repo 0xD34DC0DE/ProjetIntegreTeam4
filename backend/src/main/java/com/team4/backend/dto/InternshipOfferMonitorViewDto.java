@@ -12,29 +12,28 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class InternshipOfferMonitorViewDto extends InternshipOfferBaseDto implements Serializable {
-
-    String id;
+public class InternshipOfferMonitorViewDto extends InternshipOfferDto implements Serializable {
 
     private List<String> listEmailInterestedStudents;
-    @Builder
-    public InternshipOfferMonitorViewDto(LocalDate limitDateToApply,
+
+    @Builder(builderMethodName = "internshipOfferMonitorViewDtoBuilder")
+    public InternshipOfferMonitorViewDto(String id,
+                                         LocalDate limitDateToApply,
                                          LocalDate beginningDate,
                                          LocalDate endingDate,
                                          String companyName,
                                          String description,
                                          Float minSalary,
                                          Float maxSalary,
-                                         String id,
                                          List<String> listEmailInterestedStudents) {
-        super(limitDateToApply,
+        super(id,
+                limitDateToApply,
                 beginningDate,
                 endingDate,
                 companyName,
                 description,
                 minSalary,
                 maxSalary);
-        this.id = id;
         this.listEmailInterestedStudents = listEmailInterestedStudents;
     }
 }
