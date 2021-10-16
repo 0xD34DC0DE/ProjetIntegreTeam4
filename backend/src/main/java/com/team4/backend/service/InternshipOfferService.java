@@ -17,6 +17,7 @@ import reactor.core.publisher.Mono;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class InternshipOfferService {
@@ -124,19 +125,16 @@ public class InternshipOfferService {
     }
 
     public Mono<Boolean> isStudentOnMonitorOffer(String studentEmail, String monitorEmail) {
-        System.out.println("dans le service dans internship offer service");
-        return internshipOfferRepository.findByEmailOfMonitor(monitorEmail)
-                .next()
-                .flatMap(internshipOffer -> {
-                    System.out.println("internshipOffer: " + internshipOffer);
-                    if (internshipOffer.getListEmailInterestedStudents().contains(studentEmail)) {
-                        System.out.println("contains");
-                        return Mono.just(true);
-                    } else {
-                        System.out.println("not contains");
-                        return Mono.just(false);
+        return internshipOfferRepository.findByEmailOfMonitorAndIsValidatedTrue(monitorEmail)
+                .collectList()
+                .flatMapMany(allFoundInternshipOffer -> {
+                    for (InternshipOffer internshipOffer : allFoundInternshipOffer) {
+                        if (internshipOffer.getListEmailInterestedStudents().contains(studentEmail)) {
+                            return Mono.just(true);
+                        }
                     }
-                });
+                    return Mono.just(false);
+                }).next().flatMap(Mono::just);
     }
 
 }

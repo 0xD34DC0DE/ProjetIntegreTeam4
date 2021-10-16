@@ -25,14 +25,17 @@ import java.util.UUID;
 @Service
 public class FileMetaDataService {
 
-    @Autowired
-    FileMetaDataRepository fileMetaDataRepository;
+    private final FileMetaDataRepository fileMetaDataRepository;
 
-    @Autowired
-    StudentService studentService;
+    private final StudentService studentService;
 
-    @Autowired
-    FileAssetService fileAssetService;
+    private final FileAssetService fileAssetService;
+
+    public FileMetaDataService(FileMetaDataRepository fileMetaDataRepository, StudentService studentService, FileAssetService fileAssetService) {
+        this.fileMetaDataRepository = fileMetaDataRepository;
+        this.studentService = studentService;
+        this.fileAssetService = fileAssetService;
+    }
 
     public Mono<FileMetaData> create(FileMetaData fileMetadata) {
         return fileMetaDataRepository.save(fileMetadata);

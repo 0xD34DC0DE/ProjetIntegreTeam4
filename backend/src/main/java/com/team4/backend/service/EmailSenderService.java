@@ -17,40 +17,42 @@ import javax.mail.internet.MimeMessage;
 @Service
 public class EmailSenderService {
 
-    @Autowired
-    MonitorRepository monitorRepository;
+    private final MonitorRepository monitorRepository;
 
-    @Autowired
-    StudentRepository studentRepository;
+    private final StudentRepository studentRepository;
 
-    @Autowired
-    InternshipOfferService internshipOfferService;
+    private final InternshipOfferService internshipOfferService;
 
-    @Autowired(required = false)
-    JavaMailSender javaMailSender;
+
+    private final JavaMailSender javaMailSender;
+
+    public EmailSenderService(MonitorRepository monitorRepository, StudentRepository studentRepository, InternshipOfferService internshipOfferService, JavaMailSender javaMailSender) {
+        this.monitorRepository = monitorRepository;
+        this.studentRepository = studentRepository;
+        this.internshipOfferService = internshipOfferService;
+        this.javaMailSender = javaMailSender;
+    }
 
     public Mono<Void> sendEmailToStudent(String sender, String receiver, String subject, String content, String principalEmail) {
 
         return monitorExistsByEmailAndIsEnabledTrue(sender)
                 .flatMap(s -> {
                     if (s) {
-                        return monitorExistsByEmailAndIsEnabledTrue(receiver);
+                        return studentExistsByEmail(receiver);
                     } else {
                         return Mono.error(new UserNotFoundException("Given sender email does not correspond to any saved monitor"));
                     }
                 })
-//                .flatMap(t -> {
-//                    if (t) {
-//                        return studentIsInMonitorList(receiver, sender);
-//                    } else {
-//                        return Mono.error(new UserNotFoundException("Given receiver email does not correspond to any saved student"));
-//                    }
-//                })
+                .flatMap(t -> {
+                    if (t) {
+                        return studentIsInMonitorList(receiver, sender);
+                    } else {
+                        return Mono.error(new UserNotFoundException("Given receiver email does not correspond to any saved student"));
+                    }
+                })
                 .flatMap( u -> {
                     if (!u) {
-                        // temporary sout to commit before the weekend
-                        return Mono.error(new UserNotFoundException("Given receiver email does not correspond to any saved student"));
-                        // return Mono.error(new UserNotFoundException("Given receiver email does not correspond to student that applied to monitor's offer"));
+                         return Mono.error(new UserNotFoundException("Given receiver email does not correspond to student that applied to monitor's offer"));
                     }
                     MimeMessage message = javaMailSender.createMimeMessage();
                     try {
@@ -76,7 +78,6 @@ public class EmailSenderService {
     }
 
     public Mono<Boolean> studentIsInMonitorList(String studentEmail, String monitorEmail) {
-        System.out.println("dans le service studentIsInMonitorList");
         return internshipOfferService.isStudentOnMonitorOffer(studentEmail, monitorEmail).flatMap(s -> {
             if (s) {
                 return Mono.just(true);

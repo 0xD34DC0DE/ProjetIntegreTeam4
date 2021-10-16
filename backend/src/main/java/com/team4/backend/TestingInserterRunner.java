@@ -23,6 +23,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -47,6 +48,8 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final Lorem lorem;
 
+    private final List<String> studentList;
+
     public TestingInserterRunner(MonitorRepository monitorRepository,
                                  InternshipOfferRepository internshipOfferRepository,
                                  StudentRepository studentRepository,
@@ -60,6 +63,10 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.fileMetaDataRepository = fileMetaDataRepository;
         this.lorem = LoremIpsum.getInstance();
+        this.studentList = new ArrayList<>();
+        this.studentList.add("123456789@gmail.com");
+        this.studentList.add("3643283423@gmail.com");
+        this.studentList.add("123667713@gmail.com");
     }
 
     @Override
@@ -208,6 +215,22 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isValidated(true)
                         .validationDate(null)
                         .isExclusive(false)
+                        // Temporary data modification so i can test the security
+                        .listEmailInterestedStudents(Collections.emptyList())
+                        .build(),
+                InternshipOffer.builder()
+                        .limitDateToApply(LocalDate.now())
+                        .beginningDate(LocalDate.now().plusDays(30))
+                        .endingDate(LocalDate.now().plusMonths(3))
+                        .emailOfMonitor("9182738492@gmail.com")
+                        .companyName("Ubisoft")
+                        .description("Tester")
+                        .minSalary(17.0f)
+                        .maxSalary(19.0f)
+                        .isValidated(true)
+                        .validationDate(null)
+                        .isExclusive(false)
+                        .listEmailInterestedStudents(studentList)
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
