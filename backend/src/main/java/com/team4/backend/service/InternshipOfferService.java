@@ -13,7 +13,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -107,6 +106,12 @@ public class InternshipOfferService {
                 )
                 .map(student -> student.getExclusiveOffersId().size())
                 .map(count -> (long) Math.ceil((double) count / (double) size));
+    }
+
+    public Flux<Student> getInterestedStudents(String emailOfMonitor) {
+        return internshipOfferRepository.findAllByEmailOfMonitorAndIsValidatedTrue(emailOfMonitor)
+                .filter(internshipOffer -> internshipOffer.getListEmailInterestedStudents() != null)
+                .flatMap(internshipOffer -> studentService.findAllByEmail(internshipOffer.getListEmailInterestedStudents()));
     }
 
 }

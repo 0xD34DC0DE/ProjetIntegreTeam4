@@ -6,7 +6,10 @@ import com.team4.backend.model.Student;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Service
 public class StudentService {
@@ -37,9 +40,14 @@ public class StudentService {
     public Mono<Student> getStudent(String studentEmail) {
         return studentRepository.findByEmailAndIsEnabledTrue(studentEmail);
     }
+
     public Mono<Student> findByEmail(String email) {
         return studentRepository.findByEmail(email)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
+    }
+
+    public Flux<Student> findAllByEmail(List<String> emails) {
+        return studentRepository.findAllByEmails(emails);
     }
 
     public Mono<Student> updateCvValidity(String email, Boolean valid) {

@@ -3,9 +3,13 @@ package com.team4.backend.controller;
 import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
+import com.team4.backend.dto.StudentDto;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.InternshipOfferMapper;
+import com.team4.backend.mapping.StudentMapper;
+import com.team4.backend.model.Student;
+import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.service.InternshipOfferService;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
@@ -16,15 +20,20 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Log
 @RestController
 @RequestMapping("/internshipOffer")
 public class InternshipOfferController {
 
     private final InternshipOfferService internshipOfferService;
+    private final StudentRepository studentRepository;
 
-    public InternshipOfferController(InternshipOfferService internshipOfferService) {
+    public InternshipOfferController(InternshipOfferService internshipOfferService, StudentRepository studentRepository) {
         this.internshipOfferService = internshipOfferService;
+        this.studentRepository = studentRepository;
     }
 
     @ExceptionHandler(InvalidPageRequestException.class)
@@ -94,11 +103,15 @@ public class InternshipOfferController {
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
     }
 
-
     @GetMapping("/getNotYetValidatedInternshipOffers")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
     public Flux<InternshipOfferDto> getNotYetValidatedInternshipOffers() {
         return internshipOfferService.getNotYetValidatedInternshipOffers().map(InternshipOfferMapper::toDto);
     }
 
+    @GetMapping("/interestedStudents/{emailOfMonitor}")
+    @PreAuthorize("hasAnyAuthority('MONITOR')")
+    public Flux<StudentDto> getInterestedStudents(@PathVariable("emailOfMonitor") String emailOfMonitor) {
+        return internshipOfferService.getInterestedStudents(emailOfMonitor).map(StudentMapper::toDto);
+    }
 }

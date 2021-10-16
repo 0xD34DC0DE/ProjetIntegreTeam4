@@ -1,14 +1,8 @@
 package com.team4.backend;
 
 import com.team4.backend.model.*;
-import com.team4.backend.repository.*;
-import com.team4.backend.model.InternshipOffer;
-import com.team4.backend.model.Monitor;
-import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.StudentState;
-import com.team4.backend.repository.InternshipOfferRepository;
-import com.team4.backend.repository.MonitorRepository;
-import com.team4.backend.repository.StudentRepository;
+import com.team4.backend.repository.*;
 import com.team4.backend.util.PBKDF2Encoder;
 import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
@@ -22,6 +16,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -82,6 +77,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 Student.studentBuilder().email("123456789@gmail.com").firstName("Travis").lastName("Scott").phoneNumber("4387650987").password(pbkdf2Encoder.encode("travis123")).hasValidCv(false).build(),
                 Student.studentBuilder().email("3643283423@gmail.com").firstName("Jean").lastName("Jordan").phoneNumber("5143245678").password(pbkdf2Encoder.encode("jean123")).hasValidCv(false).build(),
                 Student.studentBuilder().email("123667713@gmail.com").firstName("Farid").lastName("Shalom").phoneNumber("4385738764").password(pbkdf2Encoder.encode("farid123")).hasValidCv(false).build(),
+                Student.studentBuilder().email("324223434@gmail.com").firstName("Maxime").lastName("Bernier").phoneNumber("5148882938").password(pbkdf2Encoder.encode("maxime123")).hasValidCv(false).build(),
                 Student.studentBuilder().email("902938912@gmail.com").firstName("Kevin").lastName("Alphonse").phoneNumber("4385738764").password(pbkdf2Encoder.encode("kevin123")).hasValidCv(false).build(),
                 Student.studentBuilder().email("student@gmail.com").password(pbkdf2Encoder.encode("student")).firstName("John").lastName("Doe").registrationDate(LocalDate.now()).studentState(StudentState.REGISTERED).phoneNumber("123-123-1234").exclusiveOffersId(Collections.singleton(insertInternshipOffersStudentView())).build()
         );
@@ -118,7 +114,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .maxSalary(17.50f)
                         .minSalary(16.25f)
                         .emailOfMonitor("9182738492@gmail.com")
-                        .listEmailInterestedStudents(Collections.emptyList())
+                        .listEmailInterestedStudents(Arrays.asList("123456789@gmail.com", "324223434@gmail.com"))
                         .build();
 
         InternshipOffer internshipOffer2 = InternshipOffer.builder()
@@ -132,7 +128,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 .maxSalary(19.50f)
                 .minSalary(19.50f)
                 .emailOfMonitor("9182738492@gmail.com")
-                .listEmailInterestedStudents(Collections.emptyList())
+                .listEmailInterestedStudents(Arrays.asList("902938912@gmail.com", "student@gmail.com", "3643283423@gmail.com"))
                 .build();
 
         for (int i = 0; i < 7; i++) {
@@ -144,7 +140,7 @@ public class TestingInserterRunner implements ApplicationRunner {
     }
 
 
-    private void insertInternshipOffersInternshipManagerView() throws IOException {
+    private void insertInternshipOffersInternshipManagerView() {
         List<InternshipOffer> internshipOffers = Arrays.asList(
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
