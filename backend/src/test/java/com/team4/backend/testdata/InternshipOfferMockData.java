@@ -103,7 +103,6 @@ public abstract class InternshipOfferMockData {
                 .minSalary(22.5f)
                 .maxSalary(23.5f)
                 .companyName("desjardins")
-                .emailOfMonitor("rickJones@desjardins.com")
                 .description("Développeur Web")
                 .build();
     }
