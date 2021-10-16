@@ -352,4 +352,13 @@ public class InternshipOfferServiceTest {
                 .verifyComplete();
     }
 
+    @Test
+    void shouldApplyInternshipOffer() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+        when(internshipOfferRepository.findById(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
+        when()
+        when(studentService.findByEmail())
+    }
+
 }
