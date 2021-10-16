@@ -123,4 +123,7 @@ public class InternshipOfferService {
                 .map(count -> (long) Math.ceil((double) count / (double) size));
     }
 
+    public Mono<InternshipOffer> applyOffer(String any) {
+        return Mono.empty();
+    }
 }
