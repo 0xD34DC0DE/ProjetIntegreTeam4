@@ -1,11 +1,11 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.MonitorDto;
+import com.team4.backend.dto.MonitorCreationDto;
 import com.team4.backend.model.Monitor;
 
 public abstract class MonitorMapper {
 
-    public static Monitor toEntity(MonitorDto monitorDto) {
+    public static Monitor toEntity(MonitorCreationDto monitorDto) {
         return Monitor.monitorBuilder()
                 .email(monitorDto.getEmail())
                 .password(monitorDto.getPassword())
@@ -17,8 +17,8 @@ public abstract class MonitorMapper {
                 .build();
     }
 
-    public static MonitorDto toDto(Monitor monitor) {
-        return MonitorDto.builder()
+    public static MonitorCreationDto toDto(Monitor monitor) {
+        return MonitorCreationDto.builder()
                 .id(monitor.getId())
                 .email(monitor.getEmail())
                 .firstName(monitor.getFirstName())
