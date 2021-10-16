@@ -17,8 +17,7 @@ import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Mono;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
@@ -32,21 +31,17 @@ class EmailSenderControllerTest {
     @MockBean
     EmailSenderService emailSenderService;
 
-    final String sender = "sender";
     final String receiver = "receiver";
     final String subject = "subject";
     final String content = "content";
 
-    final String principalEmail = "principal@gmail.com";
-
     @Test
     void shouldSendEmailToStudent() {
         //ARRANGE
-        when(emailSenderService.sendEmailToStudent(principalEmail, receiver, subject, content)).thenReturn(Mono.empty());
+        when(emailSenderService.sendEmailToStudent(any(), eq(receiver), eq(subject), eq(content))).thenReturn(Mono.empty());
 
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
 
-        builder.part("sender", principalEmail);
         builder.part("receiver", receiver);
         builder.part("subject", subject);
         builder.part("content", content);
@@ -59,7 +54,8 @@ class EmailSenderControllerTest {
                 .uri("/emailsender")
                 .bodyValue(multiValueMap)
                 .exchange()
-                //ASSERT
+
+        //ASSERT
                 .expectStatus().isOk()
                 .expectBody(String.class);
     }

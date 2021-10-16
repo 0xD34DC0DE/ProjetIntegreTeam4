@@ -10,6 +10,8 @@ import org.springframework.mail.javamail.JavaMailSender;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static reactor.core.publisher.Mono.when;
+
 
 @EnableAutoConfiguration
 @ExtendWith(MockitoExtension.class)
@@ -32,6 +34,7 @@ class EmailSenderServiceTest {
     @Test
     void sendEmailToStudent() {
         //ARRANGE
+        when(emailSenderService.)
 
         //ACT
         Mono<Void> response = emailSenderService.sendEmailToStudent(principalEmail, receiver, subject, content);

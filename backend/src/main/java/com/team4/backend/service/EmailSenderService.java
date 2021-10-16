@@ -37,7 +37,7 @@ public class EmailSenderService {
                             sendEmail(sender, receiver, subject, content));
     }
 
-    public Mono<Void> sendEmail(String sender, String receiver, String subject, String content) {
+    protected Mono<Void> sendEmail(String sender, String receiver, String subject, String content) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = new MimeMessageHelper(message, true);
