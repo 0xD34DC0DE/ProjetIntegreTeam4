@@ -1,6 +1,5 @@
 package com.team4.backend.service;
 
-import com.team4.backend.model.Student;
 import com.team4.backend.repository.MonitorRepository;
 import com.team4.backend.repository.StudentRepository;
 import org.junit.jupiter.api.Test;
@@ -14,8 +13,6 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.mockito.Mockito.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @EnableAutoConfiguration
 @ExtendWith(MockitoExtension.class)
@@ -45,10 +42,10 @@ class EmailSenderServiceTest {
     @Test
     void sendEmailToStudent() {
 //        //ARRANGE
-        when(monitorRepository.existsByEmailAndIsEnabledTrue(sender)).thenReturn(Mono.just(true));
+        when(monitorRepository.existsByEmailAndIsEnabledTrue(principalEmail)).thenReturn(Mono.just(true));
         when(studentRepository.existsByEmail(receiver)).thenReturn(Mono.just(true));
 
-        Mono<Void> response = emailSenderService.sendEmailToStudent(sender, receiver, subject, content, principalEmail);
+        Mono<Void> response = emailSenderService.sendEmailToStudent(principalEmail, receiver, subject, content);
 
         //ACT & ASSERT
         StepVerifier.create(response).verifyComplete();

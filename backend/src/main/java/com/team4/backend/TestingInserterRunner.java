@@ -215,7 +215,6 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isValidated(true)
                         .validationDate(null)
                         .isExclusive(false)
-                        // Temporary data modification so i can test the security
                         .listEmailInterestedStudents(Collections.emptyList())
                         .build(),
                 InternshipOffer.builder()

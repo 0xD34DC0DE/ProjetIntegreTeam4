@@ -7,8 +7,6 @@ import com.team4.backend.model.enums.UploadType;
 import com.team4.backend.repository.FileMetaDataRepository;
 import com.team4.backend.util.ValidatingPageRequest;
 import lombok.extern.java.Log;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;

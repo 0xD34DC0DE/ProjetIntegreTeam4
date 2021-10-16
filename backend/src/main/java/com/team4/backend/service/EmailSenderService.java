@@ -33,7 +33,7 @@ public class EmailSenderService {
         this.javaMailSender = javaMailSender;
     }
 
-    public Mono<Void> sendEmailToStudent(String sender, String receiver, String subject, String content, String principalEmail) {
+    public Mono<Void> sendEmailToStudent(String sender, String receiver, String subject, String content) {
 
         return monitorExistsByEmailAndIsEnabledTrue(sender)
                 .flatMap(s -> {

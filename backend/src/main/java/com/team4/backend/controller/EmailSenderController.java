@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import java.net.http.HttpResponse;
 import java.security.Principal;
 
 @RestController
@@ -24,8 +23,8 @@ public class EmailSenderController {
 
     @PostMapping
     @PreAuthorize("hasAnyAuthority('MONITOR')")
-    public Mono<ResponseEntity<String>> sendEmailToStudent(@RequestPart("sender") String sender, @RequestPart("receiver") String receiver, @RequestPart("subject") String subject, @RequestPart("content") String content, Principal principal) {
-        return emailSenderService.sendEmailToStudent(sender, receiver, subject, content, OwnershipService.getLoggedUserName(principal))
+    public Mono<ResponseEntity<String>> sendEmailToStudent(@RequestPart("receiver") String receiver, @RequestPart("subject") String subject, @RequestPart("content") String content, Principal principal) {
+        return emailSenderService.sendEmailToStudent(OwnershipService.getLoggedUserName(principal), receiver, subject, content)
                 .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.OK).body("")))
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
     }

@@ -42,13 +42,13 @@ class EmailSenderControllerTest {
     @Test
     void shouldSendEmailToStudent() {
         //ARRANGE
-        when(emailSenderService.sendEmailToStudent(sender, receiver, subject, content, principalEmail)).thenReturn(Mono.empty());
+        when(emailSenderService.sendEmailToStudent(principalEmail, receiver, subject, content)).thenReturn(Mono.empty());
 
         MultipartBodyBuilder builder = new MultipartBodyBuilder();
 
-        builder.part("sender", sender);
+        builder.part("sender", principalEmail);
         builder.part("receiver", receiver);
-        builder.part("sender", sender);
+        builder.part("subject", subject);
         builder.part("content", content);
 
         MultiValueMap<String, HttpEntity<?>> multiValueMap = builder.build();
