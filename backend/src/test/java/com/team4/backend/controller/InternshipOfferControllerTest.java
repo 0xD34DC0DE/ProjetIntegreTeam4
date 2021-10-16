@@ -24,6 +24,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.security.Principal;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -279,7 +280,7 @@ public class InternshipOfferControllerTest {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.applyOffer(any(String.class))).then(s -> {
+        when(internshipOfferService.applyOffer(any(String.class), any(Principal.class))).then(s -> {
             internshipOffer.getListEmailInterestedStudents().add("student@gmail.com");
             return Mono.just(internshipOffer);
         });
@@ -299,7 +300,7 @@ public class InternshipOfferControllerTest {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.applyOffer(internshipOffer.getId()))
+        when(internshipOfferService.applyOffer(internshipOffer.getId(), any(Principal.class)))
                 .thenReturn(Mono.error(UnauthorizedException::new));
 
         //ACT
@@ -316,7 +317,7 @@ public class InternshipOfferControllerTest {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.applyOffer(internshipOffer.getId()))
+        when(internshipOfferService.applyOffer(internshipOffer.getId(), any(Principal.class)))
                 .thenReturn(Mono.error(InternshipOfferNotFoundException::new));
 
         //ACT

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.security.Principal;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -109,7 +110,7 @@ public class InternshipOfferService {
                 .map(count -> (long) Math.ceil((double) count / (double) size));
     }
 
-    public Mono<InternshipOffer> applyOffer(String any) {
+    public Mono<InternshipOffer> applyOffer(String any, Principal principal) {
         return Mono.empty();
     }
 }
