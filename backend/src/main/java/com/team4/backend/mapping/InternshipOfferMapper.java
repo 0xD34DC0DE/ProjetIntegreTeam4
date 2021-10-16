@@ -47,12 +47,10 @@ public abstract class InternshipOfferMapper {
                 .beginningDate(internshipOffer.getBeginningDate())
                 .endingDate(internshipOffer.getEndingDate())
                 .companyName(internshipOffer.getCompanyName())
-                .emailOfMonitor(internshipOffer.getEmailOfMonitor())
                 .description(internshipOffer.getDescription())
                 .minSalary(internshipOffer.getMinSalary())
                 .maxSalary(internshipOffer.getMaxSalary())
-                .listEmailInterestedStudents(internshipOffer.getListEmailInterestedStudents())
-                .isValidated(internshipOffer.getIsValidated()).build();
+                .build();
     }
 
     public static InternshipOfferMonitorViewDto toMonitorView(InternshipOffer internshipOffer) {
