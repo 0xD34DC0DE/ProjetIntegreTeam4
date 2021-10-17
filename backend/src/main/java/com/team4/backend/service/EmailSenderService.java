@@ -28,7 +28,6 @@ public class EmailSenderService {
     }
 
     public Mono<Void> sendEmailToStudent(String sender, String receiver, String subject, String content) {
-
         return studentService.findByEmail(receiver)
                 .flatMap(student -> internshipOfferService.monitorOffersInterestedStudentsContainsStudentEmail(receiver, sender))
                 .flatMap( studentInMonitorListResponse ->
@@ -40,7 +39,7 @@ public class EmailSenderService {
     protected Mono<Void> sendEmail(String sender, String receiver, String subject, String content) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
-            MimeMessageHelper helper = new MimeMessageHelper(message, true);
+            MimeMessageHelper helper = getHelper(message);
             helper.setTo(sender);
             helper.setTo(receiver);
             helper.setSubject(subject);
@@ -52,4 +51,7 @@ public class EmailSenderService {
         return Mono.empty();
     }
 
+    protected MimeMessageHelper getHelper(MimeMessage message) throws MessagingException {
+        return new MimeMessageHelper(message, true);
+    }
 }
