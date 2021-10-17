@@ -3,11 +3,13 @@ package com.team4.backend.service;
 import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
+import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.InternshipOfferRepository;
+import com.team4.backend.security.UserSessionService;
 import com.team4.backend.util.ExperimentalValidatingPageRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -33,6 +35,13 @@ public class InternshipOfferService {
         this.studentService = studentService;
     }
 
+    private Mono<InternshipOffer> findInternshipOfferById(String offerId) {
+        return internshipOfferRepository.findById(offerId)
+                .switchIfEmpty(
+                        Mono.error(new InternshipOfferNotFoundException("Can't find internship offer with this id"))
+                );
+    }
+
     public Mono<InternshipOffer> addAnInternshipOffer(InternshipOfferCreationDto internshipOfferDTO) {
         return monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getEmailOfMonitor())
                 .flatMap(exist -> exist ?
@@ -41,12 +50,7 @@ public class InternshipOfferService {
     }
 
     public Flux<InternshipOffer> getStudentExclusiveOffers(String studentEmail, Integer page, Integer size) {
-        return studentService.getStudent(studentEmail)
-                .switchIfEmpty(
-                        Mono.error(
-                                new UserNotFoundException("Could not find student with email: " + studentEmail)
-                        )
-                )
+        return studentService.findByEmail(studentEmail)
                 .map(Student::getExclusiveOffersId)
                 .flatMapMany(offerIdList ->
                         ExperimentalValidatingPageRequest.applyPaging(offerIdList, page, size)
@@ -75,8 +79,7 @@ public class InternshipOfferService {
     }
 
     public Mono<InternshipOffer> validateInternshipOffer(String id, Boolean isValid) {
-        return internshipOfferRepository.findById(id)
-                .switchIfEmpty(Mono.error(new InternshipOfferNotFoundException("Can't find internship offer with this id")))
+        return findInternshipOfferById(id)
                 .map(offer -> {
                     offer.setIsValidated(isValid);
                     offer.setValidationDate(LocalDateTime.now());
@@ -102,15 +105,44 @@ public class InternshipOfferService {
             return Mono.error(new UserNotFoundException("Email is null"));
         }
 
-        return studentService.getStudent(studentEmail)
-                .switchIfEmpty(
-                        Mono.error(new UserNotFoundException("Could not find student with email: " + studentEmail))
-                )
+        return studentService.findByEmail(studentEmail)
                 .map(student -> student.getExclusiveOffersId().size())
                 .map(count -> (long) Math.ceil((double) count / (double) size));
     }
 
-    public Mono<InternshipOffer> applyOffer(String any, Principal principal) {
-        return Mono.empty();
+    public Mono<InternshipOffer> applyOffer(String offerId, Principal principal) {
+        return findInternshipOfferById(offerId)
+                .flatMap(internshipOffer -> {
+                            if(!internshipOffer.getIsValidated()) {
+                                return Mono.error(new UnauthorizedException("Cannot apply to unvalidated offers"));
+                            }
+                            return studentService.findByEmail(UserSessionService.getLoggedUserEmail(principal))
+                                    .flatMap(student ->
+                                            addStudentEmailToOfferInterestedStudents(internshipOffer, student)
+                                    );
+                        }
+                );
+    }
+
+    private Mono<InternshipOffer> addStudentEmailToOfferInterestedStudents(InternshipOffer internshipOffer,
+                                                                           Student student) {
+        return Mono.just(internshipOffer).flatMap(offer -> {
+            if (offer.getIsExclusive()) {
+                if (!student.getExclusiveOffersId().contains(offer.getId())) {
+                    return Mono.error(
+                            new UnauthorizedException("Student is not allowed to apply to this exclusive offer")
+                    );
+                }
+            }
+            return Mono.just(offer);
+        }).flatMap(offer -> {
+            if (!offer.getListEmailInterestedStudents().contains(student.getEmail())) {
+                offer.getListEmailInterestedStudents().add(student.getEmail());
+                return studentService.addOfferToStudentAppliedOffers(student, offer.getId()).then(
+                    internshipOfferRepository.save(offer)
+                );
+            }
+            return Mono.just(offer);
+        });
     }
 }
