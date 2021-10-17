@@ -1,7 +1,7 @@
 package com.team4.backend.mapping;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
-import com.team4.backend.dto.InternshipOfferDto;
+import com.team4.backend.dto.InternshipOfferDetailedDto;
 import com.team4.backend.dto.InternshipOfferMonitorViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.model.InternshipOffer;
@@ -40,8 +40,8 @@ public abstract class InternshipOfferMapper {
                 .build();
     }
 
-    public static InternshipOfferDto toDto(InternshipOffer internshipOffer) {
-        return InternshipOfferDto.builder()
+    public static InternshipOfferDetailedDto toDto(InternshipOffer internshipOffer) {
+        return InternshipOfferDetailedDto.internshipOfferDetailedDtoBuilder()
                 .id(internshipOffer.getId())
                 .limitDateToApply(internshipOffer.getLimitDateToApply())
                 .beginningDate(internshipOffer.getBeginningDate())

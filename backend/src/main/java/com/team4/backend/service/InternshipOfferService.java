@@ -108,10 +108,4 @@ public class InternshipOfferService {
                 .map(count -> (long) Math.ceil((double) count / (double) size));
     }
 
-    public Flux<Student> getInterestedStudents(String emailOfMonitor) {
-        return internshipOfferRepository.findAllByEmailOfMonitorAndIsValidatedTrue(emailOfMonitor)
-                .filter(internshipOffer -> internshipOffer.getListEmailInterestedStudents() != null)
-                .flatMap(internshipOffer -> studentService.findAllByEmail(internshipOffer.getListEmailInterestedStudents()));
-    }
-
 }

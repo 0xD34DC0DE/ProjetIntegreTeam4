@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.dto.InternshipOfferDetailedDto;
 import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InternshipOfferNotFoundException;
@@ -40,16 +41,16 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldAddAnInternshipOffer() {
         //ARRANGE
-        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferCreationDto();
+        InternshipOfferCreationDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferCreationDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferService.addAnInternshipOffer(internshipOfferDto)).thenReturn(Mono.just(internshipOffer));
 
         //ACT
         webTestClient
                 .post()
                 .uri("/internshipOffer/addAnInternshipOffer")
-                .bodyValue(internshipOfferDTO)
+                .bodyValue(internshipOfferDto)
                 .exchange()
                 //ASSERT
                 .expectStatus().isCreated()
@@ -59,15 +60,15 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldNotAddAnInternshipOffer() {
         //ARRANGE
-        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferCreationDto();
+        InternshipOfferCreationDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferCreationDto();
 
-        when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.error(UserNotFoundException::new));
+        when(internshipOfferService.addAnInternshipOffer(internshipOfferDto)).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
         webTestClient
                 .post()
                 .uri("/internshipOffer/addAnInternshipOffer")
-                .bodyValue(internshipOfferDTO)
+                .bodyValue(internshipOfferDto)
                 .exchange()
                 //ASSERT
                 .expectStatus().isNotFound()
@@ -77,10 +78,10 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldValidateInternshipOffer() {
         //ARRANGE
-        InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOfferDetailedDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.validateInternshipOffer(internshipOfferDTO.getId(), true)).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferService.validateInternshipOffer(internshipOfferDto.getId(), true)).thenReturn(Mono.just(internshipOffer));
 
         //ACT
         webTestClient
@@ -88,10 +89,10 @@ public class InternshipOfferControllerTest {
                 .uri(uriBuilder ->
                         uriBuilder
                                 .path("/internshipOffer/validateInternshipOffer")
-                                .queryParam("id", internshipOfferDTO.getId())
+                                .queryParam("id", internshipOfferDto.getId())
                                 .queryParam("isValid", true)
                                 .build())
-                .bodyValue(internshipOfferDTO)
+                .bodyValue(internshipOfferDto)
                 .exchange()
                 //ASSERT
                 .expectStatus().isNoContent()
@@ -111,16 +112,15 @@ public class InternshipOfferControllerTest {
                 .exchange()
                 // ASSERT
                 .expectStatus().isOk()
-                .expectBodyList(InternshipOfferDto.class);
+                .expectBodyList(InternshipOfferDetailedDto.class);
     }
 
     @Test
     void shouldNotValidateInternshipOffer() {
         //ARRANGE
-        InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
-        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+        InternshipOfferDetailedDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
 
-        when(internshipOfferService.validateInternshipOffer(internshipOfferDTO.getId(), true)).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
+        when(internshipOfferService.validateInternshipOffer(internshipOfferDto.getId(), true)).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
 
         //ACT
         webTestClient
@@ -128,10 +128,10 @@ public class InternshipOfferControllerTest {
                 .uri(uriBuilder ->
                         uriBuilder
                                 .path("/internshipOffer/validateInternshipOffer")
-                                .queryParam("id", internshipOfferDTO.getId())
+                                .queryParam("id", internshipOfferDto.getId())
                                 .queryParam("isValid", true)
                                 .build())
-                .bodyValue(internshipOfferDTO)
+                .bodyValue(internshipOfferDto)
                 .exchange()
                 //ASSERT
                 .expectStatus().isNotFound()
