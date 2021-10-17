@@ -8,10 +8,8 @@ import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.InternshipOffer;
-import com.team4.backend.model.Student;
 import com.team4.backend.service.InternshipOfferService;
 import com.team4.backend.testdata.InternshipOfferMockData;
-import com.team4.backend.testdata.StudentMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,10 +22,10 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.security.Principal;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
@@ -280,7 +278,7 @@ public class InternshipOfferControllerTest {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.applyOffer(any(String.class), any(Principal.class))).then(s -> {
+        when(internshipOfferService.applyOffer(eq(internshipOffer.getId()), any())).then(s -> {
             internshipOffer.getListEmailInterestedStudents().add("student@gmail.com");
             return Mono.just(internshipOffer);
         });
@@ -291,7 +289,7 @@ public class InternshipOfferControllerTest {
                 .uri("/internshipOffer/apply/" + internshipOffer.getId())
                 .exchange()
                 //ASSERT
-                .expectStatus().isOk()
+                .expectStatus().isNoContent()
                 .expectBody().isEmpty();
     }
 
@@ -300,7 +298,7 @@ public class InternshipOfferControllerTest {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.applyOffer(internshipOffer.getId(), any(Principal.class)))
+        when(internshipOfferService.applyOffer(eq(internshipOffer.getId()), any()))
                 .thenReturn(Mono.error(UnauthorizedException::new));
 
         //ACT
@@ -317,7 +315,7 @@ public class InternshipOfferControllerTest {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.applyOffer(internshipOffer.getId(), any(Principal.class)))
+        when(internshipOfferService.applyOffer(eq(internshipOffer.getId()), any()))
                 .thenReturn(Mono.error(InternshipOfferNotFoundException::new));
 
         //ACT
