@@ -16,7 +16,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.security.Principal;
-import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -35,7 +34,7 @@ public class InternshipOfferService {
         this.studentService = studentService;
     }
 
-    private Mono<InternshipOffer> findInternshipOfferById(String offerId) {
+    public Mono<InternshipOffer> findInternshipOfferById(String offerId) {
         return internshipOfferRepository.findById(offerId)
                 .switchIfEmpty(
                         Mono.error(new InternshipOfferNotFoundException("Can't find internship offer with this id"))
