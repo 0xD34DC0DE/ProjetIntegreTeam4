@@ -79,11 +79,52 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private void insertStudents() {
         List<Student> students = Arrays.asList(
-                Student.studentBuilder().email("123456789@gmail.com").firstName("Travis").lastName("Scott").phoneNumber("4387650987").password(pbkdf2Encoder.encode("travis123")).hasValidCv(false).build(),
-                Student.studentBuilder().email("3643283423@gmail.com").firstName("Jean").lastName("Jordan").phoneNumber("5143245678").password(pbkdf2Encoder.encode("jean123")).hasValidCv(false).build(),
-                Student.studentBuilder().email("123667713@gmail.com").firstName("Farid").lastName("Shalom").phoneNumber("4385738764").password(pbkdf2Encoder.encode("farid123")).hasValidCv(false).build(),
-                Student.studentBuilder().email("902938912@gmail.com").firstName("Kevin").lastName("Alphonse").phoneNumber("4385738764").password(pbkdf2Encoder.encode("kevin123")).hasValidCv(false).build(),
-                Student.studentBuilder().email("student@gmail.com").password(pbkdf2Encoder.encode("student")).firstName("John").lastName("Doe").registrationDate(LocalDate.now()).studentState(StudentState.REGISTERED).phoneNumber("123-123-1234").exclusiveOffersId(Collections.singleton(insertInternshipOffersStudentView())).build()
+                Student.studentBuilder()
+                        .email("123456789@gmail.com")
+                        .firstName("Travis")
+                        .lastName("Scott")
+                        .phoneNumber("4387650987")
+                        .password(pbkdf2Encoder.encode("travis123"))
+                        .hasValidCv(false)
+                        .appliedOffersId(Collections.emptyList())
+                        .build(),
+                Student.studentBuilder()
+                        .email("3643283423@gmail.com")
+                        .firstName("Jean")
+                        .lastName("Jordan")
+                        .phoneNumber("5143245678")
+                        .password(pbkdf2Encoder.encode("jean123"))
+                        .hasValidCv(false)
+                        .appliedOffersId(Collections.emptyList())
+                        .build(),
+                Student.studentBuilder()
+                        .email("123667713@gmail.com")
+                        .firstName("Farid")
+                        .lastName("Shalom")
+                        .phoneNumber("4385738764")
+                        .password(pbkdf2Encoder.encode("farid123"))
+                        .hasValidCv(false)
+                        .appliedOffersId(Collections.emptyList())
+                        .build(),
+                Student.studentBuilder()
+                        .email("902938912@gmail.com")
+                        .firstName("Kevin")
+                        .lastName("Alphonse")
+                        .phoneNumber("4385738764")
+                        .password(pbkdf2Encoder.encode("kevin123"))
+                        .appliedOffersId(Collections.emptyList())
+                        .hasValidCv(false).build(),
+                Student.studentBuilder()
+                        .email("student@gmail.com")
+                        .password(pbkdf2Encoder.encode("student"))
+                        .firstName("John")
+                        .lastName("Doe")
+                        .registrationDate(LocalDate.now())
+                        .studentState(StudentState.REGISTERED)
+                        .phoneNumber("123-123-1234")
+                        .appliedOffersId(Collections.emptyList())
+                        .exclusiveOffersId(Collections.singleton(insertInternshipOffersStudentView()))
+                        .build()
         );
 
         studentRepository.saveAll(students).subscribe(student -> log.info("Student has been saved : {}", student));
@@ -157,6 +198,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .maxSalary(22.0f)
                         .isValidated(false)
                         .isExclusive(false)
+                        .listEmailInterestedStudents(Collections.emptyList())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -169,6 +211,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .maxSalary(22.0f)
                         .isValidated(false)
                         .isExclusive(false)
+                        .listEmailInterestedStudents(Collections.emptyList())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -181,6 +224,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .maxSalary(20.0f)
                         .isValidated(false)
                         .isExclusive(false)
+                        .listEmailInterestedStudents(Collections.emptyList())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -194,6 +238,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isValidated(false)
                         .validationDate(null)
                         .isExclusive(false)
+                        .listEmailInterestedStudents(Collections.emptyList())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -207,6 +252,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isValidated(true)
                         .validationDate(null)
                         .isExclusive(false)
+                        .listEmailInterestedStudents(Collections.emptyList())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -220,6 +266,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isValidated(false)
                         .validationDate(null)
                         .isExclusive(false)
+                        .listEmailInterestedStudents(Collections.emptyList())
                         .build()
         );
 
