@@ -97,7 +97,7 @@ public class InternshipOfferServiceTest {
         InternshipOffer internshipOffer2 = InternshipOfferMockData.getInternshipOffer();
         internshipOffer2.setId(exclusiveOfferIds.get(1));
 
-        when(studentService.getStudent(any(String.class))).thenReturn(Mono.just(student));
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
                 same(exclusiveOfferIds.get(0)), any(LocalDate.class))
@@ -127,7 +127,7 @@ public class InternshipOfferServiceTest {
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
         internshipOffer.setId(exclusiveOfferIds.get(1));
 
-        when(studentService.getStudent(any(String.class))).thenReturn(Mono.just(student));
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
                 same(exclusiveOfferIds.get(1)), any(LocalDate.class))
@@ -146,7 +146,7 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldNotGetExclusiveInternshipOfferStudentViewsInvalidEmail() {
         //ARRANGE
-        when(studentService.getStudent(any(String.class))).thenReturn(Mono.error(UserNotFoundException::new));
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
         Flux<InternshipOffer> internshipOfferFlux =
@@ -162,7 +162,7 @@ public class InternshipOfferServiceTest {
     void shouldNotGetExclusiveInternshipOfferStudentViewsInvalidPageSize() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
-        when(studentService.getStudent(any(String.class))).thenReturn(Mono.just(student));
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         //ACT
         Flux<InternshipOffer> internshipOfferFlux =
@@ -240,7 +240,7 @@ public class InternshipOfferServiceTest {
     void shouldGetExclusiveInternshipOfferPageCount() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
-        when(studentService.getStudent(any(String.class))).thenReturn(Mono.just(student));
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         //ACT
         Mono<Long> pageCountMono = internshipOfferService.getInternshipOffersPageCount(student.getEmail(), 1);
@@ -280,7 +280,7 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldNotGetGeneralInternshipOfferPageCountInvalidEmail() {
         //ARRANGE
-        when(studentService.getStudent(any(String.class))).thenReturn(Mono.error(UserNotFoundException::new));
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
         Mono<Long> pageCountMono = internshipOfferService.getInternshipOffersPageCount("invalid@gmail.com", 1);
@@ -363,24 +363,31 @@ public class InternshipOfferServiceTest {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
         Student student = StudentMockData.getMockStudent();
-        internshipOffer.getListEmailInterestedStudents().add(student.getEmail());
 
-        when(UserSessionService.getLoggedUserEmail(any(Principal.class))).thenReturn(student.getEmail());
-        when(internshipOfferRepository.findById(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
-        when(studentService.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
+        Principal principal = mock(Principal.class);
+        when(UserSessionService.getLoggedUserEmail(principal)).thenReturn(student.getEmail());
+
+        when(internshipOfferRepository.findById(any(String.class))).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
+
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
+        when(studentService.addOfferToStudentAppliedOffers(any(Student.class), any(String.class)))
+                .then(s -> {
+                    student.getAppliedOffersId().add(internshipOffer.getId());
+                    return Mono.just(student);
+                });
+
+        int sizeBefore = InternshipOfferMockData.getInternshipOffer().getListEmailInterestedStudents().size();
 
         //ACT
         Mono<InternshipOffer> internshipOfferMono = internshipOfferService.applyOffer(
                 internshipOffer.getId(),
-                any(Principal.class)
+                principal
         );
 
         //ASSERT
         StepVerifier.create(internshipOfferMono)
-                .assertNext(offer -> {
-                    assertEquals(1, offer.getListEmailInterestedStudents().size());
-                    assertEquals(student.getEmail(), offer.getListEmailInterestedStudents().get(0));
-                })
+                .assertNext(offer -> assertEquals(sizeBefore + 1, offer.getListEmailInterestedStudents().size()))
                 .verifyComplete();
     }
 
@@ -391,14 +398,15 @@ public class InternshipOfferServiceTest {
         Student student = StudentMockData.getMockStudent();
         internshipOffer.getListEmailInterestedStudents().add(student.getEmail());
 
-        when(UserSessionService.getLoggedUserEmail(any(Principal.class))).thenReturn(student.getEmail());
+        Principal principal = mock(Principal.class);
+        when(UserSessionService.getLoggedUserEmail(principal)).thenReturn(student.getEmail());
         when(internshipOfferRepository.findById(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
         when(studentService.findByEmail(student.getEmail())).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
         Mono<InternshipOffer> internshipOfferMono = internshipOfferService.applyOffer(
                 internshipOffer.getId(),
-                any(Principal.class)
+                principal
         );
 
         //ASSERT
@@ -414,15 +422,14 @@ public class InternshipOfferServiceTest {
         Student student = StudentMockData.getMockStudent();
         internshipOffer.getListEmailInterestedStudents().add(student.getEmail());
 
-        when(UserSessionService.getLoggedUserEmail(any(Principal.class))).thenReturn(student.getEmail());
+        Principal principal = mock(Principal.class);
         when(internshipOfferRepository.findById(internshipOffer.getId()))
                 .thenReturn(Mono.error(InternshipOfferNotFoundException::new));
-        when(studentService.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
 
         //ACT
         Mono<InternshipOffer> internshipOfferMono = internshipOfferService.applyOffer(
                 internshipOffer.getId(),
-                any(Principal.class)
+                principal
         );
 
         //ASSERT
@@ -435,16 +442,20 @@ public class InternshipOfferServiceTest {
     void shouldNotApplyInternshipOfferNotInExclusiveStudents() {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+        internshipOffer.setIsExclusive(true);
         Student student = StudentMockData.getMockStudent();
 
-        when(UserSessionService.getLoggedUserEmail(any(Principal.class))).thenReturn(student.getEmail());
+        Principal principal = mock(Principal.class);
+        when(UserSessionService.getLoggedUserEmail(principal)).thenReturn(student.getEmail());
+
         when(internshipOfferRepository.findById(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
+
         when(studentService.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
 
         //ACT
         Mono<InternshipOffer> internshipOfferMono = internshipOfferService.applyOffer(
                 internshipOffer.getId(),
-                any(Principal.class)
+                principal
         );
 
         //ASSERT
