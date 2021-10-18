@@ -57,7 +57,7 @@ public class InternshipOfferMapperTest {
 
         //ACT
         InternshipOfferMonitorViewDto internshipOfferMonitorViewDto =
-                InternshipOfferMapper.toMonitorView(internshipOffer);
+                InternshipOfferMapper.toMonitorViewDto(internshipOffer);
 
         //ASSERT
         assertEquals(internshipOffer.getId(), internshipOfferMonitorViewDto.getId());

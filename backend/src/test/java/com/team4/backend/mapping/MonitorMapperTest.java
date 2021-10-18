@@ -1,6 +1,6 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.MonitorCreationDto;
+import com.team4.backend.dto.MonitorDetailsDto;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.testdata.MonitorMockData;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ public class MonitorMapperTest {
         Monitor entity = MonitorMockData.getMockMonitor();
 
         //ACT
-        MonitorCreationDto dto = MonitorMapper.toDto(entity);
+        MonitorDetailsDto dto = MonitorMapper.toDto(entity);
 
         //ASSERT
         assertNull(dto.getPassword());
@@ -33,7 +33,7 @@ public class MonitorMapperTest {
     @Test
     void mapDtoToEntity() {
         //ARRANGE
-        MonitorCreationDto dto = MonitorMockData.getMockMonitorDto();
+        MonitorDetailsDto dto = MonitorMockData.getMockMonitorDto();
 
         //ACT
         Monitor entity = MonitorMapper.toEntity(dto);

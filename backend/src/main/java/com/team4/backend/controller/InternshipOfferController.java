@@ -2,6 +2,7 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.dto.InternshipOfferDetailedDto;
+import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
@@ -98,6 +99,12 @@ public class InternshipOfferController {
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
     public Flux<InternshipOfferDetailedDto> getNotYetValidatedInternshipOffers() {
         return internshipOfferService.getNotYetValidatedInternshipOffers().map(InternshipOfferMapper::toDto);
+    }
+
+    @GetMapping("/interestedStudents/{emailOfMonitor}")
+    @PreAuthorize("hasAnyAuthority('MONITOR')")
+    public Flux<InternshipOfferStudentInterestViewDto> internshipOfferInterestedStudents(@PathVariable String emailOfMonitor) {
+        return internshipOfferService.getInterestedStudents(emailOfMonitor);
     }
 
 }

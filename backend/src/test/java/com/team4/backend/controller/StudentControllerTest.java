@@ -1,6 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.StudentCreationDto;
+import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Student;
 import com.team4.backend.service.StudentService;
@@ -34,7 +34,7 @@ public class StudentControllerTest {
     @Test
     public void shouldCreateStudent() {
         //ARRANGE
-        StudentCreationDto studentCreationDto = StudentMockData.getMockStudentDto();
+        StudentDetailsDto studentCreationDto = StudentMockData.getMockStudentDto();
 
         studentCreationDto.setId(null);
 
@@ -61,7 +61,7 @@ public class StudentControllerTest {
     @Test
     public void shouldNotCreateStudent() {
         //ARRANGE
-        StudentCreationDto studentCreationDto = StudentMockData.getMockStudentDto();
+        StudentDetailsDto studentCreationDto = StudentMockData.getMockStudentDto();
 
         studentCreationDto.setId(null);
 

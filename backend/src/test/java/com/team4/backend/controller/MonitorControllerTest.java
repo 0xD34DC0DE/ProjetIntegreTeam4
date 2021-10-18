@@ -1,6 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.MonitorCreationDto;
+import com.team4.backend.dto.MonitorDetailsDto;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.service.MonitorService;
@@ -16,7 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -39,7 +38,7 @@ public class MonitorControllerTest {
     @Test
     public void shouldCreateMonitor() {
         //ARRANGE
-        MonitorCreationDto monitorDto = MonitorMockData.getMockMonitorDto();
+        MonitorDetailsDto monitorDto = MonitorMockData.getMockMonitorDto();
 
         monitorDto.setId(null); // Frontend gives null id
 
@@ -66,7 +65,7 @@ public class MonitorControllerTest {
     @Test
     public void shouldNotCreateMonitor() {
         //ARRANGE
-        MonitorCreationDto monitorDto = MonitorMockData.getMockMonitorDto();
+        MonitorDetailsDto monitorDto = MonitorMockData.getMockMonitorDto();
 
         monitorDto.setId(null); // Frontend gives null id
 

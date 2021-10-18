@@ -1,13 +1,13 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.StudentCreationDto;
+import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.model.Student;
 
 import java.time.LocalDate;
 
 public abstract class StudentMapper {
 
-    public static Student toEntity(StudentCreationDto studentCreationDto) {
+    public static Student toEntity(StudentDetailsDto studentCreationDto) {
         return Student.studentBuilder()
                 .email(studentCreationDto.getEmail())
                 .password(studentCreationDto.getPassword())
@@ -20,8 +20,8 @@ public abstract class StudentMapper {
                 .build();
     }
 
-    public static StudentCreationDto toDto(Student student) {
-        return StudentCreationDto.builder()
+    public static StudentDetailsDto toDto(Student student) {
+        return StudentDetailsDto.builder()
                 .id(student.getId())
                 .email(student.getEmail())
                 .firstName(student.getFirstName())

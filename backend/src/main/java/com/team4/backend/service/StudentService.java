@@ -46,7 +46,7 @@ public class StudentService {
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
     }
 
-    public Flux<Student> findAllByEmail(List<String> emails) {
+    public Flux<Student> findAllByEmails(List<String> emails) {
         return studentRepository.findAllByEmails(emails);
     }
 

@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
@@ -106,6 +107,20 @@ public class InternshipOfferService {
                 )
                 .map(student -> student.getExclusiveOffersId().size())
                 .map(count -> (long) Math.ceil((double) count / (double) size));
+    }
+
+    public Flux<InternshipOfferStudentInterestViewDto> getInterestedStudents(String emailOfMonitor) {
+        return internshipOfferRepository.findAllByEmailOfMonitorAndIsValidatedTrue(emailOfMonitor)
+                .filter(internshipOffer -> internshipOffer.getListEmailInterestedStudents() != null)
+                .flatMap(internshipOffer -> {
+                    InternshipOfferStudentInterestViewDto internshipOfferDto = InternshipOfferMapper.toStudentInterestViewDto(internshipOffer);
+                    return studentService.findAllByEmails(internshipOffer.getListEmailInterestedStudents())
+                            .collectList()
+                            .flatMap(students -> {
+                                internshipOfferDto.setInterestedStudentList(students);
+                                return Mono.just(internshipOfferDto);
+                            });
+                });
     }
 
 }
