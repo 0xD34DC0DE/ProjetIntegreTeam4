@@ -1,6 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.MonitorDto;
+import com.team4.backend.dto.MonitorCreationDto;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.service.MonitorService;
@@ -38,7 +38,7 @@ public class MonitorControllerTest {
     @Test
     public void shouldCreateMonitor() {
         //ARRANGE
-        MonitorDto monitorDto = MonitorMockData.getMockMonitorDto();
+        MonitorCreationDto monitorDto = MonitorMockData.getMockMonitorDto();
 
         monitorDto.setId(null); // Frontend gives null id
 
@@ -65,7 +65,7 @@ public class MonitorControllerTest {
     @Test
     public void shouldNotCreateMonitor() {
         //ARRANGE
-        MonitorDto monitorDto = MonitorMockData.getMockMonitorDto();
+        MonitorCreationDto monitorDto = MonitorMockData.getMockMonitorDto();
 
         monitorDto.setId(null); // Frontend gives null id
 

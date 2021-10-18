@@ -1,8 +1,7 @@
 package com.team4.backend.controller;
 
 
-import com.team4.backend.dto.StudentDto;
-import com.team4.backend.exception.UserAlreadyExistsException;
+import com.team4.backend.dto.StudentCreationDto;
 import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.service.StudentService;
 import org.springframework.http.HttpStatus;
@@ -24,8 +23,8 @@ public class StudentController {
     }
 
     @PostMapping("/register")
-    public Mono<ResponseEntity<String>> register(@RequestBody StudentDto studentDto) {
-        return studentService.registerStudent(StudentMapper.toEntity(studentDto))
+    public Mono<ResponseEntity<String>> register(@RequestBody StudentCreationDto studentCreationDto) {
+        return studentService.registerStudent(StudentMapper.toEntity(studentCreationDto))
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(error.getMessage())));
         //TODO add a non-handled exception to make sure it returns 500 and not 409

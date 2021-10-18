@@ -1,6 +1,6 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.SupervisorDto;
+import com.team4.backend.dto.SupervisorCreationDto;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.testdata.SupervisorMockData;
 import org.junit.jupiter.api.Test;
@@ -13,7 +13,7 @@ public class SupervisorMapperTest {
     @Test
     void mapDtoToEntity() {
         //ARANGE
-        SupervisorDto dto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorCreationDto dto = SupervisorMockData.getMockSupervisorDto();
 
         //ACT
         Supervisor entity = SupervisorMapper.toEntity(dto);
@@ -35,7 +35,7 @@ public class SupervisorMapperTest {
         Supervisor entity = SupervisorMockData.getMockSupervisor();
 
         //ACT
-        SupervisorDto dto = SupervisorMapper.toDto(entity);
+        SupervisorCreationDto dto = SupervisorMapper.toDto(entity);
 
         //ASSERT
         assertNull(dto.getPassword()); // password shouldn't be given to frontend

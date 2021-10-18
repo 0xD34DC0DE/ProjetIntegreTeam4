@@ -1,12 +1,12 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.InternshipManagerDto;
+import com.team4.backend.dto.InternshipManagerCreationDto;
 import com.team4.backend.model.InternshipManager;
 
 public abstract class InternshipManagerMapper {
 
-    public static InternshipManagerDto toDto(InternshipManager internshipManager) {
-        return InternshipManagerDto.builder()
+    public static InternshipManagerCreationDto toDto(InternshipManager internshipManager) {
+        return InternshipManagerCreationDto.builder()
                 .id(internshipManager.getId())
                 .email(internshipManager.getEmail())
                 .firstName(internshipManager.getFirstName())
@@ -16,7 +16,7 @@ public abstract class InternshipManagerMapper {
                 .build();
     }
 
-    public static InternshipManager toEntity(InternshipManagerDto internshipManagerDto) {
+    public static InternshipManager toEntity(InternshipManagerCreationDto internshipManagerDto) {
         return InternshipManager.internshipManagerBuilder()
                 .id(internshipManagerDto.getId())
                 .email(internshipManagerDto.getEmail())

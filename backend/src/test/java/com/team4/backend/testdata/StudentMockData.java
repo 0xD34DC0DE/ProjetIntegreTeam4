@@ -1,6 +1,6 @@
 package com.team4.backend.testdata;
 
-import com.team4.backend.dto.StudentDto;
+import com.team4.backend.dto.StudentCreationDto;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.StudentState;
 
@@ -23,8 +23,8 @@ public abstract class StudentMockData {
                 .build();
     }
 
-    public static StudentDto getMockStudentDto() {
-        return StudentDto.builder()
+    public static StudentCreationDto getMockStudentDto() {
+        return StudentCreationDto.builder()
                 .id("mock_id")
                 .email("123456789@gmail.com")
                 .password("passwd")

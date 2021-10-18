@@ -103,13 +103,12 @@ public abstract class InternshipOfferMockData {
                 .minSalary(22.5f)
                 .maxSalary(23.5f)
                 .companyName("desjardins")
-                .emailOfMonitor("rickJones@desjardins.com")
                 .description("Développeur Web")
                 .build();
     }
 
     public static InternshipOfferCreationDto getInternshipOfferCreationDto() {
-        return InternshipOfferCreationDto.builder()
+        return InternshipOfferCreationDto.internshipOfferCreationDtoBuilder()
                 .limitDateToApply(LocalDate.now().plusMonths(1))
                 .beginningDate(LocalDate.now().plusMonths(2))
                 .endingDate(LocalDate.now().plusMonths(6))
@@ -122,7 +121,7 @@ public abstract class InternshipOfferMockData {
     }
 
     public static InternshipOfferStudentViewDto getInternshipStudentViewDto() {
-        return InternshipOfferStudentViewDto.builder()
+        return InternshipOfferStudentViewDto.internshipOfferStudentViewDtoBuilder()
                 .id("id")
                 .limitDateToApply(LocalDate.now().plusMonths(1))
                 .beginningDate(LocalDate.now().plusMonths(2))
