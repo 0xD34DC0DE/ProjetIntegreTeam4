@@ -52,21 +52,16 @@ public class InternshipOfferController {
             @PathVariable("email") String studentEmail,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "5") Integer size) {
-        return internshipOfferService.getStudentExclusiveOffers(studentEmail, page, size)
-                .onErrorMap(
-                        UserNotFoundException.class,
-                        e -> new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage())
-                )
-                .map(InternshipOfferMapper::toStudentViewDto);
+        return internshipOfferService.getStudentExclusiveOffers(studentEmail, page, size);
     }
 
     @GetMapping(value = "/studentInternshipOffers")
     @PreAuthorize("hasAuthority('STUDENT')")
     public Flux<InternshipOfferStudentViewDto> studentGeneralInternshipOffers(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "5") Integer size) {
-        return internshipOfferService.getGeneralInternshipOffers(page, size)
-                .map(InternshipOfferMapper::toStudentViewDto);
+            @RequestParam(value = "size", defaultValue = "5") Integer size,
+            Principal principal) {
+        return internshipOfferService.getGeneralInternshipOffers(page, size, principal);
     }
 
     @GetMapping(value = {"/pageCount/{email}"})
