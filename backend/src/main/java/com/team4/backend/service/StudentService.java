@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.team4.backend.exception.ForbiddenActionException;
 import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
@@ -55,7 +56,7 @@ public class StudentService {
     public Mono<Student> updateStudentState(String email, StudentState studentState) {
         return findByEmail(email)
                 .filter(student -> student.getStudentState().equals(StudentState.WAITING_FOR_RESPONSE))
-                .switchIfEmpty(Mono.error(new UnauthorizedException("Can't update your state if you're not waiting for a response to your recent interview!")))
+                .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update your state if you're not waiting for a response to your recent interview!")))
                 .map(student -> {
                     //TODO --> call function that will trigger the contract generation
                     student.setStudentState(studentState);

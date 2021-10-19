@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.team4.backend.exception.ForbiddenActionException;
 import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
@@ -219,7 +220,7 @@ public class StudentServiceTest {
         Mono<Student> studentMono = studentService.updateStudentState(student.getEmail(), StudentState.INTERNSHIP_FOUND);
 
         //ASSERT
-        StepVerifier.create(studentMono).verifyError(UnauthorizedException.class);
+        StepVerifier.create(studentMono).verifyError(ForbiddenActionException.class);
     }
 
 }

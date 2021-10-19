@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.StudentCreationDto;
+import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
@@ -96,7 +97,7 @@ public class StudentControllerTest {
     }
 
     @Test
-    void shouldNotUpdateStudentState() {
+    void shouldNotUpdateStudentStateWhenNotFound() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
 
@@ -109,6 +110,23 @@ public class StudentControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isNotFound()
+                .expectBodyList(String.class);
+    }
+
+    @Test
+    void shouldNotUpdateStudentStateWhenStudentStateIsNotWaitingForResponse(){
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentService.updateStudentState(any(), any())).thenReturn(Mono.error(UnauthorizedException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/student/updateStudentState")
+                .exchange()
+                //ASSERT
+                .expectStatus().isForbidden()
                 .expectBodyList(String.class);
     }
 
