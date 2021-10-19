@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
@@ -192,7 +193,7 @@ public class StudentServiceTest {
     }
 
     @Test
-    void shouldNotUpdateStudentState() {
+    void shouldNotUpdateStudentStateWhenNotFound() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
 
@@ -203,6 +204,22 @@ public class StudentServiceTest {
 
         //ASSERT
         StepVerifier.create(studentMono).verifyError(UserNotFoundException.class);
+    }
+
+    @Test
+    void shouldNotUpdateStudentStateWhenStudentStateIsNotWaitingForResponse() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        student.setStudentState(StudentState.WAITING_FOR_RESPONSE);
+
+        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
+
+        //ACT
+        Mono<Student> studentMono = studentService.updateStudentState(student.getEmail(), StudentState.INTERNSHIP_FOUND);
+
+        //ASSERT
+        StepVerifier.create(studentMono).verifyError(UnauthorizedException.class);
     }
 
 }

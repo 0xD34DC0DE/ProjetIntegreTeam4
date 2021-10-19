@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
@@ -52,16 +53,18 @@ public class StudentService {
     }
 
     public Mono<Student> updateStudentState(String email, StudentState studentState) {
+        //TODO --> call function that will trigger the contract generation
         return findByEmail(email)
+                .filter(student -> student.getStudentState().equals(StudentState.WAITING_FOR_RESPONSE))
+                .switchIfEmpty(Mono.error(new UnauthorizedException("Can't update state if you're not waiting for a response!")))
                 .map(student -> {
                     student.setStudentState(studentState);
-                    //TODO --> call function that will trigger the contract generation
                     return student;
                 }).flatMap(studentRepository::save);
     }
 
     public Mono<Student> addOfferToStudentAppliedOffers(Student student, String offerId) {
-        if(!student.getAppliedOffersId().contains(offerId)) {
+        if (!student.getAppliedOffersId().contains(offerId)) {
             student.getAppliedOffersId().add(offerId);
             return studentRepository.save(student);
         }

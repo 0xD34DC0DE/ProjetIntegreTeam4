@@ -8,6 +8,7 @@ import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -32,6 +33,7 @@ public class StudentController {
     }
 
     @PatchMapping("/updateStudentState")
+    @PreAuthorize("hasAuthority('STUDENT')")
     public Mono<ResponseEntity<String>> updateStudentState(Principal principal) {
         return studentService.updateStudentState(UserSessionService.getLoggedUserEmail(principal), StudentState.INTERNSHIP_FOUND)
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")))
