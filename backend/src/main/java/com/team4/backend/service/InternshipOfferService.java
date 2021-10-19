@@ -10,7 +10,7 @@ import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.InternshipOfferRepository;
 import com.team4.backend.security.UserSessionService;
-import com.team4.backend.util.ExperimentalValidatingPageRequest;
+import com.team4.backend.util.ValidatingPageRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -52,7 +52,7 @@ public class InternshipOfferService {
         return studentService.findByEmail(studentEmail)
                 .map(Student::getExclusiveOffersId)
                 .flatMapMany(offerIdList ->
-                        ExperimentalValidatingPageRequest.applyPaging(offerIdList, page, size)
+                        ValidatingPageRequest.applyPaging(offerIdList, page, size)
                                 .flatMap(offerId ->
                                         internshipOfferRepository.
                                                 findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
@@ -63,7 +63,7 @@ public class InternshipOfferService {
     }
 
     public Flux<InternshipOffer> getGeneralInternshipOffers(Integer page, Integer size) {
-        return ExperimentalValidatingPageRequest.getPageRequestMono(page, size)
+        return ValidatingPageRequest.getPageRequestMono(page, size)
                 .flatMapMany(pageRequest ->
                         internshipOfferRepository
                                 .findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(
