@@ -100,8 +100,6 @@ public class StudentControllerTest {
     @Test
     void shouldNotUpdateStudentStateWhenNotFound() {
         //ARRANGE
-        Student student = StudentMockData.getMockStudent();
-
         when(studentService.updateStudentState(any(), any())).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
@@ -117,8 +115,6 @@ public class StudentControllerTest {
     @Test
     void shouldNotUpdateStudentStateWhenStudentStateIsNotWaitingForResponse(){
         //ARRANGE
-        Student student = StudentMockData.getMockStudent();
-
         when(studentService.updateStudentState(any(), any())).thenReturn(Mono.error(ForbiddenActionException::new));
 
         //ACT
