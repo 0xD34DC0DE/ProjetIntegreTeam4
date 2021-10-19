@@ -26,7 +26,7 @@ public class FileMetaDataController {
     @PostMapping
     @PreAuthorize("hasAuthority('STUDENT')")
     public Mono<ResponseEntity<String>> uploadFile(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("mimeType") String mimeType, @RequestPart("file") Mono<FilePart> filePartMono, Principal principal) {
-        return fileMetaDataService.uploadFile(filename, type, mimeType, filePartMono, OwnershipService.getLoggedUserName(principal))
+        return fileMetaDataService.uploadFile(filename, type, mimeType, filePartMono, OwnershipService.getLoggerUserEmail(principal))
                 .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error.getMessage())));
     }

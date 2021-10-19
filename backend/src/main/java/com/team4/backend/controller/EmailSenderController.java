@@ -24,7 +24,7 @@ public class EmailSenderController {
     @PostMapping
     @PreAuthorize("hasAnyAuthority('MONITOR')")
     public Mono<ResponseEntity<String>> sendEmailToStudent(@RequestPart("receiver") String receiver, @RequestPart("subject") String subject, @RequestPart("content") String content, Principal principal) {
-        return emailSenderService.sendEmailToStudent(OwnershipService.getLoggedUserName(principal), receiver, subject, content)
+        return emailSenderService.sendEmailToStudent(OwnershipService.getLoggerUserEmail(principal), receiver, subject, content)
                 .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.OK).body("")))
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
     }

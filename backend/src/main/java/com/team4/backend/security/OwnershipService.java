@@ -4,7 +4,7 @@ import java.security.Principal;
 
 public abstract class OwnershipService {
 
-    public static String getLoggedUserName(Principal principal) {
+    public static String getLoggerUserEmail(Principal principal) {
         return principal != null ? principal.getName() : "";
     }
 }

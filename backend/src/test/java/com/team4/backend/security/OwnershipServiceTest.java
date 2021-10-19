@@ -19,7 +19,7 @@ public class OwnershipServiceTest {
         when(principal.getName()).thenReturn("username");
 
         //ACT & ASSERT
-        assertEquals("username", OwnershipService.getLoggedUserName(principal));
+        assertEquals("username", OwnershipService.getLoggerUserEmail(principal));
     }
 
     @Test
@@ -31,6 +31,6 @@ public class OwnershipServiceTest {
         when(principal.getName()).thenReturn("");
 
         //ACT & ASSERT
-        assertEquals("", OwnershipService.getLoggedUserName(principal));
+        assertEquals("", OwnershipService.getLoggerUserEmail(principal));
     }
 }
