@@ -2,7 +2,6 @@ package com.team4.backend.service;
 
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

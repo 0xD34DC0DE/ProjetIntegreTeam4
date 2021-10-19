@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.util.List;
 
 @Log
 @Service
@@ -31,17 +33,16 @@ public class EmailSenderService {
         return studentService.findByEmail(receiver)
                 .flatMap(student -> internshipOfferService.monitorOffersInterestedStudentsContainsStudentEmail(receiver, sender))
                 .flatMap( studentInMonitorListResponse ->
-                        !studentInMonitorListResponse ?
-                            Mono.error(new UserNotFoundException("Given receiver email does not correspond to student that applied to monitor's offer")) :
-                            sendEmail(sender, receiver, subject, content));
+                        studentInMonitorListResponse ?
+                            sendEmail(sender, receiver, subject, content) :
+                            Mono.error(new UserNotFoundException("Given receiver email does not correspond to student that applied to monitor's offer")));
     }
 
     protected Mono<Void> sendEmail(String sender, String receiver, String subject, String content) {
         MimeMessage message = javaMailSender.createMimeMessage();
         try {
             MimeMessageHelper helper = getHelper(message);
-            helper.setTo(sender);
-            helper.setTo(receiver);
+            helper.setTo(new String[]{sender, receiver});
             helper.setSubject(subject);
             helper.setText(content);
         } catch (MessagingException e) {
