@@ -38,6 +38,7 @@ public abstract class InternshipOfferMapper {
                 .minSalary(internshipOffer.getMinSalary())
                 .maxSalary(internshipOffer.getMaxSalary())
                 .isExclusive(internshipOffer.getIsExclusive())
+                .hasAlreadyApplied(false)
                 .build();
     }
 
