@@ -4,6 +4,7 @@ package com.team4.backend.controller;
 import com.team4.backend.dto.StudentCreationDto;
 import com.team4.backend.dto.StudentProfileDto;
 import com.team4.backend.exception.ForbiddenActionException;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.security.UserSessionService;
@@ -40,10 +41,8 @@ public class StudentController {
     public Mono<ResponseEntity<String>> updateStudentState(Principal principal) {
         return studentService.updateStudentState(UserSessionService.getLoggedUserEmail(principal), StudentState.INTERNSHIP_FOUND)
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")))
-                .onErrorResume(error ->
-                        Mono.just(ResponseEntity.status(error instanceof ForbiddenActionException ?
-                                HttpStatus.FORBIDDEN : HttpStatus.NOT_FOUND
-                        ).body(error.getMessage())));
+                .onErrorResume(UserNotFoundException.class, e -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage())))
+                .onErrorResume(ForbiddenActionException.class, e -> Mono.just(ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage())));
     }
 
     @GetMapping("/getProfile")
