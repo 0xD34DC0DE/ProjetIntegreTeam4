@@ -3,6 +3,7 @@ package com.team4.backend.service;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
+import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.springframework.stereotype.Service;
@@ -48,6 +49,15 @@ public class StudentService {
             student.setHasValidCv(valid);
             return student;
         }).flatMap(studentRepository::save);
+    }
+
+    public Mono<Student> updateStudentState(String email, StudentState studentState) {
+        return findByEmail(email)
+                .map(student -> {
+                    student.setStudentState(studentState);
+                    //TODO --> call function that will trigger the contract generation
+                    return student;
+                }).flatMap(studentRepository::save);
     }
 
     public Mono<Student> addOfferToStudentAppliedOffers(Student student, String offerId) {
