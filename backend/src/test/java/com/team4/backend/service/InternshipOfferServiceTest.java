@@ -517,4 +517,44 @@ public class InternshipOfferServiceTest {
                 .verifyComplete();
     }
 
+    @Test
+    void shouldGetExclusiveInternshipOfferStudentViewsAlreadyAppliedMatches() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+        List<String> exclusiveOfferIds = new ArrayList<>(student.getExclusiveOffersId());
+
+        InternshipOffer internshipOffer1 = InternshipOfferMockData.getInternshipOffer();
+        internshipOffer1.setId(exclusiveOfferIds.get(0));
+
+        InternshipOffer internshipOffer2 = InternshipOfferMockData.getInternshipOffer();
+        internshipOffer2.setId(exclusiveOfferIds.get(1));
+
+        student.getAppliedOffersId().add(internshipOffer1.getId());
+
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
+
+        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
+                same(exclusiveOfferIds.get(0)), any(LocalDate.class))
+        ).thenReturn(Mono.just(internshipOffer1));
+
+        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
+                same(exclusiveOfferIds.get(1)), any(LocalDate.class))
+        ).thenReturn(Mono.just(internshipOffer2));
+
+        //ACT
+        Flux<InternshipOfferStudentViewDto> internshipOfferFlux =
+                internshipOfferService.getStudentExclusiveOffers(student.getEmail(), 0, 2);
+
+        //ASSERT
+        StepVerifier.create(internshipOfferFlux)
+                .assertNext(offer -> {
+                    assertEquals(offer.getId(), exclusiveOfferIds.get(0));
+                    assertTrue(offer.getHasAlreadyApplied());
+                })
+                .assertNext(offer -> {
+                    assertEquals(offer.getId(), exclusiveOfferIds.get(1));
+                    assertFalse(offer.getHasAlreadyApplied());
+                })
+                .verifyComplete();
+    }
 }
