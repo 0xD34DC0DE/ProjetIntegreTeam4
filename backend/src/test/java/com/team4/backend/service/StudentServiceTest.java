@@ -173,4 +173,44 @@ public class StudentServiceTest {
                 .verifyComplete();
     }
 
+    @Test
+    void shouldAddAppliedOffer() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentRepository.save(any(Student.class))).then(s -> {
+            student.getAppliedOffersId().add("offerId");
+            return Mono.just(student);
+        });
+
+        //ACT
+        Mono<Student> studentMono = studentService.addOfferToStudentAppliedOffers(student, "offerId");
+
+        //ASSERT
+        StepVerifier.create(studentMono)
+                .assertNext(s -> {
+                    assertEquals(1, student.getAppliedOffersId().size());
+                    assertTrue(student.getAppliedOffersId().contains("offerId"));
+                })
+                .verifyComplete();
+    }
+
+
+    @Test
+    void shouldNotAddAppliedOffer() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+        student.getAppliedOffersId().add("offerId");
+
+        //ACT
+        Mono<Student> studentMono = studentService.addOfferToStudentAppliedOffers(student, "offerId");
+
+        //ASSERT
+        StepVerifier.create(studentMono)
+                .assertNext(s -> {
+                    assertEquals(1, student.getAppliedOffersId().size());
+                    assertTrue(student.getAppliedOffersId().contains("offerId"));
+                })
+                .verifyComplete();
+    }
 }
