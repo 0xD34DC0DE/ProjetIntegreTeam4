@@ -45,7 +45,7 @@ public class TestingInserterRunner implements ApplicationRunner {
 
         private final Lorem lorem;
 
-        private final Set<String> studentList;
+        private final Set<String> studentSet;
 
         public TestingInserterRunner(MonitorRepository monitorRepository,
                         InternshipOfferRepository internshipOfferRepository, StudentRepository studentRepository,
@@ -58,10 +58,10 @@ public class TestingInserterRunner implements ApplicationRunner {
                 this.pbkdf2Encoder = pbkdf2Encoder;
                 this.fileMetaDataRepository = fileMetaDataRepository;
                 this.lorem = LoremIpsum.getInstance();
-                this.studentList = new HashSet<>();
-                this.studentList.add("123456789@gmail.com");
-                this.studentList.add("3643283423@gmail.com");
-                this.studentList.add("123667713@gmail.com");
+                this.studentSet = new HashSet<>();
+                this.studentSet.add("123456789@gmail.com");
+                this.studentSet.add("3643283423@gmail.com");
+                this.studentSet.add("123667713@gmail.com");
         }
 
         @Override
@@ -190,7 +190,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                                                 .emailOfMonitor("9182738492@gmail.com").companyName("Ubisoft")
                                                 .description("Game Tester").minSalary(16.0f).maxSalary(18.0f)
                                                 .isValidated(true).validationDate(null).isExclusive(false)
-                                                .listEmailInterestedStudents(studentList).build(),
+                                                .listEmailInterestedStudents(studentSet).build(),
                                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                                                 .beginningDate(LocalDate.now().plusDays(30))
                                                 .endingDate(LocalDate.now().plusMonths(3))

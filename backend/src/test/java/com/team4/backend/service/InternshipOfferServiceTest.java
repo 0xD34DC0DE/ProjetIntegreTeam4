@@ -464,4 +464,38 @@ public class InternshipOfferServiceTest {
                 .verify();
     }
 
+    @Test
+    void shouldMonitorOffersInterestedStudentsContainsStudentEmail() {
+        //ARRANGE
+
+        Flux<InternshipOffer> internshipOffers = InternshipOfferMockData.getAllInternshipOffers();
+        when(internshipOfferRepository.findAllByEmailOfMonitorAndIsValidatedTrue(any())).thenReturn(internshipOffers);
+
+        String monitorEmail = "sender";
+        String studentEmail = "student1@email.com";
+
+        //ACT
+        Mono<Boolean> response = internshipOfferService.monitorOffersInterestedStudentsContainsStudentEmail(studentEmail, monitorEmail);
+
+        //ASSERT
+        StepVerifier.create(response).assertNext(Assertions::assertTrue).verifyComplete();
+    }
+
+    @Test
+    void shouldNotMonitorOffersInterestedStudentsContainsStudentEmail() {
+        //ARRANGE
+
+        Flux<InternshipOffer> internshipOffers = InternshipOfferMockData.getAllInternshipOffers();
+        when(internshipOfferRepository.findAllByEmailOfMonitorAndIsValidatedTrue(any())).thenReturn(internshipOffers);
+
+        String monitorEmail = "sender";
+        String studentEmail = "wrong@email.com";
+
+        //ACT
+        Mono<Boolean> response = internshipOfferService.monitorOffersInterestedStudentsContainsStudentEmail(studentEmail, monitorEmail);
+
+        //ASSERT
+        StepVerifier.create(response).assertNext(Assertions::assertFalse).verifyComplete();
+    }
+
 }
