@@ -84,7 +84,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .phoneNumber("4387650987")
                         .password(pbkdf2Encoder.encode("travis123"))
                         .hasValidCv(false)
-                        .appliedOffersId(new ArrayList<>())
+                        .appliedOffersId(new HashSet<>())
                         .build(),
                 Student.studentBuilder()
                         .email("3643283423@gmail.com")
@@ -93,7 +93,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .phoneNumber("5143245678")
                         .password(pbkdf2Encoder.encode("jean123"))
                         .hasValidCv(false)
-                        .appliedOffersId(new ArrayList<>())
+                        .appliedOffersId(new HashSet<>())
                         .build(),
                 Student.studentBuilder()
                         .email("123667713@gmail.com")
@@ -102,7 +102,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .phoneNumber("4385738764")
                         .password(pbkdf2Encoder.encode("farid123"))
                         .hasValidCv(false)
-                        .appliedOffersId(new ArrayList<>())
+                        .appliedOffersId(new HashSet<>())
                         .build(),
                 Student.studentBuilder()
                         .email("902938912@gmail.com")
@@ -110,7 +110,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .lastName("Alphonse")
                         .phoneNumber("4385738764")
                         .password(pbkdf2Encoder.encode("kevin123"))
-                        .appliedOffersId(new ArrayList<>())
+                        .appliedOffersId(new HashSet<>())
                         .hasValidCv(false).build(),
                 Student.studentBuilder()
                         .email("student@gmail.com")
@@ -120,7 +120,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .registrationDate(LocalDate.now())
                         .studentState(StudentState.REGISTERED)
                         .phoneNumber("123-123-1234")
-                        .appliedOffersId(new ArrayList<>())
+                        .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>(){{add(insertInternshipOffersStudentView());}})
                         .build()
         );
