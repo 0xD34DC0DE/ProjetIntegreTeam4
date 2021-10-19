@@ -7,6 +7,7 @@ import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.model.InternshipOffer;
 
 import java.util.Collections;
+import java.util.HashSet;
 
 public abstract class InternshipOfferMapper {
 
@@ -20,14 +21,14 @@ public abstract class InternshipOfferMapper {
                 .description(internshipOfferCreationDto.getDescription())
                 .minSalary(internshipOfferCreationDto.getMinSalary())
                 .maxSalary(internshipOfferCreationDto.getMaxSalary())
-                .listEmailInterestedStudents(Collections.emptyList())
+                .listEmailInterestedStudents(new HashSet<>())
                 .isValidated(false)
                 .isExclusive(false)
                 .build();
     }
 
     public static InternshipOfferStudentViewDto toStudentViewDto(InternshipOffer internshipOffer) {
-        return InternshipOfferStudentViewDto.builder()
+        return InternshipOfferStudentViewDto.internshipOfferStudentViewDtoBuilder()
                 .id(internshipOffer.getId())
                 .limitDateToApply(internshipOffer.getLimitDateToApply())
                 .beginningDate(internshipOffer.getBeginningDate())
@@ -47,16 +48,14 @@ public abstract class InternshipOfferMapper {
                 .beginningDate(internshipOffer.getBeginningDate())
                 .endingDate(internshipOffer.getEndingDate())
                 .companyName(internshipOffer.getCompanyName())
-                .emailOfMonitor(internshipOffer.getEmailOfMonitor())
                 .description(internshipOffer.getDescription())
                 .minSalary(internshipOffer.getMinSalary())
                 .maxSalary(internshipOffer.getMaxSalary())
-                .listEmailInterestedStudents(internshipOffer.getListEmailInterestedStudents())
-                .isValidated(internshipOffer.getIsValidated()).build();
+                .build();
     }
 
     public static InternshipOfferMonitorViewDto toMonitorView(InternshipOffer internshipOffer) {
-        return InternshipOfferMonitorViewDto.builder()
+        return InternshipOfferMonitorViewDto.internshipOfferMonitorViewDtoBuilder()
                 .id(internshipOffer.getId())
                 .limitDateToApply(internshipOffer.getLimitDateToApply())
                 .beginningDate(internshipOffer.getBeginningDate())

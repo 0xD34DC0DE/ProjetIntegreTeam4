@@ -5,6 +5,7 @@ import com.team4.backend.dto.InternshipOfferDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
+import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.service.InternshipOfferService;
@@ -24,6 +25,7 @@ import reactor.core.publisher.Mono;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
@@ -269,6 +271,60 @@ public class InternshipOfferControllerTest {
                 //ASSERT
                 .expectStatus().isOk()
                 .expectBody(Long.class);
+    }
+
+    @Test
+    void shouldApplyInternshipOffer() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.applyOffer(eq(internshipOffer.getId()), any())).then(s -> {
+            internshipOffer.getListEmailInterestedStudents().add("student@gmail.com");
+            return Mono.just(internshipOffer);
+        });
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/internshipOffer/apply/" + internshipOffer.getId())
+                .exchange()
+                //ASSERT
+                .expectStatus().isNoContent()
+                .expectBody().isEmpty();
+    }
+
+    @Test
+    void shouldNotApplyExclusiveInternshipOffer() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.applyOffer(eq(internshipOffer.getId()), any()))
+                .thenReturn(Mono.error(UnauthorizedException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/internshipOffer/apply/" + internshipOffer.getId())
+                .exchange()
+                //ASSERT
+                .expectStatus().isUnauthorized();
+    }
+
+    @Test
+    void shouldNotApplyInternshipOfferNonExistentOffer() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.applyOffer(eq(internshipOffer.getId()), any()))
+                .thenReturn(Mono.error(InternshipOfferNotFoundException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/internshipOffer/apply/" + internshipOffer.getId())
+                .exchange()
+                //ASSERT
+                .expectStatus().isNotFound();
     }
 
 }
