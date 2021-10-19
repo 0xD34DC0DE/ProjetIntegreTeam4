@@ -479,4 +479,42 @@ public class InternshipOfferServiceTest {
                 .verify();
     }
 
+
+    @Test
+    void shouldGetGeneralInternshipOfferStudentViewsAlreadyAppliedMatches() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+        List<InternshipOffer> internshipOffers = InternshipOfferMockData.getListInternshipOffer(2);
+        List<InternshipOfferStudentViewDto> internshipOfferStudentViewDtos =
+                InternshipOfferMockData.getListInternshipOfferStudentViewDto(2);
+
+        student.getAppliedOffersId().add(internshipOfferStudentViewDtos.get(0).getId());
+
+        when(internshipOfferRepository.findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(
+                any(LocalDate.class), any(Pageable.class))
+        ).thenReturn(Flux.fromIterable(internshipOffers));
+
+        Principal principal = mock(Principal.class);
+
+        when(UserSessionService.getLoggedUserEmail(principal)).thenReturn(student.getEmail());
+
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
+
+        //ACT
+        Flux<InternshipOfferStudentViewDto> internshipOfferFlux =
+                internshipOfferService.getGeneralInternshipOffers(0, 2, principal);
+
+        //ASSERT
+        StepVerifier.create(internshipOfferFlux)
+                .assertNext(offer -> {
+                    assertEquals(offer.getId(), internshipOfferStudentViewDtos.get(0).getId());
+                    assertTrue(offer.getHasAlreadyApplied());
+                })
+                .assertNext(offer -> {
+                    assertEquals(offer.getId(), internshipOfferStudentViewDtos.get(1).getId());
+                    assertFalse(offer.getHasAlreadyApplied());
+                })
+                .verifyComplete();
+    }
+
 }
