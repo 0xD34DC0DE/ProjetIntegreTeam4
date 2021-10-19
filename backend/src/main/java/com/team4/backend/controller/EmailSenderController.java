@@ -1,6 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.security.OwnershipService;
+import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.EmailSenderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ public class EmailSenderController {
     @PostMapping
     @PreAuthorize("hasAnyAuthority('MONITOR')")
     public Mono<ResponseEntity<String>> sendEmailToStudent(@RequestPart("receiver") String receiver, @RequestPart("subject") String subject, @RequestPart("content") String content, Principal principal) {
-        return emailSenderService.sendEmailToStudent(OwnershipService.getLoggerUserEmail(principal), receiver, subject, content)
+        return emailSenderService.sendEmailToStudent(UserSessionService.getLoggedUserEmail(principal), receiver, subject, content)
                 .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.OK).body("")))
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
     }
