@@ -181,6 +181,8 @@ public class StudentServiceTest {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
 
+        student.setStudentState(StudentState.WAITING_FOR_RESPONSE);
+
         when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
         when(studentRepository.save(any(Student.class))).thenReturn(Mono.just(student));
 

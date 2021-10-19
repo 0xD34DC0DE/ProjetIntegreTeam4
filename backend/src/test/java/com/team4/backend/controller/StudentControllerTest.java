@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.StudentCreationDto;
+import com.team4.backend.exception.ForbiddenActionException;
 import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
@@ -118,7 +119,7 @@ public class StudentControllerTest {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
 
-        when(studentService.updateStudentState(any(), any())).thenReturn(Mono.error(UnauthorizedException::new));
+        when(studentService.updateStudentState(any(), any())).thenReturn(Mono.error(ForbiddenActionException::new));
 
         //ACT
         webTestClient
