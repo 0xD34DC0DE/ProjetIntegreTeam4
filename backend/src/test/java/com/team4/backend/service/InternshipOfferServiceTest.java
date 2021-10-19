@@ -439,7 +439,7 @@ public class InternshipOfferServiceTest {
     }
 
     @Test
-    void shouldNotApplyInternshipOfferNotInExclusiveStudents() {
+    void shouldNotApplyToInternshipOfferNotIncludedInStudentExclusiveOffers () {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
         internshipOffer.setIsExclusive(true);
