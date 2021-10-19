@@ -16,6 +16,8 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.security.Principal;
+
 @Log
 @RestController
 @RequestMapping("/internshipOffer")
@@ -88,17 +90,27 @@ public class InternshipOfferController {
 
     @PatchMapping("/validateInternshipOffer")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Mono<ResponseEntity<String>> validateInternshipOffer(@RequestParam("id") String id, @RequestParam("isValid") Boolean isValid) {
+    public Mono<ResponseEntity<String>> validateInternshipOffer(@RequestParam("id") String id,
+                                                                @RequestParam("isValid") Boolean isValid) {
         return internshipOfferService.validateInternshipOffer(id, isValid)
                 .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")))
-                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
+                .onErrorResume(error -> Mono.just(
+                        ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage()))
+                );
     }
-
 
     @GetMapping("/getNotYetValidatedInternshipOffers")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
     public Flux<InternshipOfferDto> getNotYetValidatedInternshipOffers() {
         return internshipOfferService.getNotYetValidatedInternshipOffers().map(InternshipOfferMapper::toDto);
+    }
+
+    @PatchMapping("/apply/{offerId}")
+    @PreAuthorize("hasAuthority('STUDENT')")
+    public Mono<ResponseEntity<String>> applyInternshipOffer(@PathVariable("offerId") String offerId,
+                                                             Principal principal) {
+        return internshipOfferService.applyOffer(offerId, principal)
+                .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 
 }

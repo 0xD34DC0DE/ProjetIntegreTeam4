@@ -1,86 +1,142 @@
 package com.team4.backend.util;
 
 import com.team4.backend.exception.InvalidPageRequestException;
-import lombok.extern.java.Log;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
-@Log
+import static org.junit.jupiter.api.Assertions.*;
+
 public class ValidatingPageRequestTest {
 
     @Test
-    void shouldCreatePageRequest() {
-        //ARRANGE
-        Integer page = 0;
-        Integer size = 1;
-
-        //ACT
-        assertDoesNotThrow(() -> {
-            ValidatingPageRequest pageRequest = new ValidatingPageRequest(page, size);
-            assertNotNull(pageRequest.getPageRequest());
-        }); // ASSERT
+    void getPageRequestValid() {
+        // ASSERT
+        assertDoesNotThrow(() ->
+                // ACT
+                ValidatingPageRequest.getPageRequest(1, 1)
+        );
     }
 
     @Test
-    void shouldNotCreatePageRequestInvalidPage() {
+    void getPageRequestMonoValid() {
         //ARRANGE
-        Integer page = -1;
-        Integer size = 1;
+        Mono<PageRequest> pageRequestMono;
 
-        //ACT
-        assertThrows(InvalidPageRequestException.class, () -> {
-            ValidatingPageRequest pageRequest = new ValidatingPageRequest(page, size);
-            assertNotNull(pageRequest.getPageRequest());
-        });// ASSERT
+        // ACT
+        pageRequestMono = ValidatingPageRequest.getPageRequestMono(1, 1);
+
+        //ASSERT
+        StepVerifier.create(pageRequestMono)
+                .expectNextCount(1)
+                .verifyComplete();
     }
 
     @Test
-    void shouldNotCreatePageRequestInvalidSize() {
-        //ARRANGE
-        Integer page = 0;
-        Integer size = 0;
-
-        //ACT
-        assertThrows(InvalidPageRequestException.class, () -> {
-            ValidatingPageRequest pageRequest = new ValidatingPageRequest(page, size);
-            assertNotNull(pageRequest.getPageRequest());
-        });// ASSERT
+    void getPageRequestInvalidSize() {
+        // ASSERT
+        assertThrows(InvalidPageRequestException.class, () ->
+                // ACT
+                ValidatingPageRequest.getPageRequest(1, 0)
+        );
     }
 
     @Test
-    void pageRequestOffsetValid() throws InvalidPageRequestException {
-        //ARRANGE
-        Integer page = 1;
-        Integer size = 1;
+    void getPageRequestInvalidPage() {
+        // ASSERT
+        assertThrows(InvalidPageRequestException.class, () ->
+                // ACT
+                ValidatingPageRequest.getPageRequest(-1, 1)
+        );
+    }
 
-        //ACT
-        ValidatingPageRequest pageRequest = new ValidatingPageRequest(page, size);
+    @Test
+    void getPageRequestInvalidNullSize() {
+        // ASSERT
+        assertThrows(InvalidPageRequestException.class, () ->
+                // ACT
+                ValidatingPageRequest.getPageRequest(1, null)
+        );
+    }
+
+    @Test
+    void getPageRequestInvalidNullPage() {
+        // ASSERT
+        assertThrows(InvalidPageRequestException.class, () ->
+                // ACT
+                ValidatingPageRequest.getPageRequest(null, 1)
+        );
+    }
+
+    @Test
+    void getPageRequestInvalidNullPageNullSize() {
+        // ASSERT
+        assertThrows(InvalidPageRequestException.class, () ->
+                // ACT
+                ValidatingPageRequest.getPageRequest(null, null)
+        );
+    }
+
+    @Test
+    void applyPagingValid() {
+        //ARRANGE
+        List<Integer> values = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+
+        // ACT
+        Flux<Integer> pagedFlux = ValidatingPageRequest.applyPaging(values, 1, 2);
 
         // ASSERT
-        assertNotNull(pageRequest.getOffset());
+        StepVerifier.create(pagedFlux)
+                .expectNext(3)
+                .expectNext(4)
+                .verifyComplete();
     }
 
     @Test
-    void shouldNotCreatePageRequestNullSize() {
+    void applyPagingValidTruncate() {
         //ARRANGE
-        Integer page = 0;
-        Integer size = null;
+        List<Integer> values = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
 
-        //ACT
-        assertThrows(InvalidPageRequestException.class, () -> new ValidatingPageRequest(page, size));// ASSERT
+        // ACT
+        Flux<Integer> pagedFlux = ValidatingPageRequest.applyPaging(values, 2, 2);
+
+        // ASSERT
+        StepVerifier.create(pagedFlux)
+                .expectNext(5)
+                .verifyComplete();
     }
 
     @Test
-    void shouldNotCreatePageRequestNullPage() {
+    void applyPagingValidEndOfList() {
         //ARRANGE
-        Integer page = null;
-        Integer size = 1;
+        List<Integer> values = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
 
-        //ACT
-        assertThrows(InvalidPageRequestException.class, () -> new ValidatingPageRequest(page, size));// ASSERT
+        // ACT
+        Flux<Integer> pagedFlux = ValidatingPageRequest.applyPaging(values, 2, 3);
+
+        // ASSERT
+        StepVerifier.create(pagedFlux)
+                .expectNextCount(0)
+                .verifyComplete();
     }
 
+    @Test
+    void applyPagingInvalid() {
+        //ARRANGE
+        List<Integer> values = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
+
+        // ACT
+        Flux<Integer> pagedFlux = ValidatingPageRequest.applyPaging(values, -1, 1);
+
+        // ASSERT
+        StepVerifier.create(pagedFlux)
+                .expectError(InvalidPageRequestException.class)
+                .verify();
+    }
 }

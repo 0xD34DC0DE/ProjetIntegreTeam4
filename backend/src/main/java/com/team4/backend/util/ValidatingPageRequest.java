@@ -4,18 +4,54 @@ import com.team4.backend.exception.InvalidPageRequestException;
 import lombok.Data;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
-import javax.validation.constraints.Min;
+import java.util.Collection;
 
 @Data
-public class ValidatingPageRequest {
+public abstract class ValidatingPageRequest {
 
-    Integer page;
+    public static PageRequest getPageRequest(Integer page, Integer size) throws InvalidPageRequestException {
+        validateValues(page, size);
+        return PageRequest.of(page, size);
+    }
 
-    Integer size;
+    public static PageRequest getPageRequest(Integer page, Integer size, Sort sort) throws InvalidPageRequestException {
+        validateValues(page, size);
+        return PageRequest.of(page, size, sort);
+    }
 
+    public static Mono<PageRequest> getPageRequestMono(Integer page, Integer size) {
+        try {
+            validateValues(page, size);
+        } catch (InvalidPageRequestException e) {
+            return Mono.error(e);
+        }
+        return Mono.just(PageRequest.of(page, size));
+    }
 
-    public ValidatingPageRequest(@Min(0) Integer page, @Min(1) Integer size) throws InvalidPageRequestException {
+    public static Mono<PageRequest> getPageRequestMono(Integer page, Integer size, Sort sort) {
+        try {
+            validateValues(page, size);
+        } catch (InvalidPageRequestException e) {
+            return Mono.error(e);
+        }
+        return Mono.just(PageRequest.of(page, size, sort));
+    }
+
+    public static <T> Flux<T> applyPaging(Collection<T> list, Integer page, Integer size) {
+        return Mono.just(list).flatMapMany(ts -> {
+            try {
+                validateValues(page, size);
+            } catch (InvalidPageRequestException e) {
+                return Mono.error(e);
+            }
+            return Flux.fromIterable(ts).skip((long) page * size).take(size);
+        });
+    }
+
+    private static void validateValues(Integer page, Integer size) throws InvalidPageRequestException {
         if (page == null || size == null) {
             throw new InvalidPageRequestException("Arguments of page request can't be null");
         }
@@ -25,22 +61,6 @@ public class ValidatingPageRequest {
         if (size < 1) {
             throw new InvalidPageRequestException("Size must be greater or equal to 1");
         }
-
-        this.page = page;
-        this.size = size;
-    }
-
-
-    public PageRequest getPageRequest() {
-        return PageRequest.of(page, size);
-    }
-
-    public PageRequest getPageRequest(Sort sort) {
-        return PageRequest.of(page, size, sort);
-    }
-
-    public Integer getOffset() {
-        return page * size;
     }
 
 }

@@ -37,6 +37,7 @@ public class StudentService {
     public Mono<Student> getStudent(String studentEmail) {
         return studentRepository.findByEmailAndIsEnabledTrue(studentEmail);
     }
+
     public Mono<Student> findByEmail(String email) {
         return studentRepository.findByEmail(email)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
@@ -47,6 +48,14 @@ public class StudentService {
             student.setHasValidCv(valid);
             return student;
         }).flatMap(studentRepository::save);
+    }
+
+    public Mono<Student> addOfferToStudentAppliedOffers(Student student, String offerId) {
+        if(!student.getAppliedOffersId().contains(offerId)) {
+            student.getAppliedOffersId().add(offerId);
+            return studentRepository.save(student);
+        }
+        return Mono.just(student);
     }
 
 }

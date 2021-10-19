@@ -22,9 +22,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Component
 @Order(1)
@@ -79,11 +77,52 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private void insertStudents() {
         List<Student> students = Arrays.asList(
-                Student.studentBuilder().email("123456789@gmail.com").firstName("Travis").lastName("Scott").phoneNumber("4387650987").password(pbkdf2Encoder.encode("travis123")).hasValidCv(false).build(),
-                Student.studentBuilder().email("3643283423@gmail.com").firstName("Jean").lastName("Jordan").phoneNumber("5143245678").password(pbkdf2Encoder.encode("jean123")).hasValidCv(false).build(),
-                Student.studentBuilder().email("123667713@gmail.com").firstName("Farid").lastName("Shalom").phoneNumber("4385738764").password(pbkdf2Encoder.encode("farid123")).hasValidCv(false).build(),
-                Student.studentBuilder().email("902938912@gmail.com").firstName("Kevin").lastName("Alphonse").phoneNumber("4385738764").password(pbkdf2Encoder.encode("kevin123")).hasValidCv(false).build(),
-                Student.studentBuilder().email("student@gmail.com").password(pbkdf2Encoder.encode("student")).firstName("John").lastName("Doe").registrationDate(LocalDate.now()).studentState(StudentState.REGISTERED).phoneNumber("123-123-1234").exclusiveOffersId(Collections.singleton(insertInternshipOffersStudentView())).build()
+                Student.studentBuilder()
+                        .email("123456789@gmail.com")
+                        .firstName("Travis")
+                        .lastName("Scott")
+                        .phoneNumber("4387650987")
+                        .password(pbkdf2Encoder.encode("travis123"))
+                        .hasValidCv(false)
+                        .appliedOffersId(new HashSet<>())
+                        .build(),
+                Student.studentBuilder()
+                        .email("3643283423@gmail.com")
+                        .firstName("Jean")
+                        .lastName("Jordan")
+                        .phoneNumber("5143245678")
+                        .password(pbkdf2Encoder.encode("jean123"))
+                        .hasValidCv(false)
+                        .appliedOffersId(new HashSet<>())
+                        .build(),
+                Student.studentBuilder()
+                        .email("123667713@gmail.com")
+                        .firstName("Farid")
+                        .lastName("Shalom")
+                        .phoneNumber("4385738764")
+                        .password(pbkdf2Encoder.encode("farid123"))
+                        .hasValidCv(false)
+                        .appliedOffersId(new HashSet<>())
+                        .build(),
+                Student.studentBuilder()
+                        .email("902938912@gmail.com")
+                        .firstName("Kevin")
+                        .lastName("Alphonse")
+                        .phoneNumber("4385738764")
+                        .password(pbkdf2Encoder.encode("kevin123"))
+                        .appliedOffersId(new HashSet<>())
+                        .hasValidCv(false).build(),
+                Student.studentBuilder()
+                        .email("student@gmail.com")
+                        .password(pbkdf2Encoder.encode("student"))
+                        .firstName("John")
+                        .lastName("Doe")
+                        .registrationDate(LocalDate.now())
+                        .studentState(StudentState.REGISTERED)
+                        .phoneNumber("123-123-1234")
+                        .appliedOffersId(new HashSet<>())
+                        .exclusiveOffersId(new HashSet<>(){{add(insertInternshipOffersStudentView());}})
+                        .build()
         );
 
         studentRepository.saveAll(students).subscribe(student -> log.info("Student has been saved : {}", student));
@@ -118,7 +157,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .maxSalary(17.50f)
                         .minSalary(16.25f)
                         .emailOfMonitor("9182738492@gmail.com")
-                        .listEmailInterestedStudents(Collections.emptyList())
+                        .listEmailInterestedStudents(new HashSet<>())
                         .build();
 
         InternshipOffer internshipOffer2 = InternshipOffer.builder()
@@ -132,7 +171,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 .maxSalary(19.50f)
                 .minSalary(19.50f)
                 .emailOfMonitor("9182738492@gmail.com")
-                .listEmailInterestedStudents(Collections.emptyList())
+                .listEmailInterestedStudents(new HashSet<>())
                 .build();
 
         for (int i = 0; i < 7; i++) {
@@ -157,6 +196,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .maxSalary(22.0f)
                         .isValidated(false)
                         .isExclusive(false)
+                        .listEmailInterestedStudents(new HashSet<>())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -169,6 +209,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .maxSalary(22.0f)
                         .isValidated(false)
                         .isExclusive(false)
+                        .listEmailInterestedStudents(new HashSet<>())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -181,6 +222,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .maxSalary(20.0f)
                         .isValidated(false)
                         .isExclusive(false)
+                        .listEmailInterestedStudents(new HashSet<>())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -194,6 +236,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isValidated(false)
                         .validationDate(null)
                         .isExclusive(false)
+                        .listEmailInterestedStudents(new HashSet<>())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -207,6 +250,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isValidated(true)
                         .validationDate(null)
                         .isExclusive(false)
+                        .listEmailInterestedStudents(new HashSet<>())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -220,6 +264,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isValidated(false)
                         .validationDate(null)
                         .isExclusive(false)
+                        .listEmailInterestedStudents(new HashSet<>())
                         .build()
         );
 
