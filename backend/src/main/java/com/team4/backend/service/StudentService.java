@@ -45,8 +45,7 @@ public class StudentService {
 
     public Mono<Student> findByEmail(String email) {
         return studentRepository.findByEmail(email)
-                .filter(Objects::nonNull)
-                .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
+               .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
     }
 
     public Mono<Student> updateCvValidity(String email, Boolean valid) {

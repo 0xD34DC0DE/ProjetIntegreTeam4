@@ -85,6 +85,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("travis123"))
                         .hasValidCv(false)
                         .appliedOffersId(new HashSet<>())
+                        .exclusiveOffersId(new HashSet<>())
                         .studentState(StudentState.WAITING_FOR_RESPONSE)
                         .build(),
                 Student.studentBuilder()
@@ -95,6 +96,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("jean123"))
                         .hasValidCv(false)
                         .appliedOffersId(new HashSet<>())
+                        .exclusiveOffersId(new HashSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
                 Student.studentBuilder()
@@ -105,6 +107,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("farid123"))
                         .hasValidCv(false)
                         .appliedOffersId(new HashSet<>())
+                        .exclusiveOffersId(new HashSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
                 Student.studentBuilder()
@@ -114,6 +117,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .phoneNumber("4385738764")
                         .password(pbkdf2Encoder.encode("kevin123"))
                         .appliedOffersId(new HashSet<>())
+                        .exclusiveOffersId(new HashSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .hasValidCv(false).build(),
                 Student.studentBuilder()

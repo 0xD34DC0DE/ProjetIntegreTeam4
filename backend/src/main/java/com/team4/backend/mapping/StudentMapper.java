@@ -34,7 +34,7 @@ public abstract class StudentMapper {
                 .build();
     }
 
-    public static StudentProfileDto toProfileDto(Student student){
+    public static StudentProfileDto toProfileDto(Student student) {
         return StudentProfileDto.builder()
                 .id(student.getId())
                 .email(student.getEmail())
@@ -43,8 +43,8 @@ public abstract class StudentMapper {
                 .registrationDate(student.getRegistrationDate())
                 .phoneNumber(student.getPhoneNumber())
                 .studentState(student.getStudentState())
-                .nbrOfAppliedOffers(student.getAppliedOffersId().size())
-                .nbrOfExclusiveOffers(student.getExclusiveOffersId().size())
+                .nbrOfAppliedOffers(student.getAppliedOffersId() != null ? student.getAppliedOffersId().size() : 0)
+                .nbrOfExclusiveOffers(student.getExclusiveOffersId() != null ? student.getExclusiveOffersId().size() : 0)
                 .hasValidCv(student.getHasValidCv())
                 .build();
     }
