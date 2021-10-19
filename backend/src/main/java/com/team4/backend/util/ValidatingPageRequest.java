@@ -3,6 +3,7 @@ package com.team4.backend.util;
 import com.team4.backend.exception.InvalidPageRequestException;
 import lombok.Data;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -16,6 +17,11 @@ public abstract class ValidatingPageRequest {
         return PageRequest.of(page, size);
     }
 
+    public static PageRequest getPageRequest(Integer page, Integer size, Sort sort) throws InvalidPageRequestException {
+        validateValues(page, size);
+        return PageRequest.of(page, size, sort);
+    }
+
     public static Mono<PageRequest> getPageRequestMono(Integer page, Integer size) {
         try {
             validateValues(page, size);
@@ -23,6 +29,15 @@ public abstract class ValidatingPageRequest {
             return Mono.error(e);
         }
         return Mono.just(PageRequest.of(page, size));
+    }
+
+    public static Mono<PageRequest> getPageRequestMono(Integer page, Integer size, Sort sort) {
+        try {
+            validateValues(page, size);
+        } catch (InvalidPageRequestException e) {
+            return Mono.error(e);
+        }
+        return Mono.just(PageRequest.of(page, size, sort));
     }
 
     public static <T> Flux<T> applyPaging(Collection<T> list, Integer page, Integer size) {
