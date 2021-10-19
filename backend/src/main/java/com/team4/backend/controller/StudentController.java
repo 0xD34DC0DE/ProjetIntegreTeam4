@@ -3,14 +3,15 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.StudentCreationDto;
 import com.team4.backend.mapping.StudentMapper;
+import com.team4.backend.model.enums.StudentState;
+import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.StudentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/student")
@@ -28,6 +29,13 @@ public class StudentController {
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(error.getMessage())));
         //TODO add a non-handled exception to make sure it returns 500 and not 409
+    }
+
+    @PatchMapping("/updateStudentState")
+    public Mono<ResponseEntity<String>> updateStudentState(Principal principal) {
+        return studentService.updateStudentState(UserSessionService.getLoggedUserEmail(principal), StudentState.INTERNSHIP_FOUND)
+                .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")))
+                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
     }
 
 }
