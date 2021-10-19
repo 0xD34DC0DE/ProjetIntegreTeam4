@@ -1,8 +1,8 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.StudentCreationDto;
+import com.team4.backend.dto.StudentProfileDto;
 import com.team4.backend.exception.ForbiddenActionException;
-import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
@@ -113,7 +113,7 @@ public class StudentControllerTest {
     }
 
     @Test
-    void shouldNotUpdateStudentStateWhenStudentStateIsNotWaitingForResponse(){
+    void shouldNotUpdateStudentStateWhenStudentStateIsNotWaitingForResponse() {
         //ARRANGE
         when(studentService.updateStudentState(any(), any())).thenReturn(Mono.error(ForbiddenActionException::new));
 
@@ -125,6 +125,38 @@ public class StudentControllerTest {
                 //ASSERT
                 .expectStatus().isForbidden()
                 .expectBodyList(String.class);
+    }
+
+    @Test
+    void shouldGetStudentProfile() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentService.findByEmail(any())).thenReturn(Mono.just(student));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/student/getProfile")
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(StudentProfileDto.class);
+    }
+
+    @Test
+    void shouldNotGetStudentProfile() {
+        //ARRANGE
+        when(studentService.findByEmail(any())).thenReturn(Mono.error(UserNotFoundException::new));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/student/getProfile")
+                .exchange()
+                //ASSERT
+                .expectStatus().isNotFound()
+                .expectBodyList(StudentProfileDto.class);
     }
 
 }

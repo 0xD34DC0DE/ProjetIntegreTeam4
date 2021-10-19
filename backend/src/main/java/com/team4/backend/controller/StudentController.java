@@ -2,8 +2,8 @@ package com.team4.backend.controller;
 
 
 import com.team4.backend.dto.StudentCreationDto;
+import com.team4.backend.dto.StudentProfileDto;
 import com.team4.backend.exception.ForbiddenActionException;
-import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.security.UserSessionService;
@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 import java.security.Principal;
@@ -43,6 +44,14 @@ public class StudentController {
                         Mono.just(ResponseEntity.status(error instanceof ForbiddenActionException ?
                                 HttpStatus.FORBIDDEN : HttpStatus.NOT_FOUND
                         ).body(error.getMessage())));
+    }
+
+    @GetMapping("/getProfile")
+    @PreAuthorize("hasAuthority('STUDENT')")
+    public Mono<StudentProfileDto> getStudentProfile(Principal principal) {
+        return studentService.findByEmail(UserSessionService.getLoggedUserEmail(principal))
+                .map(StudentMapper::toProfileDto)
+                .onErrorMap(error -> new ResponseStatusException(HttpStatus.NOT_FOUND, error.getMessage()));
     }
 
 }

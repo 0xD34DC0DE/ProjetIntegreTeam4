@@ -11,6 +11,8 @@ import com.team4.backend.util.PBKDF2Encoder;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
+import java.util.Objects;
+
 @Service
 public class StudentService {
 
@@ -43,6 +45,7 @@ public class StudentService {
 
     public Mono<Student> findByEmail(String email) {
         return studentRepository.findByEmail(email)
+                .filter(Objects::nonNull)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
     }
 

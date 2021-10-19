@@ -1,6 +1,7 @@
 package com.team4.backend.mapping;
 
 import com.team4.backend.dto.StudentCreationDto;
+import com.team4.backend.dto.StudentProfileDto;
 import com.team4.backend.model.Student;
 
 import java.time.LocalDate;
@@ -29,6 +30,21 @@ public abstract class StudentMapper {
                 .registrationDate(student.getRegistrationDate())
                 .phoneNumber(student.getPhoneNumber())
                 .studentState(student.getStudentState())
+                .hasValidCv(student.getHasValidCv())
+                .build();
+    }
+
+    public static StudentProfileDto toProfileDto(Student student){
+        return StudentProfileDto.builder()
+                .id(student.getId())
+                .email(student.getEmail())
+                .firstName(student.getFirstName())
+                .lastName(student.getLastName())
+                .registrationDate(student.getRegistrationDate())
+                .phoneNumber(student.getPhoneNumber())
+                .studentState(student.getStudentState())
+                .nbrOfAppliedOffers(student.getAppliedOffersId().size())
+                .nbrOfExclusiveOffers(student.getExclusiveOffersId().size())
                 .hasValidCv(student.getHasValidCv())
                 .build();
     }

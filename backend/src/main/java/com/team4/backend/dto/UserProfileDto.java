@@ -1,6 +1,5 @@
 package com.team4.backend.dto;
 
-import com.team4.backend.model.enums.Role;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
