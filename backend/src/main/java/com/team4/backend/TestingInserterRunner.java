@@ -157,7 +157,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .maxSalary(17.50f)
                         .minSalary(16.25f)
                         .emailOfMonitor("9182738492@gmail.com")
-                        .listEmailInterestedStudents(new ArrayList<>())
+                        .listEmailInterestedStudents(new HashSet<>())
                         .build();
 
         InternshipOffer internshipOffer2 = InternshipOffer.builder()
@@ -171,7 +171,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 .maxSalary(19.50f)
                 .minSalary(19.50f)
                 .emailOfMonitor("9182738492@gmail.com")
-                .listEmailInterestedStudents(new ArrayList<>())
+                .listEmailInterestedStudents(new HashSet<>())
                 .build();
 
         for (int i = 0; i < 7; i++) {
@@ -196,7 +196,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .maxSalary(22.0f)
                         .isValidated(false)
                         .isExclusive(false)
-                        .listEmailInterestedStudents(new ArrayList<>())
+                        .listEmailInterestedStudents(new HashSet<>())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -209,7 +209,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .maxSalary(22.0f)
                         .isValidated(false)
                         .isExclusive(false)
-                        .listEmailInterestedStudents(new ArrayList<>())
+                        .listEmailInterestedStudents(new HashSet<>())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -222,7 +222,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .maxSalary(20.0f)
                         .isValidated(false)
                         .isExclusive(false)
-                        .listEmailInterestedStudents(new ArrayList<>())
+                        .listEmailInterestedStudents(new HashSet<>())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -236,7 +236,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isValidated(false)
                         .validationDate(null)
                         .isExclusive(false)
-                        .listEmailInterestedStudents(new ArrayList<>())
+                        .listEmailInterestedStudents(new HashSet<>())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -250,7 +250,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isValidated(true)
                         .validationDate(null)
                         .isExclusive(false)
-                        .listEmailInterestedStudents(new ArrayList<>())
+                        .listEmailInterestedStudents(new HashSet<>())
                         .build(),
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
@@ -264,7 +264,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isValidated(false)
                         .validationDate(null)
                         .isExclusive(false)
-                        .listEmailInterestedStudents(new ArrayList<>())
+                        .listEmailInterestedStudents(new HashSet<>())
                         .build()
         );
 

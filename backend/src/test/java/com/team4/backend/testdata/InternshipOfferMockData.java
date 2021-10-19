@@ -9,9 +9,7 @@ import com.team4.backend.model.Student;
 import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public abstract class InternshipOfferMockData {
 
@@ -135,8 +133,8 @@ public abstract class InternshipOfferMockData {
                 .build();
     }
 
-    public static List<String> getInterestedStudentsEmailList() {
-        List<String> studentEmails = new ArrayList<>();
+    public static Set<String> getInterestedStudentsEmailList() {
+        Set<String> studentEmails = new HashSet<>();
         studentEmails.add("student1@email.com");
         studentEmails.add("student2@email.com");
         return studentEmails;
