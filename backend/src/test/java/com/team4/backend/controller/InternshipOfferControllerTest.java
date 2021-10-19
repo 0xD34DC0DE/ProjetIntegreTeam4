@@ -143,9 +143,10 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldReturnGeneralInternshipOffers() {
         //ARRANGE
-        List<InternshipOffer> internshipOffers = InternshipOfferMockData.getListInternshipOffer(3);
+        List<InternshipOfferStudentViewDto> internshipOffers = InternshipOfferMockData
+                .getListInternshipOfferStudentViewDto(3);
 
-        when(internshipOfferService.getGeneralInternshipOffers(any(Integer.class), any(Integer.class)))
+        when(internshipOfferService.getGeneralInternshipOffers(any(Integer.class), any(Integer.class), any()))
                 .thenReturn(Flux.fromIterable(internshipOffers));
 
         //ACT
@@ -161,7 +162,9 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldReturnExclusiveInternshipOffers() {
         //ARRANGE
-        List<InternshipOffer> internshipOffers = InternshipOfferMockData.getListInternshipOffer(3);
+        List<InternshipOfferStudentViewDto> internshipOffers =
+                InternshipOfferMockData.getListInternshipOfferStudentViewDto(3);
+
 
         when(internshipOfferService.getStudentExclusiveOffers(
                 any(String.class), any(Integer.class), any(Integer.class))
@@ -180,7 +183,7 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldNotReturnGeneralInternshipOffersInvalidParametersSize() {
         //ARRANGE
-        when(internshipOfferService.getGeneralInternshipOffers(any(Integer.class), any(Integer.class)))
+        when(internshipOfferService.getGeneralInternshipOffers(any(Integer.class), any(Integer.class), any()))
                 .thenReturn(Flux.error(InvalidPageRequestException::new));
 
         //ACT
