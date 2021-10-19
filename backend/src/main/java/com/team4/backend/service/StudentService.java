@@ -53,11 +53,11 @@ public class StudentService {
     }
 
     public Mono<Student> updateStudentState(String email, StudentState studentState) {
-        //TODO --> call function that will trigger the contract generation
         return findByEmail(email)
                 .filter(student -> student.getStudentState().equals(StudentState.WAITING_FOR_RESPONSE))
-                .switchIfEmpty(Mono.error(new UnauthorizedException("Can't update state if you're not waiting for a response!")))
+                .switchIfEmpty(Mono.error(new UnauthorizedException("Can't update your state if you're not waiting for a response to your recent interview!")))
                 .map(student -> {
+                    //TODO --> call function that will trigger the contract generation
                     student.setStudentState(studentState);
                     return student;
                 }).flatMap(studentRepository::save);
