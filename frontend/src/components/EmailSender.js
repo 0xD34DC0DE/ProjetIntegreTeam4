@@ -15,8 +15,10 @@ import {
   const EmailSender = ({ open, toggleDialogs, receiver }) => {
     const [errorMessage, setErrorMessage] = useState();
     const [form, setForm] = useState({
-      email: "",
-      password: "",
+      sender: userInfo.email.toLowerCase(),
+      receiver: receiver,
+      subject: "",
+      content: ""
     });
     const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
   
