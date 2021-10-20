@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -40,8 +41,9 @@ public class FileMetaDataController {
 
     @GetMapping("/getListInvalidCvNotSeen/{noPage}")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Flux<FileMetaDataInternshipManagerViewDto> getListInvalidCvNotSeen(@PathVariable Integer noPage) throws InvalidPageRequestException {
-        return fileMetaDataService.getListInvalidCvNotSeen(noPage).map(FileMetaDataMapper::toInternshipManagerViewDto);
+    public Flux<FileMetaDataInternshipManagerViewDto> getListInvalidCvNotSeen(@PathVariable Integer noPage) {
+        return fileMetaDataService.getListInvalidCvNotSeen(noPage).map(FileMetaDataMapper::toInternshipManagerViewDto)
+                .onErrorMap(error -> new ResponseStatusException(HttpStatus.BAD_REQUEST,error.getMessage()));
     }
 
     @PatchMapping("/validateCv")
