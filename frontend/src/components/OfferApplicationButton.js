@@ -12,7 +12,8 @@ function OfferApplicationButton({disabled, offerId}) {
     if (userInfo.loggedIn && isWaitingResponse) {
       axios({
         method: "PATCH",
-        url: `http://localhost:8080/internshipOffer/apply/${offerId}`,
+        baseURL: "http://localhost:8080",
+        url: `/internshipOffer/apply/${offerId}`,
         headers: {
           Authorization: userInfo.jwt,
         },
