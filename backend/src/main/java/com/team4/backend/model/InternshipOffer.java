@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
@@ -44,6 +45,6 @@ public class InternshipOffer implements Serializable {
 
     private Boolean isExclusive;
 
-    private List<String> listEmailInterestedStudents;
+    private Set<String> listEmailInterestedStudents;
 
 }

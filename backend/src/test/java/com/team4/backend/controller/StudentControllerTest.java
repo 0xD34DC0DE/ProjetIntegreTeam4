@@ -1,8 +1,11 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.StudentCreationDto;
+import com.team4.backend.dto.StudentProfileDto;
+import com.team4.backend.exception.ForbiddenActionException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.mapping.StudentMapper;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
 import com.team4.backend.service.StudentService;
 import com.team4.backend.testdata.StudentMockData;
@@ -91,6 +94,82 @@ public class StudentControllerTest {
         //ASSERT
                 .expectStatus().isOk()
                 .expectBodyList(StudentCreationDto.class);
+    void shouldUpdateStudentState() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentService.updateStudentState(any(), any())).thenReturn(Mono.just(student));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/student/updateStudentState")
+                .exchange()
+                //ASSERT
+                .expectStatus().isNoContent()
+                .expectBodyList(String.class);
+    }
+
+    @Test
+    void shouldNotUpdateStudentStateWhenNotFound() {
+        //ARRANGE
+        when(studentService.updateStudentState(any(), any())).thenReturn(Mono.error(UserNotFoundException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/student/updateStudentState")
+                .exchange()
+                //ASSERT
+                .expectStatus().isNotFound()
+                .expectBodyList(String.class);
+    }
+
+    @Test
+    void shouldNotUpdateStudentStateWhenStudentStateIsNotWaitingForResponse() {
+        //ARRANGE
+        when(studentService.updateStudentState(any(), any())).thenReturn(Mono.error(ForbiddenActionException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/student/updateStudentState")
+                .exchange()
+                //ASSERT
+                .expectStatus().isForbidden()
+                .expectBodyList(String.class);
+    }
+
+    @Test
+    void shouldGetStudentProfile() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentService.findByEmail(any())).thenReturn(Mono.just(student));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/student/getProfile")
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(StudentProfileDto.class);
+    }
+
+    @Test
+    void shouldNotGetStudentProfile() {
+        //ARRANGE
+        when(studentService.findByEmail(any())).thenReturn(Mono.error(UserNotFoundException::new));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/student/getProfile")
+                .exchange()
+                //ASSERT
+                .expectStatus().isNotFound()
+                .expectBodyList(StudentProfileDto.class);
     }
 
 }

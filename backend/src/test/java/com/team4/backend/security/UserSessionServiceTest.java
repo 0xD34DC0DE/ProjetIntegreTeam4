@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-public class OwnershipServiceTest {
+public class UserSessionServiceTest {
 
 
     @Test
@@ -19,7 +19,7 @@ public class OwnershipServiceTest {
         when(principal.getName()).thenReturn("username");
 
         //ACT & ASSERT
-        assertEquals("username", OwnershipService.getLoggedUserName(principal));
+        assertEquals("username", UserSessionService.getLoggedUserEmail(principal));
     }
 
     @Test
@@ -31,6 +31,6 @@ public class OwnershipServiceTest {
         when(principal.getName()).thenReturn("");
 
         //ACT & ASSERT
-        assertEquals("", OwnershipService.getLoggedUserName(principal));
+        assertEquals("", UserSessionService.getLoggedUserEmail(principal));
     }
 }

@@ -4,10 +4,12 @@ import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
+import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.InternshipOfferRepository;
+import com.team4.backend.security.UserSessionService;
 import com.team4.backend.testdata.InternshipOfferMockData;
 import com.team4.backend.testdata.StudentMockData;
 import lombok.extern.java.Log;
@@ -21,6 +23,7 @@ import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -93,7 +96,7 @@ public class InternshipOfferServiceTest {
         InternshipOffer internshipOffer2 = InternshipOfferMockData.getInternshipOffer();
         internshipOffer2.setId(exclusiveOfferIds.get(1));
 
-        when(studentService.getStudent(any(String.class))).thenReturn(Mono.just(student));
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
                 same(exclusiveOfferIds.get(0)), any(LocalDate.class))
@@ -104,7 +107,7 @@ public class InternshipOfferServiceTest {
         ).thenReturn(Mono.just(internshipOffer2));
 
         //ACT
-        Flux<InternshipOffer> internshipOfferFlux =
+        Flux<InternshipOfferStudentViewDto> internshipOfferFlux =
                 internshipOfferService.getStudentExclusiveOffers(student.getEmail(), 0, 2);
 
         //ASSERT
@@ -123,14 +126,14 @@ public class InternshipOfferServiceTest {
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
         internshipOffer.setId(exclusiveOfferIds.get(1));
 
-        when(studentService.getStudent(any(String.class))).thenReturn(Mono.just(student));
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
                 same(exclusiveOfferIds.get(1)), any(LocalDate.class))
         ).thenReturn(Mono.just(internshipOffer));
 
         //ACT
-        Flux<InternshipOffer> internshipOfferFlux =
+        Flux<InternshipOfferStudentViewDto> internshipOfferFlux =
                 internshipOfferService.getStudentExclusiveOffers(student.getEmail(), 1, 1);
 
         //ASSERT
@@ -142,10 +145,10 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldNotGetExclusiveInternshipOfferStudentViewsInvalidEmail() {
         //ARRANGE
-        when(studentService.getStudent(any(String.class))).thenReturn(Mono.error(UserNotFoundException::new));
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
-        Flux<InternshipOffer> internshipOfferFlux =
+        Flux<InternshipOfferStudentViewDto> internshipOfferFlux =
                 internshipOfferService.getStudentExclusiveOffers("invalid@gmail.com", 0, 1);
 
         //ASSERT
@@ -158,10 +161,10 @@ public class InternshipOfferServiceTest {
     void shouldNotGetExclusiveInternshipOfferStudentViewsInvalidPageSize() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
-        when(studentService.getStudent(any(String.class))).thenReturn(Mono.just(student));
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         //ACT
-        Flux<InternshipOffer> internshipOfferFlux =
+        Flux<InternshipOfferStudentViewDto> internshipOfferFlux =
                 internshipOfferService.getStudentExclusiveOffers("invalid@gmail.com", 0, 0);
 
         //ASSERT
@@ -182,8 +185,11 @@ public class InternshipOfferServiceTest {
                 any(LocalDate.class), any(Pageable.class))
         ).thenReturn(Flux.fromIterable(internshipOffers));
 
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
+
         //ACT
-        Flux<InternshipOffer> internshipOfferFlux = internshipOfferService.getGeneralInternshipOffers(0, 2);
+        Flux<InternshipOfferStudentViewDto> internshipOfferFlux =
+                internshipOfferService.getGeneralInternshipOffers(0, 2, student.getEmail());
 
         //ASSERT
         StepVerifier.create(internshipOfferFlux)
@@ -195,9 +201,13 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldNotGetGeneralInternshipOfferStudentViewsInvalidPage() {
         //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         //ACT
-        Flux<InternshipOffer> internshipOfferFlux = internshipOfferService.getGeneralInternshipOffers(0, 0);
+        Flux<InternshipOfferStudentViewDto> internshipOfferFlux =
+                internshipOfferService.getGeneralInternshipOffers(0, 0, student.getEmail());
 
         //ASSERT
         StepVerifier.create(internshipOfferFlux)
@@ -236,7 +246,7 @@ public class InternshipOfferServiceTest {
     void shouldGetExclusiveInternshipOfferPageCount() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
-        when(studentService.getStudent(any(String.class))).thenReturn(Mono.just(student));
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         //ACT
         Mono<Long> pageCountMono = internshipOfferService.getInternshipOffersPageCount(student.getEmail(), 1);
@@ -276,7 +286,7 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldNotGetGeneralInternshipOfferPageCountInvalidEmail() {
         //ARRANGE
-        when(studentService.getStudent(any(String.class))).thenReturn(Mono.error(UserNotFoundException::new));
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
         Mono<Long> pageCountMono = internshipOfferService.getInternshipOffersPageCount("invalid@gmail.com", 1);
@@ -354,4 +364,175 @@ public class InternshipOfferServiceTest {
                 .verifyComplete();
     }
 
+    @Test
+    void shouldApplyInternshipOffer() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+        Student student = StudentMockData.getMockStudent();
+
+        when(internshipOfferRepository.findById(any(String.class))).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
+
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
+        when(studentService.addOfferToStudentAppliedOffers(any(Student.class), any(String.class)))
+                .then(s -> {
+                    student.getAppliedOffersId().add(internshipOffer.getId());
+                    return Mono.just(student);
+                });
+
+        int sizeBefore = InternshipOfferMockData.getInternshipOffer().getListEmailInterestedStudents().size();
+
+        //ACT
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.applyOffer(
+                internshipOffer.getId(),
+                student.getEmail()
+        );
+
+        //ASSERT
+        StepVerifier.create(internshipOfferMono)
+                .assertNext(offer -> assertEquals(sizeBefore + 1, offer.getListEmailInterestedStudents().size()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotApplyInternshipOfferInvalidStudent() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+        Student student = StudentMockData.getMockStudent();
+        internshipOffer.getListEmailInterestedStudents().add(student.getEmail());
+
+        when(internshipOfferRepository.findById(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
+        when(studentService.findByEmail(student.getEmail())).thenReturn(Mono.error(UserNotFoundException::new));
+
+        //ACT
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.applyOffer(
+                internshipOffer.getId(),
+                student.getEmail()
+        );
+
+        //ASSERT
+        StepVerifier.create(internshipOfferMono)
+                .expectError(UserNotFoundException.class)
+                .verify();
+    }
+
+    @Test
+    void shouldNotApplyInternshipOfferInvalidOffer() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+        Student student = StudentMockData.getMockStudent();
+        internshipOffer.getListEmailInterestedStudents().add(student.getEmail());
+
+        when(internshipOfferRepository.findById(internshipOffer.getId()))
+                .thenReturn(Mono.error(InternshipOfferNotFoundException::new));
+
+        //ACT
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.applyOffer(
+                internshipOffer.getId(),
+                student.getEmail()
+        );
+
+        //ASSERT
+        StepVerifier.create(internshipOfferMono)
+                .expectError(InternshipOfferNotFoundException.class)
+                .verify();
+    }
+
+    @Test
+    void shouldNotApplyToInternshipOfferNotIncludedInStudentExclusiveOffers () {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+        internshipOffer.setIsExclusive(true);
+        Student student = StudentMockData.getMockStudent();
+
+        when(internshipOfferRepository.findById(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
+
+        when(studentService.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
+
+        //ACT
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.applyOffer(
+                internshipOffer.getId(),
+                student.getEmail()
+        );
+
+        //ASSERT
+        StepVerifier.create(internshipOfferMono)
+                .expectError(UnauthorizedException.class)
+                .verify();
+    }
+
+
+    @Test
+    void shouldGetGeneralInternshipOfferStudentViewsAlreadyAppliedMatches() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+        List<InternshipOffer> internshipOffers = InternshipOfferMockData.getListInternshipOffer(2);
+        List<InternshipOfferStudentViewDto> internshipOfferStudentViewDtos =
+                InternshipOfferMockData.getListInternshipOfferStudentViewDto(2);
+
+        student.getAppliedOffersId().add(internshipOfferStudentViewDtos.get(0).getId());
+
+        when(internshipOfferRepository.findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(
+                any(LocalDate.class), any(Pageable.class))
+        ).thenReturn(Flux.fromIterable(internshipOffers));
+
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
+
+        //ACT
+        Flux<InternshipOfferStudentViewDto> internshipOfferFlux =
+                internshipOfferService.getGeneralInternshipOffers(0, 2, student.getEmail());
+
+        //ASSERT
+        StepVerifier.create(internshipOfferFlux)
+                .assertNext(offer -> {
+                    assertEquals(offer.getId(), internshipOfferStudentViewDtos.get(0).getId());
+                    assertTrue(offer.getHasAlreadyApplied());
+                })
+                .assertNext(offer -> {
+                    assertEquals(offer.getId(), internshipOfferStudentViewDtos.get(1).getId());
+                    assertFalse(offer.getHasAlreadyApplied());
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldGetExclusiveInternshipOfferStudentViewsAlreadyAppliedMatches() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+        List<String> exclusiveOfferIds = new ArrayList<>(student.getExclusiveOffersId());
+
+        InternshipOffer internshipOffer1 = InternshipOfferMockData.getInternshipOffer();
+        internshipOffer1.setId(exclusiveOfferIds.get(0));
+
+        InternshipOffer internshipOffer2 = InternshipOfferMockData.getInternshipOffer();
+        internshipOffer2.setId(exclusiveOfferIds.get(1));
+
+        student.getAppliedOffersId().add(internshipOffer1.getId());
+
+        when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
+
+        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
+                same(exclusiveOfferIds.get(0)), any(LocalDate.class))
+        ).thenReturn(Mono.just(internshipOffer1));
+
+        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
+                same(exclusiveOfferIds.get(1)), any(LocalDate.class))
+        ).thenReturn(Mono.just(internshipOffer2));
+
+        //ACT
+        Flux<InternshipOfferStudentViewDto> internshipOfferFlux =
+                internshipOfferService.getStudentExclusiveOffers(student.getEmail(), 0, 2);
+
+        //ASSERT
+        StepVerifier.create(internshipOfferFlux)
+                .assertNext(offer -> {
+                    assertEquals(offer.getId(), exclusiveOfferIds.get(0));
+                    assertTrue(offer.getHasAlreadyApplied());
+                })
+                .assertNext(offer -> {
+                    assertEquals(offer.getId(), exclusiveOfferIds.get(1));
+                    assertFalse(offer.getHasAlreadyApplied());
+                })
+                .verifyComplete();
+    }
 }

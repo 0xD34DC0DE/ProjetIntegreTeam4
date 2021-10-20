@@ -144,7 +144,7 @@ class FileMetaDataServiceTest {
     }
 
     @Test
-    void shouldGetListInvalidCvNotSeen() throws InvalidPageRequestException {
+    void shouldGetListInvalidCvNotSeen() {
         //ARRANGE
         Integer noPage = 0;
         when(fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("uploadDate").ascending())))

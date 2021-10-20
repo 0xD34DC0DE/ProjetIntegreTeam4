@@ -7,6 +7,7 @@ import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.model.InternshipOffer;
 
 import java.util.Collections;
+import java.util.HashSet;
 
 public abstract class InternshipOfferMapper {
 
@@ -20,7 +21,7 @@ public abstract class InternshipOfferMapper {
                 .description(internshipOfferCreationDto.getDescription())
                 .minSalary(internshipOfferCreationDto.getMinSalary())
                 .maxSalary(internshipOfferCreationDto.getMaxSalary())
-                .listEmailInterestedStudents(Collections.emptyList())
+                .listEmailInterestedStudents(new HashSet<>())
                 .isValidated(false)
                 .isExclusive(false)
                 .build();
@@ -37,6 +38,7 @@ public abstract class InternshipOfferMapper {
                 .minSalary(internshipOffer.getMinSalary())
                 .maxSalary(internshipOffer.getMaxSalary())
                 .isExclusive(internshipOffer.getIsExclusive())
+                .hasAlreadyApplied(false)
                 .build();
     }
 
