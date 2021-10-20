@@ -1,6 +1,7 @@
 package com.team4.backend.mapping;
 
 import com.team4.backend.dto.StudentCreationDto;
+import com.team4.backend.dto.StudentProfileDto;
 import com.team4.backend.model.Student;
 import com.team4.backend.testdata.StudentMockData;
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,28 @@ public class StudentMapperTest {
         assertEquals(entity.getPhoneNumber(), dto.getPhoneNumber());
         assertEquals(entity.getStudentState(), dto.getStudentState());
         assertEquals(entity.getRegistrationDate(), dto.getRegistrationDate());
+        assertEquals(entity.getHasValidCv(), dto.getHasValidCv());
+    }
+
+    @Test
+    void mapEntityToProfileDto() {
+        //ARANGE
+        Student entity = StudentMockData.getMockStudent();
+
+        //ACT
+        StudentProfileDto dto = StudentMapper.toProfileDto(entity);
+
+        //ASSERT
+
+        assertEquals(entity.getId(), dto.getId());
+        assertEquals(entity.getEmail(), dto.getEmail());
+        assertEquals(entity.getFirstName(), dto.getFirstName());
+        assertEquals(entity.getLastName(), dto.getLastName());
+        assertEquals(entity.getPhoneNumber(), dto.getPhoneNumber());
+        assertEquals(entity.getStudentState(), dto.getStudentState());
+        assertEquals(entity.getRegistrationDate(), dto.getRegistrationDate());
+        assertEquals(entity.getAppliedOffersId().size(), dto.getNbrOfAppliedOffers());
+        assertEquals(entity.getExclusiveOffersId().size(), dto.getNbrOfExclusiveOffers());
         assertEquals(entity.getHasValidCv(), dto.getHasValidCv());
     }
 
