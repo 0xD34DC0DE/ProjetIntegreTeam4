@@ -161,6 +161,7 @@ public abstract class InternshipOfferMockData {
             InternshipOfferStudentViewDto internshipOfferStudentViewDto = getInternshipStudentViewDto();
 
             internshipOfferStudentViewDto.setId(internshipOfferStudentViewDto.getId() + "_" + i);
+            internshipOfferStudentViewDto.setHasAlreadyApplied(false);
 
             internshipOffers.add(internshipOfferStudentViewDto);
         }
