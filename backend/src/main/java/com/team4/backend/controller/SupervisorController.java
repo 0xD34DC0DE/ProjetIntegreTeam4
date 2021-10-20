@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 
+import com.team4.backend.dto.StudentCreationDto;
 import com.team4.backend.dto.SupervisorCreationDto;
 import com.team4.backend.mapping.SupervisorMapper;
 import com.team4.backend.service.SupervisorService;
@@ -8,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -35,7 +37,9 @@ public class SupervisorController {
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(error.getMessage())));
     }
 
-
-
-
+    @GetMapping("/getAll")
+    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
+    public Flux<SupervisorCreationDto> getAllSupervisors(){
+        return supervisorService.getAllSupervisors().map(SupervisorMapper::toDto);
+    }
 }

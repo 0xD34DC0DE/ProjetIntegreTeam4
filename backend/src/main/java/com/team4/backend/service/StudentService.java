@@ -6,6 +6,7 @@ import com.team4.backend.model.Student;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -49,4 +50,7 @@ public class StudentService {
         }).flatMap(studentRepository::save);
     }
 
+    public Flux<Student> getAllStudents() {
+        return studentRepository.findAll();
+    }
 }

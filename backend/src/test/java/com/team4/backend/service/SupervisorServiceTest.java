@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -121,5 +122,19 @@ public class SupervisorServiceTest {
         StepVerifier.create(supervisorMono)
                 .expectError()
                 .verify();
+    }
+
+    @Test
+    void shouldGetAllSupervisors(){
+        //ARRANGE
+        when(supervisorRepository.findAll()).thenReturn(SupervisorMockData.getAllSupervisors());
+        //ACT
+        Flux<Supervisor> supervisors = supervisorService.getAllSupervisors();
+
+        //ASSERT
+        StepVerifier.create(supervisors)
+                .expectNextCount(2)
+                .verifyComplete();
+
     }
 }

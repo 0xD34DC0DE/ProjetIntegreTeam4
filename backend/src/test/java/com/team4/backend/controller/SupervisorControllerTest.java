@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -126,5 +127,22 @@ public class SupervisorControllerTest {
                 //ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
                 .expectBody(String.class);
+    }
+
+    @Test
+    void shouldGetAllSupervisors(){
+        //ARRANGE
+        when(supervisorService.getAllSupervisors()).thenReturn(SupervisorMockData.getAllSupervisors());
+
+        //ACT
+        webTestClient.get().uri(uriBuilder ->
+                uriBuilder
+                    .path("/supervisor/getAll")
+                    .build())
+                .exchange()
+        //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(SupervisorCreationDto.class);
+
     }
 }

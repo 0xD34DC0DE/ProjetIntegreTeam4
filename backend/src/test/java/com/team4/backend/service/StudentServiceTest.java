@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -170,6 +171,20 @@ public class StudentServiceTest {
         //ASSERT
         StepVerifier.create(studentMono)
                 .expectNextCount(0)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllStudents(){
+        //ARRANGE
+        when(studentRepository.findAll()).thenReturn(StudentMockData.getAllStudents());
+
+        //ACT
+        Flux<Student> students = studentService.getAllStudents();
+
+        //ASSERT
+        StepVerifier.create(students)
+                .expectNextCount(2)
                 .verifyComplete();
     }
 

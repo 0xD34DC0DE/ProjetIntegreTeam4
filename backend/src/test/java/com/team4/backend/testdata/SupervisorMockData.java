@@ -2,7 +2,10 @@ package com.team4.backend.testdata;
 
 import com.team4.backend.dto.SupervisorCreationDto;
 import com.team4.backend.model.Supervisor;
+import net.bytebuddy.implementation.bind.annotation.Super;
+import reactor.core.publisher.Flux;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,7 +37,50 @@ public class SupervisorMockData {
                 .build();
     }
 
+    public static Flux<Supervisor> getAllSupervisors(){
+        return Flux.just(Supervisor.supervisorBuilder()
+                .id("123a45ce678ae91d0b111b21")
+                .email("professeur@outlook.com")
+                .password("prof123")
+                .firstName("Maxime")
+                .lastName("Dupuis")
+                .studentEmails(getStudentEmails())
+                .phoneNumber("514-111-2222")
+                .registrationDate(null) // Current date
+                .build(), Supervisor.supervisorBuilder()
+                .id("222a44ce555ae66d0b777b88")
+                .email("enseignant@outlook.com")
+                .password("enseignant123")
+                .firstName("Paul")
+                .lastName("Hebert")
+                .phoneNumber("514-222-1111")
+                .registrationDate(null) // Current date
+                .build());
+    }
+
+    public static Flux<SupervisorCreationDto> getAllSupervisorsDto(){
+        return Flux.just(SupervisorCreationDto.builder()
+                .id("123a45ce678ae91d0b111b21")
+                .email("professeur@outlook.com")
+                .password("prof123")
+                .firstName("Maxime")
+                .lastName("Dupuis")
+                .studentEmails(getStudentEmails())
+                .phoneNumber("514-111-2222")
+                .registrationDate(null) // Current date
+                .build(), SupervisorCreationDto.builder()
+                .id("222a44ce555ae66d0b777b88")
+                .email("enseignant@outlook.com")
+                .password("enseignant123")
+                .firstName("Paul")
+                .lastName("Hebert")
+                .phoneNumber("514-222-1111")
+                .registrationDate(null) // Current date
+                .build());
+    }
+
     public static List<String> getStudentEmails() {
         return Arrays.asList("12395432@gmail.com", "toto23@outlook.com");
     }
+
 }

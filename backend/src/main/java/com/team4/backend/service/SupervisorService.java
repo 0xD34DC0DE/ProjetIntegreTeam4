@@ -4,10 +4,12 @@ import com.team4.backend.exception.DuplicateEntryException;
 import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.model.Student;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.repository.SupervisorRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
@@ -56,4 +58,7 @@ public class SupervisorService {
         }).switchIfEmpty(Mono.error(new UserNotFoundException("Can't find a supervisor with given id: " + supervisorId)));
     }
 
+    public Flux<Supervisor> getAllSupervisors(){
+        return supervisorRepository.findAll();
+    }
 }

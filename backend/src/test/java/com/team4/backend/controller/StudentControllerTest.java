@@ -2,6 +2,7 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.StudentCreationDto;
 import com.team4.backend.exception.UserAlreadyExistsException;
+import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.model.Student;
 import com.team4.backend.service.StudentService;
 import com.team4.backend.testdata.StudentMockData;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -75,6 +77,20 @@ public class StudentControllerTest {
                 // ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
                 .expectBody().isEmpty();
+    }
+
+    @Test
+    public void shouldGetAllStudents(){
+        //ARRANGE
+        Flux<Student> studentFlux = StudentMockData.getAllStudents();
+        when(studentService.getAllStudents()).thenReturn(studentFlux);
+        //ACT
+        webTestClient
+                .get().uri("/student/getAll")
+                .exchange()
+        //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(StudentCreationDto.class);
     }
 
 }
