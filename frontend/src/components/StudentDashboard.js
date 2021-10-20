@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { styled } from "@mui/material/styles";
 import {
   Avatar,
   Card,
@@ -13,6 +12,7 @@ import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import BlockIcon from '@mui/icons-material/Block';
 import TodayIcon from '@mui/icons-material/Today';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 const StudentDashBoard = () => {
   const [profile, setProfile] = useState({
@@ -77,6 +77,7 @@ const StudentDashBoard = () => {
               <Grid item xs>
                 <Typography gutterBottom variant="subtitle1" component="div">
                   {profile.lastName}, {profile.firstName}
+                  <AccountCircleIcon/>
                 </Typography>
                 <Typography variant="body2" component="div" gutterBottom>
                   {profile.phoneNumber}
