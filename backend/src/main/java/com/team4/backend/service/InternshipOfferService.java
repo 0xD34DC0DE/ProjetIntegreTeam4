@@ -70,8 +70,8 @@ public class InternshipOfferService {
                 );
     }
 
-    public Flux<InternshipOfferStudentViewDto> getGeneralInternshipOffers(Integer page, Integer size, Principal principal) {
-        return studentService.findByEmail(UserSessionService.getLoggedUserEmail(principal)).flatMapMany(student ->
+    public Flux<InternshipOfferStudentViewDto> getGeneralInternshipOffers(Integer page, Integer size, String studentEmail) {
+        return studentService.findByEmail(studentEmail).flatMapMany(student ->
                 ValidatingPageRequest.getPageRequestMono(page, size)
                 .flatMapMany(pageRequest ->
                         internshipOfferRepository
@@ -125,13 +125,13 @@ public class InternshipOfferService {
                 .map(count -> (long) Math.ceil((double) count / (double) size));
     }
 
-    public Mono<InternshipOffer> applyOffer(String offerId, Principal principal) {
+    public Mono<InternshipOffer> applyOffer(String offerId, String studentEmail) {
         return findInternshipOfferById(offerId)
                 .flatMap(internshipOffer -> {
                             if(!internshipOffer.getIsValidated()) {
                                 return Mono.error(new UnauthorizedException("Cannot apply to unvalidated offers"));
                             }
-                            return studentService.findByEmail(UserSessionService.getLoggedUserEmail(principal))
+                            return studentService.findByEmail(studentEmail)
                                     .flatMap(student ->
                                             addStudentEmailToOfferInterestedStudents(internshipOffer, student)
                                     );

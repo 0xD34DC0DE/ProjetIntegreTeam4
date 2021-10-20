@@ -186,15 +186,11 @@ public class InternshipOfferServiceTest {
                 any(LocalDate.class), any(Pageable.class))
         ).thenReturn(Flux.fromIterable(internshipOffers));
 
-        Principal principal = mock(Principal.class);
-
-        when(UserSessionService.getLoggedUserEmail(principal)).thenReturn(student.getEmail());
-
         when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         //ACT
         Flux<InternshipOfferStudentViewDto> internshipOfferFlux =
-                internshipOfferService.getGeneralInternshipOffers(0, 2, principal);
+                internshipOfferService.getGeneralInternshipOffers(0, 2, student.getEmail());
 
         //ASSERT
         StepVerifier.create(internshipOfferFlux)
@@ -208,15 +204,11 @@ public class InternshipOfferServiceTest {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
 
-        Principal principal = mock(Principal.class);
-
-        when(UserSessionService.getLoggedUserEmail(principal)).thenReturn(student.getEmail());
-
         when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         //ACT
         Flux<InternshipOfferStudentViewDto> internshipOfferFlux =
-                internshipOfferService.getGeneralInternshipOffers(0, 0, principal);
+                internshipOfferService.getGeneralInternshipOffers(0, 0, student.getEmail());
 
         //ASSERT
         StepVerifier.create(internshipOfferFlux)
@@ -379,9 +371,6 @@ public class InternshipOfferServiceTest {
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
         Student student = StudentMockData.getMockStudent();
 
-        Principal principal = mock(Principal.class);
-        when(UserSessionService.getLoggedUserEmail(principal)).thenReturn(student.getEmail());
-
         when(internshipOfferRepository.findById(any(String.class))).thenReturn(Mono.just(internshipOffer));
         when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
 
@@ -397,7 +386,7 @@ public class InternshipOfferServiceTest {
         //ACT
         Mono<InternshipOffer> internshipOfferMono = internshipOfferService.applyOffer(
                 internshipOffer.getId(),
-                principal
+                student.getEmail()
         );
 
         //ASSERT
@@ -413,15 +402,13 @@ public class InternshipOfferServiceTest {
         Student student = StudentMockData.getMockStudent();
         internshipOffer.getListEmailInterestedStudents().add(student.getEmail());
 
-        Principal principal = mock(Principal.class);
-        when(UserSessionService.getLoggedUserEmail(principal)).thenReturn(student.getEmail());
         when(internshipOfferRepository.findById(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
         when(studentService.findByEmail(student.getEmail())).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
         Mono<InternshipOffer> internshipOfferMono = internshipOfferService.applyOffer(
                 internshipOffer.getId(),
-                principal
+                student.getEmail()
         );
 
         //ASSERT
@@ -437,14 +424,13 @@ public class InternshipOfferServiceTest {
         Student student = StudentMockData.getMockStudent();
         internshipOffer.getListEmailInterestedStudents().add(student.getEmail());
 
-        Principal principal = mock(Principal.class);
         when(internshipOfferRepository.findById(internshipOffer.getId()))
                 .thenReturn(Mono.error(InternshipOfferNotFoundException::new));
 
         //ACT
         Mono<InternshipOffer> internshipOfferMono = internshipOfferService.applyOffer(
                 internshipOffer.getId(),
-                principal
+                student.getEmail()
         );
 
         //ASSERT
@@ -460,9 +446,6 @@ public class InternshipOfferServiceTest {
         internshipOffer.setIsExclusive(true);
         Student student = StudentMockData.getMockStudent();
 
-        Principal principal = mock(Principal.class);
-        when(UserSessionService.getLoggedUserEmail(principal)).thenReturn(student.getEmail());
-
         when(internshipOfferRepository.findById(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
 
         when(studentService.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
@@ -470,7 +453,7 @@ public class InternshipOfferServiceTest {
         //ACT
         Mono<InternshipOffer> internshipOfferMono = internshipOfferService.applyOffer(
                 internshipOffer.getId(),
-                principal
+                student.getEmail()
         );
 
         //ASSERT
@@ -494,15 +477,11 @@ public class InternshipOfferServiceTest {
                 any(LocalDate.class), any(Pageable.class))
         ).thenReturn(Flux.fromIterable(internshipOffers));
 
-        Principal principal = mock(Principal.class);
-
-        when(UserSessionService.getLoggedUserEmail(principal)).thenReturn(student.getEmail());
-
         when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         //ACT
         Flux<InternshipOfferStudentViewDto> internshipOfferFlux =
-                internshipOfferService.getGeneralInternshipOffers(0, 2, principal);
+                internshipOfferService.getGeneralInternshipOffers(0, 2, student.getEmail());
 
         //ASSERT
         StepVerifier.create(internshipOfferFlux)
