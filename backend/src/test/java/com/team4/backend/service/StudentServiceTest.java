@@ -1,8 +1,11 @@
 package com.team4.backend.service;
 
+import com.team4.backend.exception.ForbiddenActionException;
+import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
+import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -171,6 +174,55 @@ public class StudentServiceTest {
         StepVerifier.create(studentMono)
                 .expectNextCount(0)
                 .verifyComplete();
+    }
+
+    @Test
+    void shouldUpdateStudentState() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        student.setStudentState(StudentState.WAITING_FOR_RESPONSE);
+
+        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
+        when(studentRepository.save(any(Student.class))).thenReturn(Mono.just(student));
+
+        //ACT
+        Mono<Student> studentMono = studentService.updateStudentState(student.getEmail(), StudentState.INTERNSHIP_FOUND);
+
+        //ASSERT
+        StepVerifier.create(studentMono)
+                .assertNext(s -> assertEquals(StudentState.INTERNSHIP_FOUND,s.getStudentState()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotUpdateStudentStateWhenNotFound() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.empty());
+
+        //ACT
+        Mono<Student> studentMono = studentService.updateStudentState(student.getEmail(), StudentState.INTERNSHIP_FOUND);
+
+        //ASSERT
+        StepVerifier.create(studentMono).verifyError(UserNotFoundException.class);
+    }
+
+    @Test
+    void shouldNotUpdateStudentStateWhenStudentStateIsNotWaitingForResponse() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        student.setStudentState(StudentState.INTERNSHIP_NOT_FOUND);
+
+        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
+
+        //ACT
+        Mono<Student> studentMono = studentService.updateStudentState(student.getEmail(), StudentState.INTERNSHIP_FOUND);
+
+        //ASSERT
+        StepVerifier.create(studentMono).verifyError(ForbiddenActionException.class);
     }
 
 }

@@ -81,9 +81,12 @@ public class FileMetaDataService {
         return fileMetaDataRepository.countAllByIsValidFalseAndIsSeenFalse();
     }
 
-    public Flux<FileMetaData> getListInvalidCvNotSeen(Integer noPage) throws InvalidPageRequestException {
+    public Flux<FileMetaData> getListInvalidCvNotSeen(Integer noPage) {
 
-        return fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(ValidatingPageRequest.getPageRequest(noPage, 10, Sort.by("uploadDate").ascending()));
+        return ValidatingPageRequest
+                .getPageRequestMono(noPage, 10, Sort.by("uploadDate").ascending())
+                .flatMapMany(pageRequest -> fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(pageRequest));
+
     }
 
     public Mono<FileMetaData> validateCv(String id, Boolean isValid) {
@@ -100,5 +103,5 @@ public class FileMetaDataService {
                     return file;
                 }).flatMap(fileMetaDataRepository::save);
     }
-    
+
 }

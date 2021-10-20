@@ -85,19 +85,24 @@ public class TestingInserterRunner implements ApplicationRunner {
                                 Student.studentBuilder().email("123456789@gmail.com").firstName("Travis")
                                                 .lastName("Scott").phoneNumber("4387650987")
                                                 .password(pbkdf2Encoder.encode("travis123")).hasValidCv(false)
-                                                .appliedOffersId(new HashSet<>()).build(),
+                                                .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
+                                                .studentState(StudentState.WAITING_FOR_RESPONSE).build(),
                                 Student.studentBuilder().email("3643283423@gmail.com").firstName("Jean")
                                                 .lastName("Jordan").phoneNumber("5143245678")
                                                 .password(pbkdf2Encoder.encode("jean123")).hasValidCv(false)
-                                                .appliedOffersId(new HashSet<>()).build(),
+                                                .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
+                                                .studentState(StudentState.INTERNSHIP_NOT_FOUND).build(),
                                 Student.studentBuilder().email("123667713@gmail.com").firstName("Farid")
                                                 .lastName("Shalom").phoneNumber("4385738764")
                                                 .password(pbkdf2Encoder.encode("farid123")).hasValidCv(false)
-                                                .appliedOffersId(new HashSet<>()).build(),
+                                                .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
+                                                .studentState(StudentState.INTERNSHIP_NOT_FOUND).build(),
                                 Student.studentBuilder().email("902938912@gmail.com").firstName("Kevin")
                                                 .lastName("Alphonse").phoneNumber("4385738764")
                                                 .password(pbkdf2Encoder.encode("kevin123"))
-                                                .appliedOffersId(new HashSet<>()).hasValidCv(false).build(),
+                                                .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
+                                                .studentState(StudentState.INTERNSHIP_NOT_FOUND).hasValidCv(false)
+                                                .build(),
                                 Student.studentBuilder().email("student@gmail.com")
                                                 .password(pbkdf2Encoder.encode("student")).firstName("John")
                                                 .lastName("Doe").registrationDate(LocalDate.now())
