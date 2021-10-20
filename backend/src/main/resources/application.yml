@@ -18,3 +18,7 @@ spring:
       resolve-lazily: true
       enabled: true
       location: /tmp
+
+server:
+  error:
+    include-message: always
