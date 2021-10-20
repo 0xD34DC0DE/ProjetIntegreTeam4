@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.security.Principal;
@@ -39,6 +40,8 @@ public class StudentController {
     @GetMapping("/getAll")
     public Flux<StudentCreationDto> getAllStudents() {
         return this.studentService.getAllStudents().map(StudentMapper::toDto);
+    }
+
     @PatchMapping("/updateStudentState")
     @PreAuthorize("hasAuthority('STUDENT')")
     public Mono<ResponseEntity<String>> updateStudentState(Principal principal) {
