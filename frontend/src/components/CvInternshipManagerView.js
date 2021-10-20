@@ -49,7 +49,7 @@ const CvInternshipManagerView = ({
               boxShadow: 6,
               margin: "auto",
               marginTop: "20px",
-              marginBottom: "20px",
+              marginBottom: "20px"
             }}
           >
             <CardContent>
