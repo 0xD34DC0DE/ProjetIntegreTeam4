@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UnauthorizedException;
@@ -45,17 +46,33 @@ public class InternshipOfferService {
                         : Mono.error(new UserNotFoundException("Can't find monitor!")));
     }
 
-    public Flux<InternshipOffer> getStudentExclusiveOffers(String studentEmail, Integer page, Integer size) {
-        return studentService.findByEmail(studentEmail).map(Student::getExclusiveOffersId)
-                .flatMapMany(offerIdList -> ValidatingPageRequest.applyPaging(offerIdList, page, size)
-                        .flatMap(offerId -> internshipOfferRepository
-                                .findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(offerId,
-                                        LocalDate.now())));
+    public Flux<InternshipOfferStudentViewDto> getStudentExclusiveOffers(String studentEmail, Integer page,
+            Integer size) {
+        return studentService.findByEmail(studentEmail).flatMapMany(student -> ValidatingPageRequest
+                .applyPaging(student.getExclusiveOffersId(), page, size)
+                .flatMap(offerId -> internshipOfferRepository
+                        .findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(offerId, LocalDate.now()))
+                .map(InternshipOfferMapper::toStudentViewDto).map(internshipOfferDto -> {
+                    if (student.getAppliedOffersId().contains(internshipOfferDto.getId())) {
+                        internshipOfferDto.setHasAlreadyApplied(true);
+                    }
+                    return internshipOfferDto;
+                }));
     }
 
-    public Flux<InternshipOffer> getGeneralInternshipOffers(Integer page, Integer size) {
-        return ValidatingPageRequest.getPageRequestMono(page, size).flatMapMany(pageRequest -> internshipOfferRepository
-                .findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(LocalDate.now(), pageRequest));
+    public Flux<InternshipOfferStudentViewDto> getGeneralInternshipOffers(Integer page, Integer size,
+            String studentEmail) {
+        return studentService.findByEmail(studentEmail)
+                .flatMapMany(student -> ValidatingPageRequest.getPageRequestMono(page, size)
+                        .flatMapMany(pageRequest -> internshipOfferRepository
+                                .findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(LocalDate.now(),
+                                        pageRequest))
+                        .map(InternshipOfferMapper::toStudentViewDto).flatMap(internshipOfferDto -> {
+                            if (student.getAppliedOffersId().contains(internshipOfferDto.getId())) {
+                                internshipOfferDto.setHasAlreadyApplied(true);
+                            }
+                            return Mono.just(internshipOfferDto);
+                        }));
     }
 
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers() {
@@ -102,6 +119,16 @@ public class InternshipOfferService {
                     }
                     return Mono.just(false);
                 }).next().flatMap(Mono::just);
+    }
+
+    public Mono<InternshipOffer> applyOffer(String offerId, String studentEmail) {
+        return findInternshipOfferById(offerId).flatMap(internshipOffer -> {
+            if (!internshipOffer.getIsValidated()) {
+                return Mono.error(new UnauthorizedException("Cannot apply to unvalidated offers"));
+            }
+            return studentService.findByEmail(studentEmail)
+                    .flatMap(student -> addStudentEmailToOfferInterestedStudents(internshipOffer, student));
+        });
     }
 
     public Mono<InternshipOffer> applyOffer(String offerId, Principal principal) {

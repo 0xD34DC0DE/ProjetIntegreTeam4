@@ -135,8 +135,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                 InternshipOffer internshipOffer1 = InternshipOffer.builder()
                                 .beginningDate(LocalDate.now().plusMonths(1)).endingDate(LocalDate.now().plusMonths(2))
                                 .limitDateToApply(LocalDate.now().plusDays(15)).companyName("BestCo.")
-                                .description("Description").isExclusive(false).isValidated(true).maxSalary(17.50f)
-                                .minSalary(16.25f).emailOfMonitor("9182738492@gmail.com")
+                                .description(lorem.getParagraphs(5, 5)).isExclusive(false).isValidated(true)
+                                .maxSalary(17.50f).minSalary(16.25f).emailOfMonitor("9182738492@gmail.com")
                                 .listEmailInterestedStudents(new HashSet<>()).build();
 
                 InternshipOffer internshipOffer2 = InternshipOffer.builder()
