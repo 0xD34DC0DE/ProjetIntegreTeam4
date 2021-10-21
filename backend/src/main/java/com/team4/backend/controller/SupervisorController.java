@@ -37,6 +37,7 @@ public class SupervisorController {
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(error.getMessage())));
     }
 
+    //TODO:Remove and replace by getAllUsersByRoleEquals
     @GetMapping("/getAll")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
     public Flux<SupervisorCreationDto> getAllSupervisors(){

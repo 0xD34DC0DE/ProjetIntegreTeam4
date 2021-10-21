@@ -49,19 +49,6 @@ const InternshipOfferDescriptionDialog = ({
     removeInternshipOffer(offer);
   };
 
-  const refuseInternshipOffer = async (id) => {
-    await axios({
-      method: "PATCH",
-      url: `http://localhost:8080/internshipOffer/refuseInternshipOffer?id=${id}`,
-      headers: {
-        Authorization: token,
-      },
-      responseType: "json",
-    });
-    toggleDialogs("internshipOfferDialogValidation", false);
-    removeInternshipOffer(offer);
-  };
-
   return (
     <Dialog open={dialogVisible} onClose={handleClose}>
       <DialogContent

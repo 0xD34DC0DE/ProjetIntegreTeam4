@@ -12,16 +12,6 @@ import { useHistory } from "react-router";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import InternshipOfferDialog from "./InternshipOfferDialog";
 import { listLabels } from "./InternshipOfferLabels";
-const emptyOffer = {
-  limitDateToApply: new Date(),
-  beginningDate: new Date(),
-  endingDate: new Date(),
-  emailOfMonitor: "",
-  companyName: "",
-  minSalary: 0,
-  maxSalary: 0,
-  description: "",
-};
 
 const isKeyIncluded = (offerKey) => {
   return ![

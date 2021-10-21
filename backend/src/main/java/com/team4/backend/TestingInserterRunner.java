@@ -144,9 +144,16 @@ public class TestingInserterRunner implements ApplicationRunner {
     }
 
     private void insertSupervisors() {
-        List<Supervisor> supervisorList = Collections.singletonList(
+        List<Supervisor> supervisorList = Arrays.asList(
                 Supervisor.supervisorBuilder()
-                        .email("45673234@gmail.com").password(pbkdf2Encoder.encode("sasuke123")).build()
+                        .email("45673234@gmail.com").password(pbkdf2Encoder.encode("sasuke123"))
+                        .studentEmails(new ArrayList<String>()).build(),
+                Supervisor.supervisorBuilder()
+                .email("supervisor1@gmail.com")
+                        .password(pbkdf2Encoder.encode("supervisor123"))
+                        .firstName("Michel")
+                        .lastName("Lamarck")
+                        .studentEmails(new ArrayList<String>()).build()
         );
 
         supervisorRepository.saveAll(supervisorList).subscribe();
