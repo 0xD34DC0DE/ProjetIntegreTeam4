@@ -8,9 +8,7 @@ import com.team4.backend.model.InternshipOffer;
 import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public abstract class InternshipOfferMockData {
 
@@ -26,6 +24,8 @@ public abstract class InternshipOfferMockData {
                 .emailOfMonitor("rickJones@desjardins.com")
                 .description("Développeur Web")
                 .listEmailInterestedStudents(getInterestedStudentsEmailList())
+                .isValidated(true)
+                .isExclusive(false)
                 .build();
     }
 
@@ -132,8 +132,11 @@ public abstract class InternshipOfferMockData {
                 .build();
     }
 
-    public static List<String> getInterestedStudentsEmailList() {
-        return Arrays.asList("student1@email.com", "student2@email.com");
+    public static Set<String> getInterestedStudentsEmailList() {
+        Set<String> studentEmails = new HashSet<>();
+        studentEmails.add("student1@email.com");
+        studentEmails.add("student2@email.com");
+        return studentEmails;
     }
 
     public static List<InternshipOffer> getListInternshipOffer(int count) {
@@ -157,6 +160,7 @@ public abstract class InternshipOfferMockData {
             InternshipOfferStudentViewDto internshipOfferStudentViewDto = getInternshipStudentViewDto();
 
             internshipOfferStudentViewDto.setId(internshipOfferStudentViewDto.getId() + "_" + i);
+            internshipOfferStudentViewDto.setHasAlreadyApplied(false);
 
             internshipOffers.add(internshipOfferStudentViewDto);
         }

@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
-import java.util.List;
+import java.util.Set;
 
 @Component
 public class CustomStudentRepositoryImpl implements CustomStudentRepository {
@@ -21,7 +21,7 @@ public class CustomStudentRepositoryImpl implements CustomStudentRepository {
     }
 
     @Override
-    public Flux<Student> findAllByEmails(List<String> emails) {
+    public Flux<Student> findAllByEmails(Set<String> emails) {
         Query query = Query.query(Criteria.where("email").in(emails));
         return mongoOperations.find(query, Student.class);
     }
