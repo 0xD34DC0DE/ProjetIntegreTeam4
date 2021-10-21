@@ -1,5 +1,6 @@
 import React, {createContext, useReducer, useEffect} from "react";
-import UserInfoReducer from './UserInfoReducer'
+import UserInfoReducer from './UserInfoReducer';
+
 
 const initialState = {
   email: "",
