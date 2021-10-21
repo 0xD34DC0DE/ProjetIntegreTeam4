@@ -159,7 +159,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .endingDate(LocalDate.now().plusMonths(2))
                         .limitDateToApply(LocalDate.now().plusDays(15))
                         .companyName("BestCo.")
-                        .description("Description")
+                        .description(lorem.getParagraphs(5, 5))
                         .isExclusive(false)
                         .isValidated(true)
                         .maxSalary(17.50f)

@@ -6,6 +6,7 @@ import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.InternshipOfferMapper;
+import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.InternshipOfferService;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
@@ -52,21 +53,20 @@ public class InternshipOfferController {
             @PathVariable("email") String studentEmail,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "5") Integer size) {
-        return internshipOfferService.getStudentExclusiveOffers(studentEmail, page, size)
-                .onErrorMap(
-                        UserNotFoundException.class,
-                        e -> new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage())
-                )
-                .map(InternshipOfferMapper::toStudentViewDto);
+        return internshipOfferService.getStudentExclusiveOffers(studentEmail, page, size);
     }
 
     @GetMapping(value = "/studentInternshipOffers")
     @PreAuthorize("hasAuthority('STUDENT')")
     public Flux<InternshipOfferStudentViewDto> studentGeneralInternshipOffers(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "5") Integer size) {
-        return internshipOfferService.getGeneralInternshipOffers(page, size)
-                .map(InternshipOfferMapper::toStudentViewDto);
+            @RequestParam(value = "size", defaultValue = "5") Integer size,
+            Principal principal) {
+        return internshipOfferService.getGeneralInternshipOffers(
+                page,
+                size,
+                UserSessionService.getLoggedUserEmail(principal)
+        );
     }
 
     @GetMapping(value = {"/pageCount/{email}"})
@@ -109,7 +109,7 @@ public class InternshipOfferController {
     @PreAuthorize("hasAuthority('STUDENT')")
     public Mono<ResponseEntity<String>> applyInternshipOffer(@PathVariable("offerId") String offerId,
                                                              Principal principal) {
-        return internshipOfferService.applyOffer(offerId, principal)
+        return internshipOfferService.applyOffer(offerId, UserSessionService.getLoggedUserEmail(principal))
                 .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 
