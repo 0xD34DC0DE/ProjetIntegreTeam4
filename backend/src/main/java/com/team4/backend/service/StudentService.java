@@ -1,7 +1,6 @@
 package com.team4.backend.service;
 
 import com.team4.backend.exception.ForbiddenActionException;
-import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.Objects;
+import java.util.Set;
 
 @Service
 public class StudentService {
@@ -46,7 +45,11 @@ public class StudentService {
 
     public Mono<Student> findByEmail(String email) {
         return studentRepository.findByEmail(email)
-               .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
+                .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
+    }
+
+    public Flux<Student> findAllByEmails(Set<String> emails) {
+        return studentRepository.findAllByEmails(emails);
     }
 
     public Mono<Student> updateCvValidity(String email, Boolean valid) {

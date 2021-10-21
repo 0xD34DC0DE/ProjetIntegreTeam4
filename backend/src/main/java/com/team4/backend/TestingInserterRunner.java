@@ -1,14 +1,8 @@
 package com.team4.backend;
 
 import com.team4.backend.model.*;
-import com.team4.backend.repository.*;
-import com.team4.backend.model.InternshipOffer;
-import com.team4.backend.model.Monitor;
-import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.StudentState;
-import com.team4.backend.repository.InternshipOfferRepository;
-import com.team4.backend.repository.MonitorRepository;
-import com.team4.backend.repository.StudentRepository;
+import com.team4.backend.repository.*;
 import com.team4.backend.util.PBKDF2Encoder;
 import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
@@ -22,7 +16,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
 
 @Component
 @Order(1)
@@ -129,7 +126,9 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .studentState(StudentState.REGISTERED)
                         .phoneNumber("123-123-1234")
                         .appliedOffersId(new HashSet<>())
-                        .exclusiveOffersId(new HashSet<>(){{add(insertInternshipOffersStudentView());}})
+                        .exclusiveOffersId(new HashSet<>() {{
+                            add(insertInternshipOffersStudentView());
+                        }})
                         .build()
         );
 
@@ -198,7 +197,7 @@ public class TestingInserterRunner implements ApplicationRunner {
     }
 
 
-    private void insertInternshipOffersInternshipManagerView() throws IOException {
+    private void insertInternshipOffersInternshipManagerView() {
         List<InternshipOffer> internshipOffers = Arrays.asList(
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())

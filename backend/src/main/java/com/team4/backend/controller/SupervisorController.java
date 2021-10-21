@@ -3,6 +3,7 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.StudentCreationDto;
 import com.team4.backend.dto.SupervisorCreationDto;
+import com.team4.backend.dto.SupervisorDetailsDto;
 import com.team4.backend.mapping.SupervisorMapper;
 import com.team4.backend.service.SupervisorService;
 import org.springframework.http.HttpStatus;
@@ -23,7 +24,7 @@ public class SupervisorController {
     }
 
     @PostMapping("/register")
-    public Mono<ResponseEntity<String>> register(@RequestBody SupervisorCreationDto supervisorDto) {
+    public Mono<ResponseEntity<String>> register(@RequestBody SupervisorDetailsDto supervisorDto) {
         return supervisorService.registerSupervisor(SupervisorMapper.toEntity(supervisorDto))
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(error.getMessage())));

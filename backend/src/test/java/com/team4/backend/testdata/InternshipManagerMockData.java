@@ -1,6 +1,6 @@
 package com.team4.backend.testdata;
 
-import com.team4.backend.dto.InternshipManagerCreationDto;
+import com.team4.backend.dto.InternshipManagerDetailsDto;
 import com.team4.backend.model.InternshipManager;
 
 public abstract class InternshipManagerMockData {
@@ -16,8 +16,8 @@ public abstract class InternshipManagerMockData {
                 .build();
     }
 
-    public static InternshipManagerCreationDto GetInternshipManagerDto() {
-        return InternshipManagerCreationDto.builder()
+    public static InternshipManagerDetailsDto GetInternshipManagerDto() {
+        return InternshipManagerDetailsDto.builder()
                 .id("internship_manager_id")
                 .email("intership.manager@email.com")
                 .firstName("John")

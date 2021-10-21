@@ -1,9 +1,6 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.InternshipOfferCreationDto;
-import com.team4.backend.dto.InternshipOfferDto;
-import com.team4.backend.dto.InternshipOfferMonitorViewDto;
-import com.team4.backend.dto.InternshipOfferStudentViewDto;
+import com.team4.backend.dto.*;
 import com.team4.backend.model.InternshipOffer;
 
 import java.util.Collections;
@@ -42,8 +39,16 @@ public abstract class InternshipOfferMapper {
                 .build();
     }
 
-    public static InternshipOfferDto toDto(InternshipOffer internshipOffer) {
-        return InternshipOfferDto.builder()
+    public static InternshipOfferStudentInterestViewDto toStudentInterestViewDto(InternshipOffer internshipOffer) {
+        return InternshipOfferStudentInterestViewDto.internshipOfferStudentInterestViewDtoBuilder()
+                .id(internshipOffer.getId())
+                .companyName(internshipOffer.getCompanyName())
+                .description(internshipOffer.getDescription())
+                .build();
+    }
+
+    public static InternshipOfferDetailedDto toDto(InternshipOffer internshipOffer) {
+        return InternshipOfferDetailedDto.internshipOfferDetailedDtoBuilder()
                 .id(internshipOffer.getId())
                 .limitDateToApply(internshipOffer.getLimitDateToApply())
                 .beginningDate(internshipOffer.getBeginningDate())
@@ -55,7 +60,7 @@ public abstract class InternshipOfferMapper {
                 .build();
     }
 
-    public static InternshipOfferMonitorViewDto toMonitorView(InternshipOffer internshipOffer) {
+    public static InternshipOfferMonitorViewDto toMonitorViewDto(InternshipOffer internshipOffer) {
         return InternshipOfferMonitorViewDto.internshipOfferMonitorViewDtoBuilder()
                 .id(internshipOffer.getId())
                 .limitDateToApply(internshipOffer.getLimitDateToApply())

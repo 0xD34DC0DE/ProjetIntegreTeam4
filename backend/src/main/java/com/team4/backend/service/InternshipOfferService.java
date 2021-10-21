@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
@@ -10,13 +11,11 @@ import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.InternshipOfferRepository;
-import com.team4.backend.security.UserSessionService;
 import com.team4.backend.util.ValidatingPageRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.security.Principal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -62,7 +61,7 @@ public class InternshipOfferService {
                                 )
                                 .map(InternshipOfferMapper::toStudentViewDto)
                                 .map(internshipOfferDto -> {
-                                    if(student.getAppliedOffersId().contains(internshipOfferDto.getId())) {
+                                    if (student.getAppliedOffersId().contains(internshipOfferDto.getId())) {
                                         internshipOfferDto.setHasAlreadyApplied(true);
                                     }
                                     return internshipOfferDto;
@@ -73,20 +72,20 @@ public class InternshipOfferService {
     public Flux<InternshipOfferStudentViewDto> getGeneralInternshipOffers(Integer page, Integer size, String studentEmail) {
         return studentService.findByEmail(studentEmail).flatMapMany(student ->
                 ValidatingPageRequest.getPageRequestMono(page, size)
-                .flatMapMany(pageRequest ->
-                        internshipOfferRepository
-                                .findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(
-                                        LocalDate.now(),
-                                        pageRequest
-                                )
-                )
-                .map(InternshipOfferMapper::toStudentViewDto)
-                .flatMap(internshipOfferDto -> {
-                    if(student.getAppliedOffersId().contains(internshipOfferDto.getId())) {
-                        internshipOfferDto.setHasAlreadyApplied(true);
-                    }
-                    return Mono.just(internshipOfferDto);
-                }));
+                        .flatMapMany(pageRequest ->
+                                internshipOfferRepository
+                                        .findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(
+                                                LocalDate.now(),
+                                                pageRequest
+                                        )
+                        )
+                        .map(InternshipOfferMapper::toStudentViewDto)
+                        .flatMap(internshipOfferDto -> {
+                            if (student.getAppliedOffersId().contains(internshipOfferDto.getId())) {
+                                internshipOfferDto.setHasAlreadyApplied(true);
+                            }
+                            return Mono.just(internshipOfferDto);
+                        }));
     }
 
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers() {
@@ -125,10 +124,24 @@ public class InternshipOfferService {
                 .map(count -> (long) Math.ceil((double) count / (double) size));
     }
 
+    public Flux<InternshipOfferStudentInterestViewDto> getInterestedStudents(String emailOfMonitor) {
+        return internshipOfferRepository.findAllByEmailOfMonitorAndIsValidatedTrue(emailOfMonitor)
+                .filter(internshipOffer -> internshipOffer.getListEmailInterestedStudents() != null)
+                .flatMap(internshipOffer -> {
+                    InternshipOfferStudentInterestViewDto internshipOfferDto = InternshipOfferMapper.toStudentInterestViewDto(internshipOffer);
+                    return studentService.findAllByEmails(internshipOffer.getListEmailInterestedStudents())
+                            .collectList()
+                            .flatMap(students -> {
+                                internshipOfferDto.setInterestedStudentList(students);
+                                return Mono.just(internshipOfferDto);
+                            });
+                });
+    }
+
     public Mono<InternshipOffer> applyOffer(String offerId, String studentEmail) {
         return findInternshipOfferById(offerId)
                 .flatMap(internshipOffer -> {
-                            if(!internshipOffer.getIsValidated()) {
+                            if (!internshipOffer.getIsValidated()) {
                                 return Mono.error(new UnauthorizedException("Cannot apply to unvalidated offers"));
                             }
                             return studentService.findByEmail(studentEmail)
@@ -154,10 +167,11 @@ public class InternshipOfferService {
             if (!offer.getListEmailInterestedStudents().contains(student.getEmail())) {
                 offer.getListEmailInterestedStudents().add(student.getEmail());
                 return studentService.addOfferToStudentAppliedOffers(student, offer.getId()).then(
-                    internshipOfferRepository.save(offer)
+                        internshipOfferRepository.save(offer)
                 );
             }
             return Mono.just(offer);
         });
     }
+
 }

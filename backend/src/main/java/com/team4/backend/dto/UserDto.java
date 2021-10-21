@@ -15,5 +15,4 @@ public class UserDto {
 
     protected String lastName;
 
-
 }

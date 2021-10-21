@@ -1,6 +1,6 @@
 package com.team4.backend.testdata;
 
-import com.team4.backend.dto.MonitorCreationDto;
+import com.team4.backend.dto.MonitorDetailsDto;
 import com.team4.backend.model.Monitor;
 
 public class MonitorMockData {
@@ -18,8 +18,8 @@ public class MonitorMockData {
                 .build();
     }
 
-    public static MonitorCreationDto getMockMonitorDto() {
-        return MonitorCreationDto.builder()
+    public static MonitorDetailsDto getMockMonitorDto() {
+        return MonitorDetailsDto.builder()
                 .id("6151f7ac87d8fbea963710fd")
                 .email("9182738492@gmail.com")
                 .password("lao@dkv23")

@@ -1,6 +1,6 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.StudentCreationDto;
+import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.dto.StudentProfileDto;
 import com.team4.backend.model.Student;
 import com.team4.backend.testdata.StudentMockData;
@@ -14,7 +14,7 @@ public class StudentMapperTest {
     @Test
     void mapDtoToEntity() {
         //ARANGE
-        StudentCreationDto dto = StudentMockData.getMockStudentDto();
+        StudentDetailsDto dto = StudentMockData.getMockStudentDto();
 
         //ACT
         Student entity = StudentMapper.toEntity(dto);
@@ -28,7 +28,7 @@ public class StudentMapperTest {
         assertEquals(dto.getPhoneNumber(), entity.getPhoneNumber());
         assertEquals(dto.getStudentState(), entity.getStudentState());
         assertEquals(dto.getRegistrationDate(), entity.getRegistrationDate());
-        assertEquals(dto.getHasValidCv(),entity.getHasValidCv());
+        assertEquals(dto.getHasValidCv(), entity.getHasValidCv());
     }
 
     @Test
@@ -37,7 +37,7 @@ public class StudentMapperTest {
         Student entity = StudentMockData.getMockStudent();
 
         //ACT
-        StudentCreationDto dto = StudentMapper.toDto(entity);
+        StudentDetailsDto dto = StudentMapper.toDto(entity);
 
         //ASSERT
         assertNull(dto.getPassword()); // password shouldn't be given to frontend
@@ -61,7 +61,6 @@ public class StudentMapperTest {
         StudentProfileDto dto = StudentMapper.toProfileDto(entity);
 
         //ASSERT
-
         assertEquals(entity.getId(), dto.getId());
         assertEquals(entity.getEmail(), dto.getEmail());
         assertEquals(entity.getFirstName(), dto.getFirstName());
