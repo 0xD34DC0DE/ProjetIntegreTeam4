@@ -16,6 +16,8 @@ import BlockIcon from "@mui/icons-material/Block";
 import TodayIcon from "@mui/icons-material/Today";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { motion } from "framer-motion";
+import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+
 const StudentDashBoard = () => {
   const listState = [
     "INTERNSHIP_NOT_FOUND",
@@ -36,7 +38,7 @@ const StudentDashBoard = () => {
     hasValidCv: false,
   });
 
-  const [isReadOnly, setIsReadOnly] = useState(true);
+  const [isDisabled, setIsDisabled] = useState(true);
   const [isStatusUpdated, setIsStatusUpdated] = useState(false);
 
   useEffect(() => {
@@ -52,7 +54,7 @@ const StudentDashBoard = () => {
         })
           .then((response) => {
             setProfile(response.data);
-            setIsReadOnly(response.data.studentState != listState[2]);
+            setIsDisabled(response.data.studentState != listState[2]);
             console.log(profile);
           })
           .catch((error) => {
@@ -80,10 +82,10 @@ const StudentDashBoard = () => {
       .catch((error) => {
         console.error(error);
       });
-  }
+  };
 
   const handleChange = ($event) => {
-    setProfile({...profile,studentState:$event.target.value});
+    setProfile({ ...profile, studentState: $event.target.value });
     console.log(profile.studentState);
     updateStudentStatus();
   };
@@ -173,20 +175,38 @@ const StudentDashBoard = () => {
                   {profile.nbrOfExclusiveOffers}
                 </Typography>
                 <Select
-                  sx={{ margin: "auto", justifyContent: "center" }}
+                  sx={{
+                    margin: "auto",
+                    display: "flex",
+                    justifyContent: "center",
+                    boxShadow: 3,
+                    textAlign: "center",
+                  }}
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={profile.studentState}
                   label="Age"
                   onChange={handleChange}
-                  readOnly={isReadOnly}
+                  disabled={isDisabled}
                 >
                   {listState.map((value, key) => (
-                    <MenuItem key={key} value={value}>
+                    <MenuItem
+                      key={key}
+                      value={value}
+                      disabled={value == listState[0] || value == listState[2]}
+                    >
                       {value}
                     </MenuItem>
                   ))}
                 </Select>
+                {isStatusUpdated ? (
+                  <Typography
+                    variant="subtitle1"
+                    sx={{ color: "green", textAlign: "center" }}
+                  >
+                    {"STATUT MODIFIÉE"}<PublishedWithChangesIcon/>
+                  </Typography>
+                ) : null}
               </Grid>
             </Grid>
           </Grid>
