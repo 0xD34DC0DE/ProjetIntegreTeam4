@@ -25,6 +25,12 @@ const StudentDashBoard = () => {
     "WAITING_FOR_RESPONSE",
   ];
 
+  const listStateFrench = [
+    "STAGE NON TROUVÉE",
+    "STAGE TROUVÉE",
+    "EN ATTENTE DE RÉPONSE",
+  ];
+
   const [profile, setProfile] = useState({
     id: "",
     email: "",
@@ -195,7 +201,7 @@ const StudentDashBoard = () => {
                       value={value}
                       disabled={value == listState[0] || value == listState[2]}
                     >
-                      {value}
+                      {listStateFrench[listState.indexOf(value)]}
                     </MenuItem>
                   ))}
                 </Select>
