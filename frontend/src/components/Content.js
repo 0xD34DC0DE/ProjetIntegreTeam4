@@ -24,10 +24,11 @@ const Content = () => {
           </Typography>
         )}
       </Container>
-      <div
-      >
-        <StudentDashBoard></StudentDashBoard>
-      </div>
+      {userInfo.role == "STUDENT" ? (
+        <div>
+          <StudentDashBoard></StudentDashBoard>
+        </div>
+      ) : null}
     </>
   );
 };
