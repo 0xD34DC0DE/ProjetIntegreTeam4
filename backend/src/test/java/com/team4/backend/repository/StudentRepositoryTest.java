@@ -16,6 +16,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.util.Arrays;
+import java.util.List;
+
 @DataMongoTest
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
@@ -65,4 +68,33 @@ public class StudentRepositoryTest {
                 .verifyComplete();
     }
 
+    @Test
+    void shouldFindAllByEmails() {
+        //ARRANGE
+        List<String> emails = Arrays.asList("testing_1@gmail.com", "testing_2@gmail.com");
+
+        //ACT
+        Flux<Student> studentFlux = studentRepository.findAllByEmails(emails);
+
+        //ASSERT
+        StepVerifier.create(studentFlux)
+                .assertNext(s -> Assertions.assertNotNull(s.getEmail()))
+                .expectNextCount(1)
+                .expectComplete()
+                .verify();
+    }
+
+    @Test
+    void shouldNotFindAllByEmails() {
+        //ARRANGE
+        List<String> emails = Arrays.asList("nonexistentemail1@gmail.com", "nonexistentemail2@gmail.com");
+
+        //ACT
+        Flux<Student> studentFlux = studentRepository.findAllByEmails(emails);
+
+        //ASSERT
+        StepVerifier.create(studentFlux)
+                .expectNextCount(0)
+                .verifyComplete();
+    }
 }

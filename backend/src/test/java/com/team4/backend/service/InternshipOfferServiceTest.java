@@ -1,6 +1,8 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.dto.InternshipOfferDto;
+import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
@@ -9,6 +11,7 @@ import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.InternshipOfferRepository;
 import com.team4.backend.testdata.InternshipOfferMockData;
+import com.team4.backend.testdata.MonitorMockData;
 import com.team4.backend.testdata.StudentMockData;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Assertions;
@@ -323,15 +326,15 @@ public class InternshipOfferServiceTest {
 
     @Test
     void shouldNotValidateInternshipOffer() {
-        //ARRANGE
+        // ARRANGE
         String id = "234dsd2egd54ter";
 
         when(internshipOfferRepository.findById(id)).thenReturn(Mono.empty());
 
-        //ACT
+        // ACT
         Mono<InternshipOffer> internshipOfferMono = internshipOfferService.validateInternshipOffer(id, true);
 
-        //ASSERT
+        // ASSERT
         StepVerifier.create(internshipOfferMono)
                 .expectError(InternshipOfferNotFoundException.class)
                 .verify();
@@ -351,6 +354,27 @@ public class InternshipOfferServiceTest {
                 .create(validIntershipOffer)
                 .assertNext(o -> assertTrue(!o.getIsValidated() && o.getValidationDate() == null))
                 .assertNext(o -> assertTrue(!o.getIsValidated() && o.getValidationDate() == null))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldGetInternshipOfferStudentInterest() {
+        // ARRANGE
+        List<InternshipOfferStudentInterestViewDto> internshipOffers = InternshipOfferMockData.getListInternshipOfferStudentInterestViewDto(2);
+        String emailOfMonitor = MonitorMockData.getMockMonitor().getEmail();
+
+        when(internshipOfferRepository.findAllByEmailOfMonitorAndIsValidatedTrue(any(String.class)))
+                .thenReturn(Flux.just(any(InternshipOffer.class)));
+
+        when(internshipOfferService.getInterestedStudents(any(String.class)))
+                .thenReturn(Flux.just(any(InternshipOfferStudentInterestViewDto.class)));
+
+        // ACT
+        Flux<InternshipOfferStudentInterestViewDto> internshipOfferDtoFlux = internshipOfferService.getInterestedStudents(emailOfMonitor);
+
+        // ASSERT
+        StepVerifier.create(internshipOfferDtoFlux)
+                .assertNext(offer -> assertEquals(offer.getId(), internshipOffers.get(0).getId()))
                 .verifyComplete();
     }
 

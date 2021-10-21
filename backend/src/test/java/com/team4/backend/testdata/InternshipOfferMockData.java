@@ -2,7 +2,7 @@ package com.team4.backend.testdata;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.dto.InternshipOfferDetailedDto;
-import com.team4.backend.dto.InternshipOfferDto;
+import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.model.InternshipOffer;
 import reactor.core.publisher.Flux;
@@ -106,14 +106,6 @@ public abstract class InternshipOfferMockData {
                 .build();
     }
 
-    public static InternshipOfferDto getInternshipOfferDto() {
-        return InternshipOfferDto.internshipOfferDtoBuilder()
-                .id("32423k42lkdsflsdf")
-                .companyName("Desjardins")
-                .description("Cobol Senior Developer")
-                .build();
-    }
-
     public static InternshipOfferCreationDto getInternshipOfferCreationDto() {
         return InternshipOfferCreationDto.internshipOfferCreationDtoBuilder()
                 .limitDateToApply(LocalDate.now().plusMonths(1))
@@ -172,4 +164,26 @@ public abstract class InternshipOfferMockData {
         return internshipOffers;
     }
 
+    public static InternshipOfferStudentInterestViewDto getInternshipStudentInterestViewDto() {
+        return InternshipOfferStudentInterestViewDto.internshipOfferStudentInterestViewDtoBuilder()
+                .id("id")
+                .companyName("company")
+                .description("description")
+                .interestedStudentList(StudentMockData.getListStudent(2))
+                .build();
+    }
+
+    public static List<InternshipOfferStudentInterestViewDto> getListInternshipOfferStudentInterestViewDto(int count) {
+        List<InternshipOfferStudentInterestViewDto> internshipOffers = new ArrayList<>();
+
+        for (int i = 0; i < count; i++) {
+            InternshipOfferStudentInterestViewDto internshipOfferStudentInterestViewDto = getInternshipStudentInterestViewDto();
+
+            internshipOfferStudentInterestViewDto.setId(internshipOfferStudentInterestViewDto.getId() + "_" + i);
+
+            internshipOffers.add(internshipOfferStudentInterestViewDto);
+        }
+
+        return internshipOffers;
+    }
 }

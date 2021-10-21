@@ -2,6 +2,7 @@ package com.team4.backend.mapping;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.dto.InternshipOfferMonitorViewDto;
+import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.testdata.InternshipOfferMockData;
@@ -28,6 +29,20 @@ public class InternshipOfferMapperTest {
         assertEquals(internshipOfferDto.getMinSalary(), internshipOffer.getMinSalary());
         assertEquals(internshipOfferDto.getMaxSalary(), internshipOffer.getMaxSalary());
         assertEquals(internshipOfferDto.getEmailOfMonitor(), internshipOffer.getEmailOfMonitor());
+    }
+
+    @Test
+    void mapInternshipOfferEntityToInternshipOfferStudentInterestViewDto() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        //ACT
+        InternshipOfferStudentInterestViewDto internshipOfferStudentInterestViewDto = InternshipOfferMapper.toStudentInterestViewDto(internshipOffer);
+
+        //ASSERT
+        assertEquals(internshipOffer.getId(), internshipOfferStudentInterestViewDto.getId());
+        assertEquals(internshipOffer.getCompanyName(), internshipOfferStudentInterestViewDto.getCompanyName());
+        assertEquals(internshipOffer.getDescription(), internshipOfferStudentInterestViewDto.getDescription());
     }
 
     @Test

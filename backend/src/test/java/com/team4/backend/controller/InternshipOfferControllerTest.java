@@ -1,9 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.InternshipOfferCreationDto;
-import com.team4.backend.dto.InternshipOfferDetailedDto;
-import com.team4.backend.dto.InternshipOfferDto;
-import com.team4.backend.dto.InternshipOfferStudentViewDto;
+import com.team4.backend.dto.*;
 import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
@@ -269,6 +266,22 @@ public class InternshipOfferControllerTest {
                 //ASSERT
                 .expectStatus().isOk()
                 .expectBody(Long.class);
+    }
+
+    @Test
+    void shouldReturnInterestedStudents() {
+        //ARRANGE
+        when(internshipOfferService.getInterestedStudents(any(String.class)))
+                .thenReturn(Flux.fromIterable(InternshipOfferMockData.getListInternshipOfferStudentInterestViewDto(3)));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/internshipOffer/interestedStudents/monitor@gmail.com")
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(InternshipOfferStudentInterestViewDto.class);
     }
 
 }
