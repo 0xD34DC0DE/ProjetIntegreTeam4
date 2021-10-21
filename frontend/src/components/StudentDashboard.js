@@ -94,6 +94,7 @@ const StudentDashBoard = () => {
     setProfile({ ...profile, studentState: $event.target.value });
     console.log(profile.studentState);
     updateStudentStatus();
+    setIsDisabled(true);
   };
 
   const fadeIn = {
@@ -210,7 +211,8 @@ const StudentDashBoard = () => {
                     variant="subtitle1"
                     sx={{ color: "green", textAlign: "center" }}
                   >
-                    {"STATUT MODIFIÉE"}<PublishedWithChangesIcon/>
+                    {"STATUT MODIFIÉE"}
+                    <PublishedWithChangesIcon />
                   </Typography>
                 ) : null}
               </Grid>
