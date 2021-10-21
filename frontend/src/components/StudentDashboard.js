@@ -1,6 +1,13 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Avatar, Card, Typography, Grid } from "@mui/material";
+import {
+  Avatar,
+  Card,
+  Typography,
+  Grid,
+  Select,
+  MenuItem,
+} from "@mui/material";
 import StarBorderPurple500Icon from "@mui/icons-material/StarBorderPurple500";
 import TouchAppIcon from "@mui/icons-material/TouchApp";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
@@ -9,8 +16,13 @@ import BlockIcon from "@mui/icons-material/Block";
 import TodayIcon from "@mui/icons-material/Today";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { motion } from "framer-motion";
-
 const StudentDashBoard = () => {
+  const listState = [
+    "INTERNSHIP_NOT_FOUND",
+    "INTERNSHIP_FOUND",
+    "WAITING_FOR_RESPONSE",
+  ];
+
   const [profile, setProfile] = useState({
     id: "",
     email: "",
@@ -24,8 +36,11 @@ const StudentDashBoard = () => {
     hasValidCv: false,
   });
 
+  const [isReadOnly, setIsReadOnly] = useState(true);
+  const [isStatusUpdated, setIsStatusUpdated] = useState(false);
+
   useEffect(() => {
-    const getProfile = (valid) => {
+    const getProfile = () => {
       {
         axios({
           method: "GET",
@@ -37,6 +52,7 @@ const StudentDashBoard = () => {
         })
           .then((response) => {
             setProfile(response.data);
+            setIsReadOnly(response.data.studentState != listState[2]);
             console.log(profile);
           })
           .catch((error) => {
@@ -47,6 +63,30 @@ const StudentDashBoard = () => {
 
     getProfile();
   }, []);
+
+  const updateStudentStatus = () => {
+    axios({
+      method: "PATCH",
+      url: "http://localhost:8080/student/updateStudentState",
+      headers: {
+        Authorization: sessionStorage.getItem("jwt"),
+      },
+      responseType: "json",
+    })
+      .then(() => {
+        setIsStatusUpdated(true);
+        console.log(profile);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  }
+
+  const handleChange = ($event) => {
+    setProfile({...profile,studentState:$event.target.value});
+    console.log(profile.studentState);
+    updateStudentStatus();
+  };
 
   const fadeIn = {
     hidden: { opacity: 0 },
@@ -132,6 +172,21 @@ const StudentDashBoard = () => {
                   <StarBorderPurple500Icon /> Nombres d'offres exlusives :{" "}
                   {profile.nbrOfExclusiveOffers}
                 </Typography>
+                <Select
+                  sx={{ margin: "auto", justifyContent: "center" }}
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={profile.studentState}
+                  label="Age"
+                  onChange={handleChange}
+                  readOnly={isReadOnly}
+                >
+                  {listState.map((value, key) => (
+                    <MenuItem key={key} value={value}>
+                      {value}
+                    </MenuItem>
+                  ))}
+                </Select>
               </Grid>
             </Grid>
           </Grid>
