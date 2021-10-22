@@ -84,19 +84,6 @@ public class StudentControllerTest {
     }
 
     @Test
-    public void shouldGetAllStudents() {
-        //ARRANGE
-        Flux<Student> studentFlux = StudentMockData.getAllStudents();
-        when(studentService.getAllStudents()).thenReturn(studentFlux);
-        //ACT
-        webTestClient
-                .get().uri("/student/getAll")
-                .exchange()
-                //ASSERT
-                .expectStatus().isOk()
-                .expectBodyList(SupervisorDetailsDto.class);
-    }
-
     void shouldUpdateStudentState() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();

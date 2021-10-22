@@ -178,19 +178,6 @@ public class StudentServiceTest {
     }
 
     @Test
-    void shouldGetAllStudents(){
-        //ARRANGE
-        when(studentRepository.findAll()).thenReturn(StudentMockData.getAllStudents());
-
-        //ACT
-        Flux<Student> students = studentService.getAllStudents();
-
-        //ASSERT
-        StepVerifier.create(students)
-                .expectNextCount(2)
-                .verifyComplete();
-    }
-
     void shouldAddAppliedOffer() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();

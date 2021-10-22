@@ -36,11 +36,6 @@ public class StudentController {
         //TODO add a non-handled exception to make sure it returns 500 and not 409
     }
 
-    @GetMapping("/getAll")
-    public Flux<StudentDetailsDto> getAllStudents() {
-        return this.studentService.getAllStudents().map(StudentMapper::toDto);
-    }
-
     @PatchMapping("/updateStudentState")
     @PreAuthorize("hasAuthority('STUDENT')")
     public Mono<ResponseEntity<String>> updateStudentState(Principal principal) {

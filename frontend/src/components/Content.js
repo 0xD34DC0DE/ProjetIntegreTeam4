@@ -1,6 +1,7 @@
 import { Container, Typography } from "@mui/material";
 import React from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import AsssignedStudentSupervisorView from "./AsssignedStudentSupervisorView";
 import ListUserDraggable from "./ListUserDraggable";
 import ListUserDroppable from "./ListUserDroppable";
 
@@ -26,8 +27,7 @@ const Content = () => {
             Bienvenue {userInfo.email.toLowerCase()}
           </Typography>
         )}
-        <ListUserDroppable role="SUPERVISOR" />
-        <ListUserDraggable role="STUDENT" />
+        <AsssignedStudentSupervisorView />
       </Container>
     </>
   );

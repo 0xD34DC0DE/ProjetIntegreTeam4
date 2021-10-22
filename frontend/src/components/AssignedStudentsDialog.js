@@ -9,7 +9,12 @@ import {
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-const AssignedStudentsDialog = ({ open, user, assignedStudents }) => {
+const AssignedStudentsDialog = ({
+  open,
+  user,
+  handleStudentAssignment,
+  assignedStudents,
+}) => {
   useEffect(() => {
     const getAssignedStudents = async () => {
       let response = await axios({
@@ -20,21 +25,22 @@ const AssignedStudentsDialog = ({ open, user, assignedStudents }) => {
         },
         responseType: "json",
       });
+      handleStudentAssignment(response.data);
     };
+
     getAssignedStudents();
   }, []);
   return (
-    <Dialog open={open}>
+    <Dialog open={true}>
       <DialogContent sx={{ p: 0 }}>
         <List>
           {assignedStudents &&
             assignedStudents.map((student, key) => {
-              console.log("studentt", student);
               return (
                 <ListItem key={key}>
                   <Person />
                   <ListItemText sx={{ ml: 5 }}>
-                    {student.user.lastName}, {student.user.firstName}
+                    {student.firstName}, {student.lastName}
                   </ListItemText>
                 </ListItem>
               );

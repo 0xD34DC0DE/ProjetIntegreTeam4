@@ -128,21 +128,4 @@ public class SupervisorControllerTest {
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
                 .expectBody(String.class);
     }
-
-    @Test
-    void shouldGetAllSupervisors(){
-        //ARRANGE
-        when(supervisorService.getAllSupervisors()).thenReturn(SupervisorMockData.getAllSupervisors());
-
-        //ACT
-        webTestClient.get().uri(uriBuilder ->
-                uriBuilder
-                    .path("/supervisor/getAll")
-                    .build())
-                .exchange()
-        //ASSERT
-                .expectStatus().isOk()
-                .expectBodyList(SupervisorDetailsDto.class);
-
-    }
 }

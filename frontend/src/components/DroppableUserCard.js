@@ -55,13 +55,7 @@ const DroppableUserCard = ({ user, index }) => {
             Authorization: sessionStorage.getItem("jwt"),
           },
           responseType: "json",
-        })
-          .then((res) => {
-            console.log("ress", res);
-            console.log("item", JSON.stringify(item));
-            handleStudentAssignment(item);
-          })
-          .catch((res) => console.log("res", res));
+        }).catch((res) => console.log("res", res));
 
         setJustDropped(true);
         setTimeout(() => {
@@ -71,10 +65,8 @@ const DroppableUserCard = ({ user, index }) => {
     },
   }));
 
-  const handleStudentAssignment = (item) => {
-    console.log("assignement", [...assignedStudents, item]);
-    console.log("assignment spread", [...assignedStudents]);
-    setAssignedStudents([...assignedStudents, item]);
+  const handleStudentAssignment = (data) => {
+    setAssignedStudents(data);
   };
 
   //TODO: Use backdrop click to close the dialog
@@ -119,11 +111,15 @@ const DroppableUserCard = ({ user, index }) => {
           </CardActions>
         </Box>
       </Card>
-      <AssignedStudentsDialog
-        open={open}
-        user={user}
-        assignedStudents={assignedStudents}
-      />
+
+      {open && (
+        <AssignedStudentsDialog
+          open={open}
+          user={user}
+          handleStudentAssignment={handleStudentAssignment}
+          assignedStudents={assignedStudents}
+        />
+      )}
     </>
   );
 };

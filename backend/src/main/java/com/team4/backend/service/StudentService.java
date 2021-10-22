@@ -59,9 +59,6 @@ public class StudentService {
         }).flatMap(studentRepository::save);
     }
 
-    public Flux<Student> getAllStudents() {
-        return studentRepository.findAll();
-    }
     public Mono<Student> updateStudentState(String email, StudentState studentState) {
         return findByEmail(email)
                 .filter(student -> student.getStudentState().equals(StudentState.WAITING_FOR_RESPONSE))

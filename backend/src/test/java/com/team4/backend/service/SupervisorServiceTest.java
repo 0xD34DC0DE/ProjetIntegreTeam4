@@ -123,18 +123,4 @@ public class SupervisorServiceTest {
                 .expectError()
                 .verify();
     }
-
-    @Test
-    void shouldGetAllSupervisors(){
-        //ARRANGE
-        when(supervisorRepository.findAll()).thenReturn(SupervisorMockData.getAllSupervisors());
-        //ACT
-        Flux<Supervisor> supervisors = supervisorService.getAllSupervisors();
-
-        //ASSERT
-        StepVerifier.create(supervisors)
-                .expectNextCount(2)
-                .verifyComplete();
-
-    }
 }

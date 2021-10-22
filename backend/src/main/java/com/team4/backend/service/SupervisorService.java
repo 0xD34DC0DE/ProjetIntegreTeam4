@@ -68,14 +68,14 @@ public class SupervisorService {
         }).switchIfEmpty(Mono.error(new UserNotFoundException("Can't find a supervisor with given id: " + supervisorId)));
     }
 
-    public Flux<Supervisor> getAllSupervisors(){
-        return supervisorRepository.findAll();
-    }
-
     public Flux<StudentDetailsDto> getAllAssignedStudents(String supervisorId) {
         return supervisorRepository.findById(supervisorId)
                 .map(Supervisor::getStudentEmails)
                 .flatMapMany(studentService::findAllByEmails)
                 .map(StudentMapper::toDto);
+    }
+
+    public Mono<Supervisor> getSupervisor(String email){
+        return supervisorRepository.findSupervisorByEmail(email);
     }
 }

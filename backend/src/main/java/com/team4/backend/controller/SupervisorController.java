@@ -37,15 +37,13 @@ public class SupervisorController {
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(error.getMessage())));
     }
 
-    //TODO:Remove and replace by getAllUsersByRoleEquals
-    @GetMapping("/getAll")
-    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Flux<SupervisorDetailsDto> getAllSupervisors(){
-        return supervisorService.getAllSupervisors().map(SupervisorMapper::toDetailsDto);
-    }
-
     @GetMapping("/getAssignedStudents/{id}")
     public Flux<StudentDetailsDto> getAssignedStudents(@PathVariable("id") String supervisorId){
         return supervisorService.getAllAssignedStudents(supervisorId);
+    }
+
+    @GetMapping("/{email}")
+    public Mono<SupervisorDetailsDto> getSupervisor(@PathVariable("email") String email){
+        return supervisorService.getSupervisor(email).map(SupervisorMapper::toDetailsDto);
     }
 }
