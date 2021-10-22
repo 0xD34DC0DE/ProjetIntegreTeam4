@@ -66,6 +66,10 @@ const theme = createTheme({
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: "rgba(100, 100, 100, 0.5)",
           },
+          "& .MuiOutlinedInput-input.Mui-disabled" : {
+            backgroundColor: "rgba(255, 255, 255, 0.4)",
+            opacity: 1
+          }
         },
       },
     },
