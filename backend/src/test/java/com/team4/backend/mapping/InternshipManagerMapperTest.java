@@ -1,6 +1,6 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.InternshipManagerCreationDto;
+import com.team4.backend.dto.InternshipManagerDetailsDto;
 import com.team4.backend.model.InternshipManager;
 import com.team4.backend.testdata.InternshipManagerMockData;
 import org.junit.jupiter.api.Test;
@@ -16,7 +16,7 @@ public class InternshipManagerMapperTest {
         InternshipManager internshipManager = InternshipManagerMockData.GetInternshipManager();
 
         //ACT
-        InternshipManagerCreationDto internshipManagerDto = InternshipManagerMapper.toDto(internshipManager);
+        InternshipManagerDetailsDto internshipManagerDto = InternshipManagerMapper.toDto(internshipManager);
 
         //ASSERT
         assertNull(internshipManagerDto.getPassword()); // Should not return password to frontend
@@ -32,7 +32,7 @@ public class InternshipManagerMapperTest {
     @Test
     void mapDtoToEntity() {
         //ARRANGE
-        InternshipManagerCreationDto internshipManagerDto = InternshipManagerMockData.GetInternshipManagerDto();
+        InternshipManagerDetailsDto internshipManagerDto = InternshipManagerMockData.GetInternshipManagerDto();
 
         //ACT
         InternshipManager internshipManager = InternshipManagerMapper.toEntity(internshipManagerDto);

@@ -32,8 +32,8 @@ public class UserRepositoryTest {
     @BeforeAll
     void init() {
         Flux<User> users = Flux.just(
-                User.builder().email("testing_1@gmail.com").password("password1").isEnabled(true).build(),
-                User.builder().email("testing_2@gmail.com").password("password2").isEnabled(false).build()
+                User.userBuilder().email("testing_1@gmail.com").password("password1").isEnabled(true).build(),
+                User.userBuilder().email("testing_2@gmail.com").password("password2").isEnabled(false).build()
         );
 
         userRepository.saveAll(users).subscribe();

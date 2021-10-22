@@ -12,19 +12,19 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class MonitorCreationDto extends UserCreationDto implements Serializable {
+public class MonitorDetailsDto extends UserDetailsDto implements Serializable {
 
     private String companyName;
 
     @Builder
-    public MonitorCreationDto(String id,
-                              String email,
-                              String password,
-                              String firstName,
-                              String lastName,
-                              String companyName,
-                              LocalDate registrationDate,
-                              String phoneNumber) {
+    public MonitorDetailsDto(String id,
+                             String email,
+                             String password,
+                             String firstName,
+                             String lastName,
+                             String companyName,
+                             LocalDate registrationDate,
+                             String phoneNumber) {
         super(id,
                 email,
                 password,

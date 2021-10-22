@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
+import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
@@ -28,7 +29,7 @@ public class InternshipOfferService {
     private final StudentService studentService;
 
     public InternshipOfferService(InternshipOfferRepository internshipOfferRepository, MonitorService monitorService,
-            StudentService studentService) {
+                                  StudentService studentService) {
         this.internshipOfferRepository = internshipOfferRepository;
         this.monitorService = monitorService;
         this.studentService = studentService;
@@ -47,7 +48,7 @@ public class InternshipOfferService {
     }
 
     public Flux<InternshipOfferStudentViewDto> getStudentExclusiveOffers(String studentEmail, Integer page,
-            Integer size) {
+                                                                         Integer size) {
         return studentService.findByEmail(studentEmail).flatMapMany(student -> ValidatingPageRequest
                 .applyPaging(student.getExclusiveOffersId(), page, size)
                 .flatMap(offerId -> internshipOfferRepository
@@ -61,7 +62,7 @@ public class InternshipOfferService {
     }
 
     public Flux<InternshipOfferStudentViewDto> getGeneralInternshipOffers(Integer page, Integer size,
-            String studentEmail) {
+                                                                          String studentEmail) {
         return studentService.findByEmail(studentEmail)
                 .flatMapMany(student -> ValidatingPageRequest.getPageRequestMono(page, size)
                         .flatMapMany(pageRequest -> internshipOfferRepository
@@ -141,8 +142,22 @@ public class InternshipOfferService {
         });
     }
 
+    public Flux<InternshipOfferStudentInterestViewDto> getInterestedStudents(String emailOfMonitor) {
+        return internshipOfferRepository.findAllByEmailOfMonitorAndIsValidatedTrue(emailOfMonitor)
+                .filter(internshipOffer -> internshipOffer.getListEmailInterestedStudents() != null)
+                .flatMap(internshipOffer -> {
+                    InternshipOfferStudentInterestViewDto internshipOfferDto = InternshipOfferMapper.toStudentInterestViewDto(internshipOffer);
+                    return studentService.findAllByEmails(internshipOffer.getListEmailInterestedStudents())
+                            .collectList()
+                            .flatMap(students -> {
+                                internshipOfferDto.setInterestedStudentList(students);
+                                return Mono.just(internshipOfferDto);
+                            });
+                });
+    }
+
     private Mono<InternshipOffer> addStudentEmailToOfferInterestedStudents(InternshipOffer internshipOffer,
-            Student student) {
+                                                                           Student student) {
         return Mono.just(internshipOffer).flatMap(offer -> {
             if (offer.getIsExclusive()) {
                 if (!student.getExclusiveOffersId().contains(offer.getId())) {

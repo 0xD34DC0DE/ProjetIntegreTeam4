@@ -1,7 +1,6 @@
 package com.team4.backend.controller;
 
-
-import com.team4.backend.dto.StudentCreationDto;
+import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.dto.StudentProfileDto;
 import com.team4.backend.exception.ForbiddenActionException;
 import com.team4.backend.exception.UserNotFoundException;
@@ -29,7 +28,7 @@ public class StudentController {
     }
 
     @PostMapping("/register")
-    public Mono<ResponseEntity<String>> register(@RequestBody StudentCreationDto studentCreationDto) {
+    public Mono<ResponseEntity<String>> register(@RequestBody StudentDetailsDto studentCreationDto) {
         return studentService.registerStudent(StudentMapper.toEntity(studentCreationDto))
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(error.getMessage())));

@@ -11,7 +11,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class InternshipOfferCreationDto extends InternshipOfferDto implements Serializable {
+public class InternshipOfferCreationDto extends InternshipOfferDetailedDto implements Serializable {
 
     private String emailOfMonitor;
 
@@ -35,6 +35,7 @@ public class InternshipOfferCreationDto extends InternshipOfferDto implements Se
                 maxSalary);
         this.emailOfMonitor = emailOfMonitor;
     }
+
 }
 
 

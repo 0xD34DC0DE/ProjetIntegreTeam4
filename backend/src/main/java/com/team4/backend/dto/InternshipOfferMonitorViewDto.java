@@ -13,7 +13,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class InternshipOfferMonitorViewDto extends InternshipOfferDto implements Serializable {
+public class InternshipOfferMonitorViewDto extends InternshipOfferDetailedDto implements Serializable {
 
     private Set<String> listEmailInterestedStudents;
 
@@ -37,4 +37,5 @@ public class InternshipOfferMonitorViewDto extends InternshipOfferDto implements
                 maxSalary);
         this.listEmailInterestedStudents = listEmailInterestedStudents;
     }
+
 }
