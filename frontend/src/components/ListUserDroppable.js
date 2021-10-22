@@ -1,12 +1,14 @@
 import { Grid, Typography } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { UserInfoContext } from "../stores/UserInfoStore";
 import DroppableUserCard from "./DroppableUserCard";
 
 const ListUserDroppable = ({ role, visible }) => {
   const [users, setUsers] = useState([]);
+  const [userInfo] = useContext(UserInfoContext)
 
   useEffect(() => {
     const getAllUsersByRole = async () => {
@@ -14,7 +16,7 @@ const ListUserDroppable = ({ role, visible }) => {
         method: "GET",
         url: `http://localhost:8080/user/getAll?role=${role}`,
         headers: {
-          Authorization: sessionStorage.getItem("jwt"),
+          Authorization: userInfo.jwt,
         },
         responseType: "json",
       });

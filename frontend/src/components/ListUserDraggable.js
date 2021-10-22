@@ -21,6 +21,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 const ListUserDraggable = ({ role, isDragging, visible }) => {
   const [users, setUsers] = useState([]);
+  const [userInfo] = useContext(UserInfoContext);
 
   useEffect(() => {
     const getAllUsersByRole = async () => {
@@ -28,7 +29,7 @@ const ListUserDraggable = ({ role, isDragging, visible }) => {
         method: "GET",
         url: `http://localhost:8080/user/getAll?role=${role}`,
         headers: {
-          Authorization: sessionStorage.getItem("jwt"),
+          Authorization: userInfo.jwt,
         },
         responseType: "json",
       });
