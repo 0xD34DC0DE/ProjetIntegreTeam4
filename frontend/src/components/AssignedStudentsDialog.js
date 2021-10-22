@@ -2,6 +2,7 @@ import { Person } from "@mui/icons-material";
 import {
   Dialog,
   DialogContent,
+  Divider,
   List,
   ListItem,
   ListItemText,
@@ -35,6 +36,7 @@ const AssignedStudentsDialog = ({
   return (
     <Dialog open={open} onClose={handleClose}>
       <DialogContent sx={{ p: 5 }}>
+        <Typography variant="h6">Étudiants assignés</Typography>
         <List>
           {assignedStudents.length > 0 ? (
             assignedStudents.map((student, key) => {

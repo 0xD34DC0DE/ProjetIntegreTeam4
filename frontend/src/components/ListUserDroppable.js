@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
@@ -26,6 +26,9 @@ const ListUserDroppable = ({ role, visible }) => {
     <>
       {visible && (
         <DndProvider backend={HTML5Backend}>
+          <Typography variant="h4" sx={{ color: "white" }}>
+            Superviseurs
+          </Typography>
           <Grid
             sx={{ py: "5vh", mt: "10%", display: "flex" }}
             container
