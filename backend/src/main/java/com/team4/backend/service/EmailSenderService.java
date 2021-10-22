@@ -29,11 +29,14 @@ public class EmailSenderService {
 
     public Mono<Void> sendEmailToStudent(String sender, String receiver, String subject, String content) {
         return studentService.findByEmail(receiver)
-                .flatMap(student -> internshipOfferService.monitorOffersInterestedStudentsContainsStudentEmail(receiver, sender))
-                .flatMap( studentInMonitorListResponse ->
-                        studentInMonitorListResponse ?
-                            sendEmail(sender, receiver, subject, content) :
-                            Mono.error(new UserNotFoundException("Given receiver email does not correspond to student that applied to monitor's offer")));
+                .flatMap(student -> internshipOfferService.isStudentEmailInMonitorOffersInterestedStudents(receiver, sender))
+                .flatMap( isStudentInMonitorOffersInterestedStudentsLists -> {
+                    if (isStudentInMonitorOffersInterestedStudentsLists) {
+                        return sendEmail(sender, receiver, subject, content);
+                    } else {
+                        return Mono.error(new UserNotFoundException("Given receiver email does not correspond to student that applied to monitor's offer"));
+                    }
+                });
     }
 
     protected Mono<Void> sendEmail(String sender, String receiver, String subject, String content) {

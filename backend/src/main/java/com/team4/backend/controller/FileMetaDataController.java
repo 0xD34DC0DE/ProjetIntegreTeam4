@@ -31,8 +31,7 @@ public class FileMetaDataController {
             @RequestPart("file") Mono<FilePart> filePartMono, Principal principal) {
         return fileMetaDataService
                 .uploadFile(filename, type, mimeType, filePartMono, UserSessionService.getLoggedUserEmail(principal))
-                .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body(""))).onErrorResume(error -> Mono
-                        .just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error.getMessage())));
+                .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")));
     }
 
     @GetMapping("/countAllInvalidCvNotSeen")

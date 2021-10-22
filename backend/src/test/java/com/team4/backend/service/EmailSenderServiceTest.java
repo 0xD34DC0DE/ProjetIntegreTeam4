@@ -9,13 +9,14 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
+
+import com.team4.backend.testdata.EmailSenderMockData;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,17 +37,10 @@ class EmailSenderServiceTest {
     @Mock
     InternshipOfferService internshipOfferService;
 
-    @Mock
-    MimeMessageHelper mimeMessageHelper;
 
     @InjectMocks
     EmailSenderService emailSenderService;
 
-    final String receiver = "receiver";
-    final String subject = "subject";
-    final String content = "content";
-
-    final String principalEmail = "principal@gmail.com";
 
     @Test
     void shouldSendEmailToStudent() {
@@ -54,11 +48,11 @@ class EmailSenderServiceTest {
         EmailSenderService emailSenderServiceSpy = spy(emailSenderService);
         doReturn(Mono.empty()).when(emailSenderServiceSpy).sendEmail(any(), any(), any(), any());
 
-        doReturn(Mono.just(new Student())).when(studentService).findByEmail(receiver);
-        doReturn(Mono.just(true)).when(internshipOfferService).monitorOffersInterestedStudentsContainsStudentEmail(receiver, principalEmail);
+        when(studentService.findByEmail(EmailSenderMockData.getReceiver())).thenReturn(Mono.just(new Student()));
+        when(internshipOfferService.isStudentEmailInMonitorOffersInterestedStudents(EmailSenderMockData.getReceiver(), EmailSenderMockData.getPrincipalEmail())).thenReturn(Mono.just(true));
 
         //ACT
-        Mono<Void> response = emailSenderServiceSpy.sendEmailToStudent(principalEmail, receiver, subject, content);
+        Mono<Void> response = emailSenderServiceSpy.sendEmailToStudent(EmailSenderMockData.getPrincipalEmail(), EmailSenderMockData.getReceiver(), EmailSenderMockData.getSubject(), EmailSenderMockData.getContent());
 
         //ASSERT
         StepVerifier.create(response).verifyComplete();
@@ -67,10 +61,10 @@ class EmailSenderServiceTest {
     @Test
     void shouldNotSendEmailToStudentInvalidReceiver() {
         //ARRANGE
-        doReturn(Mono.error(new UserNotFoundException())).when(studentService).findByEmail(receiver);
+        when(studentService.findByEmail(EmailSenderMockData.getReceiver())).thenReturn(Mono.error(new UserNotFoundException()));
 
         //ACT
-        Mono<Void> response = emailSenderService.sendEmailToStudent(principalEmail, receiver, subject, content);
+        Mono<Void> response = emailSenderService.sendEmailToStudent(EmailSenderMockData.getPrincipalEmail(), EmailSenderMockData.getReceiver(), EmailSenderMockData.getSubject(), EmailSenderMockData.getContent());
 
         //ASSERT
         StepVerifier.create(response).expectErrorMatches(throwable -> throwable instanceof UserNotFoundException).verify();
@@ -79,11 +73,11 @@ class EmailSenderServiceTest {
     @Test
     void shouldNotSendEmailToStudentNotInList() {
         //ARRANGE
-        doReturn(Mono.just(new Student())).when(studentService).findByEmail(receiver);
-        doReturn(Mono.just(false)).when(internshipOfferService).monitorOffersInterestedStudentsContainsStudentEmail(receiver, principalEmail);
+        when(studentService.findByEmail(EmailSenderMockData.getReceiver())).thenReturn(Mono.just(new Student()));
+        when(internshipOfferService.isStudentEmailInMonitorOffersInterestedStudents(EmailSenderMockData.getReceiver(), EmailSenderMockData.getPrincipalEmail())).thenReturn(Mono.just(false));
 
         //ACT
-        Mono<Void> response = emailSenderService.sendEmailToStudent(principalEmail, receiver, subject, content);
+        Mono<Void> response = emailSenderService.sendEmailToStudent(EmailSenderMockData.getPrincipalEmail(), EmailSenderMockData.getReceiver(), EmailSenderMockData.getSubject(), EmailSenderMockData.getContent());
 
         //ASSERT
         StepVerifier.create(response).expectErrorMatches(throwable -> throwable instanceof UserNotFoundException).verify();
@@ -92,7 +86,7 @@ class EmailSenderServiceTest {
     @Test
     void shouldNotSendEmailToStudentNullPointerException() {
         // ACT & ASSERT
-        assertThrows(NullPointerException.class, () -> emailSenderService.sendEmailToStudent(principalEmail, receiver, subject, content));
+        assertThrows(NullPointerException.class, () -> emailSenderService.sendEmailToStudent(EmailSenderMockData.getPrincipalEmail(), EmailSenderMockData.getReceiver(), EmailSenderMockData.getSubject(), EmailSenderMockData.getContent()));
     }
 
     @Test
@@ -101,7 +95,7 @@ class EmailSenderServiceTest {
         when(javaMailSender.createMimeMessage()).thenReturn(new MimeMessage((Session)null));
 
         // ACT
-        Mono<Void> response = emailSenderService.sendEmail(principalEmail, receiver, subject, content);
+        Mono<Void> response = emailSenderService.sendEmail(EmailSenderMockData.getPrincipalEmail(), EmailSenderMockData.getReceiver(), EmailSenderMockData.getSubject(), EmailSenderMockData.getContent());
 
         // ASSERT
         StepVerifier.create(response).verifyComplete();
@@ -116,7 +110,7 @@ class EmailSenderServiceTest {
         when(javaMailSender.createMimeMessage()).thenReturn(new MimeMessage((Session)null));
 
         // ACT
-        Mono<Void> response = emailSenderServiceSpy.sendEmail(principalEmail, receiver, subject, content);
+        Mono<Void> response = emailSenderServiceSpy.sendEmail(EmailSenderMockData.getPrincipalEmail(), EmailSenderMockData.getReceiver(), EmailSenderMockData.getSubject(), EmailSenderMockData.getContent());
 
         //ASSERT
         StepVerifier.create(response).expectErrorMatches(throwable -> throwable instanceof MessagingException).verify();

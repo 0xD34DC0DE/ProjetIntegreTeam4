@@ -109,7 +109,7 @@ public class InternshipOfferService {
                 .map(count -> (long) Math.ceil((double) count / (double) size));
     }
 
-    public Mono<Boolean> monitorOffersInterestedStudentsContainsStudentEmail(String studentEmail, String monitorEmail) {
+    public Mono<Boolean> isStudentEmailInMonitorOffersInterestedStudents(String studentEmail, String monitorEmail) {
         return internshipOfferRepository.findAllByEmailOfMonitorAndIsValidatedTrue(monitorEmail).collectList()
                 .flatMapMany(allFoundInternshipOffer -> {
                     for (InternshipOffer internshipOffer : allFoundInternshipOffer) {

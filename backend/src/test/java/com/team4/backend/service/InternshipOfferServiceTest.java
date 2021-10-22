@@ -9,7 +9,6 @@ import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.InternshipOfferRepository;
-import com.team4.backend.security.UserSessionService;
 import com.team4.backend.testdata.InternshipOfferMockData;
 import com.team4.backend.testdata.StudentMockData;
 import lombok.extern.java.Log;
@@ -438,7 +437,7 @@ public class InternshipOfferServiceTest {
 
                 // ACT
                 Mono<Boolean> response = internshipOfferService
-                                .monitorOffersInterestedStudentsContainsStudentEmail(studentEmail, monitorEmail);
+                                .isStudentEmailInMonitorOffersInterestedStudents(studentEmail, monitorEmail);
 
                 // ASSERT
                 StepVerifier.create(response).assertNext(Assertions::assertTrue).verifyComplete();
@@ -457,7 +456,7 @@ public class InternshipOfferServiceTest {
 
                 // ACT
                 Mono<Boolean> response = internshipOfferService
-                                .monitorOffersInterestedStudentsContainsStudentEmail(studentEmail, monitorEmail);
+                                .isStudentEmailInMonitorOffersInterestedStudents(studentEmail, monitorEmail);
 
                 // ASSERT
                 StepVerifier.create(response).assertNext(Assertions::assertFalse).verifyComplete();
