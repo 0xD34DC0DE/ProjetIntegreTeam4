@@ -66,9 +66,21 @@ const Content = ({
             toggleDialog={toggleDialog}
             dialogVisibility={dialogVisibility}
           />
-          <AsssignedStudentSupervisorView visible={selection.id == 10} />
-          <ListUserDroppable role="SUPERVISOR" visible={selection.id == 11} />
-          <ListUserDraggable role="STUDENT" visible={selection.id == 11} />
+          <AsssignedStudentSupervisorView
+            visible={selection.id == 10 && userInfo.role == "SUPERVISOR"}
+          />
+          <ListUserDroppable
+            role="SUPERVISOR"
+            visible={
+              selection.id == 11 && userInfo.role == "INTERNSHIP_MANAGER"
+            }
+          />
+          <ListUserDraggable
+            role="STUDENT"
+            visible={
+              selection.id == 11 && userInfo.role == "INTERNSHIP_MANAGER"
+            }
+          />
         </Box>
       )}
       <OfferForm

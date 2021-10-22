@@ -40,35 +40,41 @@ const AsssignedStudentSupervisorView = ({ visible }) => {
   return (
     <>
       {visible && (
-        <Grid
-          sx={{ py: "5vh", mt: "10%", display: "flex" }}
-          container
-          spacing={{ xs: 2, md: 3 }}
-          columns={{ xs: 4, sm: 8, md: 12 }}
-        >
-          {assignedStudents.map((student, index) => (
-            <>
-              <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={index}>
-                <Card
-                  sx={{
-                    alignItem: "center",
-                    justifyContent: "center",
-                    p: 2,
-                    mx: 2,
-                  }}
-                >
-                  <Box sx={{ textAlign: "center" }}>
-                    <Avatar sx={{ mx: "auto", my: 2 }}></Avatar>
-                    <Typography>{student.email}</Typography>
-                    <Typography>
-                      {student.firstName}, {student.lastName}
-                    </Typography>
-                  </Box>
-                </Card>
-              </Grid>
-            </>
-          ))}
-        </Grid>
+        <>
+          <Typography variant="h4" sx={{ color: "white" }}>
+            Liste des étudiants assignés
+          </Typography>
+          <Grid
+            sx={{ py: "5vh", mt: "10%", display: "flex" }}
+            container
+            spacing={{ xs: 2, md: 3 }}
+            columns={{ xs: 4, sm: 8, md: 12 }}
+          >
+            {assignedStudents.map((student, index) => (
+              <>
+                <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={index}>
+                  <Card
+                    sx={{
+                      backgroundColor: "black",
+                      alignItem: "center",
+                      justifyContent: "center",
+                      p: 2,
+                      mx: 2,
+                    }}
+                  >
+                    <Box sx={{ textAlign: "center" }}>
+                      <Avatar sx={{ mx: "auto", my: 2 }}></Avatar>
+                      <Typography>{student.email}</Typography>
+                      <Typography>
+                        {student.firstName}, {student.lastName}
+                      </Typography>
+                    </Box>
+                  </Card>
+                </Grid>
+              </>
+            ))}
+          </Grid>
+        </>
       )}
     </>
   );
