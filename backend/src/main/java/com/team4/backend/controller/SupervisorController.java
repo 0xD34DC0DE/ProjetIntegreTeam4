@@ -38,11 +38,13 @@ public class SupervisorController {
     }
 
     @GetMapping("/getAssignedStudents/{id}")
+    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER', 'SUPERVISOR')")
     public Flux<StudentDetailsDto> getAssignedStudents(@PathVariable("id") String supervisorId){
         return supervisorService.getAllAssignedStudents(supervisorId);
     }
 
     @GetMapping("/{email}")
+    @PreAuthorize("hasAnyAuthority('SUPERVISOR')")
     public Mono<SupervisorDetailsDto> getSupervisor(@PathVariable("email") String email){
         return supervisorService.getSupervisor(email).map(SupervisorMapper::toDetailsDto);
     }

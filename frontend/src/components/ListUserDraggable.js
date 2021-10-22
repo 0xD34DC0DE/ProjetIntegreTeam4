@@ -19,7 +19,7 @@ import DroppableUserCard from "./DroppableUserCard";
 import { DndContext, DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
-const ListUserDraggable = ({ role, isDragging }) => {
+const ListUserDraggable = ({ role, isDragging, visible }) => {
   const [users, setUsers] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
 
@@ -38,22 +38,29 @@ const ListUserDraggable = ({ role, isDragging }) => {
     getAllUsersByRole();
   }, []);
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Grid
-        sx={{ py: "5vh", mt: "10%", display: "flex" }}
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
-        {users.map((user, index) => (
-          <>
-            <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={index}>
-              <UserCard isDragging={isDragging} user={user} />
-            </Grid>
-          </>
-        ))}
-      </Grid>
-    </DndProvider>
+    <>
+      {visible && (
+        <DndProvider backend={HTML5Backend}>
+          <Typography variant="h4" sx={{ color: "white", ml: 2 }}>
+            Étudiants
+          </Typography>
+          <Grid
+            sx={{ py: "5vh", mt: "10%", display: "flex" }}
+            container
+            spacing={{ xs: 2, md: 3 }}
+            columns={{ xs: 4, sm: 8, md: 12 }}
+          >
+            {users.map((user, index) => (
+              <>
+                <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={index}>
+                  <UserCard isDragging={isDragging} user={user} />
+                </Grid>
+              </>
+            ))}
+          </Grid>
+        </DndProvider>
+      )}
+    </>
   );
 };
 

@@ -18,6 +18,7 @@ export default function UserCard({ user }) {
       role="Handle"
       ref={drag}
       sx={{
+        backgroundColor: "#1F2020",
         alignItem: "center",
         justifyContent: "center",
         p: 2,

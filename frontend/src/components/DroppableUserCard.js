@@ -36,6 +36,8 @@ const fadeIn = {
 const DroppableUserCard = ({ user, index }) => {
   const [open, setOpen] = useState(false);
   const [justDropped, setJustDropped] = useState(false);
+  const [assignedStudents, setAssignedStudents] = useState([]);
+  const [droppedItem, setDroppedItem] = useState();
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     // The type (or types) to accept - strings or symbols
     accept: "UserCard",
@@ -54,6 +56,7 @@ const DroppableUserCard = ({ user, index }) => {
           },
           responseType: "json",
         }).catch((res) => console.log("res", res));
+
         setJustDropped(true);
         setTimeout(() => {
           setJustDropped(false);
@@ -62,6 +65,16 @@ const DroppableUserCard = ({ user, index }) => {
     },
   }));
 
+  const handleClose = (_, reason) => {
+    if (reason === "backdropClick") {
+      setOpen(false);
+    }
+  };
+
+  const handleStudentAssignment = (data) => {
+    setAssignedStudents(data);
+  };
+
   //TODO: Use backdrop click to close the dialog
   return (
     <>
@@ -69,8 +82,8 @@ const DroppableUserCard = ({ user, index }) => {
         key={index}
         ref={drop}
         role={"Dustbin"}
-        style={{ backgroundColor: isOver ? "red" : "white" }}
         sx={{
+          backgroundColor: isOver ? "#2F3030" : "#1F2020",
           alignItem: "center",
           justifyContent: "center",
           m: 2,
@@ -98,13 +111,22 @@ const DroppableUserCard = ({ user, index }) => {
                   setOpen(true);
                 }}
               >
-                <People color="primary" />
+                <People sx={{ color: "white" }} />
               </IconButton>
             </Tooltip>
           </CardActions>
         </Box>
       </Card>
-      <AssignedStudentsDialog open={open} user={user} />
+
+      {open && (
+        <AssignedStudentsDialog
+          open={open}
+          user={user}
+          handleStudentAssignment={handleStudentAssignment}
+          assignedStudents={assignedStudents}
+          handleClose={handleClose}
+        />
+      )}
     </>
   );
 };

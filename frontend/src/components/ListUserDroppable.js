@@ -1,14 +1,14 @@
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import DroppableUserCard from "./DroppableUserCard";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import DroppableUserCard from "./DroppableUserCard";
 
-const ListUserDroppable = ({ role }) => {
+const ListUserDroppable = ({ role, visible }) => {
   const [users, setUsers] = useState([]);
-  const [userInfo] = useContext(UserInfoContext);
+  const [userInfo] = useContext(UserInfoContext)
 
   useEffect(() => {
     const getAllUsersByRole = async () => {
@@ -25,22 +25,29 @@ const ListUserDroppable = ({ role }) => {
     getAllUsersByRole();
   }, []);
   return (
-    <DndProvider backend={HTML5Backend}>
-      <Grid
-        sx={{ py: "5vh", mt: "10%", display: "flex" }}
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-      >
-        {users.map((user, index) => (
-          <>
-            <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={index}>
-              <DroppableUserCard user={user} key={index} index={index} />
-            </Grid>
-          </>
-        ))}
-      </Grid>
-    </DndProvider>
+    <>
+      {visible && (
+        <DndProvider backend={HTML5Backend}>
+          <Typography variant="h4" sx={{ color: "white", ml: 2, mt: 2 }}>
+            Superviseurs
+          </Typography>
+          <Grid
+            sx={{ py: "5vh", mt: "10%", display: "flex" }}
+            container
+            spacing={{ xs: 2, md: 3 }}
+            columns={{ xs: 4, sm: 8, md: 12 }}
+          >
+            {users.map((user, index) => (
+              <>
+                <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={index}>
+                  <DroppableUserCard user={user} key={index} index={index} />
+                </Grid>
+              </>
+            ))}
+          </Grid>
+        </DndProvider>
+      )}
+    </>
   );
 };
 

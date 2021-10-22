@@ -81,7 +81,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .lastName("Scott")
                         .phoneNumber("4387650987")
                         .password(pbkdf2Encoder.encode("travis123"))
-                        .hasValidCv(false)
+                        .hasValidCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
                         .studentState(StudentState.WAITING_FOR_RESPONSE)
@@ -147,6 +147,8 @@ public class TestingInserterRunner implements ApplicationRunner {
         List<Supervisor> supervisorList = Arrays.asList(
                 Supervisor.supervisorBuilder()
                         .email("45673234@gmail.com").password(pbkdf2Encoder.encode("sasuke123"))
+                        .firstName("Ginette")
+                        .lastName("Renaud")
                         .studentEmails(new HashSet<>()).build(),
                 Supervisor.supervisorBuilder()
                 .email("supervisor1@gmail.com")

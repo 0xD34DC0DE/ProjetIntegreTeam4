@@ -12,6 +12,9 @@ import OfferForm from "./OfferForm";
 import OfferViews from "./OfferViews";
 import StudentDashBoard from "./StudentDashboard";
 import InternshipOfferValidation from "./InternshipOfferValidation";
+import ListUserDroppable from "./ListUserDroppable";
+import ListUserDraggable from "./ListUserDraggable";
+import AsssignedStudentSupervisorView from "./AsssignedStudentSupervisorView";
 
 const Content = ({
   isSidebarOpen,
@@ -20,6 +23,8 @@ const Content = ({
   selection,
 }) => {
   const [userInfo] = useContext(UserInfoContext);
+
+  //TODO use switch instead of repeated conditionnal rendering
 
   return (
     <Box
@@ -47,22 +52,44 @@ const Content = ({
             role={roles[userInfo.role]}
             description={selection.description}
           />
-          <ListStudentApplying
-            visible={selection.id == 6}
-            toggleDialog={toggleDialog}
-            dialogVisibility={dialogVisibility}
-          />
-          <UploadCV visible={selection.id == 5} />
-          <ListCvInternshipManagerView visible={selection.id == 1} />
-          <OfferViews visible={selection.id == 4} />
-          <StudentDashBoard
-            visible={selection.id == 7 && userInfo.role == "STUDENT"}
-          />
-          <InternshipOfferValidation
-            visible={selection.id == 3}
-            toggleDialog={toggleDialog}
-            dialogVisibility={dialogVisibility}
-          />
+          {userInfo.role === "INTERNSHIP_MANAGER" && (
+            <ListCvInternshipManagerView visible={selection.id == 1} />
+          )}
+
+          {userInfo.role === "MONITOR" && (
+            <ListStudentApplying
+              visible={selection.id == 6}
+              toggleDialog={toggleDialog}
+              dialogVisibility={dialogVisibility}
+            />
+          )}
+          {userInfo.role === "STUDENT" && (
+            <UploadCV visible={selection.id == 5} />
+          )}
+          {userInfo.role === "STUDENT" && (
+            <OfferViews visible={selection.id == 4} />
+          )}
+          {userInfo.role === "STUDENT" && (
+            <StudentDashBoard
+              visible={selection.id == 7 && userInfo.role == "STUDENT"}
+            />
+          )}
+          {userInfo.role === "INTERNSHIP_MANAGER" && (
+            <InternshipOfferValidation
+              visible={selection.id == 3}
+              toggleDialog={toggleDialog}
+              dialogVisibility={dialogVisibility}
+            />
+          )}
+          {userInfo.role === "SUPERVISOR" && (
+            <AsssignedStudentSupervisorView visible={selection.id == 10} />
+          )}
+          {userInfo.role === "INTERNSHIP_MANAGER" && (
+            <ListUserDroppable role="SUPERVISOR" visible={selection.id == 11} />
+          )}
+          {userInfo.role === "INTERNSHIP_MANAGER" && (
+            <ListUserDraggable role="STUDENT" visible={selection.id == 11} />
+          )}
         </Box>
       )}
       <OfferForm

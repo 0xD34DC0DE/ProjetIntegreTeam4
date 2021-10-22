@@ -57,7 +57,7 @@ const StudentDashBoard = ({ visible }) => {
           method: "GET",
           url: "http://localhost:8080/student/getProfile",
           headers: {
-            Authorization: sessionStorage.getItem("jwt"),
+            Authorization: userInfo.jwt,
           },
           responseType: "json",
         })
@@ -67,7 +67,6 @@ const StudentDashBoard = ({ visible }) => {
               response.data.studentState != listState[2] ||
                 !response.data.hasValidCv
             );
-            console.log(profile);
           })
           .catch((error) => {
             console.error(error);
