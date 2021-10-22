@@ -1,0 +1,16 @@
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hack pour empêcher le webkit de mettre le background blanc lorsque autofill est utilisé pour un input */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active {
+  transition: background-color 50000s ease-in-out 0s, color 5000s ease-in-out 0s;
+}
+
+/* Filter pour mettre les indicateurs de calendrier du webkit blanc */
+input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(100%);
+}
