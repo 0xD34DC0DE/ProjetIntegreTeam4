@@ -84,10 +84,10 @@ const Content = ({
           {userInfo.role === "SUPERVISOR" && (
             <AsssignedStudentSupervisorView visible={selection.id == 10} />
           )}
-          {userInfo.role === "SUPERVISOR" && (
+          {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListUserDroppable role="SUPERVISOR" visible={selection.id == 11} />
           )}
-          {userInfo.role === "SUPERVISOR" && (
+          {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListUserDraggable role="STUDENT" visible={selection.id == 11} />
           )}
         </Box>

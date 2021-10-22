@@ -55,7 +55,8 @@ const AsssignedStudentSupervisorView = ({ visible }) => {
                 <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={index}>
                   <Card
                     sx={{
-                      backgroundColor: "black",
+                      backgroundColor: "#1F2020",
+                      boxShadow: 6,
                       alignItem: "center",
                       justifyContent: "center",
                       p: 2,

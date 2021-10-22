@@ -15,6 +15,7 @@ const AssignedStudentsDialog = ({
   user,
   handleStudentAssignment,
   assignedStudents,
+  handleClose,
 }) => {
   useEffect(() => {
     const getAssignedStudents = async () => {
@@ -32,7 +33,7 @@ const AssignedStudentsDialog = ({
     getAssignedStudents();
   }, []);
   return (
-    <Dialog open={true}>
+    <Dialog open={open} onClose={handleClose}>
       <DialogContent sx={{ p: 5 }}>
         <List>
           {assignedStudents.length > 0 ? (

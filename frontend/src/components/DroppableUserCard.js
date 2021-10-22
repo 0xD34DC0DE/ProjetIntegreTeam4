@@ -65,6 +65,12 @@ const DroppableUserCard = ({ user, index }) => {
     },
   }));
 
+  const handleClose = (_, reason) => {
+    if (reason === "backdropClick") {
+      setOpen(false);
+    }
+  };
+
   const handleStudentAssignment = (data) => {
     setAssignedStudents(data);
   };
@@ -76,8 +82,8 @@ const DroppableUserCard = ({ user, index }) => {
         key={index}
         ref={drop}
         role={"Dustbin"}
-        style={{ backgroundColor: isOver ? "red" : "white" }}
         sx={{
+          backgroundColor: isOver ? "#2F3030" : "#1F2020",
           alignItem: "center",
           justifyContent: "center",
           m: 2,
@@ -105,7 +111,7 @@ const DroppableUserCard = ({ user, index }) => {
                   setOpen(true);
                 }}
               >
-                <People color="primary" />
+                <People sx={{ color: "white" }} />
               </IconButton>
             </Tooltip>
           </CardActions>
@@ -118,6 +124,7 @@ const DroppableUserCard = ({ user, index }) => {
           user={user}
           handleStudentAssignment={handleStudentAssignment}
           assignedStudents={assignedStudents}
+          handleClose={handleClose}
         />
       )}
     </>
