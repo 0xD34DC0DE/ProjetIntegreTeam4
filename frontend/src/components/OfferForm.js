@@ -8,9 +8,10 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { OFFER_FORM_VALUES } from "../models/TextFormFieldValues";
 import TextFormField from "./TextFormField";
+import { UserInfoContext } from "../stores/UserInfoStore";
 
 const OfferForm = ({ open, toggleDialog }) => {
   const emptyOffer = {
@@ -25,7 +26,7 @@ const OfferForm = ({ open, toggleDialog }) => {
   };
   const [offer, setOffer] = useState(emptyOffer);
   const [isValid, setIsValid] = useState(false);
-  const [token, setToken] = useState(sessionStorage.getItem("jwt"));
+  const [userInfo] = useContext(UserInfoContext);
 
   const handleFormChange = (event) => {
     setOffer((previousForm) => ({
@@ -48,7 +49,7 @@ const OfferForm = ({ open, toggleDialog }) => {
       method: "POST",
       url: "http://localhost:8080/internshipOffer/addAnInternshipOffer",
       headers: {
-        Authorization: token,
+        Authorization: userInfo.jwt,
       },
       data: offer,
       responseType: "json",

@@ -66,7 +66,7 @@ export const sidebarList = [
   {
     id: 6,
     label: "Liste des postulations",
-    role: ["MONITOR", "INTERNSHIP_MANAGER"],
+    role: ["MONITOR"],
     isDialog: false,
     icon: <FindInPageOutlined sx={{ mr: 1 }} />,
     description: "Liste des étudiants ayant postulés à l'une de vos offres",
