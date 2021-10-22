@@ -8,33 +8,34 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class InternshipOfferMonitorViewDto extends InternshipOfferBaseDto implements Serializable {
+public class InternshipOfferMonitorViewDto extends InternshipOfferDetailedDto implements Serializable {
 
-    String id;
+    private Set<String> listEmailInterestedStudents;
 
-    private List<String> listEmailInterestedStudents;
-    @Builder
-    public InternshipOfferMonitorViewDto(LocalDate limitDateToApply,
+    @Builder(builderMethodName = "internshipOfferMonitorViewDtoBuilder")
+    public InternshipOfferMonitorViewDto(String id,
+                                         LocalDate limitDateToApply,
                                          LocalDate beginningDate,
                                          LocalDate endingDate,
                                          String companyName,
                                          String description,
                                          Float minSalary,
                                          Float maxSalary,
-                                         String id,
-                                         List<String> listEmailInterestedStudents) {
-        super(limitDateToApply,
+                                         Set<String> listEmailInterestedStudents) {
+        super(id,
+                limitDateToApply,
                 beginningDate,
                 endingDate,
                 companyName,
                 description,
                 minSalary,
                 maxSalary);
-        this.id = id;
         this.listEmailInterestedStudents = listEmailInterestedStudents;
     }
+
 }

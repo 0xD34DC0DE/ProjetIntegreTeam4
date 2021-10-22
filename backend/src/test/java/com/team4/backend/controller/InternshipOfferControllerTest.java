@@ -1,11 +1,13 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
-import com.team4.backend.dto.InternshipOfferDto;
+import com.team4.backend.dto.InternshipOfferDetailedDto;
+import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
+import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
+import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserNotFoundException;
-import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.service.InternshipOfferService;
 import com.team4.backend.testdata.InternshipOfferMockData;
@@ -23,8 +25,9 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-import static org.mockito.Mockito.when;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
@@ -40,16 +43,16 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldAddAnInternshipOffer() {
         //ARRANGE
-        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferCreationDto();
+        InternshipOfferCreationDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferCreationDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferService.addAnInternshipOffer(internshipOfferDto)).thenReturn(Mono.just(internshipOffer));
 
         //ACT
         webTestClient
                 .post()
                 .uri("/internshipOffer/addAnInternshipOffer")
-                .bodyValue(internshipOfferDTO)
+                .bodyValue(internshipOfferDto)
                 .exchange()
                 //ASSERT
                 .expectStatus().isCreated()
@@ -59,15 +62,15 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldNotAddAnInternshipOffer() {
         //ARRANGE
-        InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferCreationDto();
+        InternshipOfferCreationDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferCreationDto();
 
-        when(internshipOfferService.addAnInternshipOffer(internshipOfferDTO)).thenReturn(Mono.error(UserNotFoundException::new));
+        when(internshipOfferService.addAnInternshipOffer(internshipOfferDto)).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
         webTestClient
                 .post()
                 .uri("/internshipOffer/addAnInternshipOffer")
-                .bodyValue(internshipOfferDTO)
+                .bodyValue(internshipOfferDto)
                 .exchange()
                 //ASSERT
                 .expectStatus().isNotFound()
@@ -75,38 +78,27 @@ public class InternshipOfferControllerTest {
     }
 
     @Test
-    void getNonValidatedIntershipOffer() {
-        // ARRANGE
-        Flux<InternshipOffer> internshipOfferFlux = InternshipOfferMockData.getNonValidatedInternshipOffers();
-        when(internshipOfferService.getNonValidatedInternshipOffers()).thenReturn(internshipOfferFlux);
-
-        // ACT
-        webTestClient
-                .get()
-                .uri("/internshipOffer/unvalidatedOffers")
-                .exchange()
-                // ASSERT
-                .expectStatus().isOk()
-                .expectBodyList(InternshipOfferDto.class);
-    }
-
-    @Test
     void shouldValidateInternshipOffer() {
         //ARRANGE
-        InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
+        InternshipOfferDetailedDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.validateInternshipOffer(internshipOfferDTO.getId())).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferService.validateInternshipOffer(internshipOfferDto.getId(), true)).thenReturn(Mono.just(internshipOffer));
 
         //ACT
         webTestClient
                 .patch()
-                .uri("/internshipOffer/validateInternshipOffer?id="+internshipOfferDTO.getId())
-                .bodyValue(internshipOfferDTO)
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/internshipOffer/validateInternshipOffer")
+                                .queryParam("id", internshipOfferDto.getId())
+                                .queryParam("isValid", true)
+                                .build())
+                .bodyValue(internshipOfferDto)
                 .exchange()
                 //ASSERT
-                .expectStatus().isOk()
-                .expectBody(InternshipOfferDto.class);
+                .expectStatus().isNoContent()
+                .expectBody(String.class);
     }
 
     @Test
@@ -122,33 +114,39 @@ public class InternshipOfferControllerTest {
                 .exchange()
                 // ASSERT
                 .expectStatus().isOk()
-                .expectBodyList(InternshipOfferDto.class);
+                .expectBodyList(InternshipOfferDetailedDto.class);
     }
-    @Test
-    void shouldRefuseInternshipOffer() {
-        //ARRANGE
-        InternshipOfferDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferDto();
-        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.refuseInternshipOffer(internshipOfferDTO.getId())).thenReturn(Mono.just(internshipOffer));
+    @Test
+    void shouldNotValidateInternshipOffer() {
+        //ARRANGE
+        InternshipOfferDetailedDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
+
+        when(internshipOfferService.validateInternshipOffer(internshipOfferDto.getId(), true)).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
 
         //ACT
         webTestClient
                 .patch()
-                .uri("/internshipOffer/refuseInternshipOffer?id="+internshipOfferDTO.getId())
-                .bodyValue(internshipOfferDTO)
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/internshipOffer/validateInternshipOffer")
+                                .queryParam("id", internshipOfferDto.getId())
+                                .queryParam("isValid", true)
+                                .build())
+                .bodyValue(internshipOfferDto)
                 .exchange()
                 //ASSERT
-                .expectStatus().isOk()
-                .expectBody(InternshipOfferDto.class);
+                .expectStatus().isNotFound()
+                .expectBody(String.class);
     }
 
     @Test
     void shouldReturnGeneralInternshipOffers() {
         //ARRANGE
-        List<InternshipOffer> internshipOffers = InternshipOfferMockData.getListInternshipOffer(3);
+        List<InternshipOfferStudentViewDto> internshipOffers = InternshipOfferMockData
+                .getListInternshipOfferStudentViewDto(3);
 
-        when(internshipOfferService.getGeneralInternshipOffers(any(Integer.class), any(Integer.class)))
+        when(internshipOfferService.getGeneralInternshipOffers(any(Integer.class), any(Integer.class), any()))
                 .thenReturn(Flux.fromIterable(internshipOffers));
 
         //ACT
@@ -164,7 +162,9 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldReturnExclusiveInternshipOffers() {
         //ARRANGE
-        List<InternshipOffer> internshipOffers = InternshipOfferMockData.getListInternshipOffer(3);
+        List<InternshipOfferStudentViewDto> internshipOffers =
+                InternshipOfferMockData.getListInternshipOfferStudentViewDto(3);
+
 
         when(internshipOfferService.getStudentExclusiveOffers(
                 any(String.class), any(Integer.class), any(Integer.class))
@@ -183,7 +183,7 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldNotReturnGeneralInternshipOffersInvalidParametersSize() {
         //ARRANGE
-        when(internshipOfferService.getGeneralInternshipOffers(any(Integer.class), any(Integer.class)))
+        when(internshipOfferService.getGeneralInternshipOffers(any(Integer.class), any(Integer.class), any()))
                 .thenReturn(Flux.error(InvalidPageRequestException::new));
 
         //ACT
@@ -274,6 +274,75 @@ public class InternshipOfferControllerTest {
                 //ASSERT
                 .expectStatus().isOk()
                 .expectBody(Long.class);
+    }
+
+    @Test
+    void shouldReturnInterestedStudents() {
+        //ARRANGE
+        when(internshipOfferService.getInterestedStudents(any(String.class)))
+                .thenReturn(Flux.fromIterable(InternshipOfferMockData.getListInternshipOfferStudentInterestViewDto(3)));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/internshipOffer/interestedStudents/monitor@gmail.com")
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(InternshipOfferStudentInterestViewDto.class);
+    }
+
+    void shouldApplyInternshipOffer() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.applyOffer(eq(internshipOffer.getId()), any(String.class))).then(s -> {
+            internshipOffer.getListEmailInterestedStudents().add("student@gmail.com");
+            return Mono.just(internshipOffer);
+        });
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/internshipOffer/apply/" + internshipOffer.getId())
+                .exchange()
+                //ASSERT
+                .expectStatus().isNoContent()
+                .expectBody().isEmpty();
+    }
+
+    @Test
+    void shouldNotApplyExclusiveInternshipOffer() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.applyOffer(eq(internshipOffer.getId()), any(String.class)))
+                .thenReturn(Mono.error(UnauthorizedException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/internshipOffer/apply/" + internshipOffer.getId())
+                .exchange()
+                //ASSERT
+                .expectStatus().isUnauthorized();
+    }
+
+    @Test
+    void shouldNotApplyInternshipOfferNonExistentOffer() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.applyOffer(eq(internshipOffer.getId()), any(String.class)))
+                .thenReturn(Mono.error(InternshipOfferNotFoundException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/internshipOffer/apply/" + internshipOffer.getId())
+                .exchange()
+                //ASSERT
+                .expectStatus().isNotFound();
     }
 
 }

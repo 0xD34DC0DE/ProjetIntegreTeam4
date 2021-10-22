@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.SupervisorDto;
+import com.team4.backend.dto.SupervisorDetailsDto;
+import com.team4.backend.exception.DuplicateEntryException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.service.SupervisorService;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -34,7 +36,7 @@ public class SupervisorControllerTest {
     @Test
     public void shouldCreateSupervisor() {
         //ARRANGE
-        SupervisorDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
         supervisorDto.setId(null);
 
@@ -61,7 +63,7 @@ public class SupervisorControllerTest {
     @Test
     public void shouldNotSupervisor() {
         //ARRANGE
-        SupervisorDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
         supervisorDto.setId(null);
 
@@ -77,4 +79,53 @@ public class SupervisorControllerTest {
                 .expectBody().isEmpty();
     }
 
+    @Test
+    void shouldAssignSupervisorToStudents(){
+        // ARRANGE
+        String studentEmail = "teststudent@gmail.com";
+        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+
+        when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), studentEmail))
+            .thenReturn(Mono.just(supervisor));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/supervisor/addEmailToStudentList")
+                                .queryParam("id", supervisorDto.getId())
+                                .queryParam("studentEmail", studentEmail)
+                                .build())
+                .bodyValue(supervisorDto)
+                .exchange()
+                //ASSERT
+                .expectStatus().isNoContent()
+                .expectBody(String.class);
+    }
+
+    @Test
+    void shouldNotAssignSupervisorToStudents(){
+        // ARRANGE
+        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+
+        when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), "toto23@outlook.com"))
+                .thenReturn(Mono.error(DuplicateEntryException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/supervisor/addEmailToStudentList")
+                                .queryParam("id", supervisorDto.getId())
+                                .queryParam("studentEmail", "toto23@outlook.com")
+                                .build())
+                .bodyValue(supervisorDto)
+                .exchange()
+                //ASSERT
+                .expectStatus().isEqualTo(HttpStatus.CONFLICT)
+                .expectBody(String.class);
+    }
 }

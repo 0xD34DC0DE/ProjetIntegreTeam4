@@ -1,7 +1,10 @@
 package com.team4.backend.model;
 
 import com.team4.backend.model.enums.Role;
-import lombok.*;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -34,7 +37,7 @@ public class User implements Serializable {
 
     protected Boolean isEnabled;
 
-    @Builder
+    @Builder(builderMethodName = "userBuilder")
     public User(String id,
                 String email,
                 String firstName,

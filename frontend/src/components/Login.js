@@ -12,7 +12,7 @@ import axios from "axios";
 import React, { useState, useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 
-const Login = ({ open, toggleDialogs }) => {
+const Login = ({ open, toggleDialog }) => {
   const [errorMessage, setErrorMessage] = useState();
   const [form, setForm] = useState({
     email: "",
@@ -41,7 +41,7 @@ const Login = ({ open, toggleDialogs }) => {
         userInfoDispatch({ type: "LOGIN", payload: { token: response.data } });
         resetForm();
         setErrorMessage();
-        toggleDialogs("loginDialog", false);
+        toggleDialog("loginDialog", false);
       })
       .catch((error) => {
         let errorMessage =
@@ -58,7 +58,7 @@ const Login = ({ open, toggleDialogs }) => {
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick") {
-      toggleDialogs("loginDialog", false);
+      toggleDialog("loginDialog", false);
       resetForm();
     }
   };
@@ -78,7 +78,7 @@ const Login = ({ open, toggleDialogs }) => {
           >
             Connexion
           </Typography>
-          <DialogContentText sx={{ color: "red", p: 0, m: 0 }}>
+          <DialogContentText style={{ color: "red", p: 0, m: 0 }}>
             {errorMessage}
           </DialogContentText>
           <TextField
@@ -112,14 +112,14 @@ const Login = ({ open, toggleDialogs }) => {
             autoComplete="current-password"
           />
         </DialogContent>
-        <DialogActions sx={{}}>
+        <DialogActions>
           <Button
             type="submit"
             variant="text"
             sx={{ justifySelf: "flex-start", mr: 20, flexGrow: "1" }}
             color="primary"
             onClick={() => {
-              toggleDialogs("loginDialog", false);
+              toggleDialog("loginDialog", false);
             }}
           >
             <KeyboardArrowLeft />

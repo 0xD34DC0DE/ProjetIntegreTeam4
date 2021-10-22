@@ -10,34 +10,33 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class InternshipOfferStudentViewDto extends InternshipOfferBaseDto {
-
-    String id;
+public class InternshipOfferStudentViewDto extends InternshipOfferDetailedDto {
 
     Boolean hasAlreadyApplied;
 
     Boolean isExclusive;
 
-    @Builder
-    public InternshipOfferStudentViewDto(LocalDate limitDateToApply,
+    @Builder(builderMethodName = "internshipOfferStudentViewDtoBuilder")
+    public InternshipOfferStudentViewDto(String id,
+                                         LocalDate limitDateToApply,
                                          LocalDate beginningDate,
                                          LocalDate endingDate,
                                          String companyName,
                                          String description,
                                          Float minSalary,
                                          Float maxSalary,
-                                         String id,
                                          Boolean hasAlreadyApplied,
                                          Boolean isExclusive) {
-        super(limitDateToApply,
+        super(id,
+                limitDateToApply,
                 beginningDate,
                 endingDate,
                 companyName,
                 description,
                 minSalary,
                 maxSalary);
-        this.id = id;
         this.hasAlreadyApplied = hasAlreadyApplied;
         this.isExclusive = isExclusive;
     }
+
 }

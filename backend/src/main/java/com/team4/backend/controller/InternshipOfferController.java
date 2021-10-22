@@ -1,28 +1,27 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
-import com.team4.backend.dto.InternshipOfferDto;
+import com.team4.backend.dto.InternshipOfferDetailedDto;
+import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.InternshipOfferMapper;
-import com.team4.backend.mapping.InternshipOfferMapper;
-import com.team4.backend.model.InternshipOffer;
+import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.InternshipOfferService;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Flux;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.util.List;
+import java.security.Principal;
 
-@RestController
 @Log
+@RestController
 @RequestMapping("/internshipOffer")
 public class InternshipOfferController {
 
@@ -51,73 +50,74 @@ public class InternshipOfferController {
 
     @GetMapping(value = "/studentInternshipOffers/{email}")
     @PreAuthorize("hasAuthority('STUDENT')")
-    public Mono<ResponseEntity<List<InternshipOfferStudentViewDto>>> studentExclusiveInternshipOffers(
+    public Flux<InternshipOfferStudentViewDto> studentExclusiveInternshipOffers(
             @PathVariable("email") String studentEmail,
             @RequestParam(value = "page", defaultValue = "0") Integer page,
             @RequestParam(value = "size", defaultValue = "5") Integer size) {
-        return internshipOfferService.getStudentExclusiveOffers(studentEmail, page, size)
-                .onErrorMap(
-                        UserNotFoundException.class,
-                        e -> new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage())
-                )
-                .map(InternshipOfferMapper::toStudentViewDto)
-                .collectList()
-                .map(ResponseEntity::ok);
+        return internshipOfferService.getStudentExclusiveOffers(studentEmail, page, size);
     }
 
     @GetMapping(value = "/studentInternshipOffers")
     @PreAuthorize("hasAuthority('STUDENT')")
-    public Mono<ResponseEntity<List<InternshipOfferStudentViewDto>>> studentGeneralInternshipOffers(
+    public Flux<InternshipOfferStudentViewDto> studentGeneralInternshipOffers(
             @RequestParam(value = "page", defaultValue = "0") Integer page,
-            @RequestParam(value = "size", defaultValue = "5") Integer size) {
-        return internshipOfferService.getGeneralInternshipOffers(page, size)
-                .map(InternshipOfferMapper::toStudentViewDto)
-                .collectList()
-                .map(ResponseEntity::ok);
+            @RequestParam(value = "size", defaultValue = "5") Integer size,
+            Principal principal) {
+        return internshipOfferService.getGeneralInternshipOffers(
+                page,
+                size,
+                UserSessionService.getLoggedUserEmail(principal)
+        );
     }
 
     @GetMapping(value = {"/pageCount/{email}"})
     @PreAuthorize("hasAuthority('STUDENT')")
-    public Mono<ResponseEntity<Long>> getInternshipOffersCount(
+    public Mono<Long> getInternshipOffersCount(
             @PathVariable("email") String studentEmail,
             @RequestParam(value = "size", defaultValue = "5") Integer size) {
         return internshipOfferService.getInternshipOffersPageCount(studentEmail, size)
                 .onErrorMap(
                         UserNotFoundException.class,
                         e -> new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage())
-                )
-                .map(ResponseEntity::ok);
+                );
     }
 
     @GetMapping(value = "/pageCount")
     @PreAuthorize("hasAuthority('STUDENT')")
-    public Mono<ResponseEntity<Long>> getInternshipOffersCount(
+    public Mono<Long> getInternshipOffersCount(
             @RequestParam(value = "size", defaultValue = "5") Integer size) {
-        return internshipOfferService.getInternshipOffersPageCount(size)
-                .map(ResponseEntity::ok);
-    }
-
-    @GetMapping("/unvalidatedOffers")
-    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Flux<InternshipOfferDto> getUnvalidatedInternshipOffers() {
-        return internshipOfferService.getNonValidatedInternshipOffers().map(InternshipOfferMapper::toDto);
+        return internshipOfferService.getInternshipOffersPageCount(size);
     }
 
     @PatchMapping("/validateInternshipOffer")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Mono<InternshipOfferDto> validateInternshipOffer(@RequestParam("id") String id){
-        return internshipOfferService.validateInternshipOffer(id).map(InternshipOfferMapper::toDto);
-    }
-
-    @PatchMapping("/refuseInternshipOffer")
-    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Mono<InternshipOfferDto> refuseInternshipOffer(@RequestParam("id") String id){
-        return internshipOfferService.refuseInternshipOffer(id).map(InternshipOfferMapper::toDto);
+    public Mono<ResponseEntity<String>> validateInternshipOffer(@RequestParam("id") String id,
+                                                                @RequestParam("isValid") Boolean isValid) {
+        return internshipOfferService.validateInternshipOffer(id, isValid)
+                .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")))
+                .onErrorResume(error -> Mono.just(
+                        ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage()))
+                );
     }
 
     @GetMapping("/getNotYetValidatedInternshipOffers")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Flux<InternshipOfferDto> getNotYetValidatedInternshipOffers() {
+    public Flux<InternshipOfferDetailedDto> getNotYetValidatedInternshipOffers() {
         return internshipOfferService.getNotYetValidatedInternshipOffers().map(InternshipOfferMapper::toDto);
     }
+
+    @GetMapping("/interestedStudents/{emailOfMonitor}")
+    @PreAuthorize("hasAnyAuthority('MONITOR')")
+    public Flux<InternshipOfferStudentInterestViewDto> internshipOfferInterestedStudents(@PathVariable String emailOfMonitor) {
+        return internshipOfferService.getInterestedStudents(emailOfMonitor);
+    }
+
+    @PatchMapping("/apply/{offerId}")
+    @PreAuthorize("hasAuthority('STUDENT')")
+    public Mono<ResponseEntity<String>> applyInternshipOffer(@PathVariable("offerId") String offerId,
+                                                             Principal principal) {
+        return internshipOfferService.applyOffer(offerId, UserSessionService.getLoggedUserEmail(principal))
+                .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
+    }
+
 }

@@ -20,7 +20,7 @@ import axios from "axios";
 import AccountFormField from "./AccountFormField";
 import CompanyNameFormField from "./CompanyNameFormField";
 
-const Register = ({ open, toggleDialogs }) => {
+const Register = ({ open, toggleDialog }) => {
   const [step, setStep] = useState(0);
   const [stepCount, setStepCount] = useState(5);
   const [formValid, setFormValid] = useState(false);
@@ -42,7 +42,7 @@ const Register = ({ open, toggleDialogs }) => {
 
   const prevStep = () => {
     if (step === 0) {
-      toggleDialogs("registerDialog", false);
+      toggleDialog("registerDialog", false);
       return;
     }
     setStep((lastStep) => (lastStep -= 1));
@@ -50,8 +50,6 @@ const Register = ({ open, toggleDialogs }) => {
   };
 
   const register = () => {
-    // Student and monitor uses the same model fields for now, it will change in the future
-
     axios({
       method: "POST",
       url:
@@ -67,7 +65,7 @@ const Register = ({ open, toggleDialogs }) => {
       responseType: "json",
     })
       .then(() => {
-        toggleDialogs("registerDialog", false);
+        toggleDialog("registerDialog", false);
         setStep(0);
       })
       .catch((error) => {
@@ -76,7 +74,7 @@ const Register = ({ open, toggleDialogs }) => {
   };
 
   const handleClose = (_, reason) => {
-    if (reason === "backdropClick") toggleDialogs("registerDialog", false);
+    if (reason === "backdropClick") toggleDialog("registerDialog", false);
   };
 
   const handleFormChange = (event) => {

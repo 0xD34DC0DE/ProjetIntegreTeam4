@@ -21,7 +21,7 @@ public class Student extends User {
 
     private Boolean hasValidCv;
 
-    private List<String> appliedOffersId;
+    private Set<String> appliedOffersId;
 
     private Set<String> exclusiveOffersId;
 
@@ -34,7 +34,7 @@ public class Student extends User {
                    String phoneNumber,
                    StudentState studentState,
                    LocalDate registrationDate,
-                   List<String> appliedOffersId,
+                   Set<String> appliedOffersId,
                    Set<String> exclusiveOffersId,
                    Boolean hasValidCv) {
         super(id,

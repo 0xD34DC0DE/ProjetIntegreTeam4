@@ -8,18 +8,22 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class InternshipManagerDto extends UserDto implements Serializable {
+public class SupervisorDetailsDto extends UserDetailsDto implements Serializable {
+
+    private Set<String> studentEmails;
 
     @Builder
-    public InternshipManagerDto(String id,
+    public SupervisorDetailsDto(String id,
                                 String email,
                                 String password,
                                 String firstName,
                                 String lastName,
+                                Set<String> studentEmails,
                                 LocalDate registrationDate,
                                 String phoneNumber) {
         super(id,
@@ -29,7 +33,8 @@ public class InternshipManagerDto extends UserDto implements Serializable {
                 lastName,
                 registrationDate,
                 phoneNumber,
-                Role.INTERNSHIP_MANAGER);
+                Role.SUPERVISOR);
+        this.studentEmails = studentEmails;
     }
 
 }

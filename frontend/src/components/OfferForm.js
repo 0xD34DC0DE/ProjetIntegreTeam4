@@ -8,11 +8,12 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { OFFER_FORM_VALUES } from "../models/TextFormFieldValues";
 import TextFormField from "./TextFormField";
+import { UserInfoContext } from "../stores/UserInfoStore";
 
-const OfferForm = ({ dialogVisible, toggleDialogs }) => {
+const OfferForm = ({ open, toggleDialog }) => {
   const emptyOffer = {
     limitDateToApply: new Date(),
     beginningDate: new Date(),
@@ -25,7 +26,7 @@ const OfferForm = ({ dialogVisible, toggleDialogs }) => {
   };
   const [offer, setOffer] = useState(emptyOffer);
   const [isValid, setIsValid] = useState(false);
-  const [token, setToken] = useState(sessionStorage.getItem("jwt"));
+  const [userInfo] = useContext(UserInfoContext);
 
   const handleFormChange = (event) => {
     setOffer((previousForm) => ({
@@ -40,7 +41,7 @@ const OfferForm = ({ dialogVisible, toggleDialogs }) => {
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick")
-      toggleDialogs("internshipOfferDialog", false);
+      toggleDialog("internshipOfferDialog", false);
   };
 
   const saveInternshipOffer = () => {
@@ -48,7 +49,7 @@ const OfferForm = ({ dialogVisible, toggleDialogs }) => {
       method: "POST",
       url: "http://localhost:8080/internshipOffer/addAnInternshipOffer",
       headers: {
-        Authorization: token,
+        Authorization: userInfo.jwt,
       },
       data: offer,
       responseType: "json",
@@ -59,13 +60,14 @@ const OfferForm = ({ dialogVisible, toggleDialogs }) => {
       .catch((error) => {
         console.error(error);
       });
+    toggleDialog("internshipOfferDialog", false);
   };
 
   return (
     <>
-      <Dialog open={dialogVisible} onClose={handleClose}>
+      <Dialog open={open} onClose={handleClose}>
         <Typography variant="h4" sx={{ ml: 3, mt: 3 }}>
-          Déposer une offre de stage <Create sx={{ mx: 1 }} />
+          Déposer une offre de stage <Create sx={{ mr: 3 }} />
         </Typography>
         <DialogContent sx={{ minWidth: 425 }}>
           <FormGroup>

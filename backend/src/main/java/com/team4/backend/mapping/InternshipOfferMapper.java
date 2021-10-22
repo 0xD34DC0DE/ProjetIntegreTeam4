@@ -1,12 +1,10 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.InternshipOfferCreationDto;
-import com.team4.backend.dto.InternshipOfferDto;
-import com.team4.backend.dto.InternshipOfferMonitorViewDto;
-import com.team4.backend.dto.InternshipOfferStudentViewDto;
+import com.team4.backend.dto.*;
 import com.team4.backend.model.InternshipOffer;
 
 import java.util.Collections;
+import java.util.HashSet;
 
 public abstract class InternshipOfferMapper {
 
@@ -20,14 +18,14 @@ public abstract class InternshipOfferMapper {
                 .description(internshipOfferCreationDto.getDescription())
                 .minSalary(internshipOfferCreationDto.getMinSalary())
                 .maxSalary(internshipOfferCreationDto.getMaxSalary())
-                .listEmailInterestedStudents(Collections.emptyList())
+                .listEmailInterestedStudents(new HashSet<>())
                 .isValidated(false)
                 .isExclusive(false)
                 .build();
     }
 
     public static InternshipOfferStudentViewDto toStudentViewDto(InternshipOffer internshipOffer) {
-        return InternshipOfferStudentViewDto.builder()
+        return InternshipOfferStudentViewDto.internshipOfferStudentViewDtoBuilder()
                 .id(internshipOffer.getId())
                 .limitDateToApply(internshipOffer.getLimitDateToApply())
                 .beginningDate(internshipOffer.getBeginningDate())
@@ -37,26 +35,33 @@ public abstract class InternshipOfferMapper {
                 .minSalary(internshipOffer.getMinSalary())
                 .maxSalary(internshipOffer.getMaxSalary())
                 .isExclusive(internshipOffer.getIsExclusive())
+                .hasAlreadyApplied(false)
                 .build();
     }
 
-    public static InternshipOfferDto toDto(InternshipOffer internshipOffer) {
-        return InternshipOfferDto.builder()
+    public static InternshipOfferStudentInterestViewDto toStudentInterestViewDto(InternshipOffer internshipOffer) {
+        return InternshipOfferStudentInterestViewDto.internshipOfferStudentInterestViewDtoBuilder()
+                .id(internshipOffer.getId())
+                .companyName(internshipOffer.getCompanyName())
+                .description(internshipOffer.getDescription())
+                .build();
+    }
+
+    public static InternshipOfferDetailedDto toDto(InternshipOffer internshipOffer) {
+        return InternshipOfferDetailedDto.internshipOfferDetailedDtoBuilder()
                 .id(internshipOffer.getId())
                 .limitDateToApply(internshipOffer.getLimitDateToApply())
                 .beginningDate(internshipOffer.getBeginningDate())
                 .endingDate(internshipOffer.getEndingDate())
                 .companyName(internshipOffer.getCompanyName())
-                .emailOfMonitor(internshipOffer.getEmailOfMonitor())
                 .description(internshipOffer.getDescription())
                 .minSalary(internshipOffer.getMinSalary())
                 .maxSalary(internshipOffer.getMaxSalary())
-                .listEmailInterestedStudents(internshipOffer.getListEmailInterestedStudents())
-                .isValidated(internshipOffer.getIsValidated()).build();
+                .build();
     }
 
-    public static InternshipOfferMonitorViewDto toMonitorView(InternshipOffer internshipOffer) {
-        return InternshipOfferMonitorViewDto.builder()
+    public static InternshipOfferMonitorViewDto toMonitorViewDto(InternshipOffer internshipOffer) {
+        return InternshipOfferMonitorViewDto.internshipOfferMonitorViewDtoBuilder()
                 .id(internshipOffer.getId())
                 .limitDateToApply(internshipOffer.getLimitDateToApply())
                 .beginningDate(internshipOffer.getBeginningDate())

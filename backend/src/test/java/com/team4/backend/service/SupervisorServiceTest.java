@@ -10,11 +10,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -74,4 +74,53 @@ public class SupervisorServiceTest {
         StepVerifier.create(supervisorMono).expectError(UserAlreadyExistsException.class).verify();
     }
 
+    @Test
+    void shouldAddStudentEmailToList(){
+        //ARRANGE
+        String studentEmail = "teststudent@gmail.com";
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+
+        when(supervisorRepository.findById(supervisor.getId())).thenReturn(Mono.just(supervisor));
+        when(supervisorRepository.save(any(Supervisor.class)))
+                .thenReturn(Mono.just(supervisor));
+
+        //ACT
+        Mono<Supervisor> supervisorMono = supervisorService.addStudentEmailToStudentList(supervisor.getId(), studentEmail);
+
+        // ASSERT
+        StepVerifier.create(supervisorMono)
+                .assertNext(s -> assertEquals(3, s.getStudentEmails().size()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotAddStudentEmailToListWhenAlreadyInTheList(){
+        //ARRANGE
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+        when(supervisorRepository.findById(supervisor.getId())).thenReturn(Mono.just(supervisor));
+
+        //ACT
+        Mono<Supervisor> supervisorMono = supervisorService
+                .addStudentEmailToStudentList(supervisor.getId(), "toto23@outlook.com");
+
+        // ASSERT
+        StepVerifier.create(supervisorMono).expectError().verify();
+    }
+
+    @Test
+    void shouldNotFindSupervisorWhenAddingStudentToList(){
+        //ARRANGE
+        String studentEmail = "teststudent@gmail.com";
+        String wrongId = "wrongId";
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+        when(supervisorRepository.findById(wrongId)).thenReturn(Mono.just(supervisor));
+
+        //ACT
+        Mono<Supervisor> supervisorMono = supervisorService.addStudentEmailToStudentList(wrongId, studentEmail);
+
+        //ASSERT
+        StepVerifier.create(supervisorMono)
+                .expectError()
+                .verify();
+    }
 }

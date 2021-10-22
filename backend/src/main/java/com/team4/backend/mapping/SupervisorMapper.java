@@ -1,11 +1,11 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.SupervisorDto;
+import com.team4.backend.dto.SupervisorDetailsDto;
 import com.team4.backend.model.Supervisor;
 
 public abstract class SupervisorMapper {
 
-    public static Supervisor toEntity(SupervisorDto supervisorDto) {
+    public static Supervisor toEntity(SupervisorDetailsDto supervisorDto) {
         return Supervisor.supervisorBuilder()
                 .email(supervisorDto.getEmail())
                 .password(supervisorDto.getPassword())
@@ -17,8 +17,8 @@ public abstract class SupervisorMapper {
                 .build();
     }
 
-    public static SupervisorDto toDto(Supervisor supervisor) {
-        return SupervisorDto.builder()
+    public static SupervisorDetailsDto toDetailsDto(Supervisor supervisor) {
+        return SupervisorDetailsDto.builder()
                 .id(supervisor.getId())
                 .email(supervisor.getEmail())
                 .firstName(supervisor.getFirstName())

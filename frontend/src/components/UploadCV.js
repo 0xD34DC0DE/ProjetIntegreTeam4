@@ -1,10 +1,11 @@
 import axios from "axios";
 import React, { useState, useRef } from "react";
-import { Button, Paper, Typography } from "@mui/material";
+import { Button, Paper, Typography, Grid } from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
+import { motion } from "framer-motion";
 
-const UploadCV = () => {
+const UploadCV = ({ visible }) => {
   const [file, setFile] = useState();
   const [errorMessage, setErrorMessage] = useState("");
   const inputFileRef = useRef();
@@ -66,68 +67,101 @@ const UploadCV = () => {
 
   return (
     <>
-      <Paper
-        elevation={3}
-        sx={{
-          mt: 10,
-          minHeight: "125px",
-          ml: 0,
-          mr: 0,
-          display: "flex",
-          alignItems: "center",
-          cursor: "pointer",
-        }}
-        align="center"
-        onClick={openFileExplorer}
-      >
-        <input
-          id="file_input"
-          type="file"
-          onChange={handleFileChange}
-          ref={inputFileRef}
-          style={{ display: "none" }}
-        />
-        <div
-          value={file}
-          id="file_upload_box"
-          onDrop={onDrop}
-          onDragOver={(event) => {
-            event.preventDefault();
-          }}
-          style={{
-            flexGrow: 1,
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-          }}
-        >
-          <Typography variant="h5">
-            {!cvSent
-              ? "Cliquer ou glisser votre CV dans la boite pour téléverser"
-              : "CV téléversé avec succès!"}
-            {!cvSent ? (
-              <PictureAsPdfIcon sx={{ ml: 3 }} />
-            ) : (
-              <CheckCircleOutlineIcon sx={{ ml: 3 }} color="success" />
-            )}
-          </Typography>
-          <Typography variant="caption" color="error">
-            {errorMessage !== "" ? errorMessage : ""}
-          </Typography>
-          {!cvSent && (
-            <Typography variant="caption">
-              {file === undefined
-                ? "Aucun fichier spécifié"
-                : `Fichier choisi: ${file.name}`}
-            </Typography>
-          )}
-          {file !== undefined && !cvSent && (
-            <Button onClick={uploadCV} variant="contained" color="success">
-              Envoyer
-            </Button>
-          )}
-        </div>
-      </Paper>
+      {visible && (
+        <Grid container flexDirection={"column"}>
+          <Grid container justifyContent="center">
+            <Grid item xl={8} xl={8} md={8} xs={10} sm={10}>
+              <motion.div
+                style={{ opacity: 0 }}
+                animate={{ opacity: [0, 1] }}
+                transition={{
+                  duration: 0.75,
+                  delay: 0.25,
+                }}
+              >
+                <Paper
+                  elevation={5}
+                  sx={{
+                    minHeight: "125px",
+                    ml: 0,
+                    mr: 2,
+                    mt: 5,
+                    display: "flex",
+                    alignItems: "center",
+                    cursor: "pointer",
+                    backgroundColor: "rgba(100, 100, 100, 0.1)",
+                    boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
+                  }}
+                  align="center"
+                  onClick={openFileExplorer}
+                >
+                  <input
+                    id="file_input"
+                    type="file"
+                    onChange={handleFileChange}
+                    ref={inputFileRef}
+                    style={{ display: "none" }}
+                  />
+                  <div
+                    value={file}
+                    id="file_upload_box"
+                    onDrop={onDrop}
+                    onDragOver={(event) => {
+                      event.preventDefault();
+                    }}
+                    style={{
+                      flexGrow: 1,
+                      display: "flex",
+                      alignItems: "center",
+                      flexDirection: "column",
+                    }}
+                  >
+                    <Typography variant="h5">
+                      {!cvSent
+                        ? "Cliquer ou glisser votre CV dans la boite pour téléverser"
+                        : "CV téléversé avec succès!"}
+                      {!cvSent ? (
+                        <PictureAsPdfIcon sx={{ ml: 3 }} />
+                      ) : (
+                        <CheckCircleOutlineIcon
+                          sx={{ ml: 3 }}
+                          color="success"
+                        />
+                      )}
+                    </Typography>
+                    {errorMessage !== "" && (
+                      <Typography
+                        variant="subtitle2"
+                        color="error"
+                        sx={{ fontSize: "0.8em", mt: 1 }}
+                      >
+                        {errorMessage !== "" ? errorMessage : ""}
+                      </Typography>
+                    )}
+                    {!cvSent && (
+                      <Typography variant="subtitle2" sx={{ mt: 1 }}>
+                        {file === undefined
+                          ? "Aucun fichier spécifié"
+                          : `Fichier choisi: ${file.name}`}
+                      </Typography>
+                    )}
+                    {file !== undefined && !cvSent && (
+                      <Button
+                        onClick={uploadCV}
+                        variant="contained"
+                        color="success"
+                        sx={{ mt: 1 }}
+                      >
+                        ENVOYER
+                      </Button>
+                    )}
+                  </div>
+                </Paper>
+              </motion.div>
+            </Grid>
+          </Grid>
+        </Grid>
+      )}
     </>
   );
 };

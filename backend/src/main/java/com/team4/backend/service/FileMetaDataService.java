@@ -1,15 +1,13 @@
 package com.team4.backend.service;
 
 import com.team4.backend.exception.FileDoNotExistException;
+import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.model.FileMetaData;
-import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.UploadType;
 import com.team4.backend.repository.FileMetaDataRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
+import com.team4.backend.util.ValidatingPageRequest;
+import lombok.extern.java.Log;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -18,22 +16,24 @@ import reactor.core.scheduler.Schedulers;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Log
 @Service
 public class FileMetaDataService {
 
-    @Autowired
-    FileMetaDataRepository fileMetaDataRepository;
+    private final FileMetaDataRepository fileMetaDataRepository;
 
-    @Autowired
-    StudentService studentService;
+    private final StudentService studentService;
 
-    @Autowired
-    FileAssetService fileAssetService;
+    private final FileAssetService fileAssetService;
+
+    public FileMetaDataService(FileMetaDataRepository fileMetaDataRepository, StudentService studentService, FileAssetService fileAssetService) {
+        this.fileMetaDataRepository = fileMetaDataRepository;
+        this.studentService = studentService;
+        this.fileAssetService = fileAssetService;
+    }
 
     public Mono<FileMetaData> create(FileMetaData fileMetadata) {
         return fileMetaDataRepository.save(fileMetadata);
@@ -47,7 +47,9 @@ public class FileMetaDataService {
         return UUID.randomUUID().toString();
     }
 
-    public Mono<ResponseEntity<Void>> uploadFile(String filename, String type, String mimeType, Mono<FilePart> filePartMono, String userEmail) {
+
+    public Mono<FileMetaData> uploadFile(String filename, String type, String mimeType, Mono<FilePart> filePartMono, String userEmail) {
+        System.out.println("dans service");
         return Mono.fromCallable(this::getTempFile)
                 .publishOn(Schedulers.boundedElastic())
                 .flatMap(tempFile -> filePartMono
@@ -66,23 +68,13 @@ public class FileMetaDataService {
                                         .id(getUuid())
                                         .userEmail(userEmail)
                                         .isValid(false)
+                                        .isSeen(false)
                                         .assetId(assetId)
                                         .type(UploadType.valueOf(type))
                                         .uploadDate(LocalDateTime.now())
                                         .filename(filename)
                                         .build()))
-                                .flatMap(this::createMetadata));
-    }
-
-    public Mono<ResponseEntity<Void>> createMetadata(FileMetaData fileMetadata) {
-        return create(fileMetadata)
-                .map(metadata -> {
-                    try {
-                        return ResponseEntity.created(new URI(metadata.getId())).build();
-                    } catch (URISyntaxException e) {
-                        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-                    }
-                });
+                                .flatMap(this::create));
     }
 
     public Mono<Long> countAllInvalidCvNotSeen() {
@@ -91,7 +83,10 @@ public class FileMetaDataService {
 
     public Flux<FileMetaData> getListInvalidCvNotSeen(Integer noPage) {
 
-        return fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(PageRequest.of(noPage, 10, Sort.by("uploadDate").ascending()));
+        return ValidatingPageRequest
+                .getPageRequestMono(noPage, 10, Sort.by("uploadDate").ascending())
+                .flatMapMany(pageRequest -> fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(pageRequest));
+
     }
 
     public Mono<FileMetaData> validateCv(String id, Boolean isValid) {
@@ -108,4 +103,5 @@ public class FileMetaDataService {
                     return file;
                 }).flatMap(fileMetaDataRepository::save);
     }
+
 }

@@ -7,53 +7,44 @@ import {
   Container,
   Paper,
 } from "@mui/material";
-import React from "react";
+import React, { useState } from "react";
 import Tag from "@mui/icons-material/Tag";
 import { CancelOutlined, CheckCircleOutline } from "@mui/icons-material";
 import { listLabels } from "./InternshipOfferLabels";
 import axios from "axios";
 
-const InternshipOfferDialog = ({
-  dialogVisible,
-  toggleDialogs,
+const InternshipOfferDescriptionDialog = ({
+  open,
+  toggleDialog,
   offer,
   removeInternshipOffer,
 }) => {
-  const [token] = React.useState(sessionStorage.getItem("jwt"));
+  const [token] = useState(sessionStorage.getItem("jwt"));
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick")
-      toggleDialogs("internshipOfferDialogValidation", false);
+      toggleDialog("internshipOfferDialogValidation", false);
   };
 
-  const validateInternshipOffer = async (id) => {
+  const validateInternshipOffer = async (id, valid) => {
     await axios({
       method: "PATCH",
-      url: `http://localhost:8080/internshipOffer/validateInternshipOffer?id=${id}`,
+      url: "http://localhost:8080/internshipOffer/validateInternshipOffer",
       headers: {
         Authorization: token,
       },
-      responseType: "json",
-    });
-    toggleDialogs("internshipOfferDialogValidation", false);
-    removeInternshipOffer(offer);
-  };
-
-  const refuseInternshipOffer = async (id) => {
-    await axios({
-      method: "PATCH",
-      url: `http://localhost:8080/internshipOffer/refuseInternshipOffer?id=${id}`,
-      headers: {
-        Authorization: token,
+      params: {
+        id: id,
+        isValid: valid,
       },
       responseType: "json",
     });
-    toggleDialogs("internshipOfferDialogValidation", false);
+    toggleDialog("internshipOfferDialogValidation", false);
     removeInternshipOffer(offer);
   };
 
   return (
-    <Dialog open={dialogVisible} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose}>
       <DialogContent
         sx={{
           p: 0,
@@ -62,7 +53,7 @@ const InternshipOfferDialog = ({
           textAlign: "center",
         }}
       >
-        <Typography variant="h6" fontSize="2rem" sx={{ m: "2%" }}>
+        <Typography variant="h6" fontSize="2.5rem" sx={{ m: "2%" }}>
           Détails
         </Typography>
         {offer && (
@@ -111,13 +102,16 @@ const InternshipOfferDialog = ({
             bottom: 0,
           }}
         >
-          <Paper>
+          <Paper
+            sx={{ backgroundColor: "rgba(50, 50, 50, 0.2)", mb: 2, mt: 1 }}
+          >
             <Tooltip title="Valider" arrow={true}>
               <Button>
                 <CheckCircleOutline
                   color="primary"
                   fontSize="large"
-                  onClick={() => validateInternshipOffer(offer.id)}
+                  sx={{ color: "green" }}
+                  onClick={() => validateInternshipOffer(offer.id, true)}
                 />
               </Button>
             </Tooltip>
@@ -126,7 +120,7 @@ const InternshipOfferDialog = ({
                 <CancelOutlined
                   sx={{ color: "red" }}
                   fontSize="large"
-                  onClick={() => refuseInternshipOffer(offer.id)}
+                  onClick={() => validateInternshipOffer(offer.id, false)}
                 />
               </Button>
             </Tooltip>
@@ -137,4 +131,4 @@ const InternshipOfferDialog = ({
   );
 };
 
-export default InternshipOfferDialog;
+export default InternshipOfferDescriptionDialog;

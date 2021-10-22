@@ -1,7 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.MonitorDto;
-import com.team4.backend.exception.UserAlreadyExistsException;
+import com.team4.backend.dto.MonitorDetailsDto;
 import com.team4.backend.mapping.MonitorMapper;
 import com.team4.backend.service.MonitorService;
 import org.springframework.http.HttpStatus;
@@ -23,7 +22,7 @@ public class MonitorController {
     }
 
     @PostMapping("/register")
-    public Mono<ResponseEntity<String>> register(@RequestBody MonitorDto monitorDto) {
+    public Mono<ResponseEntity<String>> register(@RequestBody MonitorDetailsDto monitorDto) {
         return monitorService.registerMonitor(MonitorMapper.toEntity(monitorDto))
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
                 .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(error.getMessage())));

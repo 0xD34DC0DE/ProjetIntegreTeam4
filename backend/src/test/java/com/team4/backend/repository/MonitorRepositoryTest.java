@@ -29,7 +29,6 @@ public class MonitorRepositoryTest {
 
     @BeforeAll
     void init() {
-
         Flux<Monitor> users = Flux.just(
                 Monitor.monitorBuilder().email("marcM@desjardin.com").password("marc123").build(),
                 Monitor.monitorBuilder().email("johnnyJ@cae-tech.com").password("johnny123").build()

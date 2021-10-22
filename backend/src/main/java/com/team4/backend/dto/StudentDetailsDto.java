@@ -14,22 +14,22 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class StudentDto extends UserDto implements Serializable {
+public class StudentDetailsDto extends UserDetailsDto implements Serializable {
 
     private StudentState studentState;
 
     private Boolean hasValidCv;
 
     @Builder
-    public StudentDto(String id,
-                      String email,
-                      String password,
-                      String firstName,
-                      String lastName,
-                      LocalDate registrationDate,
-                      String phoneNumber,
-                      StudentState studentState,
-                      Boolean hasValidCv) {
+    public StudentDetailsDto(String id,
+                             String email,
+                             String password,
+                             String firstName,
+                             String lastName,
+                             LocalDate registrationDate,
+                             String phoneNumber,
+                             StudentState studentState,
+                             Boolean hasValidCv) {
         super(id,
                 email,
                 password,
