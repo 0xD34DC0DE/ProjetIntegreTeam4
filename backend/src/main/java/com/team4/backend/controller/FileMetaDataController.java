@@ -26,10 +26,12 @@ public class FileMetaDataController {
 
     @PostMapping
     @PreAuthorize("hasAuthority('STUDENT')")
-    public Mono<ResponseEntity<String>> uploadFile(@RequestPart("filename") String filename, @RequestPart("type") String type, @RequestPart("mimeType") String mimeType, @RequestPart("file") Mono<FilePart> filePartMono, Principal principal) {
-        return fileMetaDataService.uploadFile(filename, type, mimeType, filePartMono, UserSessionService.getLoggedUserEmail(principal))
-                .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
-                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error.getMessage())));
+    public Mono<ResponseEntity<String>> uploadFile(@RequestPart("filename") String filename,
+            @RequestPart("type") String type, @RequestPart("mimeType") String mimeType,
+            @RequestPart("file") Mono<FilePart> filePartMono, Principal principal) {
+        return fileMetaDataService
+                .uploadFile(filename, type, mimeType, filePartMono, UserSessionService.getLoggedUserEmail(principal))
+                .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")));
     }
 
     @GetMapping("/countAllInvalidCvNotSeen")
@@ -38,39 +40,21 @@ public class FileMetaDataController {
         return fileMetaDataService.countAllInvalidCvNotSeen();
     }
 
-
     @GetMapping("/getListInvalidCvNotSeen/{noPage}")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Flux<FileMetaDataInternshipManagerViewDto> getListInvalidCvNotSeen(@PathVariable Integer noPage) {
         return fileMetaDataService.getListInvalidCvNotSeen(noPage).map(FileMetaDataMapper::toInternshipManagerViewDto)
-                .onErrorMap(error -> new ResponseStatusException(HttpStatus.BAD_REQUEST,error.getMessage()));
+                .onErrorMap(error -> new ResponseStatusException(HttpStatus.BAD_REQUEST, error.getMessage()));
     }
 
     @PatchMapping("/validateCv")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Mono<ResponseEntity<String>> validateCv(@RequestParam("id") String id, @RequestParam("isValid") Boolean isValid) {
+    public Mono<ResponseEntity<String>> validateCv(@RequestParam("id") String id,
+            @RequestParam("isValid") Boolean isValid) {
         return fileMetaDataService.validateCv(id, isValid)
                 .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")))
-                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
+                .onErrorResume(
+                        error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
     }
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
