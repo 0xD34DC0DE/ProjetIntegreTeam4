@@ -11,6 +11,7 @@ import {
   AddCircleOutlineOutlined,
   CheckOutlined,
 } from "@mui/icons-material";
+import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 
 export const sidebarList = [
   {
@@ -78,6 +79,13 @@ export const sidebarList = [
     isDialog: false,
     icon: <PeopleAltOutlined sx={{ mr: 1 }} />,
     description: "Liste des étudiants ayant été assigné",
+  },
+  {
+    id: 11,
+    label: "Jumelé un superviseur avec un étudiant",
+    role: ["INTERNSHIP_MANAGER"],
+    icon: <SupervisedUserCircleIcon fontSize="small" sx={{ mr: 1 }} />,
+    description: "Assignations des superviseurs aux élèves",
   },
 ];
 

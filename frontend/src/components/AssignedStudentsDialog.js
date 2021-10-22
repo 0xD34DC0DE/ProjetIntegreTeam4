@@ -5,42 +5,50 @@ import {
   List,
   ListItem,
   ListItemText,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState, useContext } from "react";
-import { UserInfoContext } from "../stores/UserInfoStore";
+import React, { useEffect, useState } from "react";
 
-const AssignedStudentsDialog = ({ open, user }) => {
-  const [assignedStudents, setAssignedStudents] = useState([]);
-  const [userInfo] = useContext(UserInfoContext);
+const AssignedStudentsDialog = ({
+  open,
+  user,
+  handleStudentAssignment,
+  assignedStudents,
+}) => {
   useEffect(() => {
     const getAssignedStudents = async () => {
       let response = await axios({
-        method: "PATCH",
-        url: `http://localhost:8080/supervisor/getAssignedStudents?id=${user.id}`,
+        method: "GET",
+        url: `http://localhost:8080/supervisor/getAssignedStudents/${user.id}`,
         headers: {
-          Authorization: userInfo.jwt,
+          Authorization: sessionStorage.getItem("jwt"),
         },
         responseType: "json",
       });
-      setAssignedStudents(response.data);
+      handleStudentAssignment(response.data);
     };
+
     getAssignedStudents();
   }, []);
   return (
-    <Dialog open={open}>
-      <DialogContent sx={{ p: 0 }}>
+    <Dialog open={true}>
+      <DialogContent sx={{ p: 5 }}>
         <List>
-          {assignedStudents.map((student, key) => {
-            return (
-              <ListItem key={key}>
-                <Person />
-                <ListItemText sx={{ ml: 5 }}>
-                  {student.user.lastName}, {student.user.firstName}
-                </ListItemText>
-              </ListItem>
-            );
-          })}
+          {assignedStudents.length > 0 ? (
+            assignedStudents.map((student, key) => {
+              return (
+                <ListItem key={key}>
+                  <Person />
+                  <ListItemText sx={{ ml: 5 }}>
+                    {student.firstName}, {student.lastName}
+                  </ListItemText>
+                </ListItem>
+              );
+            })
+          ) : (
+            <Typography>Aucun étudiant assigné</Typography>
+          )}
         </List>
       </DialogContent>
     </Dialog>

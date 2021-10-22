@@ -57,7 +57,7 @@ const StudentDashBoard = ({ visible }) => {
           method: "GET",
           url: "http://localhost:8080/student/getProfile",
           headers: {
-            Authorization: sessionStorage.getItem("jwt"),
+            Authorization: userInfo.jwt,
           },
           responseType: "json",
         })

@@ -12,6 +12,9 @@ import OfferForm from "./OfferForm";
 import OfferViews from "./OfferViews";
 import StudentDashBoard from "./StudentDashboard";
 import InternshipOfferValidation from "./InternshipOfferValidation";
+import ListUserDroppable from "./ListUserDroppable";
+import ListUserDraggable from "./ListUserDraggable";
+import AsssignedStudentSupervisorView from "./AsssignedStudentSupervisorView";
 
 const Content = ({
   isSidebarOpen,
@@ -63,6 +66,9 @@ const Content = ({
             toggleDialog={toggleDialog}
             dialogVisibility={dialogVisibility}
           />
+          <AsssignedStudentSupervisorView visible={selection.id == 10} />
+          <ListUserDroppable role="SUPERVISOR" visible={selection.id == 11} />
+          <ListUserDraggable role="STUDENT" visible={selection.id == 11} />
         </Box>
       )}
       <OfferForm
