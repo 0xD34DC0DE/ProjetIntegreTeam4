@@ -16,6 +16,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -109,7 +110,7 @@ public class SupervisorControllerTest {
         // ARRANGE
         SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
-        when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), supervisorDto.getStudentEmails().get(0)))
+        when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), "toto23@outlook.com"))
                 .thenReturn(Mono.error(DuplicateEntryException::new));
 
         //ACT
@@ -119,7 +120,7 @@ public class SupervisorControllerTest {
                         uriBuilder
                                 .path("/supervisor/addEmailToStudentList")
                                 .queryParam("id", supervisorDto.getId())
-                                .queryParam("studentEmail", supervisorDto.getStudentEmails().get(0))
+                                .queryParam("studentEmail", "toto23@outlook.com")
                                 .build())
                 .bodyValue(supervisorDto)
                 .exchange()

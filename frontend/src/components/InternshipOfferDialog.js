@@ -13,6 +13,10 @@ import { CancelOutlined, CheckCircleOutline } from "@mui/icons-material";
 import { listLabels } from "./InternshipOfferLabels";
 import axios from "axios";
 
+const isKeyIncluded = (offerKey) => {
+  return !["id", "listEmailInterestedStudents", "validated"].includes(offerKey);
+};
+
 const InternshipOfferDescriptionDialog = ({
   dialogVisible,
   toggleDialogs,
@@ -28,7 +32,7 @@ const InternshipOfferDescriptionDialog = ({
     console.log("dialogVisible", dialogVisible);
   };
 
-  const validateInternshipOffer = async (id,valid) => {
+  const validateInternshipOffer = async (id, valid) => {
     await axios({
       method: "PATCH",
       url: "http://localhost:8080/internshipOffer/validateInternshipOffer",
@@ -37,20 +41,7 @@ const InternshipOfferDescriptionDialog = ({
       },
       params: {
         id: id,
-        isValid: valid
-      },
-      responseType: "json",
-    });
-    toggleDialogs("internshipOfferDialogValidation", false);
-    removeInternshipOffer(offer);
-  };
-
-  const refuseInternshipOffer = async (id) => {
-    await axios({
-      method: "PATCH",
-      url: `http://localhost:8080/internshipOffer/refuseInternshipOffer?id=${id}`,
-      headers: {
-        Authorization: token,
+        isValid: valid,
       },
       responseType: "json",
     });
@@ -82,9 +73,7 @@ const InternshipOfferDescriptionDialog = ({
             {Object.keys(offer).map((offerKey, key) => {
               return (
                 <>
-                  {!["id", "listEmailInterestedStudents", "validated"].includes(
-                    offerKey
-                  ) && (
+                  {isKeyIncluded(offerKey) && (
                     <Container key={key} sx={{ textAlign: "left" }}>
                       <Typography
                         variant="overline"
@@ -123,7 +112,7 @@ const InternshipOfferDescriptionDialog = ({
                 <CheckCircleOutline
                   color="primary"
                   fontSize="large"
-                  onClick={() => validateInternshipOffer(offer.id,true)}
+                  onClick={() => validateInternshipOffer(offer.id, true)}
                 />
               </Button>
             </Tooltip>
@@ -132,7 +121,7 @@ const InternshipOfferDescriptionDialog = ({
                 <CancelOutlined
                   sx={{ color: "red" }}
                   fontSize="large"
-                  onClick={() => validateInternshipOffer(offer.id,false)}
+                  onClick={() => validateInternshipOffer(offer.id, false)}
                 />
               </Button>
             </Tooltip>

@@ -8,6 +8,7 @@ import UploadCV from "./components/UploadCV";
 import TopBar from "./components/TopBar";
 import UserInfoStore, { UserInfoContext } from "./stores/UserInfoStore";
 import OfferViews from "./components/OfferViews";
+import ListUserDraggable from "./components/ListUserDraggable";
 
 function App() {
   const handleDialogs = (dialogName, show) => {
@@ -28,7 +29,9 @@ function App() {
           <TopBar
             openDrawer={open}
             setOpenDrawer={setOpen}
-            internshipOfferDialogVisible={dialogVisibility.internshipOfferDialog}
+            internshipOfferDialogVisible={
+              dialogVisibility.internshipOfferDialog
+            }
             loginVisible={dialogVisibility.loginDialog}
             registerVisible={dialogVisibility.registerDialog}
             toggleDialogs={handleDialogs}
@@ -49,7 +52,7 @@ function App() {
               sx={{ marginTop: "50px" }}
             ></ListCvInternshipManagerView>
             <UploadCV exact path="/televerserCV" />
-            <OfferViews exact path="/offres"/>
+            <OfferViews exact path="/offres" />
           </Switch>
           <UserInfoContext.Consumer>
             {({ loggedIn }) => (loggedIn ? <Redirect push to="/" /> : null)}

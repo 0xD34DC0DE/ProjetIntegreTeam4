@@ -5,3 +5,7 @@
 header{
   margin:0
 }
+
+html, body{
+  width:"100%";
+}

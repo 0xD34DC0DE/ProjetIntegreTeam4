@@ -10,6 +10,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -100,7 +101,7 @@ public class SupervisorServiceTest {
 
         //ACT
         Mono<Supervisor> supervisorMono = supervisorService
-                .addStudentEmailToStudentList(supervisor.getId(), supervisor.getStudentEmails().get(0));
+                .addStudentEmailToStudentList(supervisor.getId(), "toto23@outlook.com");
 
         // ASSERT
         StepVerifier.create(supervisorMono).expectError().verify();

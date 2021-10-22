@@ -35,7 +35,7 @@ public class SupervisorMapperTest {
         Supervisor entity = SupervisorMockData.getMockSupervisor();
 
         //ACT
-        SupervisorDetailsDto dto = SupervisorMapper.toDto(entity);
+        SupervisorDetailsDto dto = SupervisorMapper.toDetailsDto(entity);
 
         //ASSERT
         assertNull(dto.getPassword()); // password shouldn't be given to frontend
