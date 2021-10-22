@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class SupervisorDetailsDto extends UserDetailsDto implements Serializable {
 
-    private List<String> studentEmails;
+    private Set<String> studentEmails;
 
     @Builder
     public SupervisorDetailsDto(String id,
@@ -23,7 +23,7 @@ public class SupervisorDetailsDto extends UserDetailsDto implements Serializable
                                 String password,
                                 String firstName,
                                 String lastName,
-                                List<String> studentEmails,
+                                Set<String> studentEmails,
                                 LocalDate registrationDate,
                                 String phoneNumber) {
         super(id,

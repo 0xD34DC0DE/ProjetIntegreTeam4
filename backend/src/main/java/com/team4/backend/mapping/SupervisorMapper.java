@@ -17,7 +17,7 @@ public abstract class SupervisorMapper {
                 .build();
     }
 
-    public static SupervisorDetailsDto toDto(Supervisor supervisor) {
+    public static SupervisorDetailsDto toDetailsDto(Supervisor supervisor) {
         return SupervisorDetailsDto.builder()
                 .id(supervisor.getId())
                 .email(supervisor.getEmail())

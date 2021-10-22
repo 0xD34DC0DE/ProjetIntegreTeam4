@@ -2,6 +2,7 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.dto.StudentProfileDto;
+import com.team4.backend.dto.SupervisorDetailsDto;
 import com.team4.backend.exception.ForbiddenActionException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.mapping.StudentMapper;
@@ -93,7 +94,7 @@ public class StudentControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
-                .expectBodyList(StudentCreationDto.class);
+                .expectBodyList(SupervisorDetailsDto.class);
     }
 
     void shouldUpdateStudentState() {

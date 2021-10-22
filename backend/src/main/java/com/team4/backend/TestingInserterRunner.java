@@ -16,10 +16,7 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 @Component
 @Order(1)
@@ -146,13 +143,13 @@ public class TestingInserterRunner implements ApplicationRunner {
         List<Supervisor> supervisorList = Arrays.asList(
                 Supervisor.supervisorBuilder()
                         .email("45673234@gmail.com").password(pbkdf2Encoder.encode("sasuke123"))
-                        .studentEmails(new ArrayList<String>()).build(),
+                        .studentEmails(new HashSet<>()).build(),
                 Supervisor.supervisorBuilder()
                 .email("supervisor1@gmail.com")
                         .password(pbkdf2Encoder.encode("supervisor123"))
                         .firstName("Michel")
                         .lastName("Lamarck")
-                        .studentEmails(new ArrayList<String>()).build()
+                        .studentEmails(new HashSet<>()).build()
         );
 
         supervisorRepository.saveAll(supervisorList).subscribe();

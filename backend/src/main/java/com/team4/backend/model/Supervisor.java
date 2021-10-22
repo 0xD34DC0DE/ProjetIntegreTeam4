@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Data
 @ToString
@@ -15,14 +15,14 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class Supervisor extends User implements Serializable {
 
-    private List<String> studentEmails;
+    private Set<String> studentEmails;
 
     @Builder(builderMethodName = "supervisorBuilder")
     public Supervisor(String id,
                       String email,
                       String firstName,
                       String lastName,
-                      List<String> studentEmails,
+                      Set<String> studentEmails,
                       String password,
                       String phoneNumber,
                       LocalDate registrationDate) {

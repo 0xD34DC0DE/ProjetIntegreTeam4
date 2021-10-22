@@ -37,7 +37,7 @@ public class StudentController {
     }
 
     @GetMapping("/getAll")
-    public Flux<StudentCreationDto> getAllStudents() {
+    public Flux<StudentDetailsDto> getAllStudents() {
         return this.studentService.getAllStudents().map(StudentMapper::toDto);
     }
 

@@ -101,7 +101,7 @@ public class SupervisorServiceTest {
 
         //ACT
         Mono<Supervisor> supervisorMono = supervisorService
-                .addStudentEmailToStudentList(supervisor.getId(), supervisor.getStudentEmails().get(0));
+                .addStudentEmailToStudentList(supervisor.getId(), "toto23@outlook.com");
 
         // ASSERT
         StepVerifier.create(supervisorMono).expectError().verify();

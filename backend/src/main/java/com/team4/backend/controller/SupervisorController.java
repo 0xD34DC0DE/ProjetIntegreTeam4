@@ -1,8 +1,7 @@
 package com.team4.backend.controller;
 
 
-import com.team4.backend.dto.StudentCreationDto;
-import com.team4.backend.dto.SupervisorCreationDto;
+import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.dto.SupervisorDetailsDto;
 import com.team4.backend.mapping.SupervisorMapper;
 import com.team4.backend.service.SupervisorService;
@@ -41,7 +40,12 @@ public class SupervisorController {
     //TODO:Remove and replace by getAllUsersByRoleEquals
     @GetMapping("/getAll")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Flux<SupervisorCreationDto> getAllSupervisors(){
-        return supervisorService.getAllSupervisors().map(SupervisorMapper::toDto);
+    public Flux<SupervisorDetailsDto> getAllSupervisors(){
+        return supervisorService.getAllSupervisors().map(SupervisorMapper::toDetailsDto);
+    }
+
+    @GetMapping("/getAssignedStudents/{id}")
+    public Flux<StudentDetailsDto> getAssignedStudents(@PathVariable("id") String supervisorId){
+        return supervisorService.getAllAssignedStudents(supervisorId);
     }
 }

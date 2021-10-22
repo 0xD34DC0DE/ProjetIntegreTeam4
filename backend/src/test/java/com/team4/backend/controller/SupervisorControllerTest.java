@@ -110,7 +110,7 @@ public class SupervisorControllerTest {
         // ARRANGE
         SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
-        when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), supervisorDto.getStudentEmails().get(0)))
+        when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), "toto23@outlook.com"))
                 .thenReturn(Mono.error(DuplicateEntryException::new));
 
         //ACT
@@ -120,7 +120,7 @@ public class SupervisorControllerTest {
                         uriBuilder
                                 .path("/supervisor/addEmailToStudentList")
                                 .queryParam("id", supervisorDto.getId())
-                                .queryParam("studentEmail", supervisorDto.getStudentEmails().get(0))
+                                .queryParam("studentEmail", "toto23@outlook.com")
                                 .build())
                 .bodyValue(supervisorDto)
                 .exchange()
@@ -142,7 +142,7 @@ public class SupervisorControllerTest {
                 .exchange()
         //ASSERT
                 .expectStatus().isOk()
-                .expectBodyList(SupervisorCreationDto.class);
+                .expectBodyList(SupervisorDetailsDto.class);
 
     }
 }

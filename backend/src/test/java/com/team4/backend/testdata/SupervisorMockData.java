@@ -5,9 +5,7 @@ import com.team4.backend.model.Supervisor;
 import net.bytebuddy.implementation.bind.annotation.Super;
 import reactor.core.publisher.Flux;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class SupervisorMockData {
 
@@ -58,8 +56,8 @@ public class SupervisorMockData {
                 .build());
     }
 
-    public static Flux<SupervisorCreationDto> getAllSupervisorsDto(){
-        return Flux.just(SupervisorCreationDto.builder()
+    public static Flux<SupervisorDetailsDto> getAllSupervisorsDto(){
+        return Flux.just(SupervisorDetailsDto.builder()
                 .id("123a45ce678ae91d0b111b21")
                 .email("professeur@outlook.com")
                 .password("prof123")
@@ -68,7 +66,7 @@ public class SupervisorMockData {
                 .studentEmails(getStudentEmails())
                 .phoneNumber("514-111-2222")
                 .registrationDate(null) // Current date
-                .build(), SupervisorCreationDto.builder()
+                .build(), SupervisorDetailsDto.builder()
                 .id("222a44ce555ae66d0b777b88")
                 .email("enseignant@outlook.com")
                 .password("enseignant123")
@@ -79,8 +77,8 @@ public class SupervisorMockData {
                 .build());
     }
 
-    public static List<String> getStudentEmails() {
-        return Arrays.asList("12395432@gmail.com", "toto23@outlook.com");
+    public static Set<String> getStudentEmails() {
+        return new HashSet<>(Arrays.asList("12395432@gmail.com", "toto23@outlook.com"));
     }
 
 }

@@ -1,35 +1,43 @@
 import {
-  Cancel,
-  Delete,
-  DeleteOutline,
   People,
-  Person,
+  PersonAddAltRounded,
+  PersonAddRounded,
+  PersonAddSharp,
+  PersonAddTwoTone,
 } from "@mui/icons-material";
+import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import {
   Avatar,
   Box,
   Card,
   CardActions,
-  Dialog,
-  DialogContent,
+  Icon,
   IconButton,
-  ListItemAvatar,
-  ListItemText,
   Tooltip,
-  ListItem,
-  List,
   Typography,
-  ListItemButton,
-  ListItemIcon,
 } from "@mui/material";
-import { useDrop } from "react-dnd";
 import axios from "axios";
+import { motion } from "framer-motion";
 import { useState } from "react";
-import PersonAddIcon from "@mui/icons-material/PersonAdd";
+import { useDrop } from "react-dnd";
+import AssignedStudentsDialog from "./AssignedStudentsDialog";
+
+const fadeIn = {
+  hidden: { transform: "translateY(20px)", opacity: 0 },
+  show: {
+    transform: 0,
+    opacity: 1,
+    transition: {
+      staggerChildren: 1,
+    },
+  },
+};
+
 const DroppableUserCard = ({ user, index }) => {
-  const [assignedStudents, setAssignedStudents] = useState([]);
   const [open, setOpen] = useState(false);
   const [justDropped, setJustDropped] = useState(false);
+  const [assignedStudents, setAssignedStudents] = useState([]);
+  const [droppedItem, setDroppedItem] = useState();
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     // The type (or types) to accept - strings or symbols
     accept: "UserCard",
@@ -40,19 +48,21 @@ const DroppableUserCard = ({ user, index }) => {
     }),
     drop: async (item, monitor) => {
       if (monitor.isOver()) {
-        var tmp = assignedStudents.concat(item);
-        if (!assignedStudents.includes(item.user.email)) {
-          console.log("email", item.user.email);
-          let response = await axios({
-            method: "PATCH",
-            url: `http://localhost:8080/supervisor/addEmailToStudentList?id=${user.id}&studentEmail=${item.user.email}`,
-            headers: {
-              Authorization: sessionStorage.getItem("jwt"),
-            },
-            responseType: "json",
-          }).catch((res) => console.log("res", res));
-        }
-        setAssignedStudents(tmp);
+        await axios({
+          method: "PATCH",
+          url: `http://localhost:8080/supervisor/addEmailToStudentList?id=${user.id}&studentEmail=${item.user.email}`,
+          headers: {
+            Authorization: sessionStorage.getItem("jwt"),
+          },
+          responseType: "json",
+        })
+          .then((res) => {
+            console.log("ress", res);
+            console.log("item", JSON.stringify(item));
+            handleStudentAssignment(item);
+          })
+          .catch((res) => console.log("res", res));
+
         setJustDropped(true);
         setTimeout(() => {
           setJustDropped(false);
@@ -60,6 +70,12 @@ const DroppableUserCard = ({ user, index }) => {
       }
     },
   }));
+
+  const handleStudentAssignment = (item) => {
+    console.log("assignement", [...assignedStudents, item]);
+    console.log("assignment spread", [...assignedStudents]);
+    setAssignedStudents([...assignedStudents, item]);
+  };
 
   //TODO: Use backdrop click to close the dialog
   return (
@@ -75,9 +91,16 @@ const DroppableUserCard = ({ user, index }) => {
           m: 2,
         }}
       >
-        {justDropped && <PersonAddIcon sx={{ m: 2 }} />}
+        {justDropped && (
+          <motion.div variants={fadeIn} initial="hidden" animate="show">
+            <PersonAddIcon
+              sx={{ position: "static", float: "right" }}
+              color="success"
+            />
+          </motion.div>
+        )}
         <Box sx={{ textAlign: "center" }}>
-          <Avatar sx={{ mx: "auto", my: 2 }}></Avatar>
+          <Avatar sx={{ mx: "auto", my: 2, clear: "right" }}></Avatar>
           <Typography>{user.email}</Typography>
           <Typography>
             {user.firstName}, {user.lastName}
@@ -96,25 +119,11 @@ const DroppableUserCard = ({ user, index }) => {
           </CardActions>
         </Box>
       </Card>
-      <Dialog open={open}>
-        <DialogContent sx={{ p: 0 }}>
-          <List>
-            {assignedStudents.map((student, key) => {
-              return (
-                <ListItem>
-                  <Person />
-                  <ListItemText sx={{ ml: 5 }}>
-                    {student.user.lastName}, {student.user.firstName}
-                  </ListItemText>
-                  <ListItemButton sx={{ ml: 5, p: 0 }}>
-                    <DeleteOutline sx={{ color: "red" }} />
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
-          </List>
-        </DialogContent>
-      </Dialog>
+      <AssignedStudentsDialog
+        open={open}
+        user={user}
+        assignedStudents={assignedStudents}
+      />
     </>
   );
 };
