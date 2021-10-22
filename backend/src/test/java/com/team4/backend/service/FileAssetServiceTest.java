@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.amazonaws.services.s3.model.PutObjectResult;
 import com.team4.backend.repository.FileAssetRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -60,6 +61,7 @@ class FileAssetServiceTest {
         FileAssetService fileAssetServiceSpy = spy(fileAssetService);
         doReturn(fileInputStream).when(fileAssetServiceSpy).getFileInputStream(filepath);
 
+        when(fileAssetRepository.create(any(), any(), any())).thenReturn(Mono.just(new PutObjectResult()));
         //ACT
         Mono<String> response = fileAssetServiceSpy.create(filepath, userEmail, mimeType, uuid);
 
@@ -72,6 +74,7 @@ class FileAssetServiceTest {
 
     @Test
     void shouldNotCreateFailForWrongFile() {
+        // ACT & ASSERT
         assertThrows(FileNotFoundException.class, () -> fileAssetService.getFileInputStream(wrongFilepath));
     }
 
