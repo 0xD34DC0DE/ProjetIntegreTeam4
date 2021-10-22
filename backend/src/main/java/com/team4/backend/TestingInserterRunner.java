@@ -81,7 +81,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .lastName("Scott")
                         .phoneNumber("4387650987")
                         .password(pbkdf2Encoder.encode("travis123"))
-                        .hasValidCv(false)
+                        .hasValidCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
                         .studentState(StudentState.WAITING_FOR_RESPONSE)
