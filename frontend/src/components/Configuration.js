@@ -82,7 +82,7 @@ export const sidebarList = [
   },
   {
     id: 11,
-    label: "Jumelé un superviseur avec un étudiant",
+    label: "Assignation superviseurs",
     role: ["INTERNSHIP_MANAGER"],
     icon: <SupervisedUserCircleIcon fontSize="small" sx={{ mr: 1 }} />,
     description: "Assignations des superviseurs aux élèves",

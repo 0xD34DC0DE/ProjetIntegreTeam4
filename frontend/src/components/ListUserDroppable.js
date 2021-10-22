@@ -26,7 +26,7 @@ const ListUserDroppable = ({ role, visible }) => {
     <>
       {visible && (
         <DndProvider backend={HTML5Backend}>
-          <Typography variant="h4" sx={{ color: "white" }}>
+          <Typography variant="h4" sx={{ color: "white", ml: 2, mt: 2 }}>
             Superviseurs
           </Typography>
           <Grid

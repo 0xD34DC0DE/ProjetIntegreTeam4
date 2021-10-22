@@ -41,7 +41,7 @@ const AsssignedStudentSupervisorView = ({ visible }) => {
     <>
       {visible && (
         <>
-          <Typography variant="h4" sx={{ color: "white" }}>
+          <Typography variant="h4" sx={{ color: "white", ml: 2, mt: 2 }}>
             Liste des étudiants assignés
           </Typography>
           <Grid

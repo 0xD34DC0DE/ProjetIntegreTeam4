@@ -40,7 +40,7 @@ const ListUserDraggable = ({ role, isDragging, visible }) => {
     <>
       {visible && (
         <DndProvider backend={HTML5Backend}>
-          <Typography variant="h4" sx={{ color: "white" }}>
+          <Typography variant="h4" sx={{ color: "white", ml: 2 }}>
             Étudiants
           </Typography>
           <Grid
