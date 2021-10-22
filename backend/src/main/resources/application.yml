@@ -18,3 +18,17 @@ spring:
       resolve-lazily: true
       enabled: true
       location: /tmp
+  mail:
+    default-encoding: UTF-8
+    host: smtp.gmail.com
+    username: projetintegreteam4
+    password: H1cmMUzU1W5jNaD64SJc
+    port: 587
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+    protocol: smtp
+    test-connection: false

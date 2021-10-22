@@ -14,8 +14,12 @@ import java.util.Map;
 
 @Service
 public class FileAssetService {
-    @Autowired
-    FileAssetRepository fileAssetRepository;
+
+    private final FileAssetRepository fileAssetRepository;
+
+    public FileAssetService(FileAssetRepository fileAssetRepository) {
+        this.fileAssetRepository = fileAssetRepository;
+    }
 
     protected FileInputStream getFileInputStream(String filePath) throws FileNotFoundException {
         return new FileInputStream(filePath);
