@@ -41,10 +41,6 @@ public class InternshipOfferController {
     public Mono<ResponseEntity<String>> addAnInternshipOffer(
             @RequestBody InternshipOfferCreationDto internshipOfferCreationDto) {
         return internshipOfferService.addAnInternshipOffer(internshipOfferCreationDto)
-                .onErrorMap(
-                        UserNotFoundException.class,
-                        e -> new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage())
-                )
                 .map(s -> ResponseEntity.status(HttpStatus.CREATED).body(""));
     }
 
@@ -94,10 +90,7 @@ public class InternshipOfferController {
     public Mono<ResponseEntity<String>> validateInternshipOffer(@RequestParam("id") String id,
                                                                 @RequestParam("isValid") Boolean isValid) {
         return internshipOfferService.validateInternshipOffer(id, isValid)
-                .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")))
-                .onErrorResume(error -> Mono.just(
-                        ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage()))
-                );
+                .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 
     @GetMapping("/getNotYetValidatedInternshipOffers")
