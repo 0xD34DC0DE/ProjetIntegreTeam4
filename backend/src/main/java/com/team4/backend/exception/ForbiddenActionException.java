@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @NoArgsConstructor
-@ResponseStatus(HttpStatus.FORBIDDEN)
+@ResponseStatus(code = HttpStatus.FORBIDDEN)
 public class ForbiddenActionException extends Exception {
 
     public ForbiddenActionException(String message) {

@@ -85,7 +85,7 @@ public class FileMetaDataService {
 
         return ValidatingPageRequest
                 .getPageRequestMono(noPage, 10, Sort.by("uploadDate").ascending())
-                .flatMapMany(pageRequest -> fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(pageRequest));
+                .flatMapMany(fileMetaDataRepository::findAllByIsValidFalseAndIsSeenFalse);
 
     }
 

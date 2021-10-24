@@ -43,8 +43,7 @@ public class FileMetaDataController {
     @GetMapping("/getListInvalidCvNotSeen/{noPage}")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Flux<FileMetaDataInternshipManagerViewDto> getListInvalidCvNotSeen(@PathVariable Integer noPage) {
-        return fileMetaDataService.getListInvalidCvNotSeen(noPage).map(FileMetaDataMapper::toInternshipManagerViewDto)
-                .onErrorMap(error -> new ResponseStatusException(HttpStatus.BAD_REQUEST, error.getMessage()));
+        return fileMetaDataService.getListInvalidCvNotSeen(noPage).map(FileMetaDataMapper::toInternshipManagerViewDto);
     }
 
     @PatchMapping("/validateCv")
@@ -52,9 +51,7 @@ public class FileMetaDataController {
     public Mono<ResponseEntity<String>> validateCv(@RequestParam("id") String id,
             @RequestParam("isValid") Boolean isValid) {
         return fileMetaDataService.validateCv(id, isValid)
-                .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")))
-                .onErrorResume(
-                        error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
+                .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 
 }
