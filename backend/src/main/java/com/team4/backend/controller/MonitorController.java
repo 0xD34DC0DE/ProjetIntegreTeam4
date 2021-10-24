@@ -24,8 +24,7 @@ public class MonitorController {
     @PostMapping("/register")
     public Mono<ResponseEntity<String>> register(@RequestBody MonitorDetailsDto monitorDto) {
         return monitorService.registerMonitor(MonitorMapper.toEntity(monitorDto))
-                .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
-                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(error.getMessage())));
+                .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")));
     }
 
 }

@@ -78,7 +78,7 @@ public class MonitorControllerTest {
                 .exchange()
                 // ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
-                .expectBody().isEmpty();
+                .expectBody(String.class);
 
     }
 
