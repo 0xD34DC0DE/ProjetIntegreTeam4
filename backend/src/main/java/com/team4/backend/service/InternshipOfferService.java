@@ -61,6 +61,7 @@ public class InternshipOfferService {
                 }));
     }
 
+
     public Flux<InternshipOfferStudentViewDto> getGeneralInternshipOffers(Integer page, Integer size,
                                                                           String studentEmail) {
         return studentService.findByEmail(studentEmail)
@@ -128,16 +129,6 @@ public class InternshipOfferService {
                 return Mono.error(new UnauthorizedException("Cannot apply to unvalidated offers"));
             }
             return studentService.findByEmail(studentEmail)
-                    .flatMap(student -> addStudentEmailToOfferInterestedStudents(internshipOffer, student));
-        });
-    }
-
-    public Mono<InternshipOffer> applyOffer(String offerId, Principal principal) {
-        return findInternshipOfferById(offerId).flatMap(internshipOffer -> {
-            if (!internshipOffer.getIsValidated()) {
-                return Mono.error(new UnauthorizedException("Cannot apply to unvalidated offers"));
-            }
-            return studentService.findByEmail(UserSessionService.getLoggedUserEmail(principal))
                     .flatMap(student -> addStudentEmailToOfferInterestedStudents(internshipOffer, student));
         });
     }
