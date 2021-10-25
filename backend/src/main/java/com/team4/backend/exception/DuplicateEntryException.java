@@ -6,8 +6,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @NoArgsConstructor
 @ResponseStatus(code = HttpStatus.CONFLICT)
-public class DuplicateEntryException extends Exception{
+public class DuplicateEntryException extends Exception {
+
     public DuplicateEntryException(String message) {
         super(message);
     }
+
 }

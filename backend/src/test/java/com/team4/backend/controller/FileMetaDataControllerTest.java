@@ -1,7 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
-import com.team4.backend.exception.FileDoNotExistException;
+import com.team4.backend.exception.FileNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.service.FileMetaDataService;
@@ -126,7 +126,7 @@ class FileMetaDataControllerTest {
         //ARRANGE
         FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
 
-        when(fileMetaDataService.validateCv(fileMetaData.getId(), true)).thenReturn(Mono.error(FileDoNotExistException::new));
+        when(fileMetaDataService.validateCv(fileMetaData.getId(), true)).thenReturn(Mono.error(FileNotFoundException::new));
 
         //ACT
         webTestClient

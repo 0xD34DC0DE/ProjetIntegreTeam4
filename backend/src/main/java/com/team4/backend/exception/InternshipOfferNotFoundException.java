@@ -11,4 +11,5 @@ public class InternshipOfferNotFoundException extends Exception {
     public InternshipOfferNotFoundException(String message) {
         super(message);
     }
+
 }

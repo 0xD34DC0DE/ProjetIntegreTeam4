@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @NoArgsConstructor
 @ResponseStatus(code = HttpStatus.NOT_FOUND)
-public class FileDoNotExistException extends Exception {
+public class FileNotFoundException extends Exception {
 
-    public FileDoNotExistException(String message) {
+    public FileNotFoundException(String message) {
         super(message);
     }
 
