@@ -36,7 +36,7 @@ public class InternshipOfferRepositoryTest {
                 InternshipOffer.builder().isValidated(false).validationDate(null).build()
         );
 
-        internshipOfferRepository.saveAll(internshipOffers).subscribe().dispose();
+        internshipOfferRepository.saveAll(internshipOffers).subscribe();
     }
 
     @Test
