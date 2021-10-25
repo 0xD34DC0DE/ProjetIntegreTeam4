@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import UserCard from "./DraggableUserCard";
 import { Box, Avatar, Typography, Grid, Card } from "@mui/material";
 import axios from "axios";
 import { UserInfoContext } from "../stores/UserInfoStore";

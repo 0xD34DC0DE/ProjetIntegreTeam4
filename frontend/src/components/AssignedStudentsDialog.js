@@ -36,7 +36,7 @@ const AssignedStudentsDialog = ({
   }, []);
   return (
     <Dialog open={open} onClose={handleClose}>
-      <DialogContent sx={{ p: 5, py: 2 }}>
+      <DialogContent sx={{ textAlign: "center" }}>
         <Typography variant="h6">Étudiants assignés</Typography>
         <List>
           {assignedStudents.length > 0 ? (
@@ -51,7 +51,12 @@ const AssignedStudentsDialog = ({
               );
             })
           ) : (
-            <Typography>Aucun étudiant assigné</Typography>
+            <Typography
+              variant="subtitle1"
+              sx={{ fontStyle: "italic", color: "rgba(255, 255, 255, 0.5)" }}
+            >
+              Aucun étudiant assigné
+            </Typography>
           )}
         </List>
       </DialogContent>

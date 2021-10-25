@@ -81,7 +81,7 @@ const DroppableUserCard = ({ user, index }) => {
           backgroundColor: isOver ? "#2F3030" : "#1F2020",
           alignItem: "center",
           justifyContent: "center",
-          m: 2,
+          mx: 2,
         }}
       >
         {justDropped && (

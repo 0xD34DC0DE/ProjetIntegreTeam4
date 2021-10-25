@@ -32,7 +32,7 @@ const ListUserDraggable = ({ role, isDragging, visible }) => {
             Étudiants
           </Typography>
           <Grid
-            sx={{ py: "5vh", mt: "10%", display: "flex" }}
+            sx={{ py: "1vh", mt: "10%", display: "flex" }}
             container
             spacing={{ xs: 2, md: 3 }}
             columns={{ xs: 4, sm: 8, md: 12 }}

@@ -207,7 +207,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .endingDate(LocalDate.now().plusMonths(3))
                         .emailOfMonitor("9182738492@gmail.com")
                         .title("Développeur Senior Cobol")
-                        .companyName("André-Laurendeau")
+                        .companyName("Google")
                         .description(lorem.getParagraphs(2, 5))
                         .minSalary(19.0f)
                         .maxSalary(22.0f)

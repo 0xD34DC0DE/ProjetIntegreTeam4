@@ -60,7 +60,7 @@ const InternshipOfferValidation = ({
           <List
             sx={{
               width: "100vw",
-              pt: 0,
+              pt: 5,
             }}
           >
             {companies.map((name, key) => {
