@@ -2,14 +2,14 @@ import { Person } from "@mui/icons-material";
 import {
   Dialog,
   DialogContent,
-  Divider,
   List,
   ListItem,
   ListItemText,
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
+import { UserInfoContext } from "../stores/UserInfoStore";
 
 const AssignedStudentsDialog = ({
   open,
@@ -18,13 +18,14 @@ const AssignedStudentsDialog = ({
   assignedStudents,
   handleClose,
 }) => {
+  const [userInfo] = useContext(UserInfoContext);
   useEffect(() => {
     const getAssignedStudents = async () => {
       let response = await axios({
         method: "GET",
         url: `http://localhost:8080/supervisor/getAssignedStudents/${user.id}`,
         headers: {
-          Authorization: sessionStorage.getItem("jwt"),
+          Authorization: userInfo.jwt,
         },
         responseType: "json",
       });

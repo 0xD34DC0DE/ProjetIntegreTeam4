@@ -1,22 +1,9 @@
-import {
-  Avatar,
-  Button,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardHeader,
-  CardMedia,
-  Grid,
-  Typography,
-  Box,
-  Container,
-} from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import UserCard from "./DraggableUserCard";
-import DroppableUserCard from "./DroppableUserCard";
-import { DndContext, DndProvider } from "react-dnd";
+import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 
 const ListUserDraggable = ({ role, isDragging, visible }) => {

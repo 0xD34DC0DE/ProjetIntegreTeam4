@@ -1,5 +1,6 @@
 export const listLabels = [
   null,
+  "Titre",
   "Date limite pour appliquer",
   "Date de commencement",
   "Date de fin",

@@ -135,7 +135,9 @@ function OfferViews({ visible }) {
             {internshipOffers == null ? (
               <CircularProgress sx={{ mt: 10, mb: 5 }} />
             ) : internshipOffers.length === 0 ? (
-              <Typography>Aucune offre disponible pour l'instant.</Typography>
+              <Typography color={"text.primary"}>
+                Aucune offre disponible pour l'instant.
+              </Typography>
             ) : (
               internshipOffers.map((offer, i) => (
                 <motion.div

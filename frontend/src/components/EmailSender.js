@@ -3,7 +3,6 @@ import {
   Dialog,
   DialogActions,
   DialogContent,
-  DialogContentText,
   TextField,
   Typography,
 } from "@mui/material";
@@ -42,7 +41,7 @@ const EmailSender = ({ open, toggleDialog, receiver }) => {
       url: "/emailsender",
       data: formData,
       headers: {
-        Authorization: sessionStorage.getItem("jwt"),
+        Authorization: userInfo.jwt,
         "content-type": "application/json",
       },
     })

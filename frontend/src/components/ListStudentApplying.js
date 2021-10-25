@@ -10,24 +10,26 @@ import {
   Tooltip,
   Button,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
 import { motion } from "framer-motion";
 import axios from "axios";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import EmailSender from "./EmailSender";
+import { UserInfoContext } from "../stores/UserInfoStore";
 
 const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
   const [offers, setOffers] = useState([]);
   const [receiver, setReceiver] = useState("");
+  const [userInfo] = useContext(UserInfoContext);
 
   const fetchData = () => {
     axios({
       method: "GET",
-      url: "http://localhost:8080/internshipOffer/interestedStudents/9182738492@gmail.com",
+      url: `http://localhost:8080/internshipOffer/interestedStudents/${userInfo.email}`,
       headers: {
-        Authorization: sessionStorage.getItem("jwt"),
+        Authorization: userInfo.jwt,
       },
       responseType: "json",
     })
@@ -104,9 +106,12 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                             </Typography>
                             <Typography
                               variant="subtitle2"
-                              color="text.primary"
+                              sx={{
+                                color: "rgba(255, 255, 255, 0.5)",
+                                fontStyle: "italic",
+                              }}
                             >
-                              Junior Développeur Cobol
+                              {offer.title}
                             </Typography>
                             <Typography variant="caption" color="text.primary">
                               Description du poste
@@ -119,14 +124,7 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                 fontStyle: "italic",
                               }}
                             >
-                              : ed ut perspiciatis unde omnis iste natus error
-                              sit voluptatem accusantium doloremque laudantium,
-                              totam rem aperiam, eaque ipsa quae ab illo
-                              inventore veritatis et quasi architecto beatae
-                              vitae dicta sunt explicabo. Nemo enim ipsam
-                              voluptatem quia voluptas sit aspernatur aut odit
-                              aut fugit, sed quia consequuntur magni dolores eos
-                              qui ratione voluptatem sequi nesciunt.
+                              : {offer.description}
                             </Typography>
                           </motion.div>
                         </Paper>

@@ -8,7 +8,8 @@ import {
   Grid,
 } from "@mui/material";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import { UserInfoContext } from "../stores/UserInfoStore";
 import InternshipOfferDialog from "./InternshipOfferDialog";
 import { listLabels } from "./InternshipOfferLabels";
 
@@ -19,8 +20,8 @@ const InternshipOfferValidation = ({
 }) => {
   const [unvalidatedOffers, setUnvalidatedOffers] = useState([]);
   const [companies, setCompanies] = useState([]);
+  const [userInfo] = useContext(UserInfoContext);
 
-  const [token] = useState(sessionStorage.getItem("jwt"));
   const [selectedOffer, setSelectedOffer] = useState(null);
   useEffect(() => {
     const getUnvalidatedInternshipOffers = async () => {
@@ -28,7 +29,7 @@ const InternshipOfferValidation = ({
         method: "GET",
         url: "http://localhost:8080/internshipOffer/getNotYetValidatedInternshipOffers",
         headers: {
-          Authorization: token,
+          Authorization: userInfo.jwt,
         },
         responseType: "json",
       });

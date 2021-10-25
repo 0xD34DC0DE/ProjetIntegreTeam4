@@ -7,11 +7,12 @@ import {
   Container,
   Paper,
 } from "@mui/material";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import Tag from "@mui/icons-material/Tag";
 import { CancelOutlined, CheckCircleOutline } from "@mui/icons-material";
 import { listLabels } from "./InternshipOfferLabels";
 import axios from "axios";
+import { UserInfoContext } from "../stores/UserInfoStore";
 
 const InternshipOfferDescriptionDialog = ({
   open,
@@ -19,7 +20,7 @@ const InternshipOfferDescriptionDialog = ({
   offer,
   removeInternshipOffer,
 }) => {
-  const [token] = useState(sessionStorage.getItem("jwt"));
+  const [userInfo] = useContext(UserInfoContext);
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick")
@@ -31,7 +32,7 @@ const InternshipOfferDescriptionDialog = ({
       method: "PATCH",
       url: "http://localhost:8080/internshipOffer/validateInternshipOffer",
       headers: {
-        Authorization: token,
+        Authorization: userInfo.jwt,
       },
       params: {
         id: id,
