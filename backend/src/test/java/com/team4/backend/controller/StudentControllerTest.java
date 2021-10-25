@@ -80,7 +80,7 @@ public class StudentControllerTest {
                 .exchange()
                 // ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
-                .expectBody().isEmpty();
+                .expectBody(String.class);
     }
 
     @Test

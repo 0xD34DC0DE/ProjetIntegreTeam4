@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @NoArgsConstructor
 @ResponseStatus(code = HttpStatus.NOT_FOUND)
 public class UserNotFoundException extends Exception {
+
     public UserNotFoundException(String message) {
         super(message);
     }

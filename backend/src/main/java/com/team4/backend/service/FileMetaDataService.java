@@ -1,7 +1,6 @@
 package com.team4.backend.service;
 
-import com.team4.backend.exception.FileDoNotExistException;
-import com.team4.backend.exception.InvalidPageRequestException;
+import com.team4.backend.exception.FileNotFoundException;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.model.enums.UploadType;
 import com.team4.backend.repository.FileMetaDataRepository;
@@ -85,13 +84,13 @@ public class FileMetaDataService {
 
         return ValidatingPageRequest
                 .getPageRequestMono(noPage, 10, Sort.by("uploadDate").ascending())
-                .flatMapMany(pageRequest -> fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(pageRequest));
+                .flatMapMany(fileMetaDataRepository::findAllByIsValidFalseAndIsSeenFalse);
 
     }
 
     public Mono<FileMetaData> validateCv(String id, Boolean isValid) {
         return fileMetaDataRepository.findById(id)
-                .switchIfEmpty(Mono.error(new FileDoNotExistException("This file do Not Exist")))
+                .switchIfEmpty(Mono.error(new FileNotFoundException("This file do Not Exist")))
                 .map(file -> {
                     file.setIsValid(isValid);
                     file.setIsSeen(true);

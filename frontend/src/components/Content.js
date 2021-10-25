@@ -27,17 +27,19 @@ const Content = ({
   //TODO use switch instead of repeated conditionnal rendering
 
   return (
+
     <Box
-      sx={{
-        backgroundColor: "primary.main",
-        flexGrow: 1,
-        m: 0,
-        p: 0,
-        minHeight: "calc(100vh - 45px)",
-        Height: "100%",
-        width: "100%",
-      }}
+    sx={{
+      backgroundColor: "primary.main",
+      flexGrow: 1,
+      m: 0,
+      p: 0,
+      minHeight: "calc(100vh - 45px)",
+      Height: "100%",
+      width: "100%",
+    }}
     >
+      <StudentDashBoard/>
       {!userInfo.loggedIn && (
         <Typography variant="h3" color="white" sx={{ pl: 2, pt: 2 }}>
           Bonjour visiteur.

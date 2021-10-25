@@ -25,14 +25,12 @@ public class UserController {
     @PostMapping("/login")
     public Mono<ResponseEntity<String>> login(@RequestBody AuthRequestDto authRequestDto) {
         return userService.login(authRequestDto)
-                .flatMap(token -> Mono.just(ResponseEntity.ok().body(token)))
-                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(error.getMessage())));
+                .flatMap(token -> Mono.just(ResponseEntity.ok().body(token)));
     }
 
     @GetMapping("/email/{email}")
-    public Mono<ResponseEntity<Boolean>> userExistsByEmail(@PathVariable String email) {
-        return userService.existsByEmail(email)
-                .flatMap(b -> Mono.just(ResponseEntity.ok().body(b)));
+    public Mono<Boolean> userExistsByEmail(@PathVariable String email) {
+        return userService.existsByEmail(email);
     }
 
     @GetMapping("/getAll")

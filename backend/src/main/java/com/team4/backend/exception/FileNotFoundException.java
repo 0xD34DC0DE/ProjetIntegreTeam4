@@ -5,10 +5,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @NoArgsConstructor
-@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
-public class WrongCredentialsException extends Exception {
+@ResponseStatus(code = HttpStatus.NOT_FOUND)
+public class FileNotFoundException extends Exception {
 
-    public WrongCredentialsException(String message) {
+    public FileNotFoundException(String message) {
         super(message);
     }
 

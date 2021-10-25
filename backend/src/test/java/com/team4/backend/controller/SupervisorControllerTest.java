@@ -61,7 +61,7 @@ public class SupervisorControllerTest {
     }
 
     @Test
-    public void shouldNotSupervisor() {
+    public void shouldNotCreateSupervisor() {
         //ARRANGE
         SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
@@ -76,18 +76,18 @@ public class SupervisorControllerTest {
                 .exchange()
                 // ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
-                .expectBody().isEmpty();
+                .expectBody(String.class);
     }
 
     @Test
-    void shouldAssignSupervisorToStudents(){
+    void shouldAssignSupervisorToStudents() {
         // ARRANGE
         String studentEmail = "teststudent@gmail.com";
         SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
 
         when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), studentEmail))
-            .thenReturn(Mono.just(supervisor));
+                .thenReturn(Mono.just(supervisor));
 
         //ACT
         webTestClient
@@ -106,7 +106,7 @@ public class SupervisorControllerTest {
     }
 
     @Test
-    void shouldNotAssignSupervisorToStudents(){
+    void shouldNotAssignSupervisorToStudents() {
         // ARRANGE
         SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
