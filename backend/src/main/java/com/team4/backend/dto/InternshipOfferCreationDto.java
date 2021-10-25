@@ -17,6 +17,7 @@ public class InternshipOfferCreationDto extends InternshipOfferDetailedDto imple
 
     @Builder(builderMethodName = "internshipOfferCreationDtoBuilder")
     public InternshipOfferCreationDto(String id,
+                                      String title,
                                       LocalDate limitDateToApply,
                                       LocalDate beginningDate,
                                       LocalDate endingDate,
@@ -26,6 +27,7 @@ public class InternshipOfferCreationDto extends InternshipOfferDetailedDto imple
                                       Float maxSalary,
                                       String emailOfMonitor) {
         super(id,
+                title,
                 limitDateToApply,
                 beginningDate,
                 endingDate,

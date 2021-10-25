@@ -11,6 +11,7 @@ public abstract class InternshipOfferMapper {
     public static InternshipOffer toEntity(InternshipOfferCreationDto internshipOfferCreationDto) {
         return InternshipOffer.builder()
                 .limitDateToApply(internshipOfferCreationDto.getLimitDateToApply())
+                .title(internshipOfferCreationDto.getTitle())
                 .beginningDate(internshipOfferCreationDto.getBeginningDate())
                 .endingDate(internshipOfferCreationDto.getEndingDate())
                 .companyName(internshipOfferCreationDto.getCompanyName())
@@ -27,6 +28,7 @@ public abstract class InternshipOfferMapper {
     public static InternshipOfferStudentViewDto toStudentViewDto(InternshipOffer internshipOffer) {
         return InternshipOfferStudentViewDto.internshipOfferStudentViewDtoBuilder()
                 .id(internshipOffer.getId())
+                .title(internshipOffer.getTitle())
                 .limitDateToApply(internshipOffer.getLimitDateToApply())
                 .beginningDate(internshipOffer.getBeginningDate())
                 .endingDate(internshipOffer.getEndingDate())
@@ -42,6 +44,7 @@ public abstract class InternshipOfferMapper {
     public static InternshipOfferStudentInterestViewDto toStudentInterestViewDto(InternshipOffer internshipOffer) {
         return InternshipOfferStudentInterestViewDto.internshipOfferStudentInterestViewDtoBuilder()
                 .id(internshipOffer.getId())
+                .title(internshipOffer.getTitle())
                 .companyName(internshipOffer.getCompanyName())
                 .description(internshipOffer.getDescription())
                 .build();
@@ -50,6 +53,7 @@ public abstract class InternshipOfferMapper {
     public static InternshipOfferDetailedDto toDto(InternshipOffer internshipOffer) {
         return InternshipOfferDetailedDto.internshipOfferDetailedDtoBuilder()
                 .id(internshipOffer.getId())
+                .title(internshipOffer.getTitle())
                 .limitDateToApply(internshipOffer.getLimitDateToApply())
                 .beginningDate(internshipOffer.getBeginningDate())
                 .endingDate(internshipOffer.getEndingDate())
@@ -63,6 +67,7 @@ public abstract class InternshipOfferMapper {
     public static InternshipOfferMonitorViewDto toMonitorViewDto(InternshipOffer internshipOffer) {
         return InternshipOfferMonitorViewDto.internshipOfferMonitorViewDtoBuilder()
                 .id(internshipOffer.getId())
+                .title(internshipOffer.getTitle())
                 .limitDateToApply(internshipOffer.getLimitDateToApply())
                 .beginningDate(internshipOffer.getBeginningDate())
                 .endingDate(internshipOffer.getEndingDate())

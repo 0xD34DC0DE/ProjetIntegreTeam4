@@ -23,6 +23,8 @@ public class InternshipOffer implements Serializable {
     @Id
     private String id;
 
+    private String title;
+
     private LocalDate limitDateToApply;
 
     private LocalDate beginningDate;
