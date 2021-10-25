@@ -189,7 +189,7 @@ public class InternshipOfferServiceTest {
 
         // ASSERT
         StepVerifier.create(internshipOfferFlux).assertNext(
-                        offer -> assertEquals(offer.getId(), internshipOfferStudentViewDtos.get(0).getId()))
+                offer -> assertEquals(offer.getId(), internshipOfferStudentViewDtos.get(0).getId()))
                 .assertNext(offer -> assertEquals(offer.getId(),
                         internshipOfferStudentViewDtos.get(1).getId()))
                 .verifyComplete();
@@ -349,17 +349,19 @@ public class InternshipOfferServiceTest {
         String emailOfMonitor = MonitorMockData.getMockMonitor().getEmail();
 
         when(internshipOfferRepository.findAllByEmailOfMonitorAndIsValidatedTrue(emailOfMonitor))
-                .thenAnswer(answer -> Flux.just(InternshipOfferMockData.getListInternshipOffer(3)));
+                .thenReturn(Flux.fromIterable(InternshipOfferMockData.getListInternshipOffer(3)));
 
-        when(internshipOfferService.getInterestedStudents(emailOfMonitor))
-                .thenAnswer(answer -> Flux.just(InternshipOfferMockData.getListInternshipOffer(2)));
+        internshipOffers.forEach(internshipOffer ->
+                when(studentService.findAllByEmails(any())).thenReturn(Flux.fromIterable(internshipOffer.getInterestedStudentList())));
 
         // ACT
         Flux<InternshipOfferStudentInterestViewDto> internshipOfferDtoFlux = internshipOfferService.getInterestedStudents(emailOfMonitor);
 
         // ASSERT
         StepVerifier.create(internshipOfferDtoFlux)
-                .assertNext(offer -> assertEquals(offer.getId(), internshipOffers.get(0).getId()))
+                .assertNext(internshipDto -> assertEquals(2, internshipDto.getInterestedStudentList().size()))
+                .assertNext(internshipDto -> assertEquals(2, internshipDto.getInterestedStudentList().size()))
+                .assertNext(internshipDto -> assertEquals(2, internshipDto.getInterestedStudentList().size()))
                 .verifyComplete();
     }
 
@@ -386,7 +388,7 @@ public class InternshipOfferServiceTest {
 
         // ASSERT
         StepVerifier.create(internshipOfferMono).assertNext(
-                        offer -> assertEquals(sizeBefore + 1, offer.getListEmailInterestedStudents().size()))
+                offer -> assertEquals(sizeBefore + 1, offer.getListEmailInterestedStudents().size()))
                 .verifyComplete();
     }
 
