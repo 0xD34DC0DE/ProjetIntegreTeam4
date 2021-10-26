@@ -6,6 +6,7 @@ import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 
@@ -17,6 +18,8 @@ import java.util.Set;
 public class Student extends User {
 
     private StudentState studentState;
+
+    private LocalDate interviewDate;
 
     private Boolean hasValidCv;
 
@@ -50,6 +53,7 @@ public class Student extends User {
         this.appliedOffersId = appliedOffersId;
         this.exclusiveOffersId = exclusiveOffersId;
         this.hasValidCv = hasValidCv;
+        this.interviewDate = null;
     }
 
 }
