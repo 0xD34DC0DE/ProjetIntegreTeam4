@@ -3,8 +3,11 @@ package com.team4.backend.controller;
 import com.team4.backend.dto.SupervisorDetailsDto;
 import com.team4.backend.exception.DuplicateEntryException;
 import com.team4.backend.exception.UserAlreadyExistsException;
+import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.service.SupervisorService;
+import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.testdata.SupervisorMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -16,7 +19,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -127,5 +129,57 @@ public class SupervisorControllerTest {
                 //ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
                 .expectBody(String.class);
+    }
+
+    @Test
+    void shouldGetAssignedStudents(){
+        //ARRANGE
+        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        when(supervisorService.getAllAssignedStudents(supervisorDto.getId()))
+                .thenReturn(StudentMockData.getAssignedStudents().map(StudentMapper::toDto));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/supervisor/getAssignedStudents/"+supervisorDto.getId())
+                                .build())
+                .exchange()
+                //ASSERT
+                .expectStatus().isEqualTo(HttpStatus.OK)
+                .expectBodyList(SupervisorDetailsDto.class);
+    }
+
+    @Test
+    void shouldGetSupervisor() {
+        //ARRANGE
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+        when(supervisorService.getSupervisor(supervisor.getEmail())).thenReturn(Mono.just(supervisor));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/supervisor/"+supervisor.getEmail())
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBody(SupervisorDetailsDto.class);
+    }
+
+    @Test
+    void shouldNotGetSupervisor() {
+        //ARRANGE
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+        when(supervisorService.getSupervisor(any())).thenReturn(Mono.error(UserNotFoundException::new));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/supervisor/"+supervisor.getEmail())
+                .exchange()
+                //ASSERT
+                .expectStatus().isNotFound()
+                .expectBody(SupervisorDetailsDto.class);
     }
 }

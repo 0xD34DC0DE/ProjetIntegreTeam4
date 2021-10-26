@@ -2,7 +2,9 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.AuthRequestDto;
 import com.team4.backend.exception.WrongCredentialsException;
+import com.team4.backend.model.User;
 import com.team4.backend.service.UserService;
+import com.team4.backend.testdata.UserMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.Mockito.when;
@@ -99,6 +102,22 @@ public class UserControllerTest {
                 //ASSERT
                 .expectStatus().isOk()
                 .expectBody(Boolean.class);
+    }
+
+    @Test
+    void shouldGetAllByRole(){
+        //ARRANGE
+        String role = "STUDENT";
+        when(userService.getAll(role)).thenReturn(UserMockData.getAllStudents());
+
+        // ACT
+        webTestClient
+                .get()
+                .uri("/user/getAll?role=STUDENT")
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(User.class);
     }
 
 }

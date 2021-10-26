@@ -73,4 +73,9 @@ public abstract class StudentMockData {
         return  exclusiveOffers;
     }
 
+    public static Flux<Student> getAssignedStudents(){
+        return Flux.just(Student.studentBuilder().email("12395432@gmail.com").build(),
+                Student.studentBuilder().email("toto23@outlook.com").build());
+    }
+
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -46,6 +47,8 @@ public class SupervisorController {
     @GetMapping("/{email}")
     @PreAuthorize("hasAnyAuthority('SUPERVISOR')")
     public Mono<SupervisorDetailsDto> getSupervisor(@PathVariable("email") String email){
-        return supervisorService.getSupervisor(email).map(SupervisorMapper::toDetailsDto);
+        return supervisorService.getSupervisor(email)
+                .map(SupervisorMapper::toDetailsDto)
+                .onErrorMap(error -> new ResponseStatusException(HttpStatus.NOT_FOUND, error.getMessage()));
     }
 }
