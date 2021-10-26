@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Button,
   Dialog,
@@ -9,9 +9,11 @@ import {
 } from "@mui/material";
 import ApprovalIcon from "@mui/icons-material/Approval";
 import axios from "axios";
+import { UserInfoContext } from "../stores/UserInfoStore";
 
 const CvValidationDialog = ({ id, removeCv }) => {
   const [open, setOpen] = useState(false);
+  const [userInfo] = useContext(UserInfoContext);
 
   const handleOpen = () => {
     setOpen(true);
@@ -23,7 +25,7 @@ const CvValidationDialog = ({ id, removeCv }) => {
         method: "PATCH",
         url: "http://localhost:8080/file/validateCv",
         headers: {
-          Authorization: sessionStorage.getItem("jwt"),
+          Authorization: userInfo.jwt,
         },
         params: {
           id: id,

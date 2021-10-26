@@ -1,7 +1,6 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.service.EmailSenderService;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +15,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Mono;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
@@ -55,8 +54,9 @@ class EmailSenderControllerTest {
                 .bodyValue(multiValueMap)
                 .exchange()
 
-        //ASSERT
+                //ASSERT
                 .expectStatus().isOk()
                 .expectBody(String.class);
     }
+
 }

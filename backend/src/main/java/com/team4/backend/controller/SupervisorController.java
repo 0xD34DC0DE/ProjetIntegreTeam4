@@ -26,21 +26,19 @@ public class SupervisorController {
     @PostMapping("/register")
     public Mono<ResponseEntity<String>> register(@RequestBody SupervisorDetailsDto supervisorDto) {
         return supervisorService.registerSupervisor(SupervisorMapper.toEntity(supervisorDto))
-                .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")))
-                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(error.getMessage())));
+                .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")));
     }
 
     @PatchMapping("/addEmailToStudentList")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
     public Mono<ResponseEntity<String>> addStudentEmailToStudentList(@RequestParam("id") String id, @RequestParam("studentEmail") String studentEmail) {
         return supervisorService.addStudentEmailToStudentList(id, studentEmail)
-                .flatMap(supervisor -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")))
-                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.CONFLICT).body(error.getMessage())));
+                .flatMap(supervisor -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 
     @GetMapping("/getAssignedStudents/{id}")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER', 'SUPERVISOR')")
-    public Flux<StudentDetailsDto> getAssignedStudents(@PathVariable("id") String supervisorId){
+    public Flux<StudentDetailsDto> getAssignedStudents(@PathVariable("id") String supervisorId) {
         return supervisorService.getAllAssignedStudents(supervisorId);
     }
 
@@ -51,4 +49,5 @@ public class SupervisorController {
                 .map(SupervisorMapper::toDetailsDto)
                 .onErrorMap(error -> new ResponseStatusException(HttpStatus.NOT_FOUND, error.getMessage()));
     }
+
 }

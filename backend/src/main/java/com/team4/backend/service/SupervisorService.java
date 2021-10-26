@@ -43,19 +43,18 @@ public class SupervisorService {
         });
     }
 
-    public Mono<Supervisor> addStudentEmailToStudentList(String supervisorId, String studentEmail){
+    public Mono<Supervisor> addStudentEmailToStudentList(String supervisorId, String studentEmail) {
         return supervisorRepository.findById(supervisorId)
                 .flatMap(supervisor -> {
-            if(!supervisor.getStudentEmails().contains(studentEmail)) {
-                Set<String> studentEmails = new HashSet<>(supervisor.getStudentEmails());
-                studentEmails.add(studentEmail);
-                supervisor.setStudentEmails(studentEmails);
-                return supervisorRepository.save(supervisor);
-            }
-            else {
-                return Mono.error(new DuplicateEntryException("Student is already present in the supervisor's student lists"));
-            }
-        }).switchIfEmpty(Mono.error(new UserNotFoundException("Can't find a supervisor with given id: " + supervisorId)));
+                    if (!supervisor.getStudentEmails().contains(studentEmail)) {
+                        Set<String> studentEmails = new HashSet<>(supervisor.getStudentEmails());
+                        studentEmails.add(studentEmail);
+                        supervisor.setStudentEmails(studentEmails);
+                        return supervisorRepository.save(supervisor);
+                    } else {
+                        return Mono.error(new DuplicateEntryException("Student is already present in the supervisor's student lists"));
+                    }
+                }).switchIfEmpty(Mono.error(new UserNotFoundException("Can't find a supervisor with given id: " + supervisorId)));
     }
 
     public Flux<StudentDetailsDto> getAllAssignedStudents(String supervisorId) {
@@ -69,4 +68,5 @@ public class SupervisorService {
         return supervisorRepository.findSupervisorByEmail(email)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
     }
+
 }

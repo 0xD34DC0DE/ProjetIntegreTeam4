@@ -1,14 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { TablePagination, Container, Grid } from "@mui/material";
 import axios from "axios";
 import CvInternshipManagerView from "./CvInternshipManagerView";
 import { motion } from "framer-motion";
+import { UserInfoContext } from "../stores/UserInfoStore";
 
 const ListCvInternshipManagerView = ({ visible }) => {
   const [cvs, setCvs] = useState([]);
   const [nbrCvs, setNbrCvs] = useState(0);
   const [noPage, setNoPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [userInfo] = useContext(UserInfoContext);
 
   const fadeIn = {
     hidden: { opacity: 0 },
@@ -26,7 +28,7 @@ const ListCvInternshipManagerView = ({ visible }) => {
         method: "GET",
         url: "http://localhost:8080/file/countAllInvalidCvNotSeen/",
         headers: {
-          Authorization: sessionStorage.getItem("jwt"),
+          Authorization: userInfo.jwt,
         },
         responseType: "json",
       })
@@ -43,7 +45,7 @@ const ListCvInternshipManagerView = ({ visible }) => {
         method: "GET",
         url: `http://localhost:8080/file/getListInvalidCvNotSeen/${newPage}`,
         headers: {
-          Authorization: sessionStorage.getItem("jwt"),
+          Authorization: userInfo.jwt,
         },
         responseType: "json",
       })

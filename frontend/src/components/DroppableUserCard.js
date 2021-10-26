@@ -1,25 +1,19 @@
-import {
-  People,
-  PersonAddAltRounded,
-  PersonAddRounded,
-  PersonAddSharp,
-  PersonAddTwoTone,
-} from "@mui/icons-material";
+import { People } from "@mui/icons-material";
 import PersonAddIcon from "@mui/icons-material/PersonAdd";
 import {
   Avatar,
   Box,
   Card,
   CardActions,
-  Icon,
   IconButton,
   Tooltip,
   Typography,
 } from "@mui/material";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useDrop } from "react-dnd";
+import { UserInfoContext } from "../stores/UserInfoStore";
 import AssignedStudentsDialog from "./AssignedStudentsDialog";
 
 const fadeIn = {
@@ -38,6 +32,7 @@ const DroppableUserCard = ({ user, index }) => {
   const [justDropped, setJustDropped] = useState(false);
   const [assignedStudents, setAssignedStudents] = useState([]);
   const [droppedItem, setDroppedItem] = useState();
+  const [userInfo] = useContext(UserInfoContext);
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     // The type (or types) to accept - strings or symbols
     accept: "UserCard",
@@ -52,10 +47,10 @@ const DroppableUserCard = ({ user, index }) => {
           method: "PATCH",
           url: `http://localhost:8080/supervisor/addEmailToStudentList?id=${user.id}&studentEmail=${item.user.email}`,
           headers: {
-            Authorization: sessionStorage.getItem("jwt"),
+            Authorization: userInfo.jwt,
           },
           responseType: "json",
-        }).catch((res) => console.log("res", res));
+        }).catch(console.error);
 
         setJustDropped(true);
         setTimeout(() => {
@@ -86,7 +81,7 @@ const DroppableUserCard = ({ user, index }) => {
           backgroundColor: isOver ? "#2F3030" : "#1F2020",
           alignItem: "center",
           justifyContent: "center",
-          m: 2,
+          mx: 2,
         }}
       >
         {justDropped && (

@@ -14,7 +14,6 @@ import javax.mail.internet.MimeMessage;
 @Service
 public class EmailSenderService {
 
-
     private final StudentService studentService;
 
     private final InternshipOfferService internshipOfferService;
@@ -30,7 +29,7 @@ public class EmailSenderService {
     public Mono<Void> sendEmailToStudent(String sender, String receiver, String subject, String content) {
         return studentService.findByEmail(receiver)
                 .flatMap(student -> internshipOfferService.isStudentEmailInMonitorOffersInterestedStudents(receiver, sender))
-                .flatMap( isStudentInMonitorOffersInterestedStudentsLists -> {
+                .flatMap(isStudentInMonitorOffersInterestedStudentsLists -> {
                     if (isStudentInMonitorOffersInterestedStudentsLists) {
                         return sendEmail(sender, receiver, subject, content);
                     } else {
@@ -56,4 +55,5 @@ public class EmailSenderService {
     protected MimeMessageHelper getHelper(MimeMessage message) throws MessagingException {
         return new MimeMessageHelper(message, true);
     }
+
 }

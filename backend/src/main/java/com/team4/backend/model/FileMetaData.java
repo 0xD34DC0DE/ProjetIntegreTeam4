@@ -1,7 +1,6 @@
 package com.team4.backend.model;
 
 import com.team4.backend.model.enums.UploadType;
-import de.flapdoodle.embed.process.config.store.FileType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

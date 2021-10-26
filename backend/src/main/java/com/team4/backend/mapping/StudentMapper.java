@@ -5,6 +5,7 @@ import com.team4.backend.dto.StudentProfileDto;
 import com.team4.backend.model.Student;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 
 public abstract class StudentMapper {
 
@@ -17,6 +18,7 @@ public abstract class StudentMapper {
                 .registrationDate(LocalDate.now())
                 .phoneNumber(studentCreationDto.getPhoneNumber())
                 .studentState(studentCreationDto.getStudentState())
+                .appliedOffersId(new HashSet<>())
                 .hasValidCv(false)
                 .build();
     }

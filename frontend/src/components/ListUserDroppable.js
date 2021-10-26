@@ -8,7 +8,7 @@ import DroppableUserCard from "./DroppableUserCard";
 
 const ListUserDroppable = ({ role, visible }) => {
   const [users, setUsers] = useState([]);
-  const [userInfo] = useContext(UserInfoContext)
+  const [userInfo] = useContext(UserInfoContext);
 
   useEffect(() => {
     const getAllUsersByRole = async () => {
@@ -32,7 +32,7 @@ const ListUserDroppable = ({ role, visible }) => {
             Superviseurs
           </Typography>
           <Grid
-            sx={{ py: "5vh", mt: "10%", display: "flex" }}
+            sx={{ py: "1vh", mt: "10%", display: "flex" }}
             container
             spacing={{ xs: 2, md: 3 }}
             columns={{ xs: 4, sm: 8, md: 12 }}

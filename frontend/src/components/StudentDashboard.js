@@ -64,7 +64,7 @@ const StudentDashBoard = ({ visible }) => {
           .then((response) => {
             setProfile(response.data);
             setIsDisabled(
-              response.data.studentState != listState[2] ||
+              response.data.studentState !== listState[2] ||
                 !response.data.hasValidCv
             );
           })
@@ -217,7 +217,7 @@ const StudentDashBoard = ({ visible }) => {
                           key={key}
                           value={value}
                           disabled={
-                            value == listState[0] || value == listState[2]
+                            value === listState[0] || value === listState[2]
                           }
                           sx={{ color: "white" }}
                         >

@@ -15,7 +15,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -84,7 +83,7 @@ public class SupervisorServiceTest {
     }
 
     @Test
-    void shouldAddStudentEmailToList(){
+    void shouldAddStudentEmailToList() {
         //ARRANGE
         String studentEmail = "teststudent@gmail.com";
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
@@ -96,14 +95,14 @@ public class SupervisorServiceTest {
         //ACT
         Mono<Supervisor> supervisorMono = supervisorService.addStudentEmailToStudentList(supervisor.getId(), studentEmail);
 
-        // ASSERT
+        //ASSERT
         StepVerifier.create(supervisorMono)
                 .assertNext(s -> assertEquals(3, s.getStudentEmails().size()))
                 .verifyComplete();
     }
 
     @Test
-    void shouldNotAddStudentEmailToListWhenAlreadyInTheList(){
+    void shouldNotAddStudentEmailToListWhenAlreadyInTheList() {
         //ARRANGE
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
         when(supervisorRepository.findById(supervisor.getId())).thenReturn(Mono.just(supervisor));
@@ -112,12 +111,12 @@ public class SupervisorServiceTest {
         Mono<Supervisor> supervisorMono = supervisorService
                 .addStudentEmailToStudentList(supervisor.getId(), "toto23@outlook.com");
 
-        // ASSERT
+        //ASSERT
         StepVerifier.create(supervisorMono).expectError().verify();
     }
 
     @Test
-    void shouldNotFindSupervisorWhenAddingStudentToList(){
+    void shouldNotFindSupervisorWhenAddingStudentToList() {
         //ARRANGE
         String studentEmail = "teststudent@gmail.com";
         String wrongId = "wrongId";

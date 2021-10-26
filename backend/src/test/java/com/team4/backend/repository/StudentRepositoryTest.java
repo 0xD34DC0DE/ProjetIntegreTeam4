@@ -1,7 +1,6 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.Student;
-import com.team4.backend.model.User;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -18,7 +17,6 @@ import reactor.test.StepVerifier;
 
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @DataMongoTest
@@ -42,7 +40,7 @@ public class StudentRepositoryTest {
     }
 
     @Test
-    void shouldFindByEmail(){
+    void shouldFindByEmail() {
         //ARRANGE
         String email = "testing_1@gmail.com";
 
@@ -51,13 +49,13 @@ public class StudentRepositoryTest {
 
         //ASSERT
         StepVerifier.create(studentMono)
-                .assertNext(s -> Assertions.assertEquals(email,s.getEmail()))
+                .assertNext(s -> Assertions.assertEquals(email, s.getEmail()))
                 .verifyComplete();
 
     }
 
     @Test
-    void shouldNotFindByEmail(){
+    void shouldNotFindByEmail() {
         //ARRANGE
         String email = "non_existent_student@gmail.com";
 
@@ -99,4 +97,5 @@ public class StudentRepositoryTest {
                 .expectNextCount(0)
                 .verifyComplete();
     }
+
 }
