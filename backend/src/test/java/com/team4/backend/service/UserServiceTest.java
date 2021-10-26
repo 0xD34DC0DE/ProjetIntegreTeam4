@@ -113,7 +113,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void shouldGetAllByRole(){
+    void shouldGetAllStudentByRole(){
         //ARRANGE
         when(userRepository.findAllByRoleEquals("STUDENT")).thenReturn(UserMockData.getAllStudents());
 
