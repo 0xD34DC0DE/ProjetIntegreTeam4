@@ -31,4 +31,5 @@ public class EmailSenderController {
         return emailSenderService.sendEmailToStudent(UserSessionService.getLoggedUserEmail(principal), receiver, subject, content)
                 .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.OK).body("")));
     }
+
 }

@@ -8,10 +8,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Set;
 
 @Data
 @Builder
@@ -19,10 +15,9 @@ import java.util.Set;
 @AllArgsConstructor
 @Document(collection = "evaluationForms")
 
-public class EvaluationForm implements Serializable{
+public class EvaluationForm implements Serializable {
 
     @Id
     private String id;
-
 
 }

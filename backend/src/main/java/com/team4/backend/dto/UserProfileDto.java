@@ -19,11 +19,11 @@ public class UserProfileDto extends UserDto implements Serializable {
     protected LocalDate registrationDate;
 
     public UserProfileDto(String id,
-                           String email,
-                           String firstName,
-                           String lastName,
-                           LocalDate registrationDate,
-                           String phoneNumber) {
+                          String email,
+                          String firstName,
+                          String lastName,
+                          LocalDate registrationDate,
+                          String phoneNumber) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -31,4 +31,5 @@ public class UserProfileDto extends UserDto implements Serializable {
         this.phoneNumber = phoneNumber;
         this.registrationDate = registrationDate;
     }
+
 }

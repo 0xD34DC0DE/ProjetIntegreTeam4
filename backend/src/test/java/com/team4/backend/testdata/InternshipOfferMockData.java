@@ -202,4 +202,5 @@ public abstract class InternshipOfferMockData {
 
         return internshipOffers;
     }
+
 }

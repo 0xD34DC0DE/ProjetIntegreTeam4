@@ -7,4 +7,5 @@ public abstract class UserSessionService {
     public static String getLoggedUserEmail(Principal principal) {
         return principal != null ? principal.getName() : "";
     }
+
 }

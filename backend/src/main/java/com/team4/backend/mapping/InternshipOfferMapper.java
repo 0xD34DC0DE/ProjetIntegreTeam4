@@ -3,7 +3,6 @@ package com.team4.backend.mapping;
 import com.team4.backend.dto.*;
 import com.team4.backend.model.InternshipOffer;
 
-import java.util.Collections;
 import java.util.HashSet;
 
 public abstract class InternshipOfferMapper {

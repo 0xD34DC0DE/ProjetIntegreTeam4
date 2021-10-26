@@ -66,15 +66,15 @@ public class UserRepositoryTest {
 
     @Test
     void existsByEmail() {
-        // ARRANGE
+        //ARRANGE
         String email1 = "testing_1@gmail.com";
         String email2 = "non_existing_user@gmail.com";
 
-        // ACT
+        //ACT
         Mono<Boolean> booleanMono1 = userRepository.existsByEmail(email1);
         Mono<Boolean> booleanMono2 = userRepository.existsByEmail(email2);
 
-        // ASSERT
+        //ASSERT
         StepVerifier.create(booleanMono1)
                 .assertNext(Assertions::assertTrue)
                 .verifyComplete();

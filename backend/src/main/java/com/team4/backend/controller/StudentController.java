@@ -2,8 +2,6 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.dto.StudentProfileDto;
-import com.team4.backend.exception.ForbiddenActionException;
-import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.security.UserSessionService;
@@ -12,8 +10,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.security.Principal;

@@ -21,5 +21,5 @@ public class DatabaseConfiguration extends AbstractReactiveMongoConfiguration {
     protected String getDatabaseName() {
         return "projet_integre";
     }
-    
+
 }

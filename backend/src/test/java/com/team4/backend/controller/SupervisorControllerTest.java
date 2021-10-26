@@ -16,7 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -74,14 +73,14 @@ public class SupervisorControllerTest {
         webTestClient
                 .post().uri("/supervisor/register").bodyValue(supervisorDto)
                 .exchange()
-                // ASSERT
+                //ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
                 .expectBody(String.class);
     }
 
     @Test
     void shouldAssignSupervisorToStudents() {
-        // ARRANGE
+        //ARRANGE
         String studentEmail = "teststudent@gmail.com";
         SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
@@ -107,7 +106,7 @@ public class SupervisorControllerTest {
 
     @Test
     void shouldNotAssignSupervisorToStudents() {
-        // ARRANGE
+        //ARRANGE
         SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
         when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), "toto23@outlook.com"))
@@ -128,4 +127,5 @@ public class SupervisorControllerTest {
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
                 .expectBody(String.class);
     }
+
 }

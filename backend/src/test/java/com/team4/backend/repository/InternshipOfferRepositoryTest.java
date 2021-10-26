@@ -15,9 +15,6 @@ import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 @DataMongoTest
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)

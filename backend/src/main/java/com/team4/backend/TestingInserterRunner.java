@@ -16,7 +16,10 @@ import org.springframework.stereotype.Component;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Component
 @Order(1)
@@ -151,7 +154,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .lastName("Renaud")
                         .studentEmails(new HashSet<>()).build(),
                 Supervisor.supervisorBuilder()
-                .email("supervisor1@gmail.com")
+                        .email("supervisor1@gmail.com")
                         .password(pbkdf2Encoder.encode("supervisor123"))
                         .firstName("Michel")
                         .lastName("Lamarck")
