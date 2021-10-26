@@ -99,10 +99,10 @@ public class InternshipOfferController {
         return internshipOfferService.getNotYetValidatedInternshipOffers().map(InternshipOfferMapper::toDto);
     }
 
-    @GetMapping("/interestedStudents/{emailOfMonitor}")
+    @GetMapping("/interestedStudents/{monitorEmail}")
     @PreAuthorize("hasAnyAuthority('MONITOR')")
-    public Flux<InternshipOfferStudentInterestViewDto> internshipOfferInterestedStudents(@PathVariable String emailOfMonitor) {
-        return internshipOfferService.getInterestedStudents(emailOfMonitor);
+    public Flux<InternshipOfferStudentInterestViewDto> internshipOfferInterestedStudents(@PathVariable String monitorEmail) {
+        return internshipOfferService.getInterestedStudents(monitorEmail);
     }
 
     @PatchMapping("/apply/{offerId}")

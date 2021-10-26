@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 public class InternshipOfferCreationDto extends InternshipOfferDetailedDto implements Serializable {
 
-    private String emailOfMonitor;
+    private String monitorEmail;
 
     @Builder(builderMethodName = "internshipOfferCreationDtoBuilder")
     public InternshipOfferCreationDto(String id,
@@ -25,7 +25,7 @@ public class InternshipOfferCreationDto extends InternshipOfferDetailedDto imple
                                       String description,
                                       Float minSalary,
                                       Float maxSalary,
-                                      String emailOfMonitor) {
+                                      String monitorEmail) {
         super(id,
                 title,
                 limitDateToApply,
@@ -35,7 +35,7 @@ public class InternshipOfferCreationDto extends InternshipOfferDetailedDto imple
                 description,
                 minSalary,
                 maxSalary);
-        this.emailOfMonitor = emailOfMonitor;
+        this.monitorEmail = monitorEmail;
     }
 
 }

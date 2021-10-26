@@ -56,7 +56,7 @@ public class InternshipOfferServiceTest {
         InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferCreationDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getEmailOfMonitor()))
+        when(monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getMonitorEmail()))
                 .thenReturn(Mono.just(true));
         when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
 
@@ -73,7 +73,7 @@ public class InternshipOfferServiceTest {
         // ARRANGE
         InternshipOfferCreationDto internshipOfferDTO = InternshipOfferMockData.getInternshipOfferCreationDto();
 
-        when(monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getEmailOfMonitor()))
+        when(monitorService.existsByEmailAndIsEnabledTrue(internshipOfferDTO.getMonitorEmail()))
                 .thenReturn(Mono.just(false));
 
         // ACT
@@ -346,16 +346,16 @@ public class InternshipOfferServiceTest {
     void shouldGetInternshipOfferStudentInterest() {
         // ARRANGE
         List<InternshipOfferStudentInterestViewDto> internshipOffers = InternshipOfferMockData.getListInternshipOfferStudentInterestViewDto(2);
-        String emailOfMonitor = MonitorMockData.getMockMonitor().getEmail();
+        String monitorEmail = MonitorMockData.getMockMonitor().getEmail();
 
-        when(internshipOfferRepository.findAllByEmailOfMonitorAndIsValidatedTrue(emailOfMonitor))
+        when(internshipOfferRepository.findAllByMonitorEmailAndIsValidatedTrue(monitorEmail))
                 .thenReturn(Flux.fromIterable(InternshipOfferMockData.getListInternshipOffer(3)));
 
         internshipOffers.forEach(internshipOffer ->
                 when(studentService.findAllByEmails(any())).thenReturn(Flux.fromIterable(internshipOffer.getInterestedStudentList())));
 
         // ACT
-        Flux<InternshipOfferStudentInterestViewDto> internshipOfferDtoFlux = internshipOfferService.getInterestedStudents(emailOfMonitor);
+        Flux<InternshipOfferStudentInterestViewDto> internshipOfferDtoFlux = internshipOfferService.getInterestedStudents(monitorEmail);
 
         // ASSERT
         StepVerifier.create(internshipOfferDtoFlux)
@@ -454,7 +454,7 @@ public class InternshipOfferServiceTest {
         // ARRANGE
 
         Flux<InternshipOffer> internshipOffers = InternshipOfferMockData.getAllInternshipOffers();
-        when(internshipOfferRepository.findAllByEmailOfMonitorAndIsValidatedTrue(any()))
+        when(internshipOfferRepository.findAllByMonitorEmailAndIsValidatedTrue(any()))
                 .thenReturn(internshipOffers);
 
         String monitorEmail = "sender";
@@ -473,7 +473,7 @@ public class InternshipOfferServiceTest {
         // ARRANGE
 
         Flux<InternshipOffer> internshipOffers = InternshipOfferMockData.getAllInternshipOffers();
-        when(internshipOfferRepository.findAllByEmailOfMonitorAndIsValidatedTrue(any()))
+        when(internshipOfferRepository.findAllByMonitorEmailAndIsValidatedTrue(any()))
                 .thenReturn(internshipOffers);
 
         String monitorEmail = "sender";

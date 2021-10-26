@@ -15,7 +15,7 @@ public abstract class InternshipOfferMapper {
                 .beginningDate(internshipOfferCreationDto.getBeginningDate())
                 .endingDate(internshipOfferCreationDto.getEndingDate())
                 .companyName(internshipOfferCreationDto.getCompanyName())
-                .emailOfMonitor(internshipOfferCreationDto.getEmailOfMonitor())
+                .monitorEmail(internshipOfferCreationDto.getMonitorEmail())
                 .description(internshipOfferCreationDto.getDescription())
                 .minSalary(internshipOfferCreationDto.getMinSalary())
                 .maxSalary(internshipOfferCreationDto.getMaxSalary())

@@ -31,7 +31,7 @@ public class InternshipOffer implements Serializable {
 
     private LocalDate endingDate;
 
-    private String emailOfMonitor;
+    private String monitorEmail;
 
     private String companyName;
 
