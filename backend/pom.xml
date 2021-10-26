@@ -109,8 +109,6 @@
             <version>3.0.12.RELEASE</version>
         </dependency>
 
-
-
         <!-- https://mvnrepository.com/artifact/org.springframework.cloud/spring-cloud-starter-aws -->
         <dependency>
             <groupId>com.amazonaws</groupId>

@@ -19,13 +19,13 @@ public abstract class PdfTemplate {
         this.variables = variables;
     }
 
-    public ByteArrayOutputStream generatePdf(SpringTemplateEngine springTemplateEngine) throws DocumentException {
+    public ByteArrayOutputStream generatePdf(SpringTemplateEngine springTemplateEngine, String css_directory) throws DocumentException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 
         String html = loadAndFillTemplate(springTemplateEngine, getContext());
 
         ITextRenderer renderer = new ITextRenderer(20.0f * 4.0f / 3.0f, 20);
-        renderer.setDocumentFromString(html);
+        renderer.setDocumentFromString(html, css_directory);
         renderer.layout();
         renderer.createPDF(outputStream);
         return outputStream;
