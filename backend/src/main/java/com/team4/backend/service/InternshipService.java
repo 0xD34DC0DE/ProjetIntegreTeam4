@@ -37,7 +37,7 @@ public class InternshipService {
                     InternshipOffer internshipOffer = tuple.getT2();
 
                     return Internship.builder()
-                            .monitorEmail(internshipOffer.getEmailOfMonitor())
+                            .monitorEmail(internshipOffer.getMonitorEmail())
                             .internshipManagerEmail(internshipOffer.getEmailOfApprovingInternshipManager())
                             .studentEmail(student.getEmail())
                             .internshipContract(new InternshipContract())
