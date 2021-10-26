@@ -2,8 +2,12 @@ package com.team4.backend.service;
 
 import com.team4.backend.dto.AuthRequestDto;
 import com.team4.backend.exception.WrongCredentialsException;
+import com.team4.backend.mapping.StudentMapper;
+import com.team4.backend.mapping.UserMapper;
 import com.team4.backend.model.User;
 import com.team4.backend.repository.UserRepository;
+import com.team4.backend.testdata.StudentMockData;
+import com.team4.backend.testdata.UserMockData;
 import com.team4.backend.util.JwtUtil;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.junit.jupiter.api.Assertions;
@@ -12,6 +16,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -104,6 +109,20 @@ public class UserServiceTest {
         //ASSERT
         StepVerifier.create(existsMono)
                 .assertNext(Assertions::assertFalse)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllStudentsByRole(){
+        //ARRANGE
+        when(userRepository.findAllByRoleEquals("STUDENT")).thenReturn(UserMockData.getAllStudents());
+
+        //ACT
+        Flux<User> studentFlux = userService.getAll("STUDENT");
+
+        //ASSERT
+        StepVerifier.create(studentFlux)
+                .expectNextCount(2)
                 .verifyComplete();
     }
 

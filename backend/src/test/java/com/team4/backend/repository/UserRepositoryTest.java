@@ -1,6 +1,7 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.User;
+import com.team4.backend.model.enums.Role;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -32,8 +33,9 @@ public class UserRepositoryTest {
     @BeforeAll
     void init() {
         Flux<User> users = Flux.just(
-                User.userBuilder().email("testing_1@gmail.com").password("password1").isEnabled(true).build(),
-                User.userBuilder().email("testing_2@gmail.com").password("password2").isEnabled(false).build()
+                User.userBuilder().email("testing_1@gmail.com").password("password1").isEnabled(true).role(Role.STUDENT).build(),
+                User.userBuilder().email("testing_2@gmail.com").password("password2").isEnabled(false).role(Role.SUPERVISOR).build(),
+                User.userBuilder().email("testing_3@gmail.com").password("password1").isEnabled(true).role(Role.STUDENT).build()
         );
 
         userRepository.saveAll(users).subscribe();
@@ -81,6 +83,17 @@ public class UserRepositoryTest {
 
         StepVerifier.create(booleanMono2)
                 .assertNext(Assertions::assertFalse)
+                .verifyComplete();
+    }
+
+    @Test
+    void findAllByRole(){
+        // ACT
+        Flux<User> userFlux = userRepository.findAllByRoleEquals("STUDENT");
+
+        // ASSERT
+        StepVerifier.create(userFlux)
+                .expectNextCount(2)
                 .verifyComplete();
     }
 

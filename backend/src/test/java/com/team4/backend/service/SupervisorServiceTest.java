@@ -1,8 +1,12 @@
 package com.team4.backend.service;
 
+import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.exception.UserAlreadyExistsException;
+import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.model.Student;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.repository.SupervisorRepository;
+import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.testdata.SupervisorMockData;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.junit.jupiter.api.Test;
@@ -10,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -29,8 +34,12 @@ public class SupervisorServiceTest {
     @Mock
     UserService userService;
 
+    @Mock
+    StudentService studentService;
+
     @InjectMocks
     SupervisorService supervisorService;
+
 
     @Test
     void shouldCreateSupervisor() {
@@ -121,5 +130,53 @@ public class SupervisorServiceTest {
         StepVerifier.create(supervisorMono)
                 .expectError()
                 .verify();
+    }
+
+    @Test
+    void shouldGetAssignedStudents(){
+        //ARRANGE
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+        Flux<Student> assignedStudents  = StudentMockData.getAssignedStudents();
+
+        when(supervisorRepository.findById(supervisor.getId())).thenReturn(Mono.just(supervisor));
+        when(studentService.findAllByEmails(supervisor.getStudentEmails())).thenReturn(assignedStudents);
+
+        //ACT
+        Flux<StudentDetailsDto> studentDetailsDtoFlux = supervisorService.getAllAssignedStudents(supervisor.getId());
+
+        //ASSERT
+        StepVerifier.create(studentDetailsDtoFlux)
+                .expectNextCount(2)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldGetSupervisor(){
+        //ARRANGE
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+        when(supervisorRepository.findSupervisorByEmail(supervisor.getEmail())).thenReturn(Mono.just(supervisor));
+
+        //ACT
+        Mono<Supervisor> supervisorMono = supervisorService.getSupervisor(supervisor.getEmail());
+
+        //ASSERT
+        StepVerifier.create(supervisorMono)
+                .assertNext(s -> assertEquals(supervisor.getEmail(), s.getEmail()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotGetSupervisor(){
+        //ARRANGE
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+        when(supervisorRepository.findSupervisorByEmail(supervisor.getEmail())).thenReturn(Mono.empty());
+
+        //ACT
+        Mono<Supervisor> supervisorMono = supervisorService.getSupervisor(supervisor.getEmail());
+
+        //ASSERT
+        StepVerifier
+                .create(supervisorMono)
+                .verifyError(UserNotFoundException.class);
     }
 }
