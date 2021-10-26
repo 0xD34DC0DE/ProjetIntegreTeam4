@@ -50,7 +50,7 @@ const DroppableUserCard = ({ user, index }) => {
             Authorization: userInfo.jwt,
           },
           responseType: "json",
-        }).catch((res) => console.log("res", res));
+        }).catch(console.error);
 
         setJustDropped(true);
         setTimeout(() => {

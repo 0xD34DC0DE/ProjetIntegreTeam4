@@ -35,7 +35,6 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
     })
       .then((response) => {
         setOffers(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);

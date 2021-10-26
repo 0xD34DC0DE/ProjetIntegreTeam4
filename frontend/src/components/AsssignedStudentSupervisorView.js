@@ -17,8 +17,6 @@ const AsssignedStudentSupervisorView = ({ visible }) => {
         },
         responseType: "json",
       });
-      console.log("userinfo email", userInfo.email);
-      console.log("res", response.data);
       return response.data;
     };
     const getAssignedStudents = async (id) => {
@@ -33,7 +31,6 @@ const AsssignedStudentSupervisorView = ({ visible }) => {
       setAssignedStudents(response.data);
     };
     var supervisor = await getSupervisor();
-    console.log("supervisor", supervisor.id);
     getAssignedStudents(supervisor.id);
   }, []);
   return (
