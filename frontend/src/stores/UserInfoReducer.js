@@ -1,5 +1,4 @@
 import jwt_decode from "jwt-decode";
-import axios from "axios";
 
 const UserInfoReducer = (state, action) => {
   switch (action.type) {

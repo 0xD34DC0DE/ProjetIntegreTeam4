@@ -27,6 +27,7 @@ public class InternshipOfferDetailedDto extends InternshipOfferDto implements Se
 
     @Builder(builderMethodName = "internshipOfferDetailedDtoBuilder")
     public InternshipOfferDetailedDto(String id,
+                                      String title,
                                       LocalDate limitDateToApply,
                                       LocalDate beginningDate,
                                       LocalDate endingDate,
@@ -35,6 +36,7 @@ public class InternshipOfferDetailedDto extends InternshipOfferDto implements Se
                                       Float minSalary,
                                       Float maxSalary) {
         super(id,
+                title,
                 companyName,
                 description
         );

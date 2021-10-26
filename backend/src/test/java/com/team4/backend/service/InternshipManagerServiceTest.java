@@ -9,7 +9,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -32,7 +31,7 @@ public class InternshipManagerServiceTest {
 
     @Test
     void shouldCreateInternshipManager() {
-        // ARRANGE
+        //ARRANGE
         InternshipManager internshipManager = InternshipManagerMockData.GetInternshipManager();
         internshipManager.setId(null); // Id is null when coming from auto-register
 

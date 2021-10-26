@@ -2,11 +2,8 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.AuthRequestDto;
 import com.team4.backend.dto.UserDto;
-import com.team4.backend.exception.WrongCredentialsException;
 import com.team4.backend.mapping.UserMapper;
-import com.team4.backend.model.User;
 import com.team4.backend.service.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
@@ -34,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping("/getAll")
-    public Flux<UserDto> getAll(@RequestParam String role){
+    public Flux<UserDto> getAll(@RequestParam String role) {
         return userService.getAll(role.toUpperCase()).map(UserMapper::toDto);
     }
 

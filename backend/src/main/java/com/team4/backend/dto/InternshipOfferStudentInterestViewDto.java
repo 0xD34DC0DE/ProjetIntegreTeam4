@@ -16,10 +16,12 @@ public class InternshipOfferStudentInterestViewDto extends InternshipOfferDto im
 
     @Builder(builderMethodName = "internshipOfferStudentInterestViewDtoBuilder")
     public InternshipOfferStudentInterestViewDto(String id,
+                                                 String title,
                                                  String companyName,
                                                  String description,
                                                  List<Student> interestedStudentList) {
         super(id,
+                title,
                 companyName,
                 description
         );

@@ -46,4 +46,5 @@ public class SupervisorController {
     public Mono<SupervisorDetailsDto> getSupervisor(@PathVariable("email") String email) {
         return supervisorService.getSupervisor(email).map(SupervisorMapper::toDetailsDto);
     }
+
 }

@@ -1,5 +1,4 @@
 import React, { useEffect, useState, useContext } from "react";
-import UserCard from "./DraggableUserCard";
 import { Box, Avatar, Typography, Grid, Card } from "@mui/material";
 import axios from "axios";
 import { UserInfoContext } from "../stores/UserInfoStore";
@@ -18,8 +17,6 @@ const AsssignedStudentSupervisorView = ({ visible }) => {
         },
         responseType: "json",
       });
-      console.log("userinfo email", userInfo.email);
-      console.log("res", response.data);
       return response.data;
     };
     const getAssignedStudents = async (id) => {
@@ -34,7 +31,6 @@ const AsssignedStudentSupervisorView = ({ visible }) => {
       setAssignedStudents(response.data);
     };
     var supervisor = await getSupervisor();
-    console.log("supervisor", supervisor.id);
     getAssignedStudents(supervisor.id);
   }, []);
   return (

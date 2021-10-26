@@ -2,7 +2,6 @@ package com.team4.backend.testdata;
 
 public abstract class EmailSenderMockData {
 
-
     public static String getReceiver() {
         return "receiver";
     }
@@ -18,4 +17,5 @@ public abstract class EmailSenderMockData {
     public static String getPrincipalEmail() {
         return "principal@gmail.com";
     }
+
 }

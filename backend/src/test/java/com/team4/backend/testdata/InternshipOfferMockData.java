@@ -8,7 +8,10 @@ import com.team4.backend.model.InternshipOffer;
 import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public abstract class InternshipOfferMockData {
 
@@ -20,9 +23,10 @@ public abstract class InternshipOfferMockData {
                 .endingDate(LocalDate.now().plusMonths(6))
                 .minSalary(22.5f)
                 .maxSalary(23.5f)
-                .companyName("desjardins")
-                .emailOfMonitor("rickJones@desjardins.com")
-                .description("Développeur Web")
+                .companyName("Desjardins")
+                .monitorEmail("rickJones@desjardins.com")
+                .title("Développeur Web")
+                .description("Description de Desjardins")
                 .listEmailInterestedStudents(getInterestedStudentsEmailList())
                 .isValidated(true)
                 .isExclusive(false)
@@ -37,9 +41,10 @@ public abstract class InternshipOfferMockData {
                         .endingDate(LocalDate.now().plusMonths(6))
                         .minSalary(19.0f)
                         .maxSalary(22.0f)
-                        .companyName("umaknow")
-                        .emailOfMonitor("maxime@umaknow.com")
-                        .description("Développeur Frontend")
+                        .companyName("Umaknow")
+                        .monitorEmail("maxime@umaknow.com")
+                        .title("Développeur Web")
+                        .description("Description de Umaknow")
                         .isValidated(true)
                         .isExclusive(true)
                         .listEmailInterestedStudents(getInterestedStudentsEmailList())
@@ -52,8 +57,9 @@ public abstract class InternshipOfferMockData {
                         .minSalary(20.0f)
                         .maxSalary(25.0f)
                         .companyName("CGI")
-                        .emailOfMonitor("patrickNormand@cgi.com")
-                        .description("Technicien en Informatique")
+                        .monitorEmail("patrickNormand@cgi.com")
+                        .title("Technicien informatique")
+                        .description("Description de CGI")
                         .isValidated(false)
                         .isExclusive(false)
                         .listEmailInterestedStudents(getInterestedStudentsEmailList())
@@ -68,9 +74,10 @@ public abstract class InternshipOfferMockData {
                         .endingDate(LocalDate.now().plusMonths(6))
                         .minSalary(19.0f)
                         .maxSalary(22.0f)
-                        .companyName("umaknow")
-                        .emailOfMonitor("maxime@umaknow.com")
-                        .description("Développeur Frontend")
+                        .companyName("Umaknow")
+                        .monitorEmail("maxime@umaknow.com")
+                        .title("Développeur Web")
+                        .description("Description de Umaknow")
                         .isValidated(false)
                         .validationDate(null)
                         .isExclusive(true)
@@ -84,8 +91,9 @@ public abstract class InternshipOfferMockData {
                         .minSalary(20.0f)
                         .maxSalary(25.0f)
                         .companyName("CGI")
-                        .emailOfMonitor("patrickNormand@cgi.com")
-                        .description("Technicien en Informatique")
+                        .monitorEmail("patrickNormand@cgi.com")
+                        .title("Technicien en Informatique")
+                        .description("Description de CGI")
                         .isValidated(false)
                         .validationDate(null)
                         .isExclusive(false)
@@ -96,39 +104,42 @@ public abstract class InternshipOfferMockData {
     public static InternshipOfferDetailedDto getInternshipOfferDetailedDto() {
         return InternshipOfferDetailedDto.internshipOfferDetailedDtoBuilder()
                 .id("234dsd2egd54ter")
+                .title("Développeur Web")
                 .limitDateToApply(LocalDate.now().plusMonths(1))
                 .beginningDate(LocalDate.now().plusMonths(2))
                 .endingDate(LocalDate.now().plusMonths(6))
                 .minSalary(22.5f)
                 .maxSalary(23.5f)
-                .companyName("desjardins")
-                .description("Développeur Web")
+                .companyName("Desjardins")
+                .description("Description de Desjardins")
                 .build();
     }
 
     public static InternshipOfferCreationDto getInternshipOfferCreationDto() {
         return InternshipOfferCreationDto.internshipOfferCreationDtoBuilder()
+                .title("Développeur Web")
                 .limitDateToApply(LocalDate.now().plusMonths(1))
                 .beginningDate(LocalDate.now().plusMonths(2))
                 .endingDate(LocalDate.now().plusMonths(6))
                 .minSalary(22.5f)
                 .maxSalary(23.5f)
-                .companyName("desjardins")
-                .emailOfMonitor("rickJones@desjardins.com")
-                .description("Développeur Web")
+                .companyName("Desjardins")
+                .monitorEmail("rickJones@desjardins.com")
+                .description("Description de Desjardins")
                 .build();
     }
 
     public static InternshipOfferStudentViewDto getInternshipStudentViewDto() {
         return InternshipOfferStudentViewDto.internshipOfferStudentViewDtoBuilder()
                 .id("id")
+                .title("Développeur Web")
                 .limitDateToApply(LocalDate.now().plusMonths(1))
                 .beginningDate(LocalDate.now().plusMonths(2))
                 .endingDate(LocalDate.now().plusMonths(6))
                 .minSalary(22.5f)
                 .maxSalary(23.5f)
-                .companyName("desjardins")
-                .description("Développeur Web")
+                .companyName("Desjardins")
+                .description("Description de Desjardins")
                 .build();
     }
 
@@ -171,6 +182,7 @@ public abstract class InternshipOfferMockData {
     public static InternshipOfferStudentInterestViewDto getInternshipStudentInterestViewDto() {
         return InternshipOfferStudentInterestViewDto.internshipOfferStudentInterestViewDtoBuilder()
                 .id("id")
+                .title("title")
                 .companyName("company")
                 .description("description")
                 .interestedStudentList(StudentMockData.getListStudent(2))
@@ -190,4 +202,5 @@ public abstract class InternshipOfferMockData {
 
         return internshipOffers;
     }
+
 }

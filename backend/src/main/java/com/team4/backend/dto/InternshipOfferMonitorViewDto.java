@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -19,6 +18,7 @@ public class InternshipOfferMonitorViewDto extends InternshipOfferDetailedDto im
 
     @Builder(builderMethodName = "internshipOfferMonitorViewDtoBuilder")
     public InternshipOfferMonitorViewDto(String id,
+                                         String title,
                                          LocalDate limitDateToApply,
                                          LocalDate beginningDate,
                                          LocalDate endingDate,
@@ -28,6 +28,7 @@ public class InternshipOfferMonitorViewDto extends InternshipOfferDetailedDto im
                                          Float maxSalary,
                                          Set<String> listEmailInterestedStudents) {
         super(id,
+                title,
                 limitDateToApply,
                 beginningDate,
                 endingDate,

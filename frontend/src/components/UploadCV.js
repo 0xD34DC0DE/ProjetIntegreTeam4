@@ -1,15 +1,17 @@
 import axios from "axios";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useContext } from "react";
 import { Button, Paper, Typography, Grid } from "@mui/material";
 import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { motion } from "framer-motion";
+import { UserInfoContext } from "../stores/UserInfoStore";
 
 const UploadCV = ({ visible }) => {
   const [file, setFile] = useState();
   const [errorMessage, setErrorMessage] = useState("");
   const inputFileRef = useRef();
   const [cvSent, setCvSent] = useState(false);
+  const [userInfo] = useContext(UserInfoContext);
 
   const validFileType = ["application/pdf"];
 
@@ -27,7 +29,7 @@ const UploadCV = ({ visible }) => {
       url: "/file",
       data: formData,
       headers: {
-        Authorization: sessionStorage.getItem("jwt"),
+        Authorization: userInfo.jwt,
       },
     })
       .then((response) => {

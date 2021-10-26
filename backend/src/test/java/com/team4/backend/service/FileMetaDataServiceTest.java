@@ -98,7 +98,7 @@ class FileMetaDataServiceTest {
     }
 
     @Test
-    void shouldUploadFile() throws  IOException {
+    void shouldUploadFile() throws IOException {
         //ARRANGE
         when(fileAssetService.create(filepath, userEmail, mimeType, uuid)).thenReturn(Mono.just(location));
 

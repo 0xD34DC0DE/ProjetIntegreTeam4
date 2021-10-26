@@ -17,9 +17,9 @@ public class ValidatingPageRequestTest {
 
     @Test
     void getPageRequestValid() {
-        // ASSERT
+        //ASSERT
         assertDoesNotThrow(() ->
-                // ACT
+                //ACT
                 ValidatingPageRequest.getPageRequest(1, 1)
         );
     }
@@ -29,7 +29,7 @@ public class ValidatingPageRequestTest {
         //ARRANGE
         Mono<PageRequest> pageRequestMono;
 
-        // ACT
+        //ACT
         pageRequestMono = ValidatingPageRequest.getPageRequestMono(1, 1);
 
         //ASSERT
@@ -40,45 +40,45 @@ public class ValidatingPageRequestTest {
 
     @Test
     void getPageRequestInvalidSize() {
-        // ASSERT
+        //ASSERT
         assertThrows(InvalidPageRequestException.class, () ->
-                // ACT
+                //ACT
                 ValidatingPageRequest.getPageRequest(1, 0)
         );
     }
 
     @Test
     void getPageRequestInvalidPage() {
-        // ASSERT
+        //ASSERT
         assertThrows(InvalidPageRequestException.class, () ->
-                // ACT
+                //ACT
                 ValidatingPageRequest.getPageRequest(-1, 1)
         );
     }
 
     @Test
     void getPageRequestInvalidNullSize() {
-        // ASSERT
+        //ASSERT
         assertThrows(InvalidPageRequestException.class, () ->
-                // ACT
+                //ACT
                 ValidatingPageRequest.getPageRequest(1, null)
         );
     }
 
     @Test
     void getPageRequestInvalidNullPage() {
-        // ASSERT
+        //ASSERT
         assertThrows(InvalidPageRequestException.class, () ->
-                // ACT
+                //ACT
                 ValidatingPageRequest.getPageRequest(null, 1)
         );
     }
 
     @Test
     void getPageRequestInvalidNullPageNullSize() {
-        // ASSERT
+        //ASSERT
         assertThrows(InvalidPageRequestException.class, () ->
-                // ACT
+                //ACT
                 ValidatingPageRequest.getPageRequest(null, null)
         );
     }
@@ -88,10 +88,10 @@ public class ValidatingPageRequestTest {
         //ARRANGE
         List<Integer> values = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
 
-        // ACT
+        //ACT
         Flux<Integer> pagedFlux = ValidatingPageRequest.applyPaging(values, 1, 2);
 
-        // ASSERT
+        //ASSERT
         StepVerifier.create(pagedFlux)
                 .expectNext(3)
                 .expectNext(4)
@@ -103,10 +103,10 @@ public class ValidatingPageRequestTest {
         //ARRANGE
         List<Integer> values = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
 
-        // ACT
+        //ACT
         Flux<Integer> pagedFlux = ValidatingPageRequest.applyPaging(values, 2, 2);
 
-        // ASSERT
+        //ASSERT
         StepVerifier.create(pagedFlux)
                 .expectNext(5)
                 .verifyComplete();
@@ -117,10 +117,10 @@ public class ValidatingPageRequestTest {
         //ARRANGE
         List<Integer> values = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
 
-        // ACT
+        //ACT
         Flux<Integer> pagedFlux = ValidatingPageRequest.applyPaging(values, 2, 3);
 
-        // ASSERT
+        //ASSERT
         StepVerifier.create(pagedFlux)
                 .expectNextCount(0)
                 .verifyComplete();
@@ -131,10 +131,10 @@ public class ValidatingPageRequestTest {
         //ARRANGE
         List<Integer> values = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 5));
 
-        // ACT
+        //ACT
         Flux<Integer> pagedFlux = ValidatingPageRequest.applyPaging(values, -1, 1);
 
-        // ASSERT
+        //ASSERT
         StepVerifier.create(pagedFlux)
                 .expectError(InvalidPageRequestException.class)
                 .verify();

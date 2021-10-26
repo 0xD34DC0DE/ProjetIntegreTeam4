@@ -1,7 +1,6 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
-import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.mapping.FileMetaDataMapper;
 import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.FileMetaDataService;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -27,8 +25,8 @@ public class FileMetaDataController {
     @PostMapping
     @PreAuthorize("hasAuthority('STUDENT')")
     public Mono<ResponseEntity<String>> uploadFile(@RequestPart("filename") String filename,
-            @RequestPart("type") String type, @RequestPart("mimeType") String mimeType,
-            @RequestPart("file") Mono<FilePart> filePartMono, Principal principal) {
+                                                   @RequestPart("type") String type, @RequestPart("mimeType") String mimeType,
+                                                   @RequestPart("file") Mono<FilePart> filePartMono, Principal principal) {
         return fileMetaDataService
                 .uploadFile(filename, type, mimeType, filePartMono, UserSessionService.getLoggedUserEmail(principal))
                 .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")));
@@ -49,7 +47,7 @@ public class FileMetaDataController {
     @PatchMapping("/validateCv")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Mono<ResponseEntity<String>> validateCv(@RequestParam("id") String id,
-            @RequestParam("isValid") Boolean isValid) {
+                                                   @RequestParam("isValid") Boolean isValid) {
         return fileMetaDataService.validateCv(id, isValid)
                 .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }

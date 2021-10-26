@@ -10,7 +10,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @Data
@@ -23,13 +22,15 @@ public class InternshipOffer implements Serializable {
     @Id
     private String id;
 
+    private String title;
+
     private LocalDate limitDateToApply;
 
     private LocalDate beginningDate;
 
     private LocalDate endingDate;
 
-    private String emailOfMonitor;
+    private String monitorEmail;
 
     private String companyName;
 
