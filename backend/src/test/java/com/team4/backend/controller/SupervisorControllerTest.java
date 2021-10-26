@@ -178,8 +178,9 @@ public class SupervisorControllerTest {
                 .get()
                 .uri("/supervisor/"+supervisor.getEmail())
                 .exchange()
-                //ASSERT
-                .expectStatus().isNotFound()
+        //ASSERT
+                .expectStatus()
+                .isNotFound()
                 .expectBody(SupervisorDetailsDto.class);
     }
 }

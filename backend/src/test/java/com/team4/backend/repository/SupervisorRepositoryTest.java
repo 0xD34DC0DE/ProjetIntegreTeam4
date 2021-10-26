@@ -30,7 +30,8 @@ public class SupervisorRepositoryTest {
     @BeforeAll
     void init(){
         Flux<Supervisor> supervisors = Flux.just(Supervisor.supervisorBuilder()
-        .email("supervisortest@gmail.com").build());
+                .email("supervisortest@gmail.com")
+                .build());
 
         supervisorRepository.saveAll(supervisors).subscribe();
     }
@@ -57,7 +58,8 @@ public class SupervisorRepositoryTest {
         Mono<Supervisor> supervisor = supervisorRepository.findSupervisorByEmail(supervisorEmail);
 
         //ASSERT
-        StepVerifier.create(supervisor)
+        StepVerifier
+                .create(supervisor)
                 .expectNextCount(0)
                 .verifyComplete();
     }

@@ -175,7 +175,8 @@ public class SupervisorServiceTest {
         Mono<Supervisor> supervisorMono = supervisorService.getSupervisor(supervisor.getEmail());
 
         //ASSERT
-        StepVerifier.create(supervisorMono)
+        StepVerifier
+                .create(supervisorMono)
                 .verifyError(UserNotFoundException.class);
     }
 }
