@@ -10,6 +10,8 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface FileMetaDataRepository extends ReactiveMongoRepository<FileMetaData, String> {
     Flux<FileMetaData> findFileMetaDataById(String id);
+
     Mono<Long> countAllByIsValidFalseAndIsSeenFalse();
+
     Flux<FileMetaData> findAllByIsValidFalseAndIsSeenFalse(Pageable pageable);
 }

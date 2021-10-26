@@ -1,12 +1,14 @@
 package com.team4.backend.testdata;
 
 import com.team4.backend.dto.StudentDetailsDto;
-import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.StudentState;
 import reactor.core.publisher.Flux;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public abstract class StudentMockData {
 
@@ -55,7 +57,7 @@ public abstract class StudentMockData {
     public static List<Student> getListStudent(int count) {
         List<Student> students = new ArrayList<>();
 
-        for(int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {
             Student student = Student.studentBuilder()
                     .id("id_" + i)
                     .build();
@@ -70,7 +72,7 @@ public abstract class StudentMockData {
         Set<String> exclusiveOffers = new HashSet<>();
         exclusiveOffers.add("exclusive_id_1");
         exclusiveOffers.add("exclusive_id_2");
-        return  exclusiveOffers;
+        return exclusiveOffers;
     }
 
 }

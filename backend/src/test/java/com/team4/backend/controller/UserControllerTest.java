@@ -69,12 +69,12 @@ public class UserControllerTest {
 
     @Test
     public void isEmailTakenTrue() {
-        // ARRANGE
+        //ARRANGE
         String email = "testing@gmail.com";
 
         when(userService.existsByEmail(email)).thenReturn(Mono.just(true));
 
-        // ACT
+        //ACT
         webTestClient
                 .get()
                 .uri("/user/email/testing@gmail.com")
@@ -86,12 +86,12 @@ public class UserControllerTest {
 
     @Test
     public void isEmailTakenFalse() {
-        // ARRANGE
+        //ARRANGE
         String email = "non_existing@gmail.com";
 
         when(userService.existsByEmail(email)).thenReturn(Mono.just(false));
 
-        // ACT
+        //ACT
         webTestClient
                 .get()
                 .uri("/user/email/non_existing@gmail.com")
