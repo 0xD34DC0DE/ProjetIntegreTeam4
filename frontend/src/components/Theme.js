@@ -66,10 +66,10 @@ const theme = createTheme({
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: "rgba(100, 100, 100, 0.5)",
           },
-          "& .MuiOutlinedInput-input.Mui-disabled" : {
+          "& .MuiOutlinedInput-input.Mui-disabled": {
             backgroundColor: "rgba(255, 255, 255, 0.4)",
-            opacity: 1
-          }
+            opacity: 1,
+          },
         },
       },
     },
@@ -86,6 +86,14 @@ const theme = createTheme({
           "& .MuiButtonBase-root.Mui-selected": {
             color: "white",
           },
+        },
+      },
+    },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          color: "white",
+          backgroundColor: "rgba(55, 55, 55, 0.5)",
         },
       },
     },
