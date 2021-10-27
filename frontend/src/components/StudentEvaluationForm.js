@@ -43,11 +43,22 @@ const StudentEvaluationForm = () => {
               {internFields.map((field, key) => {
                 return (
                   <>
-                    <Grid item xl={2} lg={2} md={2} sm={2} xs={2}>
-                      <Typography variant="caption">{field} : </Typography>
+                    <Grid item xl={1.5} lg={1.5} md={1.5} sm={1.5} xs={1.5}>
+                      <Typography variant="caption">{field}</Typography>
                     </Grid>
-                    <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
-                      <TextField variant="standard" fullWidth></TextField>
+                    <Grid
+                      item
+                      xl={10.5}
+                      lg={10.5}
+                      md={10.5}
+                      sm={10.5}
+                      xs={10.5}
+                    >
+                      <TextField
+                        variant="standard"
+                        sx={{ "& .MuiInput-input": { fontSize: "0.8em" } }}
+                        fullWidth
+                      ></TextField>
                     </Grid>
                   </>
                 );
@@ -175,8 +186,10 @@ const StudentEvaluationForm = () => {
               </Grid>
             </Grid>
           </AccordionSummary>
-          <AccordionDetails sx={{ backgroundColor: "rgba(35, 35, 35, 0.6)" }}>
-            <Grid container textAlign="center">
+          <AccordionDetails
+            sx={{ backgroundColor: "rgba(35, 35, 35, 0.6)", pb: 1 }}
+          >
+            <Grid container textAlign="center" alignItems="center">
               {appreciationFields.map((field, key) => {
                 return (
                   <>
