@@ -8,12 +8,24 @@ import org.xhtmlrenderer.pdf.ITextRenderer;
 import java.io.ByteArrayOutputStream;
 import java.util.Map;
 
+/**
+ * Abstract class to be extended with a concrete class to represent a custom pdf template
+ *
+ * The constructor of the extending class should take Map&lt;String, Object> and call super by passing
+ * the filename of the html template file (located in resources/pdf/) without the .html extension
+ */
 public abstract class PdfTemplate {
 
     private final String template_filename;
 
     private final Map<String, Object> variables;
 
+    /**
+     *
+     * @param template_filename filename of the template html file (located in resources/pdf/) without
+     *                          the .html extension
+     * @param variables Map of the objects used in the html template and their variable names.
+     */
     protected PdfTemplate(String template_filename, Map<String, Object> variables) {
         this.template_filename = template_filename;
         this.variables = variables;

@@ -21,17 +21,18 @@ public class PdfService {
 
     private final String cssResourcesAbsolutePath;
 
-    @Qualifier("thymeleafTemplateEngine")
     private final SpringTemplateEngine templateEngine;
-
-    private final ResourceLoader resourceLoader;
 
     public PdfService(SpringTemplateEngine templateEngine, ResourceLoader resourceLoader) throws IOException {
         this.templateEngine = templateEngine;
-        this.resourceLoader = resourceLoader;
         this.cssResourcesAbsolutePath = new ClassPathResource(PDF_CSS_DIR).getURL().toExternalForm();
     }
 
+    /**
+     * Render the pdf to a byte object using the given template object
+     * @param pdfTemplate Object of a class that extends pdfTemplate
+     * @return Byte array of the generated pdf
+     */
     public Mono<byte[]> renderPdf(PdfTemplate pdfTemplate) {
         try {
             ByteArrayOutputStream outputStream = pdfTemplate.generatePdf(templateEngine, cssResourcesAbsolutePath);
