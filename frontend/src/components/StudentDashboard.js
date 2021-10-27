@@ -120,6 +120,7 @@ const StudentDashBoard = ({ visible }) => {
                 p: 15,
                 mt: 10,
                 maxWidth: 1000,
+                border:"0.5px solid grey",
                 alignItems:"center",
                 backgroundColor: "rgba(0, 0, 0, 0.1)",
                 flexGrow: 1,
@@ -133,7 +134,7 @@ const StudentDashBoard = ({ visible }) => {
                 justifyContent="center"
               >
                 <Grid item>
-                  <Avatar sx={{ width: 200, height: 200 }}>
+                  <Avatar sx={{ width: 200, height: 200, border:"1px solid white",boxShadow:6 }}>
                     {profile.firstName.charAt(0)}
                   </Avatar>
                 </Grid>
