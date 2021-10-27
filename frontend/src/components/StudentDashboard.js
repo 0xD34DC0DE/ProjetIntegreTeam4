@@ -118,8 +118,9 @@ const StudentDashBoard = ({ visible }) => {
             <Card
               sx={{
                 p: 15,
-                margin: "auto",
+                mt: 10,
                 maxWidth: 1000,
+                alignItems:"center",
                 backgroundColor: "rgba(0, 0, 0, 0.1)",
                 flexGrow: 1,
                 boxShadow: 6,
@@ -199,7 +200,7 @@ const StudentDashBoard = ({ visible }) => {
                     <Select
                       sx={{
                         margin: "auto",
-
+                        border:"1px solid white",
                         display: "flex",
                         justifyContent: "center",
                         boxShadow: 3,

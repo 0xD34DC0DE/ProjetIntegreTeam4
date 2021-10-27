@@ -48,8 +48,8 @@ public abstract class StudentMapper {
                 .registrationDate(student.getRegistrationDate())
                 .phoneNumber(student.getPhoneNumber())
                 .studentState(student.getStudentState())
-                .nbrOfAppliedOffers(student.getAppliedOffersId().isEmpty() ? student.getAppliedOffersId().size() : 0)
-                .nbrOfExclusiveOffers(student.getExclusiveOffersId().isEmpty() ? student.getExclusiveOffersId().size() : 0)
+                .nbrOfAppliedOffers(student.getAppliedOffersId().size())
+                .nbrOfExclusiveOffers(student.getExclusiveOffersId().size())
                 .hasValidCv(student.getHasValidCv())
                 .recentInterviewDate(student.getInterviewsDate().isEmpty() ? null : Collections.max(student.getInterviewsDate()))
                 .build();
