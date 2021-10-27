@@ -165,4 +165,13 @@ public class InternshipOfferService {
         });
     }
 
+    private Flux<InternshipOffer> getAllNonValidatedOffers(LocalDate sessionStart, LocalDate sessionEnd) {
+        return internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyBetween(sessionStart, sessionEnd);
+    }
+
+    private Flux<InternshipOffer> getAllValidatedOffers(LocalDate sessionStart, LocalDate sessionEnd) {
+        return internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyBetween(sessionStart, sessionEnd);
+    }
+
+
 }

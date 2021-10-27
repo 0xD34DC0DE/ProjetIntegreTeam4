@@ -13,6 +13,8 @@ import reactor.core.publisher.Mono;
 
 import java.util.Set;
 
+import static com.team4.backend.model.enums.StudentState.*;
+
 @Service
 public class StudentService {
 
@@ -21,6 +23,7 @@ public class StudentService {
     private final PBKDF2Encoder pbkdf2Encoder;
 
     private final UserService userService;
+
 
     public StudentService(StudentRepository studentRepository, PBKDF2Encoder pbkdf2Encoder, UserService userService) {
         this.studentRepository = studentRepository;
@@ -61,7 +64,7 @@ public class StudentService {
 
     public Mono<Student> updateStudentState(String email, StudentState studentState) {
         return findByEmail(email)
-                .filter(student -> student.getStudentState().equals(StudentState.WAITING_FOR_RESPONSE))
+                .filter(student -> student.getStudentState().equals(WAITING_FOR_RESPONSE))
                 .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update your state if you're not waiting for a response to your recent interview!")))
                 .map(student -> {
                     //TODO --> call function that will trigger the contract generation
@@ -76,6 +79,41 @@ public class StudentService {
             return studentRepository.save(student);
         }
         return Mono.just(student);
+    }
+
+    public Mono<Student> setHasCvStatusTrue(String email) {
+        return studentRepository.findByEmail(email).flatMap(student -> {
+            student.setHasCv(true);
+            return studentRepository.save(student);
+        });
+    }
+
+    public Flux<Student> getAll() {
+        return studentRepository.findAllByRole("STUDENT");
+    }
+
+    public Flux<Student> getAllStudentsWithUnvalidatedCv() {
+        return studentRepository.findAllByHasValidCvFalse();
+    }
+
+    public Flux<Student> getAllStudentsWithNoCv() {
+        return studentRepository.findAllByHasCvFalse();
+    }
+
+    public Flux<Student> getStudentsNoInternship() {
+        return studentRepository.findAllByStudentState(REGISTERED);
+    }
+
+    public Flux<Student> getStudentsWaitingInterview() {
+        return studentRepository.findAllByStudentState(INTERNSHIP_NOT_FOUND);
+    }
+
+    public Flux<Student> getStudentsWaitingResponse() {
+        return studentRepository.findAllByStudentState(WAITING_FOR_RESPONSE);
+    }
+
+    public Flux<Student> getStudentsWithInternship() {
+        return studentRepository.findAllByStudentState(INTERNSHIP_FOUND);
     }
 
 }

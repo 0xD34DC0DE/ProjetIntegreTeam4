@@ -61,19 +61,21 @@ public class FileMetaDataService {
                                 // the file inside
                                 .switchIfEmpty(Mono.just(tempFile)))
                 )
-                .flatMap(tempFile ->
-                        fileAssetService.create(tempFile.getPath(), userEmail, mimeType, getUuid())
-                                .flatMap(assetId -> Mono.just(FileMetaData.builder()
-                                        .id(getUuid())
-                                        .userEmail(userEmail)
-                                        .isValid(false)
-                                        .isSeen(false)
-                                        .assetId(assetId)
-                                        .type(UploadType.valueOf(type))
-                                        .uploadDate(LocalDateTime.now())
-                                        .filename(filename)
-                                        .build()))
-                                .flatMap(this::create));
+                .flatMap(tempFile -> {
+                        studentService.setHasCvStatusTrue(userEmail);
+                        return fileAssetService.create(tempFile.getPath(), userEmail, mimeType, getUuid())
+                                    .flatMap(assetId -> Mono.just(FileMetaData.builder()
+                                            .id(getUuid())
+                                            .userEmail(userEmail)
+                                            .isValid(false)
+                                            .isSeen(false)
+                                            .assetId(assetId)
+                                            .type(UploadType.valueOf(type))
+                                            .uploadDate(LocalDateTime.now())
+                                            .filename(filename)
+                                            .build()))
+                                    .flatMap(this::create);
+                });
     }
 
     public Mono<Long> countAllInvalidCvNotSeen() {

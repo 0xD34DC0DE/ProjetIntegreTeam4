@@ -85,6 +85,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .phoneNumber("4387650987")
                         .password(pbkdf2Encoder.encode("travis123"))
                         .hasValidCv(true)
+                        .hasCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
                         .studentState(StudentState.WAITING_FOR_RESPONSE)
@@ -96,6 +97,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .phoneNumber("5143245678")
                         .password(pbkdf2Encoder.encode("jean123"))
                         .hasValidCv(false)
+                        .hasCv(true)
                         .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
@@ -106,6 +108,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .phoneNumber("4385738764")
                         .password(pbkdf2Encoder.encode("farid123"))
                         .hasValidCv(false)
+                        .hasCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
@@ -120,6 +123,19 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .exclusiveOffersId(new HashSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .hasValidCv(false)
+                        .hasCv(true)
+                        .build(),
+                Student.studentBuilder()
+                        .email("nocv@gmail.com")
+                        .firstName("no")
+                        .lastName("cv")
+                        .phoneNumber("4385738764")
+                        .password(pbkdf2Encoder.encode("student"))
+                        .appliedOffersId(new HashSet<>())
+                        .exclusiveOffersId(new HashSet<>())
+                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .hasValidCv(false)
+                        .hasCv(false)
                         .build(),
                 Student.studentBuilder()
                         .email("student@gmail.com")
@@ -134,6 +150,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                                 add(insertInternshipOffersStudentView());
                             }
                         }).build());
+
 
         studentRepository.saveAll(students)
                 .subscribe(student -> log.info("Student has been saved : {}", student));

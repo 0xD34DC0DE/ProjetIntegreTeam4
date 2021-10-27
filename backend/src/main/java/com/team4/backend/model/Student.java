@@ -16,6 +16,8 @@ import java.util.Set;
 @Document(collection = "users")
 public class Student extends User {
 
+    private Boolean hasCv;
+
     private StudentState studentState;
 
     private Boolean hasValidCv;
@@ -35,7 +37,8 @@ public class Student extends User {
                    LocalDate registrationDate,
                    Set<String> appliedOffersId,
                    Set<String> exclusiveOffersId,
-                   Boolean hasValidCv) {
+                   Boolean hasValidCv,
+                   Boolean hasCv) {
         super(id,
                 email,
                 firstName,
@@ -50,6 +53,7 @@ public class Student extends User {
         this.appliedOffersId = appliedOffersId;
         this.exclusiveOffersId = exclusiveOffersId;
         this.hasValidCv = hasValidCv;
+        this.hasCv = hasCv;
     }
 
 }
