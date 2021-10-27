@@ -36,7 +36,7 @@ public class ReportController {
         return studentService.getAll();
     }
 
-    @GetMapping("/getStudentsNoOffer")
+    @GetMapping("/getStudentsNoInternship")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Flux<Student> getStudentsNoInternship() {
         return studentService.getStudentsNoInternship();
