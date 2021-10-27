@@ -93,7 +93,7 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           color: "white",
-          backgroundColor: "rgba(55, 55, 55, 0.5)",
+          backgroundColor: "rgba(55, 55, 55, 1)",
         },
       },
     },

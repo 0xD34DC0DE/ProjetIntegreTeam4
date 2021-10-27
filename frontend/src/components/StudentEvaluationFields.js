@@ -53,3 +53,14 @@ export const fields = [
     ],
   },
 ];
+
+export const ratings = [
+  { value: 5, label: "Totalement en accord" },
+  { value: 4, label: "Plutôt en accord" },
+  { value: 3, label: "Plutôt en désaccord" },
+  {
+    value: 2,
+    label: "Totalement en désaccord",
+  },
+  { value: 1, label: "N/A" },
+];
