@@ -152,15 +152,15 @@ const StudentDashBoard = ({ visible }) => {
                         variant="subtitle1"
                         component="div"
                       >
-                        {profile.lastName}, {profile.firstName}
+                        Name : {profile.lastName}, {profile.firstName}
                         <AccountCircleIcon />
                       </Typography>
                       <Typography variant="body2" component="div" gutterBottom>
-                        {profile.phoneNumber}
+                        N° de téléphone : {profile.phoneNumber}
                         <PhoneAndroidIcon />
                       </Typography>
                       <Typography variant="body2" component="div" gutterBottom>
-                        {profile.registrationDate}
+                        Membre depuis : {profile.registrationDate}
                         <TodayIcon />
                       </Typography>
                       {profile.hasValidCv ? (
@@ -216,9 +216,7 @@ const StudentDashBoard = ({ visible }) => {
                         <MenuItem
                           key={key}
                           value={value}
-                          disabled={
-                            value === listState[0] || value === listState[2]
-                          }
+                          disabled={value === listState[2] || value === listState[0]}
                           sx={{ color: "white" }}
                         >
                           {listStateFrench[listState.indexOf(value)]}

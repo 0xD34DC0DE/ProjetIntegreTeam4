@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Service
@@ -66,6 +67,16 @@ public class StudentService {
                 .map(student -> {
                     //TODO --> call function that will trigger the contract generation
                     student.setStudentState(studentState);
+                    return student;
+                }).flatMap(studentRepository::save);
+    }
+
+    public Mono<Student> updateInterviewDate(String email, LocalDate interviewDate) {
+        return findByEmail(email)
+                .filter(student -> !student.getStudentState().equals(StudentState.INTERNSHIP_FOUND))
+                .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update the interview date if you already have an internship")))
+                .map(student -> {
+                    student.getInterviewsDate().add(interviewDate);
                     return student;
                 }).flatMap(studentRepository::save);
     }

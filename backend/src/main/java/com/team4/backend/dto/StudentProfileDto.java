@@ -20,6 +20,8 @@ public class StudentProfileDto extends UserProfileDto implements Serializable {
 
     private Boolean hasValidCv;
 
+    private LocalDate recentInterviewDate;
+
     @Builder
     public StudentProfileDto(String id,
                              String email,
@@ -30,11 +32,13 @@ public class StudentProfileDto extends UserProfileDto implements Serializable {
                              StudentState studentState,
                              Integer nbrOfExclusiveOffers,
                              Integer nbrOfAppliedOffers,
-                             Boolean hasValidCv) {
+                             Boolean hasValidCv,
+                             LocalDate recentInterviewDate) {
         super(id, email, firstName, lastName, registrationDate, phoneNumber);
         this.studentState = studentState;
         this.nbrOfExclusiveOffers = nbrOfExclusiveOffers;
         this.nbrOfAppliedOffers = nbrOfAppliedOffers;
         this.hasValidCv = hasValidCv;
+        this.recentInterviewDate = recentInterviewDate;
     }
 }
