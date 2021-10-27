@@ -3,6 +3,7 @@ import {
   AccordionActions,
   AccordionDetails,
   AccordionSummary,
+  Paper,
   Grid,
   Button,
   Typography,
@@ -13,7 +14,12 @@ import { fields, ratings } from "./StudentEvaluationFields";
 
 const StudentEvaluationForm = () => {
   return (
-    <Grid container px={5}>
+    <Grid container px={5} pb={3}>
+      <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+        <Paper>
+          <p>asd</p>
+        </Paper>
+      </Grid>
       {fields.map((section, key) => {
         return (
           <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={5}>
@@ -33,49 +39,21 @@ const StudentEvaluationForm = () => {
                 </Grid>
               </AccordionSummary>
               <AccordionDetails
-                sx={{ backgroundColor: "rgba(35, 35, 35, 0.6)" }}
+                sx={{ backgroundColor: "rgba(35, 35, 35, 0.6)", pb: 1 }}
               >
                 <Grid container>
-                  <Grid item xl={4} lg={4} md={4} sm={4} xs={4} mt={2}>
-                    <Grid container flexDirection="column">
-                      {section.tasks.map((task, key2) => {
-                        return (
-                          <Grid
-                            item
-                            xl={12}
-                            lg={12}
-                            md={12}
-                            sm={12}
-                            xs={12}
-                            mt={3}
-                          >
-                            <Typography variant="caption">
-                              {key2 + 1}) {task}
-                            </Typography>
-                          </Grid>
-                        );
-                      })}
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    item
-                    xl={8}
-                    lg={8}
-                    md={8}
-                    sm={8}
-                    xs={8}
-                    sx={{ textAlign: "center" }}
-                  >
-                    <Grid container>
+                  <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                    <Grid container flexDirection="row" textAlign="center">
+                      <Grid item xl={6} lg={6} md={6} sm={6} xs={6}></Grid>
                       {ratings.map((rating, key3) => {
                         return (
                           <Grid
                             item
-                            xl={2.4}
-                            lg={2.4}
-                            md={2.4}
-                            sm={2.4}
-                            xs={2.4}
+                            xl={1.2}
+                            lg={1.2}
+                            md={1.2}
+                            sm={1.2}
+                            xs={1.2}
                           >
                             <Typography
                               variant="caption"
@@ -89,28 +67,48 @@ const StudentEvaluationForm = () => {
                           </Grid>
                         );
                       })}
+                    </Grid>
+                  </Grid>
+                  <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                    <Grid container flexDirection="row">
+                      {section.tasks.map((task, key2) => {
+                        return (
+                          <>
+                            <Grid
+                              item
+                              xl={6}
+                              lg={6}
+                              md={6}
+                              sm={6}
+                              xs={6}
+                              alignSelf="center"
+                            >
+                              <Typography variant="caption">
+                                {key2 + 1}) {task}
+                              </Typography>
+                            </Grid>
 
-                      <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={2}>
-                        <Grid container flexDirection="row">
-                          {ratings.map((task, key3) => {
-                            return section.tasks.map((_, key4) => {
+                            {ratings.map((task, key3) => {
                               return (
                                 <Grid
                                   item
-                                  xl={2.4}
-                                  lg={2.4}
-                                  md={2.4}
-                                  sm={2.4}
-                                  xs={2.4}
-                                  mb={0.25}
+                                  textAlign="center"
+                                  xl={1.2}
+                                  lg={1.2}
+                                  md={1.2}
+                                  sm={1.2}
+                                  xs={1.2}
                                 >
-                                  <Radio value={key3} name={"radio" + key3} />
+                                  <Radio
+                                    value={key3}
+                                    name={"radio" + key2 + "_" + key3}
+                                  ></Radio>
                                 </Grid>
                               );
-                            });
-                          })}
-                        </Grid>
-                      </Grid>
+                            })}
+                          </>
+                        );
+                      })}
                     </Grid>
                   </Grid>
                 </Grid>
