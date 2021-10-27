@@ -8,17 +8,53 @@ import {
   Button,
   Typography,
   Radio,
+  TextField,
 } from "@mui/material";
 import React from "react";
-import { fields, ratings } from "./StudentEvaluationFields";
+import {
+  appreciationFields,
+  fields,
+  internFields,
+  ratingFields,
+} from "./StudentEvaluationFields";
 
 const StudentEvaluationForm = () => {
   return (
     <Grid container px={5} pb={3}>
-      <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
-        <Paper>
-          <p>asd</p>
-        </Paper>
+      <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={3}>
+        <Accordion>
+          <AccordionSummary>
+            <Grid container flexDirection="row" textAlign="center">
+              <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{ fontSize: "1.75em", lineHeight: "100%" }}
+                >
+                  Évaluation de l'étudiant
+                </Typography>
+              </Grid>
+              <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                <Typography variant="caption">Coordonnées des pairs</Typography>
+              </Grid>
+            </Grid>
+          </AccordionSummary>
+          <AccordionDetails sx={{ backgroundColor: "rgba(35, 35, 35, 0.6)" }}>
+            <Grid container>
+              {internFields.map((field, key) => {
+                return (
+                  <>
+                    <Grid item xl={2} lg={2} md={2} sm={2} xs={2}>
+                      <Typography variant="caption">{field} : </Typography>
+                    </Grid>
+                    <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
+                      <TextField variant="standard" fullWidth></TextField>
+                    </Grid>
+                  </>
+                );
+              })}
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
       </Grid>
       {fields.map((section, key) => {
         return (
@@ -27,7 +63,10 @@ const StudentEvaluationForm = () => {
               <AccordionSummary>
                 <Grid container flexDirection="row" textAlign="center">
                   <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
-                    <Typography variant="subtitle2" sx={{ fontSize: "1.5em" }}>
+                    <Typography
+                      variant="subtitle2"
+                      sx={{ fontSize: "1.75em", lineHeight: "100%" }}
+                    >
                       {section.title}
                     </Typography>
                   </Grid>
@@ -45,7 +84,7 @@ const StudentEvaluationForm = () => {
                   <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                     <Grid container flexDirection="row" textAlign="center">
                       <Grid item xl={6} lg={6} md={6} sm={6} xs={6}></Grid>
-                      {ratings.map((rating, key3) => {
+                      {ratingFields.map((rating, key3) => {
                         return (
                           <Grid
                             item
@@ -88,7 +127,7 @@ const StudentEvaluationForm = () => {
                               </Typography>
                             </Grid>
 
-                            {ratings.map((task, key3) => {
+                            {ratingFields.map((task, key3) => {
                               return (
                                 <Grid
                                   item
@@ -117,6 +156,43 @@ const StudentEvaluationForm = () => {
           </Grid>
         );
       })}
+      <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={5}>
+        <Accordion>
+          <AccordionSummary>
+            <Grid container flexDirection="row" textAlign="center">
+              <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                <Typography
+                  variant="subtitle2"
+                  sx={{ fontSize: "1.75em", lineHeight: "100%" }}
+                >
+                  Appréciation
+                </Typography>
+              </Grid>
+              <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                <Typography variant="caption">
+                  Appréciation globale du stagiaire
+                </Typography>
+              </Grid>
+            </Grid>
+          </AccordionSummary>
+          <AccordionDetails sx={{ backgroundColor: "rgba(35, 35, 35, 0.6)" }}>
+            <Grid container textAlign="center">
+              {appreciationFields.map((field, key) => {
+                return (
+                  <>
+                    <Grid item xl={6} lg={6} md={6} sm={6} xs={6}>
+                      <Typography variant="caption">{field} </Typography>
+                    </Grid>
+                    <Grid item xl={6} lg={6} md={10} sm={6} xs={6}>
+                      <Radio value={key} name={"radio" + key}></Radio>
+                    </Grid>
+                  </>
+                );
+              })}
+            </Grid>
+          </AccordionDetails>
+        </Accordion>
+      </Grid>
     </Grid>
   );
 };

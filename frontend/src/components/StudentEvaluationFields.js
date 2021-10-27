@@ -54,7 +54,7 @@ export const fields = [
   },
 ];
 
-export const ratings = [
+export const ratingFields = [
   { value: 5, label: "Totalement en accord" },
   { value: 4, label: "Plutôt en accord" },
   { value: 3, label: "Plutôt en désaccord" },
@@ -63,4 +63,21 @@ export const ratings = [
     label: "Totalement en désaccord",
   },
   { value: 1, label: "N/A" },
+];
+
+export const internFields = [
+  "Nom de l'élève",
+  "Programme d'études",
+  "Nom de l'entreprise",
+  "Nom du superviseur",
+  "Fonction",
+  "Téléphone",
+];
+
+export const appreciationFields = [
+  "Les habiletés démontrées dépassent de beaucoup les attentes",
+  "Les habiletés démontrées dépasent les attentes",
+  "Les habiletés démontrées répondent pleinement aux attentes",
+  "Les habiletés démontrées répondent partiellement aux attentes",
+  "Les habiletés démontrées ne répondent pas aux attentes",
 ];
