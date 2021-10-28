@@ -27,9 +27,8 @@ public class ReportService {
         // TODO: implémenter les dates de session
         return internshipOfferService.getAllNonValidatedOffers(new Date(Long.MIN_VALUE), new Date(Long.MAX_VALUE)).collectList()
                 .flatMap(nonValidatedOffers -> {
-                    List<InternshipOffer> internshipOfferList = nonValidatedOffers;
                     Map<String, Object> variables = new HashMap<>();
-                    variables.put("internshipOfferList", internshipOfferList);
+                    variables.put("internshipOfferList", nonValidatedOffers);
                     return pdfService.renderPdf(new NonValidatedOffersPdfTemplate(variables));
                 });
     }
@@ -38,9 +37,8 @@ public class ReportService {
         // TODO: implémenter les dates de session
         return internshipOfferService.getAllValidatedOffers(new Date(Long.MIN_VALUE), new Date(Long.MAX_VALUE)).collectList()
                 .flatMap(nonValidatedOffers -> {
-                    List<InternshipOffer> internshipOfferList = nonValidatedOffers;
                     Map<String, Object> variables = new HashMap<>();
-                    variables.put("internshipOfferList", internshipOfferList);
+                    variables.put("internshipOfferList", nonValidatedOffers);
                     return pdfService.renderPdf(new NonValidatedOffersPdfTemplate(variables));
                 });
     }
