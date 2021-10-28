@@ -8,5 +8,5 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface InternshipRepository extends ReactiveMongoRepository<Internship, String> {
-    public Mono<Internship> findInternshipByStudentEmail(String studentEmail);
+    public Mono<Internship> findByStudentEmail(String studentEmail);
 }

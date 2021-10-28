@@ -8,39 +8,37 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.beans.factory.annotation.Autowired;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static reactor.core.publisher.Mono.when;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 public class InternshipServiceTest {
 
     @Mock
-    private InternshipRepository internshipRepository;
+    InternshipRepository internshipRepository;
 
     @InjectMocks
-    private InternshipService internshipService;
+    InternshipService internshipService;
 
 
     //TODO:Service test does not work and Controller test is not done
     @Test
     void shouldGetInternshipByStudentEmail() {
         //ARRANGE
-        String studentEmail = "studentTest@gmail.com";
         Internship internship = InternshipMockData.getInternship();
 
-        when(internshipRepository.findInternshipByStudentEmail(studentEmail)).thenReturn(Mono.just(internship));
+        when(internshipRepository.findByStudentEmail(internship.getStudentEmail())).thenReturn(Mono.just(internship));
 
         //ACT
-        Mono<Internship> internshipMono = internshipService.getInternshipByEmail(studentEmail);
+        Mono<Internship> internshipMono = internshipService.getInternshipByEmail(internship.getStudentEmail());
 
         //ASSERT
         StepVerifier
                 .create(internshipMono)
-                .assertNext(i -> assertEquals(studentEmail, i.getStudentEmail()))
+                .assertNext(i -> assertEquals(internship.getStudentEmail(), i.getStudentEmail()))
                 .verifyComplete();
     }
 }

@@ -34,7 +34,7 @@ public class InternshipRepositoryTest {
                 .build(),
                 Internship
                         .builder()
-                        .studentEmail("test_student@gmail.com")
+                        .studentEmail("test_student2@gmail.com")
                         .build());
 
         internshipRepository.saveAll(internshipFlux).subscribe();
@@ -46,7 +46,7 @@ public class InternshipRepositoryTest {
         String studentEmail = "test_student@gmail.com";
 
         //ACT
-        Mono<Internship> internshipMono = internshipRepository.findInternshipByStudentEmail(studentEmail);
+        Mono<Internship> internshipMono = internshipRepository.findByStudentEmail(studentEmail);
 
         //ASSERT
         StepVerifier
