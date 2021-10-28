@@ -8,6 +8,8 @@ import {
   Select,
   MenuItem,
   Container,
+  FormControl,
+  TextField,
 } from "@mui/material";
 import StarBorderPurple500Icon from "@mui/icons-material/StarBorderPurple500";
 import TouchAppIcon from "@mui/icons-material/TouchApp";
@@ -18,12 +20,12 @@ import TodayIcon from "@mui/icons-material/Today";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { motion } from "framer-motion";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
-import PeopleIcon from '@mui/icons-material/People';
+import PeopleIcon from "@mui/icons-material/People";
 import { UserInfoContext } from "../stores/UserInfoStore";
 
 const StudentDashBoard = ({ visible }) => {
-  const [interviewDate, setInterviewDate] = useState(initialState)
-  
+  const [interviewDate, setInterviewDate] = useState(null);
+
   const listState = [
     "INTERNSHIP_NOT_FOUND",
     "INTERNSHIP_FOUND",
@@ -98,7 +100,7 @@ const StudentDashBoard = ({ visible }) => {
       });
   };
 
-  const updateStudentStatus = () => {
+  const updateInterviewDate = () => {
     axios({
       method: "PATCH",
       url: "http://localhost:8080/student/updateInterviewDate",
@@ -148,11 +150,7 @@ const StudentDashBoard = ({ visible }) => {
                 boxShadow: 6,
               }}
             >
-              <Grid
-                container
-                spacing={2}
-                sx={{ alignItems: "center" }}
-              >
+              <Grid container spacing={2} sx={{ alignItems: "center" }}>
                 <Grid item>
                   <Avatar
                     sx={{
@@ -166,14 +164,9 @@ const StudentDashBoard = ({ visible }) => {
                   </Avatar>
                 </Grid>
 
-                <Grid
-                  item
-                  xs={12}
-                  sm
-                  container
-                >
+                <Grid item xs={12} sm container>
                   <Grid item xs container direction="column" spacing={2}>
-                    <Grid item xs sx={{textAlign:"start"}}>
+                    <Grid item xs sx={{ textAlign: "start" }}>
                       <Typography
                         gutterBottom
                         variant="subtitle1"
@@ -190,6 +183,7 @@ const StudentDashBoard = ({ visible }) => {
                         Membre depuis : {profile.registrationDate}
                         <TodayIcon />
                       </Typography>
+                      
                       {profile.hasValidCv ? (
                         <Typography
                           sx={{ color: "green" }}
@@ -211,6 +205,11 @@ const StudentDashBoard = ({ visible }) => {
                           <BlockIcon />
                         </Typography>
                       )}
+                        <TextField
+                        sx={{border:"1px white",boxShadow:4,borderRadius:2,mt:2}}
+                          label="Date récente d'entrevue"
+                          type={"date"}
+                        />
                     </Grid>
                   </Grid>
 
