@@ -140,8 +140,8 @@ public class TestingInserterRunner implements ApplicationRunner {
     }
 
     private void insertMonitors() {
-        Monitor monitor = Monitor.monitorBuilder().email("9182738492@gmail.com")
-                .password(pbkdf2Encoder.encode("lao@dkv23")).build();
+        Monitor monitor = Monitor.monitorBuilder().email("monitor@gmail.com")
+                .password(pbkdf2Encoder.encode("monitor")).build();
 
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
@@ -176,7 +176,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 .isValidated(true)
                 .maxSalary(17.50f)
                 .minSalary(16.25f)
-                .monitorEmail("9182738492@gmail.com")
+                .monitorEmail("monitor@gmail.com")
                 .listEmailInterestedStudents(new HashSet<>())
                 .build();
 
@@ -190,7 +190,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 .isExclusive(true)
                 .isValidated(true).maxSalary(19.50f)
                 .minSalary(19.50f)
-                .monitorEmail("9182738492@gmail.com")
+                .monitorEmail("monitor@gmail.com")
                 .listEmailInterestedStudents(new HashSet<>())
                 .build();
 
@@ -202,26 +202,29 @@ public class TestingInserterRunner implements ApplicationRunner {
         return internshipOfferRepository.save(internshipOffer2).block().getId();
     }
 
-    private void insertInternshipOffersInternshipManagerView() throws IOException {
+    private void insertInternshipOffersInternshipManagerView() {
+        Set<String> offer1InterestedStudent = new HashSet<>();
+        offer1InterestedStudent.add("student@gmail.com");
+
         List<InternshipOffer> internshipOffers = Arrays.asList(
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("9182738492@gmail.com")
+                        .monitorEmail("monitor@gmail.com")
                         .title("Développeur Senior Cobol")
                         .companyName("Google")
                         .description(lorem.getParagraphs(2, 5))
                         .minSalary(19.0f)
                         .maxSalary(22.0f)
-                        .isValidated(false)
+                        .isValidated(true)
                         .isExclusive(false)
-                        .listEmailInterestedStudents(new HashSet<>())
+                        .listEmailInterestedStudents(offer1InterestedStudent)
                         .build(),
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("9182738492@gmail.com")
+                        .monitorEmail("monitor@gmail.com")
                         .title("Développeur React")
                         .companyName("Umaknow")
                         .description(lorem.getParagraphs(2, 5))
@@ -234,7 +237,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("9182738492@gmail.com")
+                        .monitorEmail("monitor@gmail.com")
                         .title("Développeur .NET")
                         .companyName("Desjardins")
                         .description(lorem.getParagraphs(2, 5))
@@ -247,7 +250,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("9182738492@gmail.com")
+                        .monitorEmail("monitor@gmail.com")
                         .title("Analyste de données")
                         .companyName("CGI")
                         .description(lorem.getParagraphs(2, 5))
@@ -261,7 +264,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("9182738492@gmail.com")
+                        .monitorEmail("monitor@gmail.com")
                         .title("Développeur Senior Java")
                         .companyName("CGI")
                         .description(lorem.getParagraphs(2, 5))
@@ -275,7 +278,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("9182738492@gmail.com")
+                        .monitorEmail("monitor@gmail.com")
                         .title("Développeur Fullstack")
                         .companyName("Desjardins")
                         .description(lorem.getParagraphs(2, 5))
@@ -289,7 +292,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("9182738492@gmail.com")
+                        .monitorEmail("monitor@gmail.com")
                         .title("Développeur Junior Angular")
                         .companyName("Banque National")
                         .description(lorem.getParagraphs(10, 15))
