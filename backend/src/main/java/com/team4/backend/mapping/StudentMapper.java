@@ -3,6 +3,7 @@ package com.team4.backend.mapping;
 import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.dto.StudentProfileDto;
 import com.team4.backend.model.Student;
+import com.team4.backend.util.DateUtil;
 
 import java.time.LocalDate;
 import java.util.Collections;
@@ -53,7 +54,7 @@ public abstract class StudentMapper {
                 .nbrOfExclusiveOffers(student.getExclusiveOffersId().size())
                 .nbrOfInterviews(student.getInterviewsDate().isEmpty() ? 0 : student.getInterviewsDate().size())
                 .hasValidCv(student.getHasValidCv())
-                .recentInterviewDate(student.getInterviewsDate().isEmpty() ? null : Collections.max(student.getInterviewsDate()))
+                .recentInterviewDate(DateUtil.retrieveDateClosestToToday(student.getInterviewsDate()))
                 .build();
     }
 

@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.TreeSet;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 public class DateUtilTest {
 
 
@@ -28,7 +30,7 @@ public class DateUtilTest {
         LocalDate closestDate = DateUtil.retrieveDateClosestToToday(dates);
 
         //ASSERT
-        Assertions.assertEquals(LocalDate.now().plusDays(1),closestDate);
+        assertEquals(LocalDate.now().plusDays(1), closestDate);
     }
 
     @Test
@@ -36,8 +38,6 @@ public class DateUtilTest {
         //ARRANGE
         Set<LocalDate> dates = new TreeSet<>(
                 Arrays.asList(
-
-                        LocalDate.now(),
                         LocalDate.now().minusMonths(1),
                         LocalDate.now().minusWeeks(1),
                         LocalDate.now().minusDays(5)
@@ -48,7 +48,20 @@ public class DateUtilTest {
         LocalDate closestDate = DateUtil.retrieveDateClosestToToday(dates);
 
         //ASSERT
-        Assertions.assertEquals(LocalDate.now().minusDays(5),closestDate);
+        assertEquals(LocalDate.now().minusDays(5), closestDate);
+    }
+
+
+    @Test
+    void shouldNotReturnDateClosesToToday() {
+        //ARRANGE
+        Set<LocalDate> dates = new TreeSet<>();
+
+        //ACT
+        LocalDate closestDate = DateUtil.retrieveDateClosestToToday(dates);
+
+        //ASSERT
+        assertNull(closestDate);
     }
 
 }

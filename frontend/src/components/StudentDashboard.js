@@ -18,9 +18,12 @@ import TodayIcon from "@mui/icons-material/Today";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { motion } from "framer-motion";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import PeopleIcon from '@mui/icons-material/People';
 import { UserInfoContext } from "../stores/UserInfoStore";
 
 const StudentDashBoard = ({ visible }) => {
+  const [interviewDate, setInterviewDate] = useState(initialState)
+  
   const listState = [
     "INTERNSHIP_NOT_FOUND",
     "INTERNSHIP_FOUND",
@@ -95,6 +98,23 @@ const StudentDashBoard = ({ visible }) => {
       });
   };
 
+  const updateStudentStatus = () => {
+    axios({
+      method: "PATCH",
+      url: "http://localhost:8080/student/updateInterviewDate",
+      headers: {
+        Authorization: userInfo.jwt,
+      },
+      responseType: "json",
+    })
+      .then(() => {
+        setIsStatusUpdated(true);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
   const handleChange = ($event) => {
     setProfile({ ...profile, studentState: $event.target.value });
     updateStudentStatus();
@@ -121,8 +141,8 @@ const StudentDashBoard = ({ visible }) => {
                 p: 15,
                 mt: 10,
                 maxWidth: 1000,
-                border:"0.5px solid grey",
-                alignItems:"center",
+                border: "0.5px solid grey",
+                alignItems: "center",
                 backgroundColor: "rgba(0, 0, 0, 0.1)",
                 flexGrow: 1,
                 boxShadow: 6,
@@ -132,10 +152,16 @@ const StudentDashBoard = ({ visible }) => {
                 container
                 spacing={2}
                 sx={{ alignItems: "center" }}
-                justifyContent="center"
               >
                 <Grid item>
-                  <Avatar sx={{ width: 200, height: 200, border:"1px solid white",boxShadow:6 }}>
+                  <Avatar
+                    sx={{
+                      width: 200,
+                      height: 200,
+                      border: "1px solid white",
+                      boxShadow: 6,
+                    }}
+                  >
                     {profile.firstName.charAt(0)}
                   </Avatar>
                 </Grid>
@@ -145,11 +171,9 @@ const StudentDashBoard = ({ visible }) => {
                   xs={12}
                   sm
                   container
-                  justifyContent="center"
-                  sx={{ textAlign: "center", alignItems: "center" }}
                 >
                   <Grid item xs container direction="column" spacing={2}>
-                    <Grid item xs>
+                    <Grid item xs sx={{textAlign:"start"}}>
                       <Typography
                         gutterBottom
                         variant="subtitle1"
@@ -190,7 +214,11 @@ const StudentDashBoard = ({ visible }) => {
                     </Grid>
                   </Grid>
 
-                  <Grid item sx={{ alignItems: "center", textAlign: "center" }}>
+                  <Grid item sx={{ alignItems: "center", textAlign: "start" }}>
+                    <Typography variant="subtitle1">
+                      <PeopleIcon /> Nombres d'entrevues :{" "}
+                      {profile.nbrOfInterviews}
+                    </Typography>
                     <Typography variant="subtitle1">
                       <TouchAppIcon /> Nombres d'offres appliquées :{" "}
                       {profile.nbrOfAppliedOffers}
@@ -199,14 +227,10 @@ const StudentDashBoard = ({ visible }) => {
                       <StarBorderPurple500Icon /> Nombres d'offres exlusives :{" "}
                       {profile.nbrOfExclusiveOffers}
                     </Typography>
-                    <Typography variant="subtitle1">
-                      <StarBorderPurple500Icon /> Nombres d'entrevues :{" "}
-                      {profile.nbrOfInterviews}
-                    </Typography>
                     <Select
                       sx={{
                         margin: "auto",
-                        border:"1px solid white",
+                        border: "1px solid white",
                         display: "flex",
                         justifyContent: "center",
                         boxShadow: 3,
@@ -223,7 +247,9 @@ const StudentDashBoard = ({ visible }) => {
                         <MenuItem
                           key={key}
                           value={value}
-                          disabled={value === listState[2] || value === listState[0]}
+                          disabled={
+                            value === listState[2] || value === listState[0]
+                          }
                           sx={{ color: "white" }}
                         >
                           {listStateFrench[listState.indexOf(value)]}
