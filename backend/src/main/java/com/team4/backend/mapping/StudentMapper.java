@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.TreeSet;
 
 public abstract class StudentMapper {
 
@@ -21,7 +22,7 @@ public abstract class StudentMapper {
                 .phoneNumber(studentCreationDto.getPhoneNumber())
                 .studentState(studentCreationDto.getStudentState())
                 .appliedOffersId(new HashSet<>())
-                .interviewsDate(new HashSet<>())
+                .interviewsDate(new TreeSet<>())
                 .hasValidCv(false)
                 .build();
     }

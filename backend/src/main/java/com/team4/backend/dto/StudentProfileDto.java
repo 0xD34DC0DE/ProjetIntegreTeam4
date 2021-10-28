@@ -47,4 +47,5 @@ public class StudentProfileDto extends UserProfileDto implements Serializable {
         this.hasValidCv = hasValidCv;
         this.recentInterviewDate = recentInterviewDate;
     }
+
 }
