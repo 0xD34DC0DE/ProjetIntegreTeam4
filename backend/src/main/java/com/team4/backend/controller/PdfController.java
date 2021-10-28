@@ -30,7 +30,7 @@ public class PdfController {
         this.studentService = studentService;
     }
 
-    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    @PreAuthorize("hasAnyAuthority('MONITOR', 'STUDENT')")
     @GetMapping(value = "/test", produces = MediaType.APPLICATION_PDF_VALUE)
     public Mono<byte[]> getTestPdf() {
         return studentService.findByEmail("student@gmail.com")
