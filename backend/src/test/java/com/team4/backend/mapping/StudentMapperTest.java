@@ -76,6 +76,7 @@ public class StudentMapperTest {
         assertEquals(entity.getRegistrationDate(), dto.getRegistrationDate());
         assertEquals(entity.getAppliedOffersId().size(), dto.getNbrOfAppliedOffers());
         assertEquals(entity.getExclusiveOffersId().size(), dto.getNbrOfExclusiveOffers());
+        assertEquals(entity.getInterviewsDate().size(),dto.getNbrOfInterviews());
         assertEquals(entity.getHasValidCv(), dto.getHasValidCv());
         assertEquals(localDate,dto.getRecentInterviewDate());
     }

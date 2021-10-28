@@ -43,6 +43,7 @@ const StudentDashBoard = ({ visible }) => {
     studentState: "",
     nbrOfExclusiveOffers: 0,
     nbrOfAppliedOffers: 0,
+    nbrOfInterviews: 0,
     hasValidCv: false,
   });
 
@@ -197,6 +198,10 @@ const StudentDashBoard = ({ visible }) => {
                     <Typography variant="subtitle1">
                       <StarBorderPurple500Icon /> Nombres d'offres exlusives :{" "}
                       {profile.nbrOfExclusiveOffers}
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      <StarBorderPurple500Icon /> Nombres d'entrevues :{" "}
+                      {profile.nbrOfInterviews}
                     </Typography>
                     <Select
                       sx={{

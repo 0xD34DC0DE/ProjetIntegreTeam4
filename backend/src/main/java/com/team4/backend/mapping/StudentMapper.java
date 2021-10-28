@@ -50,6 +50,7 @@ public abstract class StudentMapper {
                 .studentState(student.getStudentState())
                 .nbrOfAppliedOffers(student.getAppliedOffersId().size())
                 .nbrOfExclusiveOffers(student.getExclusiveOffersId().size())
+                .nbrOfInterviews(student.getInterviewsDate().isEmpty() ? 0 : student.getInterviewsDate().size())
                 .hasValidCv(student.getHasValidCv())
                 .recentInterviewDate(student.getInterviewsDate().isEmpty() ? null : Collections.max(student.getInterviewsDate()))
                 .build();

@@ -7,6 +7,7 @@ import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.util.PBKDF2Encoder;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -14,6 +15,7 @@ import reactor.core.publisher.Mono;
 import java.time.LocalDate;
 import java.util.Set;
 
+@Log
 @Service
 public class StudentService {
 
@@ -77,6 +79,7 @@ public class StudentService {
                 .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update the interview date if you already have an internship")))
                 .map(student -> {
                     student.getInterviewsDate().add(interviewDate);
+                    log.info(student.getInterviewsDate().toString());
                     return student;
                 }).flatMap(studentRepository::save);
     }
