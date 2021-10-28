@@ -24,8 +24,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import { UserInfoContext } from "../stores/UserInfoStore";
 
 const StudentDashBoard = ({ visible }) => {
-  const [interviewDate, setInterviewDate] = useState(null);
-
+  
   const listState = [
     "INTERNSHIP_NOT_FOUND",
     "INTERNSHIP_FOUND",
@@ -37,7 +36,7 @@ const StudentDashBoard = ({ visible }) => {
     "STAGE TROUVÉE",
     "EN ATTENTE DE RÉPONSE",
   ];
-
+  
   const [profile, setProfile] = useState({
     id: "",
     email: "",
@@ -46,15 +45,18 @@ const StudentDashBoard = ({ visible }) => {
     registrationDate: "",
     phoneNumber: "",
     studentState: "",
+    closestInterviewDate: "",
     nbrOfExclusiveOffers: 0,
     nbrOfAppliedOffers: 0,
     nbrOfInterviews: 0,
     hasValidCv: false,
   });
-
+  
   const [isDisabled, setIsDisabled] = useState(true);
   const [isStatusUpdated, setIsStatusUpdated] = useState(false);
   const [userInfo] = useContext(UserInfoContext);
+  const [interviewDate, setInterviewDate] = useState(null);
+  const [isInterviewDateUpdated, setIsInterviewDateUpdated] = useState(false);
 
   useEffect(() => {
     const getProfile = () => {
@@ -88,7 +90,7 @@ const StudentDashBoard = ({ visible }) => {
       method: "PATCH",
       url: "http://localhost:8080/student/updateStudentState",
       headers: {
-        Authorization: userInfo.jwt,
+        Authorization: userInfo.jwt
       },
       responseType: "json",
     })
@@ -100,17 +102,17 @@ const StudentDashBoard = ({ visible }) => {
       });
   };
 
-  const updateInterviewDate = () => {
+  const updateInterviewDate = (date) => {
     axios({
       method: "PATCH",
-      url: "http://localhost:8080/student/updateInterviewDate",
+      url: "http://localhost:8080/student/updateInterviewDate/" + date,
       headers: {
-        Authorization: userInfo.jwt,
+        Authorization: userInfo.jwt
       },
       responseType: "json",
     })
       .then(() => {
-        setIsStatusUpdated(true);
+        setIsInterviewDateUpdated(true);
       })
       .catch((error) => {
         console.error(error);
@@ -122,6 +124,16 @@ const StudentDashBoard = ({ visible }) => {
     updateStudentStatus();
     setIsDisabled(true);
   };
+
+  const handleChangeDate = ($event) =>{
+    console.log($event.target.value);
+    const value = $event.target.value;
+    setProfile({...profile, closestInterviewDate:value});
+  
+    updateInterviewDate(value);
+    console.log(userInfo.jwt);
+  }
+
 
   const fadeIn = {
     hidden: { opacity: 0 },
@@ -183,33 +195,19 @@ const StudentDashBoard = ({ visible }) => {
                         Membre depuis : {profile.registrationDate}
                         <TodayIcon />
                       </Typography>
-                      
-                      {profile.hasValidCv ? (
-                        <Typography
-                          sx={{ color: "green" }}
-                          variant="body2"
-                          component="div"
-                          gutterBottom
-                        >
-                          {"Vous avez un CV est valide"}
-                          <CheckCircleIcon />
-                        </Typography>
-                      ) : (
-                        <Typography
-                          sx={{ color: "red" }}
-                          variant="body2"
-                          component="div"
-                          gutterBottom
-                        >
-                          {"Vous n'avez aucun CV valide"}
-                          <BlockIcon />
-                        </Typography>
-                      )}
-                        <TextField
-                        sx={{border:"1px white",boxShadow:4,borderRadius:2,mt:2}}
-                          label="Date récente d'entrevue"
-                          type={"date"}
-                        />
+
+                      <TextField
+                        sx={{
+                          border: "1px white",
+                          boxShadow: 4,
+                          borderRadius: 2,
+                          mt: 2,
+                        }}
+                        label="Date d'entrevue la plus proche"
+                        value={profile.closestInterviewDate}
+                        onChange={handleChangeDate}
+                        type={"date"}
+                      />
                     </Grid>
                   </Grid>
 
@@ -226,6 +224,7 @@ const StudentDashBoard = ({ visible }) => {
                       <StarBorderPurple500Icon /> Nombres d'offres exlusives :{" "}
                       {profile.nbrOfExclusiveOffers}
                     </Typography>
+
                     <Select
                       sx={{
                         margin: "auto",
@@ -264,6 +263,28 @@ const StudentDashBoard = ({ visible }) => {
                         <PublishedWithChangesIcon />
                       </Typography>
                     ) : null}
+
+                    {profile.hasValidCv ? (
+                      <Typography
+                        sx={{ color: "green", textAlign: "center" }}
+                        variant="body2"
+                        component="div"
+                        gutterBottom
+                      >
+                        {"Vous avez un CV est valide"}
+                        <CheckCircleIcon />
+                      </Typography>
+                    ) : (
+                      <Typography
+                        sx={{ color: "red", textAlign: "center" }}
+                        variant="body2"
+                        component="div"
+                        gutterBottom
+                      >
+                        {"Vous n'avez aucun CV valide"}
+                        <BlockIcon />
+                      </Typography>
+                    )}
                   </Grid>
                 </Grid>
               </Grid>

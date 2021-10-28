@@ -4,12 +4,9 @@ import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.dto.StudentProfileDto;
 import com.team4.backend.model.Student;
 import com.team4.backend.testdata.StudentMockData;
-import org.assertj.core.api.LocalDateAssert;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -78,7 +75,7 @@ public class StudentMapperTest {
         assertEquals(entity.getExclusiveOffersId().size(), dto.getNbrOfExclusiveOffers());
         assertEquals(entity.getInterviewsDate().size(),dto.getNbrOfInterviews());
         assertEquals(entity.getHasValidCv(), dto.getHasValidCv());
-        assertEquals(localDate,dto.getRecentInterviewDate());
+        assertEquals(localDate,dto.getClosestInterviewDate());
     }
 
 }

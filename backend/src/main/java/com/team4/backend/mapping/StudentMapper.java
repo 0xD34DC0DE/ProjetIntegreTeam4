@@ -54,7 +54,7 @@ public abstract class StudentMapper {
                 .nbrOfExclusiveOffers(student.getExclusiveOffersId().size())
                 .nbrOfInterviews(student.getInterviewsDate().isEmpty() ? 0 : student.getInterviewsDate().size())
                 .hasValidCv(student.getHasValidCv())
-                .recentInterviewDate(DateUtil.retrieveDateClosestToToday(student.getInterviewsDate()))
+                .closestInterviewDate(DateUtil.retrieveDateClosestToToday(student.getInterviewsDate()))
                 .build();
     }
 

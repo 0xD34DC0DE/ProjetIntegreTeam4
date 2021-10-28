@@ -24,7 +24,7 @@ public class StudentProfileDto extends UserProfileDto implements Serializable {
     private Boolean hasValidCv;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate recentInterviewDate;
+    private LocalDate closestInterviewDate;
 
     @Builder
     public StudentProfileDto(String id,
@@ -38,14 +38,14 @@ public class StudentProfileDto extends UserProfileDto implements Serializable {
                              Integer nbrOfAppliedOffers,
                              Integer nbrOfInterviews,
                              Boolean hasValidCv,
-                             LocalDate recentInterviewDate) {
+                             LocalDate closestInterviewDate) {
         super(id, email, firstName, lastName, registrationDate, phoneNumber);
         this.studentState = studentState;
         this.nbrOfExclusiveOffers = nbrOfExclusiveOffers;
         this.nbrOfAppliedOffers = nbrOfAppliedOffers;
         this.nbrOfInterviews = nbrOfInterviews;
         this.hasValidCv = hasValidCv;
-        this.recentInterviewDate = recentInterviewDate;
+        this.closestInterviewDate = closestInterviewDate;
     }
 
 }
