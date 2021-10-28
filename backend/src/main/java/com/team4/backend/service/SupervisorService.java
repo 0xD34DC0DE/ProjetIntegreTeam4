@@ -64,8 +64,9 @@ public class SupervisorService {
                 .map(StudentMapper::toDto);
     }
 
-    public Mono<Supervisor> getSupervisor(String email) {
-        return supervisorRepository.findSupervisorByEmail(email);
+    public Mono<Supervisor> getSupervisor(String email){
+        return supervisorRepository.findSupervisorByEmail(email)
+                .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
     }
 
 }
