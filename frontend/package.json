@@ -24,10 +24,12 @@
     "web-vitals": "^1.1.2"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "run-s copy_worker start_react",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "start_react": "react-scripts start",
+    "copy_worker": "node ./custom_build_scripts/copy_worker_script.js"
   },
   "eslintConfig": {
     "extends": [
