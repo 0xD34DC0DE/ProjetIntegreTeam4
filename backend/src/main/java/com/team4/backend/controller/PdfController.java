@@ -33,14 +33,16 @@ public class PdfController {
     @PreAuthorize("hasAnyAuthority('STUDENT')")
     @GetMapping(value = "/test", produces = MediaType.APPLICATION_PDF_VALUE)
     public Mono<byte[]> getTestPdf() {
-        return studentService.findByEmail("student@gmail.com")
+        return studentService.getAll().collectList()
                 .flatMap(student -> {
-                    List<Student> studentList = new ArrayList<>();
-                    studentList.add(student);
+                    List<Student> studentList = student;
+//                    studentList.add(student);
 
                     Map<String, Object> variables = new HashMap<>();
                     variables.put("students", studentList);
                     return pdfService.renderPdf(new StudentPdfTemplate(variables));
                 });
     }
+
+
 }

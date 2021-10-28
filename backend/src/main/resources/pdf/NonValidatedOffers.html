@@ -1,0 +1,39 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Non Validated Offers</title>
+    <bookmarks>
+        <bookmark name="NonValidatedOffers" href="#internshipOfferList"></bookmark>
+    </bookmarks>
+    <link th:rel="stylesheet" type="text/css" th:href="@{css/style.css}"/>
+</head>
+
+<body>
+
+<h1 class="center">Rapport : Offres de stages non validées</h1>
+
+<h2 class="titles-style" th:text="|Nombre d'offres non-validées : ${#lists.size(internshipOfferList)}|"></h2>
+<tr></tr>
+<div id="internshipOfferList">
+    <div th:if="${not #lists.isEmpty(internshipOfferList)}">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Titre</th>
+                <th scope="col">Monitor's email</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="offer : ${internshipOfferList}">
+                <td scope="row" th:text="${offer?.id}"></td>
+                <td th:text="${offer?.title}"></td>
+                <td th:text="${offer?.monitorEmail}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

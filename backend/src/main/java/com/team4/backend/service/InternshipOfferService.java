@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 public class InternshipOfferService {
@@ -165,11 +166,11 @@ public class InternshipOfferService {
         });
     }
 
-    private Flux<InternshipOffer> getAllNonValidatedOffers(LocalDate sessionStart, LocalDate sessionEnd) {
+    public Flux<InternshipOffer> getAllNonValidatedOffers(Date sessionStart, Date sessionEnd) {
         return internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyBetween(sessionStart, sessionEnd);
     }
 
-    private Flux<InternshipOffer> getAllValidatedOffers(LocalDate sessionStart, LocalDate sessionEnd) {
+    public Flux<InternshipOffer> getAllValidatedOffers(Date sessionStart, Date sessionEnd) {
         return internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyBetween(sessionStart, sessionEnd);
     }
 
