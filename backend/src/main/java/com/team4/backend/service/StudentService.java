@@ -63,7 +63,8 @@ public class StudentService {
 
     public Mono<Student> updateStudentState(String email, StudentState studentState) {
         return findByEmail(email)
-                .filter(student -> student.getStudentState().equals(StudentState.WAITING_FOR_RESPONSE))
+                .filter(student -> student.getStudentState().equals(StudentState.WAITING_FOR_RESPONSE)
+                        && student.getHasValidCv())
                 .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update your state if you're not waiting for a response to your recent interview!")))
                 .map(student -> {
                     //TODO --> call function that will trigger the contract generation
@@ -74,7 +75,8 @@ public class StudentService {
 
     public Mono<Student> updateInterviewDate(String email, LocalDate interviewDate) {
         return findByEmail(email)
-                .filter(student -> !student.getStudentState().equals(StudentState.INTERNSHIP_FOUND))
+                .filter(student -> !student.getStudentState().equals(StudentState.INTERNSHIP_FOUND)
+                        && student.getHasValidCv())
                 .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update the interview date if you already have an internship")))
                 .map(student -> {
                     student.getInterviewsDate().add(interviewDate);

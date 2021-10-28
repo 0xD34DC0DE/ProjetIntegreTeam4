@@ -19,6 +19,7 @@ import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -221,6 +222,7 @@ public class StudentServiceTest {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
 
+        student.setHasValidCv(true);
         student.setStudentState(StudentState.WAITING_FOR_RESPONSE);
 
         when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
@@ -254,6 +256,7 @@ public class StudentServiceTest {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
 
+        student.setHasValidCv(true);
         student.setStudentState(StudentState.INTERNSHIP_NOT_FOUND);
 
         when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
@@ -271,8 +274,9 @@ public class StudentServiceTest {
         LocalDate interviewDate = LocalDate.now();
         Student student = StudentMockData.getMockStudent();
 
+        student.setHasValidCv(true);
         student.setStudentState(StudentState.INTERNSHIP_NOT_FOUND);
-        student.setInterviewsDate(new HashSet<>());
+        student.setInterviewsDate(new TreeSet<>());
 
         when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
         when(studentRepository.save(any(Student.class))).thenReturn(Mono.just(student));
@@ -305,6 +309,7 @@ public class StudentServiceTest {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
 
+        student.setHasValidCv(true);
         student.setStudentState(StudentState.INTERNSHIP_FOUND);
 
         when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
