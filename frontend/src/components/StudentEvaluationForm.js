@@ -22,7 +22,7 @@ import {
 const StudentEvaluationForm = () => {
   return (
     <Grid container px={5} pb={3}>
-      <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={3}>
+      <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={1}>
         <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
           <AccordionSummary>
             <Grid container flexDirection="row" textAlign="center">
@@ -31,7 +31,7 @@ const StudentEvaluationForm = () => {
                   variant="subtitle2"
                   sx={{ fontSize: "1.75em", lineHeight: "100%" }}
                 >
-                  Évaluation de l'étudiant
+                  Évaluation
                 </Typography>
               </Grid>
               <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
@@ -159,6 +159,34 @@ const StudentEvaluationForm = () => {
                           </>
                         );
                       })}
+                      <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            display: "inline-block",
+                            fontSize: "0.8em",
+                            ml: 1,
+                            mt: 3,
+                          }}
+                        >
+                          Commentaires :
+                        </Typography>
+                      </Grid>
+                      <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                        <TextField
+                          fullWidth
+                          multiline
+                          inputProps={{
+                            sx: {
+                              fontSize: "0.8em",
+                            },
+                          }}
+                          variant="outlined"
+                          rows={3}
+                          margin="dense"
+                          size="small"
+                        ></TextField>
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
@@ -214,13 +242,18 @@ const StudentEvaluationForm = () => {
                     mt: 3,
                   }}
                 >
-                  Précisez votre appréciation
+                  Précisez votre appréciation :
                 </Typography>
               </Grid>
               <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                 <TextField
                   fullWidth
                   multiline
+                  inputProps={{
+                    sx: {
+                      fontSize: "0.8em",
+                    },
+                  }}
                   variant="outlined"
                   rows={3}
                   margin="dense"
@@ -303,11 +336,79 @@ const StudentEvaluationForm = () => {
                 <TextField
                   fullWidth
                   multiline
+                  inputProps={{
+                    sx: {
+                      fontSize: "0.8em",
+                    },
+                  }}
                   variant="outlined"
                   rows={3}
                   margin="dense"
                   size="small"
                 ></TextField>
+              </Grid>
+              <Grid
+                container
+                flexDirection="row"
+                justifyContent="center"
+                mt={1}
+              >
+                <Grid item xl={5.8} lg={5.7} md={5.6} sm={5.5} xs={5.2} mr={5}>
+                  <TextField
+                    fullWidth
+                    variant="standard"
+                    label="Nom"
+                    InputLabelProps={{
+                      sx: {
+                        fontSize: "0.9em",
+                      },
+                    }}
+                  ></TextField>
+                </Grid>
+                <Grid item xl={5.8} lg={5.7} md={5.6} sm={5.5} xs={5.2}>
+                  <TextField
+                    fullWidth
+                    variant="standard"
+                    label="Fonction"
+                    InputLabelProps={{
+                      sx: {
+                        fontSize: "0.9em",
+                      },
+                    }}
+                  ></TextField>
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                flexDirection="row"
+                justifyContent="center"
+                mb={2}
+                mt={1}
+              >
+                <Grid item xl={5.8} lg={5.7} md={5.6} sm={5.5} xs={5.2} mr={5}>
+                  <TextField
+                    fullWidth
+                    variant="standard"
+                    label="Signature"
+                    InputLabelProps={{
+                      sx: {
+                        fontSize: "0.9em",
+                      },
+                    }}
+                  ></TextField>
+                </Grid>
+                <Grid item xl={5.8} lg={5.7} md={5.6} sm={5.5} xs={5.2}>
+                  <TextField
+                    fullWidth
+                    InputLabelProps={{
+                      sx: {
+                        fontSize: "0.9em",
+                      },
+                    }}
+                    variant="standard"
+                    label="Date"
+                  ></TextField>
+                </Grid>
               </Grid>
             </Grid>
           </AccordionDetails>
