@@ -32,3 +32,6 @@ spring:
             enable: true
     protocol: smtp
     test-connection: false
+  thymeleaf:
+    enabled: false
+
