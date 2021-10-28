@@ -97,6 +97,11 @@ const theme = createTheme({
         },
       },
     },
+    MuiRadio: {
+      styleOverrides: {
+        root: {},
+      },
+    },
     MuiDialog: {
       styleOverrides: {
         paper: {
