@@ -13,12 +13,13 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
-import HowToRegIcon from '@mui/icons-material/HowToReg';
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 import { motion } from "framer-motion";
 import axios from "axios";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import EmailSender from "./EmailSender";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import SignContractMonitorDialog from "./SignContractMonitorDialog";
 
 const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
   const [offers, setOffers] = useState([]);
@@ -344,9 +345,8 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                             },
                                           }}
                                           onClick={() => {
-                                            setReceiver(student.email);
                                             toggleDialog(
-                                              "emailSenderDialog",
+                                              "signContractMonitorDialog",
                                               true
                                             );
                                           }}
@@ -374,6 +374,11 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
         toggleDialog={toggleDialog}
         open={dialogVisibility.emailSenderDialog}
         receiver={receiver}
+      />
+      <SignContractMonitorDialog
+        toggleDialog={toggleDialog}
+        open={dialogVisibility.signContractMonitorDialog}
+        pdfUrl="http://localhost:8080/pdf/test"
       />
     </Grid>
   );
