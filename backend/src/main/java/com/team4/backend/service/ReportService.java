@@ -1,6 +1,5 @@
 package com.team4.backend.service;
 
-import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.pdf.NonValidatedOffersPdfTemplate;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
@@ -29,6 +28,8 @@ public class ReportService {
                 .flatMap(nonValidatedOffers -> {
                     Map<String, Object> variables = new HashMap<>();
                     variables.put("internshipOfferList", nonValidatedOffers);
+                    variables.put("date", LocalDate.now());
+                    variables.put("title", "Offres de stages non validées");
                     return pdfService.renderPdf(new NonValidatedOffersPdfTemplate(variables));
                 });
     }
@@ -36,9 +37,11 @@ public class ReportService {
     public Mono<byte[]> generateAllValidatedOffersReport() {
         // TODO: implémenter les dates de session
         return internshipOfferService.getAllValidatedOffers(new Date(Long.MIN_VALUE), new Date(Long.MAX_VALUE)).collectList()
-                .flatMap(nonValidatedOffers -> {
+                .flatMap(validatedOffers -> {
                     Map<String, Object> variables = new HashMap<>();
-                    variables.put("internshipOfferList", nonValidatedOffers);
+                    variables.put("internshipOfferList", validatedOffers);
+                    variables.put("date", LocalDate.now());
+                    variables.put("title", "Offres de stages validées");
                     return pdfService.renderPdf(new NonValidatedOffersPdfTemplate(variables));
                 });
     }

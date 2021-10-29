@@ -10,25 +10,32 @@
 
 <body>
 
-<h1 class="center">Rapport : Offres de stages non validées</h1>
+<h1 class="center" th:text="|Rapport : ${title}|"></h1>
 
-<h2 class="titles-style" th:text="|Nombre d'offres non-validées : ${#lists.size(internshipOfferList)}|"></h2>
+<h2 class="titles-style" th:text="|Date d'aujourd'hui : ${date}|"></h2>
+<h2 class="titles-style" th:text="|Nombre d'${title} : ${#lists.size(internshipOfferList)}|"></h2>
 <tr></tr>
 <div id="internshipOfferList">
     <div th:if="${not #lists.isEmpty(internshipOfferList)}">
         <table class="table">
             <thead>
             <tr>
-                <th scope="col">Id</th>
+<!--                <th scope="col">Id</th>-->
                 <th scope="col">Titre</th>
-                <th scope="col">Monitor's email</th>
+                <th scope="col">Compagnie</th>
+                <th scope="col">Email du moniteur</th>
+                <th scope="col">Date de début</th>
+                <th scope="col">Date de fin</th>
             </tr>
             </thead>
             <tbody>
             <tr th:each="offer : ${internshipOfferList}">
-                <td scope="row" th:text="${offer?.id}"></td>
+<!--                <td scope="row" th:text="${offer?.id}"></td>-->
                 <td th:text="${offer?.title}"></td>
+                <td th:text="${offer?.companyName}"></td>
                 <td th:text="${offer?.monitorEmail}"></td>
+                <td th:text="${offer?.beginningDate}"></td>
+                <td th:text="${offer?.endingDate}"></td>
             </tr>
             </tbody>
         </table>

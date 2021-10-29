@@ -31,6 +31,12 @@ public class ReportController {
         return reportService.generateAllNonValidatedOffersReport();
     }
 
+    @GetMapping(value = "/generateAllValidatedOffersReport", produces = MediaType.APPLICATION_PDF_VALUE)
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
+    public Mono<byte[]> generateAllValidatedOffersReport() {
+        return reportService.generateAllValidatedOffersReport();
+    }
+
     @GetMapping("/studentsWithNoCV")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Flux<Student> getAllStudentsWithNoCV() {
