@@ -1,0 +1,62 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Non Validated Offers</title>
+    <bookmarks>
+        <bookmark name="NonValidatedOffers" href="#internshipOfferList"></bookmark>
+    </bookmarks>
+    <link th:rel="stylesheet" type="text/css" th:href="@{css/style.css}"/>
+</head>
+
+<body>
+
+<h1 class="center" th:text="|Rapport : ${title}|"></h1>
+
+<h2 class="titles-style" th:text="|Date d'aujourd'hui : ${date}|"></h2>
+<h2 class="titles-style" th:text="|Nombre d'${title} : ${#lists.size(internshipOfferList)}|"></h2>
+<br/>
+<div id="internshipOfferList">
+    <div th:if="${not #lists.isEmpty(internshipOfferList)}">
+        <table class="table">
+            <div class="offer" th:each="offer: ${internshipOfferList}">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Titre</th>
+                        <th scope="col">Compagnie</th>
+                        <th scope="col">Email du moniteur</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td scope="row" th:text="${offer?.id}"></td>
+                        <td th:text="${offer?.title}"></td>
+                        <td th:text="${offer?.companyName}"></td>
+                        <td th:text="${offer?.monitorEmail}"></td>
+                    </tr>
+                </tbody>
+                <thead>
+                <tr>
+                    <th scope="col">Date limite pour appliquer</th>
+                    <th scope="col">Date de début</th>
+                    <th scope="col">Date de fin</th>
+                    <th scope="col">Exclusive</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${offer?.limitDateToApply}"></td>
+                    <td th:text="${offer?.beginningDate}"></td>
+                    <td th:text="${offer?.endingDate}"></td>
+                    <td th:if="${offer?.isExclusive}">Oui</td>
+                    <td th:if="${not offer?.isExclusive}">Non</td>
+                </tr>
+                </tbody>
+            </div>
+            <tr></tr>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

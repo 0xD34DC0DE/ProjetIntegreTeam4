@@ -4,14 +4,23 @@ html {
 
 table {
     width: 100%;
-    border-collapse: collapse;
+    /*text-align: center;*/
+    /*border-collapse: collapse;*/
 }
 
-table, th, td {
+th, td {
     border: 1px solid black;
+    width: 25%;
 }
 
 .center {
     text-align: center;
     border: 3px solid grey;
+}
+
+.offer {
+    border: 1px solid black;
+    margin-bottom: 25px;
+    /*width: 100%;*/
+    /*border-collapse: collapse;*/
 }

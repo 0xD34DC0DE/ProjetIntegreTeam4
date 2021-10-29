@@ -1,6 +1,6 @@
 package com.team4.backend.service;
 
-import com.team4.backend.pdf.NonValidatedOffersPdfTemplate;
+import com.team4.backend.pdf.OffersPdf;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -30,7 +30,7 @@ public class ReportService {
                     variables.put("internshipOfferList", nonValidatedOffers);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Offres de stages non validées");
-                    return pdfService.renderPdf(new NonValidatedOffersPdfTemplate(variables));
+                    return pdfService.renderPdf(new OffersPdf(variables));
                 });
     }
 
@@ -42,8 +42,8 @@ public class ReportService {
                     variables.put("internshipOfferList", validatedOffers);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Offres de stages validées");
-                    return pdfService.renderPdf(new NonValidatedOffersPdfTemplate(variables));
+                    return pdfService.renderPdf(new OffersPdf(variables));
                 });
     }
-
+    
 }
