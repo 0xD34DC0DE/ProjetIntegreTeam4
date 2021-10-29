@@ -1,0 +1,63 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Students</title>
+    <bookmarks>
+        <bookmark name="Students" href="#studentsList"></bookmark>
+    </bookmarks>
+    <link th:rel="stylesheet" type="text/css" th:href="@{css/style.css}"/>
+</head>
+
+<body>
+
+<h1 class="center" th:text="|Rapport : ${title}|"></h1>
+
+<h2 class="titles-style" th:text="|Date d'aujourd'hui : ${date}|"></h2>
+<h2 class="titles-style" th:text="|Nombre d'${title} : ${#lists.size(studentsList)}|"></h2>
+<br/>
+<div id="studentsList">
+    <div th:if="${not #lists.isEmpty(studentsList)}">
+        <table class="table">
+            <div class="student" th:each="student: ${studentsList}">
+                <thead>
+                <tr>
+                    <th scope="col">Id</th>
+                    <th scope="col">Nom</th>
+                    <th scope="col">Prenom</th>
+                    <th scope="col">Status</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td scope="row" th:text="${student?.id}"></td>
+                    <td th:text="${student?.lastName}"></td>
+                    <td th:text="${student?.firstName}"></td>
+                    <td th:text="${student?.studentState}"></td>
+                </tr>
+                </tbody>
+                <thead>
+                <tr>
+                    <th scope="col">Courriel</th>
+                    <th scope="col">Téléphone</th>
+                    <th scope="col">CV</th>
+                    <th scope="col">CV validé</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${student?.email}"></td>
+                    <td th:text="${student?.phoneNumber}"></td>
+                    <td th:if="${student?.hasCv}">Oui</td>
+                    <td th:if="${not student?.hasCv}">Non</td>
+                    <td th:if="${student?.hasValidCv}">Oui</td>
+                    <td th:if="${not student?.hasValidCv}">Non</td>
+                </tr>
+                </tbody>
+            </div>
+            <tr></tr>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

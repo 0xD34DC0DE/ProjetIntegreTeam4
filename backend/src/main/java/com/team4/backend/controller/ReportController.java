@@ -37,46 +37,46 @@ public class ReportController {
         return reportService.generateAllValidatedOffersReport();
     }
 
-    @GetMapping("/studentsWithNoCV")
+    @GetMapping(value = "/generateAllStudentsReport", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Flux<Student> getAllStudentsWithNoCV() {
-        return studentService.getAllStudentsWithNoCv();
+    public Mono<byte[]> generateAllStudentsReport() {
+        return reportService.generateAllStudentsReport();
     }
 
-    @GetMapping("/studentsWithUnvalidatedCV")
+    @GetMapping(value = "/generateStudentsNoCvReport", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Flux<Student> getAllStudentsWithUnvalidatedCV() {
-        return studentService.getAllStudentsWithUnvalidatedCv();
+    public Mono<byte[]> generateStudentsNoCvReport() {
+        return reportService.generateStudentsNoCvReport();
     }
 
-    @GetMapping()
+    @GetMapping(value = "/generateStudentsUnvalidatedCvReport", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Flux<Student> getAllStudents() {
-        return studentService.getAll();
+    public Mono<byte[]> generateStudentsUnvalidatedCvReport() {
+        return reportService.generateStudentsUnvalidatedCvReport();
     }
 
-    @GetMapping("/getStudentsNoInternship")
+    @GetMapping(value = "/generateStudentsNoInternshipReport", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Flux<Student> getStudentsNoInternship() {
-        return studentService.getStudentsNoInternship();
+    public Mono<byte[]> generateStudentsNoInternshipReport() {
+        return reportService.generateStudentsNoInternshipReport();
     }
 
-    @GetMapping("/getStudentsWaitingInterview")
+    @GetMapping(value = "/generateStudentsWaitingInterviewReport", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Flux<Student> getStudentsWaitingInterview() {
-        return studentService.getStudentsWaitingInterview();
+    public Mono<byte[]> generateStudentsWaitingInterviewReport() {
+        return reportService.generateStudentsWaitingInterviewReport();
     }
 
-    @GetMapping("/getStudentsWaitingResponse")
+    @GetMapping(value = "/generateStudentsWaitingInterviewResponseReport", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Flux<Student> getStudentsWaitingResponse() {
-        return studentService.getStudentsWaitingResponse();
+    public Mono<byte[]> generateStudentsWaitingInterviewResponseReport() {
+        return reportService.generateStudentsWaitingInterviewResponseReport();
     }
 
-    @GetMapping("/getStudentsWithInternship")
+    @GetMapping(value = "/generateStudentsWithInternshipReport", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Flux<Student> getStudentsWithInternship() {
-        return studentService.getStudentsWithInternship();
+    public Mono<byte[]> generateStudentsWithInternshipReport() {
+        return reportService.generateStudentsWithInternshipReport();
     }
 
 }

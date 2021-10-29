@@ -143,6 +143,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .firstName("John")
                         .lastName("Doe").registrationDate(LocalDate.now())
                         .studentState(StudentState.REGISTERED)
+                        .hasValidCv(false)
+                        .hasCv(false)
                         .phoneNumber("123-123-1234")
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>() {

@@ -92,12 +92,12 @@ public class StudentService {
         return studentRepository.findAllByRole("STUDENT");
     }
 
-    public Flux<Student> getAllStudentsWithUnvalidatedCv() {
-        return studentRepository.findAllByHasValidCvFalse();
-    }
-
     public Flux<Student> getAllStudentsWithNoCv() {
         return studentRepository.findAllByHasCvFalse();
+    }
+
+    public Flux<Student> getAllStudentsWithUnvalidatedCv() {
+        return studentRepository.findAllByHasValidCvFalse();
     }
 
     public Flux<Student> getStudentsNoInternship() {

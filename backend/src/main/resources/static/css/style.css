@@ -2,12 +2,6 @@ html {
     background-color: #bcbebf;
 }
 
-table {
-    width: 100%;
-    /*text-align: center;*/
-    /*border-collapse: collapse;*/
-}
-
 th, td {
     border: 1px solid black;
     width: 25%;
@@ -21,6 +15,9 @@ th, td {
 .offer {
     border: 1px solid black;
     margin-bottom: 25px;
-    /*width: 100%;*/
-    /*border-collapse: collapse;*/
+}
+
+.student {
+    border: 1px solid black;
+    margin-bottom: 25px;
 }
