@@ -1,14 +1,12 @@
-import {
-  Dialog,
-  DialogContent,
-} from "@mui/material";
-import React, { useState, useContext, useEffect } from "react";
+import { Dialog, DialogContent } from "@mui/material";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import PdfView from "./PdfView.js";
 
 function SignContractMonitorDialog({ open, toggleDialog, pdfUrl }) {
   const [userInfo] = useContext(UserInfoContext);
   const [form, setForm] = useState({});
+  let dialogRef = useRef(null);
 
   const handleFormChange = (event) => {
     setForm((form) => ({
@@ -30,10 +28,24 @@ function SignContractMonitorDialog({ open, toggleDialog, pdfUrl }) {
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogContent>
-          <PdfView pdfUrl={pdfUrl} />
-        </DialogContent>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        fullWidth
+        maxWidth="lg"
+        PaperProps={{
+          sx: {
+            width: "75%",
+            height: "80%",
+          },
+        }}
+      >
+        
+        {open && (
+          <DialogContent sx={{ minHeight: "100%" }} ref={dialogRef}>
+            {dialogRef && <PdfView pdfUrl={pdfUrl} dialogRef={dialogRef} />}
+          </DialogContent>
+        )}
       </Dialog>
     </>
   );
