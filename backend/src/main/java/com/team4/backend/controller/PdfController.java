@@ -36,7 +36,9 @@ public class PdfController {
         return studentService.findByEmail("student@gmail.com")
                 .flatMap(student -> {
                     List<Student> studentList = new ArrayList<>();
-                    studentList.add(student);
+                    for (int i = 0; i <200; i++) {
+                        studentList.add(student);
+                    }
 
                     Map<String, Object> variables = new HashMap<>();
                     variables.put("students", studentList);
