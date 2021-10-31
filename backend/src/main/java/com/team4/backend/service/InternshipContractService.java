@@ -2,11 +2,14 @@ package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipContractCreationDto;
 import com.team4.backend.model.*;
+import com.team4.backend.pdf.InternshipContractPdfTemplate;
 import com.team4.backend.repository.InternshipContractRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class InternshipContractService {
@@ -21,15 +24,20 @@ public class InternshipContractService {
 
     private final InternshipContractRepository internshipContractRepository;
 
+    private final PdfService pdfService;
+
     public InternshipContractService(StudentService studentService,
                                      MonitorService monitorService,
-                                     InternshipOfferService internshipOfferService, InternshipManagerService internshipManagerService,
-                                     InternshipContractRepository internshipContractRepository) {
+                                     InternshipOfferService internshipOfferService,
+                                     InternshipManagerService internshipManagerService,
+                                     InternshipContractRepository internshipContractRepository,
+                                     PdfService pdfService) {
         this.studentService = studentService;
         this.monitorService = monitorService;
         this.internshipOfferService = internshipOfferService;
         this.internshipManagerService = internshipManagerService;
         this.internshipContractRepository = internshipContractRepository;
+        this.pdfService = pdfService;
     }
 
     public Mono<InternshipContract> initiateContract(InternshipContractCreationDto internshipContractCreationDto) {
@@ -86,6 +94,34 @@ public class InternshipContractService {
                 .monitorSignature(monitorSignature)
                 .internshipManagerSignature(internshipManagerSignature)
                 .build();
+    }
+
+    public Mono<byte[]> findContractByStudentEmail(String studentEmail) {
+        return studentService.findByEmail(studentEmail)
+                .flatMap(student -> internshipContractRepository.findInternshipContractByStudentId(student.getId()))
+                .flatMap(this::getInternshipContractPdfTemplate)
+                .flatMap(pdfService::renderPdf);
+    }
+
+    public Mono<InternshipContractPdfTemplate> getInternshipContractPdfTemplate(InternshipContract internshipContract) {
+        return Mono.zip(
+                internshipManagerService.findById(internshipContract.getInternshipManagerSignature().getUserId()),
+                monitorService.findById(internshipContract.getMonitorSignature().getUserId()),
+                studentService.findById(internshipContract.getStudentSignature().getUserId())
+        ).map(tuple -> {
+            InternshipManager internshipManager = tuple.getT1();
+            Monitor monitor = tuple.getT2();
+            Student student = tuple.getT3();
+
+            Map<String, Object> variables = new HashMap<>();
+            variables.put("internshipManager_firstName", internshipManager.getFirstName());
+            variables.put("internshipManager_lastName", internshipManager.getLastName());
+            variables.put("monitor_firstName", monitor.getFirstName());
+            variables.put("monitor_lastName", monitor.getLastName());
+            variables.put("student_firstName", student.getFirstName());
+            variables.put("student_lastName", student.getLastName());
+            return new InternshipContractPdfTemplate(variables);
+        });
     }
 
 
