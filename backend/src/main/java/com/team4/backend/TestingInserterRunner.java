@@ -1,6 +1,7 @@
 package com.team4.backend;
 
 import com.team4.backend.model.*;
+import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.*;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -13,7 +14,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -26,6 +26,8 @@ import java.util.Set;
 public class TestingInserterRunner implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(TestingInserterRunner.class);
+
+    private final UserRepository userRepository;
 
     private final MonitorRepository monitorRepository;
 
@@ -41,14 +43,22 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final FileMetaDataRepository fileMetaDataRepository;
 
+    private final InternshipManagerRepository internshipManagerRepository;
+
     private final Lorem lorem;
 
     private final Set<String> studentSet;
 
-    public TestingInserterRunner(MonitorRepository monitorRepository,
-                                 InternshipOfferRepository internshipOfferRepository, StudentRepository studentRepository,
-                                 SupervisorRepository supervisorRepository, InternshipContractRepository internshipContractRepository, PBKDF2Encoder pbkdf2Encoder,
-                                 FileMetaDataRepository fileMetaDataRepository) {
+    public TestingInserterRunner(UserRepository userRepository,
+                                 MonitorRepository monitorRepository,
+                                 InternshipOfferRepository internshipOfferRepository,
+                                 StudentRepository studentRepository,
+                                 SupervisorRepository supervisorRepository,
+                                 InternshipContractRepository internshipContractRepository,
+                                 PBKDF2Encoder pbkdf2Encoder,
+                                 FileMetaDataRepository fileMetaDataRepository,
+                                 InternshipManagerRepository internshipManagerRepository) {
+        this.userRepository = userRepository;
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
         this.studentRepository = studentRepository;
@@ -56,6 +66,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.internshipContractRepository = internshipContractRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.fileMetaDataRepository = fileMetaDataRepository;
+        this.internshipManagerRepository = internshipManagerRepository;
         this.lorem = LoremIpsum.getInstance();
         this.studentSet = new HashSet<>();
         this.studentSet.add("123456789@gmail.com");
@@ -64,12 +75,11 @@ public class TestingInserterRunner implements ApplicationRunner {
     }
 
     @Override
-    public void run(final ApplicationArguments args) throws IOException {
-        studentRepository.deleteAll().subscribe();
-        monitorRepository.deleteAll().subscribe();
-        studentRepository.deleteAll().subscribe();
-        supervisorRepository.deleteAll().subscribe();
-        fileMetaDataRepository.deleteAll().subscribe();
+    public void run(final ApplicationArguments args) {
+        userRepository.deleteAllByRoleEquals(Role.STUDENT).subscribe();
+        userRepository.deleteAllByRoleEquals(Role.MONITOR).subscribe();
+        userRepository.deleteAllByRoleEquals(Role.SUPERVISOR).subscribe();
+        fileMetaDataRepository.deleteAll().subscribe(System.err::println);
         internshipOfferRepository.deleteAll().subscribe();
         internshipContractRepository.deleteAll().subscribe();
 
@@ -78,6 +88,29 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertMonitors();
         insertSupervisors();
         insertCvs();
+        insertInternshipContract();
+    }
+
+    private void insertInternshipContract() {
+        String studentId = studentRepository.findByEmail("student@gmail.com").block().getId();
+        String monitorId = monitorRepository.findByEmail("monitor@gmail.com").block().getId();
+        String internshipManagerId = internshipManagerRepository.findByEmail("manager1@gmail.com")
+                .block().getId();
+
+        InternshipContract internshipContract = InternshipContract.builder()
+                .address("address")
+                .startDate(LocalDate.now().plusMonths(1))
+                .endDate(LocalDate.now().plusMonths(2))
+                .dailySchedule("8:00 to 16:00")
+                .hourlyRate(21.50f)
+                .hoursPerWeek(40.0f)
+                .internTasks("Tasks")
+                .studentSignature(Signature.builder().userId(studentId).hasSigned(false).build())
+                .monitorSignature(Signature.builder().signDate(LocalDate.now()).userId(monitorId).hasSigned(true).build())
+                .internshipManagerSignature(Signature.builder().userId(internshipManagerId).hasSigned(false).build())
+                .build();
+
+        internshipContractRepository.save(internshipContract).block();
     }
 
     private void insertStudents() {
@@ -128,8 +161,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                 Student.studentBuilder()
                         .email("student@gmail.com")
                         .password(pbkdf2Encoder.encode("student"))
-                        .firstName("John")
-                        .lastName("Doe").registrationDate(LocalDate.now())
+                        .firstName("Shia")
+                        .lastName("LaBeouf").registrationDate(LocalDate.now())
                         .studentState(StudentState.REGISTERED)
                         .phoneNumber("123-123-1234")
                         .appliedOffersId(new HashSet<>())
@@ -145,7 +178,10 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private void insertMonitors() {
         Monitor monitor = Monitor.monitorBuilder().email("monitor@gmail.com")
-                .password(pbkdf2Encoder.encode("monitor")).build();
+                .password(pbkdf2Encoder.encode("monitor"))
+                .firstName("Giorno")
+                .lastName("Giovanna")
+                .build();
 
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
