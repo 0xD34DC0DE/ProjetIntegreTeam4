@@ -1,7 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.service.ReportService;
-import org.junit.jupiter.api.BeforeEach;
+import com.team4.backend.testdata.ReportMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +27,10 @@ class ReportControllerTest {
     @MockBean
     ReportService reportService;
 
-    private final byte[] bytes = "bytes".getBytes();
-
     @Test
     void shouldGenerateAllNonValidatedOffersReport() {
         //ARRANGE
-        doReturn(Mono.just(bytes)).when(reportService).generateAllNonValidatedOffersReport();
+        doReturn(Mono.just(ReportMockData.getMonoBytes())).when(reportService).generateAllNonValidatedOffersReport();
 
         //ACT
         webTestClient
@@ -47,7 +45,7 @@ class ReportControllerTest {
     @Test
     void shouldGenerateAllValidatedOffersReport() {
         //ARRANGE
-        doReturn(Mono.just(bytes)).when(reportService).generateAllValidatedOffersReport();
+        doReturn(Mono.just(ReportMockData.getMonoBytes())).when(reportService).generateAllValidatedOffersReport();
 
         //ACT
         webTestClient
@@ -62,7 +60,7 @@ class ReportControllerTest {
     @Test
     void shouldGenerateAllStudentsReport() {
         //ARRANGE
-        doReturn(Mono.just(bytes)).when(reportService).generateAllStudentsReport();
+        doReturn(Mono.just(ReportMockData.getMonoBytes())).when(reportService).generateAllStudentsReport();
 
         //ACT
         webTestClient
@@ -77,7 +75,7 @@ class ReportControllerTest {
     @Test
     void shouldGenerateStudentsNoCvReport() {
         //ARRANGE
-        doReturn(Mono.just(bytes)).when(reportService).generateStudentsNoCvReport();
+        doReturn(Mono.just(ReportMockData.getMonoBytes())).when(reportService).generateStudentsNoCvReport();
 
         //ACT
         webTestClient
@@ -92,7 +90,7 @@ class ReportControllerTest {
     @Test
     void shouldGenerateStudentsUnvalidatedCvReport() {
         //ARRANGE
-        doReturn(Mono.just(bytes)).when(reportService).generateStudentsUnvalidatedCvReport();
+        doReturn(Mono.just(ReportMockData.getMonoBytes())).when(reportService).generateStudentsUnvalidatedCvReport();
 
         //ACT
         webTestClient
@@ -107,7 +105,7 @@ class ReportControllerTest {
     @Test
     void shouldGenerateStudentsNoInternshipReport() {
         //ARRANGE
-        doReturn(Mono.just(bytes)).when(reportService).generateStudentsNoInternshipReport();
+        doReturn(Mono.just(ReportMockData.getMonoBytes())).when(reportService).generateStudentsNoInternshipReport();
 
         //ACT
         webTestClient
@@ -122,7 +120,7 @@ class ReportControllerTest {
     @Test
     void shouldGenerateStudentsWaitingInterviewReport() {
         //ARRANGE
-        doReturn(Mono.just(bytes)).when(reportService).generateStudentsWaitingInterviewReport();
+        doReturn(Mono.just(ReportMockData.getMonoBytes())).when(reportService).generateStudentsWaitingInterviewReport();
 
         //ACT
         webTestClient
@@ -137,7 +135,7 @@ class ReportControllerTest {
     @Test
     void shouldGenerateStudentsWaitingInterviewResponseReport() {
         //ARRANGE
-        doReturn(Mono.just(bytes)).when(reportService).generateStudentsWaitingInterviewResponseReport();
+        doReturn(Mono.just(ReportMockData.getMonoBytes())).when(reportService).generateStudentsWaitingInterviewResponseReport();
 
         //ACT
         webTestClient
@@ -152,7 +150,7 @@ class ReportControllerTest {
     @Test
     void shouldGenerateStudentsWithInternshipReport() {
         //ARRANGE
-        doReturn(Mono.just(bytes)).when(reportService).generateStudentsWithInternshipReport();
+        doReturn(Mono.just(ReportMockData.getMonoBytes())).when(reportService).generateStudentsWithInternshipReport();
 
         //ACT
         webTestClient
