@@ -220,6 +220,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isValidated(true)
                         .isExclusive(false)
                         .listEmailInterestedStudents(offer1InterestedStudent)
+                        .emailOfApprovingInternshipManager("manager1@gmail.com")
                         .build(),
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
@@ -274,6 +275,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .validationDate(null)
                         .isExclusive(false)
                         .listEmailInterestedStudents(new HashSet<>())
+                        .emailOfApprovingInternshipManager("manager1@gmail.com")
                         .build(),
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
@@ -288,6 +290,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .validationDate(null)
                         .isExclusive(false)
                         .listEmailInterestedStudents(studentSet)
+                        .emailOfApprovingInternshipManager("manager1@gmail.com")
                         .build(),
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
