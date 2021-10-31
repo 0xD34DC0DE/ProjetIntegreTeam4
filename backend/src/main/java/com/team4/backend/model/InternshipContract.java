@@ -25,6 +25,8 @@ public class InternshipContract {
 
     private String dailySchedule;
 
+    private Float hoursPerWeek;
+
     private Float hourlyRate;
 
     private String internTasks;
@@ -42,6 +44,7 @@ public class InternshipContract {
                               LocalDate endDate,
                               String dailySchedule,
                               Float hourlyRate,
+                              Float hoursPerWeek,
                               String internTasks,
                               Signature studentSignature,
                               Signature monitorSignature,
@@ -51,6 +54,7 @@ public class InternshipContract {
         this.startDate = startDate;
         this.endDate = endDate;
         this.dailySchedule = dailySchedule;
+        this.hoursPerWeek = hoursPerWeek;
         this.hourlyRate = hourlyRate;
         this.internTasks = internTasks;
         this.studentSignature = studentSignature;

@@ -35,6 +35,8 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final SupervisorRepository supervisorRepository;
 
+    private final InternshipContractRepository internshipContractRepository;
+
     private final PBKDF2Encoder pbkdf2Encoder;
 
     private final FileMetaDataRepository fileMetaDataRepository;
@@ -45,12 +47,13 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     public TestingInserterRunner(MonitorRepository monitorRepository,
                                  InternshipOfferRepository internshipOfferRepository, StudentRepository studentRepository,
-                                 SupervisorRepository supervisorRepository, PBKDF2Encoder pbkdf2Encoder,
+                                 SupervisorRepository supervisorRepository, InternshipContractRepository internshipContractRepository, PBKDF2Encoder pbkdf2Encoder,
                                  FileMetaDataRepository fileMetaDataRepository) {
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
         this.studentRepository = studentRepository;
         this.supervisorRepository = supervisorRepository;
+        this.internshipContractRepository = internshipContractRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.fileMetaDataRepository = fileMetaDataRepository;
         this.lorem = LoremIpsum.getInstance();
@@ -68,6 +71,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         supervisorRepository.deleteAll().subscribe();
         fileMetaDataRepository.deleteAll().subscribe();
         internshipOfferRepository.deleteAll().subscribe();
+        internshipContractRepository.deleteAll().subscribe();
 
         insertInternshipOffersInternshipManagerView();
         insertStudents();

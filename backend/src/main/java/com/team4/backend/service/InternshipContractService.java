@@ -46,7 +46,8 @@ public class InternshipContractService {
                                 tuple.getT1(),
                                 tuple.getT2(),
                                 tuple.getT3(),
-                                internshipOffer)
+                                internshipOffer,
+                                internshipContractCreationDto)
                         )
                         .flatMap(internshipContractRepository::save));
     }
@@ -55,7 +56,8 @@ public class InternshipContractService {
     private InternshipContract buildInternshipContract(InternshipManager internshipManager,
                                                        Monitor monitor,
                                                        Student student,
-                                                       InternshipOffer internshipOffer) {
+                                                       InternshipOffer internshipOffer,
+                                                       InternshipContractCreationDto internshipContractCreationDto) {
         Signature monitorSignature = Signature.builder()
                 .userId(monitor.getId())
                 .hasSigned(true)
@@ -73,11 +75,12 @@ public class InternshipContractService {
                 .build();
 
         return InternshipContract.builder()
-                .address("")
+                .address(internshipContractCreationDto.getAddress())
                 .startDate(internshipOffer.getBeginningDate())
                 .endDate(internshipOffer.getEndingDate())
-                .dailySchedule("")
-                .hourlyRate(0.0f)
+                .dailySchedule(internshipContractCreationDto.getDailySchedule())
+                .hoursPerWeek(internshipContractCreationDto.getHoursPerWeek())
+                .hourlyRate(internshipContractCreationDto.getHourlyRate())
                 .internTasks(internshipOffer.getDescription())
                 .studentSignature(studentSignature)
                 .monitorSignature(monitorSignature)
