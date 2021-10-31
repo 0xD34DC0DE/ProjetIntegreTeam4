@@ -44,4 +44,10 @@ public class MonitorService {
                         Mono.error(new UserNotFoundException("Could not find Monitor with email : " + monitorEmail))
                 );
     }
+
+    public Mono<Monitor> findById(String monitorId) {
+        return monitorRepository.findById(monitorId).switchIfEmpty(
+                Mono.error(new UserNotFoundException("Could not find Monitor with id : " + monitorId))
+        );
+    }
 }

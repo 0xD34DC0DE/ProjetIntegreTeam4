@@ -33,4 +33,12 @@ public class InternshipManagerService {
                         )
                 );
     }
+
+    public Mono<InternshipManager> findById(String internshipManagerId) {
+        return internshipManagerRepository.findById(internshipManagerId).switchIfEmpty(
+                Mono.error(
+                        new UserNotFoundException("Could not find internship manager with id :" + internshipManagerId)
+                )
+        );
+    }
 }

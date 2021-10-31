@@ -78,4 +78,10 @@ public class StudentService {
         return Mono.just(student);
     }
 
+    public Mono<Student> findById(String studentId) {
+        return studentRepository.findById(studentId)
+                .switchIfEmpty(
+                        Mono.error(new UserNotFoundException("Could not find student with id : " + studentId))
+                );
+    }
 }
