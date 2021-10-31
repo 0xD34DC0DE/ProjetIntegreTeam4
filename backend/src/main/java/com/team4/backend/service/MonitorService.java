@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.exception.UserAlreadyExistsException;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.repository.MonitorRepository;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -37,4 +38,10 @@ public class MonitorService {
         });
     }
 
+    public Mono<Monitor> findByEmail(String monitorEmail) {
+        return monitorRepository.findByEmail(monitorEmail)
+                .switchIfEmpty(
+                        Mono.error(new UserNotFoundException("Could not find Monitor with email : " + monitorEmail))
+                );
+    }
 }
