@@ -1,7 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.model.Student;
-import com.team4.backend.pdf.StudentPdfTemplate;
+import com.team4.backend.pdf.InternshipContractPdfTemplate;
 import com.team4.backend.service.PdfService;
 import com.team4.backend.service.StudentService;
 import org.springframework.http.MediaType;
@@ -11,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -35,14 +31,14 @@ public class PdfController {
     public Mono<byte[]> getTestPdf() {
         return studentService.findByEmail("student@gmail.com")
                 .flatMap(student -> {
-                    List<Student> studentList = new ArrayList<>();
-                    for (int i = 0; i <200; i++) {
-                        studentList.add(student);
-                    }
+//                    List<Student> studentList = new ArrayList<>();
+//                    for (int i = 0; i <200; i++) {
+//                        studentList.add(student);
+//                    }
 
                     Map<String, Object> variables = new HashMap<>();
-                    variables.put("students", studentList);
-                    return pdfService.renderPdf(new StudentPdfTemplate(variables));
+//                    variables.put("students", studentList);
+                    return pdfService.renderPdf(new InternshipContractPdfTemplate(variables));
                 });
     }
 }
