@@ -16,12 +16,9 @@ import reactor.core.publisher.Mono;
 @RequestMapping("/report")
 public class ReportController {
 
-    private final StudentService studentService;
-
     private final ReportService reportService;
 
-    public ReportController(StudentService studentService, ReportService reportService) {
-        this.studentService = studentService;
+    public ReportController(ReportService reportService) {
         this.reportService = reportService;
     }
 
