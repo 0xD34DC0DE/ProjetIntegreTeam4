@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-@Order(1)
+@Order(2)
 public class TestingInserterRunner implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(TestingInserterRunner.class);
