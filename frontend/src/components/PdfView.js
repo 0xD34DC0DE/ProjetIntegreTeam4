@@ -56,7 +56,7 @@ function PdfView({ pdfUrl, dialogRef }) {
                   md={2}
                   loading={null}
                   pageNumber={pageNumber}
-                  height={dialogHeight * 0.7}
+                  height={dialogHeight}
                 />
               </Document>
             </Grid>
