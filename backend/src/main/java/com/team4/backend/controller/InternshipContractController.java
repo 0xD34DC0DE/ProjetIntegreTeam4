@@ -26,7 +26,7 @@ public class InternshipContractController {
                 .map(c -> ResponseEntity.status(HttpStatus.CREATED).body(""));
     }
 
-    @PostMapping("/pdfByStudentEmail/{studentEmail}")
+    @GetMapping("/pdfByStudentEmail/{studentEmail}")
     @PreAuthorize("hasAnyAuthority('MONITOR')")
     public Mono<byte[]> findInternshipContractByStudentEmail(
             @PathVariable("studentEmail") String studentEmail) {

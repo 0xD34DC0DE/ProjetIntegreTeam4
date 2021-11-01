@@ -113,6 +113,7 @@ public class InternshipContractService {
             Monitor monitor = tuple.getT2();
             Student student = tuple.getT3();
 
+            //TODO use the objects instead -> monitor.firstname , monitor.lastName
             Map<String, Object> variables = new HashMap<>();
             variables.put("internshipManager_firstName", internshipManager.getFirstName());
             variables.put("internshipManager_lastName", internshipManager.getLastName());
