@@ -1,14 +1,14 @@
 import {
+  Grid,
   List,
   ListItem,
   ListItemButton,
+  Paper,
   Tooltip,
   Typography,
-  Paper,
-  Grid,
 } from "@mui/material";
 import axios from "axios";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import InternshipOfferDialog from "./InternshipOfferDialog";
 import { listLabels } from "./InternshipOfferLabels";
@@ -51,6 +51,10 @@ const InternshipOfferValidation = ({
         Array.from(unvalidatedOffers, ({ companyName }) => companyName)
       ),
     ]);
+  };
+
+  const isNotARenderedAttribute = (identifier) => {
+    return !["id", "companyName", "description"].includes(identifier);
   };
 
   return (
@@ -123,16 +127,10 @@ const InternshipOfferValidation = ({
                               setSelectedOffer(offer);
                             }}
                           >
-                            {Object.keys(offer).map((offerKey, key) => {
+                            {Object.keys(offer).map((identifier, key) => {
                               return (
                                 <>
-                                  {![
-                                    "id",
-                                    "listEmailInterestedStudents",
-                                    "companyName",
-                                    "description",
-                                    "validated",
-                                  ].includes(offerKey) && (
+                                  {isNotARenderedAttribute(identifier) && (
                                     <Tooltip
                                       key={key}
                                       title={listLabels[key]}
@@ -143,7 +141,7 @@ const InternshipOfferValidation = ({
                                     >
                                       <ListItem key={key}>
                                         {Object.values(offer)[key]}
-                                        {offerKey.includes("Salary") && "$"}
+                                        {identifier.includes("Salary") && "$"}
                                       </ListItem>
                                     </Tooltip>
                                   )}
