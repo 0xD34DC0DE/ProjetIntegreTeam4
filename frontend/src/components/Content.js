@@ -15,7 +15,7 @@ import InternshipOfferValidation from "./InternshipOfferValidation";
 import ListUserDroppable from "./ListUserDroppable";
 import ListUserDraggable from "./ListUserDraggable";
 import AsssignedStudentSupervisorView from "./AsssignedStudentSupervisorView";
-import StudentEvaluationForm from "./StudentEvaluationForm";
+import StudentEvaluationForm from "./Evaluation/StudentEvaluationForm";
 
 const Content = ({
   isSidebarOpen,
@@ -95,7 +95,6 @@ const Content = ({
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListUserDraggable role="STUDENT" visible={selection.id === 11} />
           )}
-          <StudentEvaluationForm></StudentEvaluationForm>
         </Box>
       )}
       <OfferForm
