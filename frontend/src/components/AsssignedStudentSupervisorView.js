@@ -1,11 +1,14 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Box, Avatar, Typography, Grid, Card } from "@mui/material";
+import { Box, Avatar, Typography, Grid, Card, Container } from "@mui/material";
 import axios from "axios";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import StudentState from "./StudentState";
+import StudentInternshipDetailsDialog from "./StudentInternshipDetailsDialog";
 
-const AsssignedStudentSupervisorView = ({ visible }) => {
+const AsssignedStudentSupervisorView = ({ visible, toggleDialog }) => {
   const [assignedStudents, setAssignedStudents] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
+  const [openedStudentEmail, setOpenedStudentEmail] = useState("");
 
   useEffect(async () => {
     const getSupervisor = async () => {
@@ -33,6 +36,7 @@ const AsssignedStudentSupervisorView = ({ visible }) => {
     var supervisor = await getSupervisor();
     getAssignedStudents(supervisor.id);
   }, []);
+
   return (
     <>
       {visible && (
@@ -47,32 +51,42 @@ const AsssignedStudentSupervisorView = ({ visible }) => {
             columns={{ xs: 4, sm: 8, md: 12 }}
           >
             {assignedStudents.map((student, index) => (
-              <>
-                <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={index}>
-                  <Card
-                    sx={{
-                      backgroundColor: "#1F2020",
-                      boxShadow: 6,
-                      alignItem: "center",
-                      justifyContent: "center",
-                      p: 2,
-                      mx: 2,
-                    }}
-                  >
-                    <Box sx={{ textAlign: "center" }}>
-                      <Avatar sx={{ mx: "auto", my: 2 }}></Avatar>
-                      <Typography>{student.email}</Typography>
-                      <Typography>
-                        {student.firstName}, {student.lastName}
-                      </Typography>
+              <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={student.id}>
+                <Card
+                  onClick={() => setOpenedStudentEmail(student.email)}
+                  sx={{
+                    backgroundColor: "#1F2020",
+                    boxShadow: 6,
+                    "&:hover": {
+                      backgroundColor: "#272929",
+                      cursor: "pointer",
+                    },
+                    alignItem: "center",
+                    justifyContent: "center",
+                    p: 2,
+                    mx: 2,
+                  }}
+                >
+                  <Box sx={{ textAlign: "center" }}>
+                    <Avatar sx={{ mx: "auto", my: 2 }}></Avatar>
+                    <Typography>{student.email}</Typography>
+                    <Typography>
+                      {student.firstName}, {student.lastName}
+                    </Typography>
+                    <Box sx={{ mt: 2 }}>
+                      <StudentState studentState={student.studentState} />
                     </Box>
-                  </Card>
-                </Grid>
-              </>
+                  </Box>
+                </Card>
+              </Grid>
             ))}
           </Grid>
         </>
       )}
+      <StudentInternshipDetailsDialog
+        openedStudentEmail={openedStudentEmail}
+        toggleDialog={toggleDialog}
+      />
     </>
   );
 };

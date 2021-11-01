@@ -39,6 +39,8 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final FileMetaDataRepository fileMetaDataRepository;
 
+    private final InternshipRepository internshipRepository;
+
     private final Lorem lorem;
 
     private final Set<String> studentSet;
@@ -46,13 +48,15 @@ public class TestingInserterRunner implements ApplicationRunner {
     public TestingInserterRunner(MonitorRepository monitorRepository,
                                  InternshipOfferRepository internshipOfferRepository, StudentRepository studentRepository,
                                  SupervisorRepository supervisorRepository, PBKDF2Encoder pbkdf2Encoder,
-                                 FileMetaDataRepository fileMetaDataRepository) {
+                                 FileMetaDataRepository fileMetaDataRepository,
+                                 InternshipRepository internshipRepository) {
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
         this.studentRepository = studentRepository;
         this.supervisorRepository = supervisorRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.fileMetaDataRepository = fileMetaDataRepository;
+        this.internshipRepository = internshipRepository;
         this.lorem = LoremIpsum.getInstance();
         this.studentSet = new HashSet<>();
         this.studentSet.add("123456789@gmail.com");
@@ -68,12 +72,35 @@ public class TestingInserterRunner implements ApplicationRunner {
         supervisorRepository.deleteAll().subscribe();
         fileMetaDataRepository.deleteAll().subscribe();
         internshipOfferRepository.deleteAll().subscribe();
+        internshipRepository.deleteAll().subscribe();
 
         insertInternshipOffersInternshipManagerView();
         insertStudents();
         insertMonitors();
         insertSupervisors();
         insertCvs();
+        insertInternship();
+    }
+
+    private void insertInternship() {
+        List<Internship> internships = Arrays.asList(
+                Internship.builder()
+                        .monitorEmail("9182738492@gmail.com")
+                        .internshipManagerEmail("manager1@gmail.com")
+                        .studentEmail("studentInternFound@gmail.com")
+                        .startDate(LocalDate.now().plusDays(15))
+                        .endDate(LocalDate.now().plusMonths(4))
+                        .build(),
+                Internship.builder()
+                        .monitorEmail("9182738492@gmail.com")
+                        .internshipManagerEmail("manager1@gmail.com")
+                        .studentEmail("123456789@gmail.com")
+                        .startDate(LocalDate.now().plusDays(15))
+                        .endDate(LocalDate.now().plusMonths(4))
+                        .build()
+        );
+        internshipRepository.saveAll(internships)
+                .subscribe(internship -> log.info("Internship has been saved : {}", internship));
     }
 
     private void insertStudents() {
@@ -133,7 +160,18 @@ public class TestingInserterRunner implements ApplicationRunner {
                             {
                                 add(insertInternshipOffersStudentView());
                             }
-                        }).build());
+                        }).build(),
+                Student.studentBuilder()
+                        .email("studentInternFound@gmail.com")
+                        .firstName("Maxime")
+                        .lastName("Dupuis")
+                        .phoneNumber("438-422-3344")
+                        .password(pbkdf2Encoder.encode("maxime123"))
+                        .hasValidCv(true)
+                        .appliedOffersId(new HashSet<>())
+                        .exclusiveOffersId(new HashSet<>())
+                        .studentState(StudentState.INTERNSHIP_FOUND)
+                        .build());
 
         studentRepository.saveAll(students)
                 .subscribe(student -> log.info("Student has been saved : {}", student));

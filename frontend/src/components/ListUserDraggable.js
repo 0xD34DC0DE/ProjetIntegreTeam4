@@ -39,7 +39,20 @@ const ListUserDraggable = ({ role, isDragging, visible }) => {
           >
             {users.map((user, index) => (
               <>
-                <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={index}>
+                <Grid
+                  item
+                  xs={6}
+                  sm={4}
+                  md={4}
+                  lg={3}
+                  xl={2}
+                  key={index}
+                  sx={{
+                    "&:hover": {
+                      cursor: "grab",
+                    },
+                  }}
+                >
                   <UserCard isDragging={isDragging} user={user} />
                 </Grid>
               </>
