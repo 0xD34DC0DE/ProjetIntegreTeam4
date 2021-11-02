@@ -4,6 +4,18 @@ import axios from "axios";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import StudentState from "./StudentState";
 import StudentInternshipDetailsDialog from "./StudentInternshipDetailsDialog";
+import { motion } from "framer-motion";
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: [0, 1],
+    transition: {
+      delay: 0.1,
+      staggerChildren: 0.5,
+    },
+  },
+};
 
 const AsssignedStudentSupervisorView = ({ visible, toggleDialog }) => {
   const [assignedStudents, setAssignedStudents] = useState([]);
@@ -52,32 +64,34 @@ const AsssignedStudentSupervisorView = ({ visible, toggleDialog }) => {
           >
             {assignedStudents.map((student, index) => (
               <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={student.id}>
-                <Card
-                  onClick={() => setOpenedStudentEmail(student.email)}
-                  sx={{
-                    backgroundColor: "#1F2020",
-                    boxShadow: 6,
-                    "&:hover": {
-                      backgroundColor: "#272929",
-                      cursor: "pointer",
-                    },
-                    alignItem: "center",
-                    justifyContent: "center",
-                    p: 2,
-                    mx: 2,
-                  }}
-                >
-                  <Box sx={{ textAlign: "center" }}>
-                    <Avatar sx={{ mx: "auto", my: 2 }}></Avatar>
-                    <Typography>{student.email}</Typography>
-                    <Typography>
-                      {student.firstName}, {student.lastName}
-                    </Typography>
-                    <Box sx={{ mt: 2 }}>
-                      <StudentState studentState={student.studentState} />
+                <motion.div variants={fadeIn} initial="hidden" animate="show">
+                  <Card
+                    onClick={() => setOpenedStudentEmail(student.email)}
+                    sx={{
+                      backgroundColor: "#1F2020",
+                      boxShadow: 6,
+                      "&:hover": {
+                        backgroundColor: "#272929",
+                        cursor: "pointer",
+                      },
+                      alignItem: "center",
+                      justifyContent: "center",
+                      p: 2,
+                      mx: 2,
+                    }}
+                  >
+                    <Box sx={{ textAlign: "center" }}>
+                      <Avatar sx={{ mx: "auto", my: 2 }}></Avatar>
+                      <Typography>{student.email}</Typography>
+                      <Typography>
+                        {student.firstName}, {student.lastName}
+                      </Typography>
+                      <Box sx={{ mt: 2 }}>
+                        <StudentState studentState={student.studentState} />
+                      </Box>
                     </Box>
-                  </Box>
-                </Card>
+                  </Card>
+                </motion.div>
               </Grid>
             ))}
           </Grid>

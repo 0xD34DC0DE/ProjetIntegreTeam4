@@ -5,6 +5,18 @@ import axios from "axios";
 import UserCard from "./DraggableUserCard";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { motion } from "framer-motion";
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  show: {
+    opacity: [0, 1],
+    transition: {
+      delay: 0.1,
+      staggerChildren: 0.5,
+    },
+  },
+};
 
 const ListUserDraggable = ({ role, isDragging, visible }) => {
   const [users, setUsers] = useState([]);
@@ -31,6 +43,7 @@ const ListUserDraggable = ({ role, isDragging, visible }) => {
           <Typography variant="h4" sx={{ color: "white", ml: 2 }}>
             Étudiants
           </Typography>
+
           <Grid
             sx={{ py: "1vh", mt: "10%", display: "flex" }}
             container
@@ -53,7 +66,9 @@ const ListUserDraggable = ({ role, isDragging, visible }) => {
                     },
                   }}
                 >
-                  <UserCard isDragging={isDragging} user={user} />
+                  <motion.div variants={fadeIn} initial="hidden" animate="show">
+                    <UserCard isDragging={isDragging} user={user} />
+                  </motion.div>
                 </Grid>
               </>
             ))}
