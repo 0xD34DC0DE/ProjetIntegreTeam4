@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @Log
 @Service
-public class FileMetaDataService {
+public class    FileMetaDataService {
 
     private final FileMetaDataRepository fileMetaDataRepository;
 
@@ -88,11 +88,12 @@ public class FileMetaDataService {
 
     }
 
-    public Mono<FileMetaData> validateCv(String id, Boolean isValid) {
+    public Mono<FileMetaData> validateCv(String id, Boolean isValid, String rejectionExplanation) {
         return fileMetaDataRepository.findById(id)
                 .switchIfEmpty(Mono.error(new FileNotFoundException("This file do Not Exist")))
                 .map(file -> {
                     file.setIsValid(isValid);
+                    file.setRejectionExplanation(rejectionExplanation);
                     file.setIsSeen(true);
                     file.setSeenDate(LocalDateTime.now());
 
