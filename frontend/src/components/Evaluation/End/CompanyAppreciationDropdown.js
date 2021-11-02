@@ -43,7 +43,7 @@ const CompanyAppreciationDropdown = () => {
         sx={{ backgroundColor: "rgba(35, 35, 35, 0.6)", pb: 1 }}
       >
         <Grid container textAlign="center" alignItems="center">
-          {appreciation.ratings.map((field, key) => {
+          {companyAppreciation.ratings.map((field, key) => {
             return (
               <>
                 <Grid
@@ -67,9 +67,11 @@ const CompanyAppreciationDropdown = () => {
                   key={"radio" + key}
                 >
                   <Radio
-                    checked={parseInt(form[appreciation.id]) === field.value}
-                    id={appreciation.id}
-                    name={appreciation.id}
+                    checked={
+                      parseInt(form[companyAppreciation.id]) === field.value
+                    }
+                    id={companyAppreciation.id}
+                    name={companyAppreciation.id}
                     value={field.value}
                     onChange={handleFormChange}
                   ></Radio>

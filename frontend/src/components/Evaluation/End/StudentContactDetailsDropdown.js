@@ -44,9 +44,9 @@ const StudentContactDetailsDropdown = () => {
                   item
                   xl={1.5}
                   lg={1.5}
-                  md={1.5}
-                  sm={1.5}
-                  xs={1.5}
+                  md={2}
+                  sm={3}
+                  xs={3}
                   key={"label" + key}
                 >
                   <Typography variant="caption">{field.label}</Typography>
@@ -55,9 +55,9 @@ const StudentContactDetailsDropdown = () => {
                   item
                   xl={10.5}
                   lg={10.5}
-                  md={10.5}
-                  sm={10.5}
-                  xs={10.5}
+                  md={10}
+                  sm={9}
+                  xs={9}
                   key={"field" + key}
                 >
                   <TextField

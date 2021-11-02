@@ -154,8 +154,8 @@ export const studentIdentification = {
   title: "Identification du stagiare",
   description: "Information du stagiaire évalué",
   fields: [
-    { label: "Nom du stagiaire", id: "studentName" },
-    { label: "Date du stage", id: "internshipDate" },
+    { label: "Nom du stagiaire", id: "studentName", type: "text" },
+    { label: "Date du stage", id: "internshipDate", type: "date" },
   ],
 };
 
@@ -193,6 +193,7 @@ export const midTermEvaluation = {
       id: "internSupervisionTimeAllocated",
       precision: (
         <>
+          <br />
           <Typography variant="caption">
             Préciser le nombre d'heures/semaine :
           </Typography>
@@ -202,6 +203,7 @@ export const midTermEvaluation = {
               <>
                 <Typography variant="caption">{value} mois: </Typography>
                 <TextField
+                  id={"timeSpentWeekly" + key}
                   variant="standard"
                   sx={{
                     "& .MuiInput-input": {
@@ -265,7 +267,7 @@ export const midTermEvaluation = {
 export const companyObservation = [
   {
     label: "Ce milieu est à privilégier pour le :",
-    id: "internshipPrivilege",
+    id: "privilegeInternship",
     options: ["Premier stage", "Deuxième stage"],
   },
   {

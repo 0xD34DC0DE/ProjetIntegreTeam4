@@ -17,6 +17,7 @@ const StudentMidEvaluationDropdown = () => {
       ...form,
       [event.target.id || event.target.name]: event.target.value,
     }));
+    console.log(form);
   };
 
   return (

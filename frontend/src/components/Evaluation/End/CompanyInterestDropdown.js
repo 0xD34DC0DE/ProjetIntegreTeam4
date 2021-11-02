@@ -99,6 +99,7 @@ const CompanyInterestDropdown = () => {
                 fullWidth
                 variant="standard"
                 label="Nom"
+                sx={{ "& .MuiInput-input": { fontSize: "0.8em" } }}
                 InputLabelProps={{
                   sx: {
                     fontSize: "0.9em",
@@ -114,6 +115,7 @@ const CompanyInterestDropdown = () => {
                 fullWidth
                 variant="standard"
                 label="Fonction"
+                sx={{ "& .MuiInput-input": { fontSize: "0.8em" } }}
                 InputLabelProps={{
                   sx: {
                     fontSize: "0.9em",
@@ -137,6 +139,7 @@ const CompanyInterestDropdown = () => {
                 type="text"
                 variant="standard"
                 label="Signature"
+                sx={{ "& .MuiInput-input": { fontSize: "0.8em" } }}
                 InputLabelProps={{
                   sx: {
                     fontSize: "0.9em",

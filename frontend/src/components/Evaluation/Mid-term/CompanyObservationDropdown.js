@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Grid,
   AccordionDetails,
@@ -11,6 +11,15 @@ import {
 import { companyObservation } from "../EvaluationFields";
 
 const CompanyObservationDropdown = () => {
+  const [form, setForm] = useState({});
+  const handleFormChange = (event) => {
+    setForm((form) => ({
+      ...form,
+      [event.target.id || event.target.name]: event.target.value,
+    }));
+    console.log(form);
+  };
+
   return (
     <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
       <AccordionSummary>
@@ -50,10 +59,16 @@ const CompanyObservationDropdown = () => {
                   {observation.options.map((option, key2) => {
                     return (
                       <>
-                        <Typography variant="caption" alignSelf="center" ml={5}>
+                        <Typography variant="caption" ml={5}>
                           {option}
                         </Typography>
-                        <Radio id={observation.id} value={key2} mr={5}></Radio>
+                        <Radio
+                          name={observation.id}
+                          onChange={handleFormChange}
+                          value={option}
+                          checked={form[observation.id] === option}
+                          mr={5}
+                        ></Radio>
                       </>
                     );
                   })}
@@ -91,6 +106,8 @@ const CompanyObservationDropdown = () => {
           </Grid>
           <Grid item xl={4} lg={4} md={4} xs={4} sm={4} ml={5} mt={5}>
             <TextField
+              id="signature"
+              onChange={handleFormChange}
               helperText="Signature de l'enseignant responsable du stagiaire"
               variant="standard"
               fullWidth
@@ -111,6 +128,7 @@ const CompanyObservationDropdown = () => {
               id="date"
               type="date"
               fullWidth
+              onChange={handleFormChange}
               placeholder=""
               InputLabelProps={{
                 sx: {

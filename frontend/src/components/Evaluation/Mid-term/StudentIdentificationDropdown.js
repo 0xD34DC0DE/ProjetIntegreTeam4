@@ -18,6 +18,7 @@ const StudentIdentificationDropdown = () => {
       ...form,
       [event.target.id || event.target.name]: event.target.value,
     }));
+    console.log(form);
   };
 
   return (
@@ -67,7 +68,7 @@ const StudentIdentificationDropdown = () => {
                   <TextField
                     id={field.id}
                     value={form[field.id]}
-                    type="text"
+                    type={field.type}
                     variant="standard"
                     onChange={handleFormChange}
                     sx={{ "& .MuiInput-input": { fontSize: "0.8em" } }}
@@ -81,16 +82,30 @@ const StudentIdentificationDropdown = () => {
             <Typography sx={{ fontSize: "0.8em" }}>Stage</Typography>
           </Grid>
           <Grid item xs={12} sm={12} md={10.5} xl={10.5} lg={10.5}>
-            <RadioGroup row>
-              <Typography alignSelf="center" sx={{ fontSize: "0.8em" }}>
-                1
-              </Typography>
-              <Radio value={1}></Radio>
-              <Typography alignSelf="center" sx={{ fontSize: "0.8em" }}>
-                2
-              </Typography>
-              <Radio value={2}></Radio>
-            </RadioGroup>
+            <Typography
+              alignSelf="center"
+              sx={{ fontSize: "0.8em", display: "inline-block" }}
+            >
+              1
+            </Typography>
+            <Radio
+              name="internshipNumber"
+              value={1}
+              checked={parseInt(form.internshipNumber) === 1}
+              onChange={handleFormChange}
+            ></Radio>
+            <Typography
+              alignSelf="center"
+              sx={{ fontSize: "0.8em", display: "inline-block" }}
+            >
+              2
+            </Typography>
+            <Radio
+              name="internshipNumber"
+              value={2}
+              checked={parseInt(form.internshipNumber) === 2}
+              onChange={handleFormChange}
+            ></Radio>
           </Grid>
         </Grid>
       </AccordionDetails>

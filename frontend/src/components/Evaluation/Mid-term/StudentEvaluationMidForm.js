@@ -9,15 +9,6 @@ const StudentEvaluationMidForm = () => {
   return (
     <Grid container px={5} pb={3}>
       <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={5}>
-        <Typography
-          variant="subtitle2"
-          sx={{ fontSize: "2.5em", color: "white" }}
-          textAlign="center"
-        >
-          Évaluation du milieu de stage
-        </Typography>
-      </Grid>
-      <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={5}>
         <CompanyIdentificationDropdown />
       </Grid>
       <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={5}>

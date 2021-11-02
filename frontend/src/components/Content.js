@@ -15,6 +15,7 @@ import InternshipOfferValidation from "./InternshipOfferValidation";
 import ListUserDroppable from "./ListUserDroppable";
 import ListUserDraggable from "./ListUserDraggable";
 import AsssignedStudentSupervisorView from "./AsssignedStudentSupervisorView";
+import StudentEvaluationForm from "./Evaluation/End/StudentEvaluationForm";
 import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMidForm";
 
 const Content = ({
