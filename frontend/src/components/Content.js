@@ -15,6 +15,7 @@ import InternshipOfferValidation from "./InternshipOfferValidation";
 import ListUserDroppable from "./ListUserDroppable";
 import ListUserDraggable from "./ListUserDraggable";
 import AsssignedStudentSupervisorView from "./AsssignedStudentSupervisorView";
+import ListReport from "./ListReport";
 
 const Content = ({
   isSidebarOpen,
@@ -56,7 +57,6 @@ const Content = ({
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListCvInternshipManagerView visible={selection.id === 1} />
           )}
-
           {userInfo.role === "MONITOR" && (
             <ListStudentApplying
               visible={selection.id === 6}
@@ -93,6 +93,9 @@ const Content = ({
           )}
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListUserDraggable role="STUDENT" visible={selection.id === 11} />
+          )}
+          {userInfo.role === "INTERNSHIP_MANAGER" && (
+            <ListReport role="STUDENT" visible={selection.id === 12} />
           )}
         </Box>
       )}

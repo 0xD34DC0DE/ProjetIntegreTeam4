@@ -10,6 +10,7 @@ import {
   FactCheckOutlined,
   AddCircleOutlineOutlined,
   CheckOutlined,
+  AssignmentSharp,
 } from "@mui/icons-material";
 import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 
@@ -86,6 +87,13 @@ export const sidebarList = [
     role: ["INTERNSHIP_MANAGER"],
     icon: <SupervisedUserCircleIcon fontSize="small" sx={{ mr: 1 }} />,
     description: "Assignations des superviseurs aux élèves",
+  },
+  {
+    id: 12,
+    label: "Consulter rapports",
+    role: ["INTERNSHIP_MANAGER"],
+    icon: <AssignmentSharp fontSize="small" sx={{ mr: 1 }} />,
+    description: "Consultation des rapports",
   },
 ];
 
