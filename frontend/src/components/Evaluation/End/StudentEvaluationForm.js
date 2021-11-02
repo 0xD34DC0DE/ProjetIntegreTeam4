@@ -1,25 +1,24 @@
 import { Grid } from "@mui/material";
 import React from "react";
-import StudentAppreciationForm from "./StudentAppreciationForm";
-import StudentContactDetailsForm from "./StudentContactDetailsForm";
-import { sections } from "./StudentEvaluationFields";
-import StudentGenericForm from "./StudentGenericForm";
-import StudentInterestForm from "./StudentInterestForm";
+import CompanyAppreciationDropdown from "./CompanyAppreciationDropdown";
+import CompanyInterestDropdown from "./CompanyInterestDropdown";
+import StudentContactDetailsDropdown from "./StudentContactDetailsDropdown";
+import StudentEvaluationDropdown from "./StudentEvaluationDropdown";
 
 const StudentEvaluationForm = () => {
   return (
     <Grid container px={5} pb={3}>
       <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={1}>
-        <StudentContactDetailsForm />
+        <StudentContactDetailsDropdown />
       </Grid>
       {sections.map((section, key) => {
-        return <StudentGenericForm section={section} key={key} />;
+        return <StudentEvaluationDropdown section={section} key={key} />;
       })}
       <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={5}>
-        <StudentAppreciationForm />
+        <CompanyAppreciationDropdown />
       </Grid>
       <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={5}>
-        <StudentInterestForm />
+        <CompanyInterestDropdown />
       </Grid>
     </Grid>
   );

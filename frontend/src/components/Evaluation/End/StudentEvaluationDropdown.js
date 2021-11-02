@@ -8,9 +8,9 @@ import {
   AccordionDetails,
   Radio,
 } from "@mui/material";
-import { ratings } from "./StudentEvaluationFields";
+import { ratings } from "../EvaluationFields";
 
-const StudentGenericForm = ({ section, key }) => {
+const StudentEvaluationDropdown = ({ section, key }) => {
   const [form, setForm] = useState({});
   const handleFormChange = (event) => {
     setForm((form) => ({
@@ -98,6 +98,7 @@ const StudentGenericForm = ({ section, key }) => {
                             md={1.2}
                             sm={1.2}
                             xs={1.2}
+                            key={key3}
                           >
                             <Radio
                               value={rating.value}
@@ -152,4 +153,4 @@ const StudentGenericForm = ({ section, key }) => {
   );
 };
 
-export default StudentGenericForm;
+export default StudentEvaluationDropdown;

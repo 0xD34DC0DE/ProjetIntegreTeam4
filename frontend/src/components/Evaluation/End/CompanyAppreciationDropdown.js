@@ -9,9 +9,9 @@ import {
   Radio,
   RadioGroup,
 } from "@mui/material";
-import { appreciation } from "./StudentEvaluationFields";
+import { companyAppreciation } from "../EvaluationFields";
 
-const StudentAppreciationForm = () => {
+const CompanyAppreciationDropdown = () => {
   const [form, setForm] = useState({});
   const handleFormChange = (event) => {
     setForm((form) => ({
@@ -140,4 +140,4 @@ const StudentAppreciationForm = () => {
   );
 };
 
-export default StudentAppreciationForm;
+export default CompanyAppreciationDropdown;

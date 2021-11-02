@@ -10,7 +10,7 @@ import {
   RadioGroup,
 } from "@mui/material";
 
-const StudentInterestForm = () => {
+const CompanyInterestDropdown = () => {
   const [form, setForm] = useState({});
   const handleFormChange = (event) => {
     setForm((form) => ({
@@ -168,4 +168,4 @@ const StudentInterestForm = () => {
   );
 };
 
-export default StudentInterestForm;
+export default CompanyInterestDropdown;

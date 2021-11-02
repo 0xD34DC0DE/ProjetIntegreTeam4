@@ -1,4 +1,4 @@
-export const sections = [
+export const endEvaluation = [
   {
     section: 1,
     title: "Productivité",
@@ -10,10 +10,10 @@ export const sections = [
       },
       {
         label: "Comprendre rapidement les directives relatives à son travail",
-        id: "fastUnderstanding",
+        id: "understandFast",
       },
-      { label: "Maintenir un rythme de travail soutenu", id: "keepsRhythm" },
-      { label: "Établir ses priorités", id: "establishesPriorities" },
+      { label: "Maintenir un rythme de travail soutenu", id: "keepRhythm" },
+      { label: "Établir ses priorités", id: "establishPriorities" },
       { label: "Respecter ses échéanciers", id: "respectDeadlines" },
     ],
     comment: { label: "Commentaires :", id: "productivityComment" },
@@ -30,15 +30,15 @@ export const sections = [
       },
       {
         label: "Porter attention aux détails dans la réalisation de ses tâches",
-        id: "paysAttentionToDetails",
+        id: "payAttentionDetails",
       },
       {
         label: "Vérifier son travail, s'assurer que rien n'a été oublié",
-        id: "verifiesWork",
+        id: "verifyWork",
       },
       {
         label: "Rechercher ses occasions de se perfectionner",
-        id: "isPerfectionist",
+        id: "perfectionate",
       },
       {
         label: "Faire une bonne analyse des problèmes rencontrés",
@@ -55,25 +55,25 @@ export const sections = [
     tasks: [
       {
         label: "Établir facilement des contacts avec les gens",
-        id: "isApprochable",
+        id: "approchable",
       },
       {
         label: "Contribuer activement au travail d'équipe",
-        id: "contributesToTeamwork",
+        id: "contributeTeamwork",
       },
       {
         label: "S'adapter facilement à la culture de l'entreprise",
-        id: "adaptsToCompany",
+        id: "adaptCompany",
       },
       {
         label: "Accepter les critiques constructives",
-        id: "acceptsCriticism",
+        id: "acceptCriticism",
       },
-      { label: "Être respectueux envers les gens", id: "isRespectful" },
+      { label: "Être respectueux envers les gens", id: "respectful" },
       {
         label:
           "Faire preuve d'écoute active en essayant de comprendre le point de vue de l'autre",
-        id: "listensToOthers",
+        id: "listenOthers",
       },
     ],
     comment: {
@@ -89,17 +89,17 @@ export const sections = [
     tasks: [
       {
         label: "Démontrer de l'intérêt et de la motivation au travail",
-        id: "showsMotivation",
+        id: "showMotivation",
       },
-      { label: "Exprimer clairement ses idées", id: "expressesClearly" },
-      { label: "Faire preuve d'initiative", id: "takesInitiative" },
-      { label: "Travailler de façon sécuritaire", id: "worksSafely" },
+      { label: "Exprimer clairement ses idées", id: "expressClearly" },
+      { label: "Faire preuve d'initiative", id: "takeInitiative" },
+      { label: "Travailler de façon sécuritaire", id: "workSafely" },
       {
         label:
           "Démontrer un bon sens des responsabilités ne réquérant qu'un minimum de supervision",
-        id: "showsAutonomy",
+        id: "showAutonomy",
       },
-      { label: "Être ponctuel et assidu à son travail", id: "isPunctual" },
+      { label: "Être ponctuel et assidu à son travail", id: "punctual" },
     ],
     comment: { label: "Commentaires :", id: "personalSkillsComment" },
   },
@@ -125,7 +125,7 @@ export const contactDetails = [
   { label: "Téléphone", id: "phoneNumber" },
 ];
 
-export const appreciation = {
+export const companyAppreciation = {
   id: "studentAppreciation",
   ratings: [
     {
@@ -154,7 +154,6 @@ export const studentIdentification = {
   fields: [
     { label: "Nom du stagiaire", id: "studentName" },
     { label: "Date du stage", id: "internshipDate" },
-    { label: "Stage", id: "internshipNumber" },
   ],
 };
 
@@ -172,7 +171,52 @@ export const companyIdentification = {
   ],
 };
 
-export const generalObservation = {
-  title: "Observations générales",
-  fields: [],
+export const midTermEvaluation = {
+  title: "Évaluation",
+  description: "Évaluation du stagiaire mi-mandat",
+  tasks: [
+    {
+      label:
+        "Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans l'entente de stage",
+      id: "taskRespectAgreement",
+    },
+    {
+      label:
+        "Des mesures d'accueil facilitent l'intégration du nouveau stagiaire.",
+      id: "internIntegrationMesures",
+    },
+    {
+      label:
+        "Le temps réel consacré à l'encadrement du stagiaire est suffisant",
+      id: "internSupervisionTimeAllocated",
+    },
+    {
+      label:
+        "L'environnement de travail respecte les normes d'hygiène et de sécurité au travail",
+      id: "workEnvironnement",
+    },
+    { label: "Le climat de travail est agréable", id: "pleasantWorkClimate" },
+    {
+      label: "Le milieu de stage est accessible par transport en commun",
+      id: "publicTransportAccessible",
+    },
+    {
+      label: "Le salaire offert est intéressant pour le stagiaire",
+      id: "interestingSalary",
+    },
+    {
+      label:
+        "La communication avec le superviseur de stage facilite le déroulement du stage",
+      id: "supervisorCommunicationEase",
+    },
+    {
+      label: "L'équipment fourni est adéquat pour réaliser les tâches confiées",
+      id: "adequateEquipement",
+    },
+    {
+      label: "Le volume de travail est acceptable",
+      id: "workVolumeAcceptable",
+    },
+  ],
+  comment: { label: "Commentaire :", id: "evaluationComment" },
 };

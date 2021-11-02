@@ -1,15 +1,17 @@
 import React, { useState } from "react";
+import { studentIdentification } from "../EvaluationFields";
 import {
-  Accordion,
   Grid,
+  AccordionDetails,
+  Accordion,
+  AccordionSummary,
   Typography,
   TextField,
-  AccordionSummary,
-  AccordionDetails,
+  Radio,
+  RadioGroup,
 } from "@mui/material";
-import { contactDetails } from "./StudentEvaluationFields";
 
-const StudentContactDetailsForm = () => {
+const StudentIdentificationDropdown = () => {
   const [form, setForm] = useState({});
   const handleFormChange = (event) => {
     setForm((form) => ({
@@ -27,17 +29,19 @@ const StudentContactDetailsForm = () => {
               variant="subtitle2"
               sx={{ fontSize: "1.75em", lineHeight: "100%" }}
             >
-              Évaluation
+              {studentIdentification.title}
             </Typography>
           </Grid>
           <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
-            <Typography variant="caption">Coordonnées des pairs</Typography>
+            <Typography variant="caption">
+              {studentIdentification.description}
+            </Typography>
           </Grid>
         </Grid>
       </AccordionSummary>
       <AccordionDetails sx={{ backgroundColor: "rgba(35, 35, 35, 0.6)" }}>
-        <Grid container>
-          {contactDetails.map((field, key) => {
+        <Grid container alignItems="center">
+          {studentIdentification.fields.map((field, key) => {
             return (
               <>
                 <Grid
@@ -45,8 +49,8 @@ const StudentContactDetailsForm = () => {
                   xl={1.5}
                   lg={1.5}
                   md={1.5}
-                  sm={1.5}
-                  xs={1.5}
+                  sm={12}
+                  xs={12}
                   key={"label" + key}
                 >
                   <Typography variant="caption">{field.label}</Typography>
@@ -56,8 +60,8 @@ const StudentContactDetailsForm = () => {
                   xl={10.5}
                   lg={10.5}
                   md={10.5}
-                  sm={10.5}
-                  xs={10.5}
+                  sm={12}
+                  xs={12}
                   key={"field" + key}
                 >
                   <TextField
@@ -73,10 +77,25 @@ const StudentContactDetailsForm = () => {
               </>
             );
           })}
+          <Grid item xl={1.5} lg={1.5} md={1.5} sm={12} xs={12}>
+            <Typography sx={{ fontSize: "0.8em" }}>Stage</Typography>
+          </Grid>
+          <Grid item xs={12} sm={12} md={10.5} xl={10.5} lg={10.5}>
+            <RadioGroup row>
+              <Typography alignSelf="center" sx={{ fontSize: "0.8em" }}>
+                1
+              </Typography>
+              <Radio value={1}></Radio>
+              <Typography alignSelf="center" sx={{ fontSize: "0.8em" }}>
+                2
+              </Typography>
+              <Radio value={2}></Radio>
+            </RadioGroup>
+          </Grid>
         </Grid>
       </AccordionDetails>
     </Accordion>
   );
 };
 
-export default StudentContactDetailsForm;
+export default StudentIdentificationDropdown;
