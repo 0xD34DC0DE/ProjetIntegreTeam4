@@ -1,3 +1,5 @@
+import { TextField, Typography } from "@mui/material";
+
 export const endEvaluation = [
   {
     section: 1,
@@ -42,7 +44,7 @@ export const endEvaluation = [
       },
       {
         label: "Faire une bonne analyse des problèmes rencontrés",
-        id: "goodProblemSolving",
+        id: "problemSolving",
       },
     ],
     comment: { label: "Commentaires :", id: "workQualityComment" },
@@ -189,6 +191,30 @@ export const midTermEvaluation = {
       label:
         "Le temps réel consacré à l'encadrement du stagiaire est suffisant",
       id: "internSupervisionTimeAllocated",
+      precision: (
+        <>
+          <Typography variant="caption">
+            Préciser le nombre d'heures/semaine :
+          </Typography>
+          <br />
+          {["Premier", "Deuxième", "Troisième"].map((value, key) => {
+            return (
+              <>
+                <Typography variant="caption">{value} mois: </Typography>
+                <TextField
+                  variant="standard"
+                  sx={{
+                    "& .MuiInput-input": {
+                      fontSize: "0.8em",
+                      textAlign: "center",
+                    },
+                  }}
+                ></TextField>
+              </>
+            );
+          })}
+        </>
+      ),
     },
     {
       label:
@@ -203,6 +229,21 @@ export const midTermEvaluation = {
     {
       label: "Le salaire offert est intéressant pour le stagiaire",
       id: "interestingSalary",
+      precision: (
+        <>
+          <br />
+          <Typography variant="caption">
+            Précisez :
+            <TextField
+              variant="standard"
+              sx={{
+                "& .MuiInput-input": { fontSize: "0.8em", textAlign: "center" },
+              }}
+            ></TextField>
+            /l'heure
+          </Typography>
+        </>
+      ),
     },
     {
       label:
@@ -220,3 +261,27 @@ export const midTermEvaluation = {
   ],
   comment: { label: "Commentaire :", id: "evaluationComment" },
 };
+
+export const companyObservation = [
+  {
+    label: "Ce milieu est à privilégier pour le :",
+    id: "internshipPrivilege",
+    options: ["Premier stage", "Deuxième stage"],
+  },
+  {
+    label: "Ce milieu est ouvert à accueillir :",
+    id: "hiringInterns",
+    options: ["Un stagiaire", "Deux stagière", "Plus de trois stagiaires"],
+  },
+  {
+    label:
+      "Ce milieu désire accueillir le même stagiaire pour un prochain stage :",
+    id: "interestRehire",
+    options: ["Oui", "Non"],
+  },
+  {
+    label: "Ce milieu offre des quarts de travail variables :",
+    id: "variableWorkShifts",
+    options: ["Oui", "Non"],
+  },
+];

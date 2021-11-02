@@ -151,6 +151,7 @@ const CompanyInterestDropdown = () => {
                 onChange={handleFormChange}
                 fullWidth
                 placeholder=""
+                sx={{ "& .MuiInput-input": { fontSize: "0.8em" } }}
                 InputLabelProps={{
                   sx: {
                     fontSize: "0.9em",

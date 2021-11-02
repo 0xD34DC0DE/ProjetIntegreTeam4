@@ -89,6 +89,7 @@ const StudentMidEvaluationDropdown = () => {
                         <Typography variant="caption">
                           {key2 + 1}) {task.label}
                         </Typography>
+                        {task.precision ? task.precision : ""}
                       </Grid>
                       {ratings.map((rating, key3) => {
                         return (
