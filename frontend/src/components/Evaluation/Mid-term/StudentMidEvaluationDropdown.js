@@ -109,6 +109,7 @@ const StudentMidEvaluationDropdown = () => {
                               id={task.id}
                               name={task.id}
                               onChange={handleFormChange}
+                              color="primary"
                               checked={parseInt(form[task.id]) === rating.value}
                             ></Radio>
                           </Grid>

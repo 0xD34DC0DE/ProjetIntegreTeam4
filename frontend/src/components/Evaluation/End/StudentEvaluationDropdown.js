@@ -103,6 +103,7 @@ const StudentEvaluationDropdown = ({ section, key }) => {
                             <Radio
                               value={rating.value}
                               id={task.id}
+                              color="primary"
                               name={task.id}
                               onChange={handleFormChange}
                               checked={parseInt(form[task.id]) === rating.value}

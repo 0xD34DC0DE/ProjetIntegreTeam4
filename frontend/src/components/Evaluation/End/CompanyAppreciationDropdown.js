@@ -7,7 +7,6 @@ import {
   AccordionSummary,
   AccordionDetails,
   Radio,
-  RadioGroup,
 } from "@mui/material";
 import { companyAppreciation } from "../EvaluationFields";
 
@@ -73,6 +72,7 @@ const CompanyAppreciationDropdown = () => {
                     id={companyAppreciation.id}
                     name={companyAppreciation.id}
                     value={field.value}
+                    color="primary"
                     onChange={handleFormChange}
                   ></Radio>
                 </Grid>
@@ -124,17 +124,22 @@ const CompanyAppreciationDropdown = () => {
             >
               Cette évaluation a été discutée avec le stagiaire:
             </Typography>
-            <RadioGroup
-              onChange={handleFormChange}
+            <Radio
               name={"discussedEvaluation"}
-              row
-              sx={{ display: "inline-block" }}
-            >
-              <Radio value={"no"}></Radio>
-              <Typography variant="caption">Oui</Typography>
-              <Radio value={"yes"}></Radio>
-              <Typography variant="caption">Non</Typography>
-            </RadioGroup>
+              color="primary"
+              onChange={handleFormChange}
+              checked={form.discussedEvaluation === "YES"}
+              value={"YES"}
+            ></Radio>
+            <Typography variant="caption">Oui</Typography>
+            <Radio
+              name={"discussedEvaluation"}
+              color="primary"
+              onChange={handleFormChange}
+              checked={form.discussedEvaluation === "NO"}
+              value={"NO"}
+            ></Radio>
+            <Typography variant="caption">Non</Typography>
           </Grid>
         </Grid>
       </AccordionDetails>

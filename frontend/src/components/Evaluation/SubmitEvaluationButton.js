@@ -3,7 +3,7 @@ import { Grid, Typography, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 
-const SubmitEvaluationButton = () => {
+const SubmitEvaluationButton = ({ delay }) => {
   return (
     <Grid
       item
@@ -19,7 +19,7 @@ const SubmitEvaluationButton = () => {
         animate={{ opacity: [0, 1] }}
         transition={{
           duration: 0.2,
-          delay: 1,
+          delay: delay,
         }}
       >
         <Button

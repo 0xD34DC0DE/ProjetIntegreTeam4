@@ -108,14 +108,14 @@ export const endEvaluation = [
 ];
 
 export const ratings = [
-  { value: 5, label: "Totalement en accord" },
-  { value: 4, label: "Plutôt en accord" },
-  { value: 3, label: "Plutôt en désaccord" },
+  { value: "TOTALLY_AGREE", label: "Totalement en accord" },
+  { value: "SOMEWHAT_AGREE", label: "Plutôt en accord" },
+  { value: "SOMEWHAT_DISAGREE", label: "Plutôt en désaccord" },
   {
-    value: 2,
+    value: "TOTALLY_DISAGREE",
     label: "Totalement en désaccord",
   },
-  { value: 1, label: "N/A" },
+  { value: "NA", label: "N/A" },
 ];
 
 export const contactDetails = [
@@ -132,20 +132,23 @@ export const companyAppreciation = {
   ratings: [
     {
       label: "Les habiletés démontrées dépassent de beaucoup les attentes",
-      value: 5,
+      value: "FAR_EXCEEDS",
     },
-    { label: "Les habiletés démontrées dépasent les attentes", value: 4 },
+    {
+      label: "Les habiletés démontrées dépassent les attentes",
+      value: "EXCEEDS",
+    },
     {
       label: "Les habiletés démontrées répondent pleinement aux attentes",
-      value: 3,
+      value: "FULLY_MEETS",
     },
     {
       label: "Les habiletés démontrées répondent partiellement aux attentes",
-      value: 2,
+      value: "PARTLY_MEETS",
     },
     {
       label: "Les habiletés démontrées ne répondent pas aux attentes",
-      value: 1,
+      value: "DOES_NOT_MEET",
     },
   ],
 };

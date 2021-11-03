@@ -8,7 +8,6 @@ import {
   Typography,
   TextField,
   Radio,
-  RadioGroup,
 } from "@mui/material";
 
 const StudentIdentificationDropdown = () => {
@@ -93,6 +92,7 @@ const StudentIdentificationDropdown = () => {
               value={1}
               checked={parseInt(form.internshipNumber) === 1}
               onChange={handleFormChange}
+              color="primary"
             ></Radio>
             <Typography
               alignSelf="center"
@@ -105,6 +105,7 @@ const StudentIdentificationDropdown = () => {
               value={2}
               checked={parseInt(form.internshipNumber) === 2}
               onChange={handleFormChange}
+              color="primary"
             ></Radio>
           </Grid>
         </Grid>

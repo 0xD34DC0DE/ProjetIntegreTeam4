@@ -1,6 +1,7 @@
 package com.team4.backend;
 
 import com.team4.backend.model.*;
+import com.team4.backend.model.enums.Rating;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.*;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -137,6 +138,7 @@ public class TestingInserterRunner implements ApplicationRunner {
 
         studentRepository.saveAll(students)
                 .subscribe(student -> log.info("Student has been saved : {}", student));
+
     }
 
     private void insertMonitors() {

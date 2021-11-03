@@ -56,11 +56,11 @@ const CompanyInterestDropdown = () => {
               sx={{ display: "inline-block" }}
             >
               <Typography variant="caption">Oui</Typography>
-              <Radio value={"yes"}></Radio>
+              <Radio color="primary" value={"YES"}></Radio>
               <Typography variant="caption">Non</Typography>
-              <Radio value={"no"}></Radio>
+              <Radio color="primary" value={"NO"}></Radio>
               <Typography variant="caption">Peut-être</Typography>
-              <Radio value={"maybe"}></Radio>
+              <Radio color="primary" value={"MAYBE"}></Radio>
             </RadioGroup>
           </Grid>
           <Grid item textAlign="left" alignSelf="flex-start">

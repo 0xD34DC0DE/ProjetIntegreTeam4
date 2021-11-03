@@ -44,12 +44,12 @@ const CompanyObservationDropdown = () => {
           {companyObservation.map((observation, key) => {
             return (
               <>
-                <Grid item xl={3} lg={4} md={4} xs={4} sm={4} key={key}>
+                <Grid item xl={4} lg={4} md={4} xs={4} sm={4} key={key}>
                   <Typography variant="caption">{observation.label}</Typography>
                 </Grid>
                 <Grid
                   item
-                  xl={9}
+                  xl={8}
                   lg={8}
                   md={8}
                   xs={8}
@@ -63,6 +63,7 @@ const CompanyObservationDropdown = () => {
                           {option}
                         </Typography>
                         <Radio
+                          color="primary"
                           name={observation.id}
                           onChange={handleFormChange}
                           value={option}

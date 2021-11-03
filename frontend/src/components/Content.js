@@ -40,7 +40,6 @@ const Content = ({
         width: "100%",
       }}
     >
-      <StudentDashBoard />
       {!userInfo.loggedIn && (
         <Typography variant="h3" color="white" sx={{ pl: 2, pt: 2 }}>
           Bonjour visiteur.
@@ -96,7 +95,12 @@ const Content = ({
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListUserDraggable role="STUDENT" visible={selection.id === 11} />
           )}
-          <StudentEvaluationForm />
+          {userInfo.role === "MONITOR" && (
+            <StudentEvaluationForm visible={selection.id === 12} />
+          )}
+          {userInfo.role === "MONITOR" && (
+            <StudentEvaluationMidForm visible={selection.id === 13} />
+          )}
         </Box>
       )}
       <OfferForm

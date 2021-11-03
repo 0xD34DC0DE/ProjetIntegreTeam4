@@ -99,7 +99,12 @@ const theme = createTheme({
     },
     MuiRadio: {
       styleOverrides: {
-        root: {},
+        colorPrimary: {
+          color: "gray",
+          "&.Mui-checked": {
+            color: "white",
+          },
+        },
       },
     },
     MuiDialog: {
