@@ -94,6 +94,8 @@ const StudentDashBoard = ({ visible }) => {
     })
       .then(() => {
         setIsStatusUpdated(true);
+
+        setTimeout(() => {setIsStatusUpdated(false)},5000);
       })
       .catch((error) => {
         console.error(error);
@@ -111,6 +113,8 @@ const StudentDashBoard = ({ visible }) => {
     })
       .then(() => {
         setIsInterviewDateUpdated(true);
+
+        setTimeout(() => {setIsInterviewDateUpdated(false)},5000);
       })
       .catch((error) => {
         console.error(error);
@@ -288,7 +292,8 @@ const StudentDashBoard = ({ visible }) => {
                     {isStatusUpdated ? (
                       <Typography
                         variant="subtitle1"
-                        sx={{ color: "green", textAlign: "center" }}
+                        sx={{ color: "green", textAlign: "center",m: 1 }}
+                        
                       >
                         {"STATUT MODIFIÉE"}
                         <PublishedWithChangesIcon />
@@ -297,8 +302,8 @@ const StudentDashBoard = ({ visible }) => {
 
                     {profile.hasValidCv ? (
                       <Typography
-                        sx={{ color: "green", textAlign: "center" }}
-                        variant="body2"
+                        sx={{ color: "green", textAlign: "center",m: 1 }}
+                        variant="subtitle1"
                         component="div"
                         gutterBottom
                       >
@@ -307,8 +312,8 @@ const StudentDashBoard = ({ visible }) => {
                       </Typography>
                     ) : (
                       <Typography
-                        sx={{ color: "red", textAlign: "center" }}
-                        variant="body2"
+                        sx={{ color: "red", textAlign: "center",m: 1 }}
+                        variant="subtitle1"
                         component="div"
                         gutterBottom
                       >
