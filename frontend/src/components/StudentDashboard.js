@@ -95,7 +95,9 @@ const StudentDashBoard = ({ visible }) => {
       .then(() => {
         setIsStatusUpdated(true);
 
-        setTimeout(() => {setIsStatusUpdated(false)},5000);
+        setTimeout(() => {
+          setIsStatusUpdated(false);
+        }, 5000);
       })
       .catch((error) => {
         console.error(error);
@@ -114,7 +116,9 @@ const StudentDashBoard = ({ visible }) => {
       .then(() => {
         setIsInterviewDateUpdated(true);
 
-        setTimeout(() => {setIsInterviewDateUpdated(false)},5000);
+        setTimeout(() => {
+          setIsInterviewDateUpdated(false);
+        }, 5000);
       })
       .catch((error) => {
         console.error(error);
@@ -229,16 +233,23 @@ const StudentDashBoard = ({ visible }) => {
                         value={profile.closestInterviewDate}
                         onChange={handleChangeDate}
                         type={"date"}
+                        disabled={profile.studentState == listState[1]}
                       />
 
                       {isInterviewDateUpdated ? (
-                        <Typography
-                          variant="subtitle1"
-                          sx={{ color: "green", textAlign: "center" }}
+                        <motion.div
+                          variants={fadeIn}
+                          initial="hidden"
+                          animate="show"
                         >
-                          {"DATE D'ENTREVUE AJOUTÉE"}
-                          <PublishedWithChangesIcon />
-                        </Typography>
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ color: "green", textAlign: "center" }}
+                          >
+                            {"DATE D'ENTREVUE AJOUTÉE"}
+                            <PublishedWithChangesIcon />
+                          </Typography>
+                        </motion.div>
                       ) : null}
                     </Grid>
                   </Grid>
@@ -290,19 +301,24 @@ const StudentDashBoard = ({ visible }) => {
                       ))}
                     </Select>
                     {isStatusUpdated ? (
-                      <Typography
-                        variant="subtitle1"
-                        sx={{ color: "green", textAlign: "center",m: 1 }}
-                        
+                      <motion.div
+                        variants={fadeIn}
+                        initial="hidden"
+                        animate="show"
                       >
-                        {"STATUT MODIFIÉE"}
-                        <PublishedWithChangesIcon />
-                      </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ color: "green", textAlign: "center", m: 1 }}
+                        >
+                          {"STATUT MODIFIÉE"}
+                          <PublishedWithChangesIcon />
+                        </Typography>
+                      </motion.div>
                     ) : null}
 
                     {profile.hasValidCv ? (
                       <Typography
-                        sx={{ color: "green", textAlign: "center",m: 1 }}
+                        sx={{ color: "green", textAlign: "center", m: 1 }}
                         variant="subtitle1"
                         component="div"
                         gutterBottom
@@ -312,7 +328,7 @@ const StudentDashBoard = ({ visible }) => {
                       </Typography>
                     ) : (
                       <Typography
-                        sx={{ color: "red", textAlign: "center",m: 1 }}
+                        sx={{ color: "red", textAlign: "center", m: 1 }}
                         variant="subtitle1"
                         component="div"
                         gutterBottom
