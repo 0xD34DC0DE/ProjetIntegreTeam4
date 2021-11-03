@@ -15,7 +15,6 @@ public class CustomStudentRepositoryImpl implements CustomStudentRepository {
 
     private final ReactiveMongoOperations mongoOperations;
 
-    @Autowired
     public CustomStudentRepositoryImpl(ReactiveMongoOperations mongoTemplate) {
         this.mongoOperations = mongoTemplate;
     }

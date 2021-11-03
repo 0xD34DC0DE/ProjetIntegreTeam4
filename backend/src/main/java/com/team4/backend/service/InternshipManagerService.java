@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.InternshipManager;
 import com.team4.backend.repository.InternshipManagerRepository;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -23,4 +24,21 @@ public class InternshipManagerService {
         return internshipManagerRepository.save(internshipManager);
     }
 
+    public Mono<InternshipManager> findByEmail(String internshipManagerEmail) {
+        return internshipManagerRepository.findByEmail(internshipManagerEmail)
+                .switchIfEmpty(
+                        Mono.error(
+                                new UserNotFoundException("Could not find internship manager with email: " +
+                                        internshipManagerEmail)
+                        )
+                );
+    }
+
+    public Mono<InternshipManager> findById(String internshipManagerId) {
+        return internshipManagerRepository.findById(internshipManagerId).switchIfEmpty(
+                Mono.error(
+                        new UserNotFoundException("Could not find internship manager with id: " + internshipManagerId)
+                )
+        );
+    }
 }
