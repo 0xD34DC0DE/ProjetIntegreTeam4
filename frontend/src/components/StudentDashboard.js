@@ -24,7 +24,6 @@ import PeopleIcon from "@mui/icons-material/People";
 import { UserInfoContext } from "../stores/UserInfoStore";
 
 const StudentDashBoard = ({ visible }) => {
-  
   const listState = [
     "INTERNSHIP_NOT_FOUND",
     "INTERNSHIP_FOUND",
@@ -36,7 +35,7 @@ const StudentDashBoard = ({ visible }) => {
     "STAGE TROUVÉE",
     "EN ATTENTE DE RÉPONSE",
   ];
-  
+
   const [profile, setProfile] = useState({
     id: "",
     email: "",
@@ -51,11 +50,10 @@ const StudentDashBoard = ({ visible }) => {
     nbrOfInterviews: 0,
     hasValidCv: false,
   });
-  
+
   const [isDisabled, setIsDisabled] = useState(true);
   const [isStatusUpdated, setIsStatusUpdated] = useState(false);
   const [userInfo] = useContext(UserInfoContext);
-  const [interviewDate, setInterviewDate] = useState(null);
   const [isInterviewDateUpdated, setIsInterviewDateUpdated] = useState(false);
 
   useEffect(() => {
@@ -90,7 +88,7 @@ const StudentDashBoard = ({ visible }) => {
       method: "PATCH",
       url: "http://localhost:8080/student/updateStudentState",
       headers: {
-        Authorization: userInfo.jwt
+        Authorization: userInfo.jwt,
       },
       responseType: "json",
     })
@@ -107,7 +105,7 @@ const StudentDashBoard = ({ visible }) => {
       method: "PATCH",
       url: "http://localhost:8080/student/updateInterviewDate/" + date,
       headers: {
-        Authorization: userInfo.jwt
+        Authorization: userInfo.jwt,
       },
       responseType: "json",
     })
@@ -125,15 +123,12 @@ const StudentDashBoard = ({ visible }) => {
     setIsDisabled(true);
   };
 
-  const handleChangeDate = ($event) =>{
-    console.log($event.target.value);
+  const handleChangeDate = ($event) => {
     const value = $event.target.value;
-    setProfile({...profile, closestInterviewDate:value});
-  
-    updateInterviewDate(value);
-    console.log(userInfo.jwt);
-  }
 
+    setProfile({ ...profile, closestInterviewDate: value });
+    updateInterviewDate(value);
+  };
 
   const fadeIn = {
     hidden: { opacity: 0 },
@@ -162,7 +157,7 @@ const StudentDashBoard = ({ visible }) => {
                 boxShadow: 6,
               }}
             >
-              <Grid container spacing={2} sx={{ alignItems: "center" }}>
+              <Grid container spacing={2} sx={{ alignItems: "center" }} justifyContent="center">
                 <Grid item>
                   <Avatar
                     sx={{
@@ -175,23 +170,23 @@ const StudentDashBoard = ({ visible }) => {
                     {profile.firstName.charAt(0)}
                   </Avatar>
                 </Grid>
-
-                <Grid item xs={12} sm container>
-                  <Grid item xs container direction="column" spacing={2}>
-                    <Grid item xs sx={{ textAlign: "start" }}>
+                <Grid item xs={12} sm container justifyContent="center">
+                  <Grid item xs container direction="column" spacing={3}>
+                    <Grid item xs sx={{ textAlign: "center" }} >
                       <Typography
                         gutterBottom
                         variant="subtitle1"
                         component="div"
+                        sx={{m:1}}
                       >
                         Name : {profile.lastName}, {profile.firstName}
                         <AccountCircleIcon />
                       </Typography>
-                      <Typography variant="body2" component="div" gutterBottom>
+                      <Typography variant="body2" component="div" gutterBottom sx={{m:1}}>
                         N° de téléphone : {profile.phoneNumber}
                         <PhoneAndroidIcon />
                       </Typography>
-                      <Typography variant="body2" component="div" gutterBottom>
+                      <Typography variant="body2" component="div" gutterBottom sx={{m:1}}>
                         Membre depuis : {profile.registrationDate}
                         <TodayIcon />
                       </Typography>
@@ -201,38 +196,47 @@ const StudentDashBoard = ({ visible }) => {
                           border: "1px white",
                           boxShadow: 4,
                           borderRadius: 2,
-                          mt: 2,
+                          m: 2,
                         }}
                         label="Date d'entrevue la plus proche"
                         value={profile.closestInterviewDate}
                         onChange={handleChangeDate}
                         type={"date"}
                       />
+
+                      {isInterviewDateUpdated ? (
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ color: "green", textAlign: "center" }}
+                        >
+                          {"DATE D'ENTREVUE AJOUTÉE"}
+                          <PublishedWithChangesIcon />
+                        </Typography>
+                      ) : null}
                     </Grid>
                   </Grid>
-
-                  <Grid item sx={{ alignItems: "center", textAlign: "start" }}>
-                    <Typography variant="subtitle1">
+                  <Grid item sx={{ alignItems: "center", textAlign: "center" }} justifyContent="center">
+                    <Typography variant="subtitle1" sx={{m:1}}>
                       <PeopleIcon /> Nombres d'entrevues :{" "}
                       {profile.nbrOfInterviews}
                     </Typography>
-                    <Typography variant="subtitle1">
+                    <Typography variant="subtitle1" sx={{m:1}}>
                       <TouchAppIcon /> Nombres d'offres appliquées :{" "}
                       {profile.nbrOfAppliedOffers}
                     </Typography>
-                    <Typography variant="subtitle1">
+                    <Typography variant="subtitle1" sx={{m:1}}>
                       <StarBorderPurple500Icon /> Nombres d'offres exlusives :{" "}
                       {profile.nbrOfExclusiveOffers}
                     </Typography>
-
                     <Select
                       sx={{
                         margin: "auto",
-                        border: "1px solid white",
+                        border: "1px white",
                         display: "flex",
                         justifyContent: "center",
                         boxShadow: 3,
                         textAlign: "center",
+                        m:1
                       }}
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
