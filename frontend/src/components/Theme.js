@@ -67,7 +67,7 @@ const theme = createTheme({
             borderColor: "rgba(100, 100, 100, 0.5)",
           },
           "& .MuiOutlinedInput-input.Mui-disabled" : {
-            backgroundColor: "rgba(255, 255, 255, 0.4)",
+            backgroundColor: "rgba(255, 255, 255, 0.6)",
             opacity: 1
           }
         },

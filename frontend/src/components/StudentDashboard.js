@@ -9,6 +9,7 @@ import {
   MenuItem,
   Container,
   FormControl,
+  InputLabel,
   TextField,
 } from "@mui/material";
 import StarBorderPurple500Icon from "@mui/icons-material/StarBorderPurple500";
@@ -125,6 +126,10 @@ const StudentDashBoard = ({ visible }) => {
       });
   };
 
+  const hasInternship = () => {
+    return profile.studentState == listState[1];
+  };
+
   const handleChange = ($event) => {
     setProfile({ ...profile, studentState: $event.target.value });
     updateStudentStatus();
@@ -179,7 +184,7 @@ const StudentDashBoard = ({ visible }) => {
                 sx={{ alignItems: "center" }}
                 justifyContent="center"
               >
-                <Grid item>
+                <Grid item justifyContent="center">
                   <Avatar
                     sx={{
                       width: 200,
@@ -190,6 +195,27 @@ const StudentDashBoard = ({ visible }) => {
                   >
                     {profile.firstName.charAt(0)}
                   </Avatar>
+                  {profile.hasValidCv ? (
+                    <Typography
+                      sx={{ color: "green", textAlign: "center", m: 1 }}
+                      variant="subtitle1"
+                      component="div"
+                      gutterBottom
+                    >
+                      {"Vous avez un CV est valide"}
+                      <CheckCircleIcon />
+                    </Typography>
+                  ) : (
+                    <Typography
+                      sx={{ color: "red", textAlign: "center", m: 1 }}
+                      variant="subtitle1"
+                      component="div"
+                      gutterBottom
+                    >
+                      {"Vous n'avez aucun CV valide"}
+                      <BlockIcon />
+                    </Typography>
+                  )}
                 </Grid>
                 <Grid item xs={12} sm container justifyContent="center">
                   <Grid item xs container direction="column" spacing={3}>
@@ -221,20 +247,21 @@ const StudentDashBoard = ({ visible }) => {
                         Membre depuis : {profile.registrationDate}
                         <TodayIcon />
                       </Typography>
-
-                      <TextField
-                        sx={{
-                          border: "1px white",
-                          boxShadow: 4,
-                          borderRadius: 2,
-                          m: 2,
-                        }}
-                        label="Date d'entrevue la plus proche"
-                        value={profile.closestInterviewDate}
-                        onChange={handleChangeDate}
-                        type={"date"}
-                        disabled={profile.studentState == listState[1]}
-                      />
+                      
+                      <Typography  variant="body2" disabled={hasInternship}>
+                        <TextField
+                          sx={{
+                            border: "1px white",
+                            boxShadow: 4,
+                            borderRadius: 2,
+                            m: 2,
+                          }}
+                          label="Date d'entrevue la plus proche"
+                          value={profile.closestInterviewDate}
+                          onChange={handleChangeDate}
+                          type={"date"}
+                        />
+                      </Typography>
 
                       {isInterviewDateUpdated ? (
                         <motion.div
@@ -270,6 +297,7 @@ const StudentDashBoard = ({ visible }) => {
                       <StarBorderPurple500Icon /> Nombres d'offres exlusives :{" "}
                       {profile.nbrOfExclusiveOffers}
                     </Typography>
+
                     <Select
                       sx={{
                         margin: "auto",
@@ -315,28 +343,6 @@ const StudentDashBoard = ({ visible }) => {
                         </Typography>
                       </motion.div>
                     ) : null}
-
-                    {profile.hasValidCv ? (
-                      <Typography
-                        sx={{ color: "green", textAlign: "center", m: 1 }}
-                        variant="subtitle1"
-                        component="div"
-                        gutterBottom
-                      >
-                        {"Vous avez un CV est valide"}
-                        <CheckCircleIcon />
-                      </Typography>
-                    ) : (
-                      <Typography
-                        sx={{ color: "red", textAlign: "center", m: 1 }}
-                        variant="subtitle1"
-                        component="div"
-                        gutterBottom
-                      >
-                        {"Vous n'avez aucun CV valide"}
-                        <BlockIcon />
-                      </Typography>
-                    )}
                   </Grid>
                 </Grid>
               </Grid>
