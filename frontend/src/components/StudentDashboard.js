@@ -100,7 +100,7 @@ const StudentDashBoard = ({ visible }) => {
 
         setTimeout(() => {
           setIsStatusUpdated(false);
-        }, 5000);
+        }, 3000);
       })
       .catch((error) => {
         console.error(error);
@@ -117,11 +117,12 @@ const StudentDashBoard = ({ visible }) => {
       responseType: "json",
     })
       .then(() => {
+        
         setIsInterviewDateUpdated(true);
 
         setTimeout(() => {
           setIsInterviewDateUpdated(false);
-        }, 5000);
+        }, 3000);
       })
       .catch((error) => {
         console.error(error);
@@ -250,7 +251,7 @@ const StudentDashBoard = ({ visible }) => {
                         <TodayIcon />
                       </Typography>
 
-                      {!hasInternship() ? (
+                      {!hasInternship() && profile.hasValidCv ? (
                         <TextField
                           sx={{
                             border: "1px white",
