@@ -13,11 +13,13 @@ import {
 import React, { useContext, useEffect, useState } from "react";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 import { motion } from "framer-motion";
 import axios from "axios";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import EmailSender from "./EmailSender";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import SignContractMonitorDialog from "./SignContractMonitorDialog";
 
 const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
   const [offers, setOffers] = useState([]);
@@ -240,11 +242,11 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                   <Grid container flexDirection={"row"}>
                                     <Grid
                                       item
-                                      xl={4}
-                                      md={4}
-                                      lg={4}
-                                      sm={4}
-                                      xs={4}
+                                      xl={3}
+                                      md={3}
+                                      lg={3}
+                                      sm={3}
+                                      xs={3}
                                       textAlign="center"
                                     >
                                       <Tooltip title="Télécharger le CV">
@@ -266,11 +268,11 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                     </Grid>
                                     <Grid
                                       item
-                                      xl={4}
-                                      md={4}
-                                      lg={4}
-                                      sm={4}
-                                      xs={4}
+                                      xl={3}
+                                      md={3}
+                                      lg={3}
+                                      sm={3}
+                                      xs={3}
                                       textAlign="center"
                                     >
                                       <Tooltip title="Répondre à la demande">
@@ -299,11 +301,11 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                     </Grid>
                                     <Grid
                                       item
-                                      xl={4}
-                                      md={4}
-                                      lg={4}
-                                      sm={4}
-                                      xs={4}
+                                      xl={3}
+                                      md={3}
+                                      lg={3}
+                                      sm={3}
+                                      xs={3}
                                       textAlign="center"
                                     >
                                       <Tooltip title="Visualiser le CV">
@@ -318,6 +320,39 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                           }}
                                         >
                                           <RemoveRedEyeOutlinedIcon
+                                            sx={{ color: "white" }}
+                                          />
+                                        </Button>
+                                      </Tooltip>
+                                    </Grid>
+                                    <Grid
+                                      item
+                                      xl={3}
+                                      md={3}
+                                      lg={3}
+                                      sm={3}
+                                      xs={3}
+                                      textAlign="center"
+                                    >
+                                      <Tooltip title="Démarer la signature de contrat">
+                                        <Button
+                                          sx={{
+                                            p: 0,
+                                            m: 0,
+                                            ":hover": {
+                                              backgroundColor:
+                                                "rgba(255, 255, 255, 0.1)",
+                                            },
+                                          }}
+                                          onClick={() => {
+                                            setReceiver(student.email);
+                                            toggleDialog(
+                                              "signContractMonitorDialog",
+                                              true
+                                            );
+                                          }}
+                                        >
+                                          <HowToRegIcon
                                             sx={{ color: "white" }}
                                           />
                                         </Button>
@@ -340,6 +375,11 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
         toggleDialog={toggleDialog}
         open={dialogVisibility.emailSenderDialog}
         receiver={receiver}
+      />
+      <SignContractMonitorDialog
+        toggleDialog={toggleDialog}
+        open={dialogVisibility.signContractMonitorDialog}
+        pdfUrl={`http://localhost:8080/contract/pdfByStudentEmail/${receiver}`}
       />
     </Grid>
   );

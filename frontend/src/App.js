@@ -23,6 +23,7 @@ function App() {
     internshipOfferDialogValidation: false,
     emailSenderDialog: false,
     reportDialog: false,
+    signContractMonitorDialog: false,
   });
 
   const onSelectionChanged = (item) => {

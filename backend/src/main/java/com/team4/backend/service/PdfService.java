@@ -3,10 +3,7 @@ package com.team4.backend.service;
 import com.lowagie.text.DocumentException;
 import com.team4.backend.exception.PdfGenerationErrorException;
 import com.team4.backend.pdf.PdfTemplate;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.spring5.SpringTemplateEngine;
 import reactor.core.publisher.Mono;
@@ -23,7 +20,7 @@ public class PdfService {
 
     private final SpringTemplateEngine templateEngine;
 
-    public PdfService(SpringTemplateEngine templateEngine, ResourceLoader resourceLoader) throws IOException {
+    public PdfService(SpringTemplateEngine templateEngine) throws IOException {
         this.templateEngine = templateEngine;
         this.cssResourcesAbsolutePath = new ClassPathResource(PDF_CSS_DIR).getURL().toExternalForm();
     }
@@ -41,4 +38,5 @@ public class PdfService {
             return Mono.error(new PdfGenerationErrorException());
         }
     }
+
 }

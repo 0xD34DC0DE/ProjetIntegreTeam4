@@ -1,6 +1,7 @@
 package com.team4.backend;
 
 import com.team4.backend.model.*;
+import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.*;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -13,7 +14,6 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
@@ -22,10 +22,12 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-@Order(1)
+@Order(2)
 public class TestingInserterRunner implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(TestingInserterRunner.class);
+
+    private final UserRepository userRepository;
 
     private final MonitorRepository monitorRepository;
 
@@ -35,24 +37,36 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final SupervisorRepository supervisorRepository;
 
+    private final InternshipContractRepository internshipContractRepository;
+
     private final PBKDF2Encoder pbkdf2Encoder;
 
     private final FileMetaDataRepository fileMetaDataRepository;
+
+    private final InternshipManagerRepository internshipManagerRepository;
 
     private final Lorem lorem;
 
     private final Set<String> studentSet;
 
-    public TestingInserterRunner(MonitorRepository monitorRepository,
-                                 InternshipOfferRepository internshipOfferRepository, StudentRepository studentRepository,
-                                 SupervisorRepository supervisorRepository, PBKDF2Encoder pbkdf2Encoder,
-                                 FileMetaDataRepository fileMetaDataRepository) {
+    public TestingInserterRunner(UserRepository userRepository,
+                                 MonitorRepository monitorRepository,
+                                 InternshipOfferRepository internshipOfferRepository,
+                                 StudentRepository studentRepository,
+                                 SupervisorRepository supervisorRepository,
+                                 InternshipContractRepository internshipContractRepository,
+                                 PBKDF2Encoder pbkdf2Encoder,
+                                 FileMetaDataRepository fileMetaDataRepository,
+                                 InternshipManagerRepository internshipManagerRepository) {
+        this.userRepository = userRepository;
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
         this.studentRepository = studentRepository;
         this.supervisorRepository = supervisorRepository;
+        this.internshipContractRepository = internshipContractRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.fileMetaDataRepository = fileMetaDataRepository;
+        this.internshipManagerRepository = internshipManagerRepository;
         this.lorem = LoremIpsum.getInstance();
         this.studentSet = new HashSet<>();
         this.studentSet.add("123456789@gmail.com");
@@ -61,19 +75,42 @@ public class TestingInserterRunner implements ApplicationRunner {
     }
 
     @Override
-    public void run(final ApplicationArguments args) throws IOException {
-        studentRepository.deleteAll().subscribe();
-        monitorRepository.deleteAll().subscribe();
-        studentRepository.deleteAll().subscribe();
-        supervisorRepository.deleteAll().subscribe();
-        fileMetaDataRepository.deleteAll().subscribe();
+    public void run(final ApplicationArguments args) {
+        userRepository.deleteAllByRoleEquals(Role.STUDENT).subscribe();
+        userRepository.deleteAllByRoleEquals(Role.MONITOR).subscribe();
+        userRepository.deleteAllByRoleEquals(Role.SUPERVISOR).subscribe();
+        fileMetaDataRepository.deleteAll().subscribe(System.err::println);
         internshipOfferRepository.deleteAll().subscribe();
+        internshipContractRepository.deleteAll().subscribe();
 
         insertInternshipOffersInternshipManagerView();
         insertStudents();
         insertMonitors();
         insertSupervisors();
         insertCvs();
+        insertInternshipContract();
+    }
+
+    private void insertInternshipContract() {
+        String studentId = studentRepository.findByEmail("student@gmail.com").block().getId();
+        String monitorId = monitorRepository.findByEmail("monitor@gmail.com").block().getId();
+        String internshipManagerId = internshipManagerRepository.findByEmail("manager1@gmail.com")
+                .block().getId();
+
+        InternshipContract internshipContract = InternshipContract.builder()
+                .address("address")
+                .beginningDate(LocalDate.now().plusMonths(1))
+                .endingDate(LocalDate.now().plusMonths(2))
+                .dailySchedule("8:00 to 16:00")
+                .hourlyRate(21.50f)
+                .hoursPerWeek(40.0f)
+                .internTasks("Tasks")
+                .studentSignature(Signature.builder().userId(studentId).hasSigned(false).build())
+                .monitorSignature(Signature.builder().signDate(LocalDate.now()).userId(monitorId).hasSigned(true).build())
+                .internshipManagerSignature(Signature.builder().userId(internshipManagerId).hasSigned(false).build())
+                .build();
+
+        internshipContractRepository.save(internshipContract).block();
     }
 
     private void insertStudents() {
@@ -140,8 +177,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                 Student.studentBuilder()
                         .email("student@gmail.com")
                         .password(pbkdf2Encoder.encode("student"))
-                        .firstName("John")
-                        .lastName("Doe").registrationDate(LocalDate.now())
+                        .firstName("Shia")
+                        .lastName("LaBeouf").registrationDate(LocalDate.now())
                         .studentState(StudentState.REGISTERED)
                         .hasValidCv(false)
                         .hasCv(false)
@@ -159,8 +196,11 @@ public class TestingInserterRunner implements ApplicationRunner {
     }
 
     private void insertMonitors() {
-        Monitor monitor = Monitor.monitorBuilder().email("9182738492@gmail.com")
-                .password(pbkdf2Encoder.encode("lao@dkv23")).build();
+        Monitor monitor = Monitor.monitorBuilder().email("monitor@gmail.com")
+                .password(pbkdf2Encoder.encode("monitor"))
+                .firstName("Giorno")
+                .lastName("Giovanna")
+                .build();
 
         monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
@@ -195,7 +235,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 .isValidated(true)
                 .maxSalary(17.50f)
                 .minSalary(16.25f)
-                .monitorEmail("9182738492@gmail.com")
+                .monitorEmail("monitor@gmail.com")
                 .listEmailInterestedStudents(new HashSet<>())
                 .build();
 
@@ -209,7 +249,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 .isExclusive(true)
                 .isValidated(true).maxSalary(19.50f)
                 .minSalary(19.50f)
-                .monitorEmail("9182738492@gmail.com")
+                .monitorEmail("monitor@gmail.com")
                 .listEmailInterestedStudents(new HashSet<>())
                 .build();
 
@@ -221,26 +261,30 @@ public class TestingInserterRunner implements ApplicationRunner {
         return internshipOfferRepository.save(internshipOffer2).block().getId();
     }
 
-    private void insertInternshipOffersInternshipManagerView() throws IOException {
+    private void insertInternshipOffersInternshipManagerView() {
+        Set<String> offer1InterestedStudent = new HashSet<>();
+        offer1InterestedStudent.add("student@gmail.com");
+
         List<InternshipOffer> internshipOffers = Arrays.asList(
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("9182738492@gmail.com")
+                        .monitorEmail("monitor@gmail.com")
                         .title("Développeur Senior Cobol")
                         .companyName("Google")
                         .description(lorem.getParagraphs(2, 5))
                         .minSalary(19.0f)
                         .maxSalary(22.0f)
-                        .isValidated(false)
+                        .isValidated(true)
                         .isExclusive(false)
-                        .listEmailInterestedStudents(new HashSet<>())
+                        .listEmailInterestedStudents(offer1InterestedStudent)
+                        .emailOfApprovingInternshipManager("manager1@gmail.com")
                         .build(),
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("9182738492@gmail.com")
+                        .monitorEmail("monitor@gmail.com")
                         .title("Développeur React")
                         .companyName("Umaknow")
                         .description(lorem.getParagraphs(2, 5))
@@ -253,7 +297,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("9182738492@gmail.com")
+                        .monitorEmail("monitor@gmail.com")
                         .title("Développeur .NET")
                         .companyName("Desjardins")
                         .description(lorem.getParagraphs(2, 5))
@@ -266,7 +310,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("9182738492@gmail.com")
+                        .monitorEmail("monitor@gmail.com")
                         .title("Analyste de données")
                         .companyName("CGI")
                         .description(lorem.getParagraphs(2, 5))
@@ -280,7 +324,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("9182738492@gmail.com")
+                        .monitorEmail("monitor@gmail.com")
                         .title("Développeur Senior Java")
                         .companyName("CGI")
                         .description(lorem.getParagraphs(2, 5))
@@ -290,11 +334,12 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .validationDate(null)
                         .isExclusive(false)
                         .listEmailInterestedStudents(new HashSet<>())
+                        .emailOfApprovingInternshipManager("manager1@gmail.com")
                         .build(),
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("9182738492@gmail.com")
+                        .monitorEmail("monitor@gmail.com")
                         .title("Développeur Fullstack")
                         .companyName("Desjardins")
                         .description(lorem.getParagraphs(2, 5))
@@ -304,11 +349,12 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .validationDate(null)
                         .isExclusive(false)
                         .listEmailInterestedStudents(studentSet)
+                        .emailOfApprovingInternshipManager("manager1@gmail.com")
                         .build(),
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("9182738492@gmail.com")
+                        .monitorEmail("monitor@gmail.com")
                         .title("Développeur Junior Angular")
                         .companyName("Banque National")
                         .description(lorem.getParagraphs(10, 15))

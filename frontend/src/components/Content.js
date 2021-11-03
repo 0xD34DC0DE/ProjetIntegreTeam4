@@ -39,7 +39,7 @@ const Content = ({
         width: "100%",
       }}
     >
-      <StudentDashBoard />
+      {userInfo.role === "STUDENT" && <StudentDashBoard />}
       {!userInfo.loggedIn && (
         <Typography variant="h3" color="white" sx={{ pl: 2, pt: 2 }}>
           Bonjour visiteur.

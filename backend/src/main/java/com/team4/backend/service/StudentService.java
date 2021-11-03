@@ -24,7 +24,6 @@ public class StudentService {
 
     private final UserService userService;
 
-
     public StudentService(StudentRepository studentRepository, PBKDF2Encoder pbkdf2Encoder, UserService userService) {
         this.studentRepository = studentRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
@@ -63,11 +62,11 @@ public class StudentService {
     }
 
     public Mono<Student> updateStudentState(String email, StudentState studentState) {
-        return findByEmail(email)
-                .filter(student -> student.getStudentState().equals(WAITING_FOR_RESPONSE))
-                .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update your state if you're not waiting for a response to your recent interview!")))
+        return findByEmail(email).filter(student -> student.getStudentState().equals(WAITING_FOR_RESPONSE))
+                .switchIfEmpty(Mono.error(new ForbiddenActionException(
+                        "Can't update your state if you're not waiting for a response to your recent interview!")))
                 .map(student -> {
-                    //TODO --> call function that will trigger the contract generation
+                    // TODO --> call function that will trigger the contract generation
                     student.setStudentState(studentState);
                     return student;
                 }).flatMap(studentRepository::save);
@@ -116,4 +115,8 @@ public class StudentService {
         return studentRepository.findAllByStudentState(INTERNSHIP_FOUND);
     }
 
+    public Mono<Student> findById(String studentId) {
+        return studentRepository.findById(studentId)
+                .switchIfEmpty(Mono.error(new UserNotFoundException("Could not find student with id: " + studentId)));
+    }
 }
