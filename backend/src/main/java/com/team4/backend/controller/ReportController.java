@@ -7,6 +7,7 @@ import com.team4.backend.service.StudentService;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
@@ -23,10 +24,10 @@ public class ReportController {
     }
 
     //TODO: implémenter gestion session
-    @GetMapping(value = "/generateAllNonValidatedOffersReport", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/generateAllNonValidatedOffersReport/{session}", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Mono<byte[]> generateAllNonValidatedOffersReport() {
-        return reportService.generateAllNonValidatedOffersReport();
+    public Mono<byte[]> generateAllNonValidatedOffersReport(@PathVariable("session") Integer sessionNumber) {
+        return reportService.generateAllNonValidatedOffersReport(sessionNumber);
     }
 
     //TODO: implémenter gestion session

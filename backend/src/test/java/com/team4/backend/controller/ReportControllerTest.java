@@ -13,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 import static reactor.core.publisher.Mono.when;
 
@@ -30,7 +31,7 @@ class ReportControllerTest {
     @Test
     void shouldGenerateAllNonValidatedOffersReport() {
         //ARRANGE
-        doReturn(ReportMockData.getMonoBytes()).when(reportService).generateAllNonValidatedOffersReport();
+        doReturn(ReportMockData.getMonoBytes()).when(reportService).generateAllNonValidatedOffersReport(any());
 //        when(reportService.generateAllNonValidatedOffersReport()).thenReturn()
 
         //ACT

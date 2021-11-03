@@ -45,7 +45,6 @@ const ListReport = ({ open, toggleDialog, visible }) => {
 
     const handleChange = (evt) => {
         setSession(evt.target.value)
-        console.log('session', session);
     }
 
     return (
@@ -91,7 +90,7 @@ const ListReport = ({ open, toggleDialog, visible }) => {
                             </Grid>
                         ))}
                     </Grid>
-                    <ReportDialog open={open} toggleDialog={toggleDialog} reportUrl={reportUrl} setReportUrl={setReportUrl} />
+                    <ReportDialog open={open} toggleDialog={toggleDialog} reportUrl={reportUrl} setReportUrl={setReportUrl} sessionNumber={session} />
                 </Box>
             )}
         </>
