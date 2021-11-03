@@ -35,7 +35,7 @@ const ListReport = ({ open, toggleDialog, visible }) => {
 
     const [reportUrl, setReportUrl] = useState("");
 
-    const [session, setSession] = useState("");
+    const [session, setSession] = useState(321);
 
     useEffect(() => {
         if (reportUrl !== "") {

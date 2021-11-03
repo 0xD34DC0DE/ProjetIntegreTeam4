@@ -8,8 +8,6 @@ const Report = ({ title, url, setReportUrl }) => {
             // className={props.classes.cardAction}
             onClick={event => {
                 setReportUrl(url);
-                console.log('event', event)
-
             }}
             sx={{ width: "100%" }}
         >

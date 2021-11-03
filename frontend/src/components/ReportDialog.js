@@ -19,8 +19,6 @@ function ReportDialog({ open, toggleDialog, reportUrl, setReportUrl, sessionNumb
         reportUrl = "http://localhost:8080/report" + reportUrl;
     }
 
-    console.log('reportUrl', reportUrl);
-
     return (
         <Dialog open={open} onClose={handleClose}>
             <DialogContent ref={dialogRef}>
