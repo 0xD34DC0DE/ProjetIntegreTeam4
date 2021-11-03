@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,7 +28,7 @@ public class PdfController {
         this.studentService = studentService;
     }
 
-    @PreAuthorize("hasAnyAuthority('STUDENT')")
+    @PreAuthorize("hasAnyAuthority('STUDENT', 'INTERNSHIP_MANAGER')")
     @GetMapping(value = "/test", produces = MediaType.APPLICATION_PDF_VALUE)
     public Mono<byte[]> getTestPdf() {
         return studentService.getAll().collectList()
