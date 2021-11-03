@@ -125,9 +125,17 @@ const StudentDashBoard = ({ visible }) => {
 
   const handleChangeDate = ($event) => {
     const value = $event.target.value;
+    const currentDate = new Date();
+    const dateValues = value.split("-");
 
-    setProfile({ ...profile, closestInterviewDate: value });
-    updateInterviewDate(value);
+    if (
+      currentDate.getFullYear() == parseInt(dateValues[0]) &&
+      parseInt(dateValues[1]) >= currentDate.getMonth() + 1 &&
+      parseInt(dateValues[2], 10) >= currentDate.getDate()
+    ) {
+      setProfile({ ...profile, closestInterviewDate: value });
+      updateInterviewDate(value);
+    }
   };
 
   const fadeIn = {
@@ -157,7 +165,12 @@ const StudentDashBoard = ({ visible }) => {
                 boxShadow: 6,
               }}
             >
-              <Grid container spacing={2} sx={{ alignItems: "center" }} justifyContent="center">
+              <Grid
+                container
+                spacing={2}
+                sx={{ alignItems: "center" }}
+                justifyContent="center"
+              >
                 <Grid item>
                   <Avatar
                     sx={{
@@ -172,21 +185,31 @@ const StudentDashBoard = ({ visible }) => {
                 </Grid>
                 <Grid item xs={12} sm container justifyContent="center">
                   <Grid item xs container direction="column" spacing={3}>
-                    <Grid item xs sx={{ textAlign: "center" }} >
+                    <Grid item xs sx={{ textAlign: "center" }}>
                       <Typography
                         gutterBottom
                         variant="subtitle1"
                         component="div"
-                        sx={{m:1}}
+                        sx={{ m: 1 }}
                       >
                         Name : {profile.lastName}, {profile.firstName}
                         <AccountCircleIcon />
                       </Typography>
-                      <Typography variant="body2" component="div" gutterBottom sx={{m:1}}>
+                      <Typography
+                        variant="body2"
+                        component="div"
+                        gutterBottom
+                        sx={{ m: 1 }}
+                      >
                         N° de téléphone : {profile.phoneNumber}
                         <PhoneAndroidIcon />
                       </Typography>
-                      <Typography variant="body2" component="div" gutterBottom sx={{m:1}}>
+                      <Typography
+                        variant="body2"
+                        component="div"
+                        gutterBottom
+                        sx={{ m: 1 }}
+                      >
                         Membre depuis : {profile.registrationDate}
                         <TodayIcon />
                       </Typography>
@@ -215,16 +238,20 @@ const StudentDashBoard = ({ visible }) => {
                       ) : null}
                     </Grid>
                   </Grid>
-                  <Grid item sx={{ alignItems: "center", textAlign: "center" }} justifyContent="center">
-                    <Typography variant="subtitle1" sx={{m:1}}>
+                  <Grid
+                    item
+                    sx={{ alignItems: "center", textAlign: "center" }}
+                    justifyContent="center"
+                  >
+                    <Typography variant="subtitle1" sx={{ m: 1 }}>
                       <PeopleIcon /> Nombres d'entrevues :{" "}
                       {profile.nbrOfInterviews}
                     </Typography>
-                    <Typography variant="subtitle1" sx={{m:1}}>
+                    <Typography variant="subtitle1" sx={{ m: 1 }}>
                       <TouchAppIcon /> Nombres d'offres appliquées :{" "}
                       {profile.nbrOfAppliedOffers}
                     </Typography>
-                    <Typography variant="subtitle1" sx={{m:1}}>
+                    <Typography variant="subtitle1" sx={{ m: 1 }}>
                       <StarBorderPurple500Icon /> Nombres d'offres exlusives :{" "}
                       {profile.nbrOfExclusiveOffers}
                     </Typography>
@@ -236,7 +263,7 @@ const StudentDashBoard = ({ visible }) => {
                         justifyContent: "center",
                         boxShadow: 3,
                         textAlign: "center",
-                        m:1
+                        m: 1,
                       }}
                       labelId="demo-simple-select-label"
                       id="demo-simple-select"
