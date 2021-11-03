@@ -28,25 +28,26 @@ public class ReportService {
 
     public Mono<byte[]> generateAllNonValidatedOffersReport(Integer sessionNumber) {
         List<Date> dates = calculateDates(sessionNumber);
-        // TODO: implémenter les dates de session
         return internshipOfferService.getAllNonValidatedOffers(dates.get(0), dates.get(1)).collectList()
                 .flatMap(nonValidatedOffers -> {
                     Map<String, Object> variables = new HashMap<>();
                     variables.put("internshipOfferList", nonValidatedOffers);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Offres de stages non validées");
+                    variables.put("dates", calculateLocalDates(sessionNumber));
                     return pdfService.renderPdf(new OffersPdf(variables));
                 });
     }
 
-    public Mono<byte[]> generateAllValidatedOffersReport() {
-        // TODO: implémenter les dates de session
-        return internshipOfferService.getAllValidatedOffers(new Date(Long.MIN_VALUE), new Date(Long.MAX_VALUE)).collectList()
+    public Mono<byte[]> generateAllValidatedOffersReport(Integer sessionNumber) {
+        List<Date> dates = calculateDates(sessionNumber);
+        return internshipOfferService.getAllValidatedOffers(dates.get(0), dates.get(1)).collectList()
                 .flatMap(validatedOffers -> {
                     Map<String, Object> variables = new HashMap<>();
                     variables.put("internshipOfferList", validatedOffers);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Offres de stages validées");
+                    variables.put("dates", calculateLocalDates(sessionNumber));
                     return pdfService.renderPdf(new OffersPdf(variables));
                 });
     }
@@ -142,36 +143,56 @@ public class ReportService {
 
             LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), 5, 31);
             endDate = convertLocalDateToDate(endLocalDate);
-            season = "Hiver";
         } else if (Integer.parseInt(season) == 2) {
             LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), 6, 1);
             startDate = convertLocalDateToDate(startLocalDate);
 
             LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), 8, 30);
             endDate = convertLocalDateToDate(endLocalDate);
-            season = "Ete";
         } else if (Integer.parseInt(season) == 3) {
-            LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), 8, 1);
+            LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), 9, 1);
             startDate = convertLocalDateToDate(startLocalDate);
 
             LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), 12, 31);
             endDate = convertLocalDateToDate(endLocalDate);
-            season = "Automne";
         }
 
         dates.add(startDate);
         dates.add(endDate);
 
-        System.out.println("dates " + dates);
+        return dates;
+    }
+
+    private List<LocalDate> calculateLocalDates(Integer sessionNumber) {
+        List<LocalDate> dates = new ArrayList<>();
+
+        String season = sessionNumber.toString().substring(0, 1);
+        String year = 20 + sessionNumber.toString().substring(1, 3);
+
+        LocalDate startLocalDate = null;
+        LocalDate endLocalDate = null;
+        if (Integer.parseInt(season) == 1) {
+            startLocalDate = LocalDate.of(Integer.parseInt(year), 1, 1);
+
+            endLocalDate = LocalDate.of(Integer.parseInt(year), 5, 31);
+        } else if (Integer.parseInt(season) == 2) {
+            startLocalDate = LocalDate.of(Integer.parseInt(year), 6, 1);
+
+            endLocalDate = LocalDate.of(Integer.parseInt(year), 8, 30);
+        } else if (Integer.parseInt(season) == 3) {
+            startLocalDate = LocalDate.of(Integer.parseInt(year), 9, 1);
+
+            endLocalDate = LocalDate.of(Integer.parseInt(year), 12, 31);
+        }
+
+        dates.add(startLocalDate);
+        dates.add(endLocalDate);
 
         return dates;
     }
 
     private Date convertLocalDateToDate(LocalDate localDate) {
-        //default time zone
         ZoneId defaultZoneId = ZoneId.systemDefault();
-
-        //local date + atStartOfDay() + default time zone + toInstant() = Date
         return Date.from(localDate.atStartOfDay(defaultZoneId).toInstant());
     }
 

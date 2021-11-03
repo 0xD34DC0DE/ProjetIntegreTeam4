@@ -37,7 +37,7 @@ class ReportControllerTest {
         //ACT
         webTestClient
                 .get()
-                .uri("/report/generateAllNonValidatedOffersReport")
+                .uri("/report/generateAllNonValidatedOffersReport/321")
                 .exchange()
 
         //ASSERT
@@ -47,12 +47,12 @@ class ReportControllerTest {
     @Test
     void shouldGenerateAllValidatedOffersReport() {
         //ARRANGE
-        doReturn(ReportMockData.getMonoBytes()).when(reportService).generateAllValidatedOffersReport();
+        doReturn(ReportMockData.getMonoBytes()).when(reportService).generateAllValidatedOffersReport(any());
 
         //ACT
         webTestClient
                 .get()
-                .uri("/report/generateAllValidatedOffersReport")
+                .uri("/report/generateAllValidatedOffersReport/321")
                 .exchange()
 
                 //ASSERT

@@ -53,7 +53,7 @@ class ReportServiceTest {
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
-        Mono<byte[]> response = reportService.generateAllValidatedOffersReport();
+        Mono<byte[]> response = reportService.generateAllValidatedOffersReport(321);
 
         //ASSERT
         StepVerifier.create(response).consumeNextWith(s -> {
