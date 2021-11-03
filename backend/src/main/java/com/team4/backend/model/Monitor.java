@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Document("users")
 @EqualsAndHashCode(callSuper = true)
-public class Monitor extends User implements Serializable {
+public class Monitor extends User {
 
     private String companyName;
 
