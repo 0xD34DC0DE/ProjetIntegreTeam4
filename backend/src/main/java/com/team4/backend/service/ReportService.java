@@ -129,7 +129,7 @@ public class ReportService {
                 });
     }
 
-    private List<Date> calculateDates(Integer sessionNumber) {
+    protected List<Date> calculateDates(Integer sessionNumber) {
         List<Date> dates = new ArrayList<>();
 
         String season = sessionNumber.toString().substring(0, 1);
@@ -157,13 +157,15 @@ public class ReportService {
             endDate = convertLocalDateToDate(endLocalDate);
         }
 
+        System.out.println("calculateDates " + dates);
+
         dates.add(startDate);
         dates.add(endDate);
 
         return dates;
     }
 
-    private List<LocalDate> calculateLocalDates(Integer sessionNumber) {
+    protected List<LocalDate> calculateLocalDates(Integer sessionNumber) {
         List<LocalDate> dates = new ArrayList<>();
 
         String season = sessionNumber.toString().substring(0, 1);
@@ -173,26 +175,27 @@ public class ReportService {
         LocalDate endLocalDate = null;
         if (Integer.parseInt(season) == 1) {
             startLocalDate = LocalDate.of(Integer.parseInt(year), 1, 1);
-
             endLocalDate = LocalDate.of(Integer.parseInt(year), 5, 31);
         } else if (Integer.parseInt(season) == 2) {
             startLocalDate = LocalDate.of(Integer.parseInt(year), 6, 1);
-
             endLocalDate = LocalDate.of(Integer.parseInt(year), 8, 30);
         } else if (Integer.parseInt(season) == 3) {
             startLocalDate = LocalDate.of(Integer.parseInt(year), 9, 1);
-
             endLocalDate = LocalDate.of(Integer.parseInt(year), 12, 31);
         }
 
         dates.add(startLocalDate);
         dates.add(endLocalDate);
 
+        System.out.println("calculateLocalDates " +dates);
+
         return dates;
     }
 
-    private Date convertLocalDateToDate(LocalDate localDate) {
+    protected Date convertLocalDateToDate(LocalDate localDate) {
+        System.out.println("Before " + localDate);
         ZoneId defaultZoneId = ZoneId.systemDefault();
+        System.out.println("After " + Date.from(localDate.atStartOfDay(defaultZoneId).toInstant()));
         return Date.from(localDate.atStartOfDay(defaultZoneId).toInstant());
     }
 
