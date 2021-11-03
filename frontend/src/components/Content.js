@@ -95,7 +95,11 @@ const Content = ({
             <ListUserDraggable role="STUDENT" visible={selection.id === 11} />
           )}
           {userInfo.role === "INTERNSHIP_MANAGER" && (
-            <ListReport role="STUDENT" visible={selection.id === 12} />
+            <ListReport
+              toggleDialog={toggleDialog}
+              open={dialogVisibility.reportDialog}
+              visible={selection.id === 12}
+            />
           )}
         </Box>
       )}

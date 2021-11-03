@@ -22,12 +22,14 @@ public class ReportController {
         this.reportService = reportService;
     }
 
+    //TODO: implémenter gestion session
     @GetMapping(value = "/generateAllNonValidatedOffersReport", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Mono<byte[]> generateAllNonValidatedOffersReport() {
         return reportService.generateAllNonValidatedOffersReport();
     }
 
+    //TODO: implémenter gestion session
     @GetMapping(value = "/generateAllValidatedOffersReport", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Mono<byte[]> generateAllValidatedOffersReport() {
