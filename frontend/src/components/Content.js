@@ -96,7 +96,7 @@ const Content = ({
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListUserDraggable role="STUDENT" visible={selection.id === 11} />
           )}
-          <StudentEvaluationMidForm />
+          <StudentEvaluationForm />
         </Box>
       )}
       <OfferForm

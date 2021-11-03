@@ -110,6 +110,7 @@ const CompanyObservationDropdown = () => {
               onChange={handleFormChange}
               helperText="Signature de l'enseignant responsable du stagiaire"
               variant="standard"
+              sx={{ "& .MuiInput-input": { fontSize: "0.8em" } }}
               fullWidth
             ></TextField>
           </Grid>

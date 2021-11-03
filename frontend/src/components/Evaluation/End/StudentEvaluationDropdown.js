@@ -20,7 +20,7 @@ const StudentEvaluationDropdown = ({ section, key }) => {
   };
 
   return (
-    <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={5}>
+    <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
       <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
         <AccordionSummary>
           <Grid container flexDirection="row" textAlign="center">
