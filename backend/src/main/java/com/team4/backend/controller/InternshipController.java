@@ -1,7 +1,6 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipCreationDto;
-import com.team4.backend.service.InternshipOfferService;
 import com.team4.backend.service.InternshipService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

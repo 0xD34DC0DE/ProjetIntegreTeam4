@@ -24,9 +24,9 @@ public class Internship {
 
     private InternshipContract internshipContract;
 
-    private LocalDate startDate;
+    private LocalDate beginningDate;
 
-    private LocalDate endDate;
+    private LocalDate endingDate;
 
     @Builder
     public Internship(String id,
@@ -34,14 +34,14 @@ public class Internship {
                       String internshipManagerEmail,
                       String studentEmail,
                       InternshipContract internshipContract,
-                      LocalDate startDate,
-                      LocalDate endDate) {
+                      LocalDate beginningDate,
+                      LocalDate endingDate) {
         this.id = id;
         this.monitorEmail = monitorEmail;
         this.internshipManagerEmail = internshipManagerEmail;
         this.studentEmail = studentEmail;
         this.internshipContract = internshipContract;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.beginningDate = beginningDate;
+        this.endingDate = endingDate;
     }
 }

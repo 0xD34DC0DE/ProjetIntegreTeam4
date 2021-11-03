@@ -19,9 +19,9 @@ public class InternshipContract {
 
     private String address;
 
-    private LocalDate startDate;
+    private LocalDate beginningDate;
 
-    private LocalDate endDate;
+    private LocalDate endingDate;
 
     private String dailySchedule;
 
@@ -40,8 +40,8 @@ public class InternshipContract {
     @Builder
     public InternshipContract(String id,
                               String address,
-                              LocalDate startDate,
-                              LocalDate endDate,
+                              LocalDate beginningDate,
+                              LocalDate endingDate,
                               String dailySchedule,
                               Float hourlyRate,
                               Float hoursPerWeek,
@@ -51,8 +51,8 @@ public class InternshipContract {
                               Signature internshipManagerSignature) {
         this.id = id;
         this.address = address;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.beginningDate = beginningDate;
+        this.endingDate = endingDate;
         this.dailySchedule = dailySchedule;
         this.hoursPerWeek = hoursPerWeek;
         this.hourlyRate = hourlyRate;

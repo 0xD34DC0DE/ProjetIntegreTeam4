@@ -28,7 +28,7 @@ public class InternshipManagerService {
         return internshipManagerRepository.findByEmail(internshipManagerEmail)
                 .switchIfEmpty(
                         Mono.error(
-                                new UserNotFoundException("Could not find internship manager with email :" +
+                                new UserNotFoundException("Could not find internship manager with email: " +
                                         internshipManagerEmail)
                         )
                 );
@@ -37,7 +37,7 @@ public class InternshipManagerService {
     public Mono<InternshipManager> findById(String internshipManagerId) {
         return internshipManagerRepository.findById(internshipManagerId).switchIfEmpty(
                 Mono.error(
-                        new UserNotFoundException("Could not find internship manager with id :" + internshipManagerId)
+                        new UserNotFoundException("Could not find internship manager with id: " + internshipManagerId)
                 )
         );
     }
