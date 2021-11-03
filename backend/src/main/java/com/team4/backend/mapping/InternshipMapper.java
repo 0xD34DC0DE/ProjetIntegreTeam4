@@ -34,8 +34,8 @@ public abstract class InternshipMapper {
                 .monitorEmail(internship.getMonitorEmail())
                 .studentEmail(internship.getStudentEmail())
                 .internshipManagerEmail(internship.getInternshipManagerEmail())
-                .startDate(internship.getStartDate())
-                .endDate(internship.getEndDate())
+                .startDate(internship.getBeginningDate())
+                .endDate(internship.getEndingDate())
                 .build();
     }
 

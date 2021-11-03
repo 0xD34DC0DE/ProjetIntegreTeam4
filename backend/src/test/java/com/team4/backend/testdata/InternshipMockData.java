@@ -2,7 +2,6 @@ package com.team4.backend.testdata;
 
 import com.team4.backend.dto.InternshipDetailedDto;
 import com.team4.backend.model.Internship;
-import com.team4.backend.model.InternshipOffer;
 
 import java.time.LocalDate;
 
@@ -15,8 +14,8 @@ public abstract class InternshipMockData {
                 .monitorEmail("monitorTest@gmail.com")
                 .internshipManagerEmail("internshipManagerTest@gmail.com")
                 .studentEmail("studentTest@gmail.com")
-                .startDate(LocalDate.now().plusDays(15))
-                .endDate(LocalDate.now().plusMonths(4))
+                .beginningDate(LocalDate.now().plusDays(15))
+                .endingDate(LocalDate.now().plusMonths(4))
                 .build();
     }
 
