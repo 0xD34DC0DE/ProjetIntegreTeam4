@@ -37,6 +37,8 @@ const StudentDashBoard = ({ visible }) => {
     "EN ATTENTE DE RÉPONSE",
   ];
 
+  const currentDate = new Date();
+
   const [profile, setProfile] = useState({
     id: "",
     email: "",
@@ -138,7 +140,6 @@ const StudentDashBoard = ({ visible }) => {
 
   const handleChangeDate = ($event) => {
     const value = $event.target.value;
-    const currentDate = new Date();
     const dateValues = value.split("-");
 
     if (
@@ -248,13 +249,18 @@ const StudentDashBoard = ({ visible }) => {
                         <TodayIcon />
                       </Typography>
                       
-                      <Typography  variant="body2" disabled={hasInternship}>
+                      <Typography  variant="body2" disabled={hasInternship}
+                      >
                         <TextField
                           sx={{
                             border: "1px white",
                             boxShadow: 4,
                             borderRadius: 2,
+                            display: "flex",
                             m: 2,
+                          }}
+                          InputLabelProps={{
+                            shrink: true,
                           }}
                           label="Date d'entrevue la plus proche"
                           value={profile.closestInterviewDate}
