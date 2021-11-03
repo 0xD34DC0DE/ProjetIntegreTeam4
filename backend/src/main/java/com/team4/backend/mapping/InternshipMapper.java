@@ -13,8 +13,8 @@ public abstract class InternshipMapper {
                 .monitorEmail(internshipCreationDto.getMonitorEmail())
                 .studentEmail(internshipCreationDto.getStudentEmail())
                 .internshipManagerEmail(internshipCreationDto.getInternshipManagerEmail())
-                .startDate(internshipCreationDto.getStartDate())
-                .endDate(internshipCreationDto.getEndDate())
+                .beginningDate(internshipCreationDto.getStartDate())
+                .beginningDate(internshipCreationDto.getEndDate())
                 .internshipContract(new InternshipContract())
                 .build();
     }
@@ -24,8 +24,8 @@ public abstract class InternshipMapper {
                 .monitorEmail(internship.getMonitorEmail())
                 .studentEmail(internship.getStudentEmail())
                 .internshipManagerEmail(internship.getInternshipManagerEmail())
-                .startDate(internship.getStartDate())
-                .endDate(internship.getEndDate())
+                .startDate(internship.getBeginningDate())
+                .endDate(internship.getEndingDate())
                 .build();
     }
 

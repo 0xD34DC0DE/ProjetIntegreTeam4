@@ -42,8 +42,8 @@ public class InternshipService {
                             .internshipManagerEmail(internshipOffer.getEmailOfApprovingInternshipManager())
                             .studentEmail(student.getEmail())
                             .internshipContract(new InternshipContract())
-                            .startDate(internshipOffer.getBeginningDate())
-                            .endDate(internshipOffer.getEndingDate())
+                            .beginningDate(internshipOffer.getBeginningDate())
+                            .endingDate(internshipOffer.getEndingDate())
                             .build();
                 })
                 .flatMap(internshipRepository::save);
