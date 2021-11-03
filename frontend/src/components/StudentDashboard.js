@@ -145,7 +145,8 @@ const StudentDashBoard = ({ visible }) => {
     if (
       currentDate.getFullYear() == parseInt(dateValues[0]) &&
       parseInt(dateValues[1]) >= currentDate.getMonth() + 1 &&
-      parseInt(dateValues[2], 10) >= currentDate.getDate()
+      parseInt(dateValues[2], 10) >= currentDate.getDate() &&
+      !hasInternship()
     ) {
       setProfile({ ...profile, closestInterviewDate: value });
       updateInterviewDate(value);
@@ -248,9 +249,8 @@ const StudentDashBoard = ({ visible }) => {
                         Membre depuis : {profile.registrationDate}
                         <TodayIcon />
                       </Typography>
-                      
-                      <Typography  variant="body2" disabled={hasInternship}
-                      >
+
+                      {!hasInternship() ? (
                         <TextField
                           sx={{
                             border: "1px white",
@@ -267,7 +267,7 @@ const StudentDashBoard = ({ visible }) => {
                           onChange={handleChangeDate}
                           type={"date"}
                         />
-                      </Typography>
+                      ) : null}
 
                       {isInterviewDateUpdated ? (
                         <motion.div
