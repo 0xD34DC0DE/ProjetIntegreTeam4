@@ -99,8 +99,8 @@ public class TestingInserterRunner implements ApplicationRunner {
 
         InternshipContract internshipContract = InternshipContract.builder()
                 .address("address")
-                .startDate(LocalDate.now().plusMonths(1))
-                .endDate(LocalDate.now().plusMonths(2))
+                .beginningDate(LocalDate.now().plusMonths(1))
+                .endingDate(LocalDate.now().plusMonths(2))
                 .dailySchedule("8:00 to 16:00")
                 .hourlyRate(21.50f)
                 .hoursPerWeek(40.0f)

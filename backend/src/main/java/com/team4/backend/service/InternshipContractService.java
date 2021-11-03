@@ -84,8 +84,8 @@ public class InternshipContractService {
 
         return InternshipContract.builder()
                 .address(internshipContractCreationDto.getAddress())
-                .startDate(internshipOffer.getBeginningDate())
-                .endDate(internshipOffer.getEndingDate())
+                .beginningDate(internshipOffer.getBeginningDate())
+                .endingDate(internshipOffer.getEndingDate())
                 .dailySchedule(internshipContractCreationDto.getDailySchedule())
                 .hoursPerWeek(internshipContractCreationDto.getHoursPerWeek())
                 .hourlyRate(internshipContractCreationDto.getHourlyRate())
