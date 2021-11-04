@@ -20,7 +20,7 @@ public class TaskSchedulerService {
         this.studentService = studentService;
     }
 
-    @Scheduled(cron = "0 34 1 ? * *")
+    @Scheduled(cron = "0 00 0 ? * *")
     private void updateStudentStateForAllStudentThatInterviewDateHasPassed() {
         studentService.updateStudentStateForAllStudentThatInterviewDateHasPassedWeb()
                 .subscribe(nbrOfUpdateStudent -> log.info(
