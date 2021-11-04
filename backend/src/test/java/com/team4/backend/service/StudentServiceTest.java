@@ -13,12 +13,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.cglib.core.Local;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
-import java.util.HashSet;
+import java.util.List;
 import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -198,7 +198,6 @@ public class StudentServiceTest {
                 .verifyComplete();
     }
 
-
     @Test
     void shouldNotAddAppliedOffer() {
         //ARRANGE
@@ -248,7 +247,8 @@ public class StudentServiceTest {
         Mono<Student> studentMono = studentService.updateStudentState(student.getEmail(), StudentState.INTERNSHIP_FOUND);
 
         //ASSERT
-        StepVerifier.create(studentMono).verifyError(UserNotFoundException.class);
+        StepVerifier.create(studentMono)
+                .verifyError(UserNotFoundException.class);
     }
 
     @Test
@@ -265,7 +265,8 @@ public class StudentServiceTest {
         Mono<Student> studentMono = studentService.updateStudentState(student.getEmail(), StudentState.INTERNSHIP_FOUND);
 
         //ASSERT
-        StepVerifier.create(studentMono).verifyError(ForbiddenActionException.class);
+        StepVerifier.create(studentMono)
+                .verifyError(ForbiddenActionException.class);
     }
 
     @Test
@@ -301,7 +302,8 @@ public class StudentServiceTest {
         Mono<Student> studentMono = studentService.updateInterviewDate(student.getEmail(), any());
 
         //ASSERT
-        StepVerifier.create(studentMono).verifyError(UserNotFoundException.class);
+        StepVerifier.create(studentMono)
+                .verifyError(UserNotFoundException.class);
     }
 
     @Test
@@ -318,7 +320,43 @@ public class StudentServiceTest {
         Mono<Student> studentMono = studentService.updateInterviewDate(student.getEmail(), any());
 
         //ASSERT
-        StepVerifier.create(studentMono).verifyError(ForbiddenActionException.class);
+        StepVerifier.create(studentMono)
+                .verifyError(ForbiddenActionException.class);
+    }
+
+    @Test
+    void shouldUpdateStudentStateForAllStudentThatInterviewDateHasPassed() {
+        //ARRANGE
+        List<Student> students = StudentMockData.getAllStudentsToUpdate();
+
+        when(studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND))
+                .thenReturn(Flux.fromIterable(students));
+
+        students.forEach(student -> when(studentRepository.save(student)).thenReturn(Mono.just(student)));
+
+        //ACT
+        Mono<Long> nbrOfUpdatedStudent = studentService.updateStudentStateForAllStudentThatInterviewDateHasPassedWeb();
+
+        //ASSERT
+        StepVerifier.create(nbrOfUpdatedStudent)
+                .assertNext(n -> assertEquals(2, n))
+                .verifyComplete();
+
+    }
+
+    @Test
+    void shouldNotUpdateStudentStateForAllStudentThatInterviewDateHasPassed() {
+        //ARRANGE
+        when(studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND))
+                .thenReturn(Flux.empty());
+
+        //ACT
+        Mono<Long> nbrOfUpdatedStudent = studentService.updateStudentStateForAllStudentThatInterviewDateHasPassedWeb();
+
+        //ASSERT
+        StepVerifier.create(nbrOfUpdatedStudent)
+                .assertNext(n -> assertEquals(0, n))
+                .verifyComplete();
     }
 
 }

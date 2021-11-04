@@ -121,7 +121,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasValidCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
-                        .interviewsDate(new TreeSet<>())
+                        .interviewsDate(new TreeSet<>( Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.WAITING_FOR_RESPONSE)
                         .build(),
                 Student.studentBuilder()
@@ -132,7 +132,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("jean123"))
                         .hasValidCv(false)
                         .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
-                        .interviewsDate(new TreeSet<>())
+                        .interviewsDate(new TreeSet<>( Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
                 Student.studentBuilder()
@@ -144,7 +144,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasValidCv(false)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
-                        .interviewsDate(new TreeSet<>())
+                        .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
                 Student.studentBuilder()
