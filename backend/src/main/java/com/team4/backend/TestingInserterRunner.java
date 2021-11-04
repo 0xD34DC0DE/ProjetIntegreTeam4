@@ -103,13 +103,6 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .studentEmail("studentInternFound@gmail.com")
                         .beginningDate(LocalDate.now().plusDays(15))
                         .endingDate(LocalDate.now().plusMonths(4))
-                        .build(),
-                Internship.builder()
-                        .monitorEmail("9182738492@gmail.com")
-                        .internshipManagerEmail("manager1@gmail.com")
-                        .studentEmail("123456789@gmail.com")
-                        .beginningDate(LocalDate.now().plusDays(15))
-                        .endingDate(LocalDate.now().plusMonths(4))
                         .build()
         );
         internshipRepository.saveAll(internships)

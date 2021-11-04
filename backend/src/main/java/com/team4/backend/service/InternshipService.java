@@ -54,4 +54,8 @@ public class InternshipService {
         return internshipRepository.findByStudentEmail(studentEmail)
                 .switchIfEmpty(Mono.error(new InternshipNotFoundException("There is no internship featuring " + studentEmail)));
     }
+
+    public Mono<Boolean> existsByStudentEmail(String studentEmail) {
+        return internshipRepository.existsByStudentEmail(studentEmail);
+    }
 }
