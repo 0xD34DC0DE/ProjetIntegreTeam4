@@ -1,5 +1,7 @@
 import {
   AccountCircleOutlined,
+  DashboardOutlined,
+  SettingsOutlined,
   PeopleAltOutlined,
   HomeOutlined,
   FindInPageOutlined,
@@ -10,6 +12,7 @@ import {
   CheckOutlined,
   SupervisedUserCircleOutlined,
   FormatListBulletedOutlined,
+  AssignmentSharp,
 } from "@mui/icons-material";
 
 export const sidebarList = [
@@ -100,6 +103,13 @@ export const sidebarList = [
     icon: <FindInPageOutlined sx={{ mr: 1 }} />,
     description: "Évaluation du stagiaire à son mi-mandat",
   },
+  {
+    id: 14,
+    label: "Consulter rapports",
+    role: ["INTERNSHIP_MANAGER"],
+    icon: <AssignmentSharp fontSize="small" sx={{ mr: 1 }} />,
+    description: "Consultation des rapports",
+  },
 ];
 
 export const topbarMenuList = [
@@ -112,13 +122,13 @@ export const topbarMenuList = [
   {
     id: 8,
     label: "Espace Personnelle",
-    icon: <FindInPageOutlined fontSize="small" sx={{ mr: 1 }} />,
+    icon: <DashboardOutlined fontSize="small" sx={{ mr: 1 }} />,
     description: "Espace personnelle",
   },
   {
     id: 9,
     label: "Paramètres",
-    icon: <FindInPageOutlined fontSize="small" sx={{ mr: 1 }} />,
+    icon: <SettingsOutlined fontSize="small" sx={{ mr: 1 }} />,
     description: "Paramètres",
   },
 ];

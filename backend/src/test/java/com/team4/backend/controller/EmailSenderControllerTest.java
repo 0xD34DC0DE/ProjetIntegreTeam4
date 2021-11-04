@@ -54,7 +54,7 @@ class EmailSenderControllerTest {
                 .bodyValue(multiValueMap)
                 .exchange()
 
-                //ASSERT
+        //ASSERT
                 .expectStatus().isOk()
                 .expectBody(String.class);
     }

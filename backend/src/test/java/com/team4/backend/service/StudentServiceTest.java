@@ -270,6 +270,179 @@ public class StudentServiceTest {
     }
 
     @Test
+    void shouldSetHasCvStatusTrue() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentRepository.findByEmail(any(String.class))).thenReturn(Mono.just(student));
+        when(studentRepository.save(any())).thenReturn(Mono.just(student));
+
+        //ACT
+        Mono<Student> response = studentService.setHasCvStatusTrue(student.getEmail());
+
+        //ASSERT
+        StepVerifier.create(response).consumeNextWith(s -> {
+            assertEquals(student, s);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldGetAll() {
+        //ARRANGE
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+
+        when(studentRepository.findAllByRole("STUDENT")).thenReturn(students);
+
+        //ACT
+        Flux<Student> response = studentService.getAll();
+
+        //ASSERT
+        StepVerifier.create(response).assertNext(s -> {
+            assertEquals(StudentMockData.getMockStudent(), s);
+        }).assertNext(s -> {
+            assertEquals(StudentMockData.getMockSecondStudent(), s);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllStudentsWithNoCv() {
+        //ARRANGE
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+
+        when(studentRepository.findAllByHasCvFalse()).thenReturn(students);
+
+        //ACT
+        Flux<Student> response = studentService.getAllStudentsWithNoCv();
+
+        //ASSERT
+        StepVerifier.create(response).assertNext(s -> {
+            assertEquals(StudentMockData.getMockStudent(), s);
+        }).assertNext(s -> {
+            assertEquals(StudentMockData.getMockSecondStudent(), s);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllStudentsWithUnvalidatedCv() {
+        //ARRANGE
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+
+        when(studentRepository.findAllByHasValidCvFalse()).thenReturn(students);
+
+        //ACT
+        Flux<Student> response = studentService.getAllStudentsWithUnvalidatedCv();
+
+        //ASSERT
+        StepVerifier.create(response).assertNext(s -> {
+            assertEquals(StudentMockData.getMockStudent(), s);
+        }).assertNext(s -> {
+            assertEquals(StudentMockData.getMockSecondStudent(), s);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldGetStudentsNoInternship() {
+        //ARRANGE
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+
+        when(studentRepository.findAllByStudentState(StudentState.REGISTERED)).thenReturn(students);
+
+        //ACT
+        Flux<Student> response = studentService.getStudentsNoInternship();
+
+        //ASSERT
+        StepVerifier.create(response).assertNext(s -> {
+            assertEquals(StudentMockData.getMockStudent(), s);
+        }).assertNext(s -> {
+            assertEquals(StudentMockData.getMockSecondStudent(), s);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldGetStudentsWaitingInterview() {
+        //ARRANGE
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+
+        when(studentRepository.findAllByStudentState(StudentState.INTERNSHIP_NOT_FOUND)).thenReturn(students);
+
+        //ACT
+        Flux<Student> response = studentService.getStudentsWaitingInterview();
+
+        //ASSERT
+        StepVerifier.create(response).assertNext(s -> {
+            assertEquals(StudentMockData.getMockStudent(), s);
+        }).assertNext(s -> {
+            assertEquals(StudentMockData.getMockSecondStudent(), s);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldGetStudentsWaitingResponse() {
+        //ARRANGE
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+
+        when(studentRepository.findAllByStudentState(StudentState.WAITING_FOR_RESPONSE)).thenReturn(students);
+
+        //ACT
+        Flux<Student> response = studentService.getStudentsWaitingResponse();
+
+        //ASSERT
+        StepVerifier.create(response).assertNext(s -> {
+            assertEquals(StudentMockData.getMockStudent(), s);
+        }).assertNext(s -> {
+            assertEquals(StudentMockData.getMockSecondStudent(), s);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldGetStudentsWithInternship() {
+        //ARRANGE
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+
+        when(studentRepository.findAllByStudentState(StudentState.INTERNSHIP_FOUND)).thenReturn(students);
+
+        //ACT
+        Flux<Student> response = studentService.getStudentsWithInternship();
+
+        //ASSERT
+        StepVerifier.create(response).assertNext(s -> {
+            assertEquals(StudentMockData.getMockStudent(), s);
+        }).assertNext(s -> {
+            assertEquals(StudentMockData.getMockSecondStudent(), s);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllWithEvaluationDateBetween() {
+        //ARRANGE
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+
+        when(studentRepository.findAllByEvaluationsDatesIsBetween(any(), any())).thenReturn(students);
+
+        //ACT
+        Flux<Student> response = studentService.getAllWithEvaluationDateBetween(LocalDate.of(2019,1,1), LocalDate.of(2019,5,31));
+
+        //ASSERT
+        StepVerifier.create(response).assertNext(s -> {
+            assertEquals(StudentMockData.getMockStudent(), s);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllWithEvaluationDateBetweenNoCorrespondingStudent() {
+        //ARRANGE
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+
+        when(studentRepository.findAllByEvaluationsDatesIsBetween(any(), any())).thenReturn(students);
+
+        //ACT
+        Flux<Student> response = studentService.getAllWithEvaluationDateBetween(LocalDate.of(2016,1,1), LocalDate.of(2016,5,31));
+
+        //ASSERT
+        StepVerifier.create(response).verifyComplete();
+    }
+
+    @Test
     void shouldUpdateInterviewDate() {
         //ARRANGE
         LocalDate interviewDate = LocalDate.now();

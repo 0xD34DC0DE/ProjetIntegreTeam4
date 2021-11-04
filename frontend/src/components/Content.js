@@ -17,6 +17,8 @@ import ListUserDraggable from "./ListUserDraggable";
 import AssignedStudentSupervisorView from "./AssignedStudentSupervisorView";
 import StudentEvaluationForm from "./Evaluation/End/StudentEvaluationForm";
 import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMidForm";
+import AsssignedStudentSupervisorView from "./AsssignedStudentSupervisorView";
+import ListReport from "./ListReport";
 
 const Content = ({
   isSidebarOpen,
@@ -57,7 +59,6 @@ const Content = ({
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListCvInternshipManagerView visible={selection.id === 1} />
           )}
-
           {userInfo.role === "MONITOR" && (
             <ListStudentApplying
               visible={selection.id === 6}
@@ -100,6 +101,13 @@ const Content = ({
           )}
           {userInfo.role === "SUPERVISOR" && (
             <StudentEvaluationMidForm visible={selection.id === 13} />
+          )}
+          {userInfo.role === "INTERNSHIP_MANAGER" && (
+            <ListReport
+              toggleDialog={toggleDialog}
+              open={dialogVisibility.reportDialog}
+              visible={selection.id === 14}
+            />
           )}
         </Box>
       )}

@@ -27,6 +27,7 @@ import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -556,6 +557,44 @@ public class InternshipOfferServiceTest {
                     assertFalse(offer.getHasAlreadyApplied());
                 })
                 .verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllNonValidatedOffers() {
+        //ARRANGE
+        Flux<InternshipOffer> internshipOffers = InternshipOfferMockData.getAllInternshipOffers();
+        List<Date> dateList = InternshipOfferMockData.getSessionDates();
+
+        when(internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyBetween(any(), any())).thenReturn(internshipOffers);
+
+        //ACT
+        Flux<InternshipOffer> response = internshipOfferService.getAllNonValidatedOffers(dateList.get(0), dateList.get(1));
+
+        //ASSERT
+        StepVerifier.create(response).assertNext(s -> {
+            assertEquals(InternshipOfferMockData.getFirstInternshipOffer(), s);
+        }).assertNext(s -> {
+            assertEquals(InternshipOfferMockData.getSecondInternshipOffer(), s);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllValidatedOffers() {
+        //ARRANGE
+        Flux<InternshipOffer> internshipOffers = InternshipOfferMockData.getAllInternshipOffers();
+        List<Date> dateList = InternshipOfferMockData.getSessionDates();
+
+        when(internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyBetween(any(), any())).thenReturn(internshipOffers);
+
+        //ACT
+        Flux<InternshipOffer> response = internshipOfferService.getAllValidatedOffers(dateList.get(0), dateList.get(1));
+
+        //ASSERT
+        StepVerifier.create(response).assertNext(s -> {
+            assertEquals(InternshipOfferMockData.getFirstInternshipOffer(), s);
+        }).assertNext(s -> {
+            assertEquals(InternshipOfferMockData.getSecondInternshipOffer(), s);
+        }).verifyComplete();
     }
 
 }
