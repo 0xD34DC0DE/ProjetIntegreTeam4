@@ -7,10 +7,12 @@ import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.util.PBKDF2Encoder;
+import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
 import java.util.Set;
 
 @Service
@@ -61,11 +63,23 @@ public class StudentService {
 
     public Mono<Student> updateStudentState(String email, StudentState studentState) {
         return findByEmail(email)
-                .filter(student -> student.getStudentState().equals(StudentState.WAITING_FOR_RESPONSE))
+                .filter(student -> student.getStudentState().equals(StudentState.WAITING_FOR_RESPONSE)
+                        && student.getHasValidCv())
                 .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update your state if you're not waiting for a response to your recent interview!")))
                 .map(student -> {
                     //TODO --> call function that will trigger the contract generation
                     student.setStudentState(studentState);
+                    return student;
+                }).flatMap(studentRepository::save);
+    }
+
+    public Mono<Student> updateInterviewDate(String email, LocalDate interviewDate) {
+        return findByEmail(email)
+                .filter(student -> !student.getStudentState().equals(StudentState.INTERNSHIP_FOUND)
+                        && student.getHasValidCv())
+                .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update the interview date if you already have an internship")))
+                .map(student -> {
+                    student.getInterviewsDate().add(interviewDate);
                     return student;
                 }).flatMap(studentRepository::save);
     }

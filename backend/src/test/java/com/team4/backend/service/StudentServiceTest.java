@@ -13,8 +13,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.cglib.core.Local;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -217,6 +222,7 @@ public class StudentServiceTest {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
 
+        student.setHasValidCv(true);
         student.setStudentState(StudentState.WAITING_FOR_RESPONSE);
 
         when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
@@ -250,12 +256,66 @@ public class StudentServiceTest {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
 
+        student.setHasValidCv(true);
         student.setStudentState(StudentState.INTERNSHIP_NOT_FOUND);
 
         when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
 
         //ACT
         Mono<Student> studentMono = studentService.updateStudentState(student.getEmail(), StudentState.INTERNSHIP_FOUND);
+
+        //ASSERT
+        StepVerifier.create(studentMono).verifyError(ForbiddenActionException.class);
+    }
+
+    @Test
+    void shouldUpdateInterviewDate() {
+        //ARRANGE
+        LocalDate interviewDate = LocalDate.now();
+        Student student = StudentMockData.getMockStudent();
+
+        student.setHasValidCv(true);
+        student.setStudentState(StudentState.INTERNSHIP_NOT_FOUND);
+        student.setInterviewsDate(new TreeSet<>());
+
+        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
+        when(studentRepository.save(any(Student.class))).thenReturn(Mono.just(student));
+
+        //ACT
+        Mono<Student> studentMono = studentService.updateInterviewDate(student.getEmail(), interviewDate);
+
+        //ASSERT
+        StepVerifier.create(studentMono)
+                .assertNext(s -> assertEquals(interviewDate, s.getInterviewsDate().stream().findFirst().get()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotUpdateInterviewDateWhenNotFound() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.empty());
+
+        //ACT
+        Mono<Student> studentMono = studentService.updateInterviewDate(student.getEmail(), any());
+
+        //ASSERT
+        StepVerifier.create(studentMono).verifyError(UserNotFoundException.class);
+    }
+
+    @Test
+    void shouldNotUpdateInterviewDateWhenStudentStateIsInternshipFound() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        student.setHasValidCv(true);
+        student.setStudentState(StudentState.INTERNSHIP_FOUND);
+
+        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
+
+        //ACT
+        Mono<Student> studentMono = studentService.updateInterviewDate(student.getEmail(), any());
 
         //ASSERT
         StepVerifier.create(studentMono).verifyError(ForbiddenActionException.class);

@@ -16,10 +16,7 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @Order(2)
@@ -124,6 +121,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasValidCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
+                        .interviewsDate(new TreeSet<>())
                         .studentState(StudentState.WAITING_FOR_RESPONSE)
                         .build(),
                 Student.studentBuilder()
@@ -134,6 +132,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("jean123"))
                         .hasValidCv(false)
                         .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
+                        .interviewsDate(new TreeSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
                 Student.studentBuilder()
@@ -145,6 +144,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasValidCv(false)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
+                        .interviewsDate(new TreeSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
                 Student.studentBuilder()
@@ -155,6 +155,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("kevin123"))
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
+                        .interviewsDate(new TreeSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .hasValidCv(false)
                         .build(),
@@ -166,6 +167,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .studentState(StudentState.REGISTERED)
                         .phoneNumber("123-123-1234")
                         .appliedOffersId(new HashSet<>())
+                        .interviewsDate(new TreeSet<>())
                         .exclusiveOffersId(new HashSet<>() {
                             {
                                 add(insertInternshipOffersStudentView());
