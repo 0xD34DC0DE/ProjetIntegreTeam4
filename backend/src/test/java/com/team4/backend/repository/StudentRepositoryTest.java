@@ -76,7 +76,6 @@ public class StudentRepositoryTest {
         StepVerifier.create(studentMono)
                 .assertNext(s -> Assertions.assertEquals(email, s.getEmail()))
                 .verifyComplete();
-
     }
 
     @Test
