@@ -345,7 +345,7 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                             },
                                           }}
                                           onClick={() => {
-                                            setReceiver(student.email);
+                                            setReceiver({internshipOfferId: offer.id, studentEmail: student.email});
                                             toggleDialog(
                                               "signContractMonitorDialog",
                                               true
@@ -379,7 +379,8 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
       <SignContractMonitorDialog
         toggleDialog={toggleDialog}
         open={dialogVisibility.signContractMonitorDialog}
-        pdfUrl={`http://localhost:8080/contract/pdfByStudentEmail/${receiver}`}
+        pdfUrl={`http://localhost:8080/contract`}
+        params={{internshipOfferId: receiver.internshipOfferId, studentEmail: receiver.studentEmail}}
       />
     </Grid>
   );

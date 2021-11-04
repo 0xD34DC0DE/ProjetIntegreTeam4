@@ -1,49 +1,85 @@
-import { Dialog, DialogContent } from "@mui/material";
+import {
+  Dialog,
+  DialogContent,
+  Button,
+  Grid,
+  Checkbox,
+  Typography,
+  TextField,
+  Box,
+  FormControlLabel,
+} from "@mui/material";
 import React, { useState, useContext, useEffect, useRef } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import PdfView from "./PdfView.js";
 
-function SignContractMonitorDialog({ open, toggleDialog, pdfUrl }) {
+import SignContractMonitorForm from "./SignContractMonitorForm";
+
+function SignContractMonitorDialog({ open, toggleDialog, pdfUrl, params }) {
   const [userInfo] = useContext(UserInfoContext);
-  const [form, setForm] = useState({});
+
+
   let dialogRef = useRef(null);
-
-  const handleFormChange = (event) => {
-    setForm((form) => ({
-      ...form,
-      [event.target.id || event.target.name]: event.target.value,
-    }));
-  };
-
-  const resetForm = () => {
-    setForm((form) => ({ ...form, subject: "", content: "" }));
-  };
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick") {
       toggleDialog("signContractMonitorDialog", false);
-      resetForm();
+      //resetForm();
     }
   };
 
+
+  function useTraceUpdate(props) {
+    const prev = useRef(props);
+    useEffect(() => {
+      const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
+        if (prev.current[k] !== v) {
+          ps[k] = [prev.current[k], v];
+        }
+        return ps;
+      }, {});
+      if (Object.keys(changedProps).length > 0) {
+        console.log("Changed props:", changedProps);
+      }
+      prev.current = props;
+    });
+  }
+  
+  useTraceUpdate({ pdfUrl: pdfUrl, params: params, ref: dialogRef });
+
   return (
     <>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        fullWidth
-        maxWidth="lg"
-        PaperProps={{
-          sx: {
-            width: "75%",
-            height: "80%",
-          },
-        }}
-      >
-        
+      <Dialog open={open} onClose={handleClose} fullWidth>
         {open && (
-          <DialogContent sx={{ minHeight: "100%" }} ref={dialogRef}>
-            {dialogRef && <PdfView pdfUrl={pdfUrl} dialogRef={dialogRef} />}
+          <DialogContent>
+            <Grid
+              container
+              direction="column"
+              justifyContent={{ sm: "left", md: "center" }}
+              alignContent={{ sm: "left", md: "center" }}
+              rowSpacing={2}
+              sx={{ mb: 4 }}
+            >
+              {dialogRef && (
+                <>
+                  <Grid item xs={12}>
+                    <PdfView pdfUrl={pdfUrl} params={params} />
+                  </Grid>
+
+                  <Grid
+                    item
+                    xs={5}
+                    sx={{ mt: 5 }}
+                    alignItems="left"
+                    textAlign="left"
+                  >
+                    <SignContractMonitorForm/>
+                  </Grid>
+
+
+                </>
+              )}
+            </Grid>
           </DialogContent>
         )}
       </Dialog>
