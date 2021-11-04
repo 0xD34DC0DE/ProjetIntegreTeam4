@@ -10,4 +10,5 @@ public interface StudentRepository extends ReactiveMongoRepository<Student, Stri
     Mono<Student> findByEmailAndIsEnabledTrue(String studentEmail);
 
     Mono<Student> findByEmail(String email);
+
 }

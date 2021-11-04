@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-@Order(2)
+@Order(1)
 @ExcludeFromGeneratedCoverage
 public class InternshipManagerRegistration implements ApplicationRunner {
 
