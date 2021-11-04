@@ -7,6 +7,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDate;
 import java.util.Date;
+import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -20,6 +22,8 @@ public class Student extends User {
     private Boolean hasCv;
 
     private StudentState studentState;
+
+    private Set<LocalDate> interviewsDate;
 
     private Boolean hasValidCv;
 
@@ -42,7 +46,8 @@ public class Student extends User {
                    Set<String> exclusiveOffersId,
                    Boolean hasValidCv,
                    Boolean hasCv,
-                   Set<LocalDate> evaluationsDates) {
+                   Set<LocalDate> evaluationsDates,
+                   Set<LocalDate> interviewsDate) {
         super(id,
                 email,
                 firstName,
@@ -59,6 +64,7 @@ public class Student extends User {
         this.hasValidCv = hasValidCv;
         this.hasCv = hasCv;
         this.evaluationsDates = evaluationsDates;
+        this.interviewsDate = interviewsDate;
     }
 
 }

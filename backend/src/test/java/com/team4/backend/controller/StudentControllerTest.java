@@ -20,6 +20,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -121,6 +123,56 @@ public class StudentControllerTest {
         webTestClient
                 .patch()
                 .uri("/student/updateStudentState")
+                .exchange()
+                //ASSERT
+                .expectStatus().isForbidden()
+                .expectBodyList(String.class);
+    }
+
+    @Test
+    void shouldUpdateInterviewDate() {
+        //ARRANGE
+        LocalDate interviewDate = LocalDate.now();
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentService.updateInterviewDate(any(), any())).thenReturn(Mono.just(student));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/student/updateInterviewDate/" + interviewDate)
+                .exchange()
+                //ASSERT
+                .expectStatus().isNoContent()
+                .expectBodyList(String.class);
+    }
+
+    @Test
+    void shouldNotUpdateInterviewDateWhenNotFound() {
+        //ARRANGE
+        LocalDate interviewDate = LocalDate.now();
+        when(studentService.updateInterviewDate(any(), any())).thenReturn(Mono.error(UserNotFoundException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/student/updateInterviewDate/" + interviewDate)
+                .exchange()
+                //ASSERT
+                .expectStatus().isNotFound()
+                .expectBodyList(String.class);
+    }
+
+    @Test
+    void shouldNotUpdateInterviewDateWhenStudentStateIsInternshipFound() {
+        //ARRANGE
+        LocalDate interviewDate = LocalDate.now();
+        when(studentService.updateInterviewDate(any(), any())).thenReturn(Mono.error(ForbiddenActionException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/student/updateInterviewDate/" + interviewDate)
                 .exchange()
                 //ASSERT
                 .expectStatus().isForbidden()

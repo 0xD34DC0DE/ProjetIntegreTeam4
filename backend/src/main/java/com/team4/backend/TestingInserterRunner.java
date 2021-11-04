@@ -128,6 +128,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
+                        .interviewsDate(new TreeSet<>())
                         .studentState(StudentState.WAITING_FOR_RESPONSE)
                         .evaluationsDates(evaluationsDates)
                         .build(),
@@ -140,6 +141,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasValidCv(false)
                         .hasCv(true)
                         .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
+                        .interviewsDate(new TreeSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
                 Student.studentBuilder()
@@ -152,6 +154,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
+                        .interviewsDate(new TreeSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
                 Student.studentBuilder()
@@ -162,6 +165,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("kevin123"))
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
+                        .interviewsDate(new TreeSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .hasValidCv(false)
                         .hasCv(true)
@@ -188,6 +192,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasCv(false)
                         .phoneNumber("123-123-1234")
                         .appliedOffersId(new HashSet<>())
+                        .interviewsDate(new TreeSet<>())
                         .exclusiveOffersId(new HashSet<>() {
                             {
                                 add(insertInternshipOffersStudentView());

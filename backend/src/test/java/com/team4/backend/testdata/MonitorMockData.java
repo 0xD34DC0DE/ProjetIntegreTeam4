@@ -3,7 +3,7 @@ package com.team4.backend.testdata;
 import com.team4.backend.dto.MonitorDetailsDto;
 import com.team4.backend.model.Monitor;
 
-public class MonitorMockData {
+public abstract class MonitorMockData {
 
     public static Monitor getMockMonitor() {
         return Monitor.monitorBuilder()
