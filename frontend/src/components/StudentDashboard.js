@@ -8,8 +8,6 @@ import {
   Select,
   MenuItem,
   Container,
-  FormControl,
-  InputLabel,
   TextField,
 } from "@mui/material";
 import StarBorderPurple500Icon from "@mui/icons-material/StarBorderPurple500";
@@ -21,6 +19,7 @@ import TodayIcon from "@mui/icons-material/Today";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { motion } from "framer-motion";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import ScheduleIcon from '@mui/icons-material/Schedule';
 import PeopleIcon from "@mui/icons-material/People";
 import { UserInfoContext } from "../stores/UserInfoStore";
 
@@ -117,7 +116,6 @@ const StudentDashBoard = ({ visible }) => {
       responseType: "json",
     })
       .then(() => {
-        
         setIsInterviewDateUpdated(true);
 
         setTimeout(() => {
@@ -268,7 +266,27 @@ const StudentDashBoard = ({ visible }) => {
                           onChange={handleChangeDate}
                           type={"date"}
                         />
-                      ) : null}
+                      ) : (
+                        <motion.div
+                          variants={fadeIn}
+                          initial="hidden"
+                          animate="show"
+                        >
+                          <Typography
+                            variant="subtitle1"
+                            sx={{
+                              color: "gray",
+                              textAlign: "center",
+                              alignItems: "center",
+                              m: 2                            }}
+                          >
+                            {
+                              "L'ajout d'entrevue sera disponible à la prochaine session"
+                            }
+                            <ScheduleIcon/>
+                          </Typography>
+                        </motion.div>
+                      )}
 
                       {isInterviewDateUpdated ? (
                         <motion.div
