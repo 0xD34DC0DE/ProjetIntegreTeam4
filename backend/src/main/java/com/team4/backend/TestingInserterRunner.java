@@ -196,13 +196,13 @@ public class TestingInserterRunner implements ApplicationRunner {
     private void insertSupervisors() {
         List<Supervisor> supervisorList = Arrays.asList(
                 Supervisor.supervisorBuilder()
-                        .email("45673234@gmail.com").password(pbkdf2Encoder.encode("sasuke123"))
+                        .email("supervisor@gmail.com").password(pbkdf2Encoder.encode("supervisor"))
                         .firstName("Ginette")
                         .lastName("Renaud")
                         .studentEmails(new HashSet<>()).build(),
                 Supervisor.supervisorBuilder()
                         .email("supervisor1@gmail.com")
-                        .password(pbkdf2Encoder.encode("supervisor123"))
+                        .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Michel")
                         .lastName("Lamarck")
                         .studentEmails(new HashSet<>()).build()

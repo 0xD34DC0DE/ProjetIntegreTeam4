@@ -69,8 +69,6 @@ const StudentEvaluationMidForm = ({ visible }) => {
     await studentMidEvaluationRef.current.getForm();
     await companyObservationRef.current.getForm();
 
-    console.log(midEvaluationForm.current);
-
     await axios({
       method: "POST",
       url: "http://localhost:8080/evaluation",
