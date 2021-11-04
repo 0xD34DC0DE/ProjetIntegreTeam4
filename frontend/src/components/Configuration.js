@@ -89,7 +89,7 @@ export const sidebarList = [
     description: "Assignations des superviseurs aux élèves",
   },
   {
-    id: 12,
+    id: 14,
     label: "Consulter rapports",
     role: ["INTERNSHIP_MANAGER"],
     icon: <AssignmentSharp fontSize="small" sx={{ mr: 1 }} />,

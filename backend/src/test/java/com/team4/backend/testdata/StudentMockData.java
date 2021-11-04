@@ -6,14 +6,11 @@ import com.team4.backend.model.enums.StudentState;
 import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-=======
 import java.util.*;
->>>>>>> 9bab10f12c0ae59e7cc6f00ebb5c95c7a1ac901b
 
 public abstract class StudentMockData {
 

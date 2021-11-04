@@ -98,7 +98,7 @@ const Content = ({
             <ListReport
               toggleDialog={toggleDialog}
               open={dialogVisibility.reportDialog}
-              visible={selection.id === 12}
+              visible={selection.id === 14}
             />
           )}
         </Box>
