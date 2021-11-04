@@ -17,7 +17,11 @@ const fadeIn = {
   },
 };
 
-const AsssignedStudentSupervisorView = ({ visible, toggleDialog }) => {
+const AsssignedStudentSupervisorView = ({
+  visible,
+  toggleDialog,
+  dialogVisibility,
+}) => {
   const [assignedStudents, setAssignedStudents] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
   const [openedStudentEmail, setOpenedStudentEmail] = useState("");
@@ -49,6 +53,10 @@ const AsssignedStudentSupervisorView = ({ visible, toggleDialog }) => {
     getAssignedStudents(supervisor.id);
   }, []);
 
+  const resetOpenedStudentEmail = () => {
+    setOpenedStudentEmail("");
+  };
+
   return (
     <>
       {visible && (
@@ -62,11 +70,14 @@ const AsssignedStudentSupervisorView = ({ visible, toggleDialog }) => {
             spacing={{ xs: 2, md: 3 }}
             columns={{ xs: 4, sm: 8, md: 12 }}
           >
-            {assignedStudents.map((student, index) => (
+            {assignedStudents.map((student) => (
               <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={student.id}>
                 <motion.div variants={fadeIn} initial="hidden" animate="show">
                   <Card
-                    onClick={() => setOpenedStudentEmail(student.email)}
+                    onClick={() => {
+                      setOpenedStudentEmail(student.email);
+                      toggleDialog("internshipDetailsDialog", true);
+                    }}
                     sx={{
                       backgroundColor: "#1F2020",
                       boxShadow: 6,
@@ -98,6 +109,8 @@ const AsssignedStudentSupervisorView = ({ visible, toggleDialog }) => {
         </>
       )}
       <StudentInternshipDetailsDialog
+        open={dialogVisibility.internshipDetailsDialog}
+        resetOpenedStudentEmail={resetOpenedStudentEmail}
         openedStudentEmail={openedStudentEmail}
         toggleDialog={toggleDialog}
       />

@@ -10,6 +10,8 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 
 const StudentInternshipDetailsDialog = ({
+  open,
+  resetOpenedStudentEmail,
   openedStudentEmail,
   toggleDialog,
 }) => {
@@ -24,29 +26,44 @@ const StudentInternshipDetailsDialog = ({
   ];
 
   useEffect(() => {
-    const getInternshipByEmail = async () => {
-      var response = await axios({
+    const existsByStudentEmail = async () => {
+      var exists = await axios({
         method: "GET",
-        url: `http://localhost:8080/internship/${openedStudentEmail}`,
+        url: `http://localhost:8080/internship/exists/${openedStudentEmail}`,
         headers: {
           Authorization: userInfo.jwt,
         },
       });
-      setInternship(response.data);
+      return exists.data;
     };
 
+    const getInternshipByEmail = async () => {
+      if ((await existsByStudentEmail()) === true) {
+        var response = await axios({
+          method: "GET",
+          url: `http://localhost:8080/internship/${openedStudentEmail}`,
+          headers: {
+            Authorization: userInfo.jwt,
+          },
+        });
+        setInternship(response.data);
+      }
+    };
     if (openedStudentEmail) {
       getInternshipByEmail();
     }
   }, [openedStudentEmail]);
 
   const handleClose = (_, reason) => {
-    if (reason === "backdropClick")
+    if (reason === "backdropClick") {
+      resetOpenedStudentEmail();
+      setInternship(null);
       toggleDialog("internshipDetailsDialog", false);
+    }
   };
 
   return (
-    <Dialog open={openedStudentEmail != ""} onClose={handleClose}>
+    <Dialog open={open} onClose={handleClose}>
       <DialogContent>
         {internship ? (
           Object.keys(internship).map((identifier, key) => {
