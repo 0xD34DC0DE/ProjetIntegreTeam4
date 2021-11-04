@@ -2,17 +2,15 @@ package com.team4.backend.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
-public class InternshipContractCreationDto implements Serializable {
-
-    private String internshipOfferId;
-
-    private String studentEmail;
+@EqualsAndHashCode(callSuper = true)
+public class InternshipContractCreationDto extends InternshipContractDto implements Serializable {
 
     private String address;
 
@@ -22,14 +20,17 @@ public class InternshipContractCreationDto implements Serializable {
 
     private Float hoursPerWeek;
 
-    @Builder
-    public InternshipContractCreationDto(String internshipOfferId, String studentEmail, String address, String dailySchedule, Float hourlyRate, Float hoursPerWeek) {
-        this.internshipOfferId = internshipOfferId;
-        this.studentEmail = studentEmail;
+    @Builder(builderMethodName = "internshipContractCreationDtoBuilder")
+    public InternshipContractCreationDto(String internshipOfferId,
+                                         String studentEmail,
+                                         String address,
+                                         String dailySchedule,
+                                         Float hourlyRate,
+                                         Float hoursPerWeek) {
+        super(internshipOfferId, studentEmail);
         this.address = address;
         this.dailySchedule = dailySchedule;
         this.hourlyRate = hourlyRate;
         this.hoursPerWeek = hoursPerWeek;
     }
-
 }
