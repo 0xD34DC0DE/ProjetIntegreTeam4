@@ -563,10 +563,9 @@ public class InternshipOfferServiceTest {
     void shouldGetAllNonValidatedOffers() {
         //ARRANGE
         Flux<InternshipOffer> internshipOffers = InternshipOfferMockData.getAllInternshipOffers();
+        List<Date> dateList = InternshipOfferMockData.getSessionDates();
 
         when(internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyBetween(any(), any())).thenReturn(internshipOffers);
-
-        List<Date> dateList = InternshipOfferMockData.getSessionDates();
 
         //ACT
         Flux<InternshipOffer> response = internshipOfferService.getAllNonValidatedOffers(dateList.get(0), dateList.get(1));
@@ -583,10 +582,9 @@ public class InternshipOfferServiceTest {
     void shouldGetAllValidatedOffers() {
         //ARRANGE
         Flux<InternshipOffer> internshipOffers = InternshipOfferMockData.getAllInternshipOffers();
+        List<Date> dateList = InternshipOfferMockData.getSessionDates();
 
         when(internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyBetween(any(), any())).thenReturn(internshipOffers);
-
-        List<Date> dateList = InternshipOfferMockData.getSessionDates();
 
         //ACT
         Flux<InternshipOffer> response = internshipOfferService.getAllValidatedOffers(dateList.get(0), dateList.get(1));
@@ -598,7 +596,5 @@ public class InternshipOfferServiceTest {
             assertEquals(InternshipOfferMockData.getSecondInternshipOffer(), s);
         }).verifyComplete();
     }
-
-
 
 }

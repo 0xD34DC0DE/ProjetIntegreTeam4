@@ -66,7 +66,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.fileMetaDataRepository = fileMetaDataRepository;
         this.internshipManagerRepository = internshipManagerRepository;
-        this.evaluationsDates = new HashSet<>();
+        this.evaluationsDates = new TreeSet<>();
         this.evaluationsDates.add(LocalDate.of(2019,4,4));
         this.evaluationsDates.add(LocalDate.of(2020,9,4));
         this.evaluationsDates.add(LocalDate.now());

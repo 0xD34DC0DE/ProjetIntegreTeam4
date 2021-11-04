@@ -174,5 +174,4 @@ public class InternshipOfferService {
         return internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyBetween(sessionStart, sessionEnd);
     }
 
-
 }

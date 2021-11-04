@@ -6,5 +6,6 @@ public class StudentsPdf extends PdfTemplate{
     public StudentsPdf(Map<String, Object> variables) {
         super("Students", variables);
     }
+
 }
 

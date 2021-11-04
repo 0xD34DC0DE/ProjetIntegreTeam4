@@ -13,11 +13,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Set;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.team4.backend.model.enums.StudentState.*;
 
@@ -101,7 +97,9 @@ public class StudentService {
 
     public Mono<Student> setHasCvStatusTrue(String email) {
         return studentRepository.findByEmail(email).flatMap(student -> {
-            student.setHasCv(true);
+            if (!student.getHasCv()) {
+                student.setHasCv(true);
+            }
             return studentRepository.save(student);
         });
     }
@@ -143,8 +141,10 @@ public class StudentService {
         return studentRepository.findAllByEvaluationsDatesIsBetween(sessionStart, sessionEnd)
                 .collectList()
                 .flatMapMany(students -> {
+                    //TODO replace loops with .forEach() during refactor
                     for (Student student : students) {
                         for (LocalDate date : student.getEvaluationsDates()) {
+                            //TODO use anyMatch() to check if a date matches time period
                             if (date.isAfter(sessionStart)  && date.isBefore(sessionEnd)) {
                                 return Flux.just(student);
                             }

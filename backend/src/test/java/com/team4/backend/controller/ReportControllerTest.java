@@ -30,15 +30,13 @@ class ReportControllerTest {
     void shouldGenerateAllNonValidatedOffersReport() {
         //ARRANGE
         doReturn(ReportMockData.getMonoBytes()).when(reportService).generateAllNonValidatedOffersReport(any());
-//        when(reportService.generateAllNonValidatedOffersReport()).thenReturn()
 
         //ACT
         webTestClient
                 .get()
                 .uri("/report/generateAllNonValidatedOffersReport/321")
                 .exchange()
-
-        //ASSERT
+                //ASSERT
                 .expectStatus().isOk();
     }
 
@@ -52,7 +50,6 @@ class ReportControllerTest {
                 .get()
                 .uri("/report/generateAllValidatedOffersReport/321")
                 .exchange()
-
                 //ASSERT
                 .expectStatus().isOk();
     }
@@ -67,7 +64,6 @@ class ReportControllerTest {
                 .get()
                 .uri("/report/generateAllStudentsReport")
                 .exchange()
-
                 //ASSERT
                 .expectStatus().isOk();
     }
@@ -82,7 +78,6 @@ class ReportControllerTest {
                 .get()
                 .uri("/report/generateStudentsNoCvReport")
                 .exchange()
-
                 //ASSERT
                 .expectStatus().isOk();
     }
@@ -97,7 +92,6 @@ class ReportControllerTest {
                 .get()
                 .uri("/report/generateStudentsUnvalidatedCvReport")
                 .exchange()
-
                 //ASSERT
                 .expectStatus().isOk();
     }
@@ -112,7 +106,6 @@ class ReportControllerTest {
                 .get()
                 .uri("/report/generateStudentsNoInternshipReport")
                 .exchange()
-
                 //ASSERT
                 .expectStatus().isOk();
     }
@@ -127,7 +120,6 @@ class ReportControllerTest {
                 .get()
                 .uri("/report/generateStudentsWaitingInterviewReport")
                 .exchange()
-
                 //ASSERT
                 .expectStatus().isOk();
     }
@@ -142,7 +134,6 @@ class ReportControllerTest {
                 .get()
                 .uri("/report/generateStudentsWaitingInterviewResponseReport")
                 .exchange()
-
                 //ASSERT
                 .expectStatus().isOk();
     }
@@ -157,7 +148,6 @@ class ReportControllerTest {
                 .get()
                 .uri("/report/generateStudentsWithInternshipReport")
                 .exchange()
-
                 //ASSERT
                 .expectStatus().isOk();
     }
@@ -172,8 +162,8 @@ class ReportControllerTest {
                 .get()
                 .uri("/report/generateStudentsNotEvaluatedReport/321")
                 .exchange()
-
                 //ASSERT
                 .expectStatus().isOk();
     }
+
 }
