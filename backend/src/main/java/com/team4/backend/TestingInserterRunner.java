@@ -128,7 +128,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
-                        .interviewsDate(new TreeSet<>())
+                        .interviewsDate(new TreeSet<>( Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.WAITING_FOR_RESPONSE)
                         .evaluationsDates(evaluationsDates)
                         .build(),
@@ -141,7 +141,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasValidCv(false)
                         .hasCv(true)
                         .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
-                        .interviewsDate(new TreeSet<>())
+                        .interviewsDate(new TreeSet<>( Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
                 Student.studentBuilder()
@@ -154,7 +154,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
-                        .interviewsDate(new TreeSet<>())
+                        .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
                 Student.studentBuilder()

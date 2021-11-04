@@ -17,9 +17,11 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.team4.backend.model.enums.StudentState.*;
 
+@Log
 @Service
 public class StudentService {
 
@@ -151,4 +153,14 @@ public class StudentService {
                     return Flux.empty();
                 });
     }
+
+    public Mono<Long> updateStudentStateForAllStudentThatInterviewDateHasPassedWeb() {
+        return studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND)
+                .map(student -> {
+                    student.setStudentState(StudentState.WAITING_FOR_RESPONSE);
+                    log.info("STATE UPDATED : " + student.getFirstName() + ", " + student.getLastName());
+                    return studentRepository.save(student).subscribe();
+                }).count();
+    }
+
 }
