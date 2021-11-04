@@ -18,6 +18,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Service
 public class InternshipOfferService {
@@ -163,6 +164,14 @@ public class InternshipOfferService {
             }
             return Mono.just(offer);
         });
+    }
+
+    public Flux<InternshipOffer> getAllNonValidatedOffers(Date sessionStart, Date sessionEnd) {
+        return internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyBetween(sessionStart, sessionEnd);
+    }
+
+    public Flux<InternshipOffer> getAllValidatedOffers(Date sessionStart, Date sessionEnd) {
+        return internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyBetween(sessionStart, sessionEnd);
     }
 
 }
