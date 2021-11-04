@@ -101,17 +101,13 @@ public class StudentService {
                 );
     }
 
-    public Integer updateStudentStateForAllStudentThatInterviewDateHasPassed() {
-        AtomicInteger counter = new AtomicInteger();
-
-        studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND)
-                .subscribe(student -> {
+    public Mono<Long> updateStudentStateForAllStudentThatInterviewDateHasPassedWeb() {
+        return studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND)
+                .map(student -> {
                     student.setStudentState(StudentState.WAITING_FOR_RESPONSE);
-                    counter.getAndIncrement();
-                    studentRepository.save(student);
-                });
-
-        return counter.get();
+                    log.info("STATE UPDATED : " + student.getFirstName() + ", " + student.getLastName());
+                    return studentRepository.save(student).subscribe();
+                }).count();
     }
 
 }

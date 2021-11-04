@@ -39,7 +39,7 @@ public class StudentRepositoryTest {
                         .email("testing_1@gmail.com")
                         .password("password1")
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
-                        .interviewsDate(new HashSet<>(Arrays.asList(
+                        .interviewsDate(new TreeSet<>(Arrays.asList(
                                 LocalDate.now().minusWeeks(3),
                                 LocalDate.now(),
                                 LocalDate.now().minusDays(5))))
@@ -54,7 +54,7 @@ public class StudentRepositoryTest {
                         .email("testing_3@gmail.com")
                         .password("password1")
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
-                        .interviewsDate(new HashSet<>(Arrays.asList(
+                        .interviewsDate(new TreeSet<>(Arrays.asList(
                                 LocalDate.now().minusWeeks(3),
                                 LocalDate.now(),
                                 LocalDate.now().minusDays(5))))
