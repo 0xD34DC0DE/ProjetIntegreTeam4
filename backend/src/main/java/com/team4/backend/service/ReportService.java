@@ -3,7 +3,6 @@ package com.team4.backend.service;
 import com.team4.backend.pdf.OffersPdf;
 import com.team4.backend.pdf.StudentsPdf;
 import org.springframework.stereotype.Service;
-import org.thymeleaf.expression.Dates;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
@@ -20,11 +19,28 @@ public class ReportService {
 
     private final PdfService pdfService;
 
+    private final int WINTER = 1;
+    private final int SUMMER = 2;
+    private final int FALL = 3;
+
+    private final int JANUARY = 1;
+    private final int MAY = 5;
+    private final int JUNE = 6;
+    private final int AUGUST = 8;
+    private final int SEPTEMBER = 9;
+    private final int DECEMBER = 12;
+
+    private final int FIRST = 1;
+    private final int THIRTY = 30;
+    private final int THIRTY_FIRST = 31;
+
+
     public ReportService(InternshipOfferService internshipOfferService, StudentService studentService, PdfService pdfService) {
         this.internshipOfferService = internshipOfferService;
         this.studentService = studentService;
         this.pdfService = pdfService;
     }
+
 
     public Mono<byte[]> generateAllNonValidatedOffersReport(Integer sessionNumber) {
         List<Date> dates = calculateDates(sessionNumber);
@@ -129,6 +145,19 @@ public class ReportService {
                 });
     }
 
+    public Mono<byte[]> generateStudentsNotEvaluatedReport(Integer sessionNumber) {
+        List<LocalDate> dates = calculateLocalDates(sessionNumber);
+        return studentService.getAllWithEvaluationDateBetween(dates.get(0), dates.get(1)).collectList()
+                .flatMap(students -> {
+                    Map<String, Object> variables = new HashMap<>();
+                    variables.put("studentsList", students);
+                    variables.put("date", LocalDate.now());
+                    variables.put("title", "Étudiants qui n'ont pas encore été évalués par leur moniteur");
+                    variables.put("dates", calculateLocalDates(sessionNumber));
+                    return pdfService.renderPdf(new StudentsPdf(variables));
+                });
+    }
+
     protected List<Date> calculateDates(Integer sessionNumber) {
         List<Date> dates = new ArrayList<>();
 
@@ -137,27 +166,25 @@ public class ReportService {
 
         Date startDate = new Date();
         Date endDate = new Date();
-        if (Integer.parseInt(season) == 1) {
-            LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), 1, 1);
+        if (Integer.parseInt(season) == WINTER) {
+            LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), JANUARY, FIRST);
             startDate = convertLocalDateToDate(startLocalDate);
 
-            LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), 5, 31);
+            LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), MAY, THIRTY_FIRST);
             endDate = convertLocalDateToDate(endLocalDate);
-        } else if (Integer.parseInt(season) == 2) {
-            LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), 6, 1);
+        } else if (Integer.parseInt(season) == SUMMER) {
+            LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), JUNE, FIRST);
             startDate = convertLocalDateToDate(startLocalDate);
 
-            LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), 8, 30);
+            LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), AUGUST, THIRTY);
             endDate = convertLocalDateToDate(endLocalDate);
-        } else if (Integer.parseInt(season) == 3) {
-            LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), 9, 1);
+        } else if (Integer.parseInt(season) == FALL) {
+            LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), SEPTEMBER, FIRST);
             startDate = convertLocalDateToDate(startLocalDate);
 
-            LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), 12, 31);
+            LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), DECEMBER, THIRTY_FIRST);
             endDate = convertLocalDateToDate(endLocalDate);
         }
-
-        System.out.println("calculateDates " + dates);
 
         dates.add(startDate);
         dates.add(endDate);
@@ -173,29 +200,25 @@ public class ReportService {
 
         LocalDate startLocalDate = null;
         LocalDate endLocalDate = null;
-        if (Integer.parseInt(season) == 1) {
-            startLocalDate = LocalDate.of(Integer.parseInt(year), 1, 1);
-            endLocalDate = LocalDate.of(Integer.parseInt(year), 5, 31);
-        } else if (Integer.parseInt(season) == 2) {
-            startLocalDate = LocalDate.of(Integer.parseInt(year), 6, 1);
-            endLocalDate = LocalDate.of(Integer.parseInt(year), 8, 30);
-        } else if (Integer.parseInt(season) == 3) {
-            startLocalDate = LocalDate.of(Integer.parseInt(year), 9, 1);
-            endLocalDate = LocalDate.of(Integer.parseInt(year), 12, 31);
+        if (Integer.parseInt(season) == WINTER) {
+            startLocalDate = LocalDate.of(Integer.parseInt(year), JANUARY, FIRST);
+            endLocalDate = LocalDate.of(Integer.parseInt(year), MAY, THIRTY_FIRST);
+        } else if (Integer.parseInt(season) == SUMMER) {
+            startLocalDate = LocalDate.of(Integer.parseInt(year), JUNE, FIRST);
+            endLocalDate = LocalDate.of(Integer.parseInt(year), AUGUST, THIRTY);
+        } else if (Integer.parseInt(season) == FALL) {
+            startLocalDate = LocalDate.of(Integer.parseInt(year), SEPTEMBER, FIRST);
+            endLocalDate = LocalDate.of(Integer.parseInt(year), DECEMBER, THIRTY_FIRST);
         }
 
         dates.add(startLocalDate);
         dates.add(endLocalDate);
 
-        System.out.println("calculateLocalDates " +dates);
-
         return dates;
     }
 
     protected Date convertLocalDateToDate(LocalDate localDate) {
-        System.out.println("Before " + localDate);
         ZoneId defaultZoneId = ZoneId.systemDefault();
-        System.out.println("After " + Date.from(localDate.atStartOfDay(defaultZoneId).toInstant()));
         return Date.from(localDate.atStartOfDay(defaultZoneId).toInstant());
     }
 

@@ -77,4 +77,10 @@ public class ReportController {
         return reportService.generateStudentsWithInternshipReport();
     }
 
+    @GetMapping(value = "/generateStudentsNotEvaluatedReport/{session}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
+    public Mono<byte[]> generateStudentsNotEvaluatedReport(@PathVariable("session") Integer sessionNumber) {
+        return reportService.generateStudentsNotEvaluatedReport(sessionNumber);
+    }
+
 }

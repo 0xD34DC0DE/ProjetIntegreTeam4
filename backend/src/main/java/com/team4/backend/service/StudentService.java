@@ -11,6 +11,10 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import static com.team4.backend.model.enums.StudentState.*;
@@ -118,5 +122,20 @@ public class StudentService {
     public Mono<Student> findById(String studentId) {
         return studentRepository.findById(studentId)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Could not find student with id: " + studentId)));
+    }
+
+    public Flux<Student> getAllWithEvaluationDateBetween(LocalDate sessionStart, LocalDate sessionEnd) {
+        return studentRepository.findAllByEvaluationsDatesIsBetween(sessionStart, sessionEnd)
+                .collectList()
+                .flatMapMany(students -> {
+                    for (Student student : students) {
+                        for (LocalDate date : student.getEvaluationsDates()) {
+                            if (date.isAfter(sessionStart)  && date.isBefore(sessionEnd)) {
+                                return Flux.just(student);
+                            }
+                        }
+                    }
+                    return Flux.empty();
+                });
     }
 }
