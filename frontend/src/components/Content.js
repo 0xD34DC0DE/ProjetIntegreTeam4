@@ -98,7 +98,7 @@ const Content = ({
           {userInfo.role === "MONITOR" && (
             <StudentEvaluationForm visible={selection.id === 12} />
           )}
-          {userInfo.role === "MONITOR" && (
+          {userInfo.role === "SUPERVISOR" && (
             <StudentEvaluationMidForm visible={selection.id === 13} />
           )}
         </Box>

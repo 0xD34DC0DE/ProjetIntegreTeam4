@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import {
   Grid,
   AccordionDetails,
@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { companyObservation } from "../EvaluationFields";
 
-const CompanyObservationDropdown = () => {
+const CompanyObservationDropdown = ({ mergeForms }, ref) => {
   const [form, setForm] = useState({ text: {}, categorical: {}, rating: {} });
   const handleFormChange = (event) => {
     const inputType = (
@@ -24,6 +24,12 @@ const CompanyObservationDropdown = () => {
       },
     }));
   };
+
+  useImperativeHandle(ref, () => ({
+    getForm: () => {
+      mergeForms(form);
+    },
+  }));
 
   return (
     <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
@@ -65,17 +71,17 @@ const CompanyObservationDropdown = () => {
                     return (
                       <>
                         <Typography variant="caption" ml={5}>
-                          {option}
+                          {option.label}
                         </Typography>
                         <Radio
                           color="primary"
                           name={observation.id}
                           onChange={handleFormChange}
-                          value={option.toUpperCase()}
+                          value={option.value}
                           checked={
                             form[observation.id.split("#")[0]][
                               observation.id.split("#")[1]
-                            ] === option.toUpperCase()
+                            ] === option.value
                           }
                           mr={5}
                         ></Radio>
@@ -162,4 +168,4 @@ const CompanyObservationDropdown = () => {
   );
 };
 
-export default CompanyObservationDropdown;
+export default forwardRef(CompanyObservationDropdown);

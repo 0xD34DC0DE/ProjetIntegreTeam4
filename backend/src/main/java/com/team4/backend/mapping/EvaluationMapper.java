@@ -11,6 +11,7 @@ public abstract class EvaluationMapper {
                 .id(evaluation.getId())
                 .rating(evaluation.getRating())
                 .expectation(evaluation.getExpectation())
+                .categorical(evaluation.getCategorical())
                 .text(evaluation.getText())
                 .build();
     }
@@ -20,6 +21,7 @@ public abstract class EvaluationMapper {
                 .id(evaluationDto.getId())
                 .rating(evaluationDto.getRating())
                 .expectation(evaluationDto.getExpectation())
+                .categorical(evaluationDto.getCategorical())
                 .text(evaluationDto.getText())
                 .build();
     }

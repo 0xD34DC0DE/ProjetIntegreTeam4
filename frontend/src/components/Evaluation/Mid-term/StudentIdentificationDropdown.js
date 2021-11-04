@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import { studentIdentification } from "../EvaluationFields";
 import {
   Grid,
@@ -10,7 +10,7 @@ import {
   Radio,
 } from "@mui/material";
 
-const StudentIdentificationDropdown = () => {
+const StudentIdentificationDropdown = ({ mergeForms }, ref) => {
   const [form, setForm] = useState({ text: {}, categorical: {}, rating: {} });
   const handleFormChange = (event) => {
     const inputType = (
@@ -24,6 +24,12 @@ const StudentIdentificationDropdown = () => {
       },
     }));
   };
+
+  useImperativeHandle(ref, () => ({
+    getForm: () => {
+      mergeForms(form);
+    },
+  }));
 
   return (
     <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
@@ -119,4 +125,4 @@ const StudentIdentificationDropdown = () => {
   );
 };
 
-export default StudentIdentificationDropdown;
+export default forwardRef(StudentIdentificationDropdown);

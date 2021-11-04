@@ -234,22 +234,35 @@ export const companyObservation = [
   {
     label: "Ce milieu est à privilégier pour le :",
     id: "text#privilegeInternship",
-    options: ["Premier stage", "Deuxième stage"],
+    options: [
+      { label: "Premier stage", value: "FIRST" },
+      { label: "Deuxième stage", value: "SECOND" },
+    ],
   },
   {
     label: "Ce milieu est ouvert à accueillir :",
     id: "text#hiringInterns",
-    options: ["Un stagiaire", "Deux stagière", "Plus de trois stagiaires"],
+    options: [
+      { label: "Un stagiaire", value: "ONE" },
+      { label: "Deux stagière", value: "TWO" },
+      { label: "Plus de trois stagiaires", value: "THREE_MORE" },
+    ],
   },
   {
     label:
       "Ce milieu désire accueillir le même stagiaire pour un prochain stage :",
     id: "categorical#interestRehire",
-    options: ["Oui", "Non"],
+    options: [
+      { label: "Oui", value: "YES" },
+      { label: "Non", value: "NO" },
+    ],
   },
   {
     label: "Ce milieu offre des quarts de travail variables :",
     id: "categorical#variableWorkShifts",
-    options: ["Oui", "Non"],
+    options: [
+      { label: "Oui", value: "YES" },
+      { label: "Non", value: "NO" },
+    ],
   },
 ];

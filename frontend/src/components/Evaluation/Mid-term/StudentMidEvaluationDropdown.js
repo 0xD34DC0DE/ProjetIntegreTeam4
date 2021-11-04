@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import {
   Accordion,
   Grid,
@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { midTermEvaluation, ratings } from "../EvaluationFields";
 
-const StudentMidEvaluationDropdown = () => {
+const StudentMidEvaluationDropdown = ({ mergeForms }, ref) => {
   const [form, setForm] = useState({ text: {}, categorical: {}, rating: {} });
   const handleFormChange = (event) => {
     const inputType = (
@@ -23,8 +23,13 @@ const StudentMidEvaluationDropdown = () => {
         [inputType[1]]: event.target.value,
       },
     }));
-    console.log(form);
   };
+
+  useImperativeHandle(ref, () => ({
+    getForm: () => {
+      mergeForms(form);
+    },
+  }));
 
   const integration = (
     <>
@@ -62,6 +67,7 @@ const StudentMidEvaluationDropdown = () => {
         <TextField
           id="text#salaryHour"
           variant="standard"
+          onChange={handleFormChange}
           sx={{
             "& .MuiInput-input": { fontSize: "0.8em", textAlign: "center" },
           }}
@@ -161,7 +167,6 @@ const StudentMidEvaluationDropdown = () => {
                           >
                             <Radio
                               value={rating.value}
-                              id={task.id}
                               name={task.id}
                               onChange={handleFormChange}
                               color="primary"
@@ -217,4 +222,4 @@ const StudentMidEvaluationDropdown = () => {
   );
 };
 
-export default StudentMidEvaluationDropdown;
+export default forwardRef(StudentMidEvaluationDropdown);

@@ -1,7 +1,5 @@
 import {
   AccountCircleOutlined,
-  DashboardOutlined,
-  SettingsOutlined,
   PeopleAltOutlined,
   HomeOutlined,
   FindInPageOutlined,
@@ -98,7 +96,7 @@ export const sidebarList = [
   {
     id: 13,
     label: "Évaluer un stagiaire (mi-mandat)",
-    role: ["MONITOR"],
+    role: ["SUPERVISOR"],
     icon: <FindInPageOutlined sx={{ mr: 1 }} />,
     description: "Évaluation du stagiaire à son mi-mandat",
   },

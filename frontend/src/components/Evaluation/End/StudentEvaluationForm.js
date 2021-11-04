@@ -10,6 +10,7 @@ import { motion } from "framer-motion";
 import { UserInfoContext } from "../../../stores/UserInfoStore";
 import axios from "axios";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
+import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 
 const StudentEvaluationForm = ({ visible }) => {
   // TODO: Find a better way then useRef
@@ -21,6 +22,7 @@ const StudentEvaluationForm = ({ visible }) => {
   });
   const [evaluationSent, setEvaluationSent] = useState(false);
   const [userInfo] = useContext(UserInfoContext);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const studentContactDetailsRef = useRef(null);
   const companyAppreciationRef = useRef(null);
@@ -38,7 +40,7 @@ const StudentEvaluationForm = ({ visible }) => {
     await companyInterestRef.current.getForm();
     await evaluationRefs.forEach((ref) => ref.current.getForm());
 
-    axios({
+    await axios({
       method: "POST",
       url: "http://localhost:8080/evaluation",
       data: evaluationForm.current,
@@ -46,24 +48,26 @@ const StudentEvaluationForm = ({ visible }) => {
         Authorization: userInfo.jwt,
       },
       responseType: "json",
-    })
-      .then(() => {
-        setEvaluationSent(true);
-        setTimeout(() => {
-          resetForm();
-        }, 5000);
-      })
-      .catch((error) => console.error(error));
+    }).catch((error) => {
+      setErrorMessage("Une erreur est survenue, veuillez réessayer.");
+      console.error(error);
+    });
+
+    setEvaluationSent(true);
+    resetForm();
   };
 
   const resetForm = () => {
-    setEvaluationSent(false);
-    evaluationForm.current = {
-      text: {},
-      categorical: {},
-      rating: {},
-      expectation: {},
-    };
+    setTimeout(() => {
+      setEvaluationSent(false);
+      setErrorMessage("");
+      evaluationForm.current = {
+        text: {},
+        categorical: {},
+        rating: {},
+        expectation: {},
+      };
+    }, 5000);
   };
 
   const mergeForms = (form) => {
@@ -114,17 +118,32 @@ const StudentEvaluationForm = ({ visible }) => {
             animate={{ opacity: [0, 1] }}
             transition={{
               duration: 0.5,
-              delay: 0.2,
+              delay: 0.5,
             }}
           >
             <Grid item textAlign="center">
               <Typography variant="h4" color="white" mt={5}>
-                L'évaluation du stagiaire a été envoyé avec succès!
+                {errorMessage
+                  ? errorMessage
+                  : "L'évaluation du stagiaire a été envoyée avec succès!"}
+                {errorMessage ? (
+                  <CancelOutlinedIcon
+                    fontSize="large"
+                    sx={{
+                      color: "rgba(255, 100, 100, 0.5)",
+                      pl: 5,
+                    }}
+                  />
+                ) : (
+                  <CheckCircleOutlineOutlinedIcon
+                    fontSize="large"
+                    sx={{
+                      color: "rgba(100, 255, 100, 0.5)",
+                      pl: 5,
+                    }}
+                  />
+                )}
               </Typography>
-              <CheckCircleOutlineOutlinedIcon
-                fontSize="large"
-                sx={{ color: "rgba(100, 255, 100, 0.5)" }}
-              />
             </Grid>
           </motion.div>
         </Grid>

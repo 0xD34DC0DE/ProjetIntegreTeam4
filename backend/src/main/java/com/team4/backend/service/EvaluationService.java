@@ -22,5 +22,4 @@ public class EvaluationService {
         return evaluationRepository.save(EvaluationMapper.toEntity(evaluationDto));
     }
 
-
 }
