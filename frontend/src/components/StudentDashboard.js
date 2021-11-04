@@ -8,8 +8,6 @@ import {
   Select,
   MenuItem,
   Container,
-  FormControl,
-  InputLabel,
   TextField,
 } from "@mui/material";
 import StarBorderPurple500Icon from "@mui/icons-material/StarBorderPurple500";
@@ -21,6 +19,8 @@ import TodayIcon from "@mui/icons-material/Today";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { motion } from "framer-motion";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
+import WarningIcon from "@mui/icons-material/Warning";
+import ScheduleIcon from "@mui/icons-material/Schedule";
 import PeopleIcon from "@mui/icons-material/People";
 import { UserInfoContext } from "../stores/UserInfoStore";
 
@@ -56,6 +56,7 @@ const StudentDashBoard = ({ visible }) => {
 
   const [isDisabled, setIsDisabled] = useState(true);
   const [isStatusUpdated, setIsStatusUpdated] = useState(false);
+  const [isDateValid, setIsDateValid] = useState(true);
   const [userInfo] = useContext(UserInfoContext);
   const [isInterviewDateUpdated, setIsInterviewDateUpdated] = useState(false);
 
@@ -117,7 +118,6 @@ const StudentDashBoard = ({ visible }) => {
       responseType: "json",
     })
       .then(() => {
-        
         setIsInterviewDateUpdated(true);
 
         setTimeout(() => {
@@ -151,6 +151,9 @@ const StudentDashBoard = ({ visible }) => {
     ) {
       setProfile({ ...profile, closestInterviewDate: value });
       updateInterviewDate(value);
+      setIsDateValid(true);
+    } else {
+      setIsDateValid(false);
     }
   };
 
@@ -268,7 +271,28 @@ const StudentDashBoard = ({ visible }) => {
                           onChange={handleChangeDate}
                           type={"date"}
                         />
-                      ) : null}
+                      ) : (
+                        <motion.div
+                          variants={fadeIn}
+                          initial="hidden"
+                          animate="show"
+                        >
+                          <Typography
+                            variant="subtitle1"
+                            sx={{
+                              color: "gray",
+                              textAlign: "center",
+                              alignItems: "center",
+                              m: 2,
+                            }}
+                          >
+                            {
+                              "L'ajout d'entrevue n'est pas disponible pour l'instant"
+                            }
+                            <ScheduleIcon />
+                          </Typography>
+                        </motion.div>
+                      )}
 
                       {isInterviewDateUpdated ? (
                         <motion.div
@@ -282,6 +306,22 @@ const StudentDashBoard = ({ visible }) => {
                           >
                             {"DATE D'ENTREVUE AJOUTÉE"}
                             <PublishedWithChangesIcon />
+                          </Typography>
+                        </motion.div>
+                      ) : null}
+
+                      {!isDateValid ? (
+                        <motion.div
+                          variants={fadeIn}
+                          initial="hidden"
+                          animate="show"
+                        >
+                          <Typography
+                            variant="subtitle1"
+                            sx={{ color: "red", textAlign: "center" }}
+                          >
+                            {"DATE D'ENTREVUE INVALIDE"}
+                            <WarningIcon />
                           </Typography>
                         </motion.div>
                       ) : null}
