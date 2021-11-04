@@ -14,6 +14,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.cglib.core.Local;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
@@ -198,7 +199,6 @@ public class StudentServiceTest {
                 .verifyComplete();
     }
 
-
     @Test
     void shouldNotAddAppliedOffer() {
         //ARRANGE
@@ -248,7 +248,8 @@ public class StudentServiceTest {
         Mono<Student> studentMono = studentService.updateStudentState(student.getEmail(), StudentState.INTERNSHIP_FOUND);
 
         //ASSERT
-        StepVerifier.create(studentMono).verifyError(UserNotFoundException.class);
+        StepVerifier.create(studentMono)
+                .verifyError(UserNotFoundException.class);
     }
 
     @Test
@@ -265,7 +266,8 @@ public class StudentServiceTest {
         Mono<Student> studentMono = studentService.updateStudentState(student.getEmail(), StudentState.INTERNSHIP_FOUND);
 
         //ASSERT
-        StepVerifier.create(studentMono).verifyError(ForbiddenActionException.class);
+        StepVerifier.create(studentMono)
+                .verifyError(ForbiddenActionException.class);
     }
 
     @Test
@@ -301,7 +303,8 @@ public class StudentServiceTest {
         Mono<Student> studentMono = studentService.updateInterviewDate(student.getEmail(), any());
 
         //ASSERT
-        StepVerifier.create(studentMono).verifyError(UserNotFoundException.class);
+        StepVerifier.create(studentMono)
+                .verifyError(UserNotFoundException.class);
     }
 
     @Test
@@ -318,7 +321,21 @@ public class StudentServiceTest {
         Mono<Student> studentMono = studentService.updateInterviewDate(student.getEmail(), any());
 
         //ASSERT
-        StepVerifier.create(studentMono).verifyError(ForbiddenActionException.class);
+        StepVerifier.create(studentMono)
+                .verifyError(ForbiddenActionException.class);
+    }
+
+    @Test
+    void shouldUpdateStudentStateForAllStudentThatInterviewDateHasPassed(){
+        //ARRANGE
+        when(studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND))
+                .thenReturn(StudentMockData.getAllStudentsToUpdate());
+
+        //ACT
+        Integer nbrOfUpdateStudent = studentService.updateStudentStateForAllStudentThatInterviewDateHasPassed();
+
+        //ASSERT
+        assertEquals(2,nbrOfUpdateStudent);
     }
 
 }

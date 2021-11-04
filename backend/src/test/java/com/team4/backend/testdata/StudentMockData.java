@@ -56,6 +56,27 @@ public abstract class StudentMockData {
                         .build());
     }
 
+    public static Flux<Student> getAllStudentsToUpdate() {
+        return Flux.just(
+
+                Student.studentBuilder()
+                        .email("testing_1@gmail.com")
+                        .password("password1")
+                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .interviewsDate(new HashSet<>(Arrays.asList(
+                                LocalDate.now().minusWeeks(3),
+                                LocalDate.now(),
+                                LocalDate.now().minusDays(5))))
+                        .build(),
+                Student.studentBuilder()
+                        .email("testing_2@gmail.com")
+                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .password("password2")
+                        .interviewsDate(new TreeSet<>())
+                        .build()
+        );
+    }
+
     public static List<Student> getListStudent(int count) {
         List<Student> students = new ArrayList<>();
 

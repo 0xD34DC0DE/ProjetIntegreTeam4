@@ -125,7 +125,7 @@ public class StudentRepositoryTest {
 
     @Test
     void shouldFindAllByStudentStateAndInterviewsDateIsNotEmpty() {
-        //ACT
+        //ARRANGE && ACT
         Flux<Student> studentFlux = studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND);
 
         //ASSERT

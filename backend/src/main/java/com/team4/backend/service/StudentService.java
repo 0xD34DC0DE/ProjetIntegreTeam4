@@ -14,7 +14,9 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
+@Log
 @Service
 public class StudentService {
 
@@ -98,4 +100,18 @@ public class StudentService {
                         Mono.error(new UserNotFoundException("Could not find student with id: " + studentId))
                 );
     }
+
+    public Integer updateStudentStateForAllStudentThatInterviewDateHasPassed() {
+        AtomicInteger counter = new AtomicInteger();
+
+        studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND)
+                .subscribe(student -> {
+                    student.setStudentState(StudentState.WAITING_FOR_RESPONSE);
+                    counter.getAndIncrement();
+                    studentRepository.save(student);
+                });
+
+        return counter.get();
+    }
+
 }
