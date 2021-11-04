@@ -10,5 +10,5 @@ public interface CustomStudentRepository {
     Flux<Student> findAllByEmails(Set<String> emails);
 
     Flux<Student> findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState studentState);
-    
+
 }

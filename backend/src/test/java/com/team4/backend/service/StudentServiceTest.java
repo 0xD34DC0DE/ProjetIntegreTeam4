@@ -324,7 +324,6 @@ public class StudentServiceTest {
                 .verifyError(ForbiddenActionException.class);
     }
 
-
     @Test
     void shouldUpdateStudentStateForAllStudentThatInterviewDateHasPassed() {
         //ARRANGE
