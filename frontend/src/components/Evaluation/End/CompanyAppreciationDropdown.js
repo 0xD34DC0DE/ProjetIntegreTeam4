@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import {
   Accordion,
   Grid,
@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { companyAppreciation } from "../EvaluationFields";
 
-const CompanyAppreciationDropdown = () => {
+const CompanyAppreciationDropdown = ({ mergeForms }, ref) => {
   const [form, setForm] = useState({
     text: {},
     categorical: {},
@@ -29,6 +29,12 @@ const CompanyAppreciationDropdown = () => {
       },
     }));
   };
+
+  useImperativeHandle(ref, () => ({
+    getForm: () => {
+      mergeForms(form);
+    },
+  }));
 
   return (
     <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
@@ -161,4 +167,4 @@ const CompanyAppreciationDropdown = () => {
   );
 };
 
-export default CompanyAppreciationDropdown;
+export default forwardRef(CompanyAppreciationDropdown);

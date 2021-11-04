@@ -9,13 +9,18 @@ public abstract class EvaluationMapper {
     public static EvaluationDto toDto(Evaluation evaluation) {
         return EvaluationDto.evaluationDtoBuilder()
                 .id(evaluation.getId())
-                .evaluation(evaluation.getEvaluation())
+                .rating(evaluation.getRating())
+                .expectation(evaluation.getExpectation())
+                .text(evaluation.getText())
                 .build();
     }
 
     public static Evaluation toEntity(EvaluationDto evaluationDto) {
         return Evaluation.evaluationBuilder()
-                .evaluation(evaluationDto.getEvaluation())
+                .id(evaluationDto.getId())
+                .rating(evaluationDto.getRating())
+                .expectation(evaluationDto.getExpectation())
+                .text(evaluationDto.getText())
                 .build();
     }
 

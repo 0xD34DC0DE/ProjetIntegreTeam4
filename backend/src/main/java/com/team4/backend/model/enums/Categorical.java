@@ -1,6 +1,8 @@
 package com.team4.backend.model.enums;
 
-public enum Categorical {
+import java.io.Serializable;
+
+public enum Categorical implements Serializable {
     YES,
     NO,
     MAYBE

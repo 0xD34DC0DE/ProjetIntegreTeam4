@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import {
   Accordion,
   Grid,
@@ -10,8 +10,13 @@ import {
 } from "@mui/material";
 import { ratings } from "../EvaluationFields";
 
-const StudentEvaluationDropdown = ({ section, key }) => {
-  const [form, setForm] = useState({ text: {}, categorical: {}, rating: {} });
+const StudentEvaluationDropdown = ({ section, key, mergeForms }, ref) => {
+  const [form, setForm] = useState({
+    text: {},
+    categorical: {},
+    rating: {},
+    expectation: {},
+  });
   const handleFormChange = (event) => {
     const inputType = (
       event.target.id ? event.target.id : event.target.name
@@ -24,6 +29,12 @@ const StudentEvaluationDropdown = ({ section, key }) => {
       },
     }));
   };
+
+  useImperativeHandle(ref, () => ({
+    getForm: () => {
+      mergeForms(form);
+    },
+  }));
 
   return (
     <Grid item xl={12} lg={12} md={12} sm={12} xs={12} key={key}>
@@ -164,4 +175,4 @@ const StudentEvaluationDropdown = ({ section, key }) => {
   );
 };
 
-export default StudentEvaluationDropdown;
+export default forwardRef(StudentEvaluationDropdown);

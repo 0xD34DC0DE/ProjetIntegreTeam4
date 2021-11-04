@@ -1,5 +1,5 @@
-import { Grid } from "@mui/material";
-import React from "react";
+import { Grid, Typography } from "@mui/material";
+import React, { useContext, useRef, useState } from "react";
 import CompanyAppreciationDropdown from "./CompanyAppreciationDropdown";
 import CompanyInterestDropdown from "./CompanyInterestDropdown";
 import StudentContactDetailsDropdown from "./StudentContactDetailsDropdown";
@@ -7,48 +7,158 @@ import StudentEvaluationDropdown from "./StudentEvaluationDropdown";
 import { endEvaluation } from "../EvaluationFields";
 import SubmitEvaluationButton from "../SubmitEvaluationButton";
 import { motion } from "framer-motion";
-
-const dropdowns = [
-  <StudentContactDetailsDropdown />,
-  ...endEvaluation.map((section, key) => {
-    return <StudentEvaluationDropdown section={section} key={key} />;
-  }),
-  <CompanyAppreciationDropdown />,
-  <CompanyInterestDropdown />,
-];
+import { UserInfoContext } from "../../../stores/UserInfoStore";
+import axios from "axios";
+import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 
 const StudentEvaluationForm = ({ visible }) => {
+  // TODO: Find a better way then useRef
+  const evaluationForm = useRef({
+    text: {},
+    categorical: {},
+    rating: {},
+    expectation: {},
+  });
+  const [evaluationSent, setEvaluationSent] = useState(false);
+  const [userInfo] = useContext(UserInfoContext);
+
+  const studentContactDetailsRef = useRef(null);
+  const companyAppreciationRef = useRef(null);
+  const companyInterestRef = useRef(null);
+  const evaluationRefs = [
+    useRef(null),
+    useRef(null),
+    useRef(null),
+    useRef(null),
+  ];
+
+  const handleSubmit = async () => {
+    await studentContactDetailsRef.current.getForm();
+    await companyAppreciationRef.current.getForm();
+    await companyInterestRef.current.getForm();
+    await evaluationRefs.forEach((ref) => ref.current.getForm());
+
+    axios({
+      method: "POST",
+      url: "http://localhost:8080/evaluation",
+      data: evaluationForm.current,
+      headers: {
+        Authorization: userInfo.jwt,
+      },
+      responseType: "json",
+    })
+      .then(() => {
+        setEvaluationSent(true);
+        setTimeout(() => {
+          resetForm();
+        }, 5000);
+      })
+      .catch((error) => console.error(error));
+  };
+
+  const resetForm = () => {
+    setEvaluationSent(false);
+    evaluationForm.current = {
+      text: {},
+      categorical: {},
+      rating: {},
+      expectation: {},
+    };
+  };
+
+  const mergeForms = (form) => {
+    evaluationForm.current = {
+      categorical: {
+        ...evaluationForm.current.categorical,
+        ...form.categorical,
+      },
+      text: { ...evaluationForm.current.text, ...form.text },
+      rating: { ...evaluationForm.current.rating, ...form.rating },
+      expectation: {
+        ...evaluationForm.current.expectation,
+        ...form.expectation,
+      },
+    };
+  };
+
+  const dropdowns = [
+    <StudentContactDetailsDropdown
+      mergeForms={mergeForms}
+      ref={studentContactDetailsRef}
+    />,
+    ...endEvaluation.map((section, key) => {
+      return (
+        <StudentEvaluationDropdown
+          mergeForms={mergeForms}
+          section={section}
+          ref={evaluationRefs[key]}
+          key={key}
+        />
+      );
+    }),
+    <CompanyAppreciationDropdown
+      mergeForms={mergeForms}
+      ref={companyAppreciationRef}
+    />,
+    <CompanyInterestDropdown
+      mergeForms={mergeForms}
+      ref={companyInterestRef}
+    />,
+  ];
+
   return (
     <>
-      {visible && (
-        <Grid container px={5} pb={3}>
-          {dropdowns.map((dropdown, key) => {
-            return (
-              <Grid
-                item
-                xl={12}
-                lg={12}
-                md={12}
-                sm={12}
-                xs={12}
-                mt={5}
-                key={key}
-              >
-                <motion.div
-                  animate={{ opacity: [0, 1] }}
-                  transition={{
-                    duration: 0.2,
-                    delay: (key + 1) * 0.2,
-                  }}
-                >
-                  {dropdown}
-                </motion.div>
-              </Grid>
-            );
-          })}
-
-          <SubmitEvaluationButton delay={2} />
+      {evaluationSent && visible ? (
+        <Grid container px={5} pb={3} justifyContent="center">
+          <motion.div
+            animate={{ opacity: [0, 1] }}
+            transition={{
+              duration: 0.5,
+              delay: 0.2,
+            }}
+          >
+            <Grid item textAlign="center">
+              <Typography variant="h4" color="white" mt={5}>
+                L'évaluation du stagiaire a été envoyé avec succès!
+              </Typography>
+              <CheckCircleOutlineOutlinedIcon
+                fontSize="large"
+                sx={{ color: "rgba(100, 255, 100, 0.5)" }}
+              />
+            </Grid>
+          </motion.div>
         </Grid>
+      ) : (
+        visible && (
+          <Grid container px={5} pb={3}>
+            {dropdowns.map((dropdown, key) => {
+              return (
+                <Grid
+                  item
+                  xl={12}
+                  lg={12}
+                  md={12}
+                  sm={12}
+                  xs={12}
+                  mt={5}
+                  key={key}
+                >
+                  <motion.div
+                    animate={{ opacity: [0, 1] }}
+                    transition={{
+                      duration: 0.2,
+                      delay: (key + 1) * 0.2,
+                    }}
+                  >
+                    {dropdown}
+                  </motion.div>
+                </Grid>
+              );
+            })}
+
+            <SubmitEvaluationButton onClick={handleSubmit} delay={2} />
+          </Grid>
+        )
       )}
     </>
   );

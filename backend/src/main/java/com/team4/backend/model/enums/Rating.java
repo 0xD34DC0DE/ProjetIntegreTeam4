@@ -1,6 +1,8 @@
 package com.team4.backend.model.enums;
 
-public enum Rating {
+import java.io.Serializable;
+
+public enum Rating implements Serializable {
     NA,
     TOTALLY_DISAGREE,
     SOMEWHAT_DISAGREE,

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import {
   Accordion,
   Grid,
@@ -10,7 +10,7 @@ import {
   RadioGroup,
 } from "@mui/material";
 
-const CompanyInterestDropdown = () => {
+const CompanyInterestDropdown = ({ mergeForms }, ref) => {
   const [form, setForm] = useState({
     text: {},
     categorical: {},
@@ -29,6 +29,12 @@ const CompanyInterestDropdown = () => {
       },
     }));
   };
+
+  useImperativeHandle(ref, () => ({
+    getForm: () => {
+      mergeForms(form);
+    },
+  }));
 
   return (
     <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
@@ -183,4 +189,4 @@ const CompanyInterestDropdown = () => {
   );
 };
 
-export default CompanyInterestDropdown;
+export default forwardRef(CompanyInterestDropdown);

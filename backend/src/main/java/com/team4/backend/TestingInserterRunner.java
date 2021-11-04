@@ -40,6 +40,8 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final FileMetaDataRepository fileMetaDataRepository;
 
+    private final EvaluationRepository evaluationRepository;
+
     private final Lorem lorem;
 
     private final Set<String> studentSet;
@@ -47,13 +49,14 @@ public class TestingInserterRunner implements ApplicationRunner {
     public TestingInserterRunner(MonitorRepository monitorRepository,
                                  InternshipOfferRepository internshipOfferRepository, StudentRepository studentRepository,
                                  SupervisorRepository supervisorRepository, PBKDF2Encoder pbkdf2Encoder,
-                                 FileMetaDataRepository fileMetaDataRepository) {
+                                 FileMetaDataRepository fileMetaDataRepository, EvaluationRepository evaluationRepository) {
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
         this.studentRepository = studentRepository;
         this.supervisorRepository = supervisorRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.fileMetaDataRepository = fileMetaDataRepository;
+        this.evaluationRepository = evaluationRepository;
         this.lorem = LoremIpsum.getInstance();
         this.studentSet = new HashSet<>();
         this.studentSet.add("123456789@gmail.com");
@@ -69,6 +72,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         supervisorRepository.deleteAll().subscribe();
         fileMetaDataRepository.deleteAll().subscribe();
         internshipOfferRepository.deleteAll().subscribe();
+        evaluationRepository.deleteAll().subscribe();
 
         insertInternshipOffersInternshipManagerView();
         insertStudents();

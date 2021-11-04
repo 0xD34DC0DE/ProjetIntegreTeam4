@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { forwardRef, useImperativeHandle, useState } from "react";
 import {
   Accordion,
   Grid,
@@ -9,8 +9,13 @@ import {
 } from "@mui/material";
 import { contactDetails } from "../EvaluationFields";
 
-const StudentContactDetailsDropdown = () => {
-  const [form, setForm] = useState({ text: {}, categorical: {}, rating: {} });
+const StudentContactDetailsDropdown = ({ mergeForms }, ref) => {
+  const [form, setForm] = useState({
+    text: {},
+    categorical: {},
+    rating: {},
+    expectation: {},
+  });
   const handleFormChange = (event) => {
     const inputType = (
       event.target.id ? event.target.id : event.target.name
@@ -23,6 +28,12 @@ const StudentContactDetailsDropdown = () => {
       },
     }));
   };
+
+  useImperativeHandle(ref, () => ({
+    getForm: () => {
+      mergeForms(form);
+    },
+  }));
 
   return (
     <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
@@ -85,4 +96,4 @@ const StudentContactDetailsDropdown = () => {
   );
 };
 
-export default StudentContactDetailsDropdown;
+export default forwardRef(StudentContactDetailsDropdown);

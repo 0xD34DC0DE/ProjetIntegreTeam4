@@ -1,5 +1,3 @@
-import { TextField, Typography } from "@mui/material";
-
 export const endEvaluation = [
   {
     section: 1,
@@ -21,7 +19,7 @@ export const endEvaluation = [
       { label: "Établir ses priorités", id: "rating#establishPriorities" },
       { label: "Respecter ses échéanciers", id: "rating#respectDeadlines" },
     ],
-    comment: { label: "Commentaires :", id: "rating#productivityComment" },
+    comment: { label: "Commentaires :", id: "text#productivityComment" },
   },
   {
     section: 2,
@@ -50,7 +48,7 @@ export const endEvaluation = [
         id: "rating#problemSolving",
       },
     ],
-    comment: { label: "Commentaires :", id: "rating#workQualityComment" },
+    comment: { label: "Commentaires :", id: "text#workQualityComment" },
   },
   {
     section: 3,
@@ -83,7 +81,7 @@ export const endEvaluation = [
     ],
     comment: {
       label: "Commentaires :",
-      id: "rating#interpersonalRelationshipsComment",
+      id: "text#interpersonalRelationshipsComment",
     },
   },
   {

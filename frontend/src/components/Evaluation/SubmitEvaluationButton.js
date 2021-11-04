@@ -3,7 +3,7 @@ import { Grid, Typography, Button } from "@mui/material";
 import { motion } from "framer-motion";
 import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 
-const SubmitEvaluationButton = ({ delay }) => {
+const SubmitEvaluationButton = ({ delay, onClick }) => {
   return (
     <Grid
       item
@@ -30,6 +30,7 @@ const SubmitEvaluationButton = ({ delay }) => {
             ":hover": { backgroundColor: "rgba(50, 50, 50, 1)" },
             px: 15,
           }}
+          onClick={onClick}
         >
           <Typography variant="subtitle2" sx={{ fontSize: "1.75em", mr: 2 }}>
             Envoyer
