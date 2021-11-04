@@ -1,6 +1,7 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.Internship;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -15,6 +16,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataMongoTest
 @EnableAutoConfiguration
@@ -41,7 +43,7 @@ public class InternshipRepositoryTest {
     }
 
     @Test
-    void shouldGetAllInternshipByStudentEmail(){
+    void shouldGetInternshipByStudentEmail(){
         //ARRANGE
         String studentEmail = "test_student@gmail.com";
 
@@ -52,6 +54,36 @@ public class InternshipRepositoryTest {
         StepVerifier
                 .create(internshipMono)
                 .assertNext(i -> assertEquals(studentEmail, i.getStudentEmail()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldExistByStudentEmail(){
+        //ARRANGE
+        String studentEmail = "test_student@gmail.com";
+
+        //ACT
+        Mono<Boolean> internshipExists = internshipRepository.existsByStudentEmail(studentEmail);
+
+        //ASSERT
+        StepVerifier
+                .create(internshipExists)
+                .assertNext(Assertions::assertTrue)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotExistByStudentEmail(){
+        //ARRANGE
+        String studentEmail = "test_wrong_student_email@gmail.com";
+
+        //ACT
+        Mono<Boolean> internshipExists = internshipRepository.existsByStudentEmail(studentEmail);
+
+        //ASSERT
+        StepVerifier
+                .create(internshipExists)
+                .assertNext(Assertions::assertFalse)
                 .verifyComplete();
     }
 

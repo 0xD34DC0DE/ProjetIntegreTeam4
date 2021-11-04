@@ -3,6 +3,7 @@ package com.team4.backend.service;
 import com.team4.backend.model.Internship;
 import com.team4.backend.repository.InternshipRepository;
 import com.team4.backend.testdata.InternshipMockData;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,6 +13,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -23,8 +25,6 @@ public class InternshipServiceTest {
     @InjectMocks
     InternshipService internshipService;
 
-
-    //TODO:Service test does not work and Controller test is not done
     @Test
     void shouldGetInternshipByStudentEmail() {
         //ARRANGE
@@ -39,6 +39,40 @@ public class InternshipServiceTest {
         StepVerifier
                 .create(internshipMono)
                 .assertNext(i -> assertEquals(internship.getStudentEmail(), i.getStudentEmail()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldExistsByStudentEmail() {
+        //ARRANGE
+        Internship internship = InternshipMockData.getInternship();
+
+        when(internshipRepository.existsByStudentEmail(internship.getStudentEmail())).thenReturn(Mono.just(true));
+
+        //ACT
+        Mono<Boolean> internshipExists = internshipService.existsByStudentEmail(internship.getStudentEmail());
+
+        //ASSERT
+        StepVerifier
+                .create(internshipExists)
+                .assertNext(Assertions::assertTrue)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotExistsByStudentEmail() {
+        //ARRANGE
+        String wrongStudentEmail = "wrong_student_email@gmail.com";
+
+        when(internshipRepository.existsByStudentEmail(wrongStudentEmail)).thenReturn(Mono.just(false));
+
+        //ACT
+        Mono<Boolean> internshipExists = internshipService.existsByStudentEmail(wrongStudentEmail);
+
+        //ASSERT
+        StepVerifier
+                .create(internshipExists)
+                .assertNext(Assertions::assertFalse)
                 .verifyComplete();
     }
 }
