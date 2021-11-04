@@ -11,13 +11,18 @@ import {
 import { companyObservation } from "../EvaluationFields";
 
 const CompanyObservationDropdown = () => {
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({ text: {}, categorical: {}, rating: {} });
   const handleFormChange = (event) => {
+    const inputType = (
+      event.target.id ? event.target.id : event.target.name
+    ).split("#");
     setForm((form) => ({
       ...form,
-      [event.target.id || event.target.name]: event.target.value,
+      [inputType[0]]: {
+        ...form[inputType[0]],
+        [inputType[1]]: event.target.value,
+      },
     }));
-    console.log(form);
   };
 
   return (
@@ -66,8 +71,12 @@ const CompanyObservationDropdown = () => {
                           color="primary"
                           name={observation.id}
                           onChange={handleFormChange}
-                          value={option}
-                          checked={form[observation.id] === option}
+                          value={option.toUpperCase()}
+                          checked={
+                            form[observation.id.split("#")[0]][
+                              observation.id.split("#")[1]
+                            ] === option.toUpperCase()
+                          }
                           mr={5}
                         ></Radio>
                       </>
@@ -78,13 +87,15 @@ const CompanyObservationDropdown = () => {
             );
           })}
           <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={1}>
-            {Array.from(Array(3), () => {
+            {Array.from(Array(3), (_, key) => {
               return (
                 <>
                   <Typography variant="caption">
                     De
                     <TextField
+                      id={"text#shift" + (key + 1) + "Start"}
                       variant="standard"
+                      onChange={handleFormChange}
                       sx={{
                         "& .MuiInput-input": { fontSize: "0.8em" },
                         ml: 2,
@@ -93,7 +104,9 @@ const CompanyObservationDropdown = () => {
                     ></TextField>
                     à
                     <TextField
+                      id={"text#shift" + (key + 1) + "End"}
                       variant="standard"
+                      onChange={handleFormChange}
                       sx={{
                         "& .MuiInput-input": { fontSize: "0.8em" },
                         ml: 2,
@@ -107,7 +120,7 @@ const CompanyObservationDropdown = () => {
           </Grid>
           <Grid item xl={4} lg={4} md={4} xs={4} sm={4} ml={5} mt={5}>
             <TextField
-              id="signature"
+              id="text#signature"
               onChange={handleFormChange}
               helperText="Signature de l'enseignant responsable du stagiaire"
               variant="standard"
@@ -127,7 +140,7 @@ const CompanyObservationDropdown = () => {
             mt={5}
           >
             <TextField
-              id="date"
+              id="text#date"
               type="date"
               fullWidth
               onChange={handleFormChange}

@@ -11,13 +11,18 @@ import {
 } from "@mui/material";
 
 const StudentIdentificationDropdown = () => {
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({ text: {}, categorical: {}, rating: {} });
   const handleFormChange = (event) => {
+    const inputType = (
+      event.target.id ? event.target.id : event.target.name
+    ).split("#");
     setForm((form) => ({
       ...form,
-      [event.target.id || event.target.name]: event.target.value,
+      [inputType[0]]: {
+        ...form[inputType[0]],
+        [inputType[1]]: event.target.value,
+      },
     }));
-    console.log(form);
   };
 
   return (
@@ -88,9 +93,9 @@ const StudentIdentificationDropdown = () => {
               1
             </Typography>
             <Radio
-              name="internshipNumber"
+              name="text#internshipNumber"
               value={1}
-              checked={parseInt(form.internshipNumber) === 1}
+              checked={form.text.internshipNumber === "1"}
               onChange={handleFormChange}
               color="primary"
             ></Radio>
@@ -101,9 +106,9 @@ const StudentIdentificationDropdown = () => {
               2
             </Typography>
             <Radio
-              name="internshipNumber"
+              name="text#internshipNumber"
               value={2}
-              checked={parseInt(form.internshipNumber) === 2}
+              checked={form.text.internshipNumber === "2"}
               onChange={handleFormChange}
               color="primary"
             ></Radio>

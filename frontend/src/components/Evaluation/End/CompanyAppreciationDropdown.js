@@ -11,11 +11,22 @@ import {
 import { companyAppreciation } from "../EvaluationFields";
 
 const CompanyAppreciationDropdown = () => {
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({
+    text: {},
+    categorical: {},
+    rating: {},
+    expectation: {},
+  });
   const handleFormChange = (event) => {
+    const inputType = (
+      event.target.id ? event.target.id : event.target.name
+    ).split("#");
     setForm((form) => ({
       ...form,
-      [event.target.id || event.target.name]: event.target.value,
+      [inputType[0]]: {
+        ...form[inputType[0]],
+        [inputType[1]]: event.target.value,
+      },
     }));
   };
 
@@ -67,9 +78,10 @@ const CompanyAppreciationDropdown = () => {
                 >
                   <Radio
                     checked={
-                      parseInt(form[companyAppreciation.id]) === field.value
+                      form[companyAppreciation.id.split("#")[0]][
+                        companyAppreciation.id.split("#")[1]
+                      ] === field.value
                     }
-                    id={companyAppreciation.id}
                     name={companyAppreciation.id}
                     value={field.value}
                     color="primary"
@@ -98,7 +110,7 @@ const CompanyAppreciationDropdown = () => {
             <TextField
               fullWidth
               multiline
-              id="appreciationComment"
+              id="text#appreciationComment"
               type="text"
               onChange={handleFormChange}
               inputProps={{
@@ -125,18 +137,20 @@ const CompanyAppreciationDropdown = () => {
               Cette évaluation a été discutée avec le stagiaire:
             </Typography>
             <Radio
-              name={"discussedEvaluation"}
+              id={"categorical#discussedEvaluation"}
+              name={"categorical#discussedEvaluation"}
               color="primary"
               onChange={handleFormChange}
-              checked={form.discussedEvaluation === "YES"}
+              checked={form.categorical.discussedEvaluation === "YES"}
               value={"YES"}
             ></Radio>
             <Typography variant="caption">Oui</Typography>
             <Radio
-              name={"discussedEvaluation"}
+              id={"categorical#discussedEvaluation"}
+              name={"categorical#discussedEvaluation"}
               color="primary"
               onChange={handleFormChange}
-              checked={form.discussedEvaluation === "NO"}
+              checked={form.categorical.discussedEvaluation === "NO"}
               value={"NO"}
             ></Radio>
             <Typography variant="caption">Non</Typography>

@@ -10,11 +10,17 @@ import {
 import { contactDetails } from "../EvaluationFields";
 
 const StudentContactDetailsDropdown = () => {
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({ text: {}, categorical: {}, rating: {} });
   const handleFormChange = (event) => {
+    const inputType = (
+      event.target.id ? event.target.id : event.target.name
+    ).split("#");
     setForm((form) => ({
       ...form,
-      [event.target.id || event.target.name]: event.target.value,
+      [inputType[0]]: {
+        ...form[inputType[0]],
+        [inputType[1]]: event.target.value,
+      },
     }));
   };
 

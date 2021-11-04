@@ -11,16 +11,22 @@ import {
 import { ratings } from "../EvaluationFields";
 
 const StudentEvaluationDropdown = ({ section, key }) => {
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({ text: {}, categorical: {}, rating: {} });
   const handleFormChange = (event) => {
+    const inputType = (
+      event.target.id ? event.target.id : event.target.name
+    ).split("#");
     setForm((form) => ({
       ...form,
-      [event.target.id || event.target.name]: event.target.value,
+      [inputType[0]]: {
+        ...form[inputType[0]],
+        [inputType[1]]: event.target.value,
+      },
     }));
   };
 
   return (
-    <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+    <Grid item xl={12} lg={12} md={12} sm={12} xs={12} key={key}>
       <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
         <AccordionSummary>
           <Grid container flexDirection="row" textAlign="center">
@@ -106,7 +112,11 @@ const StudentEvaluationDropdown = ({ section, key }) => {
                               color="primary"
                               name={task.id}
                               onChange={handleFormChange}
-                              checked={parseInt(form[task.id]) === rating.value}
+                              checked={
+                                form[task.id.split("#")[0]][
+                                  task.id.split("#")[1]
+                                ] === rating.value
+                              }
                             ></Radio>
                           </Grid>
                         );

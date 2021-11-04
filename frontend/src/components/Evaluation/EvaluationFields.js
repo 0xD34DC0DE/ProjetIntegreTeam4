@@ -8,17 +8,20 @@ export const endEvaluation = [
     tasks: [
       {
         label: "Planifier et organiser son travail de façon efficace",
-        id: "organizeEfficiently",
+        id: "rating#organizeEfficiently",
       },
       {
         label: "Comprendre rapidement les directives relatives à son travail",
-        id: "understandFast",
+        id: "rating#understandFast",
       },
-      { label: "Maintenir un rythme de travail soutenu", id: "keepRhythm" },
-      { label: "Établir ses priorités", id: "establishPriorities" },
-      { label: "Respecter ses échéanciers", id: "respectDeadlines" },
+      {
+        label: "Maintenir un rythme de travail soutenu",
+        id: "rating#keepRhythm",
+      },
+      { label: "Établir ses priorités", id: "rating#establishPriorities" },
+      { label: "Respecter ses échéanciers", id: "rating#respectDeadlines" },
     ],
-    comment: { label: "Commentaires :", id: "productivityComment" },
+    comment: { label: "Commentaires :", id: "rating#productivityComment" },
   },
   {
     section: 2,
@@ -28,26 +31,26 @@ export const endEvaluation = [
     tasks: [
       {
         label: "Respecter les mandats qui lui on été confiés",
-        id: "respectMandates",
+        id: "rating#respectMandates",
       },
       {
         label: "Porter attention aux détails dans la réalisation de ses tâches",
-        id: "payAttentionDetails",
+        id: "rating#payAttentionDetails",
       },
       {
         label: "Vérifier son travail, s'assurer que rien n'a été oublié",
-        id: "verifyWork",
+        id: "rating#verifyWork",
       },
       {
         label: "Rechercher ses occasions de se perfectionner",
-        id: "perfectionate",
+        id: "rating#perfectionate",
       },
       {
         label: "Faire une bonne analyse des problèmes rencontrés",
-        id: "problemSolving",
+        id: "rating#problemSolving",
       },
     ],
-    comment: { label: "Commentaires :", id: "workQualityComment" },
+    comment: { label: "Commentaires :", id: "rating#workQualityComment" },
   },
   {
     section: 3,
@@ -57,30 +60,30 @@ export const endEvaluation = [
     tasks: [
       {
         label: "Établir facilement des contacts avec les gens",
-        id: "approchable",
+        id: "rating#approchable",
       },
       {
         label: "Contribuer activement au travail d'équipe",
-        id: "contributeTeamwork",
+        id: "rating#contributeTeamwork",
       },
       {
         label: "S'adapter facilement à la culture de l'entreprise",
-        id: "adaptCompany",
+        id: "rating#adaptCompany",
       },
       {
         label: "Accepter les critiques constructives",
-        id: "acceptCriticism",
+        id: "rating#acceptCriticism",
       },
-      { label: "Être respectueux envers les gens", id: "respectful" },
+      { label: "Être respectueux envers les gens", id: "rating#respectful" },
       {
         label:
           "Faire preuve d'écoute active en essayant de comprendre le point de vue de l'autre",
-        id: "listenOthers",
+        id: "rating#listenOthers",
       },
     ],
     comment: {
       label: "Commentaires :",
-      id: "interpersonalRelationshipsComment",
+      id: "rating#interpersonalRelationshipsComment",
     },
   },
   {
@@ -91,19 +94,19 @@ export const endEvaluation = [
     tasks: [
       {
         label: "Démontrer de l'intérêt et de la motivation au travail",
-        id: "showMotivation",
+        id: "rating#showMotivation",
       },
-      { label: "Exprimer clairement ses idées", id: "expressClearly" },
-      { label: "Faire preuve d'initiative", id: "takeInitiative" },
-      { label: "Travailler de façon sécuritaire", id: "workSafely" },
+      { label: "Exprimer clairement ses idées", id: "rating#expressClearly" },
+      { label: "Faire preuve d'initiative", id: "rating#takeInitiative" },
+      { label: "Travailler de façon sécuritaire", id: "rating#workSafely" },
       {
         label:
           "Démontrer un bon sens des responsabilités ne réquérant qu'un minimum de supervision",
-        id: "showAutonomy",
+        id: "rating#showAutonomy",
       },
-      { label: "Être ponctuel et assidu à son travail", id: "punctual" },
+      { label: "Être ponctuel et assidu à son travail", id: "rating#punctual" },
     ],
-    comment: { label: "Commentaires :", id: "personalSkillsComment" },
+    comment: { label: "Commentaires :", id: "text#personalSkillsComment" },
   },
 ];
 
@@ -119,16 +122,16 @@ export const ratings = [
 ];
 
 export const contactDetails = [
-  { label: "Nom de l'élève", id: "studentFullName" },
-  { label: "Programme d'études", id: "studyProgram" },
-  { label: "Nom de l'entreprise", id: "companyName" },
-  { label: "Nom du superviseur", id: "supervisorFullName" },
-  { label: "Fonction", id: "fonction" },
-  { label: "Téléphone", id: "phoneNumber" },
+  { label: "Nom de l'élève", id: "text#studentFullName" },
+  { label: "Programme d'études", id: "text#studyProgram" },
+  { label: "Nom de l'entreprise", id: "text#companyName" },
+  { label: "Nom du superviseur", id: "text#supervisorFullName" },
+  { label: "Fonction", id: "text#fonction" },
+  { label: "Téléphone", id: "text#phoneNumber" },
 ];
 
 export const companyAppreciation = {
-  id: "studentAppreciation",
+  id: "expectation#studentAppreciation",
   ratings: [
     {
       label: "Les habiletés démontrées dépassent de beaucoup les attentes",
@@ -157,8 +160,8 @@ export const studentIdentification = {
   title: "Identification du stagiare",
   description: "Information du stagiaire évalué",
   fields: [
-    { label: "Nom du stagiaire", id: "studentName", type: "text" },
-    { label: "Date du stage", id: "internshipDate", type: "date" },
+    { label: "Nom du stagiaire", id: "text#studentName", type: "text" },
+    { label: "Date du stage", id: "text#internshipDate", type: "date" },
   ],
 };
 
@@ -166,13 +169,13 @@ export const companyIdentification = {
   title: "Identification de l'entreprise",
   description: "Information sur la compagnie offrant le stage",
   fields: [
-    { label: "Nom de l'entreprise", id: "companyName" },
-    { label: "Contact", id: "contact" },
-    { label: "Adresse", id: "address" },
-    { label: "Ville", id: "city" },
-    { label: "Numéro de téléphone", id: "pĥoneNumber" },
-    { label: "Télécopieur", id: "faxMachine" },
-    { label: "Code postal", id: "zipCode" },
+    { label: "Nom de l'entreprise", id: "text#companyName" },
+    { label: "Contact", id: "text#contact" },
+    { label: "Adresse", id: "text#address" },
+    { label: "Ville", id: "text#city" },
+    { label: "Numéro de téléphone", id: "text#pĥoneNumber" },
+    { label: "Télécopieur", id: "text#faxMachine" },
+    { label: "Code postal", id: "text#zipCode" },
   ],
 };
 
@@ -183,110 +186,72 @@ export const midTermEvaluation = {
     {
       label:
         "Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans l'entente de stage",
-      id: "taskRespectAgreement",
+      id: "rating#taskRespectAgreement",
     },
     {
       label:
         "Des mesures d'accueil facilitent l'intégration du nouveau stagiaire.",
-      id: "internIntegrationMesures",
+      id: "rating#internIntegrationMesures",
     },
     {
       label:
         "Le temps réel consacré à l'encadrement du stagiaire est suffisant",
-      id: "internSupervisionTimeAllocated",
-      precision: (
-        <>
-          <br />
-          <Typography variant="caption">
-            Préciser le nombre d'heures/semaine :
-          </Typography>
-          <br />
-          {["Premier", "Deuxième", "Troisième"].map((value, key) => {
-            return (
-              <>
-                <Typography variant="caption">{value} mois: </Typography>
-                <TextField
-                  id={"timeSpentWeekly" + key}
-                  variant="standard"
-                  sx={{
-                    "& .MuiInput-input": {
-                      fontSize: "0.8em",
-                      textAlign: "center",
-                    },
-                  }}
-                ></TextField>
-              </>
-            );
-          })}
-        </>
-      ),
+      id: "rating#internSupervisionTimeAllocated",
     },
     {
       label:
         "L'environnement de travail respecte les normes d'hygiène et de sécurité au travail",
-      id: "workEnvironnement",
+      id: "rating#workEnvironnement",
     },
-    { label: "Le climat de travail est agréable", id: "pleasantWorkClimate" },
+    {
+      label: "Le climat de travail est agréable",
+      id: "rating#pleasantWorkClimate",
+    },
     {
       label: "Le milieu de stage est accessible par transport en commun",
-      id: "publicTransportAccessible",
+      id: "rating#publicTransportAccessible",
     },
     {
       label: "Le salaire offert est intéressant pour le stagiaire",
-      id: "interestingSalary",
-      precision: (
-        <>
-          <br />
-          <Typography variant="caption">
-            Précisez :
-            <TextField
-              variant="standard"
-              sx={{
-                "& .MuiInput-input": { fontSize: "0.8em", textAlign: "center" },
-              }}
-            ></TextField>
-            /l'heure
-          </Typography>
-        </>
-      ),
+      id: "rating#interestingSalary",
     },
     {
       label:
         "La communication avec le superviseur de stage facilite le déroulement du stage",
-      id: "supervisorCommunicationEase",
+      id: "rating#supervisorCommunicationEase",
     },
     {
       label: "L'équipment fourni est adéquat pour réaliser les tâches confiées",
-      id: "adequateEquipement",
+      id: "rating#adequateEquipement",
     },
     {
       label: "Le volume de travail est acceptable",
-      id: "workVolumeAcceptable",
+      id: "rating#workVolumeAcceptable",
     },
   ],
-  comment: { label: "Commentaire :", id: "evaluationComment" },
+  comment: { label: "Commentaire :", id: "text#evaluationComment" },
 };
 
 export const companyObservation = [
   {
     label: "Ce milieu est à privilégier pour le :",
-    id: "privilegeInternship",
+    id: "text#privilegeInternship",
     options: ["Premier stage", "Deuxième stage"],
   },
   {
     label: "Ce milieu est ouvert à accueillir :",
-    id: "hiringInterns",
+    id: "text#hiringInterns",
     options: ["Un stagiaire", "Deux stagière", "Plus de trois stagiaires"],
   },
   {
     label:
       "Ce milieu désire accueillir le même stagiaire pour un prochain stage :",
-    id: "interestRehire",
+    id: "categorical#interestRehire",
     options: ["Oui", "Non"],
   },
   {
     label: "Ce milieu offre des quarts de travail variables :",
-    id: "variableWorkShifts",
+    id: "categorical#variableWorkShifts",
     options: ["Oui", "Non"],
   },
 ];

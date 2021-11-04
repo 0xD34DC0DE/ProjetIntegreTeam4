@@ -11,11 +11,22 @@ import {
 } from "@mui/material";
 
 const CompanyInterestDropdown = () => {
-  const [form, setForm] = useState({});
+  const [form, setForm] = useState({
+    text: {},
+    categorical: {},
+    rating: {},
+    expectation: {},
+  });
   const handleFormChange = (event) => {
+    const inputType = (
+      event.target.id ? event.target.id : event.target.name
+    ).split("#");
     setForm((form) => ({
       ...form,
-      [event.target.id || event.target.name]: event.target.value,
+      [inputType[0]]: {
+        ...form[inputType[0]],
+        [inputType[1]]: event.target.value,
+      },
     }));
   };
 
@@ -51,7 +62,7 @@ const CompanyInterestDropdown = () => {
           <Grid item textAlign="center">
             <RadioGroup
               onChange={handleFormChange}
-              name="interestedNextInternship"
+              name="categorical#interestedNextInternship"
               row
               sx={{ display: "inline-block" }}
             >
@@ -74,7 +85,7 @@ const CompanyInterestDropdown = () => {
           </Grid>
           <Grid item>
             <TextField
-              id="technicalTrainingComment"
+              id="text#technicalTrainingComment"
               onChange={handleFormChange}
               fullWidth
               multiline
@@ -93,7 +104,7 @@ const CompanyInterestDropdown = () => {
           <Grid container flexDirection="row" justifyContent="center" mt={1}>
             <Grid item xl={5.8} lg={5.7} md={5.6} sm={5.5} xs={5.2} mr={5}>
               <TextField
-                id="monitorFullName"
+                id="text#monitorFullName"
                 type="text"
                 onChange={handleFormChange}
                 fullWidth
@@ -109,7 +120,7 @@ const CompanyInterestDropdown = () => {
             </Grid>
             <Grid item xl={5.8} lg={5.7} md={5.6} sm={5.5} xs={5.2}>
               <TextField
-                id="fonction"
+                id="text#fonction"
                 type="text"
                 onChange={handleFormChange}
                 fullWidth
@@ -133,7 +144,7 @@ const CompanyInterestDropdown = () => {
           >
             <Grid item xl={5.8} lg={5.7} md={5.6} sm={5.5} xs={5.2} mr={5}>
               <TextField
-                id="signature"
+                id="text#signature"
                 onChange={handleFormChange}
                 fullWidth
                 type="text"
@@ -149,7 +160,7 @@ const CompanyInterestDropdown = () => {
             </Grid>
             <Grid item xl={5.8} lg={5.7} md={5.6} sm={5.5} xs={5.2}>
               <TextField
-                id="date"
+                id="text#date"
                 type="date"
                 onChange={handleFormChange}
                 fullWidth

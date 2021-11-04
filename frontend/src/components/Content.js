@@ -14,7 +14,7 @@ import StudentDashBoard from "./StudentDashboard";
 import InternshipOfferValidation from "./InternshipOfferValidation";
 import ListUserDroppable from "./ListUserDroppable";
 import ListUserDraggable from "./ListUserDraggable";
-import AsssignedStudentSupervisorView from "./AsssignedStudentSupervisorView";
+import AssignedStudentSupervisorView from "./AssignedStudentSupervisorView";
 import StudentEvaluationForm from "./Evaluation/End/StudentEvaluationForm";
 import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMidForm";
 
@@ -84,7 +84,7 @@ const Content = ({
             />
           )}
           {userInfo.role === "SUPERVISOR" && (
-            <AsssignedStudentSupervisorView visible={selection.id === 10} />
+            <AssignedStudentSupervisorView visible={selection.id === 10} />
           )}
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListUserDroppable
