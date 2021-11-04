@@ -18,7 +18,7 @@ import Report from "./Report"
 import ReportDialog from "./ReportDialog";
 
 const ListReport = ({ open, toggleDialog, visible }) => {
-    const [reports, setReports] = useState([
+    const [reports] = useState([
         { title: "Offres de stages non validées", url: "/generateAllNonValidatedOffersReport" },
         { title: "Offres de stages validées", url: "/generateAllValidatedOffersReport" },
         { title: "Étudiants inscrits", url: "/generateAllStudentsReport" },
@@ -29,9 +29,8 @@ const ListReport = ({ open, toggleDialog, visible }) => {
         { title: "Étudiants en attente de réponse", url: "/generateStudentsWaitingInterviewResponseReport" },
         { title: "Étudiants avec stage trouvé", url: "/generateStudentsWithInternshipReport" },
         { title: "Étudiants pas évalué par leur moniteur", url: "/generateStudentsNotEvaluatedReport" },
-        { title: "Étudiants dont le superviseur n'a pas évalué l'entreprise", url: "test" },
+        { title: "Étudiants dont le superviseur n'a pas évalué l'entreprise", url: "/null" },
     ]);
-    const [userInfo] = useContext(UserInfoContext);
 
     const [reportUrl, setReportUrl] = useState("");
 

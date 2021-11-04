@@ -8,19 +8,16 @@ import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.util.PBKDF2Encoder;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
-import org.springframework.cglib.core.Local;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
