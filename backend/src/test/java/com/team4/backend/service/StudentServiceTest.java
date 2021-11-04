@@ -8,6 +8,7 @@ import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.util.PBKDF2Encoder;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,6 +17,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -403,5 +406,35 @@ public class StudentServiceTest {
         }).assertNext(s -> {
             assertEquals(StudentMockData.getMockSecondStudent(), s);
         }).verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllWithEvaluationDateBetween() {
+        //ARRANGE
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+
+        when(studentRepository.findAllByEvaluationsDatesIsBetween(any(), any())).thenReturn(students);
+
+        //ACT
+        Flux<Student> response = studentService.getAllWithEvaluationDateBetween(LocalDate.of(2019,1,1), LocalDate.of(2019,5,31));
+
+        //ASSERT
+        StepVerifier.create(response).assertNext(s -> {
+            assertEquals(StudentMockData.getMockStudent(), s);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllWithEvaluationDateBetweenNoCorrespondingStudent() {
+        //ARRANGE
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+
+        when(studentRepository.findAllByEvaluationsDatesIsBetween(any(), any())).thenReturn(students);
+
+        //ACT
+        Flux<Student> response = studentService.getAllWithEvaluationDateBetween(LocalDate.of(2016,1,1), LocalDate.of(2016,5,31));
+
+        //ASSERT
+        StepVerifier.create(response).verifyComplete();
     }
 }

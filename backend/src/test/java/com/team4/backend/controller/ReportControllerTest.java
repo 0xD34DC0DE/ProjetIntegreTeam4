@@ -163,4 +163,19 @@ class ReportControllerTest {
                 //ASSERT
                 .expectStatus().isOk();
     }
+
+    @Test
+    void shouldGenerateStudentsNotEvaluatedReport() {
+        //ARRANGE
+        doReturn(ReportMockData.getMonoBytes()).when(reportService).generateStudentsNotEvaluatedReport(any());
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/report/generateStudentsNotEvaluatedReport/321")
+                .exchange()
+
+                //ASSERT
+                .expectStatus().isOk();
+    }
 }

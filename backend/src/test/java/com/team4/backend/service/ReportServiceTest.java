@@ -171,6 +171,21 @@ class ReportServiceTest {
     }
 
     @Test
+    void shouldGenerateStudentsNotEvaluatedReport() {
+        //ARRANGE
+        doReturn(ReportMockData.getInternshipOffers()).when(studentService).getAllWithEvaluationDateBetween(any(), any());
+        doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
+
+        //ACT
+        Mono<byte[]> response = reportService.generateStudentsNotEvaluatedReport(321);
+
+        //ASSERT
+        StepVerifier.create(response).consumeNextWith(s -> {
+            assertEquals(ReportMockData.getBytes()[0], s[0]);
+        }).verifyComplete();
+    }
+
+    @Test
     void shouldCalculateDatesWinter() {
         //ACT
         List<Date> dates = reportService.calculateDates(121);
