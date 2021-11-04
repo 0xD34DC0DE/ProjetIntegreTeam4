@@ -42,7 +42,6 @@ public class Student extends User {
                    Set<String> appliedOffersId,
                    Set<String> exclusiveOffersId,
                    Boolean hasValidCv,
-                   Boolean hasCv,
                    Set<LocalDate> evaluationsDates,
                    Set<LocalDate> interviewsDate) {
         super(id,
@@ -59,7 +58,7 @@ public class Student extends User {
         this.appliedOffersId = appliedOffersId;
         this.exclusiveOffersId = exclusiveOffersId;
         this.hasValidCv = hasValidCv;
-        this.hasCv = hasCv;
+        this.hasCv = false;
         this.evaluationsDates = evaluationsDates;
         this.interviewsDate = interviewsDate;
     }
