@@ -1,8 +1,10 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipContractCreationDto;
+import com.team4.backend.dto.InternshipContractDto;
 import com.team4.backend.service.InternshipContractService;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -26,11 +28,11 @@ public class InternshipContractController {
                 .map(c -> ResponseEntity.status(HttpStatus.CREATED).body(""));
     }
 
-    @GetMapping("/pdfByStudentEmail/{studentEmail}")
+    @GetMapping(produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAnyAuthority('MONITOR')")
-    public Mono<byte[]> findInternshipContractByStudentEmail(
-            @PathVariable("studentEmail") String studentEmail) {
-        return internshipContractService.findContractByStudentEmail(studentEmail);
+    public Mono<byte[]> getContract(@RequestParam("internshipOfferId") String internshipOfferId,
+                                    @RequestParam("studentEmail") String studentEmail) {
+        return internshipContractService.getContract(internshipOfferId, studentEmail);
     }
 
 }
