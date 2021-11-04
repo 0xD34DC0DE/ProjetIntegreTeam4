@@ -28,6 +28,6 @@ public class TaskSchedulerService {
                                 nbrOfUpdateStudent +
                                 ", time : " +
                                 LocalDateTime.now()));
-
     }
+    
 }
