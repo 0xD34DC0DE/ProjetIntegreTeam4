@@ -33,18 +33,22 @@ public class InternshipContractService {
 
     private final PdfService pdfService;
 
+    private final UserService userService;
+
     public InternshipContractService(StudentService studentService,
                                      MonitorService monitorService,
                                      InternshipOfferService internshipOfferService,
                                      InternshipManagerService internshipManagerService,
                                      InternshipContractRepository internshipContractRepository,
-                                     PdfService pdfService) {
+                                     PdfService pdfService,
+                                     UserService userService) {
         this.studentService = studentService;
         this.monitorService = monitorService;
         this.internshipOfferService = internshipOfferService;
         this.internshipManagerService = internshipManagerService;
         this.internshipContractRepository = internshipContractRepository;
         this.pdfService = pdfService;
+        this.userService = userService;
     }
 
     public Mono<InternshipContract> initiateContract(InternshipContractCreationDto internshipContractCreationDto) {
@@ -208,4 +212,8 @@ public class InternshipContractService {
         }
     }
 
+    public Mono<Boolean> hasSigned(String internshipContractId, String userEmail) {
+        return userService.findByEmail(userEmail)
+                .flatMap(user -> internshipContractRepository.hasSigned(internshipContractId, user.getId()));
+    }
 }
