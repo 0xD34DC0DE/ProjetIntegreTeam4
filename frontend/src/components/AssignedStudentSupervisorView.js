@@ -3,7 +3,7 @@ import { Box, Avatar, Typography, Grid, Card } from "@mui/material";
 import axios from "axios";
 import { UserInfoContext } from "../stores/UserInfoStore";
 
-const AsssignedStudentSupervisorView = ({ visible }) => {
+const AssignedStudentSupervisorView = ({ visible }) => {
   const [assignedStudents, setAssignedStudents] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
 
@@ -77,4 +77,4 @@ const AsssignedStudentSupervisorView = ({ visible }) => {
   );
 };
 
-export default AsssignedStudentSupervisorView;
+export default AssignedStudentSupervisorView;
