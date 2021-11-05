@@ -18,14 +18,16 @@ const CompanyAppreciationDropdown = ({ mergeForms }, ref) => {
     expectation: {},
   });
   const handleFormChange = (event) => {
-    const inputType = (
+    const target = (
       event.target.id ? event.target.id : event.target.name
     ).split("#");
+    const id = target[1];
+    const type = target[0];
     setForm((form) => ({
       ...form,
-      [inputType[0]]: {
-        ...form[inputType[0]],
-        [inputType[1]]: event.target.value,
+      [type]: {
+        ...form[type],
+        [id]: event.target.value,
       },
     }));
   };
@@ -35,6 +37,10 @@ const CompanyAppreciationDropdown = ({ mergeForms }, ref) => {
       mergeForms(form);
     },
   }));
+
+  const getFieldValue = (id) => {
+    return form[id.split("#")[0]][id.split("#")[1]];
+  };
 
   return (
     <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
@@ -84,9 +90,7 @@ const CompanyAppreciationDropdown = ({ mergeForms }, ref) => {
                 >
                   <Radio
                     checked={
-                      form[companyAppreciation.id.split("#")[0]][
-                        companyAppreciation.id.split("#")[1]
-                      ] === field.value
+                      getFieldValue(companyAppreciation.id) === field.value
                     }
                     name={companyAppreciation.id}
                     value={field.value}

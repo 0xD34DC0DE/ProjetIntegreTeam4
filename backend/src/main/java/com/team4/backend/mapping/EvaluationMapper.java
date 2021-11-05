@@ -3,7 +3,6 @@ package com.team4.backend.mapping;
 import com.team4.backend.dto.EvaluationDto;
 import com.team4.backend.model.Evaluation;
 
-
 public abstract class EvaluationMapper {
 
     public static EvaluationDto toDto(Evaluation evaluation) {

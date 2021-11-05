@@ -18,16 +18,22 @@ const StudentEvaluationDropdown = ({ section, key, mergeForms }, ref) => {
     expectation: {},
   });
   const handleFormChange = (event) => {
-    const inputType = (
+    const target = (
       event.target.id ? event.target.id : event.target.name
     ).split("#");
+    const id = target[1];
+    const type = target[0];
     setForm((form) => ({
       ...form,
-      [inputType[0]]: {
-        ...form[inputType[0]],
-        [inputType[1]]: event.target.value,
+      [type]: {
+        ...form[type],
+        [id]: event.target.value,
       },
     }));
+  };
+
+  const getFieldValue = (taskId) => {
+    return form[taskId.split("#")[0]][taskId.split("#")[1]];
   };
 
   useImperativeHandle(ref, () => ({
@@ -123,11 +129,7 @@ const StudentEvaluationDropdown = ({ section, key, mergeForms }, ref) => {
                               color="primary"
                               name={task.id}
                               onChange={handleFormChange}
-                              checked={
-                                form[task.id.split("#")[0]][
-                                  task.id.split("#")[1]
-                                ] === rating.value
-                              }
+                              checked={getFieldValue(task.id) === rating.value}
                             ></Radio>
                           </Grid>
                         );

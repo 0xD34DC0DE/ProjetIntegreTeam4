@@ -17,14 +17,16 @@ const StudentContactDetailsDropdown = ({ mergeForms }, ref) => {
     expectation: {},
   });
   const handleFormChange = (event) => {
-    const inputType = (
+    const target = (
       event.target.id ? event.target.id : event.target.name
     ).split("#");
+    const id = target[1];
+    const type = target[0];
     setForm((form) => ({
       ...form,
-      [inputType[0]]: {
-        ...form[inputType[0]],
-        [inputType[1]]: event.target.value,
+      [type]: {
+        ...form[type],
+        [id]: event.target.value,
       },
     }));
   };

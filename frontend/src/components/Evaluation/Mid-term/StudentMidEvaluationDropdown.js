@@ -10,19 +10,32 @@ import {
 } from "@mui/material";
 import { midTermEvaluation, ratings } from "../EvaluationFields";
 
+const ordinalNumbers = ["Premier", "Deuxième", "Troisième"];
+
 const StudentMidEvaluationDropdown = ({ mergeForms }, ref) => {
-  const [form, setForm] = useState({ text: {}, categorical: {}, rating: {} });
+  const [form, setForm] = useState({
+    text: {},
+    categorical: {},
+    rating: {},
+    expectation: {},
+  });
   const handleFormChange = (event) => {
-    const inputType = (
+    const target = (
       event.target.id ? event.target.id : event.target.name
     ).split("#");
+    const id = target[1];
+    const type = target[0];
     setForm((form) => ({
       ...form,
-      [inputType[0]]: {
-        ...form[inputType[0]],
-        [inputType[1]]: event.target.value,
+      [type]: {
+        ...form[type],
+        [id]: event.target.value,
       },
     }));
+  };
+
+  const getFieldValue = (taskId) => {
+    return form[taskId.split("#")[0]][taskId.split("#")[1]];
   };
 
   useImperativeHandle(ref, () => ({
@@ -38,7 +51,7 @@ const StudentMidEvaluationDropdown = ({ mergeForms }, ref) => {
         Préciser le nombre d'heures/semaine :
       </Typography>
       <br />
-      {["Premier", "Deuxième", "Troisième"].map((value, key) => {
+      {ordinalNumbers.map((value, key) => {
         return (
           <>
             <Typography variant="caption">{value} mois: </Typography>
@@ -58,6 +71,14 @@ const StudentMidEvaluationDropdown = ({ mergeForms }, ref) => {
       })}
     </>
   );
+
+  const hasSubtasks = (taskId) => {
+    return taskId === "rating#internIntegrationMesures"
+      ? integration
+      : taskId === "rating#interestingSalary"
+      ? salaryHour
+      : "";
+  };
 
   const salaryHour = (
     <>
@@ -147,11 +168,7 @@ const StudentMidEvaluationDropdown = ({ mergeForms }, ref) => {
                         <Typography variant="caption">
                           {key2 + 1}) {task.label}
                         </Typography>
-                        {task.id === "rating#internIntegrationMesures"
-                          ? integration
-                          : task.id === "rating#interestingSalary"
-                          ? salaryHour
-                          : ""}
+                        {hasSubtasks(task.id)}
                       </Grid>
                       {ratings.map((rating, key3) => {
                         return (
@@ -170,11 +187,7 @@ const StudentMidEvaluationDropdown = ({ mergeForms }, ref) => {
                               name={task.id}
                               onChange={handleFormChange}
                               color="primary"
-                              checked={
-                                form[task.id.split("#")[0]][
-                                  task.id.split("#")[1]
-                                ] === rating.value
-                              }
+                              checked={getFieldValue(task.id) === rating.value}
                             ></Radio>
                           </Grid>
                         );
