@@ -16,7 +16,6 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataMongoTest
 @EnableAutoConfiguration
@@ -29,11 +28,11 @@ public class InternshipRepositoryTest {
     private InternshipRepository internshipRepository;
 
     @BeforeAll
-    void init(){
+    void init() {
         Flux<Internship> internshipFlux = Flux.just(Internship
-                .builder()
-                .studentEmail("test_student@gmail.com")
-                .build(),
+                        .builder()
+                        .studentEmail("test_student@gmail.com")
+                        .build(),
                 Internship
                         .builder()
                         .studentEmail("test_student2@gmail.com")
@@ -43,7 +42,7 @@ public class InternshipRepositoryTest {
     }
 
     @Test
-    void shouldGetInternshipByStudentEmail(){
+    void shouldGetInternshipByStudentEmail() {
         //ARRANGE
         String studentEmail = "test_student@gmail.com";
 
@@ -58,7 +57,7 @@ public class InternshipRepositoryTest {
     }
 
     @Test
-    void shouldExistByStudentEmail(){
+    void shouldExistByStudentEmail() {
         //ARRANGE
         String studentEmail = "test_student@gmail.com";
 
@@ -73,7 +72,7 @@ public class InternshipRepositoryTest {
     }
 
     @Test
-    void shouldNotExistByStudentEmail(){
+    void shouldNotExistByStudentEmail() {
         //ARRANGE
         String studentEmail = "test_wrong_student_email@gmail.com";
 

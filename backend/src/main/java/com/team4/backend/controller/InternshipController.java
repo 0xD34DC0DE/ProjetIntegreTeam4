@@ -35,7 +35,7 @@ public class InternshipController {
                 .onErrorMap(error -> new ResponseStatusException(HttpStatus.NOT_FOUND, error.getMessage()));
     }
 
-        @GetMapping("/exists/{studentEmail}")
+    @GetMapping("/exists/{studentEmail}")
     @PreAuthorize("hasAnyAuthority('SUPERVISOR')")
     public Mono<Boolean> existsByStudentEmail(@PathVariable("studentEmail") String studentEmail){
         return internshipService.existsByStudentEmail(studentEmail);
