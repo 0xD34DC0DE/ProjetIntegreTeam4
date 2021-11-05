@@ -37,8 +37,9 @@ public class InternshipContractController {
     @GetMapping("/signed")
     @PreAuthorize("hasAnyAuthority('MONITOR', 'STUDENT', 'INTERNSHIP_MANAGER')")
     public Mono<Boolean> hasSigned(@RequestParam("internshipOfferId") String internshipOfferId,
+                                   @RequestParam("studentEmail") String studentEmail,
                                    @RequestParam("userEmail") String userEmail) {
-        return internshipContractService.hasSigned(internshipOfferId, userEmail);
+        return internshipContractService.hasSigned(internshipOfferId, studentEmail, userEmail);
     }
 
 }

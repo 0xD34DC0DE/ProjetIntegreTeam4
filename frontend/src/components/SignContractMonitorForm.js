@@ -84,6 +84,7 @@ const SignContractMonitorForm = ({ studentEmail, offerId }) => {
       url: "/contract/signed",
       params: {
         userEmail: userInfo.email,
+        studentEmail: studentEmail,
         internshipOfferId: offerId,
       },
       headers: {
@@ -91,7 +92,6 @@ const SignContractMonitorForm = ({ studentEmail, offerId }) => {
       },
     })
       .then((response) => {
-        console.log(response.data);
         setAlreadySigned(response.data);
       })
       .catch((error) => {

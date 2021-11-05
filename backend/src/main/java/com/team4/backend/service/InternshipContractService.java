@@ -212,8 +212,32 @@ public class InternshipContractService {
         }
     }
 
-    public Mono<Boolean> hasSigned(String internshipContractId, String userEmail) {
+    // TODO Make this method more generic, not just for the monitor
+    // Aka take a contract id instead of this mess
+    public Mono<Boolean> hasSigned(String internshipOfferId, String studentEmail, String userEmail) {
+
+        // Using an InternshipContractDto to avoid having to make an override
+        // of the method to accept an internshipOfferId
+        InternshipContractDto internshipContractDto = InternshipContractDto.builder()
+                .internshipOfferId(internshipOfferId)
+                .studentEmail(studentEmail)
+                .build();
+
         return userService.findByEmail(userEmail)
-                .flatMap(user -> internshipContractRepository.hasSigned(internshipContractId, user.getId()));
+                .flatMap(user ->
+                        getContractObjectsTuple(internshipContractDto)
+                                .flatMap(tuple -> {
+                                    InternshipManager internshipManager = tuple.getT1();
+                                    Monitor monitor = tuple.getT2();
+                                    Student student = tuple.getT3();
+
+                                    return internshipContractRepository.hasSigned(
+                                            internshipOfferId,
+                                            internshipManager.getId(),
+                                            student.getId(),
+                                            monitor.getId(),
+                                            user.getId());
+                                })
+                );
     }
 }

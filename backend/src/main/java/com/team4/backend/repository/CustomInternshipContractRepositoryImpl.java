@@ -28,24 +28,37 @@ public class CustomInternshipContractRepositoryImpl implements CustomInternshipC
     }
 
     @Override
-    public Mono<Boolean> hasSigned(String internshipOfferId, String userId) {
-        Criteria criteria = Criteria.where("internshipOfferId").is(internshipOfferId);
-        return userService.findById(userId).map(user -> {
-            switch (user.getRole()) {
-                case STUDENT:
-                    return criteria.and("studentSignature.userId").is(userId);
-                case MONITOR:
-                    return criteria.and("monitorSignature.userId").is(userId);
-                case INTERNSHIP_MANAGER:
-                    return criteria.and("internshipManagerSignature.userId").is(userId);
-                default:
-                   break;
-            }
-            throw new RuntimeException("Invalid role received for hasSigned query");
-        }).flatMap(c -> {
-            Query query = Query.query(c);
-            return mongoOperations.findOne(query, InternshipContract.class).hasElement();
-        });
+    public Mono<Boolean> hasSigned(String internshipOfferId,
+                                   String internshipMonitorId,
+                                   String studentId,
+                                   String monitorId,
+                                   String userId) {
+
+        Criteria criteria = Criteria.where("internshipOfferId")
+                .is(internshipOfferId)
+                .and("studentSignature.userId")
+                .is(studentId)
+                .and("monitorSignature.userId")
+                .is(monitorId)
+                .and("internshipManagerSignature.userId")
+                .is(internshipMonitorId);
+
+        return mongoOperations.findOne(Query.query(criteria), InternshipContract.class)
+                .flatMap(internshipContract ->
+                        userService.findById(userId).map(user -> {
+                            switch (user.getRole()) {
+                                case STUDENT:
+                                    return internshipContract.getStudentSignature().getUserId().equals(userId);
+                                case MONITOR:
+                                    return internshipContract.getMonitorSignature().getUserId().equals(userId);
+                                case INTERNSHIP_MANAGER:
+                                    return internshipContract.getInternshipManagerSignature().getUserId().equals(userId);
+                                default:
+                                    break;
+                            }
+                            throw new RuntimeException("Invalid role received for hasSigned query");
+                        })
+                );
     }
 
 }
