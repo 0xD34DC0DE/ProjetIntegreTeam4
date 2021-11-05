@@ -59,7 +59,9 @@ public class Student extends User {
         this.appliedOffersId = appliedOffersId;
         this.exclusiveOffersId = exclusiveOffersId;
         this.hasValidCv = hasValidCv;
-        this.hasCv = false;
+        if (hasCv == null) {
+            this.hasCv = false;
+        }
         this.evaluationsDates = evaluationsDates;
         this.interviewsDate = interviewsDate;
     }

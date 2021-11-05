@@ -163,4 +163,8 @@ public class StudentService {
                 }).count();
     }
 
+    public Mono<Student> save(Student student) {
+        return studentRepository.save(student);
+    }
+
 }
