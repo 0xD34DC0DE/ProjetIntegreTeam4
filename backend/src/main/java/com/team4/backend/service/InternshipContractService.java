@@ -1,6 +1,5 @@
 package com.team4.backend.service;
 
-import com.team4.backend.InternshipManagerRegistration;
 import com.team4.backend.dto.InternshipContractCreationDto;
 import com.team4.backend.dto.InternshipContractDto;
 import com.team4.backend.model.*;
@@ -10,10 +9,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple3;
 import reactor.util.function.Tuple4;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -64,14 +63,10 @@ public class InternshipContractService {
                 .flatMap(student -> internshipContractRepository.findInternshipContractByStudentId(student.getId()))
                 .switchIfEmpty(buildInternshipContractFromInternshipContractDto(insternshipContractDto))
                 .flatMap(this::getPdfBytes)
-                .onErrorMap(throwable -> {log.info(throwable.getLocalizedMessage()); return throwable;});
-    }
-
-    private Mono<InternshipContract> findContractByStudentEmail(String studentEmail) {
-        return studentService.findByEmail(studentEmail)
-                .flatMap(student ->
-                        internshipContractRepository.findInternshipContractByStudentId(student.getId())
-                );
+                .onErrorMap(throwable -> {
+                    log.info(throwable.getLocalizedMessage());
+                    return throwable;
+                });
     }
 
     private Mono<byte[]> getPdfBytes(InternshipContract internshipContract) {
@@ -132,6 +127,7 @@ public class InternshipContractService {
         Signature internshipManagerSignature = buildSignature(internshipManager.getId(), false);
 
         return InternshipContract.builder()
+                .internshipOfferId(internshipOffer.getId())
                 .beginningDate(internshipOffer.getBeginningDate())
                 .endingDate(internshipOffer.getEndingDate())
                 .internTasks(internshipOffer.getDescription())
@@ -182,18 +178,34 @@ public class InternshipContractService {
             InternshipManager internshipManager = tuple.getT1();
             Monitor monitor = tuple.getT2();
             Student student = tuple.getT3();
+            Long weeks = ChronoUnit.WEEKS.between(
+                    internshipContract.getBeginningDate(),
+                    internshipContract.getEndingDate()
+            );
 
             //TODO use the objects instead -> monitor.firstname , monitor.lastName
             Map<String, Object> variables = new HashMap<>();
-            variables.put("internshipManager_firstName", internshipManager.getFirstName());
-            variables.put("internshipManager_lastName", internshipManager.getLastName());
-            variables.put("monitor_firstName", monitor.getFirstName());
-            variables.put("monitor_lastName", monitor.getLastName());
-            variables.put("student_firstName", student.getFirstName());
-            variables.put("student_lastName", student.getLastName());
+            variables.put("internshipManager", internshipManager);
+            variables.put("monitor", monitor);
+            variables.put("student", student);
+            variables.put("contract", internshipContract);
+            variables.put("weeks", weeks);
+            variables.put("student_signature_name", getSignatureName(internshipContract.getStudentSignature(), student));
+            variables.put("monitor_signature_name", getSignatureName(internshipContract.getMonitorSignature(), monitor));
+            variables.put("internshipManager_signature_name", getSignatureName(
+                    internshipContract.getInternshipManagerSignature(),
+                    internshipManager)
+            );
             return new InternshipContractPdfTemplate(variables);
         });
     }
 
+    private String getSignatureName(Signature signature, User user) {
+        if (signature.getHasSigned()) {
+            return user.getFirstName() + " " + user.getLastName();
+        } else {
+            return "";
+        }
+    }
 
 }
