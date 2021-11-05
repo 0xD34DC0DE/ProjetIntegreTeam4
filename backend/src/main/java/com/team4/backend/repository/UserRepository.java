@@ -16,4 +16,6 @@ public interface UserRepository extends ReactiveMongoRepository<User, String> {
     public Flux<User> findAllByRoleEquals(String role);
 
     Mono<Long> deleteAllByRoleEquals(Role role);
+
+    Mono<User> findByEmail(String userEmail);
 }
