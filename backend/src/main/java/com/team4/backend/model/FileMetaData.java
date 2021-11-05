@@ -36,8 +36,10 @@ public class FileMetaData implements Serializable {
 
     private LocalDateTime seenDate;
 
+    private String rejectionExplanation;
+
     @Builder
-    public FileMetaData(String id, String assetId, String userEmail, String filename, String path, UploadType type, Boolean isValid, Boolean isSeen, LocalDateTime uploadDate, LocalDateTime seenDate) {
+    public FileMetaData(String id, String assetId, String userEmail, String filename, String path, UploadType type, Boolean isValid, Boolean isSeen, LocalDateTime uploadDate, LocalDateTime seenDate, String rejectionExplanation) {
         this.id = id;
         this.assetId = assetId;
         this.userEmail = userEmail;
@@ -48,6 +50,7 @@ public class FileMetaData implements Serializable {
         this.isSeen = isSeen;
         this.uploadDate = uploadDate;
         this.seenDate = seenDate;
+        this.rejectionExplanation = rejectionExplanation;
     }
 
 }

@@ -22,6 +22,8 @@ function App() {
     internshipOfferDialog: false,
     internshipOfferDialogValidation: false,
     emailSenderDialog: false,
+    internshipDetailsDialog: false,
+    reportDialog: false,
     signContractMonitorDialog: false,
   });
 

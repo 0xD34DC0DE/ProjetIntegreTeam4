@@ -58,7 +58,6 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
       container
       flexDirection="row"
       mt={2}
-      pb={3}
       gap="20px"
       justifyContent="center"
       alignItems="center"

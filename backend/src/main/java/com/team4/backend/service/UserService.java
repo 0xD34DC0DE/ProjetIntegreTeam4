@@ -60,5 +60,4 @@ public class UserService {
             -the backend will return true or false, if the verification code is still valid
             -depending on the answer the frontend will forward to the form or not
      */
-
 }

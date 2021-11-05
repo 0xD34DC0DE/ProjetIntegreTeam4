@@ -40,6 +40,9 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final FileMetaDataRepository fileMetaDataRepository;
 
+    private final InternshipRepository internshipRepository;
+    private final EvaluationRepository evaluationRepository;
+
     private final InternshipManagerRepository internshipManagerRepository;
 
     private final Lorem lorem;
@@ -48,15 +51,19 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private String internshipOfferId;
 
+    private final Set<LocalDate> evaluationsDates;
+
     public TestingInserterRunner(UserRepository userRepository,
                                  MonitorRepository monitorRepository,
                                  InternshipOfferRepository internshipOfferRepository,
                                  StudentRepository studentRepository,
                                  SupervisorRepository supervisorRepository,
+                                 EvaluationRepository evaluationRepository,
                                  InternshipContractRepository internshipContractRepository,
                                  PBKDF2Encoder pbkdf2Encoder,
                                  FileMetaDataRepository fileMetaDataRepository,
-                                 InternshipManagerRepository internshipManagerRepository) {
+                                 InternshipManagerRepository internshipManagerRepository,
+                                 InternshipRepository internshipRepository) {
         this.userRepository = userRepository;
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
@@ -65,7 +72,13 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.internshipContractRepository = internshipContractRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.fileMetaDataRepository = fileMetaDataRepository;
+        this.internshipRepository = internshipRepository;
+        this.evaluationRepository = evaluationRepository;
         this.internshipManagerRepository = internshipManagerRepository;
+        this.evaluationsDates = new TreeSet<>();
+        this.evaluationsDates.add(LocalDate.of(2019,4,4));
+        this.evaluationsDates.add(LocalDate.of(2020,9,4));
+        this.evaluationsDates.add(LocalDate.now());
         this.lorem = LoremIpsum.getInstance();
         this.studentSet = new HashSet<>();
         this.studentSet.add("123456789@gmail.com");
@@ -80,6 +93,8 @@ public class TestingInserterRunner implements ApplicationRunner {
         userRepository.deleteAllByRoleEquals(Role.SUPERVISOR).subscribe();
         fileMetaDataRepository.deleteAll().subscribe(System.err::println);
         internshipOfferRepository.deleteAll().subscribe();
+        internshipRepository.deleteAll().subscribe();
+        evaluationRepository.deleteAll().subscribe();
         internshipContractRepository.deleteAll().subscribe();
 
         insertInternshipOffersInternshipManagerView();
@@ -87,6 +102,21 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertMonitors();
         insertSupervisors();
         insertCvs();
+        insertInternship();
+    }
+
+    private void insertInternship() {
+        List<Internship> internships = Arrays.asList(
+                Internship.builder()
+                        .monitorEmail("9182738492@gmail.com")
+                        .internshipManagerEmail("manager1@gmail.com")
+                        .studentEmail("studentInternFound@gmail.com")
+                        .beginningDate(LocalDate.now().plusDays(15))
+                        .endingDate(LocalDate.now().plusMonths(4))
+                        .build()
+        );
+        internshipRepository.saveAll(internships)
+                .subscribe(internship -> log.info("Internship has been saved : {}", internship));
         insertInternshipContract();
     }
 
@@ -122,10 +152,12 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .phoneNumber("4387650987")
                         .password(pbkdf2Encoder.encode("travis123"))
                         .hasValidCv(true)
+                        .hasCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.WAITING_FOR_RESPONSE)
+                        .evaluationsDates(evaluationsDates)
                         .build(),
                 Student.studentBuilder()
                         .email("3643283423@gmail.com")
@@ -134,6 +166,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .phoneNumber("5143245678")
                         .password(pbkdf2Encoder.encode("jean123"))
                         .hasValidCv(false)
+                        .hasCv(true)
                         .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
@@ -145,6 +178,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .phoneNumber("4385738764")
                         .password(pbkdf2Encoder.encode("farid123"))
                         .hasValidCv(false)
+                        .hasCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
@@ -161,6 +195,19 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .interviewsDate(new TreeSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .hasValidCv(false)
+                        .hasCv(true)
+                        .build(),
+                Student.studentBuilder()
+                        .email("nocv@gmail.com")
+                        .firstName("no")
+                        .lastName("cv")
+                        .phoneNumber("4385738764")
+                        .password(pbkdf2Encoder.encode("student"))
+                        .appliedOffersId(new HashSet<>())
+                        .exclusiveOffersId(new HashSet<>())
+                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .hasValidCv(false)
+                        .hasCv(false)
                         .build(),
                 Student.studentBuilder()
                         .email("student@gmail.com")
@@ -168,6 +215,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .firstName("Shia")
                         .lastName("LaBeouf").registrationDate(LocalDate.now())
                         .studentState(StudentState.REGISTERED)
+                        .hasValidCv(false)
+                        .hasCv(false)
                         .phoneNumber("123-123-1234")
                         .appliedOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>())
@@ -175,7 +224,20 @@ public class TestingInserterRunner implements ApplicationRunner {
                             {
                                 add(insertInternshipOffersStudentView());
                             }
-                        }).build());
+                        }).build(),
+                Student.studentBuilder()
+                        .email("studentInternFound@gmail.com")
+                        .firstName("Maxime")
+                        .lastName("Dupuis")
+                        .phoneNumber("438-422-3344")
+                        .password(pbkdf2Encoder.encode("maxime123"))
+                        .hasValidCv(true)
+                        .interviewsDate(new TreeSet<>())
+                        .appliedOffersId(new HashSet<>())
+                        .exclusiveOffersId(new HashSet<>())
+                        .studentState(StudentState.INTERNSHIP_FOUND)
+                        .build());
+
 
         studentRepository.saveAll(students)
                 .subscribe(student -> log.info("Student has been saved : {}", student));
@@ -194,16 +256,16 @@ public class TestingInserterRunner implements ApplicationRunner {
     private void insertSupervisors() {
         List<Supervisor> supervisorList = Arrays.asList(
                 Supervisor.supervisorBuilder()
-                        .email("45673234@gmail.com").password(pbkdf2Encoder.encode("sasuke123"))
+                        .email("supervisor@gmail.com").password(pbkdf2Encoder.encode("supervisor"))
                         .firstName("Ginette")
                         .lastName("Renaud")
                         .studentEmails(new HashSet<>()).build(),
                 Supervisor.supervisorBuilder()
                         .email("supervisor1@gmail.com")
-                        .password(pbkdf2Encoder.encode("supervisor123"))
+                        .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Michel")
                         .lastName("Lamarck")
-                        .studentEmails(new HashSet<>()).build()
+                        .studentEmails(new HashSet<>(Arrays.asList("studentInternFound@gmail.com", "123456789@gmail.com"))).build()
         );
 
         supervisorRepository.saveAll(supervisorList).subscribe();
@@ -323,7 +385,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .listEmailInterestedStudents(new HashSet<>())
                         .emailOfApprovingInternshipManager("manager1@gmail.com")
                         .build(),
-                InternshipOffer.builder().limitDateToApply(LocalDate.now())
+                InternshipOffer.builder().limitDateToApply(LocalDate.of(2021,4,4))
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
                         .monitorEmail("monitor@gmail.com")

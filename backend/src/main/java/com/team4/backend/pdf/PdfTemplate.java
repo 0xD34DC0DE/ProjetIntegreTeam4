@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Abstract class to be extended with a concrete class to represent a custom pdf template
- * <p>
+ *
  * The constructor of the extending class should take Map&lt;String, Object> and call super by passing
  * the filename of the html template file (located in resources/pdf/) without the .html extension
  */
@@ -59,7 +59,7 @@ public abstract class PdfTemplate {
                 .replaceAll("è", "&egrave;")
                 .replaceAll("È", "&Egrave;")
                 .replaceAll("é", "&eacute;")
-                .replaceAll("É", "&Eacute")
+                .replaceAll("É", "&Eacute;")
                 .replaceAll("ê", "&Ecirc;")
                 .replaceAll("Ê", "&Ecirc;")
                 .replaceAll("ï", "&iuml;")

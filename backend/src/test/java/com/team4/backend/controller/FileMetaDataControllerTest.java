@@ -104,7 +104,7 @@ class FileMetaDataControllerTest {
         //ARRANGE
         FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
 
-        when(fileMetaDataService.validateCv(fileMetaData.getId(), true)).thenReturn(Mono.just(fileMetaData));
+        when(fileMetaDataService.validateCv(fileMetaData.getId(), true, null)).thenReturn(Mono.just(fileMetaData));
 
         //ACT
         webTestClient
@@ -126,7 +126,7 @@ class FileMetaDataControllerTest {
         //ARRANGE
         FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
 
-        when(fileMetaDataService.validateCv(fileMetaData.getId(), true)).thenReturn(Mono.error(FileNotFoundException::new));
+        when(fileMetaDataService.validateCv(fileMetaData.getId(), true, null)).thenReturn(Mono.error(FileNotFoundException::new));
 
         //ACT
         webTestClient
