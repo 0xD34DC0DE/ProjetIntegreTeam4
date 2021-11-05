@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Repository
 public interface InternshipOfferRepository extends ReactiveMongoRepository<InternshipOffer, String> {
@@ -20,4 +21,8 @@ public interface InternshipOfferRepository extends ReactiveMongoRepository<Inter
     Flux<InternshipOffer> findAllByValidationDateNullAndIsValidatedFalse();
 
     Flux<InternshipOffer> findAllByMonitorEmailAndIsValidatedTrue(String monitorEmail);
+
+    Flux<InternshipOffer> findAllByIsValidatedFalseAndLimitDateToApplyBetween(Date sessionStart, Date sessionEnd);
+
+    Flux<InternshipOffer> findAllByIsValidatedTrueAndLimitDateToApplyBetween(Date sessionStart, Date sessionEnd);
 }

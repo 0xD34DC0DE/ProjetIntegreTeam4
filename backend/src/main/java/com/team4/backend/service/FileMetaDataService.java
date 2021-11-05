@@ -48,7 +48,6 @@ public class    FileMetaDataService {
 
 
     public Mono<FileMetaData> uploadFile(String filename, String type, String mimeType, Mono<FilePart> filePartMono, String userEmail) {
-        System.out.println("dans service");
         return Mono.fromCallable(this::getTempFile)
                 .publishOn(Schedulers.boundedElastic())
                 .flatMap(tempFile -> filePartMono
@@ -61,19 +60,21 @@ public class    FileMetaDataService {
                                 // the file inside
                                 .switchIfEmpty(Mono.just(tempFile)))
                 )
-                .flatMap(tempFile ->
-                        fileAssetService.create(tempFile.getPath(), userEmail, mimeType, getUuid())
-                                .flatMap(assetId -> Mono.just(FileMetaData.builder()
-                                        .id(getUuid())
-                                        .userEmail(userEmail)
-                                        .isValid(false)
-                                        .isSeen(false)
-                                        .assetId(assetId)
-                                        .type(UploadType.valueOf(type))
-                                        .uploadDate(LocalDateTime.now())
-                                        .filename(filename)
-                                        .build()))
-                                .flatMap(this::create));
+                .flatMap(tempFile -> {
+                        studentService.setHasCvStatusTrue(userEmail);
+                        return fileAssetService.create(tempFile.getPath(), userEmail, mimeType, getUuid())
+                                    .flatMap(assetId -> Mono.just(FileMetaData.builder()
+                                            .id(getUuid())
+                                            .userEmail(userEmail)
+                                            .isValid(false)
+                                            .isSeen(false)
+                                            .assetId(assetId)
+                                            .type(UploadType.valueOf(type))
+                                            .uploadDate(LocalDateTime.now())
+                                            .filename(filename)
+                                            .build()))
+                                    .flatMap(this::create);
+                });
     }
 
     public Mono<Long> countAllInvalidCvNotSeen() {

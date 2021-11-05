@@ -23,6 +23,7 @@ function App() {
     internshipOfferDialogValidation: false,
     emailSenderDialog: false,
     internshipDetailsDialog: false,
+    reportDialog: false,
     signContractMonitorDialog: false,
   });
 

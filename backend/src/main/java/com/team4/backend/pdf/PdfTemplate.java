@@ -55,19 +55,19 @@ public abstract class PdfTemplate {
 
     private String replaceAccentLettersWithSpecialEntityCode(String html) {
         // Can't be bothered to make efficient code
-        return html.replaceAll("à", "&agrave")
-                .replaceAll("À", "&Agrave")
-                .replaceAll("è", "&egrave")
-                .replaceAll("È", "&Egrave")
-                .replaceAll("é", "&eacute")
-                .replaceAll("É", "&Eacute")
-                .replaceAll("ê", "&Ecirc")
-                .replaceAll("Ê", "&Ecirc")
-                .replaceAll("ï", "&iuml")
-                .replaceAll("Ï", "&Iuml")
-                .replaceAll("Û", "&Ucirc")
-                .replaceAll("û", "&ucirc")
-                .replaceAll("Ù", "&Ugrave")
-                .replaceAll("ù", "&ugrave");
+        return html.replaceAll("à", "&agrave;")
+                .replaceAll("À", "&Agrave;")
+                .replaceAll("è", "&egrave;")
+                .replaceAll("È", "&Egrave;")
+                .replaceAll("é", "&eacute;")
+                .replaceAll("É", "&Eacute;")
+                .replaceAll("ê", "&Ecirc;")
+                .replaceAll("Ê", "&Ecirc;")
+                .replaceAll("ï", "&iuml;")
+                .replaceAll("Ï", "&Iuml;")
+                .replaceAll("Û", "&Ucirc;")
+                .replaceAll("û", "&ucirc;")
+                .replaceAll("Ù", "&Ugrave;")
+                .replaceAll("ù", "&ugrave;");
     }
 }

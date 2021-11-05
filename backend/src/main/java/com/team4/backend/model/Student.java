@@ -16,13 +16,19 @@ import java.util.Set;
 @Document(collection = "users")
 public class Student extends User {
 
+    private Boolean hasCv;
+
     private StudentState studentState;
+
+    private Set<LocalDate> interviewsDate;
 
     private Boolean hasValidCv;
 
     private Set<String> appliedOffersId;
 
     private Set<String> exclusiveOffersId;
+
+    private Set<LocalDate> evaluationsDates;
 
     @Builder(builderMethodName = "studentBuilder")
     public Student(String id,
@@ -35,7 +41,9 @@ public class Student extends User {
                    LocalDate registrationDate,
                    Set<String> appliedOffersId,
                    Set<String> exclusiveOffersId,
-                   Boolean hasValidCv) {
+                   Boolean hasValidCv,
+                   Set<LocalDate> evaluationsDates,
+                   Set<LocalDate> interviewsDate) {
         super(id,
                 email,
                 firstName,
@@ -50,6 +58,9 @@ public class Student extends User {
         this.appliedOffersId = appliedOffersId;
         this.exclusiveOffersId = exclusiveOffersId;
         this.hasValidCv = hasValidCv;
+        this.hasCv = false;
+        this.evaluationsDates = evaluationsDates;
+        this.interviewsDate = interviewsDate;
     }
 
 }
