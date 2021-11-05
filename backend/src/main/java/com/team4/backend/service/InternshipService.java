@@ -58,4 +58,5 @@ public class InternshipService {
     public Mono<Boolean> existsByStudentEmail(String studentEmail) {
         return internshipRepository.existsByStudentEmail(studentEmail);
     }
+
 }

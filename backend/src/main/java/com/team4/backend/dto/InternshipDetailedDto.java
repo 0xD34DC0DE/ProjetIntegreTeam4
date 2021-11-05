@@ -18,4 +18,5 @@ public class InternshipDetailedDto extends InternshipDto implements Serializable
                                  LocalDate endDate) {
         super(monitorEmail, studentEmail, internshipManagerEmail, startDate, endDate);
     }
+
 }

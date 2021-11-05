@@ -20,7 +20,7 @@ import java.util.UUID;
 
 @Log
 @Service
-public class    FileMetaDataService {
+public class FileMetaDataService {
 
     private final FileMetaDataRepository fileMetaDataRepository;
 
@@ -94,13 +94,13 @@ public class    FileMetaDataService {
                 .switchIfEmpty(Mono.error(new FileNotFoundException("This file do Not Exist")))
                 .map(file -> {
                     file.setIsValid(isValid);
-                    file.setRejectionExplanation(rejectionExplanation);
                     file.setIsSeen(true);
                     file.setSeenDate(LocalDateTime.now());
 
                     if (isValid)
                         studentService.updateCvValidity(file.getUserEmail(), true).subscribe();
-
+                    else
+                        file.setRejectionExplanation(rejectionExplanation);
                     return file;
                 }).flatMap(fileMetaDataRepository::save);
     }

@@ -31,8 +31,7 @@ public class InternshipController {
     @PreAuthorize("hasAnyAuthority('SUPERVISOR')")
     public Mono<InternshipDetailedDto> getInternshipByStudentEmail(@PathVariable("studentEmail") String studentEmail) {
         return internshipService.getInternshipByEmail(studentEmail)
-                .map(InternshipMapper::toDetailedDto)
-                .onErrorMap(error -> new ResponseStatusException(HttpStatus.NOT_FOUND, error.getMessage()));
+                .map(InternshipMapper::toDetailedDto);
     }
 
     @GetMapping("/exists/{studentEmail}")

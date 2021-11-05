@@ -8,13 +8,13 @@ import com.team4.backend.model.InternshipContract;
 
 public abstract class InternshipMapper {
 
-    public static Internship toEntity(InternshipCreationDto internshipCreationDto) {
+    public static Internship toEntity(InternshipDto internshipDto) {
         return Internship.builder()
-                .monitorEmail(internshipCreationDto.getMonitorEmail())
-                .studentEmail(internshipCreationDto.getStudentEmail())
-                .internshipManagerEmail(internshipCreationDto.getInternshipManagerEmail())
-                .beginningDate(internshipCreationDto.getStartDate())
-                .beginningDate(internshipCreationDto.getEndDate())
+                .monitorEmail(internshipDto.getMonitorEmail())
+                .studentEmail(internshipDto.getStudentEmail())
+                .internshipManagerEmail(internshipDto.getInternshipManagerEmail())
+                .beginningDate(internshipDto.getStartDate())
+                .endingDate(internshipDto.getEndDate())
                 .internshipContract(new InternshipContract())
                 .build();
     }
