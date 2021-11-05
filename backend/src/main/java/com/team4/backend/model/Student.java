@@ -42,6 +42,7 @@ public class Student extends User {
                    Set<String> appliedOffersId,
                    Set<String> exclusiveOffersId,
                    Boolean hasValidCv,
+                   Boolean hasCv,
                    Set<LocalDate> evaluationsDates,
                    Set<LocalDate> interviewsDate) {
         super(id,

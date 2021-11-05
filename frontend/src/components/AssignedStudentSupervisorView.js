@@ -118,4 +118,4 @@ const AsssignedStudentSupervisorView = ({
   );
 };
 
-export default AsssignedStudentSupervisorView;
+export default AssignedStudentSupervisorView;

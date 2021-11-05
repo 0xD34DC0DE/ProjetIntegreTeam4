@@ -14,7 +14,9 @@ import StudentDashBoard from "./StudentDashboard";
 import InternshipOfferValidation from "./InternshipOfferValidation";
 import ListUserDroppable from "./ListUserDroppable";
 import ListUserDraggable from "./ListUserDraggable";
-import AsssignedStudentSupervisorView from "./AsssignedStudentSupervisorView";
+import AssignedStudentSupervisorView from "./AssignedStudentSupervisorView";
+import StudentEvaluationForm from "./Evaluation/End/StudentEvaluationForm";
+import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMidForm";
 import ListReport from "./ListReport";
 
 const Content = ({
@@ -39,7 +41,6 @@ const Content = ({
         width: "100%",
       }}
     >
-      {userInfo.role === "STUDENT" && <StudentDashBoard />}
       {!userInfo.loggedIn && (
         <Typography variant="h3" color="white" sx={{ pl: 2, pt: 2 }}>
           Bonjour visiteur.
@@ -97,6 +98,12 @@ const Content = ({
           )}
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListUserDraggable role="STUDENT" visible={selection.id === 11} />
+          )}
+          {userInfo.role === "MONITOR" && (
+            <StudentEvaluationForm visible={selection.id === 12} />
+          )}
+          {userInfo.role === "SUPERVISOR" && (
+            <StudentEvaluationMidForm visible={selection.id === 13} />
           )}
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListReport

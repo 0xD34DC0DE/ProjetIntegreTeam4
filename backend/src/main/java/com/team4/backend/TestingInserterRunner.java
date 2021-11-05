@@ -41,6 +41,8 @@ public class TestingInserterRunner implements ApplicationRunner {
     private final FileMetaDataRepository fileMetaDataRepository;
 
     private final InternshipRepository internshipRepository;
+    private final EvaluationRepository evaluationRepository;
+
     private final InternshipManagerRepository internshipManagerRepository;
 
     private final Lorem lorem;
@@ -54,6 +56,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                                  InternshipOfferRepository internshipOfferRepository,
                                  StudentRepository studentRepository,
                                  SupervisorRepository supervisorRepository,
+                                 EvaluationRepository evaluationRepository,
                                  InternshipContractRepository internshipContractRepository,
                                  PBKDF2Encoder pbkdf2Encoder,
                                  FileMetaDataRepository fileMetaDataRepository,
@@ -68,6 +71,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.fileMetaDataRepository = fileMetaDataRepository;
         this.internshipRepository = internshipRepository;
+        this.evaluationRepository = evaluationRepository;
         this.internshipManagerRepository = internshipManagerRepository;
         this.evaluationsDates = new TreeSet<>();
         this.evaluationsDates.add(LocalDate.of(2019,4,4));
@@ -88,6 +92,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         fileMetaDataRepository.deleteAll().subscribe(System.err::println);
         internshipOfferRepository.deleteAll().subscribe();
         internshipRepository.deleteAll().subscribe();
+        evaluationRepository.deleteAll().subscribe();
         internshipContractRepository.deleteAll().subscribe();
 
         insertInternshipOffersInternshipManagerView();
@@ -147,7 +152,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
-                        .interviewsDate(new TreeSet<>( Arrays.asList(LocalDate.now().plusWeeks(2))))
+                        .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.WAITING_FOR_RESPONSE)
                         .evaluationsDates(evaluationsDates)
                         .build(),
@@ -160,7 +165,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasValidCv(false)
                         .hasCv(true)
                         .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
-                        .interviewsDate(new TreeSet<>( Arrays.asList(LocalDate.now().plusWeeks(2))))
+                        .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
                 Student.studentBuilder()
@@ -247,13 +252,13 @@ public class TestingInserterRunner implements ApplicationRunner {
     private void insertSupervisors() {
         List<Supervisor> supervisorList = Arrays.asList(
                 Supervisor.supervisorBuilder()
-                        .email("45673234@gmail.com").password(pbkdf2Encoder.encode("sasuke123"))
+                        .email("supervisor@gmail.com").password(pbkdf2Encoder.encode("supervisor"))
                         .firstName("Ginette")
                         .lastName("Renaud")
                         .studentEmails(new HashSet<>()).build(),
                 Supervisor.supervisorBuilder()
                         .email("supervisor1@gmail.com")
-                        .password(pbkdf2Encoder.encode("supervisor123"))
+                        .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Michel")
                         .lastName("Lamarck")
                         .studentEmails(new HashSet<>(Arrays.asList("studentInternFound@gmail.com", "123456789@gmail.com"))).build()

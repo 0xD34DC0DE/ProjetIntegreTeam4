@@ -89,6 +89,24 @@ const theme = createTheme({
         },
       },
     },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          color: "white",
+          backgroundColor: "rgba(55, 55, 55, 1)",
+        },
+      },
+    },
+    MuiRadio: {
+      styleOverrides: {
+        colorPrimary: {
+          color: "gray",
+          "&.Mui-checked": {
+            color: "white",
+          },
+        },
+      },
+    },
     MuiDialog: {
       styleOverrides: {
         paper: {
