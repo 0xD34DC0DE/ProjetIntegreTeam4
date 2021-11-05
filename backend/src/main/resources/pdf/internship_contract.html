@@ -15,25 +15,19 @@
     Dans le cadre de la formule ATE, les parties cites ci-dessous :
 </h2>
 <h2 style="text-align: center; font-weight: normal;">Le gestionnaire de stage,
-    <span th:text="${internshipManager_firstName + ' ' + internshipManager_lastName}">
-        Lorem Ipsum
-    </span>
+    <span th:text="${internshipManager.firstName + ' ' + internshipManager.lastName}"></span>
 </h2>
 <br/>
 <h2 style="text-align: center; font-weight: bold;">et</h2>
 <br/>
 <h2 style="text-align: center; font-weight: normal;">L'employeur,
-    <span th:text="${monitor_firstName + ' ' + monitor_lastName}">
-        Lorem Ipsum
-    </span>
+    <span th:text="${monitor.firstName + ' ' + monitor.lastName}"></span>
 </h2>
 <br/>
 <h2 style="text-align: center; font-weight: bold;">et</h2>
 <br/>
 <h2 style="text-align: center; font-weight: normal;">L'&eacute;tudiant(e),
-    <span th:text="${student_firstName + ' ' + student_lastName}">
-         Lorem Ipsum
-    </span>
+    <span th:text="${student.firstName + ' ' + student.lastName}"></span>
 </h2>
 <br/>
 <h2 style="text-align: center; font-weight: normal; ">Conviennent des conditions de stage suivantes :</h2>
@@ -49,7 +43,9 @@
                 <tr>
                     <td>
                         <p style="font-size: larger; margin-left: 10px; margin-top: 8px; margin-bottom: 8px; line-height: 0.8">
-                            Adresse: 124 fake avenue, Montreal</p>
+                            <span th:if="${contract.address != null}" th:text="${'Adresse: ' + contract.address}"></span>
+                            <span th:unless="${contract.address != null}">Adresse:  </span>
+                        </p>
                     </td>
                 </tr>
             </table>
@@ -65,19 +61,19 @@
                 <tr>
                     <td>
                         <p style="font-size: larger; margin-left: 10px; margin-top: 8px; margin-bottom: 8px; line-height: 0.8">
-                            Date de d&eacute;but du stage: 2022-01-22</p>
+                            <span th:text="${'Date de debut du stage: ' + contract.beginningDate}"></span></p>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <p style="font-size: larger; margin-left: 10px; margin-top: 8px; margin-bottom: 8px; line-height: 0.8">
-                            Date de fin du stage: 2022-04-27</p>
+                            <span th:text="${'Date de fin du stage: ' + contract.endingDate}"></span></p>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <p style="font-size: larger; margin-left: 10px; margin-top: 8px; margin-bottom: 8px; line-height: 0.8">
-                            Nombre total de semaines: 17</p>
+                            <span th:text="${'Nombre total de semaines: ' + weeks}"></span></p>
                     </td>
                 </tr>
             </table>
@@ -93,13 +89,19 @@
                 <tr>
                     <td>
                         <p style="font-size: larger; margin-left: 10px; margin-top: 8px; margin-bottom: 8px; line-height: 0.8">
-                            Horaire de travail: 8:00 &agrave; 16:00</p>
+                            <span th:if="${contract.dailySchedule != null}"
+                                  th:text="${'Horaire de travail: ' + contract.dailySchedule}"></span>
+                            <span th:unless="${contract.dailySchedule != null}">Horaire de travail: </span>
+                        </p>
                     </td>
                 </tr>
                 <tr>
                     <td>
                         <p style="font-size: larger; margin-left: 10px; margin-top: 8px; margin-bottom: 8px; line-height: 0.8">
-                            Nombre total d'heures par semaine: 40h</p>
+                            <span th:if="${contract.hoursPerWeek != null}"
+                                  th:text="${'Nombre total d''heures par semaine: ' + contract.hoursPerWeek + 'h'}"></span>
+                            <span th:unless="${contract.hoursPerWeek != null}">Nombre total d'heures par semaine: </span>
+                        </p>
                     </td>
                 </tr>
             </table>
@@ -114,7 +116,10 @@
                 <tr>
                     <td>
                         <p style="font-size: larger; margin-left: 10px; margin-top: 8px; margin-bottom: 8px; line-height: 0.8">
-                            Salaire horaire: 21.00$/h</p>
+                            <span th:if="${contract.hourlyRate != null}"
+                                  th:text="${'Salaire horaire: ' + contract.hourlyRate + '$'}"></span>
+                            <span th:unless="${contract.hourlyRate != null}">Salaire horaire: </span>
+                        </p>
                     </td>
                 </tr>
             </table>
@@ -125,7 +130,9 @@
 <br/>
 <h2 style="text-align: center; font-weight: bold;">T&Acirc;CHES ET RESPONSABILIT&Eacute;S DU STAGIAIRE:</h2>
 <p style="margin-left: auto; margin-right: auto; padding: 8px; text-align: left; border: 1px solid black; width:80%; word-wrap: break-word">
-    LOREM LOREM LOREM LOREM LOREM LOREM LOREM LOREM LOREM LOREM
+    Lorem ipsum dolor sit amet, consectetur
+    adipiscing elit. Nunc a erat sed metus sagittis congue ut vel purus. Morbi sollicitudin vulputate sem et
+    consequat. Aliquam vitae lectus in erat bibendum accumsan. Vestibulum ante ipsum primis in faucibus orci luctus
 </p>
 <br/>
 <h2 style="text-align: center; font-weight: bold;">RESPONSABILIT&Eacute;S</h2>
@@ -165,11 +172,25 @@
 
     <table style="width: 100%; border-collapse: collapse;">
         <tr style="border-bottom: 1px solid black">
-            <td><p style="font-size: x-large; margin-bottom: 0">Signature: Lore ipsum</p></td>
-            <td><p style="font-size: x-large; margin-bottom: 0">Date: 2021-02-1</p></td>
+            <td>
+                <p style="font-size: x-large; margin-bottom: 0">
+                    <span th:text="${'Signature: ' + student_signature_name}"></span>
+                </p>
+            </td>
+            <td>
+                <p style="font-size: x-large; margin-bottom: 0">
+                    <span th:if="${contract.studentSignature.hasSigned}"
+                          th:text="${'Date: ' + contract.studentSignature.signDate}"></span>
+                    <span th:unless="${contract.studentSignature.hasSigned}" th:text="${'Date:'}"></span>
+                </p>
+            </td>
         </tr>
         <tr>
-            <td><p style="font-size: x-large; margin-top: 4px">Nom: Lore ipsum</p></td>
+            <td>
+                <p style="font-size: x-large; margin-top: 4px">Nom:
+                    <span th:text="${student.firstName + ' ' + student.lastName}"></span>
+                </p>
+            </td>
             <td></td>
         </tr>
     </table>
@@ -178,11 +199,25 @@
 
     <table style="width: 100%; border-collapse: collapse;">
         <tr style="border-bottom: 1px solid black">
-            <td><p style="font-size: x-large; margin-bottom: 0">Signature: Lore ipsum</p></td>
-            <td><p style="font-size: x-large; margin-bottom: 0">Date: 2021-02-1</p></td>
+            <td>
+                <p style="font-size: x-large; margin-bottom: 0">
+                    <span th:text="${'Signature: ' + monitor_signature_name}"></span>
+                </p>
+            </td>
+            <td>
+                <p style="font-size: x-large; margin-bottom: 0">
+                    <span th:if="${contract.monitorSignature.hasSigned}"
+                          th:text="${'Date: ' + contract.monitorSignature.signDate}"></span>
+                    <span th:unless="${contract.monitorSignature.hasSigned}" th:text="${'Date:'}"></span>
+                </p>
+            </td>
         </tr>
         <tr>
-            <td><p style="font-size: x-large; margin-top: 4px">Nom: Lore ipsum</p></td>
+            <td>
+                <p style="font-size: x-large; margin-top: 4px">Nom:
+                    <span th:text="${monitor.firstName + ' ' + monitor.lastName}"></span>
+                </p>
+            </td>
             <td></td>
         </tr>
     </table>
@@ -191,17 +226,29 @@
 
     <table style="width: 100%; border-collapse: collapse;">
         <tr style="border-bottom: 1px solid black">
-            <td><p style="font-size: x-large; margin-bottom: 0">Signature: Lore ipsum</p></td>
-            <td><p style="font-size: x-large; margin-bottom: 0">Date: 2021-02-1</p></td>
+            <td>
+                <p style="font-size: x-large; margin-bottom: 0">
+                    <span th:text="${'Signature: ' + internshipManager_signature_name}"></span>
+                </p>
+            </td>
+            <td>
+                <p style="font-size: x-large; margin-bottom: 0">
+                    <span th:if="${contract.internshipManagerSignature.hasSigned}"
+                          th:text="${'Date: ' + contract.internshipManagerSignature.signDate}"></span>
+                    <span th:unless="${contract.internshipManagerSignature.hasSigned}" th:text="${'Date:'}"></span>
+                </p>
+            </td>
         </tr>
         <tr>
-            <td><p style="font-size: x-large; margin-top: 4px">Nom: Lore ipsum</p></td>
+            <td>
+                <p style="font-size: x-large; margin-top: 4px">Nom:
+                    <span th:text="${internshipManager.firstName + ' ' + internshipManager.lastName}"></span>
+                </p>
+            </td>
             <td></td>
         </tr>
     </table>
 
 </div>
-
-
 </body>
 </html>
