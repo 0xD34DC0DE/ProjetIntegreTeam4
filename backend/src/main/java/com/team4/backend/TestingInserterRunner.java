@@ -46,6 +46,8 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final Set<String> studentSet;
 
+    private String internshipOfferId;
+
     public TestingInserterRunner(UserRepository userRepository,
                                  MonitorRepository monitorRepository,
                                  InternshipOfferRepository internshipOfferRepository,
@@ -95,10 +97,11 @@ public class TestingInserterRunner implements ApplicationRunner {
                 .block().getId();
 
         InternshipContract internshipContract = InternshipContract.builder()
-                .address("address")
-                .beginningDate(LocalDate.now().plusMonths(1))
-                .endingDate(LocalDate.now().plusMonths(2))
-                .dailySchedule("8:00 to 16:00")
+                .internshipOfferId(internshipOfferId)
+                .address("123, Somewhere St., Montreal, Quebec")
+                .beginningDate(LocalDate.now().plusWeeks(1))
+                .endingDate(LocalDate.now().plusWeeks(5))
+                .dailySchedule("8:00 à 16:00")
                 .hourlyRate(21.50f)
                 .hoursPerWeek(40.0f)
                 .internTasks("Tasks")
@@ -121,7 +124,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasValidCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
-                        .interviewsDate(new TreeSet<>( Arrays.asList(LocalDate.now().plusWeeks(2))))
+                        .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.WAITING_FOR_RESPONSE)
                         .build(),
                 Student.studentBuilder()
@@ -132,7 +135,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("jean123"))
                         .hasValidCv(false)
                         .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
-                        .interviewsDate(new TreeSet<>( Arrays.asList(LocalDate.now().plusWeeks(2))))
+                        .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
                 Student.studentBuilder()
@@ -248,22 +251,23 @@ public class TestingInserterRunner implements ApplicationRunner {
         Set<String> offer1InterestedStudent = new HashSet<>();
         offer1InterestedStudent.add("student@gmail.com");
 
+        InternshipOffer firstInternshipOffer = InternshipOffer.builder()
+                .limitDateToApply(LocalDate.now())
+                .beginningDate(LocalDate.now().plusWeeks(1))
+                .endingDate(LocalDate.now().plusWeeks(4))
+                .monitorEmail("monitor@gmail.com")
+                .title("Développeur Senior Cobol")
+                .companyName("Google")
+                .description(lorem.getParagraphs(2, 5))
+                .minSalary(19.0f)
+                .maxSalary(22.0f)
+                .isValidated(true)
+                .isExclusive(false)
+                .listEmailInterestedStudents(offer1InterestedStudent)
+                .emailOfApprovingInternshipManager("manager1@gmail.com")
+                .build();
+
         List<InternshipOffer> internshipOffers = Arrays.asList(
-                InternshipOffer.builder()
-                        .limitDateToApply(LocalDate.now())
-                        .beginningDate(LocalDate.now().plusDays(30))
-                        .endingDate(LocalDate.now().plusMonths(3))
-                        .monitorEmail("monitor@gmail.com")
-                        .title("Développeur Senior Cobol")
-                        .companyName("Google")
-                        .description(lorem.getParagraphs(2, 5))
-                        .minSalary(19.0f)
-                        .maxSalary(22.0f)
-                        .isValidated(true)
-                        .isExclusive(false)
-                        .listEmailInterestedStudents(offer1InterestedStudent)
-                        .emailOfApprovingInternshipManager("manager1@gmail.com")
-                        .build(),
                 InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
@@ -349,6 +353,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .listEmailInterestedStudents(new HashSet<>())
                         .build());
 
+        internshipOfferRepository.save(firstInternshipOffer)
+                .subscribe(internshipOffer -> internshipOfferId = internshipOffer.getId());
         internshipOfferRepository.saveAll(internshipOffers).subscribe();
     }
 
