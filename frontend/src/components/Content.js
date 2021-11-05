@@ -17,7 +17,6 @@ import ListUserDraggable from "./ListUserDraggable";
 import AssignedStudentSupervisorView from "./AssignedStudentSupervisorView";
 import StudentEvaluationForm from "./Evaluation/End/StudentEvaluationForm";
 import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMidForm";
-import AsssignedStudentSupervisorView from "./AsssignedStudentSupervisorView";
 import ListReport from "./ListReport";
 
 const Content = ({
