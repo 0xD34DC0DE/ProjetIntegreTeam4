@@ -10,7 +10,7 @@ import java.util.Map;
 
 /**
  * Abstract class to be extended with a concrete class to represent a custom pdf template
- *
+ * <p>
  * The constructor of the extending class should take Map&lt;String, Object> and call super by passing
  * the filename of the html template file (located in resources/pdf/) without the .html extension
  */
@@ -21,10 +21,9 @@ public abstract class PdfTemplate {
     private final Map<String, Object> variables;
 
     /**
-     *
      * @param template_filename filename of the template html file (located in resources/pdf/) without
      *                          the .html extension
-     * @param variables Map of the objects used in the html template and their variable names.
+     * @param variables         Map of the objects used in the html template and their variable names.
      */
     protected PdfTemplate(String template_filename, Map<String, Object> variables) {
         this.template_filename = template_filename;
@@ -47,7 +46,7 @@ public abstract class PdfTemplate {
         Context context = new Context();
         context.setVariables(variables);
         return context;
-    };
+    }
 
     private String loadAndFillTemplate(SpringTemplateEngine templateEngine, Context context) {
         return replaceAccentLettersWithSpecialEntityCode(templateEngine.process(template_filename, context));
@@ -55,19 +54,19 @@ public abstract class PdfTemplate {
 
     private String replaceAccentLettersWithSpecialEntityCode(String html) {
         // Can't be bothered to make efficient code
-        return html.replaceAll("à", "&agrave")
-                .replaceAll("À", "&Agrave")
-                .replaceAll("è", "&egrave")
-                .replaceAll("È", "&Egrave")
-                .replaceAll("é", "&eacute")
+        return html.replaceAll("à", "&agrave;")
+                .replaceAll("À", "&Agrave;")
+                .replaceAll("è", "&egrave;")
+                .replaceAll("È", "&Egrave;")
+                .replaceAll("é", "&eacute;")
                 .replaceAll("É", "&Eacute")
-                .replaceAll("ê", "&Ecirc")
-                .replaceAll("Ê", "&Ecirc")
-                .replaceAll("ï", "&iuml")
-                .replaceAll("Ï", "&Iuml")
-                .replaceAll("Û", "&Ucirc")
-                .replaceAll("û", "&ucirc")
-                .replaceAll("Ù", "&Ugrave")
-                .replaceAll("ù", "&ugrave");
+                .replaceAll("ê", "&Ecirc;")
+                .replaceAll("Ê", "&Ecirc;")
+                .replaceAll("ï", "&iuml;")
+                .replaceAll("Ï", "&Iuml;")
+                .replaceAll("Û", "&Ucirc;")
+                .replaceAll("û", "&ucirc;")
+                .replaceAll("Ù", "&Ugrave;")
+                .replaceAll("ù", "&ugrave;");
     }
 }
