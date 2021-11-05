@@ -40,6 +40,7 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final FileMetaDataRepository fileMetaDataRepository;
 
+    private final InternshipRepository internshipRepository;
     private final EvaluationRepository evaluationRepository;
 
     private final InternshipManagerRepository internshipManagerRepository;
@@ -59,7 +60,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                                  InternshipContractRepository internshipContractRepository,
                                  PBKDF2Encoder pbkdf2Encoder,
                                  FileMetaDataRepository fileMetaDataRepository,
-                                 InternshipManagerRepository internshipManagerRepository) {
+                                 InternshipManagerRepository internshipManagerRepository,
+                                 InternshipRepository internshipRepository) {
         this.userRepository = userRepository;
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
@@ -68,6 +70,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.internshipContractRepository = internshipContractRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.fileMetaDataRepository = fileMetaDataRepository;
+        this.internshipRepository = internshipRepository;
         this.evaluationRepository = evaluationRepository;
         this.internshipManagerRepository = internshipManagerRepository;
         this.evaluationsDates = new TreeSet<>();
@@ -88,6 +91,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         userRepository.deleteAllByRoleEquals(Role.SUPERVISOR).subscribe();
         fileMetaDataRepository.deleteAll().subscribe(System.err::println);
         internshipOfferRepository.deleteAll().subscribe();
+        internshipRepository.deleteAll().subscribe();
         evaluationRepository.deleteAll().subscribe();
         internshipContractRepository.deleteAll().subscribe();
 
@@ -96,6 +100,21 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertMonitors();
         insertSupervisors();
         insertCvs();
+        insertInternship();
+    }
+
+    private void insertInternship() {
+        List<Internship> internships = Arrays.asList(
+                Internship.builder()
+                        .monitorEmail("9182738492@gmail.com")
+                        .internshipManagerEmail("manager1@gmail.com")
+                        .studentEmail("studentInternFound@gmail.com")
+                        .beginningDate(LocalDate.now().plusDays(15))
+                        .endingDate(LocalDate.now().plusMonths(4))
+                        .build()
+        );
+        internshipRepository.saveAll(internships)
+                .subscribe(internship -> log.info("Internship has been saved : {}", internship));
         insertInternshipContract();
     }
 
@@ -202,7 +221,19 @@ public class TestingInserterRunner implements ApplicationRunner {
                             {
                                 add(insertInternshipOffersStudentView());
                             }
-                        }).build());
+                        }).build(),
+                Student.studentBuilder()
+                        .email("studentInternFound@gmail.com")
+                        .firstName("Maxime")
+                        .lastName("Dupuis")
+                        .phoneNumber("438-422-3344")
+                        .password(pbkdf2Encoder.encode("maxime123"))
+                        .hasValidCv(true)
+                        .interviewsDate(new TreeSet<>())
+                        .appliedOffersId(new HashSet<>())
+                        .exclusiveOffersId(new HashSet<>())
+                        .studentState(StudentState.INTERNSHIP_FOUND)
+                        .build());
 
 
         studentRepository.saveAll(students)
@@ -231,7 +262,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Michel")
                         .lastName("Lamarck")
-                        .studentEmails(new HashSet<>()).build()
+                        .studentEmails(new HashSet<>(Arrays.asList("studentInternFound@gmail.com", "123456789@gmail.com"))).build()
         );
 
         supervisorRepository.saveAll(supervisorList).subscribe();

@@ -47,8 +47,9 @@ public class FileMetaDataController {
     @PatchMapping("/validateCv")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Mono<ResponseEntity<String>> validateCv(@RequestParam("id") String id,
-                                                   @RequestParam("isValid") Boolean isValid) {
-        return fileMetaDataService.validateCv(id, isValid)
+                                                   @RequestParam("isValid") Boolean isValid,
+                                                   @RequestBody(required = false) String rejectionExplanation) {
+        return fileMetaDataService.validateCv(id, isValid, rejectionExplanation)
                 .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 

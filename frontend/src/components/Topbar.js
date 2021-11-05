@@ -8,6 +8,7 @@ import {
   MenuItem,
   Typography,
   Divider,
+  Box,
   Grid,
   IconButton,
 } from "@mui/material";
@@ -40,7 +41,7 @@ const Topbar = ({
   };
 
   return (
-    <>
+    <Box>
       <AppBar sx={{ position: "fixed" }}>
         <Toolbar>
           <IconButton
@@ -206,7 +207,7 @@ const Topbar = ({
         </Toolbar>
       </AppBar>
       <Toolbar />
-    </>
+    </Box>
   );
 };
 
