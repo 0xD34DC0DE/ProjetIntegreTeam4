@@ -17,7 +17,7 @@ const fadeIn = {
   },
 };
 
-const AsssignedStudentSupervisorView = ({
+const AssignedStudentSupervisorView = ({
   visible,
   toggleDialog,
   dialogVisibility,
