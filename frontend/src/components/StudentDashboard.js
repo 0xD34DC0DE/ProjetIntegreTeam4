@@ -101,6 +101,7 @@ const StudentDashBoard = ({ visible }) => {
 
         setTimeout(() => {
           setIsStatusUpdated(false);
+          setIsDateValid(true);
         }, 3000);
       })
       .catch((error) => {

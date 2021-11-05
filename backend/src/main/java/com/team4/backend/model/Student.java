@@ -61,6 +61,8 @@ public class Student extends User {
         this.hasValidCv = hasValidCv;
         if (hasCv == null) {
             this.hasCv = false;
+        } else {
+            this.hasCv = hasCv;
         }
         this.evaluationsDates = evaluationsDates;
         this.interviewsDate = interviewsDate;
