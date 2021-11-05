@@ -37,6 +37,7 @@ public abstract class EvaluationMockData {
     public static HashMap<String, String> getText() {
         HashMap<String, String> text = new HashMap<>();
         text.put("field10", "value");
+        text.put("studentFullName", "John Doe");
         return text;
     }
 
