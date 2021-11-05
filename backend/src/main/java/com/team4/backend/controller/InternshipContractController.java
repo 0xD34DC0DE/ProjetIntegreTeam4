@@ -1,7 +1,6 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipContractCreationDto;
-import com.team4.backend.dto.InternshipContractDto;
 import com.team4.backend.service.InternshipContractService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -33,6 +32,13 @@ public class InternshipContractController {
     public Mono<byte[]> getContract(@RequestParam("internshipOfferId") String internshipOfferId,
                                     @RequestParam("studentEmail") String studentEmail) {
         return internshipContractService.getContract(internshipOfferId, studentEmail);
+    }
+
+    @GetMapping("/signed")
+    @PreAuthorize("hasAnyAuthority('MONITOR', 'STUDENT', 'INTERNSHIP_MANAGER')")
+    public Mono<Boolean> hasSigned(@RequestParam("internshipOfferId") String internshipOfferId,
+                                   @RequestParam("userEmail") String userEmail) {
+        return internshipContractService.hasSigned(internshipOfferId, userEmail);
     }
 
 }
