@@ -72,7 +72,7 @@ const UploadCV = ({ visible }) => {
       {visible && (
         <Grid container flexDirection={"column"}>
           <Grid container justifyContent="center">
-            <Grid item xl={8} xl={8} md={8} xs={10} sm={10}>
+            <Grid item xl={8} md={8} xs={10} sm={10}>
               <motion.div
                 style={{ opacity: 0 }}
                 animate={{ opacity: [0, 1] }}

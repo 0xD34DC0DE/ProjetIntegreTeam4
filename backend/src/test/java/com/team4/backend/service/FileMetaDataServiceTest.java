@@ -171,7 +171,7 @@ class FileMetaDataServiceTest {
         when(fileMetaDataRepository.save(any(FileMetaData.class))).thenReturn(Mono.just(fileMetaData));
 
         //ACT
-        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(fileMetaData.getId(), true);
+        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(fileMetaData.getId(), true, null);
 
         //ASSERT
         StepVerifier.create(fileMetaDataMono)
@@ -189,7 +189,7 @@ class FileMetaDataServiceTest {
         when(fileMetaDataRepository.findById(any(String.class))).thenReturn(Mono.empty());
 
         //ACT
-        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(fileMetaData.getId(), true);
+        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(fileMetaData.getId(), true, null);
 
         //ASSERT
         StepVerifier.create(fileMetaDataMono)
