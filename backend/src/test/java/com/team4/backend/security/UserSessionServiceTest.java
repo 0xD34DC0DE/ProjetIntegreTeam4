@@ -10,26 +10,27 @@ import static org.mockito.Mockito.when;
 
 public class UserSessionServiceTest {
 
-        @Test
-        void shouldGetLoggerUserNameForRealUser() {
-                // ARRANGE
-                Principal principal = mock(Principal.class);
+    @Test
+    void shouldGetLoggerUserNameForRealUser() {
+        //ARRANGE
+        Principal principal = mock(Principal.class);
 
-                when(principal.getName()).thenReturn("username");
+        when(principal.getName()).thenReturn("username");
 
-                // ACT & ASSERT
-                assertEquals("username", UserSessionService.getLoggedUserEmail(principal));
-        }
+        //ACT & ASSERT
+        assertEquals("username", UserSessionService.getLoggedUserEmail(principal));
+    }
 
-        @Test
-        void shouldNotGetLoggerUserNameNoUser() {
+    @Test
+    void shouldNotGetLoggerUserNameNoUser() {
 
-                // ARRANGE
-                Principal principal = mock(Principal.class);
+        //ARRANGE
+        Principal principal = mock(Principal.class);
 
-                when(principal.getName()).thenReturn("");
+        when(principal.getName()).thenReturn("");
 
-                // ACT & ASSERT
-                assertEquals("", UserSessionService.getLoggedUserEmail(principal));
-        }
+        //ACT & ASSERT
+        assertEquals("", UserSessionService.getLoggedUserEmail(principal));
+    }
+
 }

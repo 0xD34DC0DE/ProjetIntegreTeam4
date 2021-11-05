@@ -9,6 +9,7 @@ class OfferFormField {
 }
 
 export const OFFER_FORM_VALUES = [
+  new OfferFormField("Titre du poste", "text"),
   new OfferFormField("Date limite pour appliquer", "date"),
   new OfferFormField("Date de début", "date"),
   new OfferFormField("Date de fin", "date"),

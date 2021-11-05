@@ -18,6 +18,7 @@ public class InternshipOfferStudentViewDto extends InternshipOfferDetailedDto {
 
     @Builder(builderMethodName = "internshipOfferStudentViewDtoBuilder")
     public InternshipOfferStudentViewDto(String id,
+                                         String title,
                                          LocalDate limitDateToApply,
                                          LocalDate beginningDate,
                                          LocalDate endingDate,
@@ -28,6 +29,7 @@ public class InternshipOfferStudentViewDto extends InternshipOfferDetailedDto {
                                          Boolean hasAlreadyApplied,
                                          Boolean isExclusive) {
         super(id,
+                title,
                 limitDateToApply,
                 beginningDate,
                 endingDate,

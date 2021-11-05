@@ -3,12 +3,10 @@ package com.team4.backend.service;
 import com.amazonaws.services.s3.model.PutObjectResult;
 import com.team4.backend.repository.FileAssetRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +18,8 @@ import java.io.FileNotFoundException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
 
 @EnableAutoConfiguration
@@ -74,7 +73,7 @@ class FileAssetServiceTest {
 
     @Test
     void shouldNotCreateFailForWrongFile() {
-        // ACT & ASSERT
+        //ACT & ASSERT
         assertThrows(FileNotFoundException.class, () -> fileAssetService.getFileInputStream(wrongFilepath));
     }
 

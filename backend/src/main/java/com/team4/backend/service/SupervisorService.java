@@ -1,16 +1,10 @@
 package com.team4.backend.service;
 
-import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.StudentDetailsDto;
-import com.team4.backend.dto.SupervisorDetailsDto;
 import com.team4.backend.exception.DuplicateEntryException;
-import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
-import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.mapping.StudentMapper;
-import com.team4.backend.mapping.SupervisorMapper;
-import com.team4.backend.model.Student;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.repository.SupervisorRepository;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -18,12 +12,8 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class SupervisorService {
@@ -53,19 +43,18 @@ public class SupervisorService {
         });
     }
 
-    public Mono<Supervisor> addStudentEmailToStudentList(String supervisorId, String studentEmail){
+    public Mono<Supervisor> addStudentEmailToStudentList(String supervisorId, String studentEmail) {
         return supervisorRepository.findById(supervisorId)
                 .flatMap(supervisor -> {
-            if(!supervisor.getStudentEmails().contains(studentEmail)) {
-                Set<String> studentEmails = new HashSet<>(supervisor.getStudentEmails());
-                studentEmails.add(studentEmail);
-                supervisor.setStudentEmails(studentEmails);
-                return supervisorRepository.save(supervisor);
-            }
-            else {
-                return Mono.error(new DuplicateEntryException("Student is already present in the supervisor's student lists"));
-            }
-        }).switchIfEmpty(Mono.error(new UserNotFoundException("Can't find a supervisor with given id: " + supervisorId)));
+                    if (!supervisor.getStudentEmails().contains(studentEmail)) {
+                        Set<String> studentEmails = new HashSet<>(supervisor.getStudentEmails());
+                        studentEmails.add(studentEmail);
+                        supervisor.setStudentEmails(studentEmails);
+                        return supervisorRepository.save(supervisor);
+                    } else {
+                        return Mono.error(new DuplicateEntryException("Student is already present in the supervisor's student lists"));
+                    }
+                }).switchIfEmpty(Mono.error(new UserNotFoundException("Can't find a supervisor with given id: " + supervisorId)));
     }
 
     public Flux<StudentDetailsDto> getAllAssignedStudents(String supervisorId) {
@@ -76,6 +65,8 @@ public class SupervisorService {
     }
 
     public Mono<Supervisor> getSupervisor(String email){
-        return supervisorRepository.findSupervisorByEmail(email);
+        return supervisorRepository.findSupervisorByEmail(email)
+                .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
     }
+
 }

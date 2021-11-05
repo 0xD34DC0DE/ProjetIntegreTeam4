@@ -10,8 +10,10 @@ import {
   FactCheckOutlined,
   AddCircleOutlineOutlined,
   CheckOutlined,
+  SupervisedUserCircleOutlined,
+  FormatListBulletedOutlined,
+  AssignmentSharp,
 } from "@mui/icons-material";
-import SupervisedUserCircleIcon from "@mui/icons-material/SupervisedUserCircle";
 
 export const sidebarList = [
   {
@@ -69,7 +71,7 @@ export const sidebarList = [
     label: "Liste des postulations",
     role: ["MONITOR"],
     isDialog: false,
-    icon: <FindInPageOutlined sx={{ mr: 1 }} />,
+    icon: <FormatListBulletedOutlined sx={{ mr: 1 }} />,
     description: "Liste des étudiants ayant postulés à l'une de vos offres",
   },
   {
@@ -84,8 +86,29 @@ export const sidebarList = [
     id: 11,
     label: "Assignation superviseurs",
     role: ["INTERNSHIP_MANAGER"],
-    icon: <SupervisedUserCircleIcon fontSize="small" sx={{ mr: 1 }} />,
+    icon: <SupervisedUserCircleOutlined fontSize="small" sx={{ mr: 1 }} />,
     description: "Assignations des superviseurs aux élèves",
+  },
+  {
+    id: 12,
+    label: "Évaluer un stagiaire",
+    role: ["MONITOR"],
+    icon: <FindInPageOutlined sx={{ mr: 1 }} />,
+    description: "Évaluation du stagiaire à la fin de son contrat",
+  },
+  {
+    id: 13,
+    label: "Évaluer un stagiaire (mi-mandat)",
+    role: ["SUPERVISOR"],
+    icon: <FindInPageOutlined sx={{ mr: 1 }} />,
+    description: "Évaluation du stagiaire à son mi-mandat",
+  },
+  {
+    id: 14,
+    label: "Consulter rapports",
+    role: ["INTERNSHIP_MANAGER"],
+    icon: <AssignmentSharp fontSize="small" sx={{ mr: 1 }} />,
+    description: "Consultation des rapports",
   },
 ];
 

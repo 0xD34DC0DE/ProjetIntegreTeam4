@@ -2,10 +2,8 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.dto.StudentProfileDto;
-import com.team4.backend.dto.SupervisorDetailsDto;
 import com.team4.backend.exception.ForbiddenActionException;
 import com.team4.backend.exception.UserAlreadyExistsException;
-import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
 import com.team4.backend.service.StudentService;
@@ -20,8 +18,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDate;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -78,9 +77,9 @@ public class StudentControllerTest {
         webTestClient
                 .post().uri("/student/register").bodyValue(studentCreationDto)
                 .exchange()
-                // ASSERT
+                //ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
-                .expectBody().isEmpty();
+                .expectBody(String.class);
     }
 
     @Test
@@ -124,6 +123,56 @@ public class StudentControllerTest {
         webTestClient
                 .patch()
                 .uri("/student/updateStudentState")
+                .exchange()
+                //ASSERT
+                .expectStatus().isForbidden()
+                .expectBodyList(String.class);
+    }
+
+    @Test
+    void shouldUpdateInterviewDate() {
+        //ARRANGE
+        LocalDate interviewDate = LocalDate.now();
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentService.updateInterviewDate(any(), any())).thenReturn(Mono.just(student));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/student/updateInterviewDate/" + interviewDate)
+                .exchange()
+                //ASSERT
+                .expectStatus().isNoContent()
+                .expectBodyList(String.class);
+    }
+
+    @Test
+    void shouldNotUpdateInterviewDateWhenNotFound() {
+        //ARRANGE
+        LocalDate interviewDate = LocalDate.now();
+        when(studentService.updateInterviewDate(any(), any())).thenReturn(Mono.error(UserNotFoundException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/student/updateInterviewDate/" + interviewDate)
+                .exchange()
+                //ASSERT
+                .expectStatus().isNotFound()
+                .expectBodyList(String.class);
+    }
+
+    @Test
+    void shouldNotUpdateInterviewDateWhenStudentStateIsInternshipFound() {
+        //ARRANGE
+        LocalDate interviewDate = LocalDate.now();
+        when(studentService.updateInterviewDate(any(), any())).thenReturn(Mono.error(ForbiddenActionException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/student/updateInterviewDate/" + interviewDate)
                 .exchange()
                 //ASSERT
                 .expectStatus().isForbidden()

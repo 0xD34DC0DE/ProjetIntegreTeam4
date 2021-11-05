@@ -1,14 +1,15 @@
 import {
+  Grid,
   List,
   ListItem,
   ListItemButton,
+  Paper,
   Tooltip,
   Typography,
-  Paper,
-  Grid,
 } from "@mui/material";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { UserInfoContext } from "../stores/UserInfoStore";
 import InternshipOfferDialog from "./InternshipOfferDialog";
 import { listLabels } from "./InternshipOfferLabels";
 
@@ -19,8 +20,8 @@ const InternshipOfferValidation = ({
 }) => {
   const [unvalidatedOffers, setUnvalidatedOffers] = useState([]);
   const [companies, setCompanies] = useState([]);
+  const [userInfo] = useContext(UserInfoContext);
 
-  const [token] = useState(sessionStorage.getItem("jwt"));
   const [selectedOffer, setSelectedOffer] = useState(null);
   useEffect(() => {
     const getUnvalidatedInternshipOffers = async () => {
@@ -28,7 +29,7 @@ const InternshipOfferValidation = ({
         method: "GET",
         url: "http://localhost:8080/internshipOffer/getNotYetValidatedInternshipOffers",
         headers: {
-          Authorization: token,
+          Authorization: userInfo.jwt,
         },
         responseType: "json",
       });
@@ -52,6 +53,10 @@ const InternshipOfferValidation = ({
     ]);
   };
 
+  const isNotARenderedAttribute = (identifier) => {
+    return !["id", "companyName", "description"].includes(identifier);
+  };
+
   return (
     <>
       {visible && (
@@ -59,7 +64,7 @@ const InternshipOfferValidation = ({
           <List
             sx={{
               width: "100vw",
-              pt: 0,
+              pt: 5,
             }}
           >
             {companies.map((name, key) => {
@@ -122,16 +127,10 @@ const InternshipOfferValidation = ({
                               setSelectedOffer(offer);
                             }}
                           >
-                            {Object.keys(offer).map((offerKey, key) => {
+                            {Object.keys(offer).map((identifier, key) => {
                               return (
                                 <>
-                                  {![
-                                    "id",
-                                    "listEmailInterestedStudents",
-                                    "companyName",
-                                    "description",
-                                    "validated",
-                                  ].includes(offerKey) && (
+                                  {isNotARenderedAttribute(identifier) && (
                                     <Tooltip
                                       key={key}
                                       title={listLabels[key]}
@@ -142,7 +141,7 @@ const InternshipOfferValidation = ({
                                     >
                                       <ListItem key={key}>
                                         {Object.values(offer)[key]}
-                                        {offerKey.includes("Salary") && "$"}
+                                        {identifier.includes("Salary") && "$"}
                                       </ListItem>
                                     </Tooltip>
                                   )}

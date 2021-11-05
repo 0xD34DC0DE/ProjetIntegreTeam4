@@ -8,13 +8,10 @@ import {
   MenuItem,
   Typography,
   Divider,
+  Box,
   Grid,
   IconButton,
-  Tooltip,
-  Icon,
 } from "@mui/material";
-import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
-import SearchOutlinedIcon from "@mui/icons-material/SearchOutlined";
 import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
@@ -24,19 +21,6 @@ import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
 import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { roles, topbarMenuList } from "./Configuration";
-
-const menuItems = [
-  {
-    text: "Voir les offres de stage",
-    icon: <SearchOutlinedIcon sx={{ ml: 0, mr: 1, color: "text.primary" }} />,
-  },
-  {
-    text: "Téléverser son CV",
-    icon: (
-      <UploadFileOutlinedIcon sx={{ ml: 0, mr: 1, color: "text.primary" }} />
-    ),
-  },
-];
 
 const Topbar = ({
   sidebarOpen,
@@ -56,12 +40,8 @@ const Topbar = ({
     setSidebarOpen(!sidebarOpen);
   };
 
-  const handleMenuItemClick = (key) => {
-    console.log(key);
-  };
-
   return (
-    <>
+    <Box>
       <AppBar sx={{ position: "fixed" }}>
         <Toolbar>
           <IconButton
@@ -227,7 +207,7 @@ const Topbar = ({
         </Toolbar>
       </AppBar>
       <Toolbar />
-    </>
+    </Box>
   );
 };
 

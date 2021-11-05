@@ -1,9 +1,9 @@
-import { Container, Grid, Paper, Typography, Box } from "@mui/material";
-import { maxWidth } from "@mui/system";
+import { Container, Grid, Paper, Typography } from "@mui/material";
 import React from "react";
 import OfferApplicationButton from "./OfferApplicationButton";
 
 function OfferView({
+  title,
   companyName,
   beginningDate,
   endingDate,
@@ -36,6 +36,15 @@ function OfferView({
             <Grid item xl={10.75} lg={10.25} md={9.8} sm={12} xs={12}>
               <Typography type="title" variant="h4">
                 {companyName}
+              </Typography>
+              <Typography
+                type="title"
+                variant="subtitle2"
+                mb={2}
+                fontStyle="italic"
+                sx={{ color: "rgba(250, 250, 250, 0.2)" }}
+              >
+                {title}
               </Typography>
               <Typography sx={{ mt: 1 }} variant="body2">
                 Début: {beginningDate}

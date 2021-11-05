@@ -103,16 +103,16 @@ public class InternshipOfferControllerTest {
 
     @Test
     void shouldGetNotYetValidatedInternshipOffer() {
-        // ARRANGE
+        //ARRANGE
         Flux<InternshipOffer> internshipOfferFlux = InternshipOfferMockData.getNonValidatedInternshipOffers();
         when(internshipOfferService.getNotYetValidatedInternshipOffers()).thenReturn(internshipOfferFlux);
 
-        // ACT
+        //ACT
         webTestClient
                 .get()
                 .uri("/internshipOffer/getNotYetValidatedInternshipOffers")
                 .exchange()
-                // ASSERT
+                //ASSERT
                 .expectStatus().isOk()
                 .expectBodyList(InternshipOfferDetailedDto.class);
     }

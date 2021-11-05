@@ -6,6 +6,8 @@ import com.team4.backend.model.Student;
 import com.team4.backend.testdata.StudentMockData;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -55,6 +57,7 @@ public class StudentMapperTest {
     @Test
     void mapEntityToProfileDto() {
         //ARANGE
+        LocalDate localDate = LocalDate.now();
         Student entity = StudentMockData.getMockStudent();
 
         //ACT
@@ -70,7 +73,9 @@ public class StudentMapperTest {
         assertEquals(entity.getRegistrationDate(), dto.getRegistrationDate());
         assertEquals(entity.getAppliedOffersId().size(), dto.getNbrOfAppliedOffers());
         assertEquals(entity.getExclusiveOffersId().size(), dto.getNbrOfExclusiveOffers());
+        assertEquals(entity.getInterviewsDate().size(), dto.getNbrOfInterviews());
         assertEquals(entity.getHasValidCv(), dto.getHasValidCv());
+        assertEquals(localDate, dto.getClosestInterviewDate());
     }
 
 }

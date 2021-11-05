@@ -2,10 +2,11 @@ package com.team4.backend.testdata;
 
 import com.team4.backend.dto.SupervisorDetailsDto;
 import com.team4.backend.model.Supervisor;
-import net.bytebuddy.implementation.bind.annotation.Super;
 import reactor.core.publisher.Flux;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class SupervisorMockData {
 
@@ -35,7 +36,7 @@ public class SupervisorMockData {
                 .build();
     }
 
-    public static Flux<Supervisor> getAllSupervisors(){
+    public static Flux<Supervisor> getAllSupervisors() {
         return Flux.just(Supervisor.supervisorBuilder()
                 .id("123a45ce678ae91d0b111b21")
                 .email("professeur@outlook.com")
@@ -56,7 +57,7 @@ public class SupervisorMockData {
                 .build());
     }
 
-    public static Flux<SupervisorDetailsDto> getAllSupervisorsDto(){
+    public static Flux<SupervisorDetailsDto> getAllSupervisorsDto() {
         return Flux.just(SupervisorDetailsDto.builder()
                 .id("123a45ce678ae91d0b111b21")
                 .email("professeur@outlook.com")

@@ -1,5 +1,6 @@
 package com.team4.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.team4.backend.model.enums.StudentState;
 import lombok.*;
 
@@ -18,7 +19,12 @@ public class StudentProfileDto extends UserProfileDto implements Serializable {
 
     private Integer nbrOfAppliedOffers;
 
+    private Integer nbrOfInterviews;
+
     private Boolean hasValidCv;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    private LocalDate closestInterviewDate;
 
     @Builder
     public StudentProfileDto(String id,
@@ -30,11 +36,16 @@ public class StudentProfileDto extends UserProfileDto implements Serializable {
                              StudentState studentState,
                              Integer nbrOfExclusiveOffers,
                              Integer nbrOfAppliedOffers,
-                             Boolean hasValidCv) {
+                             Integer nbrOfInterviews,
+                             Boolean hasValidCv,
+                             LocalDate closestInterviewDate) {
         super(id, email, firstName, lastName, registrationDate, phoneNumber);
         this.studentState = studentState;
         this.nbrOfExclusiveOffers = nbrOfExclusiveOffers;
         this.nbrOfAppliedOffers = nbrOfAppliedOffers;
+        this.nbrOfInterviews = nbrOfInterviews;
         this.hasValidCv = hasValidCv;
+        this.closestInterviewDate = closestInterviewDate;
     }
+
 }

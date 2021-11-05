@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class AmazonConfig {
+
     @Bean
     public AmazonS3 s3() {
         AWSCredentialsProvider credentials = new ProfileCredentialsProvider("ProjetIntegreTeam4");

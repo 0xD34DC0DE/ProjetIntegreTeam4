@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import TextFormField from "./TextFormField";
 
 const NameFormField = ({ valid, step, onFieldChange, visibleStep }) => {
-  const [errorMessage, setErrorMessage] = useState({
+  const [errorMessage] = useState({
     firstName: "",
     lastName: "",
   });

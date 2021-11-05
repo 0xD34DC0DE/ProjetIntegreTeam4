@@ -15,6 +15,7 @@ import { UserInfoContext } from "../stores/UserInfoStore";
 
 const OfferForm = ({ open, toggleDialog }) => {
   const emptyOffer = {
+    title: "",
     limitDateToApply: new Date(),
     beginningDate: new Date(),
     endingDate: new Date(),

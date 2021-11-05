@@ -1,8 +1,12 @@
 package com.team4.backend.service;
 
+import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.exception.UserAlreadyExistsException;
+import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.model.Student;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.repository.SupervisorRepository;
+import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.testdata.SupervisorMockData;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.junit.jupiter.api.Test;
@@ -30,8 +34,12 @@ public class SupervisorServiceTest {
     @Mock
     UserService userService;
 
+    @Mock
+    StudentService studentService;
+
     @InjectMocks
     SupervisorService supervisorService;
+
 
     @Test
     void shouldCreateSupervisor() {
@@ -75,7 +83,7 @@ public class SupervisorServiceTest {
     }
 
     @Test
-    void shouldAddStudentEmailToList(){
+    void shouldAddStudentEmailToList() {
         //ARRANGE
         String studentEmail = "teststudent@gmail.com";
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
@@ -87,14 +95,14 @@ public class SupervisorServiceTest {
         //ACT
         Mono<Supervisor> supervisorMono = supervisorService.addStudentEmailToStudentList(supervisor.getId(), studentEmail);
 
-        // ASSERT
+        //ASSERT
         StepVerifier.create(supervisorMono)
                 .assertNext(s -> assertEquals(3, s.getStudentEmails().size()))
                 .verifyComplete();
     }
 
     @Test
-    void shouldNotAddStudentEmailToListWhenAlreadyInTheList(){
+    void shouldNotAddStudentEmailToListWhenAlreadyInTheList() {
         //ARRANGE
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
         when(supervisorRepository.findById(supervisor.getId())).thenReturn(Mono.just(supervisor));
@@ -103,12 +111,12 @@ public class SupervisorServiceTest {
         Mono<Supervisor> supervisorMono = supervisorService
                 .addStudentEmailToStudentList(supervisor.getId(), "toto23@outlook.com");
 
-        // ASSERT
+        //ASSERT
         StepVerifier.create(supervisorMono).expectError().verify();
     }
 
     @Test
-    void shouldNotFindSupervisorWhenAddingStudentToList(){
+    void shouldNotFindSupervisorWhenAddingStudentToList() {
         //ARRANGE
         String studentEmail = "teststudent@gmail.com";
         String wrongId = "wrongId";
@@ -122,5 +130,53 @@ public class SupervisorServiceTest {
         StepVerifier.create(supervisorMono)
                 .expectError()
                 .verify();
+    }
+
+    @Test
+    void shouldGetAssignedStudents(){
+        //ARRANGE
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+        Flux<Student> assignedStudents  = StudentMockData.getAssignedStudents();
+
+        when(supervisorRepository.findById(supervisor.getId())).thenReturn(Mono.just(supervisor));
+        when(studentService.findAllByEmails(supervisor.getStudentEmails())).thenReturn(assignedStudents);
+
+        //ACT
+        Flux<StudentDetailsDto> studentDetailsDtoFlux = supervisorService.getAllAssignedStudents(supervisor.getId());
+
+        //ASSERT
+        StepVerifier.create(studentDetailsDtoFlux)
+                .expectNextCount(2)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldGetSupervisor(){
+        //ARRANGE
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+        when(supervisorRepository.findSupervisorByEmail(supervisor.getEmail())).thenReturn(Mono.just(supervisor));
+
+        //ACT
+        Mono<Supervisor> supervisorMono = supervisorService.getSupervisor(supervisor.getEmail());
+
+        //ASSERT
+        StepVerifier.create(supervisorMono)
+                .assertNext(s -> assertEquals(supervisor.getEmail(), s.getEmail()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotGetSupervisor(){
+        //ARRANGE
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+        when(supervisorRepository.findSupervisorByEmail(supervisor.getEmail())).thenReturn(Mono.empty());
+
+        //ACT
+        Mono<Supervisor> supervisorMono = supervisorService.getSupervisor(supervisor.getEmail());
+
+        //ASSERT
+        StepVerifier
+                .create(supervisorMono)
+                .verifyError(UserNotFoundException.class);
     }
 }

@@ -1,17 +1,17 @@
+import { CancelOutlined, CheckCircleOutline } from "@mui/icons-material";
 import {
   Button,
+  Container,
   Dialog,
   DialogContent,
+  Paper,
   Tooltip,
   Typography,
-  Container,
-  Paper,
 } from "@mui/material";
-import React, { useState } from "react";
-import Tag from "@mui/icons-material/Tag";
-import { CancelOutlined, CheckCircleOutline } from "@mui/icons-material";
-import { listLabels } from "./InternshipOfferLabels";
 import axios from "axios";
+import React, { useContext } from "react";
+import { UserInfoContext } from "../stores/UserInfoStore";
+import { listLabels } from "./InternshipOfferLabels";
 
 const InternshipOfferDescriptionDialog = ({
   open,
@@ -19,7 +19,7 @@ const InternshipOfferDescriptionDialog = ({
   offer,
   removeInternshipOffer,
 }) => {
-  const [token] = useState(sessionStorage.getItem("jwt"));
+  const [userInfo] = useContext(UserInfoContext);
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick")
@@ -31,7 +31,7 @@ const InternshipOfferDescriptionDialog = ({
       method: "PATCH",
       url: "http://localhost:8080/internshipOffer/validateInternshipOffer",
       headers: {
-        Authorization: token,
+        Authorization: userInfo.jwt,
       },
       params: {
         id: id,
@@ -58,18 +58,10 @@ const InternshipOfferDescriptionDialog = ({
         </Typography>
         {offer && (
           <>
-            <Tooltip title={`ID: ${offer.id}`} followCursor={true}>
-              <Tag
-                sx={{ position: "absolute", top: 0, right: 5, p: "5%" }}
-                color="primary"
-              />
-            </Tooltip>
-            {Object.keys(offer).map((offerKey, key) => {
+            {Object.keys(offer).map((identifier, key) => {
               return (
                 <>
-                  {!["id", "listEmailInterestedStudents", "validated"].includes(
-                    offerKey
-                  ) && (
+                  {identifier !== "id" && (
                     <Container key={key} sx={{ textAlign: "left" }}>
                       <Typography
                         variant="overline"
@@ -84,7 +76,7 @@ const InternshipOfferDescriptionDialog = ({
                         align="justify"
                       >
                         {Object.values(offer)[key]}
-                        {offerKey.includes("Salary") && "$"}
+                        {identifier.includes("Salary") && "$"}
                       </Typography>
                     </Container>
                   )}

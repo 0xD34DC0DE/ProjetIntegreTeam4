@@ -10,30 +10,33 @@ import {
   Tooltip,
   Button,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import FileDownloadOutlinedIcon from "@mui/icons-material/FileDownloadOutlined";
 import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
+import HowToRegIcon from "@mui/icons-material/HowToReg";
 import { motion } from "framer-motion";
 import axios from "axios";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import EmailSender from "./EmailSender";
+import { UserInfoContext } from "../stores/UserInfoStore";
+import SignContractMonitorDialog from "./SignContractMonitorDialog";
 
 const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
   const [offers, setOffers] = useState([]);
   const [receiver, setReceiver] = useState("");
+  const [userInfo] = useContext(UserInfoContext);
 
   const fetchData = () => {
     axios({
       method: "GET",
-      url: "http://localhost:8080/internshipOffer/interestedStudents/9182738492@gmail.com",
+      url: `http://localhost:8080/internshipOffer/interestedStudents/${userInfo.email}`,
       headers: {
-        Authorization: sessionStorage.getItem("jwt"),
+        Authorization: userInfo.jwt,
       },
       responseType: "json",
     })
       .then((response) => {
         setOffers(response.data);
-        console.log(response.data);
       })
       .catch((error) => {
         console.error(error);
@@ -55,7 +58,6 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
       container
       flexDirection="row"
       mt={2}
-      pb={3}
       gap="20px"
       justifyContent="center"
       alignItems="center"
@@ -104,9 +106,12 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                             </Typography>
                             <Typography
                               variant="subtitle2"
-                              color="text.primary"
+                              sx={{
+                                color: "rgba(255, 255, 255, 0.5)",
+                                fontStyle: "italic",
+                              }}
                             >
-                              Junior Développeur Cobol
+                              {offer.title}
                             </Typography>
                             <Typography variant="caption" color="text.primary">
                               Description du poste
@@ -119,14 +124,7 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                 fontStyle: "italic",
                               }}
                             >
-                              : ed ut perspiciatis unde omnis iste natus error
-                              sit voluptatem accusantium doloremque laudantium,
-                              totam rem aperiam, eaque ipsa quae ab illo
-                              inventore veritatis et quasi architecto beatae
-                              vitae dicta sunt explicabo. Nemo enim ipsam
-                              voluptatem quia voluptas sit aspernatur aut odit
-                              aut fugit, sed quia consequuntur magni dolores eos
-                              qui ratione voluptatem sequi nesciunt.
+                              : {offer.description}
                             </Typography>
                           </motion.div>
                         </Paper>
@@ -243,11 +241,11 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                   <Grid container flexDirection={"row"}>
                                     <Grid
                                       item
-                                      xl={4}
-                                      md={4}
-                                      lg={4}
-                                      sm={4}
-                                      xs={4}
+                                      xl={3}
+                                      md={3}
+                                      lg={3}
+                                      sm={3}
+                                      xs={3}
                                       textAlign="center"
                                     >
                                       <Tooltip title="Télécharger le CV">
@@ -269,11 +267,11 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                     </Grid>
                                     <Grid
                                       item
-                                      xl={4}
-                                      md={4}
-                                      lg={4}
-                                      sm={4}
-                                      xs={4}
+                                      xl={3}
+                                      md={3}
+                                      lg={3}
+                                      sm={3}
+                                      xs={3}
                                       textAlign="center"
                                     >
                                       <Tooltip title="Répondre à la demande">
@@ -302,11 +300,11 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                     </Grid>
                                     <Grid
                                       item
-                                      xl={4}
-                                      md={4}
-                                      lg={4}
-                                      sm={4}
-                                      xs={4}
+                                      xl={3}
+                                      md={3}
+                                      lg={3}
+                                      sm={3}
+                                      xs={3}
                                       textAlign="center"
                                     >
                                       <Tooltip title="Visualiser le CV">
@@ -321,6 +319,39 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                           }}
                                         >
                                           <RemoveRedEyeOutlinedIcon
+                                            sx={{ color: "white" }}
+                                          />
+                                        </Button>
+                                      </Tooltip>
+                                    </Grid>
+                                    <Grid
+                                      item
+                                      xl={3}
+                                      md={3}
+                                      lg={3}
+                                      sm={3}
+                                      xs={3}
+                                      textAlign="center"
+                                    >
+                                      <Tooltip title="Démarer la signature de contrat">
+                                        <Button
+                                          sx={{
+                                            p: 0,
+                                            m: 0,
+                                            ":hover": {
+                                              backgroundColor:
+                                                "rgba(255, 255, 255, 0.1)",
+                                            },
+                                          }}
+                                          onClick={() => {
+                                            setReceiver({internshipOfferId: offer.id, studentEmail: student.email});
+                                            toggleDialog(
+                                              "signContractMonitorDialog",
+                                              true
+                                            );
+                                          }}
+                                        >
+                                          <HowToRegIcon
                                             sx={{ color: "white" }}
                                           />
                                         </Button>
@@ -343,6 +374,12 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
         toggleDialog={toggleDialog}
         open={dialogVisibility.emailSenderDialog}
         receiver={receiver}
+      />
+      <SignContractMonitorDialog
+        toggleDialog={toggleDialog}
+        open={dialogVisibility.signContractMonitorDialog}
+        pdfUrl={`http://localhost:8080/contract`}
+        params={{internshipOfferId: receiver.internshipOfferId, studentEmail: receiver.studentEmail}}
       />
     </Grid>
   );

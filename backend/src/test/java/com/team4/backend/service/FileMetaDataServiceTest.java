@@ -1,7 +1,6 @@
 package com.team4.backend.service;
 
-import com.team4.backend.exception.FileDoNotExistException;
-import com.team4.backend.exception.InvalidPageRequestException;
+import com.team4.backend.exception.FileNotFoundException;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.UploadType;
@@ -19,8 +18,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.multipart.FilePart;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -101,7 +98,7 @@ class FileMetaDataServiceTest {
     }
 
     @Test
-    void shouldUploadFile() throws  IOException {
+    void shouldUploadFile() throws IOException {
         //ARRANGE
         when(fileAssetService.create(filepath, userEmail, mimeType, uuid)).thenReturn(Mono.just(location));
 
@@ -174,7 +171,7 @@ class FileMetaDataServiceTest {
         when(fileMetaDataRepository.save(any(FileMetaData.class))).thenReturn(Mono.just(fileMetaData));
 
         //ACT
-        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(fileMetaData.getId(), true);
+        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(fileMetaData.getId(), true, null);
 
         //ASSERT
         StepVerifier.create(fileMetaDataMono)
@@ -192,11 +189,11 @@ class FileMetaDataServiceTest {
         when(fileMetaDataRepository.findById(any(String.class))).thenReturn(Mono.empty());
 
         //ACT
-        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(fileMetaData.getId(), true);
+        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(fileMetaData.getId(), true, null);
 
         //ASSERT
         StepVerifier.create(fileMetaDataMono)
-                .expectError(FileDoNotExistException.class)
+                .expectError(FileNotFoundException.class)
                 .verify();
     }
 

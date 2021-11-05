@@ -29,7 +29,7 @@ public class EmailSenderController {
             @RequestPart("content") String content,
             Principal principal) {
         return emailSenderService.sendEmailToStudent(UserSessionService.getLoggedUserEmail(principal), receiver, subject, content)
-                .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.OK).body("")))
-                .onErrorResume(error -> Mono.just(ResponseEntity.status(HttpStatus.NOT_FOUND).body(error.getMessage())));
+                .flatMap(u -> Mono.just(ResponseEntity.status(HttpStatus.OK).body("")));
     }
+
 }

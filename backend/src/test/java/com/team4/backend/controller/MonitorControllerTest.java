@@ -76,9 +76,9 @@ public class MonitorControllerTest {
         webTestClient
                 .post().uri("/monitor/register").bodyValue(monitorDto)
                 .exchange()
-                // ASSERT
+                //ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
-                .expectBody().isEmpty();
+                .expectBody(String.class);
 
     }
 

@@ -14,7 +14,10 @@ import StudentDashBoard from "./StudentDashboard";
 import InternshipOfferValidation from "./InternshipOfferValidation";
 import ListUserDroppable from "./ListUserDroppable";
 import ListUserDraggable from "./ListUserDraggable";
-import AsssignedStudentSupervisorView from "./AsssignedStudentSupervisorView";
+import AssignedStudentSupervisorView from "./AssignedStudentSupervisorView";
+import StudentEvaluationForm from "./Evaluation/End/StudentEvaluationForm";
+import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMidForm";
+import ListReport from "./ListReport";
 
 const Content = ({
   isSidebarOpen,
@@ -43,7 +46,7 @@ const Content = ({
           Bonjour visiteur.
         </Typography>
       )}
-      {userInfo.loggedIn && selection.id != undefined && (
+      {userInfo.loggedIn && selection.id !== undefined && (
         <Box
           sx={{ transition: "margin 300ms ease", ml: isSidebarOpen ? 36 : 0 }}
         >
@@ -53,42 +56,61 @@ const Content = ({
             description={selection.description}
           />
           {userInfo.role === "INTERNSHIP_MANAGER" && (
-            <ListCvInternshipManagerView visible={selection.id == 1} />
+            <ListCvInternshipManagerView visible={selection.id === 1} />
           )}
-
           {userInfo.role === "MONITOR" && (
             <ListStudentApplying
-              visible={selection.id == 6}
+              visible={selection.id === 6}
               toggleDialog={toggleDialog}
               dialogVisibility={dialogVisibility}
             />
           )}
           {userInfo.role === "STUDENT" && (
-            <UploadCV visible={selection.id == 5} />
+            <UploadCV visible={selection.id === 5} />
           )}
           {userInfo.role === "STUDENT" && (
-            <OfferViews visible={selection.id == 4} />
+            <OfferViews visible={selection.id === 4} />
           )}
           {userInfo.role === "STUDENT" && (
             <StudentDashBoard
-              visible={selection.id == 7 && userInfo.role == "STUDENT"}
+              visible={selection.id === 7 && userInfo.role === "STUDENT"}
             />
           )}
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <InternshipOfferValidation
-              visible={selection.id == 3}
+              visible={selection.id === 3}
               toggleDialog={toggleDialog}
               dialogVisibility={dialogVisibility}
             />
           )}
           {userInfo.role === "SUPERVISOR" && (
-            <AsssignedStudentSupervisorView visible={selection.id == 10} />
+            <AssignedStudentSupervisorView
+              visible={selection.id === 10}
+              toggleDialog={toggleDialog}
+              dialogVisibility={dialogVisibility}
+            />
           )}
           {userInfo.role === "INTERNSHIP_MANAGER" && (
-            <ListUserDroppable role="SUPERVISOR" visible={selection.id == 11} />
+            <ListUserDroppable
+              role="SUPERVISOR"
+              visible={selection.id === 11}
+            />
           )}
           {userInfo.role === "INTERNSHIP_MANAGER" && (
-            <ListUserDraggable role="STUDENT" visible={selection.id == 11} />
+            <ListUserDraggable role="STUDENT" visible={selection.id === 11} />
+          )}
+          {userInfo.role === "MONITOR" && (
+            <StudentEvaluationForm visible={selection.id === 12} />
+          )}
+          {userInfo.role === "SUPERVISOR" && (
+            <StudentEvaluationMidForm visible={selection.id === 13} />
+          )}
+          {userInfo.role === "INTERNSHIP_MANAGER" && (
+            <ListReport
+              toggleDialog={toggleDialog}
+              open={dialogVisibility.reportDialog}
+              visible={selection.id === 14}
+            />
           )}
         </Box>
       )}

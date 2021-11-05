@@ -15,9 +15,6 @@ import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 @DataMongoTest
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
@@ -36,7 +33,7 @@ public class InternshipOfferRepositoryTest {
                 InternshipOffer.builder().isValidated(false).validationDate(null).build()
         );
 
-        internshipOfferRepository.saveAll(internshipOffers).subscribe().dispose();
+        internshipOfferRepository.saveAll(internshipOffers).subscribe();
     }
 
     @Test

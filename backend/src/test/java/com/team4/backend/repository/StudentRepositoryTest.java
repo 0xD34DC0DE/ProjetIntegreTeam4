@@ -1,7 +1,7 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.Student;
-import com.team4.backend.model.User;
+import com.team4.backend.model.enums.StudentState;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -16,10 +16,11 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 @DataMongoTest
 @EnableAutoConfiguration
@@ -34,15 +35,37 @@ public class StudentRepositoryTest {
     @BeforeAll
     void init() {
         Flux<Student> users = Flux.just(
-                Student.studentBuilder().email("testing_1@gmail.com").password("password1").build(),
-                Student.studentBuilder().email("testing_2@gmail.com").password("password2").build()
+                Student.studentBuilder()
+                        .email("testing_1@gmail.com")
+                        .password("password1")
+                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .interviewsDate(new TreeSet<>(Arrays.asList(
+                                LocalDate.now().minusWeeks(3),
+                                LocalDate.now(),
+                                LocalDate.now().minusDays(5))))
+                        .build(),
+                Student.studentBuilder()
+                        .email("testing_2@gmail.com")
+                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .password("password2")
+                        .interviewsDate(new TreeSet<>())
+                        .build(),
+                Student.studentBuilder()
+                        .email("testing_3@gmail.com")
+                        .password("password1")
+                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .interviewsDate(new TreeSet<>(Arrays.asList(
+                                LocalDate.now().minusWeeks(3),
+                                LocalDate.now(),
+                                LocalDate.now().minusDays(5))))
+                        .build()
         );
 
         studentRepository.saveAll(users).subscribe();
     }
 
     @Test
-    void shouldFindByEmail(){
+    void shouldFindByEmail() {
         //ARRANGE
         String email = "testing_1@gmail.com";
 
@@ -51,13 +74,12 @@ public class StudentRepositoryTest {
 
         //ASSERT
         StepVerifier.create(studentMono)
-                .assertNext(s -> Assertions.assertEquals(email,s.getEmail()))
+                .assertNext(s -> Assertions.assertEquals(email, s.getEmail()))
                 .verifyComplete();
-
     }
 
     @Test
-    void shouldNotFindByEmail(){
+    void shouldNotFindByEmail() {
         //ARRANGE
         String email = "non_existent_student@gmail.com";
 
@@ -99,4 +121,16 @@ public class StudentRepositoryTest {
                 .expectNextCount(0)
                 .verifyComplete();
     }
+
+    @Test
+    void shouldFindAllByStudentStateAndInterviewsDateIsNotEmpty() {
+        //ARRANGE && ACT
+        Flux<Student> studentFlux = studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND);
+
+        //ASSERT
+        StepVerifier.create(studentFlux)
+                .expectNextCount(2)
+                .verifyComplete();
+    }
+
 }

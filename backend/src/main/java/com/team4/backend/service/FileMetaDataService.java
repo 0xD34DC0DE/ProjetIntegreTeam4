@@ -1,7 +1,6 @@
 package com.team4.backend.service;
 
-import com.team4.backend.exception.FileDoNotExistException;
-import com.team4.backend.exception.InvalidPageRequestException;
+import com.team4.backend.exception.FileNotFoundException;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.model.enums.UploadType;
 import com.team4.backend.repository.FileMetaDataRepository;
@@ -49,7 +48,6 @@ public class FileMetaDataService {
 
 
     public Mono<FileMetaData> uploadFile(String filename, String type, String mimeType, Mono<FilePart> filePartMono, String userEmail) {
-        System.out.println("dans service");
         return Mono.fromCallable(this::getTempFile)
                 .publishOn(Schedulers.boundedElastic())
                 .flatMap(tempFile -> filePartMono
@@ -62,19 +60,21 @@ public class FileMetaDataService {
                                 // the file inside
                                 .switchIfEmpty(Mono.just(tempFile)))
                 )
-                .flatMap(tempFile ->
-                        fileAssetService.create(tempFile.getPath(), userEmail, mimeType, getUuid())
-                                .flatMap(assetId -> Mono.just(FileMetaData.builder()
-                                        .id(getUuid())
-                                        .userEmail(userEmail)
-                                        .isValid(false)
-                                        .isSeen(false)
-                                        .assetId(assetId)
-                                        .type(UploadType.valueOf(type))
-                                        .uploadDate(LocalDateTime.now())
-                                        .filename(filename)
-                                        .build()))
-                                .flatMap(this::create));
+                .flatMap(tempFile -> {
+                        studentService.setHasCvStatusTrue(userEmail);
+                        return fileAssetService.create(tempFile.getPath(), userEmail, mimeType, getUuid())
+                                    .flatMap(assetId -> Mono.just(FileMetaData.builder()
+                                            .id(getUuid())
+                                            .userEmail(userEmail)
+                                            .isValid(false)
+                                            .isSeen(false)
+                                            .assetId(assetId)
+                                            .type(UploadType.valueOf(type))
+                                            .uploadDate(LocalDateTime.now())
+                                            .filename(filename)
+                                            .build()))
+                                    .flatMap(this::create);
+                });
     }
 
     public Mono<Long> countAllInvalidCvNotSeen() {
@@ -85,13 +85,13 @@ public class FileMetaDataService {
 
         return ValidatingPageRequest
                 .getPageRequestMono(noPage, 10, Sort.by("uploadDate").ascending())
-                .flatMapMany(pageRequest -> fileMetaDataRepository.findAllByIsValidFalseAndIsSeenFalse(pageRequest));
+                .flatMapMany(fileMetaDataRepository::findAllByIsValidFalseAndIsSeenFalse);
 
     }
 
-    public Mono<FileMetaData> validateCv(String id, Boolean isValid) {
+    public Mono<FileMetaData> validateCv(String id, Boolean isValid, String rejectionExplanation) {
         return fileMetaDataRepository.findById(id)
-                .switchIfEmpty(Mono.error(new FileDoNotExistException("This file do Not Exist")))
+                .switchIfEmpty(Mono.error(new FileNotFoundException("This file do Not Exist")))
                 .map(file -> {
                     file.setIsValid(isValid);
                     file.setIsSeen(true);
@@ -99,7 +99,8 @@ public class FileMetaDataService {
 
                     if (isValid)
                         studentService.updateCvValidity(file.getUserEmail(), true).subscribe();
-
+                    else
+                        file.setRejectionExplanation(rejectionExplanation);
                     return file;
                 }).flatMap(fileMetaDataRepository::save);
     }

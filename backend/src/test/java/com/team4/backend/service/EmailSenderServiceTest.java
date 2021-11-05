@@ -2,6 +2,7 @@ package com.team4.backend.service;
 
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
+import com.team4.backend.testdata.EmailSenderMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -16,10 +17,7 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.internet.MimeMessage;
 
-import com.team4.backend.testdata.EmailSenderMockData;
-
-import static org.junit.jupiter.api.Assertions.*;
-
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
@@ -85,34 +83,35 @@ class EmailSenderServiceTest {
 
     @Test
     void shouldNotSendEmailToStudentNullPointerException() {
-        // ACT & ASSERT
+        //ACT & ASSERT
         assertThrows(NullPointerException.class, () -> emailSenderService.sendEmailToStudent(EmailSenderMockData.getPrincipalEmail(), EmailSenderMockData.getReceiver(), EmailSenderMockData.getSubject(), EmailSenderMockData.getContent()));
     }
 
     @Test
     void shouldSendEmail() {
-        // ARRANGE
-        when(javaMailSender.createMimeMessage()).thenReturn(new MimeMessage((Session)null));
+        //ARRANGE
+        when(javaMailSender.createMimeMessage()).thenReturn(new MimeMessage((Session) null));
 
-        // ACT
+        //ACT
         Mono<Void> response = emailSenderService.sendEmail(EmailSenderMockData.getPrincipalEmail(), EmailSenderMockData.getReceiver(), EmailSenderMockData.getSubject(), EmailSenderMockData.getContent());
 
-        // ASSERT
+        //ASSERT
         StepVerifier.create(response).verifyComplete();
     }
 
     @Test
     void shouldNotSendEmail() throws MessagingException {
-        // ARRANGE
+        //ARRANGE
         EmailSenderService emailSenderServiceSpy = spy(emailSenderService);
         doThrow(new MessagingException()).when(emailSenderServiceSpy).getHelper(any());
 
-        when(javaMailSender.createMimeMessage()).thenReturn(new MimeMessage((Session)null));
+        when(javaMailSender.createMimeMessage()).thenReturn(new MimeMessage((Session) null));
 
-        // ACT
+        //ACT
         Mono<Void> response = emailSenderServiceSpy.sendEmail(EmailSenderMockData.getPrincipalEmail(), EmailSenderMockData.getReceiver(), EmailSenderMockData.getSubject(), EmailSenderMockData.getContent());
 
         //ASSERT
         StepVerifier.create(response).expectErrorMatches(throwable -> throwable instanceof MessagingException).verify();
     }
+
 }

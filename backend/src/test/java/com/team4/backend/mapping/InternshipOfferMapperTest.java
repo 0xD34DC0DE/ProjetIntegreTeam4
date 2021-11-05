@@ -28,7 +28,7 @@ public class InternshipOfferMapperTest {
         assertEquals(internshipOfferDto.getDescription(), internshipOffer.getDescription());
         assertEquals(internshipOfferDto.getMinSalary(), internshipOffer.getMinSalary());
         assertEquals(internshipOfferDto.getMaxSalary(), internshipOffer.getMaxSalary());
-        assertEquals(internshipOfferDto.getEmailOfMonitor(), internshipOffer.getEmailOfMonitor());
+        assertEquals(internshipOfferDto.getMonitorEmail(), internshipOffer.getMonitorEmail());
     }
 
     @Test
