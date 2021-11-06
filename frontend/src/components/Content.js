@@ -84,7 +84,11 @@ const Content = ({
             />
           )}
           {userInfo.role === "SUPERVISOR" && (
-            <AssignedStudentSupervisorView visible={selection.id === 10} />
+            <AssignedStudentSupervisorView
+              visible={selection.id === 10}
+              toggleDialog={toggleDialog}
+              dialogVisibility={dialogVisibility}
+            />
           )}
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListUserDroppable

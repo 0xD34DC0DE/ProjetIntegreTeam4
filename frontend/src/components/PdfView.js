@@ -1,77 +1,87 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import { pdfjs } from "react-pdf";
 import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import {
-    Pagination,
-    Container,
-    Grid,
-    Skeleton,
+  Pagination,
+  Container,
+  Grid,
+  Skeleton,
+  Box,
+  Typography,
 } from "@mui/material";
+import axios from "axios";
+import PdfContainer from "./PdfContainer";
 
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.min.js";
 
-function PdfView({ pdfUrl, dialogRef }) {
-    const [numPages, setNumPages] = useState(null);
-    const [pageNumber, setPageNumber] = useState(1);
-    const [userInfo] = useContext(UserInfoContext);
-    const [dialogHeight, setDialogHeight] = useState(700);
+function PdfView({ pdfUrl, params }) {
+  const [numPages, setNumPages] = useState(1);
+  const [pageNumber, setPageNumber] = useState(1);
+  const [userInfo] = useContext(UserInfoContext);
+  const [pdfData, setPdfData] = useState();
+  const [error, setError] = useState();
 
-    const handlePageChange = (_, selectedPage) => {
-        setPageNumber(selectedPage);
+  const handlePageChange = (_, selectedPage) => {
+    setPageNumber(selectedPage);
+  };
+
+  useEffect(() => {
+    const getPdf = () => {
+      {
+        axios({
+          method: "GET",
+          url: pdfUrl,
+          headers: {
+            Authorization: userInfo.jwt,
+            Accept: "application/pdf",
+          },
+          params: { ...params },
+          responseType: "arraybuffer",
+        })
+          .then((response) => {
+            setPdfData(response.data);
+          })
+          .catch((error) => {
+            setError(error);
+            console.error(error);
+          });
+      }
     };
 
-    useEffect(() => {
-        if (dialogRef.current) {
-            setDialogHeight(dialogRef.current.offsetHeight);
-        }
-    }, [dialogRef]);
+    getPdf();
+  }, []);
 
-    const onDocumentLoadSuccess = (pdfProxy) => {
-        setNumPages(pdfProxy.numPages);
-    };
+  return (
+    <>
+      <Grid
+        item
+        container
+        direction="column"
+        justifyContent={"center"}
+        alignContent={"center"}
+        alignItems={"center"}
+      >
+        <Grid item>
+          <PdfContainer
+            pdfData={pdfData}
+            pageNumber={pageNumber}
+            setPageCount={setNumPages}
+          />
+          {error && <Typography> Erreur lors du chargement du PDF</Typography>}
+        </Grid>
 
-    return (
-        <>
-            <Container>
-                <Grid
-                    container
-                    direction="column"
-                    justifyContent={{ xs: "left", md: "center" }}
-                    alignContent={{ xs: "left", md: "center" }}
-                    alignItems={{ xs: "left", md: "center" }}
-                >
-                    <Grid item xs={12} sm={11} md={10} lg={8} textAlign="center">
-                        <Document
-                            file={{
-                                url: pdfUrl,
-                                httpHeaders: { Authorization: userInfo.jwt },
-                            }}
-                            onLoadSuccess={onDocumentLoadSuccess}
-                            loading={
-                                <Skeleton variant="rectangular" width={"100%"} height={500} />
-                            }
-                        >
-                            <Page
-                                md={2}
-                                loading={null}
-                                pageNumber={pageNumber}
-                                height={dialogHeight}
-                            />
-                        </Document>
-                    </Grid>
-
-                    <Grid item xs={12} textAlign="center">
-                        <Pagination
-                            count={numPages}
-                            page={pageNumber}
-                            onChange={handlePageChange}
-                        />
-                    </Grid>
-                </Grid>
-            </Container>
-        </>
-    );
+        <Grid item textAlign="center">
+          <Pagination
+            sx={{ mt: 1 }}
+            count={numPages}
+            page={pageNumber}
+            onChange={handlePageChange}
+          />
+        </Grid>
+      </Grid>
+    </>
+  );
 }
 
 export default PdfView;

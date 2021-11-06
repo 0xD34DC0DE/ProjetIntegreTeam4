@@ -50,7 +50,7 @@ public class StudentService {
 
     public Mono<Student> findByEmail(String email) {
         return studentRepository.findByEmail(email)
-                .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
+                .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find student with email" + email)));
     }
 
     public Flux<Student> findAllByEmails(Set<String> emails) {
@@ -161,6 +161,10 @@ public class StudentService {
                     log.info("STATE UPDATED : " + student.getFirstName() + ", " + student.getLastName());
                     return studentRepository.save(student).subscribe();
                 }).count();
+    }
+
+    public Mono<Student> save(Student student) {
+        return studentRepository.save(student);
     }
 
 }

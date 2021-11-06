@@ -17,6 +17,8 @@ public class InternshipContract {
     @Id
     private String id;
 
+    private String internshipOfferId;
+
     private String address;
 
     private LocalDate beginningDate;
@@ -39,6 +41,7 @@ public class InternshipContract {
 
     @Builder
     public InternshipContract(String id,
+                              String internshipOfferId,
                               String address,
                               LocalDate beginningDate,
                               LocalDate endingDate,
@@ -50,6 +53,7 @@ public class InternshipContract {
                               Signature monitorSignature,
                               Signature internshipManagerSignature) {
         this.id = id;
+        this.internshipOfferId = internshipOfferId;
         this.address = address;
         this.beginningDate = beginningDate;
         this.endingDate = endingDate;

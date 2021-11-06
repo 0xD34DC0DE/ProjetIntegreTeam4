@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.AuthRequestDto;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.exception.WrongCredentialsException;
 import com.team4.backend.model.User;
 import com.team4.backend.repository.UserRepository;
@@ -37,8 +38,18 @@ public class UserService {
         return userRepository.existsByEmail(email);
     }
 
-    public Flux<User> getAll(String role){
+    public Flux<User> getAll(String role) {
         return userRepository.findAllByRoleEquals(role);
+    }
+
+    public Mono<User> findById(String userId) {
+        return userRepository.findById(userId)
+                .switchIfEmpty(Mono.error(new UserNotFoundException("Could not find user with id: " + userId)));
+    }
+
+    public Mono<User> findByEmail(String userEmail) {
+        return userRepository.findByEmail(userEmail)
+                .switchIfEmpty(Mono.error(new UserNotFoundException("Could not find user with email: " + userEmail)));
     }
 
     /*

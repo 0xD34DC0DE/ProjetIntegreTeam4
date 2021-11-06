@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipCreationDto;
+import com.team4.backend.exception.InternshipNotFoundException;
 import com.team4.backend.model.Internship;
 import com.team4.backend.model.InternshipContract;
 import com.team4.backend.model.InternshipOffer;
@@ -47,4 +48,15 @@ public class InternshipService {
                 })
                 .flatMap(internshipRepository::save);
     }
+
+
+    public Mono<Internship> getInternshipByEmail(String studentEmail) {
+        return internshipRepository.findByStudentEmail(studentEmail)
+                .switchIfEmpty(Mono.error(new InternshipNotFoundException("There is no internship featuring " + studentEmail)));
+    }
+
+    public Mono<Boolean> existsByStudentEmail(String studentEmail) {
+        return internshipRepository.existsByStudentEmail(studentEmail);
+    }
+
 }

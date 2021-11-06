@@ -1,51 +1,39 @@
-import { Dialog, DialogContent } from "@mui/material";
-import React, { useState, useContext, useEffect, useRef } from "react";
-import { UserInfoContext } from "../stores/UserInfoStore";
+import { Dialog, DialogContent, Grid } from "@mui/material";
+import React from "react";
 import PdfView from "./PdfView.js";
+import SignContractMonitorForm from "./SignContractMonitorForm";
 
-function SignContractMonitorDialog({ open, toggleDialog, pdfUrl }) {
-  const [userInfo] = useContext(UserInfoContext);
-  const [form, setForm] = useState({});
-  let dialogRef = useRef(null);
-
-  const handleFormChange = (event) => {
-    setForm((form) => ({
-      ...form,
-      [event.target.id || event.target.name]: event.target.value,
-    }));
-  };
-
-  const resetForm = () => {
-    setForm((form) => ({ ...form, subject: "", content: "" }));
-  };
+function SignContractMonitorDialog({ open, toggleDialog, pdfUrl, params }) {
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick") {
       toggleDialog("signContractMonitorDialog", false);
-      resetForm();
     }
   };
 
   return (
     <>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        fullWidth
-        maxWidth="lg"
-        PaperProps={{
-          sx: {
-            width: "75%",
-            height: "80%",
-          },
-        }}
-      >
-        
-        {open && (
-          <DialogContent sx={{ minHeight: "100%" }} ref={dialogRef}>
-            {dialogRef && <PdfView pdfUrl={pdfUrl} dialogRef={dialogRef} />}
-          </DialogContent>
-        )}
+      <Dialog open={open} onClose={handleClose} fullWidth>
+        <DialogContent>
+          <Grid
+            container
+            direction="column"
+            justifyContent="center"
+            alignContent="center"
+            rowSpacing={2}
+          >
+            <Grid item xs={12}>
+              <PdfView pdfUrl={pdfUrl} params={params} />
+            </Grid>
+
+            <Grid item>
+              <SignContractMonitorForm
+                studentEmail={params.studentEmail}
+                offerId={params.internshipOfferId}
+              />
+            </Grid>
+          </Grid>
+        </DialogContent>
       </Dialog>
     </>
   );

@@ -89,7 +89,7 @@ public class FileMetaDataService {
 
     }
 
-    public Mono<FileMetaData> validateCv(String id, Boolean isValid) {
+    public Mono<FileMetaData> validateCv(String id, Boolean isValid, String rejectionExplanation) {
         return fileMetaDataRepository.findById(id)
                 .switchIfEmpty(Mono.error(new FileNotFoundException("This file do Not Exist")))
                 .map(file -> {
@@ -99,7 +99,8 @@ public class FileMetaDataService {
 
                     if (isValid)
                         studentService.updateCvValidity(file.getUserEmail(), true).subscribe();
-
+                    else
+                        file.setRejectionExplanation(rejectionExplanation);
                     return file;
                 }).flatMap(fileMetaDataRepository::save);
     }

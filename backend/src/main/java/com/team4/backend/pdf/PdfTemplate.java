@@ -21,10 +21,9 @@ public abstract class PdfTemplate {
     private final Map<String, Object> variables;
 
     /**
-     *
      * @param template_filename filename of the template html file (located in resources/pdf/) without
      *                          the .html extension
-     * @param variables Map of the objects used in the html template and their variable names.
+     * @param variables         Map of the objects used in the html template and their variable names.
      */
     protected PdfTemplate(String template_filename, Map<String, Object> variables) {
         this.template_filename = template_filename;
@@ -47,7 +46,7 @@ public abstract class PdfTemplate {
         Context context = new Context();
         context.setVariables(variables);
         return context;
-    };
+    }
 
     private String loadAndFillTemplate(SpringTemplateEngine templateEngine, Context context) {
         return replaceAccentLettersWithSpecialEntityCode(templateEngine.process(template_filename, context));
