@@ -18,6 +18,7 @@ import AssignedStudentSupervisorView from "./AssignedStudentSupervisorView";
 import StudentEvaluationForm from "./Evaluation/End/StudentEvaluationForm";
 import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMidForm";
 import ListReport from "./ListReport";
+import Notification from "./Notification/Notification";
 
 const Content = ({
   isSidebarOpen,
@@ -112,6 +113,8 @@ const Content = ({
               visible={selection.id === 14}
             />
           )}
+
+          <Notification></Notification>
         </Box>
       )}
       <OfferForm

@@ -10,6 +10,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Optional;
 
 @Data
@@ -36,6 +38,8 @@ public class User implements Serializable {
     protected Role role;
 
     protected Boolean isEnabled;
+
+    protected LinkedHashSet<Notification> notifications;
 
     @Builder(builderMethodName = "userBuilder")
     public User(String id,

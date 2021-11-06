@@ -35,4 +35,9 @@ public class Notification implements Serializable {
         this.creationDate = Optional.ofNullable(creationDate).orElse(LocalDateTime.now());
     }
 
+    @Override
+    public String toString() {
+        return "aaa";
+    }
+
 }
