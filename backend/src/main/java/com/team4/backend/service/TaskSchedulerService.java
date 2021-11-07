@@ -40,7 +40,9 @@ public class TaskSchedulerService {
     public void initializeSemestersAnnually() {
         LocalDateTime currentDateTime = LocalDateTime.now();
 
+        log.info("*************************************************");
         log.info("NEW SCHOOL YEAR : " + currentDateTime.getYear());
+        log.info("*************************************************");
 
         semesterService.initializeSemestersAnnually(SemesterUtil.getSemesters(currentDateTime))
                 .subscribe(semester -> log.info("NEW SEMESTER CREATED : " + semester.toString()));
