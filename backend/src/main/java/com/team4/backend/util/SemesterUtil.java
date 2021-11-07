@@ -1,5 +1,4 @@
-package com.team4.backend.testdata;
-
+package com.team4.backend.util;
 
 import com.team4.backend.model.Semester;
 import com.team4.backend.model.enums.SemesterName;
@@ -9,10 +8,9 @@ import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class SemesterMockData {
+public abstract class SemesterUtil {
 
-    public static List<Semester> getListSemester() {
-        LocalDateTime currentDateTime = LocalDateTime.now();
+    public static List<Semester> getSemesters(LocalDateTime currentDateTime) {
 
         return Arrays.asList(
                 Semester.builder()
