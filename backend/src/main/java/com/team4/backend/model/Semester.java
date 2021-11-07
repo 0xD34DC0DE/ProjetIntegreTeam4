@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -18,5 +18,5 @@ public class Semester implements Serializable {
     @Id
     private String id;
     private String fullName;
-    private LocalDate from,to;
+    private LocalDateTime from,to;
 }

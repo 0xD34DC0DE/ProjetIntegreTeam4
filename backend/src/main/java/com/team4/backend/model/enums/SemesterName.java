@@ -1,5 +1,5 @@
 package com.team4.backend.model.enums;
 
-public enum SessionName {
+public enum SemesterName {
     AUTUMN, WINTER, SUMMER
 }
