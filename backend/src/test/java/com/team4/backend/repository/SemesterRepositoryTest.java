@@ -4,7 +4,6 @@ import com.team4.backend.model.Semester;
 import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.testdata.SemesterMockData;
 import lombok.extern.java.Log;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,6 +16,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Log
 @DataMongoTest
@@ -44,7 +47,7 @@ public class SemesterRepositoryTest {
 
         //ASSERT
         StepVerifier.create(semesterMono)
-                .assertNext(s -> Assertions.assertEquals(fullName, s.getFullName()))
+                .assertNext(s -> assertEquals(fullName, s.getFullName()))
                 .verifyComplete();
     }
 
@@ -59,6 +62,20 @@ public class SemesterRepositoryTest {
         //ASSERT
         StepVerifier.create(semesterMono)
                 .expectNextCount(0)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldFindByFromLessThanEqualAndToGreaterThanEqual() {
+        //ARRANGE
+        LocalDateTime currentDate = LocalDateTime.now();
+
+        //ACT
+        Mono<Semester> semesterMono = semesterRepository.findByFromLessThanEqualAndToGreaterThanEqual(currentDate,currentDate);
+
+        //ASSERT
+        StepVerifier.create(semesterMono)
+                .assertNext(s -> assertEquals(SemesterName.AUTUMN + " " + 2021,s.getFullName()))
                 .verifyComplete();
     }
 
