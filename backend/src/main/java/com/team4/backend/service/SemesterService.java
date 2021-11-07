@@ -38,7 +38,7 @@ public class SemesterService {
                 .switchIfEmpty(Mono.error(new SemesterNotFoundException("Can't find current semester!")));
     }
 
-    public Mono<SemesterDto> getListSemesterFullName() {
+    public Mono<SemesterDto> getAllSemesterFullName() {
         SemesterDto semesterDto = new SemesterDto();
 
         return getCurrentSemesterFullName().map(fullName -> {

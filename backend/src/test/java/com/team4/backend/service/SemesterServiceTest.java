@@ -5,7 +5,6 @@ import com.team4.backend.exception.SemesterNotFoundException;
 import com.team4.backend.model.Semester;
 import com.team4.backend.repository.SemesterRepository;
 import com.team4.backend.testdata.SemesterMockData;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -109,7 +108,7 @@ public class SemesterServiceTest {
     }
 
     @Test
-    void shouldGetListSemesterFullName(){
+    void shouldGetAllSemesterFullName(){
         //ARRANGE
         Semester currentSemester = SemesterMockData.getListSemester().get(0);
 
@@ -120,7 +119,7 @@ public class SemesterServiceTest {
 
 
         //ACT
-        Mono<SemesterDto> semesterDtoMono = semesterService.getListSemesterFullName();
+        Mono<SemesterDto> semesterDtoMono = semesterService.getAllSemesterFullName();
 
         //ASSERT
         StepVerifier.create(semesterDtoMono)

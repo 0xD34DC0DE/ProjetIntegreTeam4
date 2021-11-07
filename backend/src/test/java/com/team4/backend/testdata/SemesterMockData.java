@@ -1,6 +1,7 @@
 package com.team4.backend.testdata;
 
 
+import com.team4.backend.dto.SemesterDto;
 import com.team4.backend.model.Semester;
 import com.team4.backend.model.enums.SemesterName;
 
@@ -8,6 +9,8 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
+import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 public abstract class SemesterMockData {
 
@@ -70,6 +73,13 @@ public abstract class SemesterMockData {
                                 .withSecond(0))
                         .build()
         );
+    }
+
+    public static SemesterDto getSemesterDto() {
+        return SemesterDto.builder()
+                .currentSemesterFullName(SemesterName.AUTUMN + " " + LocalDateTime.now().getYear())
+                .semestersFullNames(new TreeSet<>(getListSemester().stream().map(Semester::getFullName).collect(Collectors.toList())))
+                .build();
     }
 
 }
