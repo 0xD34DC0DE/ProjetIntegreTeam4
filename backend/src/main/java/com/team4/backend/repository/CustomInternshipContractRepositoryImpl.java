@@ -11,17 +11,16 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
-@Component()
-@ComponentScan(basePackages = {})
+@Component
 public class CustomInternshipContractRepositoryImpl implements CustomInternshipContractRepository {
 
     private final ReactiveMongoOperations mongoOperations;
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public CustomInternshipContractRepositoryImpl(ReactiveMongoOperations mongoOperations, UserService userService) {
+    public CustomInternshipContractRepositoryImpl(ReactiveMongoOperations mongoOperations, UserRepository userRepository) {
         this.mongoOperations = mongoOperations;
-        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -48,7 +47,7 @@ public class CustomInternshipContractRepositoryImpl implements CustomInternshipC
 
         return mongoOperations.findOne(Query.query(criteria), InternshipContract.class)
                 .flatMap(internshipContract ->
-                        userService.findById(userId)
+                        userRepository.findById(userId)
                                 .map(user -> {
                                     switch (user.getRole()) {
                                         case STUDENT:
