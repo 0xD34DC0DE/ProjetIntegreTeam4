@@ -20,7 +20,7 @@ const CvValidationDialog = ({ id, removeCv }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [userInfo] = useContext(UserInfoContext);
 
-  const [rejectionExplanation, setRejectionExplanation] = useState(null);
+  const [rejectionExplanation, setRejectionExplanation] = useState("");
 
   const handleOpen = () => {
     setOpen(true);
@@ -55,6 +55,8 @@ const CvValidationDialog = ({ id, removeCv }) => {
 
   const handleClose = () => {
     setOpen(false);
+    setErrorMessage("");
+    setRejectionExplanation("");
     setIsRejecting(false);
   };
 
