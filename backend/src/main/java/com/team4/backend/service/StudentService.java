@@ -154,7 +154,7 @@ public class StudentService {
                 });
     }
 
-    public Mono<Long> updateStudentStateForAllStudentThatInterviewDateHasPassedWeb() {
+    public Mono<Long> updateStudentStateForAllStudentThatInterviewDateHasPassed() {
         return studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND)
                 .map(student -> {
                     student.setStudentState(StudentState.WAITING_FOR_RESPONSE);

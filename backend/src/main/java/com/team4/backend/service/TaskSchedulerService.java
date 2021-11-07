@@ -28,7 +28,7 @@ public class TaskSchedulerService {
 
     @Scheduled(cron = "0 00 0 ? * *")
     private void updateStudentStateForAllStudentThatInterviewDateHasPassed() {
-        studentService.updateStudentStateForAllStudentThatInterviewDateHasPassedWeb()
+        studentService.updateStudentStateForAllStudentThatInterviewDateHasPassed()
                 .subscribe(nbrOfUpdateStudent -> log.info(
                         "NBR OF STUDENT THAT HAVE THEIR STATE UPDATED : " +
                                 nbrOfUpdateStudent +
