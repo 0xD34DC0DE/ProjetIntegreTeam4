@@ -36,7 +36,7 @@ public class TaskSchedulerService {
                                 LocalDateTime.now()));
     }
 
-    @Scheduled(cron = "0 00 0 ? * *")
+    @Scheduled(cron = "0 00 1 1 8 ?")
     public void initializeSemestersAnnually() {
         LocalDateTime currentDateTime = LocalDateTime.now();
 
@@ -44,7 +44,6 @@ public class TaskSchedulerService {
 
         semesterService.initializeSemestersAnnually(SemesterUtil.getSemesters(currentDateTime))
                 .subscribe(semester -> log.info("NEW SEMESTER CREATED : " + semester.toString()));
-
     }
 
 }
