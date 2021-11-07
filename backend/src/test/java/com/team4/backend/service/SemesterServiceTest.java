@@ -2,7 +2,6 @@ package com.team4.backend.service;
 
 import com.team4.backend.exception.SemesterNotFoundException;
 import com.team4.backend.model.Semester;
-import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.repository.SemesterRepository;
 import com.team4.backend.testdata.SemesterMockData;
 import org.junit.jupiter.api.Assertions;
@@ -46,14 +45,14 @@ public class SemesterServiceTest {
     }
 
     @Test
-    void shouldFindSemesterByName() {
+    void shouldFindSemesterByFullName() {
         //ARRANGE
         Semester semester = SemesterMockData.getListSemester().get(0);
 
         when(semesterRepository.findByFullName(any())).thenReturn(Mono.just(semester));
 
         //ACT
-        Mono<Semester> semesterMono = semesterRepository.findByFullName(semester.getFullName());
+        Mono<Semester> semesterMono = semesterService.findByFullName(semester.getFullName());
 
         //ASSERT
         StepVerifier.create(semesterMono)
@@ -62,14 +61,45 @@ public class SemesterServiceTest {
     }
 
     @Test
-    void shouldNotFindSemesterByName() {
+    void shouldNotFindSemesterByFullName() {
         //ARRANGE
         Semester semester = SemesterMockData.getListSemester().get(0);
 
         when(semesterRepository.findByFullName(any())).thenReturn(Mono.error(SemesterNotFoundException::new));
 
         //ACT
-        Mono<Semester> semesterMono = semesterRepository.findByFullName(semester.getFullName());
+        Mono<Semester> semesterMono = semesterService.findByFullName(semester.getFullName());
+
+        //ASSERT
+        StepVerifier.create(semesterMono)
+                .verifyError(SemesterNotFoundException.class);
+    }
+
+    @Test
+    void shouldGetCurrentSemester() {
+        //ARRANGE
+        Semester semester = SemesterMockData.getListSemester().get(0);
+
+        when(semesterRepository.findByFromLessThanEqualAndToGreaterThanEqual(any(), any())).thenReturn(Mono.just(semester));
+
+        //ACT
+        Mono<String> semesterMono = semesterService.getCurrentSemesterFullName();
+
+        //ASSERT
+        StepVerifier.create(semesterMono)
+                .assertNext(s -> Assertions.assertEquals(semester.getFullName(), s))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotGetCurrentSemester() {
+        //ARRANGE
+        Semester semester = SemesterMockData.getListSemester().get(0);
+
+        when(semesterRepository.findByFromLessThanEqualAndToGreaterThanEqual(any(), any())).thenReturn(Mono.error(SemesterNotFoundException::new));
+
+        //ACT
+        Mono<String> semesterMono = semesterService.getCurrentSemesterFullName();
 
         //ASSERT
         StepVerifier.create(semesterMono)
