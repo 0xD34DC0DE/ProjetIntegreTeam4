@@ -43,6 +43,7 @@ public class SupervisorService {
         });
     }
 
+    //TODO : refactor studentlist for object(email,LocalDate)  to be able to fetch student by session
     public Mono<Supervisor> addStudentEmailToStudentList(String supervisorId, String studentEmail) {
         return supervisorRepository.findById(supervisorId)
                 .flatMap(supervisor -> {
@@ -57,6 +58,8 @@ public class SupervisorService {
                 }).switchIfEmpty(Mono.error(new UserNotFoundException("Can't find a supervisor with given id: " + supervisorId)));
     }
 
+    //TODO : refactor to pass sessionName
+    //TODO : refactor to SessionService.findByName and filter all student that has been assigned between range
     public Flux<StudentDetailsDto> getAllAssignedStudents(String supervisorId) {
         return supervisorRepository.findById(supervisorId)
                 .map(Supervisor::getStudentEmails)
@@ -64,7 +67,7 @@ public class SupervisorService {
                 .map(StudentMapper::toDto);
     }
 
-    public Mono<Supervisor> getSupervisor(String email){
+    public Mono<Supervisor> getSupervisor(String email) {
         return supervisorRepository.findSupervisorByEmail(email)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
     }
