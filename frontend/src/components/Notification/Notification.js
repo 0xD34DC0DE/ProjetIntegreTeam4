@@ -13,27 +13,34 @@ import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutli
 import EventSource from "eventsource";
 import { UserInfoContext } from "../../stores/UserInfoStore";
 
-const Notification = () => {
+const Notification = ({ addNotification }) => {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [snackbarContent, setSnackbarContent] = useState("");
   const [snackbarTitle, setSnackbarTitle] = useState("");
   const [userInfo] = useContext(UserInfoContext);
-
-  const event = new EventSource("http://localhost:8080/notification/sse", {
-    headers: { Authorization: userInfo.jwt },
-  });
+  const [eventSource, setEventSource] = useState(undefined);
 
   useEffect(() => {
-    event.onopen = () => {
+    setEventSource(
+      new EventSource("http://localhost:8080/notification/sse", {
+        headers: { Authorization: userInfo.jwt },
+      })
+    );
+  }, [userInfo]);
+
+  useEffect(() => {
+    if (eventSource === undefined) return;
+    eventSource.onopen = () => {
       console.log("[EventSource] Connection established.");
     };
-    event.onmessage = (event) => {
+    eventSource.onmessage = (event) => {
       setShowSnackbar(true);
       const data = JSON.parse(event.data);
       setSnackbarTitle(data.title);
       setSnackbarContent(data.content);
+      addNotification(data);
     };
-  }, []);
+  }, [eventSource]);
 
   const handleOnClose = () => {
     setShowSnackbar(false);

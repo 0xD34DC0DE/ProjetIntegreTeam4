@@ -34,14 +34,14 @@ public class NotificationController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR', 'INTERNSHIP_MANAGER, SUPERVISOR')")
+    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
     public Mono<ResponseEntity<Notification>> createNotification(@RequestBody Notification notification) {
         return notificationService.createNotification(notification)
                 .map(n -> ResponseEntity.status(HttpStatus.CREATED).body(n));
     }
 
     @GetMapping("/sse")
-    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR', 'INTERNSHIP_MANAGER, SUPERVISOR')")
+    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
     public Flux<ServerSentEvent<String>> sseNotificationCreation(Principal principal) {
         return notificationCreatedEvents
                 .filter(event -> ((Notification) event.getSource()).getReceiverEmail().equals(UserSessionService.getLoggedUserEmail(principal)))
@@ -57,6 +57,7 @@ public class NotificationController {
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
     public Flux<Notification> findAllNotifications(Principal principal) {
         return notificationService
                 .findAllNotifications(principal);

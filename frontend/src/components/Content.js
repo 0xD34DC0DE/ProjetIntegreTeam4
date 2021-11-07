@@ -113,8 +113,6 @@ const Content = ({
               visible={selection.id === 14}
             />
           )}
-
-          <Notification></Notification>
         </Box>
       )}
       <OfferForm
