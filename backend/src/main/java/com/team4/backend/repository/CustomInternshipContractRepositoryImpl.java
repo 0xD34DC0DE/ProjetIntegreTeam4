@@ -3,6 +3,7 @@ package com.team4.backend.repository;
 import com.team4.backend.model.InternshipContract;
 import com.team4.backend.model.User;
 import com.team4.backend.service.UserService;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -14,11 +15,11 @@ public class CustomInternshipContractRepositoryImpl implements CustomInternshipC
 
     private final ReactiveMongoOperations mongoOperations;
 
-    private final UserService userService;
+    private final UserRepository userRepository;
 
-    public CustomInternshipContractRepositoryImpl(ReactiveMongoOperations mongoOperations, UserService userService) {
+    public CustomInternshipContractRepositoryImpl(ReactiveMongoOperations mongoOperations, UserRepository userRepository) {
         this.mongoOperations = mongoOperations;
-        this.userService = userService;
+        this.userRepository = userRepository;
     }
 
     @Override
@@ -45,7 +46,7 @@ public class CustomInternshipContractRepositoryImpl implements CustomInternshipC
 
         return mongoOperations.findOne(Query.query(criteria), InternshipContract.class)
                 .flatMap(internshipContract ->
-                        userService.findById(userId).map(user -> {
+                        userRepository.findById(userId).map(user -> {
                             switch (user.getRole()) {
                                 case STUDENT:
                                     return internshipContract.getStudentSignature().getUserId().equals(userId);
