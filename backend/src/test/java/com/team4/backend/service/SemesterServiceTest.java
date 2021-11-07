@@ -8,11 +8,11 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
+import java.util.List;
+
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -25,21 +25,18 @@ public class SemesterServiceTest {
     SemesterService semesterService;
 
     @Test
-    void shouldCreateSemester() {
+    void shouldInitializeSemestersAnnually() {
         //ARRANGE
-        Semester semester = SemesterMockData.getSemester();
+        List<Semester> semesters = SemesterMockData.getListSemester();
 
-        when(semesterRepository.save(any())).thenReturn(Mono.just(semester).map(s -> {
-            s.setId("615259e03835be1f53bd49e4");
-            return s;
-        }));
+        when(semesterRepository.saveAll(semesters)).thenReturn(Flux.fromIterable(semesters));
 
         //ACT
-        Mono<Semester> semesterMono = semesterService.create(semester.getFullName(), semester.getFrom(), semester.getTo());
+        Flux<Semester> semesterFlux = semesterService.initializeSemestersAnnually(semesters);
 
         //ASSERT
-        StepVerifier.create(semesterMono)
-                .assertNext(s -> assertEquals(semester.getFullName(), s.getFullName()))
+        StepVerifier.create(semesterFlux)
+                .expectNextCount(3)
                 .verifyComplete();
     }
 
