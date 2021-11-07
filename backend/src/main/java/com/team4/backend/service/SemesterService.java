@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.team4.backend.dto.SemesterDto;
 import com.team4.backend.exception.SemesterNotFoundException;
 import com.team4.backend.model.Semester;
 import com.team4.backend.repository.SemesterRepository;
@@ -35,6 +36,19 @@ public class SemesterService {
                 .map(Semester::getFullName)
                 //This should never happen, because we create the 3 semester yearly, but in case it happens
                 .switchIfEmpty(Mono.error(new SemesterNotFoundException("Can't find current semester!")));
+    }
+
+    public Mono<SemesterDto> getListSemesterFullName() {
+        SemesterDto semesterDto = new SemesterDto();
+
+        return getCurrentSemesterFullName().map(fullName -> {
+            semesterDto.setCurrentSemesterFullName(fullName);
+            return semesterDto;
+        }).map(semester -> {
+            semesterRepository.findAll().map(Semester::getFullName)
+                    .subscribe(fullName -> semester.getSemestersFullNames().add(fullName));
+            return semester;
+        });
     }
 
 }
