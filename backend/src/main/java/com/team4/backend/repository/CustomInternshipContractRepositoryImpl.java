@@ -1,10 +1,12 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.InternshipContract;
-import com.team4.backend.model.User;
 import com.team4.backend.service.UserService;
+import com.team4.backend.util.JwtUtil;
+import com.team4.backend.util.PBKDF2Encoder;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -12,15 +14,16 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
+@Import({UserService.class, PBKDF2Encoder.class, JwtUtil.class})
 public class CustomInternshipContractRepositoryImpl implements CustomInternshipContractRepository {
 
     private final ReactiveMongoOperations mongoOperations;
 
-    private final UserRepository userRepository;
+    private final UserService userService;
 
-    public CustomInternshipContractRepositoryImpl(ReactiveMongoOperations mongoOperations, UserRepository userRepository) {
+    public CustomInternshipContractRepositoryImpl(ReactiveMongoOperations mongoOperations, UserService userService) {
         this.mongoOperations = mongoOperations;
-        this.userRepository = userRepository;
+        this.userService = userService;
     }
 
     @Override
@@ -47,7 +50,7 @@ public class CustomInternshipContractRepositoryImpl implements CustomInternshipC
 
         return mongoOperations.findOne(Query.query(criteria), InternshipContract.class)
                 .flatMap(internshipContract ->
-                        userRepository.findById(userId)
+                        userService.findById(userId)
                                 .map(user -> {
                                     switch (user.getRole()) {
                                         case STUDENT:
