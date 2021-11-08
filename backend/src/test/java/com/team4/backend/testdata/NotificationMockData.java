@@ -1,9 +1,9 @@
 package com.team4.backend.testdata;
 
+import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.model.Notification;
 import com.team4.backend.model.enums.NotificationSeverity;
 import reactor.core.publisher.Flux;
-import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 
@@ -30,8 +30,8 @@ public abstract class NotificationMockData {
         );
     }
 
-    public static Mono<Notification> getNotification() {
-        return Mono.just(
+    public static Notification getNotification() {
+        return
                 Notification.notificationBuilder()
                         .id("507f191e810c19729de860ea")
                         .receiverEmail("email@gmail.com")
@@ -39,8 +39,18 @@ public abstract class NotificationMockData {
                         .severity(NotificationSeverity.LOW)
                         .creationDate(LocalDateTime.now())
                         .content("this is content 1")
-                        .build()
-        );
+                        .build();
+    }
+
+    public static NotificationDto getNotificationDto() {
+        return
+                NotificationDto.notificationDtoBuilder()
+                        .receiverEmail("email@gmail.com")
+                        .title("Title 1")
+                        .severity(NotificationSeverity.LOW)
+                        .creationDate(LocalDateTime.now())
+                        .content("this is content 1")
+                        .build();
     }
 
 }

@@ -87,7 +87,6 @@ const NotificationList = ({
               key={key}
               sx={{
                 backgroundColor: "rgba(100, 100, 100, 0.05)",
-
                 mb: 0.5,
               }}
             >

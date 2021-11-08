@@ -40,6 +40,10 @@ const Topbar = ({
     setSidebarOpen(!sidebarOpen);
   };
 
+  const handleMenuClick = () => {
+    setMenuOpen(!menuOpen);
+  };
+
   const handleNotificationMenuOpen = (event) => {
     setNotificationMenuOpen(true);
     setNotficationMenuAnchorEl(event.currentTarget);
@@ -75,12 +79,15 @@ const Topbar = ({
             </IconButton>
           </Tooltip>
           <Tooltip title="Menu">
-            <Button ref={menuAnchorRef}>
+            <Button ref={menuAnchorRef} onClick={handleMenuClick}>
               <PersonOutlineOutlinedIcon
                 sx={{ color: "text.primary", px: 0, mx: 0 }}
               />
               <Menu
                 open={menuOpen}
+                onClose={() => {
+                  setMenuOpen(false);
+                }}
                 anchorEl={menuAnchorRef.current}
                 sx={{ left: "-20px", p: 0, m: 0 }}
                 PaperProps={{

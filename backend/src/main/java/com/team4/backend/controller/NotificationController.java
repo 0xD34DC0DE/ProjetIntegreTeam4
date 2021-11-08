@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.event.NotificationCreatedEvent;
 import com.team4.backend.model.Notification;
 import com.team4.backend.publisher.NotificationCreatedPublisher;
@@ -33,8 +34,8 @@ public class NotificationController {
     }
 
     @PostMapping("/create")
-    public Mono<ResponseEntity<Notification>> createNotification(@RequestBody Notification notification) {
-        return notificationService.createNotification(notification)
+    public Mono<ResponseEntity<Notification>> createNotification(@RequestBody NotificationDto notificationDto) {
+        return notificationService.createNotification(notificationDto)
                 .map(n -> ResponseEntity.status(HttpStatus.CREATED).body(n));
     }
 

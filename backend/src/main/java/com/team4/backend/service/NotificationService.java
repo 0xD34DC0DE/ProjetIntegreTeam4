@@ -1,6 +1,8 @@
 package com.team4.backend.service;
 
+import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.event.NotificationCreatedEvent;
+import com.team4.backend.mapping.NotificationMapper;
 import com.team4.backend.model.Notification;
 import com.team4.backend.repository.NotificationRepository;
 import com.team4.backend.security.UserSessionService;
@@ -22,9 +24,9 @@ public class NotificationService {
         this.applicationEventPublisher = applicationEventPublisher;
     }
 
-    public Mono<Notification> createNotification(Notification notification) {
+    public Mono<Notification> createNotification(NotificationDto notification) {
         return notificationRepository
-                .save(notification)
+                .save(NotificationMapper.toEntity(notification))
                 .doOnSuccess(n -> applicationEventPublisher.publishEvent(new NotificationCreatedEvent(n)));
     }
 
