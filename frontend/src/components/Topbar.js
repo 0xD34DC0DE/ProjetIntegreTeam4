@@ -36,10 +36,6 @@ const Topbar = ({
   const [notificationMenuOpen, setNotificationMenuOpen] = useState(false);
   const [notficationMenuAnchorEl, setNotficationMenuAnchorEl] = useState(null);
 
-  const handleMenuClick = () => {
-    setMenuOpen(!menuOpen);
-  };
-
   const handleSidebarClick = () => {
     setSidebarOpen(!sidebarOpen);
   };
@@ -79,7 +75,7 @@ const Topbar = ({
             </IconButton>
           </Tooltip>
           <Tooltip title="Menu">
-            <Button onClick={handleMenuClick} ref={menuAnchorRef}>
+            <Button ref={menuAnchorRef}>
               <PersonOutlineOutlinedIcon
                 sx={{ color: "text.primary", px: 0, mx: 0 }}
               />
@@ -237,11 +233,14 @@ const Topbar = ({
         </Toolbar>
       </AppBar>
       <Toolbar />
-      <NotificationList
-        anchorEl={notficationMenuAnchorEl}
-        handleMenuClose={handleNotificationMenuClose}
-        menuOpen={notificationMenuOpen}
-      />
+      {userInfo && userInfo.loggedIn && (
+        <NotificationList
+          anchorEl={notficationMenuAnchorEl}
+          handleMenuClose={handleNotificationMenuClose}
+          setMenuOpen={setNotificationMenuOpen}
+          menuOpen={notificationMenuOpen}
+        />
+      )}
     </Box>
   );
 };

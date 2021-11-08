@@ -1,6 +1,7 @@
 package com.team4.backend;
 
 import com.team4.backend.model.*;
+import com.team4.backend.model.enums.NotificationSeverity;
 import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.*;
@@ -107,10 +108,31 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertMonitors();
         insertSupervisors();
         insertCvs();
-        insertInternship();
+        insertNotifications();
+        insertInternships();
     }
 
-    private void insertInternship() {
+    private void insertNotifications() {
+        List<Notification> notifications = Arrays.asList(
+                Notification.notificationBuilder()
+                        .content("CV refusé!")
+                        .title("Notification")
+                        .receiverEmail("student@gmail.com")
+                        .severity(NotificationSeverity.HIGH)
+                        .build(),
+                Notification.notificationBuilder()
+                        .content("CV Accepté!")
+                        .title("Notification")
+                        .receiverEmail("123456789@gmail.com")
+                        .severity(NotificationSeverity.LOW)
+                        .build()
+        );
+
+        notificationRepository
+                .saveAll(notifications).subscribe(notification -> log.info("Notifications has been saved: {}", notification));
+    }
+
+    private void insertInternships() {
         List<Internship> internships = Arrays.asList(
                 Internship.builder()
                         .monitorEmail("9182738492@gmail.com")

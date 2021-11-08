@@ -33,4 +33,9 @@ public class NotificationService {
                 .findByReceiverEmail(UserSessionService.getLoggedUserEmail(principal));
     }
 
+    public Mono<Void> deleteNotification(String id) {
+        return notificationRepository
+                .deleteById(id);
+    }
+
 }

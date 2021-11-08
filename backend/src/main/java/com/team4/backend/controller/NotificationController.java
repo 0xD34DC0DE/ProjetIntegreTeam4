@@ -6,7 +6,6 @@ import com.team4.backend.model.Notification;
 import com.team4.backend.publisher.NotificationCreatedPublisher;
 import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.NotificationService;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.ServerSentEvent;
@@ -19,8 +18,8 @@ import java.io.IOException;
 import java.security.Principal;
 
 @RestController
-@Log4j2
 @RequestMapping("/notification")
+@PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
 public class NotificationController {
 
     private final NotificationService notificationService;
@@ -34,15 +33,13 @@ public class NotificationController {
     }
 
     @PostMapping("/create")
-    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
     public Mono<ResponseEntity<Notification>> createNotification(@RequestBody Notification notification) {
         return notificationService.createNotification(notification)
                 .map(n -> ResponseEntity.status(HttpStatus.CREATED).body(n));
     }
 
     @GetMapping("/sse")
-    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
-    public Flux<ServerSentEvent<String>> sseNotificationCreation(Principal principal) {
+    public Flux<ServerSentEvent<String>> sseNotificationCreation(@RequestParam String channelId, Principal principal) {
         return notificationCreatedEvents
                 .filter(event -> ((Notification) event.getSource()).getReceiverEmail().equals(UserSessionService.getLoggedUserEmail(principal)))
                 .map(event -> {
@@ -57,10 +54,16 @@ public class NotificationController {
     }
 
     @GetMapping
-    @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
     public Flux<Notification> findAllNotifications(Principal principal) {
         return notificationService
                 .findAllNotifications(principal);
+    }
+
+    @DeleteMapping("/{id}")
+    public Mono<ResponseEntity<String>> deleteNotification(@PathVariable String id) {
+        return notificationService
+                .deleteNotification(id)
+                .thenReturn(ResponseEntity.ok(""));
     }
 
 }

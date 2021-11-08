@@ -12,19 +12,28 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import EventSource from "eventsource";
 import { UserInfoContext } from "../../stores/UserInfoStore";
+import { v4 as uuidv4 } from "uuid";
 
-const Notification = ({ addNotification }) => {
+const Notification = ({ addNotification, deleteNotification }) => {
   const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarContent, setSnackbarContent] = useState("");
-  const [snackbarTitle, setSnackbarTitle] = useState("");
   const [userInfo] = useContext(UserInfoContext);
+  const [notification, setNotification] = useState({
+    id: "",
+    title: "",
+    content: "",
+  });
   const [eventSource, setEventSource] = useState(undefined);
 
   useEffect(() => {
+    if (userInfo === undefined) return;
+    console.log(userInfo);
     setEventSource(
-      new EventSource("http://localhost:8080/notification/sse", {
-        headers: { Authorization: userInfo.jwt },
-      })
+      new EventSource(
+        "http://localhost:8080/notification/sse?channelId=" + uuidv4(),
+        {
+          headers: { Authorization: userInfo.jwt },
+        }
+      )
     );
   }, [userInfo]);
 
@@ -36,8 +45,11 @@ const Notification = ({ addNotification }) => {
     eventSource.onmessage = (event) => {
       setShowSnackbar(true);
       const data = JSON.parse(event.data);
-      setSnackbarTitle(data.title);
-      setSnackbarContent(data.content);
+      setNotification({
+        id: data.id,
+        content: data.content,
+        title: data.title,
+      });
       addNotification(data);
     };
   }, [eventSource]);
@@ -61,14 +73,16 @@ const Notification = ({ addNotification }) => {
             m: 0,
           }}
           message={
-            <Grid container ml={2}>
+            <Grid container ml={2} sx={{ maxWidth: "250px" }}>
               <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                 <Typography variant="subtitle2" sx={{ fontSize: "1.35em" }}>
-                  {snackbarTitle}
+                  {notification.title}
                 </Typography>
               </Grid>
               <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
-                <Typography variant="caption">{snackbarContent}</Typography>
+                <Typography variant="caption">
+                  {notification.content}
+                </Typography>
               </Grid>
             </Grid>
           }
@@ -94,7 +108,10 @@ const Notification = ({ addNotification }) => {
                   <IconButton
                     variant="text"
                     sx={{ fontSize: "0.75em" }}
-                    onClick={handleOnClose}
+                    onClick={() => {
+                      deleteNotification(notification.id);
+                      setShowSnackbar(false);
+                    }}
                   >
                     <CancelOutlinedIcon
                       sx={{

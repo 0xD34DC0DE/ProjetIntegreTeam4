@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @Data
 @NoArgsConstructor
+@Builder
 @Document(collection = "notifications")
 public class Notification implements Serializable {
 
@@ -22,7 +23,8 @@ public class Notification implements Serializable {
     private String content;
     private String receiverEmail;
     private NotificationSeverity severity;
-    private LocalDateTime creationDate;
+    @Builder.Default
+    private LocalDateTime creationDate = LocalDateTime.now();
 
     @Builder(builderMethodName = "notificationBuilder")
     public Notification(String id,
