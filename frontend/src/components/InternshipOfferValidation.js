@@ -27,7 +27,7 @@ const InternshipOfferValidation = ({
     const getUnvalidatedInternshipOffers = async () => {
       let response = await axios({
         method: "GET",
-        url: "http://localhost:8080/internshipOffer/getNotYetValidatedInternshipOffers2/SUMMER 2021",
+        url: "http://localhost:8080/internshipOffer/getNotYetValidatedInternshipOffers2/WINTER-2022",
         headers: {
           Authorization: userInfo.jwt,
         },

@@ -62,10 +62,9 @@ public class InternshipOfferRepositoryTest {
     void shouldFindAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(){
         //ARRANGE
         LocalDateTime date1 = LocalDateTime.now();
-        LocalDateTime date2 = LocalDateTime.now().plusWeeks(3);
 
         //ACT
-        Flux<InternshipOffer> internshipOfferFlux = internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(date1,date2);
+        Flux<InternshipOffer> internshipOfferFlux = internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(date1,date1.plusWeeks(3));
 
 
         //ASSERT

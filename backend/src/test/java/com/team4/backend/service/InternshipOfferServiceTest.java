@@ -284,21 +284,6 @@ public class InternshipOfferServiceTest {
     }
 
     @Test
-    void shouldOnlyGetNonValidatedInternshipOffers() {
-        //ARRANGE
-        when(internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse())
-                .thenReturn(InternshipOfferMockData.getNonValidatedInternshipOffers());
-
-        //ACT
-        Flux<InternshipOffer> nonValidatedInternshipOffers = internshipOfferService
-                .getNotYetValidatedInternshipOffers();
-
-        //ASSERT
-        StepVerifier.create(nonValidatedInternshipOffers).assertNext(o -> assertFalse(o.getIsValidated()))
-                .assertNext(o -> assertFalse(o.getIsValidated())).verifyComplete();
-    }
-
-    @Test
     void shouldValidateInternshipOffer() {
         //ARRANGE
         String id = "234dsd2egd54ter";
@@ -331,22 +316,6 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldGetNotYetValidatedInternshipOffer() {
         //ARRANGE
-        when(internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse())
-                .thenReturn(InternshipOfferMockData.getNonValidatedInternshipOffers());
-
-        //ACT
-        Flux<InternshipOffer> validIntershipOffer = internshipOfferService.getNotYetValidatedInternshipOffers();
-
-        //ASSERT
-        StepVerifier.create(validIntershipOffer)
-                .assertNext(o -> assertTrue(!o.getIsValidated() && o.getValidationDate() == null))
-                .assertNext(o -> assertTrue(!o.getIsValidated() && o.getValidationDate() == null))
-                .verifyComplete();
-    }
-
-    @Test
-    void shouldGetNotYetValidatedInternshipOffer2() {
-        //ARRANGE
         String semesterFullName = SemesterName.FALL + "-" + LocalDateTime.now().getYear();
         Semester semester = SemesterMockData.getListSemester().get(0);
 
@@ -355,7 +324,7 @@ public class InternshipOfferServiceTest {
                 .thenReturn(InternshipOfferMockData.getNonValidatedInternshipOffers());
 
         //ACT
-        Flux<InternshipOffer> internshipOfferFlux = internshipOfferService.getNotYetValidatedInternshipOffers2(semesterFullName);
+        Flux<InternshipOffer> internshipOfferFlux = internshipOfferService.getNotYetValidatedInternshipOffers(semesterFullName);
 
         //ASSERT
         StepVerifier.create(internshipOfferFlux)

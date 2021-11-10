@@ -93,16 +93,10 @@ public class InternshipOfferController {
                 .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 
-    @GetMapping("/getNotYetValidatedInternshipOffers")
+    @GetMapping("/getNotYetValidatedInternshipOffers/{semesterFullName}")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Flux<InternshipOfferDetailedDto> getNotYetValidatedInternshipOffers() {
-        return internshipOfferService.getNotYetValidatedInternshipOffers().map(InternshipOfferMapper::toDto);
-    }
-
-    @GetMapping("/getNotYetValidatedInternshipOffers2/{semesterFullName}")
-    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Flux<InternshipOfferDetailedDto> getNotYetValidatedInternshipOffers2(@PathVariable String semesterFullName) {
-        return internshipOfferService.getNotYetValidatedInternshipOffers2(semesterFullName).map(InternshipOfferMapper::toDto);
+    public Flux<InternshipOfferDetailedDto> getNotYetValidatedInternshipOffers(@PathVariable String semesterFullName) {
+        return internshipOfferService.getNotYetValidatedInternshipOffers(semesterFullName).map(InternshipOfferMapper::toDto);
     }
 
     @GetMapping("/interestedStudents/{monitorEmail}")

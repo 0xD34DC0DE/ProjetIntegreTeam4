@@ -368,7 +368,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isExclusive(false)
                         .listEmailInterestedStudents(new HashSet<>())
                         .build(),
-                InternshipOffer.builder().limitDateToApply(LocalDate.now())
+                InternshipOffer.builder().limitDateToApply(LocalDate.now().plusMonths(5))
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
                         .monitorEmail("monitor@gmail.com")
@@ -397,7 +397,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .listEmailInterestedStudents(new HashSet<>())
                         .emailOfApprovingInternshipManager("manager1@gmail.com")
                         .build(),
-                InternshipOffer.builder().limitDateToApply(LocalDate.now().plusMonths(5))
+                InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
                         .monitorEmail("monitor@gmail.com")

@@ -82,14 +82,7 @@ public class InternshipOfferService {
                         }));
     }
 
-    // TODO : refactor to add session name in argument
-    //TODO : call SessionService.findByName and pass range of date to new query
-    public Flux<InternshipOffer> getNotYetValidatedInternshipOffers() {
-        return internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse();
-    }
-
-    //TODO --> this will replace the other one
-    public Flux<InternshipOffer> getNotYetValidatedInternshipOffers2(String semesterFullName) {
+    public Flux<InternshipOffer> getNotYetValidatedInternshipOffers(String semesterFullName) {
         return semesterService.findByFullName(semesterFullName)
                 .flatMapMany(semester -> internshipOfferRepository
                         .findAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(semester.getFrom(), semester.getTo()));
