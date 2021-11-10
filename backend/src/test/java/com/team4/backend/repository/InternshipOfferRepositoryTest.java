@@ -33,6 +33,9 @@ public class InternshipOfferRepositoryTest {
     void init() {
         Flux<InternshipOffer> internshipOffers = Flux.just(
                 InternshipOffer.builder()
+                        .id("618b68cae908a226e003d7e6")
+                        .isExclusive(true)
+                        .limitDateToApply(LocalDate.now().plusWeeks(2))
                         .isValidated(true)
                         .validationDate(LocalDateTime.now())
                         .build(),
@@ -106,6 +109,26 @@ public class InternshipOfferRepositoryTest {
         StepVerifier.create(internshipOfferFlux)
                 .expectNextCount(2)
                 .verifyComplete();
+    }
+
+    @Test
+    void shouldFindByIdAndIsExclusiveTrueAndIsValidatedTrueAndLimitDateToApplyIsBetween(){
+        //ARRANGE
+        String id = "618b68cae908a226e003d7e6";
+        LocalDateTime date1 = LocalDateTime.now().minusDays(3);
+
+        //ACT
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferRepository.findByIdAndIsExclusiveTrueAndIsValidatedTrueAndLimitDateToApplyIsBetween(
+                id,
+                date1,
+                date1.plusWeeks(3));
+
+
+        //ASSERT
+        StepVerifier.create(internshipOfferMono)
+                .assertNext(internshipOffer -> Assertions.assertEquals(id,internshipOffer.getId()))
+                .verifyComplete();
+
     }
 
 }

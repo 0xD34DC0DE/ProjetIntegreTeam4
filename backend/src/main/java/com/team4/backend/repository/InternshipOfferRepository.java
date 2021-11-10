@@ -13,11 +13,12 @@ import java.util.Date;
 
 @Repository
 public interface InternshipOfferRepository extends ReactiveMongoRepository<InternshipOffer, String> {
-    Flux<InternshipOffer> findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(LocalDate date, Pageable page);
 
-    Flux<InternshipOffer> findAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(LocalDateTime date1,LocalDateTime date2, Pageable pageable);
+    Flux<InternshipOffer> findAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(LocalDateTime date1, LocalDateTime date2, Pageable pageable);
 
     Mono<InternshipOffer> findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(String id, LocalDate date);
+
+    Mono<InternshipOffer> findByIdAndIsExclusiveTrueAndIsValidatedTrueAndLimitDateToApplyIsBetween(String id,LocalDateTime date1, LocalDateTime date2);
 
     Mono<Long> countAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(LocalDateTime date1, LocalDateTime date2);
 

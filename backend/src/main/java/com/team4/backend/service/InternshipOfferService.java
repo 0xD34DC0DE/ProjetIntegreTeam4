@@ -70,7 +70,6 @@ public class InternshipOfferService {
     public Flux<InternshipOfferStudentViewDto> getGeneralInternshipOffers(Integer page,
                                                                           Integer size,
                                                                           String studentEmail) {
-
         return Mono.zip(studentService.findByEmail(studentEmail), semesterService.getCurrentSemester())
                 .flatMapMany(tuple -> {
                     Student student = tuple.getT1();
