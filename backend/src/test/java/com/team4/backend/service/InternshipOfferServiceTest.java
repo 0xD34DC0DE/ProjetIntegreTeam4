@@ -185,8 +185,11 @@ public class InternshipOfferServiceTest {
         List<InternshipOfferStudentViewDto> internshipOfferStudentViewDtos = InternshipOfferMockData
                 .getListInternshipOfferStudentViewDto(2);
 
-        when(internshipOfferRepository.findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(
-                any(LocalDate.class), any(Pageable.class)))
+        when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
+        when(internshipOfferRepository.findAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(
+                any(LocalDateTime.class),
+                any(LocalDateTime.class),
+                any(Pageable.class)))
                 .thenReturn(Flux.fromIterable(internshipOffers));
 
         when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
@@ -208,6 +211,7 @@ public class InternshipOfferServiceTest {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
 
+        when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
         when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         //ACT
@@ -492,8 +496,11 @@ public class InternshipOfferServiceTest {
 
         student.getAppliedOffersId().add(internshipOfferStudentViewDtos.get(0).getId());
 
-        when(internshipOfferRepository.findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(
-                any(LocalDate.class), any(Pageable.class)))
+        when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
+        when(internshipOfferRepository.findAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(
+                any(LocalDateTime.class),
+                any(LocalDateTime.class),
+                any(Pageable.class)))
                 .thenReturn(Flux.fromIterable(internshipOffers));
 
         when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));

@@ -9,6 +9,7 @@ import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.model.InternshipOffer;
+import com.team4.backend.model.Semester;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.InternshipOfferRepository;
 import com.team4.backend.util.ValidatingPageRequest;
@@ -66,23 +67,27 @@ public class InternshipOfferService {
                 }));
     }
 
-
     public Flux<InternshipOfferStudentViewDto> getGeneralInternshipOffers(Integer page,
                                                                           Integer size,
                                                                           String studentEmail) {
 
-        //TODO : get current session date range to pass to new query of internshipOfferRepository
-        return studentService.findByEmail(studentEmail)
-                .flatMapMany(student -> ValidatingPageRequest.getPageRequestMono(page, size)
-                        .flatMapMany(pageRequest -> internshipOfferRepository
-                                .findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(LocalDate.now(),
-                                        pageRequest))
-                        .map(InternshipOfferMapper::toStudentViewDto).flatMap(internshipOfferDto -> {
-                            if (student.getAppliedOffersId().contains(internshipOfferDto.getId())) {
-                                internshipOfferDto.setHasAlreadyApplied(true);
-                            }
-                            return Mono.just(internshipOfferDto);
-                        }));
+        return Mono.zip(studentService.findByEmail(studentEmail), semesterService.getCurrentSemester())
+                .flatMapMany(tuple -> {
+                    Student student = tuple.getT1();
+                    Semester semester = tuple.getT2();
+
+                    return ValidatingPageRequest.getPageRequestMono(page, size)
+                            .flatMapMany(pageRequest -> internshipOfferRepository.findAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(
+                                    semester.getFrom(),
+                                    semester.getTo(),
+                                    pageRequest
+                            ))
+                            .map(InternshipOfferMapper::toStudentViewDto).flatMap(internshipOfferDto -> {
+                                if (student.getAppliedOffersId().contains(internshipOfferDto.getId()))
+                                    internshipOfferDto.setHasAlreadyApplied(true);
+                                return Mono.just(internshipOfferDto);
+                            });
+                });
     }
 
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers(String semesterFullName) {

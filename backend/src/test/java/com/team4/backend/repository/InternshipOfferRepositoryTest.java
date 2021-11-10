@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Flux;
@@ -88,6 +89,23 @@ public class InternshipOfferRepositoryTest {
                 .assertNext(c -> Assertions.assertEquals(1, c))
                 .verifyComplete();
 
+    }
+
+    @Test
+    void shouldFindAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween() {
+        //ARRANGE
+        LocalDateTime date1 = LocalDateTime.now().minusDays(3);
+
+        //ACT
+        Flux<InternshipOffer> internshipOfferFlux = internshipOfferRepository.findAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(date1,
+                date1.plusWeeks(3),
+                PageRequest.of(0,10));
+
+
+        //ASSERT
+        StepVerifier.create(internshipOfferFlux)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
 }
