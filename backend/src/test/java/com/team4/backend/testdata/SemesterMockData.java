@@ -19,7 +19,7 @@ public abstract class SemesterMockData {
 
         return Arrays.asList(
                 Semester.builder()
-                        .fullName(SemesterName.AUTUMN + " " + currentDateTime.getYear())
+                        .fullName(SemesterName.FALL + " " + currentDateTime.getYear())
                         .from(currentDateTime
                                 .withMonth(Month.AUGUST.getValue())
                                 .withYear(currentDateTime.getYear())
@@ -77,7 +77,7 @@ public abstract class SemesterMockData {
 
     public static SemesterDto getSemesterDto() {
         return SemesterDto.builder()
-                .currentSemesterFullName(SemesterName.AUTUMN + " " + LocalDateTime.now().getYear())
+                .currentSemesterFullName(SemesterName.FALL + " " + LocalDateTime.now().getYear())
                 .semestersFullNames(new TreeSet<>(getListSemester().stream().map(Semester::getFullName).collect(Collectors.toList())))
                 .build();
     }

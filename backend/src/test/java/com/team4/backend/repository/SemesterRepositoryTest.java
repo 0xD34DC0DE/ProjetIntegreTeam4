@@ -40,7 +40,7 @@ public class SemesterRepositoryTest {
     @Test
     void shouldFindSemesterByName() {
         //ARRANGE
-        String fullName = SemesterName.AUTUMN + " " + 2021;
+        String fullName = SemesterName.FALL + " " + 2021;
 
         //ACT
         Mono<Semester> semesterMono = semesterRepository.findByFullName(fullName);
@@ -54,7 +54,7 @@ public class SemesterRepositoryTest {
     @Test
     void shouldNotFindSemesterByName() {
         //ARRANGE
-        String fullName = SemesterName.AUTUMN + " " + 2019;
+        String fullName = SemesterName.FALL + " " + 2019;
 
         //ACT
         Mono<Semester> semesterMono = semesterRepository.findByFullName(fullName);

@@ -14,7 +14,7 @@ public abstract class SemesterUtil {
 
         return Arrays.asList(
                 Semester.builder()
-                        .fullName(SemesterName.AUTUMN + " " + currentDateTime.getYear())
+                        .fullName(SemesterName.FALL + " " + currentDateTime.getYear())
                         .from(currentDateTime
                                 .withMonth(Month.AUGUST.getValue())
                                 .withYear(currentDateTime.getYear())
