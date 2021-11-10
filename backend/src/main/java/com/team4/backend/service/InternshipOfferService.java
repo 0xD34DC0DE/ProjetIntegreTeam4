@@ -141,7 +141,6 @@ public class InternshipOfferService {
             if (!internshipOffer.getIsValidated()) {
                 return Mono.error(new UnauthorizedException("Cannot apply to unvalidated offers"));
             }
-            //TODO --> check if it is in current session
             return studentService.findByEmail(studentEmail)
                     .flatMap(student -> addStudentEmailToOfferInterestedStudents(internshipOffer, student));
         });

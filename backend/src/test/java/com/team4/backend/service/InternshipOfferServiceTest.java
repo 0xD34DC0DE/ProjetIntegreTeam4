@@ -222,7 +222,7 @@ public class InternshipOfferServiceTest {
     void shouldGetGeneralInternshipOfferPageCount() {
         //ARRANGE
         when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
-        when(internshipOfferRepository.countAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(any(),any()))
+        when(internshipOfferRepository.countAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(any(), any()))
                 .thenReturn(Mono.just(1L));
         //ACT
         Mono<Long> pageCountMono = internshipOfferService.getInternshipOffersPageCount(1);
@@ -245,6 +245,7 @@ public class InternshipOfferServiceTest {
     void shouldGetExclusiveInternshipOfferPageCount() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
+
         when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         //ACT
@@ -290,6 +291,7 @@ public class InternshipOfferServiceTest {
         //ARRANGE
         String id = "234dsd2egd54ter";
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
         when(internshipOfferRepository.findById(id)).thenReturn(Mono.just(internshipOffer));
         when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
 
@@ -445,13 +447,13 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldMonitorOffersInterestedStudentsContainsStudentEmail() {
         //ARRANGE
-
+        String monitorEmail = "sender";
+        String studentEmail = "student1@email.com";
         Flux<InternshipOffer> internshipOffers = InternshipOfferMockData.getAllInternshipOffers();
+
         when(internshipOfferRepository.findAllByMonitorEmailAndIsValidatedTrue(any()))
                 .thenReturn(internshipOffers);
 
-        String monitorEmail = "sender";
-        String studentEmail = "student1@email.com";
 
         //ACT
         Mono<Boolean> response = internshipOfferService
@@ -464,8 +466,8 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldNotMonitorOffersInterestedStudentsContainsStudentEmail() {
         //ARRANGE
-
         Flux<InternshipOffer> internshipOffers = InternshipOfferMockData.getAllInternshipOffers();
+
         when(internshipOfferRepository.findAllByMonitorEmailAndIsValidatedTrue(any()))
                 .thenReturn(internshipOffers);
 
