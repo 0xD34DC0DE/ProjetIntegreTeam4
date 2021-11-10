@@ -25,14 +25,11 @@ const Notification = ({ addNotification, deleteNotification }) => {
   const [eventSource, setEventSource] = useState(undefined);
 
   useEffect(() => {
-    if (userInfo === undefined) return;
-    console.log(userInfo);
+    if (!userInfo.loggedIn) return;
     setEventSource(
       new EventSource(
         "http://localhost:8080/notification/sse?channelId=" + uuidv4(),
-        {
-          headers: { Authorization: userInfo.jwt },
-        }
+        { headers: { Authorization: userInfo.jwt } }
       )
     );
   }, [userInfo]);
@@ -41,6 +38,10 @@ const Notification = ({ addNotification, deleteNotification }) => {
     if (eventSource === undefined) return;
     eventSource.onopen = () => {
       console.log("[EventSource] Connection established.");
+    };
+    eventSource.onerror = (e) => {
+      console.log(e);
+      eventSource.close();
     };
     eventSource.onmessage = (event) => {
       setShowSnackbar(true);
