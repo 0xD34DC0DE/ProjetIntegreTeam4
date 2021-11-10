@@ -13,6 +13,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @DataMongoTest
@@ -28,9 +29,19 @@ public class InternshipOfferRepositoryTest {
     @BeforeAll
     void init() {
         Flux<InternshipOffer> internshipOffers = Flux.just(
-                InternshipOffer.builder().isValidated(true).validationDate(LocalDateTime.now()).build(),
-                InternshipOffer.builder().isValidated(false).validationDate(null).build(),
-                InternshipOffer.builder().isValidated(false).validationDate(null).build()
+                InternshipOffer.builder()
+                        .isValidated(true)
+                        .validationDate(LocalDateTime.now())
+                        .build(),
+                InternshipOffer.builder()
+                        .isValidated(false)
+                        .limitDateToApply(LocalDate.now())
+                        .validationDate(null)
+                        .build(),
+                InternshipOffer.builder()
+                        .limitDateToApply(LocalDate.now().plusWeeks(2))
+                        .isValidated(false)
+                        .validationDate(null).build()
         );
 
         internshipOfferRepository.saveAll(internshipOffers).subscribe();
@@ -43,6 +54,22 @@ public class InternshipOfferRepositoryTest {
 
         //ASSERT
         StepVerifier.create(validatedInternshipOffers)
+                .expectNextCount(2)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldFindAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(){
+        //ARRANGE
+        LocalDateTime date1 = LocalDateTime.now();
+        LocalDateTime date2 = LocalDateTime.now().plusWeeks(3);
+
+        //ACT
+        Flux<InternshipOffer> internshipOfferFlux = internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(date1,date2);
+
+
+        //ASSERT
+        StepVerifier.create(internshipOfferFlux)
                 .expectNextCount(2)
                 .verifyComplete();
     }
