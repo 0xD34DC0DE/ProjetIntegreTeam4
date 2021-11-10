@@ -221,7 +221,8 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldGetGeneralInternshipOfferPageCount() {
         //ARRANGE
-        when(internshipOfferRepository.countAllByIsExclusiveFalseAndLimitDateToApplyAfter(any(LocalDate.class)))
+        when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
+        when(internshipOfferRepository.countAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(any(),any()))
                 .thenReturn(Mono.just(1L));
         //ACT
         Mono<Long> pageCountMono = internshipOfferService.getInternshipOffersPageCount(1);
@@ -229,6 +230,7 @@ public class InternshipOfferServiceTest {
         //ASSERT
         StepVerifier.create(pageCountMono).expectNext(1L).verifyComplete();
     }
+
 
     @Test
     void shouldNotGetGeneralInternshipOfferPageCountInvalidPageSize() {

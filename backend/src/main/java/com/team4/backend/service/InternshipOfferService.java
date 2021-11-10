@@ -100,17 +100,18 @@ public class InternshipOfferService {
         }).flatMap(internshipOfferRepository::save);
     }
 
+
     public Mono<Long> getInternshipOffersPageCount(Integer size) {
         if (size < 1) {
             return Mono.error(InvalidPageRequestException::new);
         }
-        //TODO -->  to put in between session range + call semesterService.getCurrentSemester
-        return internshipOfferRepository.countAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now())
-                .map(count -> (long) Math.ceil((double) count / (double) size));
+
+        return semesterService.getCurrentSemester().flatMap(semester ->
+                internshipOfferRepository.countAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(semester.getFrom(), semester.getTo())
+                        .map(count -> (long) Math.ceil((double) count / (double) size))
+        );
     }
 
-
-    //TODO --> shouldBeRenamedToInternshipOffersExclusivePageCount
     public Mono<Long> getInternshipOffersPageCount(String studentEmail, Integer size) {
         if (size < 1) {
             return Mono.error(InvalidPageRequestException::new);

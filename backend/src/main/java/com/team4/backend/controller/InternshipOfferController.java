@@ -71,11 +71,7 @@ public class InternshipOfferController {
     public Mono<Long> getInternshipOffersCount(
             @PathVariable("email") String studentEmail,
             @RequestParam(value = "size", defaultValue = "5") Integer size) {
-        return internshipOfferService.getInternshipOffersPageCount(studentEmail, size)
-                .onErrorMap(
-                        UserNotFoundException.class,
-                        e -> new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage())
-                );
+        return internshipOfferService.getInternshipOffersPageCount(studentEmail, size);
     }
 
     @GetMapping(value = "/pageCount")
