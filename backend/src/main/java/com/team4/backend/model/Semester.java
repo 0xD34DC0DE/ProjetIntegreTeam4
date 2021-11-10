@@ -20,5 +20,6 @@ public class Semester implements Serializable {
     @Id
     private String id;
     private String fullName;
-    private LocalDateTime from, to;
+    private LocalDateTime from;
+    private LocalDateTime to;
 }
