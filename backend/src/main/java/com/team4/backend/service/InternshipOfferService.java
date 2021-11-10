@@ -54,17 +54,22 @@ public class InternshipOfferService {
     public Flux<InternshipOfferStudentViewDto> getStudentExclusiveOffers(String studentEmail,
                                                                          Integer page,
                                                                          Integer size) {
-        return studentService.findByEmail(studentEmail).flatMapMany(student -> ValidatingPageRequest
-                .applyPaging(student.getExclusiveOffersId(), page, size)
-                .flatMap(offerId -> internshipOfferRepository
-                        //TODO --> refactor this for Between
-                        .findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(offerId, LocalDate.now()))
-                .map(InternshipOfferMapper::toStudentViewDto).map(internshipOfferDto -> {
-                    if (student.getAppliedOffersId().contains(internshipOfferDto.getId())) {
-                        internshipOfferDto.setHasAlreadyApplied(true);
-                    }
-                    return internshipOfferDto;
-                }));
+        return Mono.zip(studentService.findByEmail(studentEmail), semesterService.getCurrentSemester())
+                .flatMapMany(tuple -> {
+                    Student student = tuple.getT1();
+                    Semester semester = tuple.getT2();
+
+                    return ValidatingPageRequest
+                            .applyPaging(student.getExclusiveOffersId(), page, size)
+                            .flatMap(offerId -> internshipOfferRepository.
+                                    findByIdAndIsExclusiveTrueAndIsValidatedTrueAndLimitDateToApplyIsBetween(offerId, semester.getFrom(), semester.getTo()))
+                            .map(InternshipOfferMapper::toStudentViewDto).map(internshipOfferDto -> {
+                                if (student.getAppliedOffersId().contains(internshipOfferDto.getId()))
+                                    internshipOfferDto.setHasAlreadyApplied(true);
+                                return internshipOfferDto;
+                            });
+
+                });
     }
 
     public Flux<InternshipOfferStudentViewDto> getGeneralInternshipOffers(Integer page,

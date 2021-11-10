@@ -104,14 +104,16 @@ public class InternshipOfferServiceTest {
         InternshipOffer internshipOffer2 = InternshipOfferMockData.getInternshipOffer();
         internshipOffer2.setId(exclusiveOfferIds.get(1));
 
+        when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
+
         when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
-        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
-                same(exclusiveOfferIds.get(0)), any(LocalDate.class)))
+        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndIsValidatedTrueAndLimitDateToApplyIsBetween(
+                same(exclusiveOfferIds.get(0)), any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(Mono.just(internshipOffer1));
 
-        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
-                same(exclusiveOfferIds.get(1)), any(LocalDate.class)))
+        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndIsValidatedTrueAndLimitDateToApplyIsBetween(
+                same(exclusiveOfferIds.get(1)), any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(Mono.just(internshipOffer2));
 
         //ACT
@@ -134,10 +136,12 @@ public class InternshipOfferServiceTest {
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
         internshipOffer.setId(exclusiveOfferIds.get(1));
 
+        when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
+
         when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
-        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
-                same(exclusiveOfferIds.get(1)), any(LocalDate.class)))
+        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndIsValidatedTrueAndLimitDateToApplyIsBetween(
+                same(exclusiveOfferIds.get(1)), any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(Mono.just(internshipOffer));
 
         //ACT
@@ -153,6 +157,7 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldNotGetExclusiveInternshipOfferStudentViewsInvalidEmail() {
         //ARRANGE
+        when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
         when(studentService.findByEmail(any(String.class))).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
@@ -167,6 +172,8 @@ public class InternshipOfferServiceTest {
     void shouldNotGetExclusiveInternshipOfferStudentViewsInvalidPageSize() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
+
+        when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
         when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
 
         //ACT
@@ -534,13 +541,14 @@ public class InternshipOfferServiceTest {
         student.getAppliedOffersId().add(internshipOffer1.getId());
 
         when(studentService.findByEmail(any(String.class))).thenReturn(Mono.just(student));
+        when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
 
-        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
-                same(exclusiveOfferIds.get(0)), any(LocalDate.class)))
+        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndIsValidatedTrueAndLimitDateToApplyIsBetween(
+                same(exclusiveOfferIds.get(0)), any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(Mono.just(internshipOffer1));
 
-        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(
-                same(exclusiveOfferIds.get(1)), any(LocalDate.class)))
+        when(internshipOfferRepository.findByIdAndIsExclusiveTrueAndIsValidatedTrueAndLimitDateToApplyIsBetween(
+                same(exclusiveOfferIds.get(1)), any(LocalDateTime.class), any(LocalDateTime.class)))
                 .thenReturn(Mono.just(internshipOffer2));
 
         //ACT
