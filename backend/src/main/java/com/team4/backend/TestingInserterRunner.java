@@ -114,7 +114,7 @@ public class TestingInserterRunner implements ApplicationRunner {
     }
 
     private void insertSemester() {
-        semesterRepository.saveAll(SemesterUtil.getSemesters(LocalDateTime.now()));
+        semesterRepository.saveAll(SemesterUtil.getSemesters(LocalDateTime.now())).subscribe();
     }
 
     private void insertInternship() {
@@ -397,7 +397,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .listEmailInterestedStudents(new HashSet<>())
                         .emailOfApprovingInternshipManager("manager1@gmail.com")
                         .build(),
-                InternshipOffer.builder().limitDateToApply(LocalDate.of(2021, 4, 4))
+                InternshipOffer.builder().limitDateToApply(LocalDate.now().plusMonths(5))
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
                         .monitorEmail("monitor@gmail.com")

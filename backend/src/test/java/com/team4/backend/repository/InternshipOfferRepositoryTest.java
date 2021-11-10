@@ -35,7 +35,7 @@ public class InternshipOfferRepositoryTest {
                         .build(),
                 InternshipOffer.builder()
                         .isValidated(false)
-                        .limitDateToApply(LocalDate.now())
+                        .limitDateToApply(LocalDate.now().plusDays(2))
                         .validationDate(null)
                         .build(),
                 InternshipOffer.builder()

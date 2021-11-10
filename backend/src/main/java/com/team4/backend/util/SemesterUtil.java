@@ -14,7 +14,7 @@ public abstract class SemesterUtil {
 
         return Arrays.asList(
                 Semester.builder()
-                        .fullName(SemesterName.FALL + " " + currentDateTime.getYear())
+                        .fullName(SemesterName.FALL + "-" + currentDateTime.getYear())
                         .from(currentDateTime
                                 .withMonth(Month.AUGUST.getValue())
                                 .withYear(currentDateTime.getYear())
@@ -32,7 +32,7 @@ public abstract class SemesterUtil {
                                 .withSecond(0))
                         .build(),
                 Semester.builder()
-                        .fullName(SemesterName.WINTER + " " + currentDateTime.plusYears(1).getYear())
+                        .fullName(SemesterName.WINTER + "-" + currentDateTime.plusYears(1).getYear())
                         .from(currentDateTime
                                 .withMonth(Month.JANUARY.getValue())
                                 .withYear(currentDateTime.plusYears(1).getYear())
@@ -50,7 +50,7 @@ public abstract class SemesterUtil {
                                 .withSecond(0))
                         .build(),
                 Semester.builder()
-                        .fullName(SemesterName.SUMMER + " " + currentDateTime.plusYears(1).getYear())
+                        .fullName(SemesterName.SUMMER + "-" + currentDateTime.plusYears(1).getYear())
                         .from(currentDateTime
                                 .withMonth(Month.JUNE.getValue())
                                 .withYear(currentDateTime.plusYears(1).getYear())

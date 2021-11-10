@@ -89,8 +89,8 @@ public class InternshipOfferService {
     }
 
     //TODO --> this will replace the other one
-    public Flux<InternshipOffer> getNotYetValidatedInternshipOffers2(String sessionFullName) {
-        return semesterService.findByFullName(sessionFullName)
+    public Flux<InternshipOffer> getNotYetValidatedInternshipOffers2(String semesterFullName) {
+        return semesterService.findByFullName(semesterFullName)
                 .flatMapMany(semester -> internshipOfferRepository
                         .findAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(semester.getFrom(), semester.getTo()));
     }

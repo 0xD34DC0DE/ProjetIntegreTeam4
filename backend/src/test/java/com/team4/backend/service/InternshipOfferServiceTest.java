@@ -347,7 +347,7 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldGetNotYetValidatedInternshipOffer2() {
         //ARRANGE
-        String semesterFullName = SemesterName.FALL + " " + LocalDateTime.now().getYear();
+        String semesterFullName = SemesterName.FALL + "-" + LocalDateTime.now().getYear();
         Semester semester = SemesterMockData.getListSemester().get(0);
 
         when(semesterService.findByFullName(semesterFullName)).thenReturn(Mono.just(semester));
