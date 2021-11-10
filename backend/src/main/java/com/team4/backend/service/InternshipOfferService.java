@@ -50,11 +50,13 @@ public class InternshipOfferService {
                         : Mono.error(new UserNotFoundException("Can't find monitor!")));
     }
 
-    public Flux<InternshipOfferStudentViewDto> getStudentExclusiveOffers(String studentEmail, Integer page,
+    public Flux<InternshipOfferStudentViewDto> getStudentExclusiveOffers(String studentEmail,
+                                                                         Integer page,
                                                                          Integer size) {
         return studentService.findByEmail(studentEmail).flatMapMany(student -> ValidatingPageRequest
                 .applyPaging(student.getExclusiveOffersId(), page, size)
                 .flatMap(offerId -> internshipOfferRepository
+                        //TODO --> refactor this for Between
                         .findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(offerId, LocalDate.now()))
                 .map(InternshipOfferMapper::toStudentViewDto).map(internshipOfferDto -> {
                     if (student.getAppliedOffersId().contains(internshipOfferDto.getId())) {
@@ -65,7 +67,8 @@ public class InternshipOfferService {
     }
 
 
-    public Flux<InternshipOfferStudentViewDto> getGeneralInternshipOffers(Integer page, Integer size,
+    public Flux<InternshipOfferStudentViewDto> getGeneralInternshipOffers(Integer page,
+                                                                          Integer size,
                                                                           String studentEmail) {
 
         //TODO : get current session date range to pass to new query of internshipOfferRepository
@@ -101,7 +104,7 @@ public class InternshipOfferService {
         if (size < 1) {
             return Mono.error(InvalidPageRequestException::new);
         }
-
+        //TODO -->  to put in between session range
         return internshipOfferRepository.countAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate.now())
                 .map(count -> (long) Math.ceil((double) count / (double) size));
     }
@@ -135,6 +138,7 @@ public class InternshipOfferService {
             if (!internshipOffer.getIsValidated()) {
                 return Mono.error(new UnauthorizedException("Cannot apply to unvalidated offers"));
             }
+            //TODO --> check if it is in current session
             return studentService.findByEmail(studentEmail)
                     .flatMap(student -> addStudentEmailToOfferInterestedStudents(internshipOffer, student));
         });

@@ -48,17 +48,6 @@ public class InternshipOfferRepositoryTest {
     }
 
     @Test
-    void shouldFindNotYetValidatedInternshipOffer() {
-        //ACT
-        Flux<InternshipOffer> validatedInternshipOffers = internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse();
-
-        //ASSERT
-        StepVerifier.create(validatedInternshipOffers)
-                .expectNextCount(2)
-                .verifyComplete();
-    }
-
-    @Test
     void shouldFindAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(){
         //ARRANGE
         LocalDateTime date1 = LocalDateTime.now();

@@ -84,23 +84,21 @@ public class SemesterServiceTest {
         when(semesterRepository.findByFromLessThanEqualAndToGreaterThanEqual(any(), any())).thenReturn(Mono.just(currentSemester));
 
         //ACT
-        Mono<String> semesterMono = semesterService.getCurrentSemesterFullName();
+        Mono<Semester> semesterMono = semesterService.getCurrentSemester();
 
         //ASSERT
         StepVerifier.create(semesterMono)
-                .assertNext(s -> assertEquals(currentSemester.getFullName(), s))
+                .assertNext(s -> assertEquals(currentSemester.getFullName(), s.getFullName()))
                 .verifyComplete();
     }
 
     @Test
     void shouldNotGetCurrentSemester() {
         //ARRANGE
-        Semester currentSemester = SemesterMockData.getListSemester().get(0);
-
         when(semesterRepository.findByFromLessThanEqualAndToGreaterThanEqual(any(), any())).thenReturn(Mono.error(SemesterNotFoundException::new));
 
         //ACT
-        Mono<String> semesterMono = semesterService.getCurrentSemesterFullName();
+        Mono<Semester> semesterMono = semesterService.getCurrentSemester();
 
         //ASSERT
         StepVerifier.create(semesterMono)
