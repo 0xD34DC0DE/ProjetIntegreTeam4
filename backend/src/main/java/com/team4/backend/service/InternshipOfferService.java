@@ -63,6 +63,8 @@ public class InternshipOfferService {
 
     public Flux<InternshipOfferStudentViewDto> getGeneralInternshipOffers(Integer page, Integer size,
                                                                           String studentEmail) {
+
+        //TODO : get current session date range to pass to new query of internshipOfferRepository
         return studentService.findByEmail(studentEmail)
                 .flatMapMany(student -> ValidatingPageRequest.getPageRequestMono(page, size)
                         .flatMapMany(pageRequest -> internshipOfferRepository
@@ -76,6 +78,8 @@ public class InternshipOfferService {
                         }));
     }
 
+    // TODO : refactor to add session name in argument
+    //TODO : call SessionService.findByName and pass range of date to new query
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers() {
         return internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse();
     }
@@ -132,6 +136,8 @@ public class InternshipOfferService {
         });
     }
 
+    // TODO :call SessionService.findBySessionName()
+    //TODO: refactor internshipOfferRepositoryQuery to add DateBetween and pass the range of the session
     public Flux<InternshipOfferStudentInterestViewDto> getInterestedStudents(String monitorEmail) {
         return internshipOfferRepository.findAllByMonitorEmailAndIsValidatedTrue(monitorEmail)
                 .filter(internshipOffer -> internshipOffer.getListEmailInterestedStudents() != null)
@@ -165,6 +171,7 @@ public class InternshipOfferService {
             return Mono.just(offer);
         });
     }
+
 
     public Flux<InternshipOffer> getAllNonValidatedOffers(Date sessionStart, Date sessionEnd) {
         return internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyBetween(sessionStart, sessionEnd);

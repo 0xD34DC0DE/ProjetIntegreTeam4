@@ -41,9 +41,12 @@ public class TestingInserterRunner implements ApplicationRunner {
     private final FileMetaDataRepository fileMetaDataRepository;
 
     private final InternshipRepository internshipRepository;
+
     private final EvaluationRepository evaluationRepository;
 
     private final InternshipManagerRepository internshipManagerRepository;
+
+    private final SemesterRepository semesterRepository;
 
     private final Lorem lorem;
 
@@ -63,7 +66,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                                  PBKDF2Encoder pbkdf2Encoder,
                                  FileMetaDataRepository fileMetaDataRepository,
                                  InternshipManagerRepository internshipManagerRepository,
-                                 InternshipRepository internshipRepository) {
+                                 InternshipRepository internshipRepository,
+                                 SemesterRepository semesterRepository) {
         this.userRepository = userRepository;
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
@@ -75,9 +79,10 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.internshipRepository = internshipRepository;
         this.evaluationRepository = evaluationRepository;
         this.internshipManagerRepository = internshipManagerRepository;
+        this.semesterRepository = semesterRepository;
         this.evaluationsDates = new TreeSet<>();
-        this.evaluationsDates.add(LocalDate.of(2019,4,4));
-        this.evaluationsDates.add(LocalDate.of(2020,9,4));
+        this.evaluationsDates.add(LocalDate.of(2019, 4, 4));
+        this.evaluationsDates.add(LocalDate.of(2020, 9, 4));
         this.evaluationsDates.add(LocalDate.now());
         this.lorem = LoremIpsum.getInstance();
         this.studentSet = new HashSet<>();
@@ -96,6 +101,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         internshipRepository.deleteAll().subscribe();
         evaluationRepository.deleteAll().subscribe();
         internshipContractRepository.deleteAll().subscribe();
+        semesterRepository.deleteAll().subscribe();
 
         insertInternshipOffersInternshipManagerView();
         insertStudents();
@@ -385,7 +391,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .listEmailInterestedStudents(new HashSet<>())
                         .emailOfApprovingInternshipManager("manager1@gmail.com")
                         .build(),
-                InternshipOffer.builder().limitDateToApply(LocalDate.of(2021,4,4))
+                InternshipOffer.builder().limitDateToApply(LocalDate.of(2021, 4, 4))
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
                         .monitorEmail("monitor@gmail.com")
