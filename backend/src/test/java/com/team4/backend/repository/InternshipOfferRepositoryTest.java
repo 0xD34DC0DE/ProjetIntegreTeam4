@@ -1,6 +1,7 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.InternshipOffer;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -11,6 +12,7 @@ import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
@@ -41,25 +43,51 @@ public class InternshipOfferRepositoryTest {
                 InternshipOffer.builder()
                         .limitDateToApply(LocalDate.now().plusWeeks(2))
                         .isValidated(false)
-                        .validationDate(null).build()
+                        .validationDate(null).build(),
+                InternshipOffer.builder()
+                        .isExclusive(false)
+                        .isValidated(true)
+                        .limitDateToApply(LocalDate.now().minusDays(2))
+                        .validationDate(LocalDateTime.now())
+                        .build(),
+                InternshipOffer.builder()
+                        .limitDateToApply(LocalDate.now().plusWeeks(2))
+                        .isExclusive(false)
+                        .isValidated(true)
+                        .validationDate(LocalDateTime.now()).build()
         );
 
         internshipOfferRepository.saveAll(internshipOffers).subscribe();
     }
 
     @Test
-    void shouldFindAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(){
+    void shouldFindAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween() {
         //ARRANGE
         LocalDateTime date1 = LocalDateTime.now();
 
         //ACT
-        Flux<InternshipOffer> internshipOfferFlux = internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(date1,date1.plusWeeks(3));
+        Flux<InternshipOffer> internshipOfferFlux = internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(date1, date1.plusWeeks(3));
 
 
         //ASSERT
         StepVerifier.create(internshipOfferFlux)
                 .expectNextCount(2)
                 .verifyComplete();
+    }
+
+    @Test
+    void shouldCountAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween() {
+        //ARRANGE
+        LocalDateTime date1 = LocalDateTime.now();
+
+        //ACT
+        Mono<Long> countMono = internshipOfferRepository.countAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(date1, date1.plusWeeks(3));
+
+        //ASSERT
+        StepVerifier.create(countMono)
+                .assertNext(c -> Assertions.assertEquals(1, c))
+                .verifyComplete();
+
     }
 
 }

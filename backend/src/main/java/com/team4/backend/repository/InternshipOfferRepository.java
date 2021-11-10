@@ -19,6 +19,8 @@ public interface InternshipOfferRepository extends ReactiveMongoRepository<Inter
 
     Mono<Long> countAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate date);
 
+    Mono<Long> countAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(LocalDateTime date1, LocalDateTime date2);
+
     Flux<InternshipOffer> findAllByMonitorEmailAndIsValidatedTrue(String monitorEmail);
 
     Flux<InternshipOffer> findAllByIsValidatedFalseAndLimitDateToApplyBetween(Date sessionStart, Date sessionEnd);
