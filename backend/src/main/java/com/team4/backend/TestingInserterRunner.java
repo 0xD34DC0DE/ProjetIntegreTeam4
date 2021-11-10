@@ -5,6 +5,7 @@ import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.*;
 import com.team4.backend.util.PBKDF2Encoder;
+import com.team4.backend.util.SemesterUtil;
 import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
 import org.slf4j.Logger;
@@ -103,12 +104,17 @@ public class TestingInserterRunner implements ApplicationRunner {
         internshipContractRepository.deleteAll().subscribe();
         semesterRepository.deleteAll().subscribe();
 
+        insertSemester();
         insertInternshipOffersInternshipManagerView();
         insertStudents();
         insertMonitors();
         insertSupervisors();
         insertCvs();
         insertInternship();
+    }
+
+    private void insertSemester() {
+        semesterRepository.saveAll(SemesterUtil.getSemesters(LocalDateTime.now()));
     }
 
     private void insertInternship() {

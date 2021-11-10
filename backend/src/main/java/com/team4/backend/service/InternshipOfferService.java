@@ -26,12 +26,16 @@ public class InternshipOfferService {
     private final InternshipOfferRepository internshipOfferRepository;
     private final MonitorService monitorService;
     private final StudentService studentService;
+    private final SemesterService semesterService;
 
-    public InternshipOfferService(InternshipOfferRepository internshipOfferRepository, MonitorService monitorService,
-                                  StudentService studentService) {
+    public InternshipOfferService(InternshipOfferRepository internshipOfferRepository,
+                                  MonitorService monitorService,
+                                  StudentService studentService,
+                                  SemesterService semesterService) {
         this.internshipOfferRepository = internshipOfferRepository;
         this.monitorService = monitorService;
         this.studentService = studentService;
+        this.semesterService = semesterService;
     }
 
     public Mono<InternshipOffer> findInternshipOfferById(String offerId) {
@@ -82,6 +86,13 @@ public class InternshipOfferService {
     //TODO : call SessionService.findByName and pass range of date to new query
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers() {
         return internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalse();
+    }
+
+    //TODO --> this will replace the other one
+    public Flux<InternshipOffer> getNotYetValidatedInternshipOffers2(String sessionFullName) {
+        return semesterService.findByFullName(sessionFullName)
+                .flatMapMany(semester -> internshipOfferRepository
+                        .findAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(semester.getFrom(), semester.getTo()));
     }
 
     public Mono<InternshipOffer> validateInternshipOffer(String id, Boolean isValid) {

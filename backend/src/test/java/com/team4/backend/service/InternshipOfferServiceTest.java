@@ -8,10 +8,13 @@ import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.InternshipOffer;
+import com.team4.backend.model.Semester;
 import com.team4.backend.model.Student;
+import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.repository.InternshipOfferRepository;
 import com.team4.backend.testdata.InternshipOfferMockData;
 import com.team4.backend.testdata.MonitorMockData;
+import com.team4.backend.testdata.SemesterMockData;
 import com.team4.backend.testdata.StudentMockData;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Assertions;
@@ -26,6 +29,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +51,9 @@ public class InternshipOfferServiceTest {
 
     @Mock
     StudentService studentService;
+
+    @Mock
+    SemesterService semesterService;
 
     @InjectMocks
     InternshipOfferService internshipOfferService;
@@ -190,7 +197,7 @@ public class InternshipOfferServiceTest {
 
         //ASSERT
         StepVerifier.create(internshipOfferFlux).assertNext(
-                        offer -> assertEquals(offer.getId(), internshipOfferStudentViewDtos.get(0).getId()))
+                offer -> assertEquals(offer.getId(), internshipOfferStudentViewDtos.get(0).getId()))
                 .assertNext(offer -> assertEquals(offer.getId(),
                         internshipOfferStudentViewDtos.get(1).getId()))
                 .verifyComplete();
@@ -225,9 +232,7 @@ public class InternshipOfferServiceTest {
 
     @Test
     void shouldNotGetGeneralInternshipOfferPageCountInvalidPageSize() {
-        //ARRANGE
-
-        //ACT
+        //ARRANGE && ACT
         Mono<Long> pageCountMono = internshipOfferService.getInternshipOffersPageCount(0);
 
         //ASSERT
@@ -250,9 +255,7 @@ public class InternshipOfferServiceTest {
 
     @Test
     void shouldNotGetGeneralInternshipOfferPageCountInvalidSize() {
-        //ARRANGE
-
-        //ACT
+        //ARRANGE && ACT
         Mono<Long> pageCountMono = internshipOfferService.getInternshipOffersPageCount("email@gmail.com", 0);
 
         //ASSERT
@@ -261,9 +264,7 @@ public class InternshipOfferServiceTest {
 
     @Test
     void shouldNotGetGeneralInternshipOfferPageCountNullEmail() {
-        //ARRANGE
-
-        //ACT
+        //ARRANGE && ACT
         Mono<Long> pageCountMono = internshipOfferService.getInternshipOffersPageCount(null, 1);
 
         //ASSERT
@@ -344,6 +345,26 @@ public class InternshipOfferServiceTest {
     }
 
     @Test
+    void shouldGetNotYetValidatedInternshipOffer2() {
+        //ARRANGE
+        String semesterFullName = SemesterName.FALL + " " + LocalDateTime.now().getYear();
+        Semester semester = SemesterMockData.getListSemester().get(0);
+
+        when(semesterService.findByFullName(semesterFullName)).thenReturn(Mono.just(semester));
+        when(internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(semester.getFrom(), semester.getTo()))
+                .thenReturn(InternshipOfferMockData.getNonValidatedInternshipOffers());
+
+        //ACT
+        Flux<InternshipOffer> internshipOfferFlux = internshipOfferService.getNotYetValidatedInternshipOffers2(semesterFullName);
+
+        //ASSERT
+        StepVerifier.create(internshipOfferFlux)
+                .assertNext(i -> assertTrue(!i.getIsValidated() && i.getValidationDate() == null))
+                .assertNext(i -> assertTrue(!i.getIsValidated() && i.getValidationDate() == null))
+                .verifyComplete();
+    }
+
+    @Test
     void shouldGetInternshipOfferStudentInterest() {
         //ARRANGE
         List<InternshipOfferStudentInterestViewDto> internshipOffers = InternshipOfferMockData.getListInternshipOfferStudentInterestViewDto(2);
@@ -389,7 +410,7 @@ public class InternshipOfferServiceTest {
 
         //ASSERT
         StepVerifier.create(internshipOfferMono).assertNext(
-                        offer -> assertEquals(sizeBefore + 1, offer.getListEmailInterestedStudents().size()))
+                offer -> assertEquals(sizeBefore + 1, offer.getListEmailInterestedStudents().size()))
                 .verifyComplete();
     }
 
