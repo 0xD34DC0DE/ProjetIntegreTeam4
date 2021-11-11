@@ -38,7 +38,7 @@ const CvValidationDialog = ({ id, removeCv }) => {
           id: id,
           isValid: valid,
         },
-        data: { rejectionExplanation },
+        data: rejectionExplanation,
         responseType: "json",
       })
         .then(() => {
