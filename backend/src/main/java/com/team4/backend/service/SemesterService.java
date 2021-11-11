@@ -50,11 +50,4 @@ public class SemesterService {
         });
     }
 
-    public Mono<Boolean> checkIfDatesAreInsideRangeOfCurrentSemester(LocalDateTime date1, LocalDateTime date2) {
-        return getCurrentSemester().map(semester ->
-                (semester.getFrom().isEqual(date1) || semester.getFrom().isBefore(date1)) &&
-                        (semester.getTo().isEqual(date2) || semester.getTo().isAfter(date2))
-        );
-    }
-
 }

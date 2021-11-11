@@ -88,7 +88,7 @@ public class SupervisorMockData {
     public static Set<TimestampedEntry> getTimeStampedEntries() {
         return new HashSet<>(Arrays.asList(
                 new TimestampedEntry("12395432@gmail.com", LocalDateTime.now()),
-                new TimestampedEntry("toto23@outlook.com",LocalDateTime.now())));
+                new TimestampedEntry("toto23@outlook.com", LocalDateTime.now())));
     }
 
 }

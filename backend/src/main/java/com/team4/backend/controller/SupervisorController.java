@@ -44,7 +44,7 @@ public class SupervisorController {
 
     @GetMapping("/{email}")
     @PreAuthorize("hasAnyAuthority('SUPERVISOR')")
-    public Mono<SupervisorCreationDto> getSupervisor(@PathVariable("email") String email){
+    public Mono<SupervisorCreationDto> getSupervisor(@PathVariable("email") String email) {
         return supervisorService.getSupervisor(email)
                 .map(SupervisorMapper::toDetailsDto)
                 .onErrorMap(error -> new ResponseStatusException(HttpStatus.NOT_FOUND, error.getMessage()));

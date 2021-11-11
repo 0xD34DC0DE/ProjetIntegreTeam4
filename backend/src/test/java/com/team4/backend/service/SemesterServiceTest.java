@@ -5,7 +5,6 @@ import com.team4.backend.exception.SemesterNotFoundException;
 import com.team4.backend.model.Semester;
 import com.team4.backend.repository.SemesterRepository;
 import com.team4.backend.testdata.SemesterMockData;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -15,11 +14,9 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -128,55 +125,6 @@ public class SemesterServiceTest {
                     assertEquals(3, s.getSemestersFullNames().size());
                     assertEquals(currentSemester.getFullName(), s.getCurrentSemesterFullName());
                 })
-                .verifyComplete();
-    }
-
-
-    @Test
-    void shouldCheckIfDatesAreInsideRangeOfCurrentSemesterAndThenReturnTrue() {
-        //ACT
-        LocalDateTime currentDate = LocalDateTime.now();
-        LocalDateTime date1 = LocalDateTime.now()
-                .withMonth(Month.OCTOBER.getValue())
-                .withYear(currentDate.getYear())
-                .withDayOfMonth(2);
-        LocalDateTime date2 = LocalDateTime.now()
-                .withMonth(Month.OCTOBER.getValue())
-                .withYear(currentDate.getYear())
-                .withDayOfMonth(25);
-
-        when(semesterRepository.findByFromLessThanEqualAndToGreaterThanEqual(any(), any())).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
-
-        //ARRANGE
-        Mono<Boolean> isInsideRange = semesterService.checkIfDatesAreInsideRangeOfCurrentSemester(date1, date2);
-
-        //ASSERT
-        StepVerifier.create(isInsideRange)
-                .assertNext(Assertions::assertTrue)
-                .verifyComplete();
-    }
-
-    @Test
-    void shouldCheckIfDatesAreInsideRangeOfCurrentSemesterAndThenReturnFalse() {
-        //ACT
-        LocalDateTime currentDate = LocalDateTime.now();
-        LocalDateTime date1 = LocalDateTime.now()
-                .withMonth(Month.OCTOBER.getValue())
-                .withYear(currentDate.getYear())
-                .withDayOfMonth(2);
-        LocalDateTime date2 = LocalDateTime.now()
-                .withMonth(Month.JANUARY.getValue())
-                .withYear(currentDate.getYear() + 1)
-                .withDayOfMonth(25);
-
-        when(semesterRepository.findByFromLessThanEqualAndToGreaterThanEqual(any(), any())).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
-
-        //ARRANGE
-        Mono<Boolean> isInsideRange = semesterService.checkIfDatesAreInsideRangeOfCurrentSemester(date1, date2);
-
-        //ASSERT
-        StepVerifier.create(isInsideRange)
-                .assertNext(Assertions::assertFalse)
                 .verifyComplete();
     }
 

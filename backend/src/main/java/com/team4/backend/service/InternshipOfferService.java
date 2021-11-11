@@ -24,8 +24,11 @@ import java.util.Date;
 public class InternshipOfferService {
 
     private final InternshipOfferRepository internshipOfferRepository;
+
     private final MonitorService monitorService;
+
     private final StudentService studentService;
+
     private final SemesterService semesterService;
 
     public InternshipOfferService(InternshipOfferRepository internshipOfferRepository,

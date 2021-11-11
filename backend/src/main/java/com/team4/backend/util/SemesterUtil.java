@@ -10,6 +10,13 @@ import java.util.List;
 
 public abstract class SemesterUtil {
 
+    public static Boolean checkIfDatesAreInsideRangeOfSemester(Semester semester,
+                                                        LocalDateTime date1,
+                                                        LocalDateTime date2) {
+        return (semester.getFrom().isEqual(date1) || semester.getFrom().isBefore(date1)) &&
+                (semester.getTo().isEqual(date2) || semester.getTo().isAfter(date2));
+    }
+
     public static List<Semester> getSemesters(LocalDateTime currentDateTime) {
 
         return Arrays.asList(
