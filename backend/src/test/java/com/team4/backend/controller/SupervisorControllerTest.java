@@ -6,6 +6,7 @@ import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.model.Supervisor;
+import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.service.SupervisorService;
 import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.testdata.SupervisorMockData;
@@ -20,6 +21,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -132,8 +135,9 @@ public class SupervisorControllerTest {
     void shouldGetAssignedStudents() {
         //ARRANGE
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+        String semesterFullName = SemesterName.WINTER + "-" + LocalDateTime.now().getYear();
 
-        when(supervisorService.getAllAssignedStudents(supervisor.getId()))
+        when(supervisorService.getAllAssignedStudents(supervisor.getId(), semesterFullName))
                 .thenReturn(StudentMockData.getAssignedStudents().map(StudentMapper::toDto));
 
         //ACT
@@ -141,7 +145,9 @@ public class SupervisorControllerTest {
                 .get()
                 .uri(uriBuilder ->
                         uriBuilder
-                                .path("/supervisor/getAssignedStudents/" + supervisor.getId())
+                                .path("/supervisor/getAssignedStudents")
+                                .queryParam("supervisorId", supervisor.getId())
+                                .queryParam("semesterFullName", semesterFullName)
                                 .build())
                 .exchange()
                 //ASSERT

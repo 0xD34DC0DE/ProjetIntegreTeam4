@@ -41,7 +41,11 @@ const AssignedStudentSupervisorView = ({
     const getAssignedStudents = async (id) => {
       let response = await axios({
         method: "GET",
-        url: `http://localhost:8080/supervisor/getAssignedStudents/${id}`,
+        url: "http://localhost:8080/supervisor/getAssignedStudents",
+        params:{
+          "supervisorId":id,
+          "semesterFullName" : "FALL-2021"
+        },
         headers: {
           Authorization: userInfo.jwt,
         },

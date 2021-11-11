@@ -29,7 +29,7 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
   const fetchData = () => {
     axios({
       method: "GET",
-      url: `http://localhost:8080/internshipOffer/interestedStudents`,
+      url: "http://localhost:8080/internshipOffer/interestedStudents",
       params:{
         "monitorEmail":userInfo.email,
         "semesterFullName" :"FALL-2021"

@@ -36,10 +36,11 @@ public class SupervisorController {
                 .flatMap(supervisor -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 
-    @GetMapping("/getAssignedStudents/{id}")
+    @GetMapping("/getAssignedStudents")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER', 'SUPERVISOR')")
-    public Flux<StudentDetailsDto> getAssignedStudents(@PathVariable("id") String supervisorId) {
-        return supervisorService.getAllAssignedStudents(supervisorId);
+    public Flux<StudentDetailsDto> getAssignedStudents(@RequestParam("supervisorId") String supervisorId,
+                                                       @RequestParam("semesterFullName") String semesterFullName) {
+        return supervisorService.getAllAssignedStudents(supervisorId, semesterFullName);
     }
 
     @GetMapping("/{email}")

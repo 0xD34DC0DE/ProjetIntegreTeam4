@@ -5,17 +5,16 @@ import com.team4.backend.exception.DuplicateEntryException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.StudentMapper;
-import com.team4.backend.model.Semester;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.model.TimestampedEntry;
 import com.team4.backend.repository.SupervisorRepository;
 import com.team4.backend.util.PBKDF2Encoder;
+import com.team4.backend.util.SemesterUtil;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -68,32 +67,18 @@ public class SupervisorService {
                 }).switchIfEmpty(Mono.error(new UserNotFoundException("Can't find a supervisor with given id: " + supervisorId)));
     }
 
-    public Flux<StudentDetailsDto> getAllAssignedStudents(String supervisorId) {
-        return supervisorRepository.findById(supervisorId)
-                .map(Supervisor::getStudentTimestampedEntries)
-                .flatMapMany(timestampedEntries -> studentService.findAllByEmails(timestampedEntries.stream()
+    public Flux<StudentDetailsDto> getAllAssignedStudents(String supervisorId, String semesterFullName) {
+
+        return Mono.zip(supervisorRepository.findById(supervisorId), semesterService.findByFullName(semesterFullName))
+                .map(tuple -> tuple.getT1().getStudentTimestampedEntries().stream()
+                        .filter(timestampedEntry -> SemesterUtil.checkIfDatesAreInsideRangeOfSemester(
+                                tuple.getT2(),
+                                timestampedEntry.getDate(),
+                                timestampedEntry.getDate())
+                        )
                         .map(TimestampedEntry::getEmail)
-                        .collect(Collectors.toSet())))
-                .map(StudentMapper::toDto);
-    }
-
-    public Flux<StudentDetailsDto> getAllAssignedStudentsNew(String supervisorId, String semesterFullName) {
-        /*
-
-        return Mono.zip(supervisorRepository.findById(supervisorId),semesterService.findByFullName(semesterFullName))
-                .flatMapMany(tuple -> {
-                    Supervisor supervisor = tuple.getT1();
-                    Semester semester = tuple.getT2();
-
-                    return null;
-
-                });
-         */
-        return supervisorRepository.findById(supervisorId)
-                .map(Supervisor::getStudentTimestampedEntries)
-                .flatMapMany(timestampedEntries -> studentService.findAllByEmails(timestampedEntries.stream()
-                        .map(TimestampedEntry::getEmail)
-                        .collect(Collectors.toSet())))
+                        .collect(Collectors.toSet())
+                ).flatMapMany(studentService::findAllByEmails)
                 .map(StudentMapper::toDto);
     }
 
