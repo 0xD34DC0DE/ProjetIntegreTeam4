@@ -73,7 +73,7 @@ public class InternshipOfferController {
     }
 
     @GetMapping(value = "/pageCount")
-    @PreAuthorize("hasAuthority('STUDENT')")
+    @PreAuthorize("hasAu§thority('STUDENT')")
     public Mono<Long> getInternshipOffersCount(
             @RequestParam(value = "size", defaultValue = "5") Integer size) {
         return internshipOfferService.getInternshipOffersPageCount(size);

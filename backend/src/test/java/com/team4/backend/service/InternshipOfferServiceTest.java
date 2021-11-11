@@ -28,7 +28,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
@@ -370,7 +369,7 @@ public class InternshipOfferServiceTest {
                 when(studentService.findAllByEmails(any())).thenReturn(Flux.fromIterable(internshipOffer.getInterestedStudentList())));
 
         //ACT
-        Flux<InternshipOfferStudentInterestViewDto> internshipOfferDtoFlux = internshipOfferService.getInterestedStudents(monitorEmail,semesterFullName);
+        Flux<InternshipOfferStudentInterestViewDto> internshipOfferDtoFlux = internshipOfferService.getInterestedStudents(monitorEmail, semesterFullName);
 
         //ASSERT
         StepVerifier.create(internshipOfferDtoFlux)
