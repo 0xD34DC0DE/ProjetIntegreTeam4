@@ -283,13 +283,18 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldReturnInterestedStudents() {
         //ARRANGE
-        when(internshipOfferService.getInterestedStudents(any(String.class)))
+        when(internshipOfferService.getInterestedStudents(any(String.class), any(String.class)))
                 .thenReturn(Flux.fromIterable(InternshipOfferMockData.getListInternshipOfferStudentInterestViewDto(3)));
 
         //ACT
         webTestClient
                 .get()
-                .uri("/internshipOffer/interestedStudents/monitor@gmail.com")
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/internshipOffer/interestedStudents")
+                                .queryParam("monitorEmail", "email@gmail.com")
+                                .queryParam("semesterFullName", "FALL-2021")
+                                .build())
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()

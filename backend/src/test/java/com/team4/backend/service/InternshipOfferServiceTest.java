@@ -351,17 +351,26 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldGetInternshipOfferStudentInterest() {
         //ARRANGE
-        List<InternshipOfferStudentInterestViewDto> internshipOffers = InternshipOfferMockData.getListInternshipOfferStudentInterestViewDto(2);
+        Semester semester = SemesterMockData.getListSemester().get(0);
         String monitorEmail = MonitorMockData.getMockMonitor().getEmail();
+        String semesterFullName = SemesterName.FALL + "-" + LocalDateTime.now().getYear();
+        List<InternshipOfferStudentInterestViewDto> internshipOffers = InternshipOfferMockData.getListInternshipOfferStudentInterestViewDto(2);
 
-        when(internshipOfferRepository.findAllByMonitorEmailAndIsValidatedTrue(monitorEmail))
+
+        when(semesterService.findByFullName(semesterFullName)).thenReturn(Mono.just(semester));
+
+        when(internshipOfferRepository.findAllByMonitorEmailAndIsValidatedTrueAndLimitDateToApplyIsBetween(
+                any(String.class),
+                any(LocalDateTime.class),
+                any(LocalDateTime.class)
+        ))
                 .thenReturn(Flux.fromIterable(InternshipOfferMockData.getListInternshipOffer(3)));
 
         internshipOffers.forEach(internshipOffer ->
                 when(studentService.findAllByEmails(any())).thenReturn(Flux.fromIterable(internshipOffer.getInterestedStudentList())));
 
         //ACT
-        Flux<InternshipOfferStudentInterestViewDto> internshipOfferDtoFlux = internshipOfferService.getInterestedStudents(monitorEmail);
+        Flux<InternshipOfferStudentInterestViewDto> internshipOfferDtoFlux = internshipOfferService.getInterestedStudents(monitorEmail,semesterFullName);
 
         //ASSERT
         StepVerifier.create(internshipOfferDtoFlux)

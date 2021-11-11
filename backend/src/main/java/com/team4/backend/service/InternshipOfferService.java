@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -154,21 +153,26 @@ public class InternshipOfferService {
                     .flatMap(student -> addStudentEmailToOfferInterestedStudents(internshipOffer, student));
         });
     }
+    public Flux<InternshipOfferStudentInterestViewDto> getInterestedStudents(String monitorEmail, String semesterFullName) {
 
-    // TODO :call SessionService.findBySessionName()
-    //TODO: refactor internshipOfferRepositoryQuery to add DateBetween and pass the range of the session
-    public Flux<InternshipOfferStudentInterestViewDto> getInterestedStudents(String monitorEmail) {
-        return internshipOfferRepository.findAllByMonitorEmailAndIsValidatedTrue(monitorEmail)
-                .filter(internshipOffer -> internshipOffer.getListEmailInterestedStudents() != null)
-                .flatMap(internshipOffer -> {
-                    InternshipOfferStudentInterestViewDto internshipOfferDto = InternshipOfferMapper.toStudentInterestViewDto(internshipOffer);
-                    return studentService.findAllByEmails(internshipOffer.getListEmailInterestedStudents())
-                            .collectList()
-                            .flatMap(students -> {
-                                internshipOfferDto.setInterestedStudentList(students);
-                                return Mono.just(internshipOfferDto);
-                            });
-                });
+        return semesterService.findByFullName(semesterFullName)
+                .flatMapMany(semester ->
+                        internshipOfferRepository.findAllByMonitorEmailAndIsValidatedTrueAndLimitDateToApplyIsBetween(
+                                monitorEmail,
+                                semester.getFrom(),
+                                semester.getTo()
+                        ).filter(internshipOffer -> !internshipOffer.getListEmailInterestedStudents().isEmpty())
+                                .flatMap(internshipOffer -> {
+                                    InternshipOfferStudentInterestViewDto internshipOfferDto = InternshipOfferMapper.toStudentInterestViewDto(internshipOffer);
+
+                                    return studentService.findAllByEmails(internshipOffer.getListEmailInterestedStudents())
+                                            .collectList()
+                                            .flatMap(students -> {
+                                                internshipOfferDto.setInterestedStudentList(students);
+                                                return Mono.just(internshipOfferDto);
+                                            });
+                                })
+                );
     }
 
     private Mono<InternshipOffer> addStudentEmailToOfferInterestedStudents(InternshipOffer internshipOffer,
