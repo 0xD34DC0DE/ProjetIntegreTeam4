@@ -196,10 +196,12 @@ public class InternshipOfferService {
     }
 
 
+    //TODO --> refactor so it will take semesterFullName and get range from SemesterService.findByFullName()
     public Flux<InternshipOffer> getAllNonValidatedOffers(Date sessionStart, Date sessionEnd) {
         return internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyBetween(sessionStart, sessionEnd);
     }
 
+    //TODO --> refactor so it will take semesterFullName and get range from SemesterService.findByFullName()
     public Flux<InternshipOffer> getAllValidatedOffers(Date sessionStart, Date sessionEnd) {
         return internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyBetween(sessionStart, sessionEnd);
     }
