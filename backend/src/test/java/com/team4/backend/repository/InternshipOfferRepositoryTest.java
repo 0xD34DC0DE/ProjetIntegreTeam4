@@ -34,6 +34,7 @@ public class InternshipOfferRepositoryTest {
         Flux<InternshipOffer> internshipOffers = Flux.just(
                 InternshipOffer.builder()
                         .id("618b68cae908a226e003d7e6")
+                        .monitorEmail("monitor1")
                         .isExclusive(true)
                         .limitDateToApply(LocalDate.now().plusWeeks(2))
                         .isValidated(true)
@@ -50,6 +51,7 @@ public class InternshipOfferRepositoryTest {
                         .validationDate(null).build(),
                 InternshipOffer.builder()
                         .isExclusive(false)
+                        .monitorEmail("monitor1")
                         .isValidated(true)
                         .limitDateToApply(LocalDate.now().minusDays(2))
                         .validationDate(LocalDateTime.now())
@@ -128,7 +130,25 @@ public class InternshipOfferRepositoryTest {
         StepVerifier.create(internshipOfferMono)
                 .assertNext(internshipOffer -> Assertions.assertEquals(id,internshipOffer.getId()))
                 .verifyComplete();
+    }
 
+    @Test
+    void shouldFindAllByMonitorEmailAndIsValidatedTrueAndLimitDateToApplyIsBetween(){
+        //ARRANGE
+        String monitorEmail = "monitor1";
+        LocalDateTime date1 = LocalDateTime.now().minusDays(3);
+
+        //ACT
+        Flux<InternshipOffer> internshipOfferFlux = internshipOfferRepository.findAllByMonitorEmailAndIsValidatedTrueAndLimitDateToApplyIsBetween(
+                monitorEmail,
+                date1,
+                date1.plusWeeks(3));
+
+
+        //ASSERT
+        StepVerifier.create(internshipOfferFlux)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
 }

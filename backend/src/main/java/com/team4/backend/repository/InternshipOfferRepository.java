@@ -16,11 +16,13 @@ public interface InternshipOfferRepository extends ReactiveMongoRepository<Inter
 
     Flux<InternshipOffer> findAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(LocalDateTime date1, LocalDateTime date2, Pageable pageable);
 
-    Mono<InternshipOffer> findByIdAndIsExclusiveTrueAndIsValidatedTrueAndLimitDateToApplyIsBetween(String id,LocalDateTime date1, LocalDateTime date2);
+    Mono<InternshipOffer> findByIdAndIsExclusiveTrueAndIsValidatedTrueAndLimitDateToApplyIsBetween(String id, LocalDateTime date1, LocalDateTime date2);
 
     Mono<Long> countAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(LocalDateTime date1, LocalDateTime date2);
 
     Flux<InternshipOffer> findAllByMonitorEmailAndIsValidatedTrue(String monitorEmail);
+
+    Flux<InternshipOffer> findAllByMonitorEmailAndIsValidatedTrueAndLimitDateToApplyIsBetween(String monitorEmail, LocalDateTime date1, LocalDateTime date2);
 
     Flux<InternshipOffer> findAllByIsValidatedFalseAndLimitDateToApplyBetween(Date sessionStart, Date sessionEnd);
 
