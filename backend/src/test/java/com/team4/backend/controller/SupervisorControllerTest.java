@@ -85,10 +85,9 @@ public class SupervisorControllerTest {
     void shouldAssignSupervisorToStudents() {
         //ARRANGE
         String studentEmail = "teststudent@gmail.com";
-        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
 
-        when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), studentEmail))
+        when(supervisorService.addStudentEmailToStudentList(supervisor.getId(), studentEmail))
                 .thenReturn(Mono.just(supervisor));
 
         //ACT
@@ -97,10 +96,9 @@ public class SupervisorControllerTest {
                 .uri(uriBuilder ->
                         uriBuilder
                                 .path("/supervisor/addEmailToStudentList")
-                                .queryParam("id", supervisorDto.getId())
+                                .queryParam("id", supervisor.getId())
                                 .queryParam("studentEmail", studentEmail)
                                 .build())
-                .bodyValue(supervisorDto)
                 .exchange()
                 //ASSERT
                 .expectStatus().isNoContent()
@@ -110,9 +108,9 @@ public class SupervisorControllerTest {
     @Test
     void shouldNotAssignSupervisorToStudents() {
         //ARRANGE
-        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
 
-        when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), "toto23@outlook.com"))
+        when(supervisorService.addStudentEmailToStudentList(supervisor.getId(), "toto23@outlook.com"))
                 .thenReturn(Mono.error(DuplicateEntryException::new));
 
         //ACT
@@ -121,10 +119,9 @@ public class SupervisorControllerTest {
                 .uri(uriBuilder ->
                         uriBuilder
                                 .path("/supervisor/addEmailToStudentList")
-                                .queryParam("id", supervisorDto.getId())
+                                .queryParam("id", supervisor.getId())
                                 .queryParam("studentEmail", "toto23@outlook.com")
                                 .build())
-                .bodyValue(supervisorDto)
                 .exchange()
                 //ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
@@ -132,10 +129,11 @@ public class SupervisorControllerTest {
     }
 
     @Test
-    void shouldGetAssignedStudents(){
+    void shouldGetAssignedStudents() {
         //ARRANGE
-        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
-        when(supervisorService.getAllAssignedStudents(supervisorDto.getId()))
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+
+        when(supervisorService.getAllAssignedStudents(supervisor.getId()))
                 .thenReturn(StudentMockData.getAssignedStudents().map(StudentMapper::toDto));
 
         //ACT
@@ -143,7 +141,7 @@ public class SupervisorControllerTest {
                 .get()
                 .uri(uriBuilder ->
                         uriBuilder
-                                .path("/supervisor/getAssignedStudents/"+supervisorDto.getId())
+                                .path("/supervisor/getAssignedStudents/" + supervisor.getId())
                                 .build())
                 .exchange()
                 //ASSERT
@@ -160,7 +158,7 @@ public class SupervisorControllerTest {
         //ACT
         webTestClient
                 .get()
-                .uri("/supervisor/"+supervisor.getEmail())
+                .uri("/supervisor/" + supervisor.getEmail())
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
@@ -176,9 +174,9 @@ public class SupervisorControllerTest {
         //ACT
         webTestClient
                 .get()
-                .uri("/supervisor/"+supervisor.getEmail())
+                .uri("/supervisor/" + supervisor.getEmail())
                 .exchange()
-        //ASSERT
+                //ASSERT
                 .expectStatus()
                 .isNotFound()
                 .expectBody(SupervisorCreationDto.class);
