@@ -5,7 +5,7 @@ import PictureAsPdfIcon from "@mui/icons-material/PictureAsPdf";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { motion } from "framer-motion";
 import { UserInfoContext } from "../stores/UserInfoStore";
-
+import SeenInvalidCvStudentView from "./SeenInvalidCvStudentView";
 const UploadCV = ({ visible }) => {
   const [file, setFile] = useState();
   const [errorMessage, setErrorMessage] = useState("");
@@ -162,6 +162,7 @@ const UploadCV = ({ visible }) => {
               </motion.div>
             </Grid>
           </Grid>
+          <SeenInvalidCvStudentView />
         </Grid>
       )}
     </>

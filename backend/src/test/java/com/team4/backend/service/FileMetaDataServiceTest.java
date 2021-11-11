@@ -197,4 +197,20 @@ class FileMetaDataServiceTest {
                 .verify();
     }
 
+    @Test
+    void getFileMetaDataByUserEmailAndIsValidFalseAndIsSeenTrue(){
+        //ARRANGE
+        FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
+        when(fileMetaDataRepository.findByUserEmailAndIsValidFalseAndIsSeenTrue(fileMetaData.getUserEmail())).thenReturn(Mono.just(fileMetaData));
+
+        //ACT
+        Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.getSeenInvalidCv(fileMetaData.getUserEmail());
+
+        //ASSERT
+        StepVerifier
+                .create(fileMetaDataMono)
+                .assertNext(f -> assertEquals(fileMetaData.getUserEmail(), f.getUserEmail()))
+                .verifyComplete();
+    }
+
 }

@@ -27,4 +27,6 @@ public class FileMetaDataStudentViewDto implements Serializable {
 
     private String cvRejectionExplanation;
 
+    private String userEmail;
+
 }

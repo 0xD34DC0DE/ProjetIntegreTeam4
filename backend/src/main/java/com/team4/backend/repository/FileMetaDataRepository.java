@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.File;
+
 @Repository
 public interface FileMetaDataRepository extends ReactiveMongoRepository<FileMetaData, String> {
     Flux<FileMetaData> findFileMetaDataById(String id);
@@ -14,4 +16,7 @@ public interface FileMetaDataRepository extends ReactiveMongoRepository<FileMeta
     Mono<Long> countAllByIsValidFalseAndIsSeenFalse();
 
     Flux<FileMetaData> findAllByIsValidFalseAndIsSeenFalse(Pageable pageable);
+
+    Mono<FileMetaData> findByUserEmailAndIsValidFalseAndIsSeenTrue(String userEmail);
+
 }

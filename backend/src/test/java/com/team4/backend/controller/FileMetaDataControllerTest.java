@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
+import com.team4.backend.dto.FileMetaDataStudentViewDto;
 import com.team4.backend.exception.FileNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.model.FileMetaData;
@@ -22,7 +23,9 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.test.StepVerifier;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -141,6 +144,26 @@ class FileMetaDataControllerTest {
                 //ASSERT
                 .expectStatus().isNotFound()
                 .expectBodyList(String.class);
+    }
+
+    @Test
+    void getFileMetaDataByUserEmailAndIsValidFalseAndIsSeenTrue(){
+        //ARRANGE
+        FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
+        when(fileMetaDataService.getSeenInvalidCv(fileMetaData.getUserEmail())).thenReturn(Mono.just(fileMetaData));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/file/getSeenInvalidCv/"+fileMetaData.getUserEmail())
+                                .build())
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(FileMetaDataStudentViewDto.class);
+
     }
 
 }

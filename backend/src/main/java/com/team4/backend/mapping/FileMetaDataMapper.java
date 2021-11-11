@@ -22,6 +22,8 @@ public abstract class FileMetaDataMapper {
                 .isValid(fileMetaData.getIsValid())
                 .uploadDate(fileMetaData.getUploadDate())
                 .seenDate(fileMetaData.getSeenDate())
+                .cvRejectionExplanation(fileMetaData.getRejectionExplanation())
+                .userEmail(fileMetaData.getUserEmail())
                 .build();
     }
 

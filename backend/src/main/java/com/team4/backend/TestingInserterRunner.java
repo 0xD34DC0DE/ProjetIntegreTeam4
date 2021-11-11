@@ -508,6 +508,14 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isValid(false)
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now())
+                        .build(),
+                FileMetaData.builder()
+                        .assetId("123456789@gmail.com/8164ae59-a072-4bfe-8f03-2f350dd8086e")
+                        .userEmail("student@gmail.com")
+                        .filename("cv1.pdf")
+                        .isValid(false)
+                        .isSeen(false)
+                        .uploadDate(LocalDateTime.now())
                         .build());
 
         fileMetaDataRepository.saveAll(fileMetaDataList)
