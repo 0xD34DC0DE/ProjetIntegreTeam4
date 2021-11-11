@@ -2,7 +2,7 @@ package com.team4.backend.controller;
 
 
 import com.team4.backend.dto.StudentDetailsDto;
-import com.team4.backend.dto.SupervisorDetailsDto;
+import com.team4.backend.dto.SupervisorCreationDto;
 import com.team4.backend.mapping.SupervisorMapper;
 import com.team4.backend.service.SupervisorService;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ public class SupervisorController {
     }
 
     @PostMapping("/register")
-    public Mono<ResponseEntity<String>> register(@RequestBody SupervisorDetailsDto supervisorDto) {
+    public Mono<ResponseEntity<String>> register(@RequestBody SupervisorCreationDto supervisorDto) {
         return supervisorService.registerSupervisor(SupervisorMapper.toEntity(supervisorDto))
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")));
     }
@@ -44,7 +44,7 @@ public class SupervisorController {
 
     @GetMapping("/{email}")
     @PreAuthorize("hasAnyAuthority('SUPERVISOR')")
-    public Mono<SupervisorDetailsDto> getSupervisor(@PathVariable("email") String email){
+    public Mono<SupervisorCreationDto> getSupervisor(@PathVariable("email") String email){
         return supervisorService.getSupervisor(email)
                 .map(SupervisorMapper::toDetailsDto)
                 .onErrorMap(error -> new ResponseStatusException(HttpStatus.NOT_FOUND, error.getMessage()));

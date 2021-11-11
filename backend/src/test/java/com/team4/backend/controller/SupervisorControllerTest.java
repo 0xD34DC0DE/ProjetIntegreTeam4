@@ -1,6 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.SupervisorDetailsDto;
+import com.team4.backend.dto.SupervisorCreationDto;
 import com.team4.backend.exception.DuplicateEntryException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
@@ -38,7 +38,7 @@ public class SupervisorControllerTest {
     @Test
     public void shouldCreateSupervisor() {
         //ARRANGE
-        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
         supervisorDto.setId(null);
 
@@ -65,7 +65,7 @@ public class SupervisorControllerTest {
     @Test
     public void shouldNotCreateSupervisor() {
         //ARRANGE
-        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
         supervisorDto.setId(null);
 
@@ -85,7 +85,7 @@ public class SupervisorControllerTest {
     void shouldAssignSupervisorToStudents() {
         //ARRANGE
         String studentEmail = "teststudent@gmail.com";
-        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
 
         when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), studentEmail))
@@ -110,7 +110,7 @@ public class SupervisorControllerTest {
     @Test
     void shouldNotAssignSupervisorToStudents() {
         //ARRANGE
-        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
         when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), "toto23@outlook.com"))
                 .thenReturn(Mono.error(DuplicateEntryException::new));
@@ -134,7 +134,7 @@ public class SupervisorControllerTest {
     @Test
     void shouldGetAssignedStudents(){
         //ARRANGE
-        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
         when(supervisorService.getAllAssignedStudents(supervisorDto.getId()))
                 .thenReturn(StudentMockData.getAssignedStudents().map(StudentMapper::toDto));
 
@@ -148,7 +148,7 @@ public class SupervisorControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isEqualTo(HttpStatus.OK)
-                .expectBodyList(SupervisorDetailsDto.class);
+                .expectBodyList(SupervisorCreationDto.class);
     }
 
     @Test
@@ -164,7 +164,7 @@ public class SupervisorControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
-                .expectBody(SupervisorDetailsDto.class);
+                .expectBody(SupervisorCreationDto.class);
     }
 
     @Test
@@ -181,6 +181,6 @@ public class SupervisorControllerTest {
         //ASSERT
                 .expectStatus()
                 .isNotFound()
-                .expectBody(SupervisorDetailsDto.class);
+                .expectBody(SupervisorCreationDto.class);
     }
 }

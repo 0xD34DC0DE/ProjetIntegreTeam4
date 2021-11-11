@@ -1,12 +1,15 @@
 package com.team4.backend.testdata;
 
-import com.team4.backend.dto.SupervisorDetailsDto;
+import com.team4.backend.dto.SupervisorCreationDto;
 import com.team4.backend.model.Supervisor;
+import com.team4.backend.model.TimestampedEntry;
 import reactor.core.publisher.Flux;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class SupervisorMockData {
 
@@ -17,20 +20,22 @@ public class SupervisorMockData {
                 .password("soleil31@")
                 .firstName("Jonathan")
                 .lastName("Poulin")
-                .studentEmails(getStudentEmails())
+                .studentTimestampedEntries(getTimeStampedEntries())
                 .phoneNumber("438-999-1234")
                 .registrationDate(null) // Current date
                 .build();
     }
 
-    public static SupervisorDetailsDto getMockSupervisorDto() {
-        return SupervisorDetailsDto.builder()
+    public static SupervisorCreationDto getMockSupervisorDto() {
+        return SupervisorCreationDto.builder()
                 .id("615a32ce577ae63d7b159b17")
                 .email("jonathan_22@outlook.com")
                 .password("soleil31@")
                 .firstName("Jonathan")
                 .lastName("Poulin")
-                .studentEmails(getStudentEmails())
+                .studentEmails(getTimeStampedEntries().stream()
+                        .map(TimestampedEntry::getEmail)
+                        .collect(Collectors.toSet()))
                 .phoneNumber("438-999-1234")
                 .registrationDate(null) // Current date
                 .build();
@@ -43,7 +48,7 @@ public class SupervisorMockData {
                 .password("prof123")
                 .firstName("Maxime")
                 .lastName("Dupuis")
-                .studentEmails(getStudentEmails())
+                .studentTimestampedEntries(getTimeStampedEntries())
                 .phoneNumber("514-111-2222")
                 .registrationDate(null) // Current date
                 .build(), Supervisor.supervisorBuilder()
@@ -57,17 +62,19 @@ public class SupervisorMockData {
                 .build());
     }
 
-    public static Flux<SupervisorDetailsDto> getAllSupervisorsDto() {
-        return Flux.just(SupervisorDetailsDto.builder()
+    public static Flux<SupervisorCreationDto> getAllSupervisorsDto() {
+        return Flux.just(SupervisorCreationDto.builder()
                 .id("123a45ce678ae91d0b111b21")
                 .email("professeur@outlook.com")
                 .password("prof123")
                 .firstName("Maxime")
                 .lastName("Dupuis")
-                .studentEmails(getStudentEmails())
+                .studentEmails(getTimeStampedEntries().stream()
+                        .map(TimestampedEntry::getEmail)
+                        .collect(Collectors.toSet()))
                 .phoneNumber("514-111-2222")
                 .registrationDate(null) // Current date
-                .build(), SupervisorDetailsDto.builder()
+                .build(), SupervisorCreationDto.builder()
                 .id("222a44ce555ae66d0b777b88")
                 .email("enseignant@outlook.com")
                 .password("enseignant123")
@@ -78,8 +85,10 @@ public class SupervisorMockData {
                 .build());
     }
 
-    public static Set<String> getStudentEmails() {
-        return new HashSet<>(Arrays.asList("12395432@gmail.com", "toto23@outlook.com"));
+    public static Set<TimestampedEntry> getTimeStampedEntries() {
+        return new HashSet<>(Arrays.asList(
+                new TimestampedEntry("12395432@gmail.com", LocalDateTime.now()),
+                new TimestampedEntry("toto23@outlook.com",LocalDateTime.now())));
     }
 
 }
