@@ -65,4 +65,17 @@ public class InternshipContract {
         this.monitorSignature = monitorSignature;
         this.internshipManagerSignature = internshipManagerSignature;
     }
+
+    public boolean hasUserSigned(String userId) {
+        if (userId.equals(studentSignature.getUserId()))
+            return studentSignature.getHasSigned();
+
+        if (userId.equals(internshipManagerSignature.getUserId()))
+            return internshipManagerSignature.getHasSigned();
+
+        if (userId.equals(monitorSignature.getUserId()))
+            return monitorSignature.getHasSigned();
+
+        return false;
+    }
 }
