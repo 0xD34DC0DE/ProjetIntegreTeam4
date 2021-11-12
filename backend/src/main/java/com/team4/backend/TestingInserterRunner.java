@@ -371,8 +371,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .listEmailInterestedStudents(new HashSet<>())
                         .build(),
                 InternshipOffer.builder().limitDateToApply(LocalDate.now().plusMonths(5))
-                        .beginningDate(LocalDate.now().plusDays(30))
-                        .endingDate(LocalDate.now().plusMonths(3))
+                        .beginningDate(LocalDate.now().plusMonths(5).plusDays(30))
+                        .endingDate(LocalDate.now().plusMonths(8))
                         .monitorEmail("monitor@gmail.com")
                         .title("Analyste de données")
                         .companyName("CGI")

@@ -22,14 +22,15 @@ const InternshipOfferValidation = ({
   const [unvalidatedOffers, setUnvalidatedOffers] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
-  const [semesterFullName,setSemesterFullName] = useState(); //TODO --> get From select component
+  const [semesterFullName, setSemesterFullName] = useState(); //TODO --> get From select component
   const [selectedOffer, setSelectedOffer] = useState(null);
-  
+
   useEffect(() => {
+    
     const getUnvalidatedInternshipOffers = async () => {
       let response = await axios({
         method: "GET",
-        url: "http://localhost:8080/internshipOffer/getNotYetValidatedInternshipOffers/WINTER-2022",
+        url: `http://localhost:8080/internshipOffer/getNotYetValidatedInternshipOffers/${semesterFullName}`,
         headers: {
           Authorization: userInfo.jwt,
         },
@@ -41,8 +42,9 @@ const InternshipOfferValidation = ({
       setCompanies(companiesName);
       setUnvalidatedOffers(response.data);
     };
+
     getUnvalidatedInternshipOffers();
-  }, []);
+  }, [semesterFullName]);
 
   const removeInternshipOffer = (offer) => {
     var index = unvalidatedOffers.indexOf(offer);
@@ -57,8 +59,8 @@ const InternshipOfferValidation = ({
 
   const updateSemesterFullName = (fullName) => {
     setSemesterFullName(fullName);
-    console.log(fullName)
-  }
+    console.log(fullName);
+  };
 
   const isNotARenderedAttribute = (identifier) => {
     return !["id", "companyName", "description"].includes(identifier);
@@ -68,7 +70,7 @@ const InternshipOfferValidation = ({
     <>
       {visible && (
         <Grid container>
-          <SemesterSelect setSelectedSemester={updateSemesterFullName} />
+          <SemesterSelect updateSemesterFullName={updateSemesterFullName} />
           <List
             sx={{
               width: "100vw",

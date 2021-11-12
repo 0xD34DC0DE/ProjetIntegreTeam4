@@ -5,6 +5,7 @@ import { UserInfoContext } from "../stores/UserInfoStore";
 import StudentState from "./StudentState";
 import StudentInternshipDetailsDialog from "./StudentInternshipDetailsDialog";
 import { motion } from "framer-motion";
+import SemesterSelect from "./SemesterSelect";
 
 const fadeIn = {
   hidden: { opacity: 0 },
@@ -25,6 +26,7 @@ const AssignedStudentSupervisorView = ({
   const [assignedStudents, setAssignedStudents] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
   const [openedStudentEmail, setOpenedStudentEmail] = useState("");
+  const [semesterFullName, setSemesterFullName] = useState();
 
   useEffect(async () => {
     const getSupervisor = async () => {
@@ -42,9 +44,9 @@ const AssignedStudentSupervisorView = ({
       let response = await axios({
         method: "GET",
         url: "http://localhost:8080/supervisor/getAssignedStudents",
-        params:{
-          "supervisorId":id,
-          "semesterFullName" : "FALL-2021"
+        params: {
+          supervisorId: id,
+          semesterFullName: semesterFullName,
         },
         headers: {
           Authorization: userInfo.jwt,
@@ -55,7 +57,12 @@ const AssignedStudentSupervisorView = ({
     };
     var supervisor = await getSupervisor();
     getAssignedStudents(supervisor.id);
-  }, []);
+  }, [semesterFullName]);
+
+  const updateSemesterFullName = (fullName) => {
+    setSemesterFullName(fullName);
+    console.log(fullName);
+  };
 
   const resetOpenedStudentEmail = () => {
     setOpenedStudentEmail("");
@@ -65,6 +72,7 @@ const AssignedStudentSupervisorView = ({
     <>
       {visible && (
         <>
+          <SemesterSelect updateSemesterFullName={updateSemesterFullName} />
           <Typography variant="h4" sx={{ color: "white", ml: 2, mt: 2 }}>
             Liste des étudiants assignés
           </Typography>
