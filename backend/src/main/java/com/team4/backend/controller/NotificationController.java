@@ -2,9 +2,7 @@ package com.team4.backend.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team4.backend.dto.NotificationDto;
-import com.team4.backend.event.NotificationCreatedEvent;
 import com.team4.backend.model.Notification;
-import com.team4.backend.publisher.NotificationCreatedPublisher;
 import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.NotificationService;
 import org.springframework.http.HttpStatus;
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.io.IOException;
 import java.security.Principal;
 
 @RestController
@@ -24,13 +21,9 @@ import java.security.Principal;
 public class NotificationController {
 
     private final NotificationService notificationService;
-    private final Flux<NotificationCreatedEvent> notificationCreatedEvents;
-    private final ObjectMapper objectMapper;
 
-    public NotificationController(NotificationService notificationService, ObjectMapper objectMapper, NotificationCreatedPublisher notificationCreatedPublisher) {
+    public NotificationController(NotificationService notificationService) {
         this.notificationService = notificationService;
-        this.notificationCreatedEvents = Flux.create(notificationCreatedPublisher).share();
-        this.objectMapper = objectMapper;
     }
 
     @PostMapping("/create")
@@ -40,18 +33,12 @@ public class NotificationController {
     }
 
     @GetMapping("/sse")
-    public Flux<ServerSentEvent<String>> sseNotificationCreation(@RequestParam String channelId, Principal principal) {
-        return notificationCreatedEvents
-                .filter(event -> ((Notification) event.getSource()).getReceiverEmail().equals(UserSessionService.getLoggedUserEmail(principal)))
-                .map(event -> {
-                    try {
-                        return ServerSentEvent.<String>builder()
-                                .data(objectMapper.writeValueAsString(event.getSource()))
-                                .build();
-                    } catch (IOException e) {
-                        throw new RuntimeException(e);
-                    }
-                });
+    public Flux<ServerSentEvent<Notification>> sseNotificationCreation(Principal principal) {
+        return notificationService.getNotificationFluxSink().asFlux()
+                .filter(n -> n.getReceiverEmail().equals(UserSessionService.getLoggedUserEmail(principal)))
+                .map(n -> ServerSentEvent.<Notification>builder()
+                        .data(n)
+                        .build());
     }
 
     @GetMapping

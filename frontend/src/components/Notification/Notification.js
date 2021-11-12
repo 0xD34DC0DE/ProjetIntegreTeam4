@@ -27,10 +27,9 @@ const Notification = ({ addNotification, deleteNotification }) => {
   useEffect(() => {
     if (!userInfo.loggedIn) return;
     setEventSource(
-      new EventSource(
-        "http://localhost:8080/notification/sse?channelId=" + uuidv4(),
-        { headers: { Authorization: userInfo.jwt } }
-      )
+      new EventSource("http://localhost:8080/notification/sse", {
+        headers: { Authorization: userInfo.jwt },
+      })
     );
   }, [userInfo]);
 
