@@ -33,7 +33,7 @@ public class NotificationController {
     }
 
     @GetMapping("/sse")
-    public Flux<ServerSentEvent<Notification>> sseNotificationCreation(Principal principal) {
+    public Flux<ServerSentEvent<Notification>> sseNotificationStream(Principal principal) {
         return notificationService.getNotificationFluxSink().asFlux()
                 .filter(n -> n.getReceiverEmail().equals(UserSessionService.getLoggedUserEmail(principal)))
                 .map(n -> ServerSentEvent.<Notification>builder()
