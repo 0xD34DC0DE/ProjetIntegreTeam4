@@ -2,18 +2,25 @@ package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipContractCreationDto;
 import com.team4.backend.dto.InternshipContractDto;
+import com.team4.backend.exception.ContractNotFoundException;
+import com.team4.backend.exception.ForbiddenActionException;
+import com.team4.backend.exception.InternalServerErrorException;
+import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.model.*;
+import com.team4.backend.model.enums.Role;
 import com.team4.backend.pdf.InternshipContractPdfTemplate;
 import com.team4.backend.repository.InternshipContractRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple4;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -51,6 +58,75 @@ public class InternshipContractService {
         this.userService = userService;
     }
 
+    public Mono<InternshipContract> signContract(InternshipContractDto internshipContractDto, String userEmail) {
+        return Mono.zip(
+                userService.findByEmail(userEmail),
+                findInternshipContractById(internshipContractDto.getContractId())
+        ).flatMap(tuple -> {
+            User user = tuple.getT1();
+            InternshipContract contract = tuple.getT2();
+            return signContractByUser(contract, user);
+        }).flatMap(internshipContractRepository::save);
+    }
+
+    private Mono<InternshipContract> signContractByUser(InternshipContract contract, User user) {
+        return getSignatureByRole(contract, user.getRole())
+                .switchIfEmpty(
+                        Mono.error(
+                                new ForbiddenActionException("User with role: " +
+                                        user.getRole().toString() + " cannot sign contracts.")
+                        )
+                ).flatMap(signature -> {
+
+                    if (!signature.getUserId().equals(user.getId())) {
+                        return Mono.error(
+                                new UnauthorizedException("Id of user with role: " + user.getRole() +
+                                        " and id: " + user.getId() + " did not match, id of user in contract")
+                        );
+                    }
+
+                    signature.setHasSigned(true);
+                    signature.setSignDate(LocalDate.now());
+
+                    switch (user.getRole()) {
+                        case STUDENT:
+                            contract.setStudentSignature(signature);
+                            return Mono.just(contract);
+                        case INTERNSHIP_MANAGER:
+                            contract.setInternshipManagerSignature(signature);
+                            return Mono.just(contract);
+                        default:
+                            return Mono.error(
+                                    new InternalServerErrorException(
+                                            "Unexpected error: default case reached for role switch statement"
+                                    )
+                            );
+                    }
+                });
+    }
+
+    private Mono<Signature> getSignatureByRole(InternshipContract contract, Role role) {
+        switch (role) {
+            case STUDENT:
+                return Mono.just(contract.getStudentSignature());
+            case INTERNSHIP_MANAGER:
+                return Mono.just(contract.getInternshipManagerSignature());
+            default:
+                return Mono.empty();
+        }
+    }
+
+    private Mono<InternshipContract> findInternshipContractById(String contractId) {
+        return internshipContractRepository.findById(contractId)
+                .switchIfEmpty(
+                        Mono.error(
+                                new ContractNotFoundException(
+                                        "Could not find internship contract with id: " + contractId
+                                )
+                        )
+                );
+    }
+
     public Mono<InternshipContract> initiateContract(InternshipContractCreationDto internshipContractCreationDto) {
         return buildInternshipContractFromInternshipContractCreationDto(internshipContractCreationDto)
                 .flatMap(internshipContractRepository::save);
@@ -71,6 +147,47 @@ public class InternshipContractService {
                     log.info(throwable.getLocalizedMessage());
                     return throwable;
                 });
+    }
+
+    public Mono<byte[]> getContractById(String contractId, String userEmail) {
+
+        return internshipContractRepository.findById(contractId)
+                .flatMap(internshipContract -> verifyUserIsInContract(internshipContract, userEmail))
+                .flatMap(this::getPdfBytes)
+                .onErrorMap(throwable -> {
+                    log.info(throwable.getLocalizedMessage());
+                    return throwable;
+                });
+    }
+
+    private Mono<InternshipContract> verifyUserIsInContract(InternshipContract internshipContract, String userEmail) {
+        return Mono.zip(
+                internshipManagerService.findById(
+                        internshipContract.getInternshipManagerSignature().getUserId()
+                ).map(User::getEmail),
+                studentService.findById(
+                        internshipContract.getStudentSignature().getUserId()
+                ).map(User::getEmail),
+                monitorService.findById(
+                        internshipContract.getMonitorSignature().getUserId()
+                ).map(User::getEmail)
+        ).flatMap(tuple -> {
+            String internshipManagerEmail = tuple.getT1();
+            String studentEmail = tuple.getT2();
+            String monitorEmail = tuple.getT3();
+
+            List<String> userIds = List.of(internshipManagerEmail, studentEmail, monitorEmail);
+
+            if (!userIds.contains(userEmail)) {
+                return Mono.error(
+                        new UnauthorizedException(
+                                "User with email: " + userEmail + " was not found inside contract"
+                        )
+                );
+            }
+
+            return Mono.just(internshipContract);
+        });
     }
 
     private Mono<byte[]> getPdfBytes(InternshipContract internshipContract) {
@@ -187,7 +304,6 @@ public class InternshipContractService {
                     internshipContract.getEndingDate()
             );
 
-            //TODO use the objects instead -> monitor.firstname , monitor.lastName
             Map<String, Object> variables = new HashMap<>();
             variables.put("internshipManager", internshipManager);
             variables.put("monitor", monitor);
@@ -240,4 +356,37 @@ public class InternshipContractService {
                                 })
                 );
     }
+
+    public Mono<Boolean> hasSignedByContractId(String contractId, String userEmail) {
+        return Mono.zip(
+                userService.findByEmail(userEmail),
+                internshipContractRepository.findById(contractId)
+        ).map(tuple -> tuple.getT2().hasUserSigned(tuple.getT1().getId()));
+    }
+
+    public Mono<String> getContractIdTemporary() {
+        return internshipContractRepository
+                .findAll()
+                .collectList()
+                .flatMapMany(internshipContracts ->
+                        Flux.fromIterable(internshipContracts)
+                                .flatMap(internshipContract ->
+                                        Mono.zip(
+                                                studentService.findById(
+                                                        internshipContract.getStudentSignature().getUserId()
+                                                ),
+                                                Mono.just(internshipContract)
+                                        )
+                                )
+                ).filter(tuple -> tuple.getT1().getEmail().equals("student@gmail.com"))
+                .collectList()
+                .flatMap(tuple2s -> {
+                    if (tuple2s.size() != 1) {
+                        return Mono.error(new RuntimeException("oops"));
+                    }
+                    return Mono.just(tuple2s.get(0).getT2().getId());
+                });
+    }
+
+
 }
