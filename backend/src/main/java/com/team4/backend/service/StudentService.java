@@ -13,7 +13,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Set;
 
 import static com.team4.backend.model.enums.StudentState.*;
@@ -166,10 +165,6 @@ public class StudentService {
 
     public Mono<Student> save(Student student) {
         return studentRepository.save(student);
-    }
-
-    public Flux<Student> findAllByEmail(List<String> emails) {
-        return studentRepository.findAllByEmail(emails);
     }
 
 }

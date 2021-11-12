@@ -6,7 +6,6 @@ import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.model.Evaluation;
-import com.team4.backend.model.Student;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.repository.SupervisorRepository;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -19,6 +18,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
@@ -92,20 +92,19 @@ public class SupervisorService {
         return getAllWithNoEvaluation(sessionStart, sessionEnd)
                 .flatMap(supervisors -> {
                     reference.set(new ArrayList<>());
-                    for (Supervisor supervisor : supervisors) {
-                        for (String studentEmail : supervisor.getStudentEmails()) {
-                            boolean emailThere = false;
-                            for (String email : reference.get()) {
+                    supervisors.forEach(supervisor -> {
+                        supervisor.getStudentEmails().forEach(studentEmail -> {
+                            AtomicBoolean emailThere = new AtomicBoolean(false);
+                            reference.get().forEach(email -> {
                                 if (studentEmail.equals(email)) {
-                                    emailThere = true;
-                                    break;
+                                    emailThere.set(true);
                                 }
-                            }
-                            if (!emailThere) {
+                            });
+                            if (!emailThere.get()) {
                                 reference.get().add(studentEmail);
                             }
-                        }
-                    }
+                        });
+                    });
                     return Mono.just(reference.get());
                 });
     }
@@ -119,19 +118,18 @@ public class SupervisorService {
                     return getAll().collectList();
                 })
                 .flatMap(supervisorsList -> {
-                    for (Supervisor supervisor : supervisorsList) {
+                    supervisorsList.forEach(supervisor -> {
                         String fullName = supervisor.getFirstName() + " " + supervisor.getLastName();
-                        boolean hasEvaluation = false;
-                        for (Evaluation evaluation : evaluations.get()) {
+                        AtomicBoolean hasEvaluation = new AtomicBoolean(false);
+                        evaluations.get().forEach(evaluation -> {
                             if (evaluation.getText().get("supervisorFullName").equals(fullName)) {
-                                hasEvaluation = true;
-                                break;
+                                hasEvaluation.set(true);
                             }
-                        }
-                        if (!hasEvaluation) {
+                        });
+                        if (!hasEvaluation.get()) {
                             supervisors.get().add(supervisor);
                         }
-                    }
+                    });
                     return Mono.just(supervisors.get());
                 });
     }

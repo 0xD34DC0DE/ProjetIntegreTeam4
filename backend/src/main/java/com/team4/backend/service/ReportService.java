@@ -173,7 +173,7 @@ public class ReportService {
                     Map<String, Object> variables = new HashMap<>();
                     variables.put("studentsList", students);
                     variables.put("date", LocalDate.now());
-                    variables.put("title", "Étudiants dont le superviseur n'a pas encore évalué d'entreprise");
+                    variables.put("title", "Étudiants dont le superviseur n'a pas encore évalué l'entreprise");
                     variables.put("dates", calculateLocalDates(sessionNumber));
                     return pdfService.renderPdf(new StudentsPdf(variables));
                 });
