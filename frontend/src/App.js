@@ -11,8 +11,10 @@ import { ThemeProvider } from "@mui/material/styles";
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [selection, setSelection] = useState(sidebarList[0]);
+  const [dialogData, setDialogData] = useState();
 
-  const handleDialogs = (dialogName, show) => {
+  const handleDialogs = (dialogName, show, data = null) => {
+    setDialogData(data)
     setDialogVisibility((dialogs) => ({ ...dialogs, [dialogName]: show }));
   };
 
@@ -25,6 +27,7 @@ function App() {
     internshipDetailsDialog: false,
     reportDialog: false,
     signContractMonitorDialog: false,
+    signContractDialog: false,
   });
 
   const onSelectionChanged = (item) => {
@@ -47,6 +50,7 @@ function App() {
             dialogVisibility={dialogVisibility}
             isSidebarOpen={sidebarOpen}
             selection={selection}
+            dialogData={dialogData}
           ></Content>
           <Sidebar
             open={sidebarOpen}
