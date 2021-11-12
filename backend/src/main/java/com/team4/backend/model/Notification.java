@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 @Data
@@ -23,6 +24,7 @@ public class Notification implements Serializable {
     private String content;
     private String receiverEmail;
     private NotificationSeverity severity;
+    private Map<String, String> data;
     @Builder.Default
     private LocalDateTime creationDate = LocalDateTime.now();
 
@@ -32,12 +34,14 @@ public class Notification implements Serializable {
                         String content,
                         String receiverEmail,
                         NotificationSeverity severity,
+                        Map<String, String> data,
                         LocalDateTime creationDate) {
         this.id = id;
         this.title = title;
         this.severity = severity;
         this.content = content;
         this.receiverEmail = receiverEmail;
+        this.data = data;
         this.creationDate = Optional.ofNullable(creationDate).orElse(LocalDateTime.now());
     }
 

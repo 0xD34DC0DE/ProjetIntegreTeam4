@@ -6,6 +6,9 @@ import com.team4.backend.model.enums.NotificationSeverity;
 import reactor.core.publisher.Flux;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public abstract class NotificationMockData {
 
@@ -17,6 +20,7 @@ public abstract class NotificationMockData {
                         .title("Title 1")
                         .creationDate(LocalDateTime.now())
                         .severity(NotificationSeverity.LOW)
+                        .data(getNotificationData(2))
                         .content("this is content 1")
                         .build(),
                 Notification.notificationBuilder()
@@ -25,6 +29,7 @@ public abstract class NotificationMockData {
                         .title("Title 2")
                         .severity(NotificationSeverity.HIGH)
                         .content("this is content")
+                        .data(Collections.emptyMap())
                         .creationDate(LocalDateTime.now())
                         .build()
         );
@@ -38,6 +43,7 @@ public abstract class NotificationMockData {
                         .title("Title 1")
                         .severity(NotificationSeverity.LOW)
                         .creationDate(LocalDateTime.now())
+                        .data(getNotificationData(3))
                         .content("this is content 1")
                         .build();
     }
@@ -49,8 +55,17 @@ public abstract class NotificationMockData {
                         .title("Title 1")
                         .severity(NotificationSeverity.LOW)
                         .creationDate(LocalDateTime.now())
+                        .data(getNotificationData(3))
                         .content("this is content 1")
                         .build();
+    }
+
+    public static Map<String, String> getNotificationData(int count) {
+        Map<String, String> data = new HashMap<>();
+        for(int i = 0; i <= count; i++) {
+            data.put("id"+count, String.valueOf(i));
+        }
+        return data;
     }
 
 }

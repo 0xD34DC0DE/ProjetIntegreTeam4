@@ -119,11 +119,13 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .title("Notification")
                         .receiverEmail("student@gmail.com")
                         .severity(NotificationSeverity.HIGH)
+                        .data(Collections.emptyMap())
                         .build(),
                 Notification.notificationBuilder()
                         .content("CV Accepté!")
                         .title("Notification")
                         .receiverEmail("123456789@gmail.com")
+                        .data(Collections.singletonMap("id", "test"))
                         .severity(NotificationSeverity.LOW)
                         .build()
         );

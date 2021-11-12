@@ -12,7 +12,6 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import EventSource from "eventsource";
 import { UserInfoContext } from "../../stores/UserInfoStore";
-import { v4 as uuidv4 } from "uuid";
 
 const Notification = ({ addNotification, deleteNotification }) => {
   const [showSnackbar, setShowSnackbar] = useState(false);
@@ -20,6 +19,7 @@ const Notification = ({ addNotification, deleteNotification }) => {
   const [notification, setNotification] = useState({
     id: "",
     title: "",
+    data: {},
     content: "",
   });
   const [eventSource, setEventSource] = useState(undefined);

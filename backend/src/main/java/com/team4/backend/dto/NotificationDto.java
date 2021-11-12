@@ -4,10 +4,10 @@ import com.team4.backend.model.enums.NotificationSeverity;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.Optional;
 
 @Data
@@ -18,6 +18,7 @@ public class NotificationDto implements Serializable {
     private String title;
     private String content;
     private String receiverEmail;
+    private Map<String, String> data;
     private NotificationSeverity severity;
     private LocalDateTime creationDate;
 
@@ -25,13 +26,15 @@ public class NotificationDto implements Serializable {
     public NotificationDto(String id,
                            String title,
                            String content,
-                           NotificationSeverity severity,
                            String receiverEmail,
+                           Map<String, String> data,
+                           NotificationSeverity severity,
                            LocalDateTime creationDate) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.severity = severity;
+        this.data = data;
         this.receiverEmail = receiverEmail;
         this.creationDate = Optional.ofNullable(creationDate).orElse(LocalDateTime.now());
     }
