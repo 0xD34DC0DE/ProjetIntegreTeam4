@@ -21,13 +21,14 @@ public class InternshipContractCreationDto extends InternshipContractDto impleme
     private Float hoursPerWeek;
 
     @Builder(builderMethodName = "internshipContractCreationDtoBuilder")
-    public InternshipContractCreationDto(String internshipOfferId,
+    public InternshipContractCreationDto(String contractId,
+                                         String internshipOfferId,
                                          String studentEmail,
                                          String address,
                                          String dailySchedule,
                                          Float hourlyRate,
                                          Float hoursPerWeek) {
-        super(internshipOfferId, studentEmail);
+        super(internshipOfferId, studentEmail, contractId);
         this.address = address;
         this.dailySchedule = dailySchedule;
         this.hourlyRate = hourlyRate;
