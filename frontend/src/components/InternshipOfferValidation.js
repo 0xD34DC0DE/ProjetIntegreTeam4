@@ -12,6 +12,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import InternshipOfferDialog from "./InternshipOfferDialog";
 import { listLabels } from "./InternshipOfferLabels";
+import SemesterSelect from "./SemesterSelect";
 
 const InternshipOfferValidation = ({
   dialogVisibility,
@@ -22,13 +23,13 @@ const InternshipOfferValidation = ({
   const [companies, setCompanies] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
   const [semesterFullName,setSemesterFullName] = useState(); //TODO --> get From select component
-
   const [selectedOffer, setSelectedOffer] = useState(null);
+  
   useEffect(() => {
     const getUnvalidatedInternshipOffers = async () => {
       let response = await axios({
         method: "GET",
-        url: "http://localhost:8080/internshipOffer/getNotYetValidatedInternshipOffers/SUMMER-2022",
+        url: "http://localhost:8080/internshipOffer/getNotYetValidatedInternshipOffers/WINTER-2022",
         headers: {
           Authorization: userInfo.jwt,
         },
@@ -54,6 +55,11 @@ const InternshipOfferValidation = ({
     ]);
   };
 
+  const updateSemesterFullName = (fullName) => {
+    setSemesterFullName(fullName);
+    console.log(fullName)
+  }
+
   const isNotARenderedAttribute = (identifier) => {
     return !["id", "companyName", "description"].includes(identifier);
   };
@@ -62,6 +68,7 @@ const InternshipOfferValidation = ({
     <>
       {visible && (
         <Grid container>
+          <SemesterSelect setSelectedSemester={updateSemesterFullName} />
           <List
             sx={{
               width: "100vw",

@@ -104,7 +104,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         internshipContractRepository.deleteAll().subscribe();
         semesterRepository.deleteAll().subscribe();
 
-        insertSemester();
+        insertSemesters();
         insertInternshipOffersInternshipManagerView();
         insertStudents();
         insertMonitors();
@@ -113,7 +113,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertInternship();
     }
 
-    private void insertSemester() {
+    private void insertSemesters() {
         semesterRepository.saveAll(SemesterUtil.getSemesters(LocalDateTime.now())).subscribe();
     }
 

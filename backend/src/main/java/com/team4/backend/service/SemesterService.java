@@ -43,10 +43,12 @@ public class SemesterService {
         return getCurrentSemester().map(semester -> {
             semesterDto.setCurrentSemesterFullName(semester.getFullName());
             return semesterDto;
-        }).map(semester -> {
-            semesterRepository.findAll().map(Semester::getFullName)
-                    .subscribe(fullName -> semester.getSemestersFullNames().add(fullName));
-            return semester;
+        }).flatMap(semester -> semesterRepository.findAll()
+                .map(Semester::getFullName)
+                .collectList()
+        ).map(s -> {
+            semesterDto.getSemestersFullNames().addAll(s);
+            return semesterDto;
         });
     }
 
