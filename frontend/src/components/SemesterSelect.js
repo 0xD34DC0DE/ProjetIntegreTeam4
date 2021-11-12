@@ -6,10 +6,19 @@ import axios from "axios";
 const SemesterSelect = ({ updateSemesterFullName }) => {
   const [userInfo] = useContext(UserInfoContext);
   const [selectedSemester, setSelectedSemester] = useState("");
-  const [semesters, setSemesters] = useState({
-    currentSemesterFullName: "",
-    semestersFullNames: [],
-  });
+  const [semesters, setSemesters] = useState([]);
+
+  const semesterNamesForUi = {
+    FALL: "AUTOMNE",
+    WINTER: "HIVER",
+    SUMMER: "ÉTÉ",
+  };
+
+  const semesterNamesForBackEnd = {
+    AUTOMNE: "FALL",
+    HIVER: "WINTER",
+    ÉTÉ: "SUMMER",
+  };
 
   useEffect(() => {
     const getAllSemesterFullName = () => {
@@ -22,11 +31,14 @@ const SemesterSelect = ({ updateSemesterFullName }) => {
         responseType: "json",
       })
         .then((response) => {
-          setSemesters(response.data);
-          /*
-
-          */
-          setSelectedSemester(response.data.currentSemesterFullName);
+          setSemesters(
+            response.data.semestersFullNames.map((semester) =>
+              formatSemesterFullNameForUi(semester)
+            )
+          );
+          setSelectedSemester(
+            formatSemesterFullNameForUi(response.data.currentSemesterFullName)
+          );
           updateSemesterFullName(response.data.currentSemesterFullName);
         })
         .catch((error) => {
@@ -36,21 +48,27 @@ const SemesterSelect = ({ updateSemesterFullName }) => {
 
     getAllSemesterFullName();
     console.log(selectedSemester);
+    console.log(semesters);
   }, []);
 
   const handleChange = ($event) => {
-    setSelectedSemester($event.target.value);
-    updateSemesterFullName(
-      formatSemesterFullNameForBackEnd($event.target.value)
-    );
+    const value = $event.target.value;
+    console.log(value);
+    setSelectedSemester(value);
+    updateSemesterFullName(formatSemesterFullNameForBackEnd(value));
   };
 
   const formatSemesterFullNameForUi = (semesterFullName) => {
-    return semesterFullName.split("-").join(" ");
+    const tmp = semesterFullName.split("-");
+
+    console.log(semesterNamesForUi[tmp[0]] + " " + tmp[1]);
+
+    return semesterNamesForUi[tmp[0]] + " " + tmp[1];
   };
 
   const formatSemesterFullNameForBackEnd = (semesterFullName) => {
-    return semesterFullName.split(" ").join("-");
+    const tmp = semesterFullName.split(" ");
+    return semesterNamesForBackEnd[tmp[0]] + "-" + tmp[1];
   };
 
   return (
@@ -61,24 +79,21 @@ const SemesterSelect = ({ updateSemesterFullName }) => {
             border: "1px white",
             display: "flex",
             justifyContent: "center",
-            boxShadow: 3,
+            boxShadow: 5,
             textAlign: "center",
             display: "flex",
-            m: 4,
+            mt: 5,
+            mb: 2,
           }}
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={formatSemesterFullNameForUi(selectedSemester)}
+          labelId="semesterSelectLabel"
+          id="semesterSelect"
+          value={selectedSemester}
           label="Session"
           onChange={handleChange}
         >
-          {semesters.semestersFullNames.map((value, key) => (
-            <MenuItem
-              key={key}
-              value={formatSemesterFullNameForUi(value)}
-              sx={{ color: "white" }}
-            >
-              {formatSemesterFullNameForUi(value)}
+          {semesters.map((value, key) => (
+            <MenuItem key={key} value={value} sx={{ color: "white" }}>
+              {value}
             </MenuItem>
           ))}
         </Select>

@@ -73,9 +73,6 @@ const AssignedStudentSupervisorView = ({
       {visible && (
         <>
           <SemesterSelect updateSemesterFullName={updateSemesterFullName} />
-          <Typography variant="h4" sx={{ color: "white", ml: 2, mt: 2 }}>
-            Liste des étudiants assignés
-          </Typography>
           <Grid
             sx={{ py: "5vh", mt: "10%", display: "flex" }}
             container
