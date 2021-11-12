@@ -22,7 +22,7 @@ const InternshipOfferValidation = ({
   const [unvalidatedOffers, setUnvalidatedOffers] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
-  const [semesterFullName, setSemesterFullName] = useState(); //TODO --> get From select component
+  const [semesterFullName, setSemesterFullName] = useState(""); //TODO --> get From select component
   const [selectedOffer, setSelectedOffer] = useState(null);
 
   useEffect(() => {

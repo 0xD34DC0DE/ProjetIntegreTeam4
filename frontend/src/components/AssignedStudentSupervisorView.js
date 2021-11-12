@@ -26,7 +26,7 @@ const AssignedStudentSupervisorView = ({
   const [assignedStudents, setAssignedStudents] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
   const [openedStudentEmail, setOpenedStudentEmail] = useState("");
-  const [semesterFullName, setSemesterFullName] = useState();
+  const [semesterFullName, setSemesterFullName] = useState("");
 
   useEffect(async () => {
     const getSupervisor = async () => {
