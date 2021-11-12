@@ -271,7 +271,13 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Michel")
                         .lastName("Lamarck")
-                        .studentEmails(new HashSet<>(Arrays.asList("studentInternFound@gmail.com", "123456789@gmail.com"))).build()
+                        .studentEmails(new HashSet<>(Arrays.asList("3643283423@gmail.com", "123456789@gmail.com"))).build(),
+                Supervisor.supervisorBuilder()
+                        .email("supervisor2@gmail.com")
+                        .password(pbkdf2Encoder.encode("supervisor1"))
+                        .firstName("Kendrick")
+                        .lastName("Lamar")
+                        .studentEmails(new HashSet<>(Arrays.asList("123456789@gmail.com"))).build()
         );
 
         supervisorRepository.saveAll(supervisorList).subscribe();

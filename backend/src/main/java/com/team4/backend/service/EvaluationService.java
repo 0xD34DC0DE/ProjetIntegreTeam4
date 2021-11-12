@@ -6,7 +6,9 @@ import com.team4.backend.model.Evaluation;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.EvaluationRepository;
 import lombok.extern.java.Log;
+import org.springframework.cglib.core.Local;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
@@ -38,13 +40,22 @@ public class EvaluationService {
                     //TODO replace with forEach during refactor sprint
                     for (Student student : students) {
                         if ((student.getFirstName() + " " + student.getLastName()).equals(fullName.toString())) {
-                            System.out.println(student.getEvaluationsDates());
                             student.getEvaluationsDates().add(LocalDate.now());
                             return studentService.save(student);
                         }
                     }
                     return Mono.empty();
                 }).flatMap(s -> Mono.just(atomicReference.get()));
+    }
+
+    public Flux<Evaluation> getAllWithDateBetween(LocalDate sessionStart, LocalDate sessionEnd) {
+        return evaluationRepository.findAll()
+                .flatMap(evaluation -> {
+                    if (LocalDate.parse(evaluation.getText().get("date")).isAfter(sessionStart) && LocalDate.parse(evaluation.getText().get("date")).isBefore(sessionEnd)) {
+                        return Flux.just(evaluation);
+                    }
+                    return Flux.empty();
+                });
     }
 
 }
