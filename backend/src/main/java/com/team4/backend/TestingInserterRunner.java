@@ -69,8 +69,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                                  PBKDF2Encoder pbkdf2Encoder,
                                  FileMetaDataRepository fileMetaDataRepository,
                                  InternshipManagerRepository internshipManagerRepository,
-                                 InternshipRepository internshipRepository, NotificationRepository notificationRepository) {
                                  InternshipRepository internshipRepository,
+                                 NotificationRepository notificationRepository,
                                  SemesterRepository semesterRepository) {
         this.userRepository = userRepository;
         this.monitorRepository = monitorRepository;
