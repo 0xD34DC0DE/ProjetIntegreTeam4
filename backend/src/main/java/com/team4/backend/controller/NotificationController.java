@@ -2,10 +2,10 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.model.Notification;
-import com.team4.backend.model.User;
 import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.NotificationService;
 import com.team4.backend.service.UserService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.ServerSentEvent;
@@ -17,6 +17,7 @@ import reactor.core.publisher.Mono;
 import java.security.Principal;
 
 @RestController
+@Log4j2
 @RequestMapping("/notification")
 @PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR', 'INTERNSHIP_MANAGER', 'SUPERVISOR')")
 public class NotificationController {
