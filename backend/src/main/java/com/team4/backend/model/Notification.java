@@ -22,7 +22,7 @@ public class Notification implements Serializable {
     private String id;
     private String title;
     private String content;
-    private String receiverEmail;
+    private String receiverId;
     private NotificationSeverity severity;
     private Map<String, String> data;
     @Builder.Default
@@ -32,7 +32,7 @@ public class Notification implements Serializable {
     public Notification(String id,
                         String title,
                         String content,
-                        String receiverEmail,
+                        String receiverId,
                         NotificationSeverity severity,
                         Map<String, String> data,
                         LocalDateTime creationDate) {
@@ -40,7 +40,7 @@ public class Notification implements Serializable {
         this.title = title;
         this.severity = severity;
         this.content = content;
-        this.receiverEmail = receiverEmail;
+        this.receiverId = receiverId;
         this.data = data;
         this.creationDate = Optional.ofNullable(creationDate).orElse(LocalDateTime.now());
     }

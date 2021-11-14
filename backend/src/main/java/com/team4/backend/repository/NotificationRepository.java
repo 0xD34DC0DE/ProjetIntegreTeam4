@@ -7,7 +7,5 @@ import reactor.core.publisher.Flux;
 
 @Repository
 public interface NotificationRepository extends ReactiveMongoRepository<Notification, String> {
-
-    Flux<Notification> findByReceiverEmail(String email);
-
+    Flux<Notification> findByReceiverId(String email);
 }

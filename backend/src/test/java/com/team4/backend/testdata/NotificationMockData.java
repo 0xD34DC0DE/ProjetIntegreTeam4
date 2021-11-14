@@ -16,7 +16,7 @@ public abstract class NotificationMockData {
         return Flux.just(
                 Notification.notificationBuilder()
                         .id("615af41de2757ad51b0b02ed")
-                        .receiverEmail("studentEmail@gmail.com")
+                        .receiverId("studentEmail@gmail.com")
                         .title("Title 1")
                         .creationDate(LocalDateTime.now())
                         .severity(NotificationSeverity.LOW)
@@ -25,7 +25,7 @@ public abstract class NotificationMockData {
                         .build(),
                 Notification.notificationBuilder()
                         .id("615af409e2757ad51b0b02df")
-                        .receiverEmail("monitorEmail@gmail.com")
+                        .receiverId("monitorEmail@gmail.com")
                         .title("Title 2")
                         .severity(NotificationSeverity.HIGH)
                         .content("this is content")
@@ -39,7 +39,7 @@ public abstract class NotificationMockData {
         return
                 Notification.notificationBuilder()
                         .id("507f191e810c19729de860ea")
-                        .receiverEmail("email@gmail.com")
+                        .receiverId("email@gmail.com")
                         .title("Title 1")
                         .severity(NotificationSeverity.LOW)
                         .creationDate(LocalDateTime.now())
@@ -51,7 +51,7 @@ public abstract class NotificationMockData {
     public static NotificationDto getNotificationDto() {
         return
                 NotificationDto.notificationDtoBuilder()
-                        .receiverEmail("email@gmail.com")
+                        .receiverId("email@gmail.com")
                         .title("Title 1")
                         .severity(NotificationSeverity.LOW)
                         .creationDate(LocalDateTime.now())

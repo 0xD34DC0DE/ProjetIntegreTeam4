@@ -2,19 +2,24 @@ package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipContractCreationDto;
 import com.team4.backend.dto.InternshipContractDto;
+import com.team4.backend.mapping.NotificationMapper;
 import com.team4.backend.model.*;
+import com.team4.backend.model.enums.NotificationSeverity;
 import com.team4.backend.pdf.InternshipContractPdfTemplate;
 import com.team4.backend.repository.InternshipContractRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple4;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 public class InternshipContractService {
@@ -35,13 +40,15 @@ public class InternshipContractService {
 
     private final UserService userService;
 
+    private final NotificationService notificationService;
+
     public InternshipContractService(StudentService studentService,
                                      MonitorService monitorService,
                                      InternshipOfferService internshipOfferService,
                                      InternshipManagerService internshipManagerService,
                                      InternshipContractRepository internshipContractRepository,
                                      PdfService pdfService,
-                                     UserService userService) {
+                                     UserService userService, NotificationService notificationService) {
         this.studentService = studentService;
         this.monitorService = monitorService;
         this.internshipOfferService = internshipOfferService;
@@ -49,6 +56,7 @@ public class InternshipContractService {
         this.internshipContractRepository = internshipContractRepository;
         this.pdfService = pdfService;
         this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     public Mono<InternshipContract> initiateContract(InternshipContractCreationDto internshipContractCreationDto) {
@@ -240,4 +248,45 @@ public class InternshipContractService {
                                 })
                 );
     }
+
+    public void getInternshipContractsTwoWeeksLeft() {
+        internshipContractRepository.findAll()
+                .filter(internshipContract -> LocalDate.now().until(internshipContract.getEndingDate()).getDays() == 14)
+                .collectList()
+                .flatMap(internshipContracts -> {
+                            List<String> monitorList = List.copyOf(internshipContracts.stream()
+                                    .map(internshipContract -> internshipContract.getMonitorSignature().getUserId()).collect(Collectors.toList()));
+
+                            Flux<Monitor> monitorFlux = monitorService.findAllByIds(monitorList);
+
+                            List<String> studentList = List.copyOf(internshipContracts.stream()
+                                    .map(internshipContract -> internshipContract.getStudentSignature().getUserId()).collect(Collectors.toList()));
+
+                            Flux<Student> studentFlux = studentService.findAllByIds(studentList);
+
+                            return Flux.zip(
+                                            monitorFlux,
+                                            studentFlux
+                                    )
+                                    .flatMap(tuple -> {
+                                        Monitor monitor = tuple.getT1();
+                                        Student student = tuple.getT2();
+                                        return createTwoWeeksNoticeNotification(monitor, student);
+                                    })
+                                    .collectList();
+                        }
+                )
+                .subscribe();
+    }
+
+    public Mono<Notification> createTwoWeeksNoticeNotification(Monitor monitor, Student student) {
+        Notification notification = Notification.notificationBuilder()
+                .title("Avis de fin de stage")
+                .content("Le stage de l'étudiant " + student.getFirstName() + " " + student.getLastName() + " se termine dans deux semaines")
+                .severity(NotificationSeverity.HIGH)
+                .receiverId(monitor.getId())
+                .build();
+        return notificationService.createNotification(NotificationMapper.toDto(notification));
+    }
+
 }

@@ -117,14 +117,14 @@ public class TestingInserterRunner implements ApplicationRunner {
                 Notification.notificationBuilder()
                         .content("CV refusé!")
                         .title("Notification")
-                        .receiverEmail("student@gmail.com")
+                        .receiverId("student@gmail.com")
                         .severity(NotificationSeverity.HIGH)
                         .data(Collections.emptyMap())
                         .build(),
                 Notification.notificationBuilder()
                         .content("CV Accepté!")
                         .title("Notification")
-                        .receiverEmail("123456789@gmail.com")
+                        .receiverId("123456789@gmail.com")
                         .data(Collections.singletonMap("id", "test"))
                         .severity(NotificationSeverity.LOW)
                         .build()
@@ -151,25 +151,55 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private void insertInternshipContract() {
         String studentId = studentRepository.findByEmail("student@gmail.com").block().getId();
+        String studentId1 = studentRepository.findByEmail("123456789@gmail.com").block().getId();
+        String studentId2 = studentRepository.findByEmail("123667713@gmail.com").block().getId();
         String monitorId = monitorRepository.findByEmail("monitor@gmail.com").block().getId();
+        String monitorId1 = monitorRepository.findByEmail("monitor1@gmail.com").block().getId();
         String internshipManagerId = internshipManagerRepository.findByEmail("manager1@gmail.com")
                 .block().getId();
+        String internshipManagerId1 = internshipManagerRepository.findByEmail("manager2@gmail.com")
+                .block().getId();
 
-        InternshipContract internshipContract = InternshipContract.builder()
-                .internshipOfferId(internshipOfferId)
-                .address("123, Somewhere St., Montreal, Quebec")
-                .beginningDate(LocalDate.now().plusWeeks(1))
-                .endingDate(LocalDate.now().plusWeeks(5))
-                .dailySchedule("8:00 à 16:00")
-                .hourlyRate(21.50f)
-                .hoursPerWeek(40.0f)
-                .internTasks("Tasks")
-                .studentSignature(Signature.builder().userId(studentId).hasSigned(false).build())
-                .monitorSignature(Signature.builder().signDate(LocalDate.now()).userId(monitorId).hasSigned(true).build())
-                .internshipManagerSignature(Signature.builder().userId(internshipManagerId).hasSigned(false).build())
-                .build();
+        List<InternshipContract> internshipContracts = Arrays.asList(InternshipContract.builder()
+                        .internshipOfferId(internshipOfferId)
+                        .address("123, Somewhere St., Montreal, Quebec")
+                        .beginningDate(LocalDate.now().plusWeeks(1))
+                        .endingDate(LocalDate.now().plusWeeks(5))
+                        .dailySchedule("8:00 à 16:00")
+                        .hourlyRate(21.50f)
+                        .hoursPerWeek(40.0f)
+                        .internTasks("Tasks")
+                        .studentSignature(Signature.builder().userId(studentId).hasSigned(false).build())
+                        .monitorSignature(Signature.builder().signDate(LocalDate.now()).userId(monitorId).hasSigned(true).build())
+                        .internshipManagerSignature(Signature.builder().userId(internshipManagerId).hasSigned(false).build())
+                        .build(),
+                InternshipContract.builder()
+                        .address("456, Perdu à la campagne, St-Isidore, Quebec")
+                        .beginningDate(LocalDate.now())
+                        .endingDate(LocalDate.now().plusWeeks(2))
+                        .dailySchedule("4:00 à 21:00")
+                        .hourlyRate(520.0f)
+                        .hoursPerWeek(80.0f)
+                        .internTasks("Work")
+                        .studentSignature(Signature.builder().userId(studentId1).hasSigned(true).build())
+                        .monitorSignature(Signature.builder().signDate(LocalDate.now()).userId(monitorId1).hasSigned(true).build())
+                        .internshipManagerSignature(Signature.builder().userId(internshipManagerId1).hasSigned(true).build())
+                        .build(),
+                InternshipContract.builder()
+                        .address("789, Quelque part, Montréal, Québec")
+                        .beginningDate(LocalDate.now())
+                        .endingDate(LocalDate.now().plusWeeks(2))
+                        .dailySchedule("10:00 à 15:00")
+                        .hourlyRate(10.0f)
+                        .hoursPerWeek(15.0f)
+                        .internTasks("Work")
+                        .studentSignature(Signature.builder().userId(studentId2).hasSigned(true).build())
+                        .monitorSignature(Signature.builder().signDate(LocalDate.now()).userId(monitorId1).hasSigned(true).build())
+                        .internshipManagerSignature(Signature.builder().userId(internshipManagerId1).hasSigned(true).build())
+                        .build()
+        );
 
-        internshipContractRepository.save(internshipContract).block();
+        internshipContractRepository.saveAll(internshipContracts).subscribe(i -> log.info("Internship has been saved : {}", i));
     }
 
     private void insertStudents() {
@@ -279,7 +309,13 @@ public class TestingInserterRunner implements ApplicationRunner {
                 .lastName("Giovanna")
                 .build();
 
-        monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
+        Monitor monitor2 = Monitor.monitorBuilder().email("monitor1@gmail.com")
+                .password(pbkdf2Encoder.encode("monitor1"))
+                .firstName("Amir")
+                .lastName("Fernandez")
+                .build();
+
+        monitorRepository.saveAll(Arrays.asList(monitor, monitor2)).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
 
     private void insertSupervisors() {

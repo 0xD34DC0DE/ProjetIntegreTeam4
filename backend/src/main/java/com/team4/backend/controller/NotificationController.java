@@ -1,10 +1,11 @@
 package com.team4.backend.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.model.Notification;
+import com.team4.backend.model.User;
 import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.NotificationService;
+import com.team4.backend.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.ServerSentEvent;
@@ -17,13 +18,16 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/notification")
-@PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
+@PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR', 'INTERNSHIP_MANAGER', 'SUPERVISOR')")
 public class NotificationController {
 
     private final NotificationService notificationService;
 
-    public NotificationController(NotificationService notificationService) {
+    private final UserService userService;
+
+    public NotificationController(NotificationService notificationService, UserService userService) {
         this.notificationService = notificationService;
+        this.userService = userService;
     }
 
     @PostMapping("/create")
@@ -34,11 +38,12 @@ public class NotificationController {
 
     @GetMapping("/sse")
     public Flux<ServerSentEvent<Notification>> sseNotificationStream(Principal principal) {
-        return notificationService.getNotificationFluxSink().asFlux()
-                .filter(n -> n.getReceiverEmail().equals(UserSessionService.getLoggedUserEmail(principal)))
-                .map(n -> ServerSentEvent.<Notification>builder()
-                        .data(n)
-                        .build());
+        return userService.findByEmail(UserSessionService.getLoggedUserEmail(principal))
+                .flatMapMany(user -> notificationService.getNotificationFluxSink().asFlux()
+                        .filter(n -> n.getReceiverId().equals(user.getId()))
+                        .map(n -> ServerSentEvent.<Notification>builder()
+                                .data(n)
+                                .build()));
     }
 
     @GetMapping

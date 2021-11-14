@@ -6,7 +6,11 @@ import com.team4.backend.model.Monitor;
 import com.team4.backend.repository.MonitorRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class MonitorService {
@@ -50,4 +54,9 @@ public class MonitorService {
                 Mono.error(new UserNotFoundException("Could not find Monitor with id: " + monitorId))
         );
     }
+
+    public Flux<Monitor> findAllByIds(List<String> ids) {
+        return monitorRepository.findAllByIds(ids);
+    }
+
 }

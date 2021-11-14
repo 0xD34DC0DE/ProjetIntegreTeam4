@@ -17,7 +17,7 @@ public class NotificationDto implements Serializable {
     private String id;
     private String title;
     private String content;
-    private String receiverEmail;
+    private String receiverId;
     private Map<String, String> data;
     private NotificationSeverity severity;
     private LocalDateTime creationDate;
@@ -26,7 +26,7 @@ public class NotificationDto implements Serializable {
     public NotificationDto(String id,
                            String title,
                            String content,
-                           String receiverEmail,
+                           String receiverId,
                            Map<String, String> data,
                            NotificationSeverity severity,
                            LocalDateTime creationDate) {
@@ -35,7 +35,7 @@ public class NotificationDto implements Serializable {
         this.content = content;
         this.severity = severity;
         this.data = data;
-        this.receiverEmail = receiverEmail;
+        this.receiverId = receiverId;
         this.creationDate = Optional.ofNullable(creationDate).orElse(LocalDateTime.now());
     }
 

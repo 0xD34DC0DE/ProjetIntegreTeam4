@@ -31,7 +31,7 @@ public class NotificationService {
 
     public Flux<Notification> findAllNotifications(Principal principal) {
         return notificationRepository
-                .findByReceiverEmail(UserSessionService.getLoggedUserEmail(principal));
+                .findByReceiverId(UserSessionService.getLoggedUserEmail(principal));
     }
 
     public Mono<Void> deleteNotification(String id) {
