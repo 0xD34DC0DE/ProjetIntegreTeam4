@@ -3,12 +3,15 @@ package com.team4.backend.service;
 import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.model.Evaluation;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.repository.SupervisorRepository;
+import com.team4.backend.testdata.EvaluationMockData;
 import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.testdata.SupervisorMockData;
 import com.team4.backend.util.PBKDF2Encoder;
+import net.bytebuddy.implementation.bind.annotation.Super;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,9 +21,13 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class SupervisorServiceTest {
@@ -36,6 +43,9 @@ public class SupervisorServiceTest {
 
     @Mock
     StudentService studentService;
+
+    @Mock
+    EvaluationService evaluationService;
 
     @InjectMocks
     SupervisorService supervisorService;
@@ -109,7 +119,7 @@ public class SupervisorServiceTest {
 
         //ACT
         Mono<Supervisor> supervisorMono = supervisorService
-                .addStudentEmailToStudentList(supervisor.getId(), "toto23@outlook.com");
+                .addStudentEmailToStudentList(supervisor.getId(), "3643283423@gmail.com");
 
         //ASSERT
         StepVerifier.create(supervisorMono).expectError().verify();
@@ -178,5 +188,89 @@ public class SupervisorServiceTest {
         StepVerifier
                 .create(supervisorMono)
                 .verifyError(UserNotFoundException.class);
+    }
+
+    @Test
+    void shouldGetAll() {
+        //ARRANGE
+        when(supervisorRepository.findAllByRole(anyString())).thenReturn(SupervisorMockData.getAllSupervisors());
+
+        //ACT
+        Flux<Supervisor> response = supervisorService.getAll();
+
+        //ASSERT
+        StepVerifier
+                .create(response)
+                .assertNext(r1 -> {
+                    assertEquals(SupervisorMockData.getAllSupervisorsList().get(0), r1);
+                })
+                .assertNext(r2 -> {
+                    assertEquals(SupervisorMockData.getAllSupervisorsList().get(1), r2);
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldGetStudentsEmailWithSupervisorWithNoEvaluation() {
+        //ARRANGE
+
+        LocalDate localDate0 = LocalDate.parse("2021-01-01");
+        LocalDate localDate1 = LocalDate.parse("2021-05-31");
+
+        SupervisorService supervisorServiceSpy = spy(supervisorService);
+        doReturn(Mono.just(SupervisorMockData.getAllSupervisorsList())).when(supervisorServiceSpy).getAllWithNoEvaluation(any(), any());
+
+        //ACT
+        Mono<List<String>> response = supervisorServiceSpy.getStudentsEmailWithSupervisorWithNoEvaluation(localDate0, localDate1);
+
+        //ASSERT
+        StepVerifier.create(response)
+                .assertNext(r1 -> {
+                    assertEquals("3643283423@gmail.com", r1.get(0));
+                }).verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllWithNoEvaluation() {
+        //ARRANGE
+        LocalDate localDate0 = LocalDate.parse("2021-01-01");
+        LocalDate localDate1 = LocalDate.parse("2021-05-31");
+
+        when(evaluationService.getAllWithDateBetween(any(), any())).thenReturn(EvaluationMockData.getAllFlux());
+
+        SupervisorService supervisorServiceSpy = spy(supervisorService);
+        doReturn(SupervisorMockData.getAllSupervisors()).when(supervisorServiceSpy).getAll();
+
+        //ACT
+        Mono<List<Supervisor>> response = supervisorServiceSpy.getAllWithNoEvaluation(localDate0, localDate1);
+
+        //ASSERT
+        StepVerifier.create(response)
+                .assertNext(s -> {
+                    assertEquals(SupervisorMockData.getAllSupervisorsList(), s);
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllWithNoEvaluationOnlyOne() {
+        //ARRANGE
+        LocalDate localDate0 = LocalDate.parse("2021-01-01");
+        LocalDate localDate1 = LocalDate.parse("2021-05-31");
+
+        when(evaluationService.getAllWithDateBetween(any(), any())).thenReturn(EvaluationMockData.getAllFlux2());
+
+        SupervisorService supervisorServiceSpy = spy(supervisorService);
+        doReturn(SupervisorMockData.getAllSupervisors()).when(supervisorServiceSpy).getAll();
+
+        //ACT
+        Mono<List<Supervisor>> response = supervisorServiceSpy.getAllWithNoEvaluation(localDate0, localDate1);
+
+        //ASSERT
+        StepVerifier.create(response)
+                .assertNext(s -> {
+                    assertEquals(SupervisorMockData.getAllSupervisorsList().get(1).getFirstName(), s.get(0).getFirstName());
+                })
+                .verifyComplete();
     }
 }

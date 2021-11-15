@@ -35,7 +35,6 @@ public class EvaluationService {
                     fullName.set(evaluation.getText().get("studentFullName"));
                     return studentService.getAll().collectList();
                 }).flatMap(students -> {
-                    //TODO replace with forEach during refactor sprint
                     for (Student student : students) {
                         if ((student.getFirstName() + " " + student.getLastName()).equals(fullName.toString())) {
                             student.getEvaluationsDates().add(LocalDate.now());

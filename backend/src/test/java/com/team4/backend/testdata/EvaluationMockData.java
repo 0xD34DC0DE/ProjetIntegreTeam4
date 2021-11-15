@@ -5,8 +5,10 @@ import com.team4.backend.model.Evaluation;
 import com.team4.backend.model.enums.Categorical;
 import com.team4.backend.model.enums.Expectation;
 import com.team4.backend.model.enums.Rating;
+import reactor.core.publisher.Flux;
 
 import java.util.HashMap;
+import java.util.List;
 
 public abstract class EvaluationMockData {
 
@@ -38,6 +40,17 @@ public abstract class EvaluationMockData {
         HashMap<String, String> text = new HashMap<>();
         text.put("field10", "value");
         text.put("studentFullName", "John Doe");
+        text.put("supervisorFullName", "Michel Lamarck");
+        text.put("date", "2021-11-09");
+        return text;
+    }
+
+    public static HashMap<String, String> getText2() {
+        HashMap<String, String> text = new HashMap<>();
+        text.put("field10", "value");
+        text.put("studentFullName", "Maxime Dupuis");
+        text.put("supervisorFullName", "Maxime Dupuis");
+        text.put("date", "2021-11-09");
         return text;
     }
 
@@ -59,6 +72,67 @@ public abstract class EvaluationMockData {
                 .text(getText())
                 .categorical(getCategorical())
                 .build();
+    }
+
+    public static Evaluation getEvaluation2() {
+        return Evaluation.evaluationBuilder()
+                .id("evaluation_id_2")
+                .expectation(getExpectation())
+                .rating(getRating())
+                .text(getText())
+                .categorical(getCategorical())
+                .build();
+    }
+
+    public static List<Evaluation> getAllList() {
+        return List.of(Evaluation.evaluationBuilder()
+                        .id("evaluation_id")
+                        .expectation(getExpectation())
+                        .rating(getRating())
+                        .text(getText())
+                        .categorical(getCategorical())
+                        .build(),
+                Evaluation.evaluationBuilder()
+                        .id("evaluation_id_2")
+                        .expectation(getExpectation())
+                        .rating(getRating())
+                        .text(getText())
+                        .categorical(getCategorical())
+                        .build());
+    }
+
+    public static Flux<Evaluation> getAllFlux() {
+        return Flux.just(Evaluation.evaluationBuilder()
+                        .id("evaluation_id")
+                        .expectation(getExpectation())
+                        .rating(getRating())
+                        .text(getText())
+                        .categorical(getCategorical())
+                        .build(),
+                Evaluation.evaluationBuilder()
+                        .id("evaluation_id_2")
+                        .expectation(getExpectation())
+                        .rating(getRating())
+                        .text(getText())
+                        .categorical(getCategorical())
+                        .build());
+    }
+
+    public static Flux<Evaluation> getAllFlux2() {
+        return Flux.just(Evaluation.evaluationBuilder()
+                        .id("evaluation_id")
+                        .expectation(getExpectation())
+                        .rating(getRating())
+                        .text(getText())
+                        .categorical(getCategorical())
+                        .build(),
+                Evaluation.evaluationBuilder()
+                        .id("evaluation_id_2")
+                        .expectation(getExpectation())
+                        .rating(getRating())
+                        .text(getText2())
+                        .categorical(getCategorical())
+                        .build());
     }
 
 }

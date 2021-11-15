@@ -3,13 +3,11 @@ package com.team4.backend.service;
 import com.team4.backend.dto.EvaluationDto;
 import com.team4.backend.model.Evaluation;
 import com.team4.backend.model.Student;
-import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.EvaluationRepository;
 import com.team4.backend.testdata.EvaluationMockData;
 import com.team4.backend.testdata.StudentMockData;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -20,11 +18,9 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -62,6 +58,36 @@ public class EvaluationServiceTest {
                 .create(evaluationMono)
                 .assertNext(Assertions::assertNotNull)
                 .verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllWithDateBetween() {
+        //ARRANGE
+        Flux<Evaluation> evaluationFlux  = EvaluationMockData.getAllFlux();
+        when(evaluationRepository.findAll()).thenReturn(evaluationFlux);
+
+        //ACT
+        Flux<Evaluation> response = evaluationService.getAllWithDateBetween(LocalDate.of(2021, 9, 1), LocalDate.of(2021, 12, 31));
+
+        //ASSERT
+        StepVerifier.create(response).assertNext(r1 -> {
+            assertEquals(EvaluationMockData.getEvaluation(), r1);
+        }).assertNext(r2 -> {
+            assertEquals(EvaluationMockData.getEvaluation2(), r2);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldNotGetAllWithDateBetween() {
+        //ARRANGE
+        Flux<Evaluation> evaluationFlux  = EvaluationMockData.getAllFlux();
+        when(evaluationRepository.findAll()).thenReturn(evaluationFlux);
+
+        //ACT
+        Flux<Evaluation> response = evaluationService.getAllWithDateBetween(LocalDate.of(2020, 9, 1), LocalDate.of(2020, 12, 31));
+
+        //ASSERT
+        StepVerifier.create(response).verifyComplete();
     }
 
 }
