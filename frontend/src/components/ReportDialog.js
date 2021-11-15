@@ -15,7 +15,8 @@ function ReportDialog({ open, toggleDialog, reportUrl, setReportUrl, sessionNumb
 
     if (reportUrl === "/generateAllNonValidatedOffersReport" ||
         reportUrl === "/generateAllValidatedOffersReport" ||
-        reportUrl === "/generateStudentsNotEvaluatedReport") {
+        reportUrl === "/generateStudentsNotEvaluatedReport" ||
+        reportUrl === "/generateStudentsWithSupervisorWithNoCompanyEvaluation") {
         reportUrl = "http://localhost:8080/report" + reportUrl + "/" + sessionNumber;
     } else {
         reportUrl = "http://localhost:8080/report" + reportUrl;

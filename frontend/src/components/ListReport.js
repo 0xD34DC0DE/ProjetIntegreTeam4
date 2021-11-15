@@ -29,7 +29,7 @@ const ListReport = ({ open, toggleDialog, visible }) => {
         { title: "Étudiants en attente de réponse", url: "/generateStudentsWaitingInterviewResponseReport" },
         { title: "Étudiants avec stage trouvé", url: "/generateStudentsWithInternshipReport" },
         { title: "Étudiants pas évalué par leur moniteur", url: "/generateStudentsNotEvaluatedReport" },
-        { title: "Étudiants dont le superviseur n'a pas évalué l'entreprise", url: "/null" },
+        { title: "Étudiants dont le superviseur n'a pas évalué l'entreprise", url: "/generateStudentsWithSupervisorWithNoCompanyEvaluation" },
     ]);
 
     const [reportUrl, setReportUrl] = useState("");
