@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.EvaluationDto;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Evaluation;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.EvaluationRepository;
@@ -18,7 +19,6 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -58,6 +58,26 @@ public class EvaluationServiceTest {
                 .create(evaluationMono)
                 .assertNext(Assertions::assertNotNull)
                 .verifyComplete();
+    }
+
+    @Test
+    void shouldNotCreateEvaluation() {
+        //ARRANGE
+        Evaluation evaluation = EvaluationMockData.getEvaluation3();
+        EvaluationDto evaluationDto = EvaluationMockData.getEvaluationDto();
+        when(evaluationRepository.save(any(Evaluation.class))).thenReturn(Mono.just(evaluation));
+
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+        when(studentService.getAll()).thenReturn(students);
+
+        //ACT
+        Mono<Evaluation> evaluationMono = evaluationService.addEvaluation(evaluationDto);
+
+        //ASSERT
+        StepVerifier
+                .create(evaluationMono)
+                .expectError(UserNotFoundException.class)
+                .verify();
     }
 
     @Test

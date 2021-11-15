@@ -48,7 +48,7 @@ public abstract class EvaluationMockData {
     public static HashMap<String, String> getText2() {
         HashMap<String, String> text = new HashMap<>();
         text.put("field10", "value");
-        text.put("studentFullName", "Maxime Dupuis");
+        text.put("studentFullName", "Wrong Name");
         text.put("supervisorFullName", "Maxime Dupuis");
         text.put("date", "2021-11-09");
         return text;
@@ -80,6 +80,16 @@ public abstract class EvaluationMockData {
                 .expectation(getExpectation())
                 .rating(getRating())
                 .text(getText())
+                .categorical(getCategorical())
+                .build();
+    }
+
+    public static Evaluation getEvaluation3() {
+        return Evaluation.evaluationBuilder()
+                .id("evaluation_id_2")
+                .expectation(getExpectation())
+                .rating(getRating())
+                .text(getText2())
                 .categorical(getCategorical())
                 .build();
     }

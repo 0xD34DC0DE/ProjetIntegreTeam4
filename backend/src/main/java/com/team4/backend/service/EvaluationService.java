@@ -1,6 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.EvaluationDto;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.EvaluationMapper;
 import com.team4.backend.model.Evaluation;
 import com.team4.backend.model.Student;
@@ -41,7 +42,7 @@ public class EvaluationService {
                             return studentService.save(student);
                         }
                     }
-                    return Mono.empty();
+                    return Mono.error(new UserNotFoundException("No student found with the name : " + fullName.toString()));
                 }).flatMap(s -> Mono.just(atomicReference.get()));
     }
 
