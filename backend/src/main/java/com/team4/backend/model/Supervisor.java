@@ -15,14 +15,14 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 public class Supervisor extends User implements Serializable {
 
-    private Set<String> studentEmails;
+    private Set<TimestampedEntry> studentTimestampedEntries;
 
     @Builder(builderMethodName = "supervisorBuilder")
     public Supervisor(String id,
                       String email,
                       String firstName,
                       String lastName,
-                      Set<String> studentEmails,
+                      Set<TimestampedEntry> studentTimestampedEntries,
                       String password,
                       String phoneNumber,
                       LocalDate registrationDate) {
@@ -35,7 +35,7 @@ public class Supervisor extends User implements Serializable {
                 Role.SUPERVISOR,
                 true,
                 registrationDate);
-        this.studentEmails = studentEmails;
+        this.studentTimestampedEntries = studentTimestampedEntries;
     }
 
 }

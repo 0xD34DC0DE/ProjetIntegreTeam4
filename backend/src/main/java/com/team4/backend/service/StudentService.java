@@ -137,6 +137,7 @@ public class StudentService {
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Could not find student with id: " + studentId)));
     }
 
+    //TODO --> refactor to pass semesterFullName in argument and get range from SemesterService.findByFullName()
     public Flux<Student> getAllWithEvaluationDateBetween(LocalDate sessionStart, LocalDate sessionEnd) {
         return studentRepository.findAllByEvaluationsDatesIsBetween(sessionStart, sessionEnd)
                 .collectList()
@@ -145,7 +146,7 @@ public class StudentService {
                     for (Student student : students) {
                         for (LocalDate date : student.getEvaluationsDates()) {
                             //TODO use anyMatch() to check if a date matches time period
-                            if (date.isAfter(sessionStart)  && date.isBefore(sessionEnd)) {
+                            if (date.isAfter(sessionStart) && date.isBefore(sessionEnd)) {
                                 return Flux.just(student);
                             }
                         }

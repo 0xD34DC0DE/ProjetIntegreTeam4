@@ -1,19 +1,24 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.SupervisorDetailsDto;
+import com.team4.backend.dto.SupervisorCreationDto;
 import com.team4.backend.model.Supervisor;
+import com.team4.backend.model.TimestampedEntry;
 import com.team4.backend.testdata.SupervisorMockData;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SupervisorMapperTest {
 
     @Test
     void mapDtoToEntity() {
-        //ARANGE
-        SupervisorDetailsDto dto = SupervisorMockData.getMockSupervisorDto();
+        //ARRANGE
+        SupervisorCreationDto dto = SupervisorMockData.getMockSupervisorDto();
+
+        dto.setStudentEmails(new HashSet<>());
 
         //ACT
         Supervisor entity = SupervisorMapper.toEntity(dto);
@@ -25,7 +30,7 @@ public class SupervisorMapperTest {
         assertEquals(dto.getFirstName(), entity.getFirstName());
         assertEquals(dto.getLastName(), entity.getLastName());
         assertEquals(dto.getPhoneNumber(), entity.getPhoneNumber());
-        assertEquals(dto.getStudentEmails(), entity.getStudentEmails());
+        assertTrue(dto.getStudentEmails().isEmpty());
         assertEquals(dto.getRegistrationDate(), entity.getRegistrationDate());
     }
 
@@ -35,7 +40,7 @@ public class SupervisorMapperTest {
         Supervisor entity = SupervisorMockData.getMockSupervisor();
 
         //ACT
-        SupervisorDetailsDto dto = SupervisorMapper.toDetailsDto(entity);
+        SupervisorCreationDto dto = SupervisorMapper.toDetailsDto(entity);
 
         //ASSERT
         assertNull(dto.getPassword()); // password shouldn't be given to frontend
@@ -45,7 +50,9 @@ public class SupervisorMapperTest {
         assertEquals(entity.getFirstName(), dto.getFirstName());
         assertEquals(entity.getLastName(), dto.getLastName());
         assertEquals(entity.getPhoneNumber(), dto.getPhoneNumber());
-        assertEquals(entity.getStudentEmails(), dto.getStudentEmails());
+        assertEquals(entity.getStudentTimestampedEntries().stream()
+                .map(TimestampedEntry::getEmail)
+                .collect(Collectors.toSet()), dto.getStudentEmails());
         assertEquals(entity.getRegistrationDate(), dto.getRegistrationDate());
     }
 
