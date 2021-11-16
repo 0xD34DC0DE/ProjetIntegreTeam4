@@ -23,21 +23,22 @@ const Notification = ({ addNotification, deleteNotification }) => {
     content: "",
   });
   const [eventSource, setEventSource] = useState(undefined);
-  const [webSocket, setWebSocket] = useState(undefined);
 
   useEffect(() => {
     if (!userInfo.loggedIn) return;
     setEventSource(
-      new EventSource("http://localhost:8080/notification/sse", {
-        headers: { Authorization: userInfo.jwt },
-      })
+      new EventSource(
+        "http://localhost:8080/notification/sse?userId=" + userInfo.id,
+        {
+          headers: { Authorization: userInfo.jwt },
+        }
+      )
     );
-    setWebSocket(new WebSocket("ws://localhost:8080/ws"));
   }, [userInfo]);
 
   useEffect(() => {
     if (eventSource === undefined) return;
-    eventSource.onopen = (event) => {
+    eventSource.onopen = () => {
       console.log("[EventSource] Connection established.");
     };
     eventSource.onerror = (error) => {
@@ -52,40 +53,13 @@ const Notification = ({ addNotification, deleteNotification }) => {
         content: data.content,
         title: data.title,
       });
+      console.log(event);
       addNotification(data);
     };
   }, [eventSource]);
 
-  useEffect(() => {
-    if (webSocket === undefined) return;
-    webSocket.onopen = (event) => {
-      console.log("[WebSocket] Connection established.");
-    };
-    webSocket.onclose = (event) => {
-      console.log(event);
-    };
-    webSocket.onmessage = (event) => {
-      console.log(event);
-    };
-    webSocket.onerror = (e) => {
-      console.error(e);
-    };
-
-    setTimeout(() => {
-      ping();
-    }, 5000);
-  }, [webSocket]);
-
   const handleOnClose = () => {
     setShowSnackbar(false);
-  };
-
-  const ping = () => {
-    webSocket.send(userInfo.email);
-    console.log("Sending email payload to server...");
-    setTimeout(() => {
-      ping();
-    }, 10000);
   };
 
   return (

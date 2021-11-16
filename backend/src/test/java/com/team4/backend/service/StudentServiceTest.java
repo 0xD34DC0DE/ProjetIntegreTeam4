@@ -508,7 +508,7 @@ public class StudentServiceTest {
         students.forEach(student -> when(studentRepository.save(student)).thenReturn(Mono.just(student)));
 
         //ACT
-        Mono<Long> nbrOfUpdatedStudent = studentService.updateStudentStateForAllStudentThatInterviewDateHasPassedWeb();
+        Mono<Long> nbrOfUpdatedStudent = studentService.updateStudentStateForAllStudentThatInterviewDateHasPassed();
 
         //ASSERT
         StepVerifier.create(nbrOfUpdatedStudent)
@@ -524,7 +524,7 @@ public class StudentServiceTest {
                 .thenReturn(Flux.empty());
 
         //ACT
-        Mono<Long> nbrOfUpdatedStudent = studentService.updateStudentStateForAllStudentThatInterviewDateHasPassedWeb();
+        Mono<Long> nbrOfUpdatedStudent = studentService.updateStudentStateForAllStudentThatInterviewDateHasPassed();
 
         //ASSERT
         StepVerifier.create(nbrOfUpdatedStudent)

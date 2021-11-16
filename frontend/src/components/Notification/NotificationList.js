@@ -11,6 +11,7 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import axios from "axios";
 import Notification from "./Notification";
 import { UserInfoContext } from "../../stores/UserInfoStore";
+import { KeyboardReturnOutlined } from "@mui/icons-material";
 
 const severity = {
   high: { color: "rgba(200, 100, 100, 1)" },
@@ -27,9 +28,10 @@ const NotificationList = ({
   const [userInfo] = useContext(UserInfoContext);
 
   useEffect(() => {
+    if (userInfo === undefined) return;
     axios({
       method: "GET",
-      url: "http://localhost:8080/notification",
+      url: "http://localhost:8080/notification?receiverId=" + userInfo.id,
       headers: {
         Authorization: userInfo.jwt,
       },

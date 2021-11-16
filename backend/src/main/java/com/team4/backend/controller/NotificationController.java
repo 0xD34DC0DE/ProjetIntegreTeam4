@@ -2,7 +2,6 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.model.Notification;
-import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.NotificationService;
 import com.team4.backend.service.UserService;
 import lombok.extern.log4j.Log4j2;
@@ -13,8 +12,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-
-import java.security.Principal;
 
 @RestController
 @Log4j2
@@ -38,19 +35,18 @@ public class NotificationController {
     }
 
     @GetMapping("/sse")
-    public Flux<ServerSentEvent<Notification>> sseNotificationStream(Principal principal) {
-        return userService.findByEmail(UserSessionService.getLoggedUserEmail(principal))
-                .flatMapMany(user -> notificationService.getNotificationFluxSink().asFlux()
-                        .filter(n -> n.getReceiverId().equals(user.getId()))
-                        .map(n -> ServerSentEvent.<Notification>builder()
-                                .data(n)
-                                .build()));
+    public Flux<ServerSentEvent<Notification>> sseNotificationStream(@RequestParam String userId) {
+        return notificationService.getNotificationFluxSink().asFlux()
+                .filter(n -> n.getReceiverId().equals(userId))
+                .map(n -> ServerSentEvent.<Notification>builder()
+                        .data(n)
+                        .build());
     }
 
     @GetMapping
-    public Flux<Notification> findAllNotifications(Principal principal) {
+    public Flux<Notification> findAllNotifications(@RequestParam String receiverId) {
         return notificationService
-                .findAllNotifications(principal);
+                .findAllNotifications(receiverId);
     }
 
     @DeleteMapping("/{id}")

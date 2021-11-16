@@ -6,6 +6,7 @@ import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.*;
 import com.team4.backend.util.PBKDF2Encoder;
+import com.team4.backend.util.SemesterUtil;
 import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
 import org.slf4j.Logger;
@@ -49,6 +50,8 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final InternshipManagerRepository internshipManagerRepository;
 
+    private final SemesterRepository semesterRepository;
+
     private final Lorem lorem;
 
     private final Set<String> studentSet;
@@ -67,7 +70,9 @@ public class TestingInserterRunner implements ApplicationRunner {
                                  PBKDF2Encoder pbkdf2Encoder,
                                  FileMetaDataRepository fileMetaDataRepository,
                                  InternshipManagerRepository internshipManagerRepository,
-                                 InternshipRepository internshipRepository, NotificationRepository notificationRepository) {
+                                 InternshipRepository internshipRepository,
+                                 SemesterRepository semesterRepository,
+                                 NotificationRepository notificationRepository) {
         this.userRepository = userRepository;
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
@@ -80,6 +85,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.evaluationRepository = evaluationRepository;
         this.internshipManagerRepository = internshipManagerRepository;
         this.notificationRepository = notificationRepository;
+        this.semesterRepository = semesterRepository;
         this.evaluationsDates = new TreeSet<>();
         this.evaluationsDates.add(LocalDate.of(2019, 4, 4));
         this.evaluationsDates.add(LocalDate.of(2020, 9, 4));
@@ -99,10 +105,11 @@ public class TestingInserterRunner implements ApplicationRunner {
         fileMetaDataRepository.deleteAll().subscribe(System.err::println);
         internshipOfferRepository.deleteAll().subscribe();
         internshipRepository.deleteAll().subscribe();
-        notificationRepository.deleteAll().subscribe();
         evaluationRepository.deleteAll().subscribe();
         internshipContractRepository.deleteAll().subscribe();
+        semesterRepository.deleteAll().subscribe();
 
+        insertSemesters();
         insertInternshipOffersInternshipManagerView();
         insertStudents();
         insertMonitors();
@@ -110,6 +117,10 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertCvs();
         insertNotifications();
         insertInternships();
+    }
+
+    private void insertSemesters() {
+        semesterRepository.saveAll(SemesterUtil.getSemesters(LocalDateTime.now())).subscribe();
     }
 
     private void insertNotifications() {
@@ -324,13 +335,15 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .email("supervisor@gmail.com").password(pbkdf2Encoder.encode("supervisor"))
                         .firstName("Ginette")
                         .lastName("Renaud")
-                        .studentEmails(new HashSet<>()).build(),
+                        .studentTimestampedEntries(new HashSet<>()).build(),
                 Supervisor.supervisorBuilder()
                         .email("supervisor1@gmail.com")
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Michel")
                         .lastName("Lamarck")
-                        .studentEmails(new HashSet<>(Arrays.asList("studentInternFound@gmail.com", "123456789@gmail.com"))).build()
+                        .studentTimestampedEntries(new HashSet<>(Arrays.asList(
+                                new TimestampedEntry("studentInternFound@gmail.com", LocalDateTime.now()),
+                                new TimestampedEntry("123456789@gmail.com", LocalDateTime.now())))).build()
         );
 
         supervisorRepository.saveAll(supervisorList).subscribe();
@@ -421,9 +434,9 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isExclusive(false)
                         .listEmailInterestedStudents(new HashSet<>())
                         .build(),
-                InternshipOffer.builder().limitDateToApply(LocalDate.now())
-                        .beginningDate(LocalDate.now().plusDays(30))
-                        .endingDate(LocalDate.now().plusMonths(3))
+                InternshipOffer.builder().limitDateToApply(LocalDate.now().plusMonths(5))
+                        .beginningDate(LocalDate.now().plusMonths(5).plusDays(30))
+                        .endingDate(LocalDate.now().plusMonths(8))
                         .monitorEmail("monitor@gmail.com")
                         .title("Analyste de données")
                         .companyName("CGI")
@@ -450,7 +463,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .listEmailInterestedStudents(new HashSet<>())
                         .emailOfApprovingInternshipManager("manager1@gmail.com")
                         .build(),
-                InternshipOffer.builder().limitDateToApply(LocalDate.of(2021, 4, 4))
+                InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
                         .monitorEmail("monitor@gmail.com")

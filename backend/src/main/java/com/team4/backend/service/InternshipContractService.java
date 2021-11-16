@@ -255,7 +255,8 @@ public class InternshipContractService {
                 .collectList()
                 .flatMap(internshipContracts -> {
                             List<String> monitorList = List.copyOf(internshipContracts.stream()
-                                    .map(internshipContract -> internshipContract.getMonitorSignature().getUserId()).collect(Collectors.toList()));
+                                    .map(internshipContract -> internshipContract.getMonitorSignature().getUserId())
+                                    .collect(Collectors.toList()));
 
                             Flux<Monitor> monitorFlux = monitorService.findAllByIds(monitorList);
 
