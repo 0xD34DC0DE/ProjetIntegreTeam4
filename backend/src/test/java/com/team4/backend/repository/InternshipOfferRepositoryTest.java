@@ -151,4 +151,21 @@ public class InternshipOfferRepositoryTest {
                 .verifyComplete();
     }
 
+    @Test
+    void shouldFindAllAllByIsValidatedFalseAndLimitDateToApplyIsBetween(){
+        //ARRANGE
+        LocalDateTime date1 = LocalDateTime.now();
+
+        //ACT
+        Flux<InternshipOffer> internshipOfferFlux = internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyIsBetween(
+                date1,
+                date1.plusWeeks(3));
+
+
+        //ASSERT
+        StepVerifier.create(internshipOfferFlux)
+                .expectNextCount(2)
+                .verifyComplete();
+    }
+
 }
