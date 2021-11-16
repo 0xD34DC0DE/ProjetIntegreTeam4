@@ -83,7 +83,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.semesterRepository = semesterRepository;
         this.evaluationsDates = new TreeSet<>();
         this.evaluationsDates.add(LocalDate.of(2019, 4, 4));
-        this.evaluationsDates.add(LocalDate.of(2020, 9, 4));
+        this.evaluationsDates.add(LocalDate.of(2021, 9, 4));
         this.evaluationsDates.add(LocalDate.now());
         this.lorem = LoremIpsum.getInstance();
         this.studentSet = new HashSet<>();
@@ -179,6 +179,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("jean123"))
                         .hasValidCv(false)
                         .hasCv(true)
+                        .evaluationsDates(new TreeSet<>())
                         .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
@@ -193,6 +194,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
+                        .evaluationsDates(new TreeSet<>())
                         .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
@@ -205,6 +207,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>())
+                        .evaluationsDates(new TreeSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .hasValidCv(false)
                         .hasCv(true)
@@ -217,6 +220,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("student"))
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
+                        .evaluationsDates(new TreeSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .hasValidCv(false)
                         .hasCv(false)
@@ -231,6 +235,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasCv(false)
                         .phoneNumber("123-123-1234")
                         .appliedOffersId(new HashSet<>())
+                        .evaluationsDates(new TreeSet<>())
                         .interviewsDate(new TreeSet<>())
                         .exclusiveOffersId(new HashSet<>() {
                             {
@@ -244,6 +249,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .phoneNumber("438-422-3344")
                         .password(pbkdf2Encoder.encode("maxime123"))
                         .hasValidCv(true)
+                        .evaluationsDates(new TreeSet<>())
                         .interviewsDate(new TreeSet<>())
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())

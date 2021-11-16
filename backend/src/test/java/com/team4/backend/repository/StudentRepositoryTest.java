@@ -17,10 +17,14 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @DataMongoTest
 @EnableAutoConfiguration
@@ -49,6 +53,8 @@ public class StudentRepositoryTest {
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .password("password2")
                         .interviewsDate(new TreeSet<>())
+                        .evaluationsDates(Stream.of(LocalDate.now())
+                                .collect(Collectors.toCollection(TreeSet::new)))
                         .build(),
                 Student.studentBuilder()
                         .email("testing_3@gmail.com")
@@ -131,6 +137,22 @@ public class StudentRepositoryTest {
         StepVerifier.create(studentFlux)
                 .expectNextCount(2)
                 .verifyComplete();
+    }
+
+    @Test
+    void shouldFindAllByEvaluationsDatesIsBetween() {
+        //ARRANGE
+        LocalDateTime currentDateTime = LocalDateTime.now();
+
+        //ACT
+        Flux<Student> studentFlux = studentRepository.findAllByEvaluationsDatesIsBetween(currentDateTime.minusDays(3),currentDateTime.plusWeeks(2));
+
+        //ASSERT
+        StepVerifier.create(studentFlux)
+                .expectNextCount(1)
+                .verifyComplete();
+
+
     }
 
 }

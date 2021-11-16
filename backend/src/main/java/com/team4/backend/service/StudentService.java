@@ -138,6 +138,7 @@ public class StudentService {
     }
 
     //TODO --> refactor to pass semesterFullName in argument and get range from SemesterService.findByFullName()
+
     public Flux<Student> getAllWithEvaluationDateBetween(LocalDate sessionStart, LocalDate sessionEnd) {
         return studentRepository.findAllByEvaluationsDatesIsBetween(sessionStart, sessionEnd)
                 .collectList()

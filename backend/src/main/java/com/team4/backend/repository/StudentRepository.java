@@ -8,6 +8,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Repository
@@ -25,5 +26,7 @@ public interface StudentRepository extends ReactiveMongoRepository<Student, Stri
     Flux<Student> findAllByStudentState(StudentState state);
 
     Flux<Student> findAllByEvaluationsDatesIsBetween(LocalDate sessionStart, LocalDate sessionEnd);
+
+    Flux<Student> findAllByEvaluationsDatesIsBetween(LocalDateTime date1, LocalDateTime date2);
 
 }

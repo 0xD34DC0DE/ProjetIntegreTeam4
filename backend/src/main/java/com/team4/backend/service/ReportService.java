@@ -41,8 +41,7 @@ public class ReportService {
         this.pdfService = pdfService;
     }
 
-    //TODO --> refactor to pass semesterFullName in argument
-    //TODO --> internshipOfferService.getAllNonValidatedOffers(semesterFullName)
+    //TODO --> will have to remove it
     public Mono<byte[]> generateAllNonValidatedOffersReport(Integer sessionNumber) {
         List<Date> dates = calculateDates(sessionNumber);
         return internshipOfferService.getAllNonValidatedOffers(dates.get(0), dates.get(1)).collectList()
@@ -68,8 +67,7 @@ public class ReportService {
                 });
     }
 
-    //TODO --> refactor to pass semesterFullName in argument
-    //TODO --> internshipOfferService.getAllValidatedOffers(semesterFullName)
+    //TODO --> will have to remove it
     public Mono<byte[]> generateAllValidatedOffersReport(Integer sessionNumber) {
         List<Date> dates = calculateDates(sessionNumber);
         return internshipOfferService.getAllValidatedOffers(dates.get(0), dates.get(1)).collectList()

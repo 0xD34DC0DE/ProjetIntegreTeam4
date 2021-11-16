@@ -19,6 +19,7 @@ public class ReportController {
         this.reportService = reportService;
     }
 
+    //TODO --> remove it
     @GetMapping(value = "/generateAllNonValidatedOffersReport/{session}", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Mono<byte[]> generateAllNonValidatedOffersReport(@PathVariable("session") Integer sessionNumber) {
@@ -31,10 +32,17 @@ public class ReportController {
         return reportService.generateAllNonValidatedOffersReportNew(semesterFullName);
     }
 
+    //TODO --> remove it
     @GetMapping(value = "/generateAllValidatedOffersReport/{session}", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Mono<byte[]> generateAllValidatedOffersReport(@PathVariable("session") Integer sessionNumber) {
         return reportService.generateAllValidatedOffersReport(sessionNumber);
+    }
+
+    @GetMapping(value = "/generateAllValidatedOffersReportNew/{fullName}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
+    public Mono<byte[]> generateAllValidatedOffersReportNew(@PathVariable("fullName") String semesterFullName) {
+        return reportService.generateAllValidatedOffersReportNew(semesterFullName);
     }
 
     @GetMapping(value = "/generateAllStudentsReport", produces = MediaType.APPLICATION_PDF_VALUE)
