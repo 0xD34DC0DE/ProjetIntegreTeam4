@@ -168,4 +168,21 @@ public class InternshipOfferRepositoryTest {
                 .verifyComplete();
     }
 
+    @Test
+    void shouldFindAllAllByIsValidatedTrueAndLimitDateToApplyIsBetween(){
+        //ARRANGE
+        LocalDateTime date1 = LocalDateTime.now();
+
+        //ACT
+        Flux<InternshipOffer> internshipOfferFlux = internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyIsBetween(
+                date1,
+                date1.plusWeeks(3));
+
+
+        //ASSERT
+        StepVerifier.create(internshipOfferFlux)
+                .expectNextCount(2)
+                .verifyComplete();
+    }
+
 }

@@ -25,6 +25,12 @@ public class ReportController {
         return reportService.generateAllNonValidatedOffersReport(sessionNumber);
     }
 
+    @GetMapping(value = "/generateAllNonValidatedOffersReportNew/{fullName}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
+    public Mono<byte[]> generateAllNonValidatedOffersReportNew(@PathVariable("fullName") String semesterFullName) {
+        return reportService.generateAllNonValidatedOffersReportNew(semesterFullName);
+    }
+
     @GetMapping(value = "/generateAllValidatedOffersReport/{session}", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Mono<byte[]> generateAllValidatedOffersReport(@PathVariable("session") Integer sessionNumber) {

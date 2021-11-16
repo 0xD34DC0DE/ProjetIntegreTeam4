@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 
@@ -24,11 +23,15 @@ public interface InternshipOfferRepository extends ReactiveMongoRepository<Inter
 
     Flux<InternshipOffer> findAllByMonitorEmailAndIsValidatedTrueAndLimitDateToApplyIsBetween(String monitorEmail, LocalDateTime date1, LocalDateTime date2);
 
+    //TODO --> to remove
     Flux<InternshipOffer> findAllByIsValidatedFalseAndLimitDateToApplyBetween(Date sessionStart, Date sessionEnd);
 
     Flux<InternshipOffer> findAllByIsValidatedFalseAndLimitDateToApplyIsBetween(LocalDateTime date1,LocalDateTime date2);
 
+    //TODO --> to remove
     Flux<InternshipOffer> findAllByIsValidatedTrueAndLimitDateToApplyBetween(Date sessionStart, Date sessionEnd);
+
+    Flux<InternshipOffer> findAllByIsValidatedTrueAndLimitDateToApplyIsBetween(LocalDateTime date1, LocalDateTime date2);
 
     Flux<InternshipOffer> findAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(LocalDateTime date1, LocalDateTime date2);
 }

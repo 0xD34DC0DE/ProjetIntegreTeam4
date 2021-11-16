@@ -156,6 +156,7 @@ public class InternshipOfferService {
                     .flatMap(student -> addStudentEmailToOfferInterestedStudents(internshipOffer, student));
         });
     }
+
     public Flux<InternshipOfferStudentInterestViewDto> getInterestedStudents(String monitorEmail, String semesterFullName) {
 
         return semesterService.findByFullName(semesterFullName)
@@ -204,9 +205,25 @@ public class InternshipOfferService {
         return internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyBetween(sessionStart, sessionEnd);
     }
 
+    public Flux<InternshipOffer> getAllNonValidatedOffersNew(String semesterFullName) {
+
+        return semesterService.findByFullName(semesterFullName)
+                .flatMapMany(semester ->
+                        internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyIsBetween(semester.getFrom(), semester.getTo())
+                );
+    }
+
     //TODO --> refactor so it will take semesterFullName and get range from SemesterService.findByFullName()
     public Flux<InternshipOffer> getAllValidatedOffers(Date sessionStart, Date sessionEnd) {
         return internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyBetween(sessionStart, sessionEnd);
+    }
+
+    public Flux<InternshipOffer> getAllValidatedOffersNew(String semesterFullName) {
+
+        return semesterService.findByFullName(semesterFullName)
+                .flatMapMany(semester ->
+                        internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyIsBetween(semester.getFrom(), semester.getTo())
+                );
     }
 
 }

@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.testdata.ReportMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,6 +12,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 
@@ -45,6 +47,21 @@ class ReportServiceTest {
 
         //ASSERT
         StepVerifier.create(respone).consumeNextWith(s -> {
+            assertEquals(ReportMockData.getBytes()[0], s[0]);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldGenerateAllNonValidatedOffersReportNew() {
+        //ARRANGE
+        doReturn(ReportMockData.getInternshipOffers()).when(internshipOfferService).getAllNonValidatedOffersNew(any());
+        doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
+
+        //ACT
+        Mono<byte[]> response = reportService.generateAllNonValidatedOffersReportNew(SemesterName.FALL + "-" + LocalDateTime.now().getYear());
+
+        //ASSERT
+        StepVerifier.create(response).consumeNextWith(s -> {
             assertEquals(ReportMockData.getBytes()[0], s[0]);
         }).verifyComplete();
     }
