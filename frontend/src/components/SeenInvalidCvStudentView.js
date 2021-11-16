@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 const SeenInvalidCvStudentView = () => {
   const [userInfo] = useContext(UserInfoContext);
-  const [rejectedCvs, setRejectedCvs] = useState();
+  const [rejectedCvs, setRejectedCvs] = useState([]);
   useEffect(() => {
     const getSeenInvalidCv = async () => {
       var response = await axios({
@@ -20,8 +20,8 @@ const SeenInvalidCvStudentView = () => {
         console.log(error);
       });
 
-      console.log("res", response);
-      if (response) setRejectedCvs(response.data);
+      console.log("response", response.data);
+      setRejectedCvs(response.data);
     };
 
     getSeenInvalidCv();
@@ -44,12 +44,18 @@ const SeenInvalidCvStudentView = () => {
               ml: 0,
               mr: 2,
               mt: 5,
+              color: "white",
               backgroundColor: "rgba(100, 100, 100, 0.1)",
               boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
             }}
             align="center"
           >
-            {rejectedCvs}
+            {rejectedCvs.map((cv) => {
+              return Object.values(cv).map((value, key) => {
+                console.log("rjcv", value);
+                return <Typography key={key}>{value}</Typography>;
+              });
+            })}
           </Paper>
         </motion.div>
       )}

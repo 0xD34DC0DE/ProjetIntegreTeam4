@@ -33,12 +33,13 @@ const CvValidationDialog = ({ id, removeCv }) => {
         url: "http://localhost:8080/file/validateCv",
         headers: {
           Authorization: userInfo.jwt,
+          "Content-Type": "text/plain",
         },
         params: {
           id: id,
           isValid: valid,
         },
-        data: { rejectionExplanation },
+        data: rejectionExplanation,
       })
         .then(() => {
           setRejectionExplanation(null);
