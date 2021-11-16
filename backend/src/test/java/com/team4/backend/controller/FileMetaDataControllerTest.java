@@ -23,7 +23,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
@@ -149,15 +150,15 @@ class FileMetaDataControllerTest {
     @Test
     void getFileMetaDataByUserEmailAndIsValidFalseAndIsSeenTrue(){
         //ARRANGE
-        FileMetaData fileMetaData = FileMetaDataMockData.getFileMetaData();
-        when(fileMetaDataService.getSeenInvalidCv(fileMetaData.getUserEmail())).thenReturn(Mono.just(fileMetaData));
+        List<FileMetaData> fileMetaDataList = FileMetaDataMockData.getAllRejectedFileMetaData();
+        when(fileMetaDataService.getAllRejectedCvInfo(fileMetaDataList.get(0).getUserEmail())).thenReturn(Flux.fromIterable(fileMetaDataList));
 
         //ACT
         webTestClient
                 .get()
                 .uri(uriBuilder ->
                         uriBuilder
-                                .path("/file/getSeenInvalidCv/"+fileMetaData.getUserEmail())
+                                .path("/file/getAllRejectedCvInfo/"+fileMetaDataList.get(0).getUserEmail())
                                 .build())
                 .exchange()
                 //ASSERT

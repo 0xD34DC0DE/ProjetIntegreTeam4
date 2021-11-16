@@ -105,8 +105,8 @@ public class FileMetaDataService {
                 }).flatMap(fileMetaDataRepository::save);
     }
 
-    public Mono<FileMetaData> getSeenInvalidCv(String userEmail){
-        return fileMetaDataRepository.findByUserEmailAndIsValidFalseAndIsSeenTrue(userEmail)
+    public Flux<FileMetaData> getAllRejectedCvInfo(String userEmail){
+        return fileMetaDataRepository.findAllByUserEmailAndIsValidFalseAndIsSeenTrue(userEmail)
                 .switchIfEmpty(Mono.error(new FileNotFoundException("This file does not exist")));
     }
 

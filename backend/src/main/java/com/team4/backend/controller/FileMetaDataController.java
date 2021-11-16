@@ -54,10 +54,10 @@ public class FileMetaDataController {
                 .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 
-    @GetMapping("/getSeenInvalidCv/{userEmail}")
+    @GetMapping("/getAllRejectedCvInfo/{userEmail}")
     @PreAuthorize("hasAuthority('STUDENT')")
-    public Mono<FileMetaDataStudentViewDto> getSeenInvalidCv(@PathVariable String userEmail) {
-        return fileMetaDataService.getSeenInvalidCv(userEmail).map(FileMetaDataMapper::toStudentViewDto);
+    public Flux<FileMetaDataStudentViewDto> getAllRejectedCvInfo(@PathVariable String userEmail) {
+        return fileMetaDataService.getAllRejectedCvInfo(userEmail).map(FileMetaDataMapper::toStudentViewDto);
     }
 
 }
