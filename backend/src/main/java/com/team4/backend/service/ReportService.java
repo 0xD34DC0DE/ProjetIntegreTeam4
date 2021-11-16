@@ -48,7 +48,8 @@ public class ReportService {
         this.pdfService = pdfService;
     }
 
-
+    //TODO --> refactor to pass semesterFullName in argument
+    //TODO --> internshipOfferService.getAllNonValidatedOffers(semesterFullName)
     public Mono<byte[]> generateAllNonValidatedOffersReport(Integer sessionNumber) {
         List<Date> dates = calculateDates(sessionNumber);
         return internshipOfferService.getAllNonValidatedOffers(dates.get(0), dates.get(1)).collectList()
@@ -62,6 +63,8 @@ public class ReportService {
                 });
     }
 
+    //TODO --> refactor to pass semesterFullName in argument
+    //TODO --> internshipOfferService.getAllValidatedOffers(semesterFullName)
     public Mono<byte[]> generateAllValidatedOffersReport(Integer sessionNumber) {
         List<Date> dates = calculateDates(sessionNumber);
         return internshipOfferService.getAllValidatedOffers(dates.get(0), dates.get(1)).collectList()
@@ -152,6 +155,8 @@ public class ReportService {
                 });
     }
 
+    //TODO --> refactor to pass semesterFullName in argument
+    //TODO --> studentService.getAllWithEvaluationDateBetween(semesterFullName)
     public Mono<byte[]> generateStudentsNotEvaluatedReport(Integer sessionNumber) {
         List<LocalDate> dates = calculateLocalDates(sessionNumber);
         return studentService.getAllWithEvaluationDateBetween(dates.get(0), dates.get(1)).collectList()
@@ -179,6 +184,8 @@ public class ReportService {
                 });
     }
 
+
+    //TODO --> remove this because it will no longer be needed
     protected List<Date> calculateDates(Integer sessionNumber) {
         List<Date> dates = new ArrayList<>();
 
@@ -213,6 +220,7 @@ public class ReportService {
         return dates;
     }
 
+    //TODO --> remove this because it will no longer be needed
     protected List<LocalDate> calculateLocalDates(Integer sessionNumber) {
         List<LocalDate> dates = new ArrayList<>();
 
@@ -238,6 +246,7 @@ public class ReportService {
         return dates;
     }
 
+    //TODO --> remove this because it will no longer be needed
     protected Date convertLocalDateToDate(LocalDate localDate) {
         ZoneId defaultZoneId = ZoneId.systemDefault();
         return Date.from(localDate.atStartOfDay(defaultZoneId).toInstant());

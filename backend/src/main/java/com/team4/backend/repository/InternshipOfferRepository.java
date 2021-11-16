@@ -8,21 +8,25 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Repository
 public interface InternshipOfferRepository extends ReactiveMongoRepository<InternshipOffer, String> {
-    Flux<InternshipOffer> findAllByIsExclusiveFalseAndLimitDateToApplyAfterAndIsValidatedTrue(LocalDate date, Pageable page);
 
-    Mono<InternshipOffer> findByIdAndIsExclusiveTrueAndLimitDateToApplyAfterAndIsValidatedTrue(String id, LocalDate date);
+    Flux<InternshipOffer> findAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(LocalDateTime date1, LocalDateTime date2, Pageable pageable);
 
-    Mono<Long> countAllByIsExclusiveFalseAndLimitDateToApplyAfter(LocalDate date);
+    Mono<InternshipOffer> findByIdAndIsExclusiveTrueAndIsValidatedTrueAndLimitDateToApplyIsBetween(String id, LocalDateTime date1, LocalDateTime date2);
 
-    Flux<InternshipOffer> findAllByValidationDateNullAndIsValidatedFalse();
+    Mono<Long> countAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(LocalDateTime date1, LocalDateTime date2);
 
     Flux<InternshipOffer> findAllByMonitorEmailAndIsValidatedTrue(String monitorEmail);
+
+    Flux<InternshipOffer> findAllByMonitorEmailAndIsValidatedTrueAndLimitDateToApplyIsBetween(String monitorEmail, LocalDateTime date1, LocalDateTime date2);
 
     Flux<InternshipOffer> findAllByIsValidatedFalseAndLimitDateToApplyBetween(Date sessionStart, Date sessionEnd);
 
     Flux<InternshipOffer> findAllByIsValidatedTrueAndLimitDateToApplyBetween(Date sessionStart, Date sessionEnd);
+
+    Flux<InternshipOffer> findAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(LocalDateTime date1, LocalDateTime date2);
 }

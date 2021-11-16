@@ -3,13 +3,17 @@ package com.team4.backend.service;
 import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.model.Semester;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.Supervisor;
+import com.team4.backend.model.TimestampedEntry;
 import com.team4.backend.repository.SupervisorRepository;
 import com.team4.backend.testdata.EvaluationMockData;
+import com.team4.backend.testdata.SemesterMockData;
 import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.testdata.SupervisorMockData;
 import com.team4.backend.util.PBKDF2Encoder;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -21,6 +25,7 @@ import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -44,6 +49,9 @@ public class SupervisorServiceTest {
 
     @Mock
     EvaluationService evaluationService;
+
+    @Mock
+    SemesterService semesterService;
 
     @InjectMocks
     SupervisorService supervisorService;
@@ -105,7 +113,7 @@ public class SupervisorServiceTest {
 
         //ASSERT
         StepVerifier.create(supervisorMono)
-                .assertNext(s -> assertEquals(3, s.getStudentEmails().size()))
+                .assertNext(s -> assertEquals(3, s.getStudentTimestampedEntries().size()))
                 .verifyComplete();
     }
 
@@ -129,6 +137,7 @@ public class SupervisorServiceTest {
         String studentEmail = "teststudent@gmail.com";
         String wrongId = "wrongId";
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+
         when(supervisorRepository.findById(wrongId)).thenReturn(Mono.just(supervisor));
 
         //ACT
@@ -141,16 +150,20 @@ public class SupervisorServiceTest {
     }
 
     @Test
-    void shouldGetAssignedStudents(){
+    void shouldGetAssignedStudents() {
         //ARRANGE
+        Semester semester = SemesterMockData.getListSemester().get(0);
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
-        Flux<Student> assignedStudents  = StudentMockData.getAssignedStudents();
+        Flux<Student> assignedStudents = StudentMockData.getAssignedStudents();
 
+        when(semesterService.findByFullName(any())).thenReturn(Mono.just(semester));
         when(supervisorRepository.findById(supervisor.getId())).thenReturn(Mono.just(supervisor));
-        when(studentService.findAllByEmails(supervisor.getStudentEmails())).thenReturn(assignedStudents);
+        when(studentService.findAllByEmails(supervisor.getStudentTimestampedEntries().stream()
+                .map(TimestampedEntry::getEmail)
+                .collect(Collectors.toSet()))).thenReturn(assignedStudents);
 
         //ACT
-        Flux<StudentDetailsDto> studentDetailsDtoFlux = supervisorService.getAllAssignedStudents(supervisor.getId());
+        Flux<StudentDetailsDto> studentDetailsDtoFlux = supervisorService.getAllAssignedStudents(supervisor.getId(), semester.getFullName());
 
         //ASSERT
         StepVerifier.create(studentDetailsDtoFlux)
@@ -159,7 +172,7 @@ public class SupervisorServiceTest {
     }
 
     @Test
-    void shouldGetSupervisor(){
+    void shouldGetSupervisor() {
         //ARRANGE
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
         when(supervisorRepository.findSupervisorByEmail(supervisor.getEmail())).thenReturn(Mono.just(supervisor));
@@ -174,7 +187,7 @@ public class SupervisorServiceTest {
     }
 
     @Test
-    void shouldNotGetSupervisor(){
+    void shouldNotGetSupervisor() {
         //ARRANGE
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
         when(supervisorRepository.findSupervisorByEmail(supervisor.getEmail())).thenReturn(Mono.empty());
@@ -191,7 +204,7 @@ public class SupervisorServiceTest {
     @Test
     void shouldGetAll() {
         //ARRANGE
-        when(supervisorRepository.findAllByRole(anyString())).thenReturn(SupervisorMockData.getAllSupervisors());
+        when(supervisorRepository.findAllByRole(anyString())).thenReturn(SupervisorMockData.getAllSupervisorsUpdated());
 
         //ACT
         Flux<Supervisor> response = supervisorService.getAll();
@@ -200,10 +213,10 @@ public class SupervisorServiceTest {
         StepVerifier
                 .create(response)
                 .assertNext(r1 -> {
-                    assertEquals(SupervisorMockData.getAllSupervisorsList().get(0), r1);
+                    assertEquals(SupervisorMockData.getAllSupervisorsList().get(0).getFirstName(), r1.getFirstName());
                 })
                 .assertNext(r2 -> {
-                    assertEquals(SupervisorMockData.getAllSupervisorsList().get(1), r2);
+                    assertEquals(SupervisorMockData.getAllSupervisorsList().get(1).getFirstName(), r2.getFirstName());
                 })
                 .verifyComplete();
     }
@@ -223,9 +236,10 @@ public class SupervisorServiceTest {
 
         //ASSERT
         StepVerifier.create(response)
-                .assertNext(r1 -> {
-                    assertEquals("3643283423@gmail.com", r1.get(0));
-                }).verifyComplete();
+                .assertNext(s -> {
+                    assertEquals(s.size(), 2);
+                })
+                .verifyComplete();
     }
 
     @Test
@@ -237,7 +251,7 @@ public class SupervisorServiceTest {
         when(evaluationService.getAllWithDateBetween(any(), any())).thenReturn(EvaluationMockData.getAllFlux());
 
         SupervisorService supervisorServiceSpy = spy(supervisorService);
-        doReturn(SupervisorMockData.getAllSupervisors()).when(supervisorServiceSpy).getAll();
+        doReturn(SupervisorMockData.getAllSupervisorsUpdated()).when(supervisorServiceSpy).getAll();
 
         //ACT
         Mono<List<Supervisor>> response = supervisorServiceSpy.getAllWithNoEvaluation(localDate0, localDate1);
@@ -245,7 +259,7 @@ public class SupervisorServiceTest {
         //ASSERT
         StepVerifier.create(response)
                 .assertNext(s -> {
-                    assertEquals(SupervisorMockData.getAllSupervisorsList(), s);
+                    assertEquals(SupervisorMockData.getAllSupervisorsList().get(0).getFirstName(), s.get(0).getFirstName());
                 })
                 .verifyComplete();
     }
@@ -259,7 +273,7 @@ public class SupervisorServiceTest {
         when(evaluationService.getAllWithDateBetween(any(), any())).thenReturn(EvaluationMockData.getAllFlux2());
 
         SupervisorService supervisorServiceSpy = spy(supervisorService);
-        doReturn(SupervisorMockData.getAllSupervisors()).when(supervisorServiceSpy).getAll();
+        doReturn(SupervisorMockData.getAllSupervisorsUpdated()).when(supervisorServiceSpy).getAll();
 
         //ACT
         Mono<List<Supervisor>> response = supervisorServiceSpy.getAllWithNoEvaluation(localDate0, localDate1);

@@ -1,11 +1,12 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.SupervisorDetailsDto;
+import com.team4.backend.dto.SupervisorCreationDto;
 import com.team4.backend.exception.DuplicateEntryException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.model.Supervisor;
+import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.service.SupervisorService;
 import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.testdata.SupervisorMockData;
@@ -20,6 +21,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
+
+import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -38,7 +41,7 @@ public class SupervisorControllerTest {
     @Test
     public void shouldCreateSupervisor() {
         //ARRANGE
-        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
         supervisorDto.setId(null);
 
@@ -65,7 +68,7 @@ public class SupervisorControllerTest {
     @Test
     public void shouldNotCreateSupervisor() {
         //ARRANGE
-        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
         supervisorDto.setId(null);
 
@@ -85,10 +88,9 @@ public class SupervisorControllerTest {
     void shouldAssignSupervisorToStudents() {
         //ARRANGE
         String studentEmail = "teststudent@gmail.com";
-        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
 
-        when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), studentEmail))
+        when(supervisorService.addStudentEmailToStudentList(supervisor.getId(), studentEmail))
                 .thenReturn(Mono.just(supervisor));
 
         //ACT
@@ -97,10 +99,9 @@ public class SupervisorControllerTest {
                 .uri(uriBuilder ->
                         uriBuilder
                                 .path("/supervisor/addEmailToStudentList")
-                                .queryParam("id", supervisorDto.getId())
+                                .queryParam("id", supervisor.getId())
                                 .queryParam("studentEmail", studentEmail)
                                 .build())
-                .bodyValue(supervisorDto)
                 .exchange()
                 //ASSERT
                 .expectStatus().isNoContent()
@@ -110,9 +111,9 @@ public class SupervisorControllerTest {
     @Test
     void shouldNotAssignSupervisorToStudents() {
         //ARRANGE
-        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
 
-        when(supervisorService.addStudentEmailToStudentList(supervisorDto.getId(), "toto23@outlook.com"))
+        when(supervisorService.addStudentEmailToStudentList(supervisor.getId(), "toto23@outlook.com"))
                 .thenReturn(Mono.error(DuplicateEntryException::new));
 
         //ACT
@@ -121,10 +122,9 @@ public class SupervisorControllerTest {
                 .uri(uriBuilder ->
                         uriBuilder
                                 .path("/supervisor/addEmailToStudentList")
-                                .queryParam("id", supervisorDto.getId())
+                                .queryParam("id", supervisor.getId())
                                 .queryParam("studentEmail", "toto23@outlook.com")
                                 .build())
-                .bodyValue(supervisorDto)
                 .exchange()
                 //ASSERT
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
@@ -132,10 +132,12 @@ public class SupervisorControllerTest {
     }
 
     @Test
-    void shouldGetAssignedStudents(){
+    void shouldGetAssignedStudents() {
         //ARRANGE
-        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
-        when(supervisorService.getAllAssignedStudents(supervisorDto.getId()))
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+        String semesterFullName = SemesterName.WINTER + "-" + LocalDateTime.now().getYear();
+
+        when(supervisorService.getAllAssignedStudents(supervisor.getId(), semesterFullName))
                 .thenReturn(StudentMockData.getAssignedStudents().map(StudentMapper::toDto));
 
         //ACT
@@ -143,12 +145,14 @@ public class SupervisorControllerTest {
                 .get()
                 .uri(uriBuilder ->
                         uriBuilder
-                                .path("/supervisor/getAssignedStudents/"+supervisorDto.getId())
+                                .path("/supervisor/getAssignedStudents")
+                                .queryParam("supervisorId", supervisor.getId())
+                                .queryParam("semesterFullName", semesterFullName)
                                 .build())
                 .exchange()
                 //ASSERT
                 .expectStatus().isEqualTo(HttpStatus.OK)
-                .expectBodyList(SupervisorDetailsDto.class);
+                .expectBodyList(SupervisorCreationDto.class);
     }
 
     @Test
@@ -160,11 +164,11 @@ public class SupervisorControllerTest {
         //ACT
         webTestClient
                 .get()
-                .uri("/supervisor/"+supervisor.getEmail())
+                .uri("/supervisor/" + supervisor.getEmail())
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
-                .expectBody(SupervisorDetailsDto.class);
+                .expectBody(SupervisorCreationDto.class);
     }
 
     @Test
@@ -176,11 +180,11 @@ public class SupervisorControllerTest {
         //ACT
         webTestClient
                 .get()
-                .uri("/supervisor/"+supervisor.getEmail())
+                .uri("/supervisor/" + supervisor.getEmail())
                 .exchange()
-        //ASSERT
+                //ASSERT
                 .expectStatus()
                 .isNotFound()
-                .expectBody(SupervisorDetailsDto.class);
+                .expectBody(SupervisorCreationDto.class);
     }
 }

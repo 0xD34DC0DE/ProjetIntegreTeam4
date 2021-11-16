@@ -37,7 +37,7 @@ public class TaskSchedulerService {
     }
 
     @Scheduled(cron = "0 00 1 1 8 ?")
-    public void initializeSemestersAnnually() {
+    private void initializeSemestersAnnually() {
         LocalDateTime currentDateTime = LocalDateTime.now();
 
         log.info("*************************************************");

@@ -5,7 +5,6 @@ import com.team4.backend.dto.InternshipOfferDetailedDto;
 import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InvalidPageRequestException;
-import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.InternshipOfferService;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
@@ -71,11 +69,7 @@ public class InternshipOfferController {
     public Mono<Long> getInternshipOffersCount(
             @PathVariable("email") String studentEmail,
             @RequestParam(value = "size", defaultValue = "5") Integer size) {
-        return internshipOfferService.getInternshipOffersPageCount(studentEmail, size)
-                .onErrorMap(
-                        UserNotFoundException.class,
-                        e -> new ResponseStatusException(HttpStatus.NOT_FOUND, e.getMessage())
-                );
+        return internshipOfferService.getInternshipOffersPageCount(studentEmail, size);
     }
 
     @GetMapping(value = "/pageCount")
@@ -93,16 +87,18 @@ public class InternshipOfferController {
                 .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 
-    @GetMapping("/getNotYetValidatedInternshipOffers")
+    @GetMapping("/getNotYetValidatedInternshipOffers/{semesterFullName}")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Flux<InternshipOfferDetailedDto> getNotYetValidatedInternshipOffers() {
-        return internshipOfferService.getNotYetValidatedInternshipOffers().map(InternshipOfferMapper::toDto);
+    public Flux<InternshipOfferDetailedDto> getNotYetValidatedInternshipOffers(@PathVariable String semesterFullName) {
+        return internshipOfferService.getNotYetValidatedInternshipOffers(semesterFullName).map(InternshipOfferMapper::toDto);
     }
 
-    @GetMapping("/interestedStudents/{monitorEmail}")
+    @GetMapping("/interestedStudents")
     @PreAuthorize("hasAnyAuthority('MONITOR')")
-    public Flux<InternshipOfferStudentInterestViewDto> internshipOfferInterestedStudents(@PathVariable String monitorEmail) {
-        return internshipOfferService.getInterestedStudents(monitorEmail);
+    public Flux<InternshipOfferStudentInterestViewDto> internshipOfferInterestedStudents(
+            @RequestParam("monitorEmail") String monitorEmail,
+            @RequestParam("semesterFullName") String semesterFullName) {
+        return internshipOfferService.getInterestedStudents(monitorEmail, semesterFullName);
     }
 
     @PatchMapping("/apply/{offerId}")

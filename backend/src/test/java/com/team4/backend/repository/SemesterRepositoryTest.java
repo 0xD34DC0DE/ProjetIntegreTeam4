@@ -5,6 +5,7 @@ import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.testdata.SemesterMockData;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -40,7 +41,7 @@ public class SemesterRepositoryTest {
     @Test
     void shouldFindSemesterByName() {
         //ARRANGE
-        String fullName = SemesterName.AUTUMN + " " + 2021;
+        String fullName = SemesterName.FALL + "-" + 2021;
 
         //ACT
         Mono<Semester> semesterMono = semesterRepository.findByFullName(fullName);
@@ -54,7 +55,7 @@ public class SemesterRepositoryTest {
     @Test
     void shouldNotFindSemesterByName() {
         //ARRANGE
-        String fullName = SemesterName.AUTUMN + " " + 2019;
+        String fullName = SemesterName.FALL + "-" + 2019;
 
         //ACT
         Mono<Semester> semesterMono = semesterRepository.findByFullName(fullName);

@@ -5,6 +5,7 @@ import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.*;
 import com.team4.backend.util.PBKDF2Encoder;
+import com.team4.backend.util.SemesterUtil;
 import com.thedeanda.lorem.Lorem;
 import com.thedeanda.lorem.LoremIpsum;
 import org.slf4j.Logger;
@@ -103,12 +104,17 @@ public class TestingInserterRunner implements ApplicationRunner {
         internshipContractRepository.deleteAll().subscribe();
         semesterRepository.deleteAll().subscribe();
 
+        insertSemesters();
         insertInternshipOffersInternshipManagerView();
         insertStudents();
         insertMonitors();
         insertSupervisors();
         insertCvs();
         insertInternship();
+    }
+
+    private void insertSemesters() {
+        semesterRepository.saveAll(SemesterUtil.getSemesters(LocalDateTime.now())).subscribe();
     }
 
     private void insertInternship() {
@@ -265,19 +271,22 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .email("supervisor@gmail.com").password(pbkdf2Encoder.encode("supervisor"))
                         .firstName("Ginette")
                         .lastName("Renaud")
-                        .studentEmails(new HashSet<>()).build(),
+                        .studentTimestampedEntries(new HashSet<>()).build(),
                 Supervisor.supervisorBuilder()
                         .email("supervisor1@gmail.com")
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Michel")
                         .lastName("Lamarck")
-                        .studentEmails(new HashSet<>(Arrays.asList("3643283423@gmail.com", "123456789@gmail.com"))).build(),
+                    .studentTimestampedEntries(new HashSet<>(Arrays.asList(
+                            new TimestampedEntry("3643283423@gmail.com", LocalDateTime.now())))).build(),
                 Supervisor.supervisorBuilder()
                         .email("supervisor2@gmail.com")
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Kendrick")
                         .lastName("Lamar")
-                        .studentEmails(new HashSet<>(Arrays.asList("123456789@gmail.com"))).build()
+                         .studentTimestampedEntries(new HashSet<>(Arrays.asList(
+                                new TimestampedEntry("studentInternFound@gmail.com", LocalDateTime.now()),
+                                new TimestampedEntry("123456789@gmail.com", LocalDateTime.now())))).build()
         );
 
         supervisorRepository.saveAll(supervisorList).subscribe();
@@ -368,9 +377,9 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isExclusive(false)
                         .listEmailInterestedStudents(new HashSet<>())
                         .build(),
-                InternshipOffer.builder().limitDateToApply(LocalDate.now())
-                        .beginningDate(LocalDate.now().plusDays(30))
-                        .endingDate(LocalDate.now().plusMonths(3))
+                InternshipOffer.builder().limitDateToApply(LocalDate.now().plusMonths(5))
+                        .beginningDate(LocalDate.now().plusMonths(5).plusDays(30))
+                        .endingDate(LocalDate.now().plusMonths(8))
                         .monitorEmail("monitor@gmail.com")
                         .title("Analyste de données")
                         .companyName("CGI")
@@ -397,7 +406,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .listEmailInterestedStudents(new HashSet<>())
                         .emailOfApprovingInternshipManager("manager1@gmail.com")
                         .build(),
-                InternshipOffer.builder().limitDateToApply(LocalDate.of(2021, 4, 4))
+                InternshipOffer.builder().limitDateToApply(LocalDate.now())
                         .beginningDate(LocalDate.now().plusDays(30))
                         .endingDate(LocalDate.now().plusMonths(3))
                         .monitorEmail("monitor@gmail.com")
