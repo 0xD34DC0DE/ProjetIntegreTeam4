@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public abstract class NotificationMockData {
 
@@ -16,7 +17,7 @@ public abstract class NotificationMockData {
         return Flux.just(
                 Notification.notificationBuilder()
                         .id("615af41de2757ad51b0b02ed")
-                        .receiverId("studentEmail@gmail.com")
+                        .receiverIds(Set.of("61930b84d3475148583fdff7"))
                         .title("Title 1")
                         .creationDate(LocalDateTime.now())
                         .severity(NotificationSeverity.LOW)
@@ -25,7 +26,7 @@ public abstract class NotificationMockData {
                         .build(),
                 Notification.notificationBuilder()
                         .id("615af409e2757ad51b0b02df")
-                        .receiverId("monitorEmail@gmail.com")
+                        .receiverIds(Set.of("61930b84d3475148583fe010", "6192ec3bb711986676e590d9"))
                         .title("Title 2")
                         .severity(NotificationSeverity.HIGH)
                         .content("this is content")
@@ -39,7 +40,7 @@ public abstract class NotificationMockData {
         return
                 Notification.notificationBuilder()
                         .id("507f191e810c19729de860ea")
-                        .receiverId("email@gmail.com")
+                        .receiverIds(Set.of("61930b84d3475148583fdfee", "61930b84d3475148583fdff3"))
                         .title("Title 1")
                         .severity(NotificationSeverity.LOW)
                         .creationDate(LocalDateTime.now())
@@ -51,7 +52,7 @@ public abstract class NotificationMockData {
     public static NotificationDto getNotificationDto() {
         return
                 NotificationDto.notificationDtoBuilder()
-                        .receiverId("email@gmail.com")
+                        .receiverIds(Set.of("61930b84d3475148583fdfed"))
                         .title("Title 1")
                         .severity(NotificationSeverity.LOW)
                         .creationDate(LocalDateTime.now())

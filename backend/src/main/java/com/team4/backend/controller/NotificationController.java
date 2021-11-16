@@ -37,7 +37,7 @@ public class NotificationController {
     @GetMapping("/sse")
     public Flux<ServerSentEvent<Notification>> sseNotificationStream(@RequestParam String userId) {
         return notificationService.getNotificationFluxSink().asFlux()
-                .filter(n -> n.getReceiverId().equals(userId))
+                .filter(n -> n.getReceiverIds().contains(userId))
                 .map(n -> ServerSentEvent.<Notification>builder()
                         .data(n)
                         .build());
@@ -49,10 +49,10 @@ public class NotificationController {
                 .findAllNotifications(receiverId);
     }
 
-    @DeleteMapping("/{id}")
-    public Mono<ResponseEntity<String>> deleteNotification(@PathVariable String id) {
+    @DeleteMapping
+    public Mono<ResponseEntity<String>> deleteNotificationForUser(@RequestParam String notificationId, @RequestParam String userId) {
         return notificationService
-                .deleteNotification(id)
+                .deleteUserNotification(notificationId, userId)
                 .thenReturn(ResponseEntity.ok(""));
     }
 

@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 
 @Repository
-public interface NotificationRepository extends ReactiveMongoRepository<Notification, String> {
-    Flux<Notification> findByReceiverId(String id);
+public interface NotificationRepository extends ReactiveMongoRepository<Notification, String>, CustomNotificationRepository {
+
 }

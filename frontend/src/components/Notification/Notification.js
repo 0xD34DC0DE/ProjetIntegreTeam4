@@ -77,14 +77,23 @@ const Notification = ({ addNotification, deleteNotification }) => {
             m: 0,
           }}
           message={
-            <Grid container ml={2} sx={{ maxWidth: "250px" }}>
+            <Grid
+              container
+              ml={2}
+              sx={{ minWidth: "300px", maxWidth: "300px" }}
+            >
               <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                 <Typography variant="subtitle2" sx={{ fontSize: "1.35em" }}>
                   {notification.title}
                 </Typography>
               </Grid>
               <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
-                <Typography variant="caption">
+                <Typography
+                  variant="caption"
+                  sx={{
+                    wordBreak: "break-word",
+                  }}
+                >
                   {notification.content}
                 </Typography>
               </Grid>

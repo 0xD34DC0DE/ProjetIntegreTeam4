@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.mongodb.client.result.UpdateResult;
 import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.mapping.NotificationMapper;
 import com.team4.backend.model.Notification;
@@ -34,9 +35,9 @@ public class NotificationService {
                 .findByReceiverId(receiverId);
     }
 
-    public Mono<Void> deleteNotification(String id) {
+    public Mono<UpdateResult> deleteUserNotification(String notificationId, String userId) {
         return notificationRepository
-                .deleteById(id);
+                .deleteUserNotification(notificationId, userId);
     }
 
     public Sinks.Many<Notification> getNotificationFluxSink() {

@@ -50,7 +50,11 @@ const NotificationList = ({
   const deleteNotification = (id) => {
     axios({
       method: "DELETE",
-      url: "http://localhost:8080/notification/" + id,
+      url:
+        "http://localhost:8080/notification?notificationId=" +
+        id +
+        "&userId=" +
+        userInfo.id,
       headers: {
         Authorization: userInfo.jwt,
       },

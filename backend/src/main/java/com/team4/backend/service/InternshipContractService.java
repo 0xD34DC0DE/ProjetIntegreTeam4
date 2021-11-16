@@ -19,6 +19,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -285,7 +286,7 @@ public class InternshipContractService {
                 .title("Avis de fin de stage")
                 .content("Le stage de l'étudiant " + student.getFirstName() + " " + student.getLastName() + " se termine dans deux semaines")
                 .severity(NotificationSeverity.HIGH)
-                .receiverId(monitor.getId())
+                .receiverIds(Set.of(monitor.getId()))
                 .build();
         return notificationService.createNotification(NotificationMapper.toDto(notification));
     }

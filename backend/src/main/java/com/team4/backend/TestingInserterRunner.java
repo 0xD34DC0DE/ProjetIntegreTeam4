@@ -108,6 +108,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         evaluationRepository.deleteAll().subscribe();
         internshipContractRepository.deleteAll().subscribe();
         semesterRepository.deleteAll().subscribe();
+        notificationRepository.deleteAll().subscribe();
 
         insertSemesters();
         insertInternshipOffersInternshipManagerView();
@@ -128,14 +129,14 @@ public class TestingInserterRunner implements ApplicationRunner {
                 Notification.notificationBuilder()
                         .content("CV refusé!")
                         .title("Notification")
-                        .receiverId(studentRepository.findByEmail("student@gmail.com").map(User::getId).block())
+                        .receiverIds(Set.of(Objects.requireNonNull(studentRepository.findByEmail("student@gmail.com").map(User::getId).block())))
                         .severity(NotificationSeverity.HIGH)
                         .data(Collections.emptyMap())
                         .build(),
                 Notification.notificationBuilder()
                         .content("CV Accepté!")
                         .title("Notification")
-                        .receiverId(studentRepository.findByEmail("123456789@gmail.com").map(User::getId).block())
+                        .receiverIds(Set.of(Objects.requireNonNull(studentRepository.findByEmail("123456789@gmail.com").map(User::getId).block())))
                         .data(Collections.singletonMap("id", "test"))
                         .severity(NotificationSeverity.LOW)
                         .build()
