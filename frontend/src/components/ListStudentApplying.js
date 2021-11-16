@@ -20,16 +20,22 @@ import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import EmailSender from "./EmailSender";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import CreateContractMonitorDialog from "./contracts/CreateContractMonitorDialog";
+import SemesterSelect from "./SemesterSelect";
 
 const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
   const [offers, setOffers] = useState([]);
   const [receiver, setReceiver] = useState("");
   const [userInfo] = useContext(UserInfoContext);
+  const [semesterFullName, setSemesterFullName] = useState();
 
   const fetchData = () => {
     axios({
       method: "GET",
-      url: `http://localhost:8080/internshipOffer/interestedStudents/${userInfo.email}`,
+      url: "http://localhost:8080/internshipOffer/interestedStudents",
+      params: {
+        monitorEmail: userInfo.email,
+        semesterFullName: semesterFullName,
+      },
       headers: {
         Authorization: userInfo.jwt,
       },
@@ -43,6 +49,11 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
       });
   };
 
+  const updateSemesterFullName = (fullName) => {
+    setSemesterFullName(fullName);
+    console.log(fullName);
+  };
+
   const getStudentInitials = (fullName) => {
     let initials = "";
     fullName.split(" ").map((char) => (initials += char.charAt(0)));
@@ -51,7 +62,7 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [semesterFullName]);
 
   return (
     <Grid
@@ -62,6 +73,9 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
       justifyContent="center"
       alignItems="center"
     >
+      {visible && (
+        <SemesterSelect updateSemesterFullName={updateSemesterFullName} />
+      )}
       {visible &&
         offers
           .filter((offer) => offer.interestedStudentList.length !== 0)
@@ -344,7 +358,10 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                             },
                                           }}
                                           onClick={() => {
-                                            setReceiver({internshipOfferId: offer.id, studentEmail: student.email});
+                                            setReceiver({
+                                              internshipOfferId: offer.id,
+                                              studentEmail: student.email,
+                                            });
                                             toggleDialog(
                                               "signContractMonitorDialog",
                                               true
@@ -379,7 +396,10 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
         toggleDialog={toggleDialog}
         open={dialogVisibility.signContractMonitorDialog}
         pdfUrl={`http://localhost:8080/contract`}
-        params={{internshipOfferId: receiver.internshipOfferId, studentEmail: receiver.studentEmail}}
+        params={{
+          internshipOfferId: receiver.internshipOfferId,
+          studentEmail: receiver.studentEmail,
+        }}
       />
     </Grid>
   );

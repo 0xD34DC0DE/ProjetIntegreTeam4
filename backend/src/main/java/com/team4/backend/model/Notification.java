@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Data
 @NoArgsConstructor
@@ -22,7 +23,7 @@ public class Notification implements Serializable {
     private String id;
     private String title;
     private String content;
-    private String receiverEmail;
+    private Set<String> receiverIds;
     private NotificationSeverity severity;
     private Map<String, String> data;
     @Builder.Default
@@ -32,7 +33,7 @@ public class Notification implements Serializable {
     public Notification(String id,
                         String title,
                         String content,
-                        String receiverEmail,
+                        Set<String> receiverIds,
                         NotificationSeverity severity,
                         Map<String, String> data,
                         LocalDateTime creationDate) {
@@ -40,7 +41,7 @@ public class Notification implements Serializable {
         this.title = title;
         this.severity = severity;
         this.content = content;
-        this.receiverEmail = receiverEmail;
+        this.receiverIds = receiverIds;
         this.data = data;
         this.creationDate = Optional.ofNullable(creationDate).orElse(LocalDateTime.now());
     }

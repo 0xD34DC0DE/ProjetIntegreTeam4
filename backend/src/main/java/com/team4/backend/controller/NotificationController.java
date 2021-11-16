@@ -1,10 +1,10 @@
 package com.team4.backend.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.model.Notification;
-import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.NotificationService;
+import com.team4.backend.service.UserService;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.ServerSentEvent;
@@ -13,17 +13,19 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.security.Principal;
-
 @RestController
+@Log4j2
 @RequestMapping("/notification")
-@PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR')")
+@PreAuthorize("hasAnyAuthority('STUDENT', 'MONITOR', 'INTERNSHIP_MANAGER', 'SUPERVISOR')")
 public class NotificationController {
 
     private final NotificationService notificationService;
 
-    public NotificationController(NotificationService notificationService) {
+    private final UserService userService;
+
+    public NotificationController(NotificationService notificationService, UserService userService) {
         this.notificationService = notificationService;
+        this.userService = userService;
     }
 
     @PostMapping("/create")
@@ -33,24 +35,24 @@ public class NotificationController {
     }
 
     @GetMapping("/sse")
-    public Flux<ServerSentEvent<Notification>> sseNotificationStream(Principal principal) {
+    public Flux<ServerSentEvent<Notification>> sseNotificationStream(@RequestParam String userId) {
         return notificationService.getNotificationFluxSink().asFlux()
-                .filter(n -> n.getReceiverEmail().equals(UserSessionService.getLoggedUserEmail(principal)))
+                .filter(n -> n.getReceiverIds().contains(userId))
                 .map(n -> ServerSentEvent.<Notification>builder()
                         .data(n)
                         .build());
     }
 
     @GetMapping
-    public Flux<Notification> findAllNotifications(Principal principal) {
+    public Flux<Notification> findAllNotifications(@RequestParam String receiverId) {
         return notificationService
-                .findAllNotifications(principal);
+                .findAllNotifications(receiverId);
     }
 
-    @DeleteMapping("/{id}")
-    public Mono<ResponseEntity<String>> deleteNotification(@PathVariable String id) {
+    @DeleteMapping
+    public Mono<ResponseEntity<String>> deleteNotificationForUser(@RequestParam String notificationId, @RequestParam String userId) {
         return notificationService
-                .deleteNotification(id)
+                .deleteUserNotification(notificationId, userId)
                 .thenReturn(ResponseEntity.ok(""));
     }
 

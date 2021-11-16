@@ -29,11 +29,10 @@ public class SemesterService {
                 .switchIfEmpty(Mono.error(new SemesterNotFoundException("Can't find semester " + fullName)));
     }
 
-    public Mono<String> getCurrentSemesterFullName() {
+    public Mono<Semester> getCurrentSemester() {
         LocalDateTime currentDate = LocalDateTime.now();
 
         return semesterRepository.findByFromLessThanEqualAndToGreaterThanEqual(currentDate, currentDate)
-                .map(Semester::getFullName)
                 //This should never happen, because we create the 3 semester yearly, but in case it happens
                 .switchIfEmpty(Mono.error(new SemesterNotFoundException("Can't find current semester!")));
     }
@@ -41,13 +40,15 @@ public class SemesterService {
     public Mono<SemesterDto> getAllSemesterFullName() {
         SemesterDto semesterDto = new SemesterDto();
 
-        return getCurrentSemesterFullName().map(fullName -> {
-            semesterDto.setCurrentSemesterFullName(fullName);
+        return getCurrentSemester().map(semester -> {
+            semesterDto.setCurrentSemesterFullName(semester.getFullName());
             return semesterDto;
-        }).map(semester -> {
-            semesterRepository.findAll().map(Semester::getFullName)
-                    .subscribe(fullName -> semester.getSemestersFullNames().add(fullName));
-            return semester;
+        }).flatMap(semester -> semesterRepository.findAll()
+                .map(Semester::getFullName)
+                .collectList()
+        ).map(s -> {
+            semesterDto.getSemestersFullNames().addAll(s);
+            return semesterDto;
         });
     }
 

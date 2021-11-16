@@ -11,6 +11,7 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import axios from "axios";
 import Notification from "./Notification";
 import { UserInfoContext } from "../../stores/UserInfoStore";
+import { KeyboardReturnOutlined } from "@mui/icons-material";
 
 const severity = {
   high: { color: "rgba(200, 100, 100, 1)" },
@@ -27,9 +28,10 @@ const NotificationList = ({
   const [userInfo] = useContext(UserInfoContext);
 
   useEffect(() => {
+    if (userInfo === undefined) return;
     axios({
       method: "GET",
-      url: "http://localhost:8080/notification",
+      url: "http://localhost:8080/notification?receiverId=" + userInfo.id,
       headers: {
         Authorization: userInfo.jwt,
       },
@@ -48,7 +50,11 @@ const NotificationList = ({
   const deleteNotification = (id) => {
     axios({
       method: "DELETE",
-      url: "http://localhost:8080/notification/" + id,
+      url:
+        "http://localhost:8080/notification?notificationId=" +
+        id +
+        "&userId=" +
+        userInfo.id,
       headers: {
         Authorization: userInfo.jwt,
       },
@@ -83,71 +89,92 @@ const NotificationList = ({
       >
         {notifications.map((notification, key) => {
           return [
-            <MenuItem
-              key={key}
-              sx={{
-                backgroundColor: "rgba(100, 100, 100, 0.05)",
-                mb: 0.5,
-              }}
-            >
-              <Grid container>
-                <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
-                  <Grid container>
-                    <Grid
-                      item
-                      xs={12}
-                      sm={12}
-                      md={12}
-                      lg={12}
-                      xl={12}
-                      sx={{
-                        color: severity[notification.severity.toLowerCase()],
-                      }}
-                    >
-                      <Typography variant="subtitle2" sx={{ fontSize: "1em" }}>
-                        {notification.title}
-                      </Typography>
-                    </Grid>
-                    <Grid item xs={12} sm={12} md={12} lg={12} xl={12} xs={12}>
-                      <Typography
-                        variant="caption"
-                        sx={{ fontSize: "0.7em", color: "white" }}
+            <Tooltip title={notification.content} placement="left">
+              <MenuItem
+                key={key}
+                sx={{
+                  backgroundColor: "rgba(100, 100, 100, 0.05)",
+                  mb: 0.5,
+                }}
+              >
+                <Grid container>
+                  <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
+                    <Grid container>
+                      <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        xl={12}
+                        sx={{
+                          color: severity[notification.severity.toLowerCase()],
+                        }}
                       >
-                        {notification.content}
-                      </Typography>
+                        <Typography
+                          variant="subtitle2"
+                          sx={{ fontSize: "1em" }}
+                        >
+                          {notification.title}
+                        </Typography>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={12}
+                        sm={12}
+                        md={12}
+                        lg={12}
+                        xl={12}
+                        xs={12}
+                        sx={{
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                        }}
+                      >
+                        <Typography
+                          variant="caption"
+                          sx={{
+                            fontSize: "0.7em",
+                            color: "white",
+                          }}
+                        >
+                          {notification.content}
+                        </Typography>
+                      </Grid>
                     </Grid>
                   </Grid>
-                </Grid>
-                <Grid
-                  item
-                  xl={2}
-                  lg={2}
-                  md={2}
-                  sm={2}
-                  item
-                  alignSelf="center"
-                  textAlign="end"
-                >
-                  <Tooltip title="Supprimer">
-                    <IconButton
-                      variant="text"
-                      onClick={() => {
-                        deleteNotification(notification.id);
-                      }}
-                      sx={{ fontSize: "0.75em" }}
-                    >
-                      <CancelOutlinedIcon
-                        sx={{
-                          color: "white",
-                          ":hover": { color: "rgba(255, 100, 100, 1)" },
+                  <Grid
+                    item
+                    xl={2}
+                    lg={2}
+                    md={2}
+                    sm={2}
+                    item
+                    alignSelf="center"
+                    textAlign="end"
+                  >
+                    <Tooltip title="Supprimer">
+                      <IconButton
+                        variant="text"
+                        onClick={() => {
+                          deleteNotification(notification.id);
                         }}
-                        fontSize="small"
-                      />
-                    </IconButton>
-                  </Tooltip>
+                        sx={{ fontSize: "0.75em" }}
+                      >
+                        <CancelOutlinedIcon
+                          sx={{
+                            color: "white",
+                            ":hover": { color: "rgba(255, 100, 100, 1)" },
+                          }}
+                          fontSize="small"
+                        />
+                      </IconButton>
+                    </Tooltip>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </MenuItem>,
+              </MenuItem>
+            </Tooltip>,
           ];
         })}
       </Menu>

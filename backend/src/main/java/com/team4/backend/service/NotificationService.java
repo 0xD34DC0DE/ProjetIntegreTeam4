@@ -1,25 +1,26 @@
 package com.team4.backend.service;
 
+import com.mongodb.client.result.UpdateResult;
 import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.mapping.NotificationMapper;
 import com.team4.backend.model.Notification;
 import com.team4.backend.repository.NotificationRepository;
-import com.team4.backend.security.UserSessionService;
+import com.team4.backend.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
-import java.security.Principal;
-
 @Service
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
+    private final UserRepository userRepository;
     private final Sinks.Many<Notification> sinks;
 
-    public NotificationService(NotificationRepository notificationRepository, Sinks.Many<Notification> notificationFlux) {
+    public NotificationService(NotificationRepository notificationRepository, UserRepository userRepository, Sinks.Many<Notification> notificationFlux) {
         this.notificationRepository = notificationRepository;
+        this.userRepository = userRepository;
         this.sinks = notificationFlux;
     }
 
@@ -29,17 +30,17 @@ public class NotificationService {
                 .doOnSuccess(sinks::tryEmitNext);
     }
 
-    public Flux<Notification> findAllNotifications(Principal principal) {
+    public Flux<Notification> findAllNotifications(String receiverId) {
         return notificationRepository
-                .findByReceiverEmail(UserSessionService.getLoggedUserEmail(principal));
+                .findByReceiverId(receiverId);
     }
 
-    public Mono<Void> deleteNotification(String id) {
+    public Mono<UpdateResult> deleteUserNotification(String notificationId, String userId) {
         return notificationRepository
-                .deleteById(id);
+                .deleteUserNotification(notificationId, userId);
     }
 
-    public Sinks.Many<Notification> getNotificationFluxSink(){
+    public Sinks.Many<Notification> getNotificationFluxSink() {
         return sinks;
     }
 

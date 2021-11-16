@@ -25,7 +25,7 @@ public class InternshipContractController {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public void handle(Exception e) {
-        
+
         log.warn("Returning HTTP 400 Bad Request", e);
     }
 
@@ -86,5 +86,13 @@ public class InternshipContractController {
                                    @RequestParam("userEmail") String userEmail) {
         return internshipContractService.hasSignedByContractId(contractId, userEmail);
     }
+
+    @GetMapping("/t")
+    @PreAuthorize("hasAnyAuthority('MONITOR', 'STUDENT', 'INTERNSHIP_MANAGER')")
+    public Mono<Boolean> getInternshipContractsTwoWeeksLeft(){
+        internshipContractService.getInternshipContractsTwoWeeksLeft();
+        return Mono.just(true);
+    }
+
 
 }

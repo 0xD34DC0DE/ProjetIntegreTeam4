@@ -9,5 +9,6 @@ import reactor.core.publisher.Mono;
 @Repository
 public interface InternshipRepository extends ReactiveMongoRepository<Internship, String> {
     public Mono<Internship> findByStudentEmail(String studentEmail);
+    
     public Mono<Boolean> existsByStudentEmail(String studentEmail);
 }

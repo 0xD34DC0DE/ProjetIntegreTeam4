@@ -3,9 +3,12 @@ package com.team4.backend.service;
 import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.model.Semester;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.Supervisor;
+import com.team4.backend.model.TimestampedEntry;
 import com.team4.backend.repository.SupervisorRepository;
+import com.team4.backend.testdata.SemesterMockData;
 import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.testdata.SupervisorMockData;
 import com.team4.backend.util.PBKDF2Encoder;
@@ -17,6 +20,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -36,6 +41,9 @@ public class SupervisorServiceTest {
 
     @Mock
     StudentService studentService;
+
+    @Mock
+    SemesterService semesterService;
 
     @InjectMocks
     SupervisorService supervisorService;
@@ -97,7 +105,7 @@ public class SupervisorServiceTest {
 
         //ASSERT
         StepVerifier.create(supervisorMono)
-                .assertNext(s -> assertEquals(3, s.getStudentEmails().size()))
+                .assertNext(s -> assertEquals(3, s.getStudentTimestampedEntries().size()))
                 .verifyComplete();
     }
 
@@ -121,6 +129,7 @@ public class SupervisorServiceTest {
         String studentEmail = "teststudent@gmail.com";
         String wrongId = "wrongId";
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+
         when(supervisorRepository.findById(wrongId)).thenReturn(Mono.just(supervisor));
 
         //ACT
@@ -133,16 +142,20 @@ public class SupervisorServiceTest {
     }
 
     @Test
-    void shouldGetAssignedStudents(){
+    void shouldGetAssignedStudents() {
         //ARRANGE
+        Semester semester = SemesterMockData.getListSemester().get(0);
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
-        Flux<Student> assignedStudents  = StudentMockData.getAssignedStudents();
+        Flux<Student> assignedStudents = StudentMockData.getAssignedStudents();
 
+        when(semesterService.findByFullName(any())).thenReturn(Mono.just(semester));
         when(supervisorRepository.findById(supervisor.getId())).thenReturn(Mono.just(supervisor));
-        when(studentService.findAllByEmails(supervisor.getStudentEmails())).thenReturn(assignedStudents);
+        when(studentService.findAllByEmails(supervisor.getStudentTimestampedEntries().stream()
+                .map(TimestampedEntry::getEmail)
+                .collect(Collectors.toSet()))).thenReturn(assignedStudents);
 
         //ACT
-        Flux<StudentDetailsDto> studentDetailsDtoFlux = supervisorService.getAllAssignedStudents(supervisor.getId());
+        Flux<StudentDetailsDto> studentDetailsDtoFlux = supervisorService.getAllAssignedStudents(supervisor.getId(), semester.getFullName());
 
         //ASSERT
         StepVerifier.create(studentDetailsDtoFlux)
@@ -151,7 +164,7 @@ public class SupervisorServiceTest {
     }
 
     @Test
-    void shouldGetSupervisor(){
+    void shouldGetSupervisor() {
         //ARRANGE
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
         when(supervisorRepository.findSupervisorByEmail(supervisor.getEmail())).thenReturn(Mono.just(supervisor));
@@ -166,7 +179,7 @@ public class SupervisorServiceTest {
     }
 
     @Test
-    void shouldNotGetSupervisor(){
+    void shouldNotGetSupervisor() {
         //ARRANGE
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
         when(supervisorRepository.findSupervisorByEmail(supervisor.getEmail())).thenReturn(Mono.empty());

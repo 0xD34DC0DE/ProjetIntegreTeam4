@@ -27,9 +27,12 @@ const Notification = ({ addNotification, deleteNotification }) => {
   useEffect(() => {
     if (!userInfo.loggedIn) return;
     setEventSource(
-      new EventSource("http://localhost:8080/notification/sse", {
-        headers: { Authorization: userInfo.jwt },
-      })
+      new EventSource(
+        "http://localhost:8080/notification/sse?userId=" + userInfo.id,
+        {
+          headers: { Authorization: userInfo.jwt },
+        }
+      )
     );
   }, [userInfo]);
 
@@ -38,8 +41,8 @@ const Notification = ({ addNotification, deleteNotification }) => {
     eventSource.onopen = () => {
       console.log("[EventSource] Connection established.");
     };
-    eventSource.onerror = (e) => {
-      console.log(e);
+    eventSource.onerror = (error) => {
+      console.error(error);
       eventSource.close();
     };
     eventSource.onmessage = (event) => {
@@ -50,6 +53,7 @@ const Notification = ({ addNotification, deleteNotification }) => {
         content: data.content,
         title: data.title,
       });
+      console.log(event);
       addNotification(data);
     };
   }, [eventSource]);
@@ -73,14 +77,23 @@ const Notification = ({ addNotification, deleteNotification }) => {
             m: 0,
           }}
           message={
-            <Grid container ml={2} sx={{ maxWidth: "250px" }}>
+            <Grid
+              container
+              ml={2}
+              sx={{ minWidth: "300px", maxWidth: "300px" }}
+            >
               <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                 <Typography variant="subtitle2" sx={{ fontSize: "1.35em" }}>
                   {notification.title}
                 </Typography>
               </Grid>
               <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
-                <Typography variant="caption">
+                <Typography
+                  variant="caption"
+                  sx={{
+                    wordBreak: "break-word",
+                  }}
+                >
                   {notification.content}
                 </Typography>
               </Grid>

@@ -10,7 +10,7 @@ public abstract class NotificationMapper {
     public static Notification toEntity(NotificationDto notificationDto) {
         return Notification.notificationBuilder()
                 .title(notificationDto.getTitle())
-                .receiverEmail(notificationDto.getReceiverEmail())
+                .receiverIds(notificationDto.getReceiverIds())
                 .content(notificationDto.getContent())
                 .data(notificationDto.getData())
                 .severity(notificationDto.getSeverity())
@@ -26,7 +26,7 @@ public abstract class NotificationMapper {
                 .creationDate(notification.getCreationDate())
                 .data(notification.getData())
                 .severity(notification.getSeverity())
-                .receiverEmail(notification.getReceiverEmail())
+                .receiverIds(notification.getReceiverIds())
                 .build();
     }
 

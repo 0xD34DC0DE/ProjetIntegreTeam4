@@ -9,6 +9,7 @@ import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.InternshipOffer;
+import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.service.InternshipOfferService;
 import com.team4.backend.testdata.InternshipOfferMockData;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -104,13 +106,15 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldGetNotYetValidatedInternshipOffer() {
         //ARRANGE
+        String semesterFullName = SemesterName.WINTER + "-" + LocalDateTime.now().getYear();
         Flux<InternshipOffer> internshipOfferFlux = InternshipOfferMockData.getNonValidatedInternshipOffers();
-        when(internshipOfferService.getNotYetValidatedInternshipOffers()).thenReturn(internshipOfferFlux);
+
+        when(internshipOfferService.getNotYetValidatedInternshipOffers(semesterFullName)).thenReturn(internshipOfferFlux);
 
         //ACT
         webTestClient
                 .get()
-                .uri("/internshipOffer/getNotYetValidatedInternshipOffers")
+                .uri("/internshipOffer/getNotYetValidatedInternshipOffers/" + semesterFullName)
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
@@ -279,13 +283,18 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldReturnInterestedStudents() {
         //ARRANGE
-        when(internshipOfferService.getInterestedStudents(any(String.class)))
+        when(internshipOfferService.getInterestedStudents(any(String.class), any(String.class)))
                 .thenReturn(Flux.fromIterable(InternshipOfferMockData.getListInternshipOfferStudentInterestViewDto(3)));
 
         //ACT
         webTestClient
                 .get()
-                .uri("/internshipOffer/interestedStudents/monitor@gmail.com")
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/internshipOffer/interestedStudents")
+                                .queryParam("monitorEmail", "email@gmail.com")
+                                .queryParam("semesterFullName", "FALL-2021")
+                                .build())
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
