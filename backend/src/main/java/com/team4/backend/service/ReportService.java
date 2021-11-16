@@ -83,6 +83,19 @@ public class ReportService {
                 });
     }
 
+    public Mono<byte[]> generateAllValidatedOffersReportNew(String semesterFullName) {
+        return internshipOfferService.getAllValidatedOffersNew(semesterFullName).collectList()
+                .flatMap(nonValidatedOffers -> {
+                    Map<String, Object> variables = new HashMap<>();
+                    variables.put("internshipOfferList", nonValidatedOffers);
+                    variables.put("date", LocalDate.now());
+                    variables.put("title", "Offres de stages validées");
+                    variables.put("dates", Arrays.asList(semesterFullName,semesterFullName));
+                    return pdfService.renderPdf(new OffersPdf(variables));
+                });
+    }
+
+
     public Mono<byte[]> generateAllStudentsReport() {
         return studentService.getAll().collectList()
                 .flatMap(students -> {

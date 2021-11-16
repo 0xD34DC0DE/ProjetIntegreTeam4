@@ -36,6 +36,7 @@ class ReportServiceTest {
     @InjectMocks
     ReportService reportService;
 
+    //TODO --> will have to remove it
     @Test
     void shouldGenerateAllNonValidatedOffersReport() {
         //ARRANGE
@@ -66,6 +67,7 @@ class ReportServiceTest {
         }).verifyComplete();
     }
 
+    //TODO --> remove it
     @Test
     void shouldGenerateAllValidatedOffersReport() {
         //ARRANGE
@@ -74,6 +76,21 @@ class ReportServiceTest {
 
         //ACT
         Mono<byte[]> response = reportService.generateAllValidatedOffersReport(321);
+
+        //ASSERT
+        StepVerifier.create(response).consumeNextWith(s -> {
+            assertEquals(ReportMockData.getBytes()[0], s[0]);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldGenerateAllValidatedOffersReportNew() {
+        //ARRANGE
+        doReturn(ReportMockData.getInternshipOffers()).when(internshipOfferService).getAllValidatedOffersNew(any());
+        doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
+
+        //ACT
+        Mono<byte[]> response = reportService.generateAllValidatedOffersReportNew(SemesterName.FALL + "-" + LocalDateTime.now().getYear());
 
         //ASSERT
         StepVerifier.create(response).consumeNextWith(s -> {
