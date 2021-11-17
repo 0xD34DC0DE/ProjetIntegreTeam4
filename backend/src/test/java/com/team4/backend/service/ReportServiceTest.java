@@ -187,92 +187,21 @@ class ReportServiceTest {
             assertEquals(ReportMockData.getBytes()[0], s[0]);
         }).verifyComplete();
     }
-    /*
 
     @Test
     void shouldGenerateStudentsWithSupervisorWithNoCompanyEvaluation() {
         //ARRANGE
-        doReturn(ReportMockData.getStudentsEmailMonoList()).when(supervisorService).getStudentsEmailWithSupervisorWithNoEvaluation(any(), any());
+        doReturn(ReportMockData.getStudentsEmailMonoList()).when(supervisorService).getStudentsEmailWithSupervisorWithNoEvaluation(any());
         doReturn(ReportMockData.getStudentMono()).when(studentService).findByEmail(any());
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
-        Mono<byte[]> response = reportService.generateStudentsWithSupervisorWithNoCompanyEvaluation(321);
+        Mono<byte[]> response = reportService.generateStudentsWithSupervisorWithNoCompanyEvaluation(SemesterName.FALL + "-" + LocalDateTime.now().getYear());
 
         //ASSERT
         StepVerifier.create(response).consumeNextWith(s -> {
             assertEquals(ReportMockData.getBytes()[0], s[0]);
         }).verifyComplete();
     }
-
-    @Test
-    void shouldCalculateDatesWinter() {
-        //ACT
-        List<Date> dates = reportService.calculateDates(121);
-
-        //ASSERT
-        assertEquals("Fri Jan 01 00:00:00 EST 2021", dates.get(0).toString());
-        assertEquals("Mon May 31 00:00:00 EDT 2021", dates.get(1).toString());
-    }
-
-    @Test
-    void shouldCalculateDatesSummer() {
-        //ACT
-        List<Date> dates = reportService.calculateDates(221);
-
-        //ASSERT
-        assertEquals("Tue Jun 01 00:00:00 EDT 2021", dates.get(0).toString());
-        assertEquals("Mon Aug 30 00:00:00 EDT 2021", dates.get(1).toString());
-    }
-
-    @Test
-    void shouldCalculateDatesFall() {
-        //ACT
-        List<Date> dates = reportService.calculateDates(321);
-
-        //ASSERT
-        assertEquals("Wed Sep 01 00:00:00 EDT 2021", dates.get(0).toString());
-        assertEquals("Fri Dec 31 00:00:00 EST 2021", dates.get(1).toString());
-    }
-
-    @Test
-    void shouldCalculateLocalDatesWinter() {
-        //ARRANGE
-        LocalDate localDate0 = LocalDate.parse("2021-01-01");
-        LocalDate localDate1 = LocalDate.parse("2021-05-31");
-        //ACT
-        List<LocalDate> dates = reportService.calculateLocalDates(121);
-
-        //ASSERT
-        assertEquals(localDate0,dates.get(0));
-        assertEquals(localDate1,dates.get(1));
-    }
-
-    @Test
-    void shouldCalculateLocalDatesSummer() {
-        //ARRANGE
-        LocalDate localDate0 = LocalDate.parse("2021-06-01");
-        LocalDate localDate1 = LocalDate.parse("2021-08-30");
-        //ACT
-        List<LocalDate> dates = reportService.calculateLocalDates(221);
-
-        //ASSERT
-        assertEquals(localDate0, dates.get(0));
-        assertEquals(localDate1, dates.get(1));
-    }
-
-    @Test
-    void shouldCalculateLocalDatesFall() {
-        //ARRANGE
-        LocalDate localDate0 = LocalDate.parse("2021-09-01");
-        LocalDate localDate1 = LocalDate.parse("2021-12-31");
-        //ACT
-        List<LocalDate> dates = reportService.calculateLocalDates(321);
-
-        //ASSERT
-        assertEquals(localDate0,dates.get(0));
-        assertEquals(localDate1,dates.get(1));
-    }
-     */
 
 }

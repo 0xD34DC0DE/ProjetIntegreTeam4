@@ -7,13 +7,13 @@ import com.team4.backend.model.Semester;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.model.TimestampedEntry;
+import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.repository.SupervisorRepository;
 import com.team4.backend.testdata.EvaluationMockData;
 import com.team4.backend.testdata.SemesterMockData;
 import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.testdata.SupervisorMockData;
 import com.team4.backend.util.PBKDF2Encoder;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -23,7 +23,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -224,37 +224,33 @@ public class SupervisorServiceTest {
     @Test
     void shouldGetStudentsEmailWithSupervisorWithNoEvaluation() {
         //ARRANGE
-
-        LocalDate localDate0 = LocalDate.parse("2021-01-01");
-        LocalDate localDate1 = LocalDate.parse("2021-05-31");
-
         SupervisorService supervisorServiceSpy = spy(supervisorService);
-        doReturn(Mono.just(SupervisorMockData.getAllSupervisorsList())).when(supervisorServiceSpy).getAllWithNoEvaluation(any(), any());
+        String semesterFullName = SemesterName.FALL + "-" + LocalDateTime.now().getYear();
+
+        doReturn(Mono.just(SupervisorMockData.getAllSupervisorsList())).when(supervisorServiceSpy).getAllWithNoEvaluation(any());
 
         //ACT
-        Mono<List<String>> response = supervisorServiceSpy.getStudentsEmailWithSupervisorWithNoEvaluation(localDate0, localDate1);
+        Mono<List<String>> response = supervisorServiceSpy.getStudentsEmailWithSupervisorWithNoEvaluation(semesterFullName);
 
         //ASSERT
         StepVerifier.create(response)
                 .assertNext(s -> {
                     assertEquals(s.size(), 2);
-                })
-                .verifyComplete();
+                });
     }
 
     @Test
     void shouldGetAllWithNoEvaluation() {
         //ARRANGE
-        LocalDate localDate0 = LocalDate.parse("2021-01-01");
-        LocalDate localDate1 = LocalDate.parse("2021-05-31");
-
-        when(evaluationService.getAllWithDateBetween(any(), any())).thenReturn(EvaluationMockData.getAllFlux());
-
         SupervisorService supervisorServiceSpy = spy(supervisorService);
+        String semesterFullName = SemesterName.FALL + "-" + LocalDateTime.now().getYear();
+
+        when(evaluationService.getAllWithDateBetween(any())).thenReturn(EvaluationMockData.getAllFlux());
+
         doReturn(SupervisorMockData.getAllSupervisorsUpdated()).when(supervisorServiceSpy).getAll();
 
         //ACT
-        Mono<List<Supervisor>> response = supervisorServiceSpy.getAllWithNoEvaluation(localDate0, localDate1);
+        Mono<List<Supervisor>> response = supervisorServiceSpy.getAllWithNoEvaluation(semesterFullName);
 
         //ASSERT
         StepVerifier.create(response)
@@ -264,25 +260,4 @@ public class SupervisorServiceTest {
                 .verifyComplete();
     }
 
-    @Test
-    void shouldGetAllWithNoEvaluationOnlyOne() {
-        //ARRANGE
-        LocalDate localDate0 = LocalDate.parse("2021-01-01");
-        LocalDate localDate1 = LocalDate.parse("2021-05-31");
-
-        when(evaluationService.getAllWithDateBetween(any(), any())).thenReturn(EvaluationMockData.getAllFlux2());
-
-        SupervisorService supervisorServiceSpy = spy(supervisorService);
-        doReturn(SupervisorMockData.getAllSupervisorsUpdated()).when(supervisorServiceSpy).getAll();
-
-        //ACT
-        Mono<List<Supervisor>> response = supervisorServiceSpy.getAllWithNoEvaluation(localDate0, localDate1);
-
-        //ASSERT
-        StepVerifier.create(response)
-                .assertNext(s -> {
-                    assertEquals(SupervisorMockData.getAllSupervisorsList().get(1).getFirstName(), s.get(0).getFirstName());
-                })
-                .verifyComplete();
-    }
 }

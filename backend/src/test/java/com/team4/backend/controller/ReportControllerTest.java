@@ -1,5 +1,6 @@
 package com.team4.backend.controller;
 
+import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.service.ReportService;
 import com.team4.backend.testdata.ReportMockData;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
+
+import java.time.LocalDateTime;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
@@ -34,7 +37,7 @@ class ReportControllerTest {
         //ACT
         webTestClient
                 .get()
-                .uri("/report/generateAllNonValidatedOffersReport/321")
+                .uri("/report/generateAllNonValidatedOffersReport/" + SemesterName.FALL + "-" + LocalDateTime.now().getYear())
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk();
@@ -48,7 +51,7 @@ class ReportControllerTest {
         //ACT
         webTestClient
                 .get()
-                .uri("/report/generateAllValidatedOffersReport/321")
+                .uri("/report/generateAllValidatedOffersReport/" + SemesterName.FALL + "-" + LocalDateTime.now().getYear())
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk();
@@ -160,13 +163,11 @@ class ReportControllerTest {
         //ACT
         webTestClient
                 .get()
-                .uri("/report/generateStudentsNotEvaluatedReport/321")
+                .uri("/report/generateStudentsNotEvaluatedReport/" + SemesterName.FALL + "-" + LocalDateTime.now().getYear())
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk();
     }
-
-    /*
 
 
     @Test
@@ -177,11 +178,10 @@ class ReportControllerTest {
         //ACT
         webTestClient
                 .get()
-                .uri("/report/generateStudentsWithSupervisorWithNoCompanyEvaluation/321")
+                .uri("/report/generateStudentsWithSupervisorWithNoCompanyEvaluation/" + SemesterName.FALL + "-" + LocalDateTime.now().getYear())
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk();
     }
-     */
 
 }

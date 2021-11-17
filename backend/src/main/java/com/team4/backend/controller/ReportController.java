@@ -79,13 +79,11 @@ public class ReportController {
     public Mono<byte[]> generateStudentsNotEvaluatedReport(@PathVariable("fullName") String semesterFullName) {
         return reportService.generateStudentsNotEvaluatedReport(semesterFullName);
     }
-/*
 
-    @GetMapping(value = "/generateStudentsWithSupervisorWithNoCompanyEvaluation/{session}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/generateStudentsWithSupervisorWithNoCompanyEvaluation/{fullName}", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Mono<byte[]> generateStudentsWithSupervisorWithNoCompanyEvaluation(@PathVariable("session") Integer sessionNumber) {
-        return reportService.generateStudentsWithSupervisorWithNoCompanyEvaluation(sessionNumber);
+    public Mono<byte[]> generateStudentsWithSupervisorWithNoCompanyEvaluation(@PathVariable("fullName") String semesterFullName) {
+        return reportService.generateStudentsWithSupervisorWithNoCompanyEvaluation(semesterFullName);
     }
- */
 
 }

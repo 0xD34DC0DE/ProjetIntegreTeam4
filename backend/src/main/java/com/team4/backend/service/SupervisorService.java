@@ -15,14 +15,11 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,7 +78,6 @@ public class SupervisorService {
     }
 
     public Flux<StudentDetailsDto> getAllAssignedStudents(String supervisorId, String semesterFullName) {
-
         return Mono.zip(supervisorRepository.findById(supervisorId), semesterService.findByFullName(semesterFullName))
                 .map(tuple -> tuple.getT1().getStudentTimestampedEntries().stream()
                         .filter(timestampedEntry -> SemesterUtil.checkIfDatesAreInsideRangeOfSemester(
@@ -104,9 +100,11 @@ public class SupervisorService {
         return supervisorRepository.findAllByRole("SUPERVISOR");
     }
 
-    public Mono<List<String>> getStudentsEmailWithSupervisorWithNoEvaluation(LocalDate sessionStart, LocalDate sessionEnd) {
+
+    public Mono<List<String>> getStudentsEmailWithSupervisorWithNoEvaluation(String semesterFullName) {
         AtomicReference<List<String>> reference = new AtomicReference<>();
-        return getAllWithNoEvaluation(sessionStart, sessionEnd)
+
+        return getAllWithNoEvaluation(semesterFullName)
                 .flatMap(supervisors -> {
                     reference.set(new ArrayList<>());
                     supervisors.forEach(supervisor -> {
@@ -126,10 +124,12 @@ public class SupervisorService {
                 });
     }
 
-    public Mono<List<Supervisor>> getAllWithNoEvaluation(LocalDate sessionStart, LocalDate sessionEnd) {
+
+    public Mono<List<Supervisor>> getAllWithNoEvaluation(String semesterFullName) {
         AtomicReference<List<Evaluation>> evaluations = new AtomicReference<>();
         AtomicReference<List<Supervisor>> supervisors = new AtomicReference<>(new ArrayList<>());
-        return evaluationService.getAllWithDateBetween(sessionStart, sessionEnd).collectList()
+
+        return evaluationService.getAllWithDateBetween(semesterFullName).collectList()
                 .flatMap(evaluationsList -> {
                     evaluations.set(evaluationsList);
                     return getAll().collectList();

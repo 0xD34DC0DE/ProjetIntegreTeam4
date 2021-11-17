@@ -53,24 +53,18 @@ const ListReport = ({ open, toggleDialog, visible }) => {
     },
     {
       title: "Étudiants dont le superviseur n'a pas évalué l'entreprise",
-      url: "/null",
+      url: "/generateStudentsWithSupervisorWithNoCompanyEvaluation",
     },
   ]);
 
   const [reportUrl, setReportUrl] = useState("");
   const [semesterFullName, setSemesterFullName] = useState("");
 
-  const [session, setSession] = useState(321);
-
   useEffect(() => {
     if (reportUrl !== "") {
       toggleDialog("reportDialog", true);
     }
   }, [reportUrl]);
-
-  const handleChange = (evt) => {
-    setSession(evt.target.value);
-  };
 
   const updateSemesterFullName = (fullName) => {
     setSemesterFullName(fullName);
@@ -112,7 +106,6 @@ const ListReport = ({ open, toggleDialog, visible }) => {
             reportUrl={reportUrl}
             semesterFullName={semesterFullName}
             setReportUrl={setReportUrl}
-            sessionNumber={session}
           />
         </Box>
       )}

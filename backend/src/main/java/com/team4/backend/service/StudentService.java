@@ -150,17 +150,17 @@ public class StudentService {
         return semesterService
                 .findByFullName(semesterFullName)
                 .flatMapMany(semester -> studentRepository.findAllByStudentState(INTERNSHIP_FOUND)
-                        .filter(student -> {
-                                    log.info(student.toString());
-                                    return student.getEvaluationsDates().isEmpty() ||
-                                            student.getEvaluationsDates()
-                                                    .stream()
-                                                    .anyMatch(date -> date.atStartOfDay().isBefore(semester.getFrom()) &&
-                                                            date.atStartOfDay().isAfter(semester.getTo())
-                                                    );
+                        .filter(student ->
+                                student.getEvaluationsDates().isEmpty() ||
+                                        student.getEvaluationsDates()
+                                                .stream()
+                                                .anyMatch(date -> date.atStartOfDay().isBefore(semester.getFrom()) &&
+                                                        date.atStartOfDay().isAfter(semester.getTo())
+                                                )
 
-                                }
-                        ));
+
+                        )
+                );
     }
 
     public Mono<Long> updateStudentStateForAllStudentThatInterviewDateHasPassed() {

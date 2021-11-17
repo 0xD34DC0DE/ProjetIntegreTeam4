@@ -2,7 +2,7 @@ import React, { useRef } from "react";
 import { Dialog, DialogContent } from "@mui/material";
 import PdfView from "./PdfView"
 
-function ReportDialog({ open, toggleDialog, reportUrl, semesterFullName,setReportUrl, sessionNumber }) {
+function ReportDialog({ open, toggleDialog, reportUrl, semesterFullName,setReportUrl }) {
 
     let dialogRef = useRef(null);
 
@@ -15,7 +15,8 @@ function ReportDialog({ open, toggleDialog, reportUrl, semesterFullName,setRepor
 
     if (reportUrl === "/generateAllNonValidatedOffersReport" ||
         reportUrl === "/generateAllValidatedOffersReport" ||
-        reportUrl === "/generateStudentsNotEvaluatedReport") {
+        reportUrl === "/generateStudentsNotEvaluatedReport" ||
+        reportUrl === "/generateStudentsWithSupervisorWithNoCompanyEvaluation") {
         reportUrl = "http://localhost:8080/report" + reportUrl + "/" + semesterFullName ;
     } else {
         reportUrl = "http://localhost:8080/report" + reportUrl;
