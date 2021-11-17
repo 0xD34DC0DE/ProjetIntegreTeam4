@@ -15,12 +15,11 @@ import reactor.core.publisher.Sinks;
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
-    private final UserRepository userRepository;
+
     private final Sinks.Many<Notification> sinks;
 
-    public NotificationService(NotificationRepository notificationRepository, UserRepository userRepository, Sinks.Many<Notification> notificationFlux) {
+    public NotificationService(NotificationRepository notificationRepository, Sinks.Many<Notification> notificationFlux) {
         this.notificationRepository = notificationRepository;
-        this.userRepository = userRepository;
         this.sinks = notificationFlux;
     }
 
