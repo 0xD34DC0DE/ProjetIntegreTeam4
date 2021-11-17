@@ -5,6 +5,7 @@ import com.team4.backend.exception.DuplicateEntryException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.StudentMapper;
+import com.team4.backend.model.Evaluation;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.model.TimestampedEntry;
 import com.team4.backend.repository.SupervisorRepository;
@@ -14,6 +15,13 @@ import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -23,6 +31,9 @@ public class SupervisorService {
     private final SupervisorRepository supervisorRepository;
 
     private final StudentService studentService;
+
+    private final EvaluationService evaluationService;
+
 
     private final PBKDF2Encoder pbkdf2Encoder;
 
@@ -34,11 +45,13 @@ public class SupervisorService {
                              PBKDF2Encoder pbkdf2Encoder,
                              UserService userService,
                              StudentService studentService,
-                             SemesterService semesterService) {
+                             SemesterService semesterService,
+                             EvaluationService evaluationService) {
         this.supervisorRepository = supervisorRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.userService = userService;
         this.studentService = studentService;
+        this.evaluationService = evaluationService;
         this.semesterService = semesterService;
     }
 
@@ -87,4 +100,54 @@ public class SupervisorService {
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
     }
 
+    protected Flux<Supervisor> getAll() {
+        return supervisorRepository.findAllByRole("SUPERVISOR");
+    }
+
+    public Mono<List<String>> getStudentsEmailWithSupervisorWithNoEvaluation(LocalDate sessionStart, LocalDate sessionEnd) {
+        AtomicReference<List<String>> reference = new AtomicReference<>();
+        return getAllWithNoEvaluation(sessionStart, sessionEnd)
+                .flatMap(supervisors -> {
+                    reference.set(new ArrayList<>());
+                    supervisors.forEach(supervisor -> {
+                        supervisor.getStudentTimestampedEntries().forEach(studentEmail -> {
+                            AtomicBoolean emailThere = new AtomicBoolean(false);
+                            reference.get().forEach(email -> {
+                                if (studentEmail.getEmail().equals(email)) {
+                                    emailThere.set(true);
+                                }
+                            });
+                            if (!emailThere.get()) {
+                                reference.get().add(studentEmail.getEmail());
+                            }
+                        });
+                    });
+                    return Mono.just(reference.get());
+                });
+    }
+
+    public Mono<List<Supervisor>> getAllWithNoEvaluation(LocalDate sessionStart, LocalDate sessionEnd) {
+        AtomicReference<List<Evaluation>> evaluations = new AtomicReference<>();
+        AtomicReference<List<Supervisor>> supervisors = new AtomicReference<>(new ArrayList<>());
+        return evaluationService.getAllWithDateBetween(sessionStart, sessionEnd).collectList()
+                .flatMap(evaluationsList -> {
+                    evaluations.set(evaluationsList);
+                    return getAll().collectList();
+                })
+                .flatMap(supervisorsList -> {
+                    supervisorsList.forEach(supervisor -> {
+                        String fullName = supervisor.getFirstName() + " " + supervisor.getLastName();
+                        AtomicBoolean hasEvaluation = new AtomicBoolean(false);
+                        evaluations.get().forEach(evaluation -> {
+                            if (evaluation.getText().get("supervisorFullName").equals(fullName)) {
+                                hasEvaluation.set(true);
+                            }
+                        });
+                        if (!hasEvaluation.get()) {
+                            supervisors.get().add(supervisor);
+                        }
+                    });
+                    return Mono.just(supervisors.get());
+                });
+    }
 }
