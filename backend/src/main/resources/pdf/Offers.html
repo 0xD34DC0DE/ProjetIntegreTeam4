@@ -14,8 +14,7 @@
 
 <h2 class="titles-style" th:text="|Date d'aujourd'hui : ${date}|"></h2>
 <h2 class="titles-style" th:text="|Nombre d'${title} : ${#lists.size(internshipOfferList)}|"></h2>
-<h2 class="titles-style" th:text="|Entre le : ${dates.get(0)}|"></h2>
-<h2 class="titles-style" th:text="|Et le : ${dates.get(1)}|"></h2>
+<h2 class="titles-style" th:text="|Pour la session : ${session}|"></h2>
 <br/>
 <div id="internshipOfferList">
     <div th:if="${not #lists.isEmpty(internshipOfferList)}">

@@ -49,7 +49,7 @@ public class ReportService {
                     variables.put("internshipOfferList", nonValidatedOffers);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Offres de stages non validées");
-                    variables.put("dates", Arrays.asList(semesterFullName, semesterFullName));
+                    variables.put("session", semesterFullName);
                     return pdfService.renderPdf(new OffersPdf(variables));
                 });
     }
@@ -61,7 +61,7 @@ public class ReportService {
                     variables.put("internshipOfferList", nonValidatedOffers);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Offres de stages validées");
-                    variables.put("dates", Arrays.asList(semesterFullName, semesterFullName));
+                    variables.put("session", semesterFullName);
                     return pdfService.renderPdf(new OffersPdf(variables));
                 });
     }
@@ -151,7 +151,7 @@ public class ReportService {
                     variables.put("studentsList", students);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants qui n'ont pas encore été évalués par leur moniteur");
-                    variables.put("dates", Arrays.asList(semesterFullName, semesterFullName));
+                    variables.put("session", semesterFullName);
                     return pdfService.renderPdf(new StudentsPdf(variables));
                 });
     }
