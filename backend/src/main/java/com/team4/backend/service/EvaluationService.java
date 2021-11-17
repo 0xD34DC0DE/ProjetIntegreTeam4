@@ -1,16 +1,17 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.EvaluationDto;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.EvaluationMapper;
 import com.team4.backend.model.Evaluation;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.EvaluationRepository;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Log
@@ -35,16 +36,24 @@ public class EvaluationService {
                     fullName.set(evaluation.getText().get("studentFullName"));
                     return studentService.getAll().collectList();
                 }).flatMap(students -> {
-                    //TODO replace with forEach during refactor sprint
                     for (Student student : students) {
                         if ((student.getFirstName() + " " + student.getLastName()).equals(fullName.toString())) {
-                            System.out.println(student.getEvaluationsDates());
                             student.getEvaluationsDates().add(LocalDate.now());
                             return studentService.save(student);
                         }
                     }
-                    return Mono.empty();
+                    return Mono.error(new UserNotFoundException("No student found with the name : " + fullName.toString()));
                 }).flatMap(s -> Mono.just(atomicReference.get()));
+    }
+
+    public Flux<Evaluation> getAllWithDateBetween(LocalDate sessionStart, LocalDate sessionEnd) {
+        return evaluationRepository.findAll()
+                .flatMap(evaluation -> {
+                    if (LocalDate.parse(evaluation.getText().get("date")).isAfter(sessionStart) && LocalDate.parse(evaluation.getText().get("date")).isBefore(sessionEnd)) {
+                        return Flux.just(evaluation);
+                    }
+                    return Flux.empty();
+                });
     }
 
 }

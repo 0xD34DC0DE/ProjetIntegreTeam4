@@ -1,5 +1,3 @@
-import { UserInfoContext } from "../stores/UserInfoStore";
-// import axios from "axios";
 import {
     Grid,
     Typography,
@@ -11,7 +9,6 @@ import {
 } from "@mui/material";
 import React, {
     useState,
-    useContext,
     useEffect
 } from "react";
 import Report from "./Report"
@@ -28,8 +25,8 @@ const ListReport = ({ open, toggleDialog, visible }) => {
         { title: "Étudiants en attente d'entrevue", url: "/generateStudentsWaitingInterviewReport" },
         { title: "Étudiants en attente de réponse", url: "/generateStudentsWaitingInterviewResponseReport" },
         { title: "Étudiants avec stage trouvé", url: "/generateStudentsWithInternshipReport" },
-        { title: "Étudiants pas évalué par leur moniteur", url: "/generateStudentsNotEvaluatedReport" },
-        { title: "Étudiants dont le superviseur n'a pas évalué l'entreprise", url: "/null" },
+        { title: "Étudiants non évalués par leur moniteur", url: "/generateStudentsNotEvaluatedReport" },
+        { title: "Étudiants dont le superviseur n'a pas évalué l'entreprise", url: "/generateStudentsWithSupervisorWithNoCompanyEvaluation" },
     ]);
 
     const [reportUrl, setReportUrl] = useState("");
