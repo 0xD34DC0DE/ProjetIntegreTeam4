@@ -5,7 +5,6 @@ import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Semester;
 import com.team4.backend.model.Student;
-import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.testdata.SemesterMockData;
@@ -21,7 +20,6 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -304,11 +302,9 @@ public class StudentServiceTest {
         Flux<Student> response = studentService.getAll();
 
         //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).assertNext(s -> {
-            assertEquals(StudentMockData.getMockSecondStudent(), s);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
     @Test
@@ -322,11 +318,9 @@ public class StudentServiceTest {
         Flux<Student> response = studentService.getAllStudentsWithNoCv();
 
         //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).assertNext(s -> {
-            assertEquals(StudentMockData.getMockSecondStudent(), s);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
     @Test
@@ -340,11 +334,9 @@ public class StudentServiceTest {
         Flux<Student> response = studentService.getAllStudentsWithUnvalidatedCv();
 
         //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).assertNext(s -> {
-            assertEquals(StudentMockData.getMockSecondStudent(), s);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
     @Test
@@ -358,11 +350,9 @@ public class StudentServiceTest {
         Flux<Student> response = studentService.getStudentsNoInternship();
 
         //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).assertNext(s -> {
-            assertEquals(StudentMockData.getMockSecondStudent(), s);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
     @Test
@@ -376,11 +366,9 @@ public class StudentServiceTest {
         Flux<Student> response = studentService.getStudentsWaitingInterview();
 
         //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).assertNext(s -> {
-            assertEquals(StudentMockData.getMockSecondStudent(), s);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
     @Test
@@ -394,11 +382,9 @@ public class StudentServiceTest {
         Flux<Student> response = studentService.getStudentsWaitingResponse();
 
         //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).assertNext(s -> {
-            assertEquals(StudentMockData.getMockSecondStudent(), s);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
     @Test
@@ -412,32 +398,14 @@ public class StudentServiceTest {
         Flux<Student> response = studentService.getStudentsWithInternship();
 
         //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).assertNext(s -> {
-            assertEquals(StudentMockData.getMockSecondStudent(), s);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
-    @Test
-        //TODO --> will have to remove it
-    void shouldGetAllWithEvaluationDateBetween() {
-        //ARRANGE
-        Flux<Student> students = StudentMockData.getAllStudentsFlux();
-
-        when(studentRepository.findAllByEvaluationsDatesIsBetween(any(LocalDate.class), any(LocalDate.class))).thenReturn(students);
-
-        //ACT
-        Flux<Student> response = studentService.getAllWithEvaluationDateBetween(LocalDate.of(2019, 1, 1), LocalDate.of(2019, 5, 31));
-
-        //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).verifyComplete();
-    }
 
     @Test
-    void shouldGetAllWithEvaluationDateBetweenNew() {
+    void shouldGetAllWithNoEvaluationDateDuringSemester() {
         //ARRANGE
         Semester semester = SemesterMockData.getListSemester().get(0);
         Flux<Student> students = StudentMockData.getAllStudentsFlux();
@@ -453,22 +421,6 @@ public class StudentServiceTest {
                 .expectNextCount(1)
                 .verifyComplete();
     }
-/*
-
-    @Test
-    void shouldGetAllWithEvaluationDateBetweenNoCorrespondingStudent() {
-        //ARRANGE
-        Flux<Student> students = StudentMockData.getAllStudentsFlux();
-
-        when(studentRepository.findAllByEvaluationsDatesIsBetween(any(), any())).thenReturn(students);
-
-        //ACT
-        Flux<Student> response = studentService.getAllWithEvaluationDateBetween(LocalDate.of(2016,1,1), LocalDate.of(2016,5,31));
-
-        //ASSERT
-        StepVerifier.create(response).verifyComplete();
-    }
- */
 
     @Test
     void shouldUpdateInterviewDate() {

@@ -575,28 +575,8 @@ public class InternshipOfferServiceTest {
                 .verifyComplete();
     }
 
-    //TODO --> will have to remove it
     @Test
     void shouldGetAllNonValidatedOffers() {
-        //ARRANGE
-        Flux<InternshipOffer> internshipOffers = InternshipOfferMockData.getAllInternshipOffers();
-        List<Date> dateList = InternshipOfferMockData.getSessionDates();
-
-        when(internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyBetween(any(), any())).thenReturn(internshipOffers);
-
-        //ACT
-        Flux<InternshipOffer> response = internshipOfferService.getAllNonValidatedOffers(dateList.get(0), dateList.get(1));
-
-        //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(InternshipOfferMockData.getFirstInternshipOffer(), s);
-        }).assertNext(s -> {
-            assertEquals(InternshipOfferMockData.getSecondInternshipOffer(), s);
-        }).verifyComplete();
-    }
-
-    @Test
-    void shouldGetAllNonValidatedOffersNew() {
         //ARRANGE
         Semester semester = SemesterMockData.getListSemester().get(0);
         Flux<InternshipOffer> internshipOffers = InternshipOfferMockData.getAllInternshipOffers();
@@ -605,7 +585,7 @@ public class InternshipOfferServiceTest {
         when(internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyIsBetween(any(), any())).thenReturn(internshipOffers);
 
         //ACT
-        Flux<InternshipOffer> internshipOfferFlux = internshipOfferService.getAllNonValidatedOffersNew(semester.getFullName());
+        Flux<InternshipOffer> internshipOfferFlux = internshipOfferService.getAllNonValidatedOffers(semester.getFullName());
 
         //ASSERT
         StepVerifier.create(internshipOfferFlux).assertNext(s -> {
@@ -615,28 +595,8 @@ public class InternshipOfferServiceTest {
         }).verifyComplete();
     }
 
-    //TODO --> will have to remove it
     @Test
     void shouldGetAllValidatedOffers() {
-        //ARRANGE
-        Flux<InternshipOffer> internshipOffers = InternshipOfferMockData.getAllInternshipOffers();
-        List<Date> dateList = InternshipOfferMockData.getSessionDates();
-
-        when(internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyBetween(any(), any())).thenReturn(internshipOffers);
-
-        //ACT
-        Flux<InternshipOffer> response = internshipOfferService.getAllValidatedOffers(dateList.get(0), dateList.get(1));
-
-        //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(InternshipOfferMockData.getFirstInternshipOffer(), s);
-        }).assertNext(s -> {
-            assertEquals(InternshipOfferMockData.getSecondInternshipOffer(), s);
-        }).verifyComplete();
-    }
-
-    @Test
-    void shouldGetAllValidatedOffersNew() {
         //ARRANGE
         Semester semester = SemesterMockData.getListSemester().get(0);
         Flux<InternshipOffer> internshipOffers = InternshipOfferMockData.getAllInternshipOffers();
@@ -645,7 +605,7 @@ public class InternshipOfferServiceTest {
         when(internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyIsBetween(any(), any())).thenReturn(internshipOffers);
 
         //ACT
-        Flux<InternshipOffer> internshipOfferFlux = internshipOfferService.getAllValidatedOffersNew(semester.getFullName());
+        Flux<InternshipOffer> internshipOfferFlux = internshipOfferService.getAllValidatedOffers(semester.getFullName());
 
         //ASSERT
         StepVerifier.create(internshipOfferFlux).assertNext(s -> {

@@ -138,42 +138,26 @@ public class StudentService {
         return studentRepository.findAllByStudentState(INTERNSHIP_FOUND);
     }
 
+    //TODO --> test
     public Mono<Student> findById(String studentId) {
         return studentRepository.findById(studentId)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Could not find student with id: " + studentId)));
     }
 
-    //TODO --> will have to remove it
-    public Flux<Student> getAllWithEvaluationDateBetween(LocalDate sessionStart, LocalDate sessionEnd) {
-        return studentRepository.findAllByEvaluationsDatesIsBetween(sessionStart, sessionEnd)
-                .collectList()
-                .flatMapMany(students -> {
-                    //TODO replace loops with .forEach() during refactor
-                    for (Student student : students) {
-                        for (LocalDate date : student.getEvaluationsDates()) {
-                            //TODO use anyMatch() to check if a date matches time period
-                            if (date.isAfter(sessionStart) && date.isBefore(sessionEnd)) {
-                                return Flux.just(student);
-                            }
-                        }
-                    }
-                    return Flux.empty();
-                });
-    }
 
     public Flux<Student> getAllWithNoEvaluationDateDuringSemester(String semesterFullName) {
 
         return semesterService
                 .findByFullName(semesterFullName)
                 .flatMapMany(semester -> studentRepository.findAllByStudentState(INTERNSHIP_FOUND)
-                        .filter(student ->{
-                                log.info(student.toString());
-                                return student.getEvaluationsDates().isEmpty() ||
-                                        student.getEvaluationsDates()
-                                                .stream()
-                                                .anyMatch(date -> date.atStartOfDay().isBefore(semester.getFrom()) &&
-                                                        date.atStartOfDay().isAfter(semester.getTo())
-                                                );
+                        .filter(student -> {
+                                    log.info(student.toString());
+                                    return student.getEvaluationsDates().isEmpty() ||
+                                            student.getEvaluationsDates()
+                                                    .stream()
+                                                    .anyMatch(date -> date.atStartOfDay().isBefore(semester.getFrom()) &&
+                                                            date.atStartOfDay().isAfter(semester.getTo())
+                                                    );
 
                                 }
                         ));
@@ -188,6 +172,7 @@ public class StudentService {
                 }).count();
     }
 
+    //TODO --> test
     public Mono<Student> save(Student student) {
         return studentRepository.save(student);
     }
