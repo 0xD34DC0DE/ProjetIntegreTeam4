@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+
 @RestController
 @Log4j2
 @RequestMapping("/notification")
@@ -36,7 +38,10 @@ public class NotificationController {
 
     @GetMapping("/sse")
     public Flux<ServerSentEvent<Notification>> sseNotificationStream(@RequestParam String userId) {
-        return notificationService.getNotificationFluxSink().asFlux()
+        return notificationService
+                .getNotificationFluxSink()
+                .asFlux()
+                .delayElements(Duration.ofSeconds(5))
                 .filter(n -> n.getReceiverIds().contains(userId))
                 .map(n -> ServerSentEvent.<Notification>builder()
                         .data(n)

@@ -42,12 +42,4 @@ public class InternshipContractController {
         return internshipContractService.hasSigned(internshipOfferId, studentEmail, userEmail);
     }
 
-    @GetMapping("/t")
-    @PreAuthorize("hasAnyAuthority('MONITOR', 'STUDENT', 'INTERNSHIP_MANAGER')")
-    public Mono<Boolean> getInternshipContractsTwoWeeksLeft(){
-        internshipContractService.getInternshipContractsTwoWeeksLeft();
-        return Mono.just(true);
-    }
-
-
 }
