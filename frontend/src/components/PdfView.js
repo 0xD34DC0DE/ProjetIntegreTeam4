@@ -35,6 +35,8 @@ function PdfView({ pdfUrl, params }) {
           headers: {
             Authorization: userInfo.jwt,
             Accept: "application/pdf",
+            "Access-Control-Allow-Origin": "*",
+            'Access-Control-Allow-Methods':'GET',
           },
           params: { ...params },
           responseType: "arraybuffer",

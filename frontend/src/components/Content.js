@@ -56,7 +56,11 @@ const Content = ({
             description={selection.description}
           />
           {userInfo.role === "INTERNSHIP_MANAGER" && (
-            <ListCvInternshipManagerView visible={selection.id === 1} />
+            <ListCvInternshipManagerView 
+              toggleDialog={toggleDialog}
+              open={dialogVisibility.cvDialog}
+              visible={selection.id === 1} 
+            />
           )}
           {userInfo.role === "MONITOR" && (
             <ListStudentApplying

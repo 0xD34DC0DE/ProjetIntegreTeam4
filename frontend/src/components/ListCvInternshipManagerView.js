@@ -4,8 +4,9 @@ import axios from "axios";
 import CvInternshipManagerView from "./CvInternshipManagerView";
 import { motion } from "framer-motion";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import CVDialog from "./CVDialog";
 
-const ListCvInternshipManagerView = ({ visible }) => {
+const ListCvInternshipManagerView = ({ open, toggleDialog, visible }) => {
   const [cvs, setCvs] = useState([]);
   const [nbrCvs, setNbrCvs] = useState(0);
   const [noPage, setNoPage] = useState(0);
@@ -75,6 +76,14 @@ const ListCvInternshipManagerView = ({ visible }) => {
     setNbrCvs(nbrCvs - 1);
   };
 
+  const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    if (url !== "") {
+        toggleDialog("cvDialog", true);
+    }
+  }, [url])
+
   return (
     <>
       {visible && (
@@ -89,7 +98,7 @@ const ListCvInternshipManagerView = ({ visible }) => {
           >
             <Grid item lg={12} xl={12} md={12} sm={6} xs={6} alignSelf="center">
               {cvs.map((cv, key) => (
-                <CvInternshipManagerView
+                  <CvInternshipManagerView
                   key={key}
                   id={cv.id}
                   assetId={cv.assetId}
@@ -97,7 +106,7 @@ const ListCvInternshipManagerView = ({ visible }) => {
                   filename={cv.filename}
                   uploadDate={cv.uploadDate}
                   removeCv={removeCv}
-                />
+                  setUrl={setUrl} />
               ))}
             </Grid>
           </Grid>
@@ -118,6 +127,7 @@ const ListCvInternshipManagerView = ({ visible }) => {
               />
             </motion.div>
           </Container>
+          <CVDialog open={open} toggleDialog={toggleDialog} cvUrl={url} setUrl={setUrl}/>
         </>
       )}
     </>

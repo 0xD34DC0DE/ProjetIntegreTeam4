@@ -24,6 +24,7 @@ function App() {
     emailSenderDialog: false,
     internshipDetailsDialog: false,
     reportDialog: false,
+    cvDialog: false,
     signContractMonitorDialog: false,
   });
 
