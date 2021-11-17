@@ -2,6 +2,7 @@ package com.team4.backend.service;
 
 import com.team4.backend.pdf.OffersPdf;
 import com.team4.backend.pdf.StudentsPdf;
+import com.team4.backend.util.SemesterUtil;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
 
@@ -49,7 +50,7 @@ public class ReportService {
                     variables.put("internshipOfferList", nonValidatedOffers);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Offres de stages non validées");
-                    variables.put("session", semesterFullName);
+                    variables.put("session", SemesterUtil.convertInFrench(semesterFullName));
                     return pdfService.renderPdf(new OffersPdf(variables));
                 });
     }
@@ -61,7 +62,7 @@ public class ReportService {
                     variables.put("internshipOfferList", nonValidatedOffers);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Offres de stages validées");
-                    variables.put("session", semesterFullName);
+                    variables.put("session", SemesterUtil.convertInFrench(semesterFullName));
                     return pdfService.renderPdf(new OffersPdf(variables));
                 });
     }
@@ -151,7 +152,7 @@ public class ReportService {
                     variables.put("studentsList", students);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants qui n'ont pas encore été évalués par leur moniteur");
-                    variables.put("session", semesterFullName);
+                    variables.put("session", SemesterUtil.convertInFrench(semesterFullName));
                     return pdfService.renderPdf(new StudentsPdf(variables));
                 });
     }
