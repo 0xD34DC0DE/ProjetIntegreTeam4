@@ -23,7 +23,7 @@ import SignContractMonitorDialog from "./SignContractMonitorDialog";
 import SemesterSelect from "./SemesterSelect";
 import CVDialog from "./CVDialog";
 
-const ListStudentApplying = ({ open, visible, toggleDialog, dialogVisibility }) => {
+const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
   const [offers, setOffers] = useState([]);
   const [receiver, setReceiver] = useState("");
   const [userInfo] = useContext(UserInfoContext);
@@ -454,7 +454,7 @@ const ListStudentApplying = ({ open, visible, toggleDialog, dialogVisibility }) 
           studentEmail: receiver.studentEmail,
         }}
       />
-      <CVDialog open={open} toggleDialog={toggleDialog} cvUrl={url} setUrl={setUrl}/>
+      <CVDialog open={dialogVisibility.cvDialog} toggleDialog={toggleDialog} cvUrl={url} setUrl={setUrl}/>
     </Grid>
   );
 };

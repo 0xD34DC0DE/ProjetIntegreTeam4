@@ -57,9 +57,9 @@ const Content = ({
           />
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListCvInternshipManagerView 
-              toggleDialog={toggleDialog}
-              open={dialogVisibility.cvDialog}
               visible={selection.id === 1} 
+              toggleDialog={toggleDialog}
+              dialogVisibility={dialogVisibility}
             />
           )}
           {userInfo.role === "MONITOR" && (
@@ -87,7 +87,7 @@ const Content = ({
               toggleDialog={toggleDialog}
               dialogVisibility={dialogVisibility}
             />
-          )}
+          )} «
           {userInfo.role === "SUPERVISOR" && (
             <AssignedStudentSupervisorView
               visible={selection.id === 10}
