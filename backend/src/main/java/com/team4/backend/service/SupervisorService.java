@@ -124,7 +124,6 @@ public class SupervisorService {
                 });
     }
 
-
     public Mono<List<Supervisor>> getAllWithNoEvaluation(String semesterFullName) {
         AtomicReference<List<Evaluation>> evaluations = new AtomicReference<>();
         AtomicReference<List<Supervisor>> supervisors = new AtomicReference<>(new ArrayList<>());

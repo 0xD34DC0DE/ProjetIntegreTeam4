@@ -47,21 +47,16 @@ const SemesterSelect = ({ updateSemesterFullName }) => {
     };
 
     getAllSemesterFullName();
-    console.log(selectedSemester);
-    console.log(semesters);
   }, []);
 
   const handleChange = ($event) => {
     const value = $event.target.value;
-    console.log(value);
     setSelectedSemester(value);
     updateSemesterFullName(formatSemesterFullNameForBackEnd(value));
   };
 
   const formatSemesterFullNameForUi = (semesterFullName) => {
     const tmp = semesterFullName.split("-");
-
-    console.log(semesterNamesForUi[tmp[0]] + " " + tmp[1]);
 
     return semesterNamesForUi[tmp[0]] + " " + tmp[1];
   };

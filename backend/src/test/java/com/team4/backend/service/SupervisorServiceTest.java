@@ -56,7 +56,6 @@ public class SupervisorServiceTest {
     @InjectMocks
     SupervisorService supervisorService;
 
-
     @Test
     void shouldCreateSupervisor() {
         //ARRANGE

@@ -169,7 +169,6 @@ class ReportControllerTest {
                 .expectStatus().isOk();
     }
 
-
     @Test
     void shouldGenerateStudentsWithSupervisorWithNoCompanyEvaluation() {
         //ARRANGE

@@ -7,11 +7,8 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-import React, {
-    useState,
-    useEffect
-} from "react";
-import Report from "./Report"
+import React, { useState, useEffect } from "react";
+import Report from "./Report";
 import ReportDialog from "./ReportDialog";
 import SemesterSelect from "./SemesterSelect";
 

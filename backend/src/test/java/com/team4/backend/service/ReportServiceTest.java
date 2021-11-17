@@ -16,7 +16,6 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
-import static reactor.core.publisher.Mono.when;
 
 @EnableAutoConfiguration
 @ExtendWith(MockitoExtension.class)
@@ -36,7 +35,6 @@ class ReportServiceTest {
 
     @InjectMocks
     ReportService reportService;
-
 
     @Test
     void shouldGenerateAllNonValidatedOffersReport() {

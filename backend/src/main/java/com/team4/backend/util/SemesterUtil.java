@@ -27,7 +27,6 @@ public abstract class SemesterUtil {
                 Map.entry(SemesterName.SUMMER.name(), "ÉTÉ")
         );
 
-
         return frenchWord.get(words[0]) + " " + words[1];
     }
 

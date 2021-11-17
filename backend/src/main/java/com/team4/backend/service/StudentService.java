@@ -138,12 +138,10 @@ public class StudentService {
         return studentRepository.findAllByStudentState(INTERNSHIP_FOUND);
     }
 
-    //TODO --> test
     public Mono<Student> findById(String studentId) {
         return studentRepository.findById(studentId)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Could not find student with id: " + studentId)));
     }
-
 
     public Flux<Student> getAllWithNoEvaluationDateDuringSemester(String semesterFullName) {
 
@@ -172,7 +170,6 @@ public class StudentService {
                 }).count();
     }
 
-    //TODO --> test
     public Mono<Student> save(Student student) {
         return studentRepository.save(student);
     }
