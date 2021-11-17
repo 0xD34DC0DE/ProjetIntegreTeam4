@@ -249,6 +249,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .phoneNumber("438-422-3344")
                         .password(pbkdf2Encoder.encode("maxime123"))
                         .hasValidCv(true)
+                        .hasCv(true)
                         .evaluationsDates(new TreeSet<>())
                         .interviewsDate(new TreeSet<>())
                         .appliedOffersId(new HashSet<>())

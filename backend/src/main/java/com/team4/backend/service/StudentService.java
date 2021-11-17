@@ -27,10 +27,16 @@ public class StudentService {
 
     private final UserService userService;
 
-    public StudentService(StudentRepository studentRepository, PBKDF2Encoder pbkdf2Encoder, UserService userService) {
+    private final SemesterService semesterService;
+
+    public StudentService(StudentRepository studentRepository,
+                          PBKDF2Encoder pbkdf2Encoder,
+                          UserService userService,
+                          SemesterService semesterService) {
         this.studentRepository = studentRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.userService = userService;
+        this.semesterService = semesterService;
     }
 
     public Mono<Student> registerStudent(Student student) {
@@ -137,8 +143,7 @@ public class StudentService {
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Could not find student with id: " + studentId)));
     }
 
-    //TODO --> refactor to pass semesterFullName in argument and get range from SemesterService.findByFullName()
-
+    //TODO --> will have to remove it
     public Flux<Student> getAllWithEvaluationDateBetween(LocalDate sessionStart, LocalDate sessionEnd) {
         return studentRepository.findAllByEvaluationsDatesIsBetween(sessionStart, sessionEnd)
                 .collectList()
@@ -154,6 +159,24 @@ public class StudentService {
                     }
                     return Flux.empty();
                 });
+    }
+
+    public Flux<Student> getAllWithNoEvaluationDateDuringSemester(String semesterFullName) {
+
+        return semesterService
+                .findByFullName(semesterFullName)
+                .flatMapMany(semester -> studentRepository.findAllByStudentState(INTERNSHIP_FOUND)
+                        .filter(student ->{
+                                log.info(student.toString());
+                                return student.getEvaluationsDates().isEmpty() ||
+                                        student.getEvaluationsDates()
+                                                .stream()
+                                                .anyMatch(date -> date.atStartOfDay().isBefore(semester.getFrom()) &&
+                                                        date.atStartOfDay().isAfter(semester.getTo())
+                                                );
+
+                                }
+                        ));
     }
 
     public Mono<Long> updateStudentStateForAllStudentThatInterviewDateHasPassed() {

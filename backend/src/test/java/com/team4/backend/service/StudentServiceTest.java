@@ -3,9 +3,12 @@ package com.team4.backend.service;
 import com.team4.backend.exception.ForbiddenActionException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.model.Semester;
 import com.team4.backend.model.Student;
+import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.StudentRepository;
+import com.team4.backend.testdata.SemesterMockData;
 import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.junit.jupiter.api.Test;
@@ -18,6 +21,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -37,6 +41,9 @@ public class StudentServiceTest {
 
     @Mock
     UserService userService;
+
+    @Mock
+    SemesterService semesterService;
 
     @InjectMocks
     StudentService studentService;
@@ -413,6 +420,7 @@ public class StudentServiceTest {
     }
 
     @Test
+        //TODO --> will have to remove it
     void shouldGetAllWithEvaluationDateBetween() {
         //ARRANGE
         Flux<Student> students = StudentMockData.getAllStudentsFlux();
@@ -420,12 +428,30 @@ public class StudentServiceTest {
         when(studentRepository.findAllByEvaluationsDatesIsBetween(any(LocalDate.class), any(LocalDate.class))).thenReturn(students);
 
         //ACT
-        Flux<Student> response = studentService.getAllWithEvaluationDateBetween(LocalDate.of(2019,1,1), LocalDate.of(2019,5,31));
+        Flux<Student> response = studentService.getAllWithEvaluationDateBetween(LocalDate.of(2019, 1, 1), LocalDate.of(2019, 5, 31));
 
         //ASSERT
         StepVerifier.create(response).assertNext(s -> {
             assertEquals(StudentMockData.getMockStudent(), s);
         }).verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllWithEvaluationDateBetweenNew() {
+        //ARRANGE
+        Semester semester = SemesterMockData.getListSemester().get(0);
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+
+        when(semesterService.findByFullName(semester.getFullName())).thenReturn(Mono.just(semester));
+        when(studentRepository.findAllByStudentState(StudentState.INTERNSHIP_FOUND)).thenReturn(students);
+
+        //ACT
+        Flux<Student> studentFlux = studentService.getAllWithNoEvaluationDateDuringSemester(semester.getFullName());
+
+        //ASSERT
+        StepVerifier.create(studentFlux)
+                .expectNextCount(1)
+                .verifyComplete();
     }
 /*
 

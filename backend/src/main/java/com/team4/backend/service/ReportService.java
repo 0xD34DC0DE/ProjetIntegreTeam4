@@ -62,7 +62,7 @@ public class ReportService {
                     variables.put("internshipOfferList", nonValidatedOffers);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Offres de stages non validées");
-                    variables.put("dates", Arrays.asList(semesterFullName,semesterFullName));
+                    variables.put("dates", Arrays.asList(semesterFullName, semesterFullName));
                     return pdfService.renderPdf(new OffersPdf(variables));
                 });
     }
@@ -88,7 +88,7 @@ public class ReportService {
                     variables.put("internshipOfferList", nonValidatedOffers);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Offres de stages validées");
-                    variables.put("dates", Arrays.asList(semesterFullName,semesterFullName));
+                    variables.put("dates", Arrays.asList(semesterFullName, semesterFullName));
                     return pdfService.renderPdf(new OffersPdf(variables));
                 });
     }
@@ -171,8 +171,7 @@ public class ReportService {
                 });
     }
 
-    //TODO --> refactor to pass semesterFullName in argument
-    //TODO --> studentService.getAllWithEvaluationDateBetween(semesterFullName)
+    //TODO --> will have to remove it
     public Mono<byte[]> generateStudentsNotEvaluatedReport(Integer sessionNumber) {
         List<LocalDate> dates = calculateLocalDates(sessionNumber);
         return studentService.getAllWithEvaluationDateBetween(dates.get(0), dates.get(1)).collectList()
@@ -182,6 +181,18 @@ public class ReportService {
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants qui n'ont pas encore été évalués par leur moniteur");
                     variables.put("dates", calculateLocalDates(sessionNumber));
+                    return pdfService.renderPdf(new StudentsPdf(variables));
+                });
+    }
+
+    public Mono<byte[]> generateStudentsNotEvaluatedReportNew(String semesterFullName) {
+        return studentService.getAllWithNoEvaluationDateDuringSemester(semesterFullName).collectList()
+                .flatMap(students -> {
+                    Map<String, Object> variables = new HashMap<>();
+                    variables.put("studentsList", students);
+                    variables.put("date", LocalDate.now());
+                    variables.put("title", "Étudiants qui n'ont pas encore été évalués par leur moniteur");
+                    variables.put("dates", Arrays.asList(semesterFullName, semesterFullName));
                     return pdfService.renderPdf(new StudentsPdf(variables));
                 });
     }

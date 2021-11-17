@@ -93,4 +93,10 @@ public class ReportController {
         return reportService.generateStudentsNotEvaluatedReport(sessionNumber);
     }
 
+    @GetMapping(value = "/generateStudentsNotEvaluatedReportNew/{fullName}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
+    public Mono<byte[]> generateStudentsNotEvaluatedReportNew(@PathVariable("fullName") String semesterFullName) {
+        return reportService.generateStudentsNotEvaluatedReportNew(semesterFullName);
+    }
+
 }

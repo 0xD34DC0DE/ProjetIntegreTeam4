@@ -18,7 +18,6 @@ import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -53,13 +52,15 @@ public class StudentRepositoryTest {
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .password("password2")
                         .interviewsDate(new TreeSet<>())
-                        .evaluationsDates(Stream.of(LocalDate.now())
+                        .evaluationsDates(Stream.of(LocalDate.now(),LocalDate.now().plusYears(2))
                                 .collect(Collectors.toCollection(TreeSet::new)))
                         .build(),
                 Student.studentBuilder()
                         .email("testing_3@gmail.com")
                         .password("password1")
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .evaluationsDates(Stream.of(LocalDate.now().plusYears(2))
+                                .collect(Collectors.toCollection(TreeSet::new)))
                         .interviewsDate(new TreeSet<>(Arrays.asList(
                                 LocalDate.now().minusWeeks(3),
                                 LocalDate.now(),
@@ -145,14 +146,12 @@ public class StudentRepositoryTest {
         LocalDateTime currentDateTime = LocalDateTime.now();
 
         //ACT
-        Flux<Student> studentFlux = studentRepository.findAllByEvaluationsDatesIsBetween(currentDateTime.minusDays(3),currentDateTime.plusWeeks(2));
+        Flux<Student> studentFlux = studentRepository.findAllByEvaluationsDatesIsBetween(currentDateTime.minusDays(3), currentDateTime.plusWeeks(2));
 
         //ASSERT
         StepVerifier.create(studentFlux)
                 .expectNextCount(1)
                 .verifyComplete();
-
-
     }
 
 }

@@ -203,8 +203,7 @@ class ReportServiceTest {
         }).verifyComplete();
     }
 
-    /*
-
+    //TODO --> remove it
     @Test
     void shouldGenerateStudentsNotEvaluatedReport() {
         //ARRANGE
@@ -219,7 +218,21 @@ class ReportServiceTest {
             assertEquals(ReportMockData.getBytes()[0], s[0]);
         }).verifyComplete();
     }
-     */
+
+    @Test
+    void shouldGenerateStudentsNotEvaluatedReportNew() {
+        //ARRANGE
+        doReturn(ReportMockData.getInternshipOffers()).when(studentService).getAllWithNoEvaluationDateDuringSemester(any());
+        doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
+
+        //ACT
+        Mono<byte[]> response = reportService.generateStudentsNotEvaluatedReportNew(SemesterName.FALL + "-" + LocalDateTime.now().getYear());
+
+        //ASSERT
+        StepVerifier.create(response).consumeNextWith(s -> {
+            assertEquals(ReportMockData.getBytes()[0], s[0]);
+        }).verifyComplete();
+    }
 
     @Test
     void shouldCalculateDatesWinter() {

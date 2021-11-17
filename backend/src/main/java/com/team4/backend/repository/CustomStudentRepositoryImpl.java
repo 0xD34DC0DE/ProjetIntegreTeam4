@@ -2,14 +2,12 @@ package com.team4.backend.repository;
 
 import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.StudentState;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
-import java.util.Collections;
 import java.util.Set;
 import java.util.TreeSet;
 
