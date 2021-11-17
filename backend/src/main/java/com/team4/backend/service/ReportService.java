@@ -4,12 +4,11 @@ import com.team4.backend.pdf.OffersPdf;
 import com.team4.backend.pdf.StudentsPdf;
 import com.team4.backend.util.SemesterUtil;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 @Service
@@ -18,6 +17,8 @@ public class ReportService {
     private final InternshipOfferService internshipOfferService;
 
     private final StudentService studentService;
+
+    private final SupervisorService supervisorService;
 
     private final PdfService pdfService;
 
@@ -37,9 +38,10 @@ public class ReportService {
     private final int THIRTY_FIRST = 31;
 
 
-    public ReportService(InternshipOfferService internshipOfferService, StudentService studentService, PdfService pdfService) {
+    public ReportService(InternshipOfferService internshipOfferService, StudentService studentService, SupervisorService supervisorService, PdfService pdfService) {
         this.internshipOfferService = internshipOfferService;
         this.studentService = studentService;
+        this.supervisorService = supervisorService;
         this.pdfService = pdfService;
     }
 
@@ -156,5 +158,89 @@ public class ReportService {
                     return pdfService.renderPdf(new StudentsPdf(variables));
                 });
     }
+/*
+
+    public Mono<byte[]> generateStudentsWithSupervisorWithNoCompanyEvaluation(Integer sessionNumber) {
+        List<LocalDate> dates = calculateLocalDates(sessionNumber);
+        return supervisorService.getStudentsEmailWithSupervisorWithNoEvaluation(dates.get(0), dates.get(1))
+                .flatMapMany(studentsEmail -> Flux.fromIterable(studentsEmail).flatMap(studentService::findByEmail)).collectList()
+                .flatMap(students -> {
+                    Map<String, Object> variables = new HashMap<>();
+                    variables.put("studentsList", students);
+                    variables.put("date", LocalDate.now());
+                    variables.put("title", "Étudiants dont le superviseur n'a pas encore évalué l'entreprise");
+                    variables.put("dates", calculateLocalDates(sessionNumber));
+                    return pdfService.renderPdf(new StudentsPdf(variables));
+                });
+    }
+
+
+    //TODO --> remove this because it will no longer be needed
+    protected List<Date> calculateDates(Integer sessionNumber) {
+        List<Date> dates = new ArrayList<>();
+
+        String season = sessionNumber.toString().substring(0, 1);
+        String year = 20 + sessionNumber.toString().substring(1, 3);
+
+        Date startDate = new Date();
+        Date endDate = new Date();
+        if (Integer.parseInt(season) == WINTER) {
+            LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), JANUARY, FIRST);
+            startDate = convertLocalDateToDate(startLocalDate);
+
+            LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), MAY, THIRTY_FIRST);
+            endDate = convertLocalDateToDate(endLocalDate);
+        } else if (Integer.parseInt(season) == SUMMER) {
+            LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), JUNE, FIRST);
+            startDate = convertLocalDateToDate(startLocalDate);
+
+            LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), AUGUST, THIRTY);
+            endDate = convertLocalDateToDate(endLocalDate);
+        } else if (Integer.parseInt(season) == FALL) {
+            LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), SEPTEMBER, FIRST);
+            startDate = convertLocalDateToDate(startLocalDate);
+
+            LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), DECEMBER, THIRTY_FIRST);
+            endDate = convertLocalDateToDate(endLocalDate);
+        }
+
+        dates.add(startDate);
+        dates.add(endDate);
+
+        return dates;
+    }
+
+    //TODO --> remove this because it will no longer be needed
+    protected List<LocalDate> calculateLocalDates(Integer sessionNumber) {
+        List<LocalDate> dates = new ArrayList<>();
+
+        String season = sessionNumber.toString().substring(0, 1);
+        String year = 20 + sessionNumber.toString().substring(1, 3);
+
+        LocalDate startLocalDate = null;
+        LocalDate endLocalDate = null;
+        if (Integer.parseInt(season) == WINTER) {
+            startLocalDate = LocalDate.of(Integer.parseInt(year), JANUARY, FIRST);
+            endLocalDate = LocalDate.of(Integer.parseInt(year), MAY, THIRTY_FIRST);
+        } else if (Integer.parseInt(season) == SUMMER) {
+            startLocalDate = LocalDate.of(Integer.parseInt(year), JUNE, FIRST);
+            endLocalDate = LocalDate.of(Integer.parseInt(year), AUGUST, THIRTY);
+        } else if (Integer.parseInt(season) == FALL) {
+            startLocalDate = LocalDate.of(Integer.parseInt(year), SEPTEMBER, FIRST);
+            endLocalDate = LocalDate.of(Integer.parseInt(year), DECEMBER, THIRTY_FIRST);
+        }
+
+        dates.add(startLocalDate);
+        dates.add(endLocalDate);
+
+        return dates;
+    }
+
+    //TODO --> remove this because it will no longer be needed
+    protected Date convertLocalDateToDate(LocalDate localDate) {
+        ZoneId defaultZoneId = ZoneId.systemDefault();
+        return Date.from(localDate.atStartOfDay(defaultZoneId).toInstant());
+    }
+ */
 
 }

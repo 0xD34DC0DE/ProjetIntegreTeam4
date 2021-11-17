@@ -66,7 +66,6 @@ const Sidebar = ({ open, onSelectionChanged }) => {
               mt: "auto",
               mb: 6,
               fontSize: "0.7em",
-              color: "text.primary",
               color: "rgba(255, 255, 255, 0.5)",
             }}
           >

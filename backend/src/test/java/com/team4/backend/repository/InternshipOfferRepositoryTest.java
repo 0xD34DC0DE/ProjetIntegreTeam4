@@ -1,10 +1,7 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.InternshipOffer;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -147,6 +144,7 @@ public class InternshipOfferRepositoryTest {
 
         //ASSERT
         StepVerifier.create(internshipOfferFlux)
+                //TODO: fix test, result will differ if all tests are ran at the same time or individually
                 .expectNextCount(2)
                 .verifyComplete();
     }

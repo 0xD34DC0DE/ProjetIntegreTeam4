@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import { Box, Dialog, DialogContent } from "@mui/material";
+import { Dialog, DialogContent } from "@mui/material";
 import PdfView from "./PdfView"
 
 function ReportDialog({ open, toggleDialog, reportUrl, semesterFullName,setReportUrl, sessionNumber }) {

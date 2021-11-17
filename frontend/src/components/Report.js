@@ -5,7 +5,6 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 const Report = ({ title, url, setReportUrl }) => {
     return (
         <ButtonBase
-            // className={props.classes.cardAction}
             onClick={event => {
                 setReportUrl(url);
             }}

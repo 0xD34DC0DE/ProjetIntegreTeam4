@@ -28,14 +28,13 @@ public class PdfController {
         this.studentService = studentService;
     }
 
+    //TODO: remove test controller method for final product
     @PreAuthorize("hasAnyAuthority('STUDENT', 'INTERNSHIP_MANAGER')")
     @GetMapping(value = "/test", produces = MediaType.APPLICATION_PDF_VALUE)
     public Mono<byte[]> getTestPdf() {
         return studentService.getAll().collectList()
                 .flatMap(student -> {
                     List<Student> studentList = student;
-//                    studentList.add(student);
-
                     Map<String, Object> variables = new HashMap<>();
                     variables.put("students", studentList);
                     return pdfService.renderPdf(new StudentPdfTemplate(variables));

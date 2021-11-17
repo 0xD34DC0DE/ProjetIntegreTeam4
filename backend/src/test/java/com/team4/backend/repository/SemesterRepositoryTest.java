@@ -5,6 +5,7 @@ import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.testdata.SemesterMockData;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,5 +1,3 @@
-import { UserInfoContext } from "../stores/UserInfoStore";
-// import axios from "axios";
 import {
   Grid,
   Typography,
@@ -9,8 +7,11 @@ import {
   MenuItem,
   Box,
 } from "@mui/material";
-import React, { useState, useContext, useEffect } from "react";
-import Report from "./Report";
+import React, {
+    useState,
+    useEffect
+} from "react";
+import Report from "./Report"
 import ReportDialog from "./ReportDialog";
 import SemesterSelect from "./SemesterSelect";
 

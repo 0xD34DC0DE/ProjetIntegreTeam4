@@ -166,4 +166,22 @@ class ReportControllerTest {
                 .expectStatus().isOk();
     }
 
+    /*
+
+
+    @Test
+    void shouldGenerateStudentsWithSupervisorWithNoCompanyEvaluation() {
+        //ARRANGE
+        doReturn(ReportMockData.getMonoBytes()).when(reportService).generateStudentsWithSupervisorWithNoCompanyEvaluation(any());
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/report/generateStudentsWithSupervisorWithNoCompanyEvaluation/321")
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk();
+    }
+     */
+
 }
