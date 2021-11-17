@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Box,
   TextareaAutosize,
   Typography,
 } from "@mui/material";
@@ -27,30 +26,28 @@ const CvValidationDialog = ({ id, removeCv }) => {
   };
 
   const validateCv = (valid, rejectionExplanation) => {
-    {
-      axios({
-        method: "PATCH",
-        url: "http://localhost:8080/file/validateCv",
-        headers: {
-          Authorization: userInfo.jwt,
-        },
-        params: {
-          id: id,
-          isValid: valid,
-        },
-        data: { rejectionExplanation },
-        responseType: "json",
+    axios({
+      method: "PATCH",
+      url: "http://localhost:8080/file/validateCv",
+      headers: {
+        Authorization: userInfo.jwt,
+      },
+      params: {
+        id: id,
+        isValid: valid,
+      },
+      data: { rejectionExplanation },
+      responseType: "json",
+    })
+      .then(() => {
+        setRejectionExplanation(null);
+        setIsRejecting(false);
+        removeCv(id);
+        handleClose();
       })
-        .then(() => {
-          setRejectionExplanation(null);
-          setIsRejecting(false);
-          removeCv(id);
-          handleClose();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleClose = () => {
@@ -90,8 +87,8 @@ const CvValidationDialog = ({ id, removeCv }) => {
                 <DialogTitle sx={{ pt: 0 }}>
                   Raison du rejet du C.V.
                 </DialogTitle>
-                {(rejectionExplanation == "" ||
-                  rejectionExplanation == null) && (
+                {(rejectionExplanation === "" ||
+                  rejectionExplanation === null) && (
                   <Typography sx={{ color: "red" }}>{errorMessage}</Typography>
                 )}
                 <TextareaAutosize
@@ -104,7 +101,7 @@ const CvValidationDialog = ({ id, removeCv }) => {
                   style={{
                     font: "14px arial, sans-serif",
                     borderColor:
-                      rejectionExplanation != "" || rejectionExplanation != null
+                      rejectionExplanation !== "" || rejectionExplanation !== null
                         ? "black"
                         : "red",
                     resize: "none",
@@ -117,8 +114,8 @@ const CvValidationDialog = ({ id, removeCv }) => {
               <Button
                 onClick={() => {
                   if (
-                    rejectionExplanation != null &&
-                    rejectionExplanation != ""
+                    rejectionExplanation !== null &&
+                    rejectionExplanation !== ""
                   ) {
                     validateCv(false, rejectionExplanation);
                   } else {

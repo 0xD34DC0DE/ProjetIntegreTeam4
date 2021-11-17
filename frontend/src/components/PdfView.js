@@ -1,13 +1,9 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { pdfjs } from "react-pdf";
-import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import {
   Pagination,
-  Container,
   Grid,
-  Skeleton,
-  Box,
   Typography,
 } from "@mui/material";
 import axios from "axios";
@@ -29,43 +25,42 @@ function PdfView({ pdfUrl, params }) {
   useEffect(() => {
     const getPdf = () => {
       var config;
-      if (pdfUrl.substring(0, 5) == 'https') {
-        config = {
-          Accept: "application/pdf",
-          "Access-Control-Allow-Origin": "*",
-          'Access-Control-Allow-Methods':'GET',
+        if (pdfUrl.indexOf('amazon') === -1) {
+          config = {
+            Accept: "application/pdf",
+            Authorization: userInfo.jwt,
+            "Access-Control-Allow-Origin": "*",
+            'Access-Control-Allow-Methods':'GET',
+          }
+        } else {
+          config = {
+            Accept: "application/pdf",
+            "Access-Control-Allow-Origin": "*",
+            'Access-Control-Allow-Methods':'GET',
+          }
         }
-      } else {
-        config = {
-          Accept: "application/pdf",
-          Authorization: userInfo.jwt,
-          "Access-Control-Allow-Origin": "*",
-          'Access-Control-Allow-Methods':'GET',
-        }
-      }
-      {
-        axios({
-          method: "GET",
-          url: pdfUrl,
-          headers: config,
-          params: { ...params },
-          responseType: "arraybuffer",
+      
+      axios({
+        method: "GET",
+        url: pdfUrl,
+        headers: config,
+        params: { ...params },
+        responseType: "arraybuffer",
+      })
+        .then((response) => {
+          setPdfData(response.data);
         })
-          .then((response) => {
-            setPdfData(response.data);
-          })
-          .catch((error) => {
-            setError(error);
-            console.error(error);
-          });
-      }
+        .catch((error) => {
+          setError(error);
+          console.error(error);
+        });
+      
     };
 
     getPdf();
   }, []);
 
   return (
-    <>
       <Grid
         item
         container
@@ -92,7 +87,6 @@ function PdfView({ pdfUrl, params }) {
           />
         </Grid>
       </Grid>
-    </>
   );
 }
 
