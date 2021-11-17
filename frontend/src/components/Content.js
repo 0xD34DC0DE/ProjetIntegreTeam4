@@ -64,6 +64,7 @@ const Content = ({
           )}
           {userInfo.role === "MONITOR" && (
             <ListStudentApplying
+              open={dialogVisibility.cvDialog}
               visible={selection.id === 6}
               toggleDialog={toggleDialog}
               dialogVisibility={dialogVisibility}

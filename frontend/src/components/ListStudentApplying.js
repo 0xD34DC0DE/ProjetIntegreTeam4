@@ -21,8 +21,9 @@ import EmailSender from "./EmailSender";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import SignContractMonitorDialog from "./SignContractMonitorDialog";
 import SemesterSelect from "./SemesterSelect";
+import CVDialog from "./CVDialog";
 
-const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
+const ListStudentApplying = ({ open, visible, toggleDialog, dialogVisibility }) => {
   const [offers, setOffers] = useState([]);
   const [receiver, setReceiver] = useState("");
   const [userInfo] = useContext(UserInfoContext);
@@ -63,6 +64,54 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
   useEffect(() => {
     fetchData();
   }, [semesterFullName]);
+
+  const [url, setUrl] = useState("");
+
+  useEffect(() => {
+    if (url !== "") {
+        console.log('find cv with this url', url);
+        toggleDialog("cvDialog", true);
+    }
+  }, [url])
+
+  const openCv = (email) => {
+    var assetId = '';
+    axios({
+      method: "GET",
+      baseURL: "http://localhost:8080",
+      url: "/file/getLatestCv/" + email,
+      headers: {
+        Authorization: userInfo.jwt,
+      },
+    }) 
+    .then((response) => {
+      assetId = response.data;
+      setUrl("https://projetintegreteam4.s3.amazonaws.com/" + assetId)
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  }
+
+  const download = (email) => {
+    var assetId = '';
+    axios({
+      method: "GET",
+      baseURL: "http://localhost:8080",
+      url: "/file/getLatestCv/" + email,
+      headers: {
+        Authorization: userInfo.jwt,
+      },
+    }) 
+    .then((response) => {
+      assetId = response.data;
+      window.open("https://projetintegreteam4.s3.amazonaws.com/" + assetId);
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+    
+  };
 
   return (
     <Grid
@@ -271,6 +320,9 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                               "rgba(255, 255, 255, 0.1)",
                                           },
                                         }}
+                                        onClick={() => {
+                                          download(student.email)
+                                        }}
                                       >
                                         <FileDownloadOutlinedIcon
                                           sx={{ color: "white" }}
@@ -329,6 +381,9 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                             backgroundColor:
                                               "rgba(255, 255, 255, 0.1)",
                                           },
+                                        }}
+                                        onClick={() => {
+                                          openCv(student.email)
                                         }}
                                       >
                                         <RemoveRedEyeOutlinedIcon
@@ -399,6 +454,7 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
           studentEmail: receiver.studentEmail,
         }}
       />
+      <CVDialog open={open} toggleDialog={toggleDialog} cvUrl={url} setUrl={setUrl}/>
     </Grid>
   );
 };

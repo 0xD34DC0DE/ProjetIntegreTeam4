@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
+import com.team4.backend.exception.FileNotFoundException;
 import com.team4.backend.mapping.FileMetaDataMapper;
 import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.FileMetaDataService;
@@ -52,5 +53,10 @@ public class FileMetaDataController {
         return fileMetaDataService.validateCv(id, isValid, rejectionExplanation)
                 .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
-
+    
+    @GetMapping("/getLatestCv/{studentEmail}")
+    @PreAuthorize("hasAuthority('MONITOR')")
+    public Mono<String> getFirstValidCv(@PathVariable String studentEmail) {
+        return fileMetaDataService.getAssetIdLastWithUserEmail(studentEmail);
+    }
 }

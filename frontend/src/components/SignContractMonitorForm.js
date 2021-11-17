@@ -105,13 +105,15 @@ const SignContractMonitorForm = ({ studentEmail, offerId }) => {
 
   return (
     <>
-      {alreadySigned === true && (
+      {/* Must be == and not === so that code may work */}
+      {alreadySigned == true && (
         <Grid item alignItems="center" textAlign="center" sx={{ mt: 3 }}>
           <Typography color="green">Contrat signé!</Typography>
         </Grid>
       )}
 
-      {alreadySigned !== null && alreadySigned === false && (
+      {/* Must be == || != and not !=== || === so that code may work */}
+      {alreadySigned != null && alreadySigned == false && (
         <>
           <Grid item alignItems="center" textAlign="center" sx={{ mt: 3 }}>
             <TextField

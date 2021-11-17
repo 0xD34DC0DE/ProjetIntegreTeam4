@@ -46,15 +46,14 @@ function PdfView({ pdfUrl, params }) {
         headers: config,
         params: { ...params },
         responseType: "arraybuffer",
+      }) 
+      .then((response) => {
+        setPdfData(response.data);
       })
-        .then((response) => {
-          setPdfData(response.data);
-        })
-        .catch((error) => {
-          setError(error);
-          console.error(error);
-        });
-      
+      .catch((error) => {
+        setError(error);
+        console.error(error);
+      });
     };
 
     getPdf();

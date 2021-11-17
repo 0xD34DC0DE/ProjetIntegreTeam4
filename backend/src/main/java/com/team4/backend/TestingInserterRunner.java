@@ -447,7 +447,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .assetId("123456789%40gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("123456789@gmail.com")
                         .filename("cv1.pdf")
-                        .isValid(false)
+                        .isValid(true)
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusDays(2))
                         .build(),
@@ -455,7 +455,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("123456789@gmail.com")
                         .filename("cv2.pdf")
-                        .isValid(false)
+                        .isValid(true)
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusWeeks(2)).build(),
                 FileMetaData.builder()
@@ -483,7 +483,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("123667713@gmail.com")
                         .filename("cv1.pdf")
-                        .isValid(false)
+                        .isValid(true)
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusWeeks(2)).build(),
                 FileMetaData.builder()
@@ -505,7 +505,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("3643283423@gmail.com")
                         .filename("cv2.pdf")
-                        .isValid(false)
+                        .isValid(true)
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusDays(2)).build(),
                 FileMetaData.builder()
@@ -518,12 +518,29 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .build(),
                 FileMetaData.builder()
                         .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
+                        .userEmail("student@gmail.com")
+                        .filename("cv1.pdf")
+                        .isValid(true)
+                        .isSeen(false)
+                        .uploadDate(LocalDateTime.now().minusWeeks(2))
+                        .build(),
+                FileMetaData.builder()
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
+                        .userEmail("student@gmail.com")
+                        .filename("cv1.pdf")
+                        .isValid(true)
+                        .isSeen(false)
+                        .uploadDate(LocalDateTime.now().minusDays(3))
+                        .build(),
+                FileMetaData.builder()
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("902938912@gmail.com")
                         .filename("cv2.pdf")
                         .isValid(false)
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now())
                         .build());
+
 
         fileMetaDataRepository.saveAll(fileMetaDataList)
                 .subscribe(f -> log.info("new cv file has been created: {}", f));
