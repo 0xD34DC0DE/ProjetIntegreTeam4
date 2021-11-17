@@ -28,16 +28,26 @@ function PdfView({ pdfUrl, params }) {
 
   useEffect(() => {
     const getPdf = () => {
+      var config;
+      if (pdfUrl.substring(0, 5) == 'https') {
+        config = {
+          Accept: "application/pdf",
+          "Access-Control-Allow-Origin": "*",
+          'Access-Control-Allow-Methods':'GET',
+        }
+      } else {
+        config = {
+          Accept: "application/pdf",
+          Authorization: userInfo.jwt,
+          "Access-Control-Allow-Origin": "*",
+          'Access-Control-Allow-Methods':'GET',
+        }
+      }
       {
         axios({
           method: "GET",
           url: pdfUrl,
-          headers: {
-            Authorization: userInfo.jwt,
-            Accept: "application/pdf",
-            "Access-Control-Allow-Origin": "*",
-            'Access-Control-Allow-Methods':'GET',
-          },
+          headers: config,
           params: { ...params },
           responseType: "arraybuffer",
         })
