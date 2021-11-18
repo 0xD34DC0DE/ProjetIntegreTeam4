@@ -1,8 +1,8 @@
 import { Button, Checkbox, FormControlLabel, Grid, Typography } from "@mui/material";
 import { grey } from "@mui/material/colors";
-import React, { useContext, useState, useEffect } from "react";
-import { UserInfoContext } from "../../stores/UserInfoStore";
 import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { UserInfoContext } from "../../stores/UserInfoStore";
 
 function SignContractForm({ contractId }) {
   const [hasAccepted, setHasAccepted] = useState(false);
