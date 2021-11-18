@@ -1,17 +1,14 @@
-import {
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-  Grid,
-  Tooltip,
-} from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import {
+  Grid, IconButton,
+  Menu,
+  MenuItem, Tooltip, Typography
+} from "@mui/material";
 import axios from "axios";
-import Notification from "./Notification";
+import React, { useContext, useEffect, useState } from "react";
 import { UserInfoContext } from "../../stores/UserInfoStore";
-import { KeyboardReturnOutlined } from "@mui/icons-material";
+import Notification from "./Notification";
+import dispatchNotificationClickEvent from "./NotificationClickDispatch";
 
 const severity = {
   high: { color: "rgba(200, 100, 100, 1)" },
