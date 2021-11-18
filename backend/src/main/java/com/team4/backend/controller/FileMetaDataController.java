@@ -54,18 +54,15 @@ public class FileMetaDataController {
                 .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 
-<<<<<<< HEAD
     @GetMapping("/getAllCvByUserEmail/{userEmail}")
     @PreAuthorize("hasAuthority('STUDENT')")
     public Flux<FileMetaDataStudentViewDto> getAllCvByUserEmail(@PathVariable String userEmail) {
         return fileMetaDataService.getAllCvByUserEmail(userEmail).map(FileMetaDataMapper::toStudentViewDto);
     }
 
-=======
     @GetMapping("/getLatestCv/{studentEmail}")
     @PreAuthorize("hasAuthority('MONITOR')")
     public Mono<String> getFirstValidCv(@PathVariable String studentEmail) {
         return fileMetaDataService.getLastValidatedCvWithUserEmail(studentEmail);
     }
->>>>>>> b08952a42262e211490815b59452ecdb09ec8706
 }

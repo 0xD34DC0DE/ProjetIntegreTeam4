@@ -165,7 +165,8 @@ class FileMetaDataControllerTest {
                 .expectStatus().isOk()
                 .expectBodyList(FileMetaDataStudentViewDto.class);
     }
-    
+
+    @Test
     void shouldGetFirstValidCv() {
         //ARRANGE
         when(fileMetaDataService.getLastValidatedCvWithUserEmail(any())).thenReturn(Mono.just("assetId"));
@@ -173,14 +174,11 @@ class FileMetaDataControllerTest {
         //ACT
         webTestClient
                 .get()
-                .uri(uriBuilder ->
-                        uriBuilder
-                                .path("/file/getAllCvByUserEmail/"+fileMetaDataList.get(0).getUserEmail())
-                                .build())
+                .uri("/file/getLatestCv/studentEmail")
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
-                .expectBodyList(FileMetaDataStudentViewDto.class);
+                .expectBody(String.class);
     }
 
 }
