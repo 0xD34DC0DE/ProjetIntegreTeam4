@@ -1,12 +1,12 @@
-import "./App.css";
+import { ThemeProvider } from "@mui/material/styles";
 import { useState } from "react";
+import "./App.css";
+import { sidebarList } from "./components/Configuration";
 import Content from "./components/Content";
 import Sidebar from "./components/Sidebar";
+import theme from "./components/Theme";
 import Topbar from "./components/Topbar";
 import UserInfoStore from "./stores/UserInfoStore";
-import { sidebarList } from "./components/Configuration";
-import theme from "./components/Theme";
-import { ThemeProvider } from "@mui/material/styles";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
