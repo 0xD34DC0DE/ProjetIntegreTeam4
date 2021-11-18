@@ -1,16 +1,10 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
-import { pdfjs } from "react-pdf";
-import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
-import { UserInfoContext } from "../stores/UserInfoStore";
 import {
-  Pagination,
-  Container,
-  Grid,
-  Skeleton,
-  Box,
-  Typography,
+  Grid, Pagination, Typography
 } from "@mui/material";
 import axios from "axios";
+import React, { useContext, useEffect, useState } from "react";
+import { pdfjs } from "react-pdf";
+import { UserInfoContext } from "../stores/UserInfoStore";
 import PdfContainer from "./PdfContainer";
 
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.min.js";
