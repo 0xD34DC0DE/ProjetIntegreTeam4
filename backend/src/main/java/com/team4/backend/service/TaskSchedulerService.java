@@ -21,9 +21,12 @@ public class TaskSchedulerService {
 
     private final SemesterService semesterService;
 
-    public TaskSchedulerService(StudentService studentService, SemesterService semesterService) {
+    private final InternshipContractService internshipContractService;
+
+    public TaskSchedulerService(StudentService studentService, SemesterService semesterService, InternshipContractService internshipContractService) {
         this.studentService = studentService;
         this.semesterService = semesterService;
+        this.internshipContractService = internshipContractService;
     }
 
     @Scheduled(cron = "0 00 0 ? * *")
@@ -68,5 +71,12 @@ public class TaskSchedulerService {
                                 LocalDateTime.now()));
     }
 
+
+    @Scheduled(cron = "0 00 0 ? * *")
+    private void notifyMonitorsTwoWeeksLeftContract() {
+        internshipContractService.notifyMonitorsTwoWeeksLeft();
+
+        log.info("TWO WEEKS LEFT CONTRACT - NOTIFYING MONITORS");
+    }
 
 }

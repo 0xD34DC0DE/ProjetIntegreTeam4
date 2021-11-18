@@ -8,6 +8,7 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 
+import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -32,6 +33,11 @@ public class CustomStudentRepositoryImpl implements CustomStudentRepository {
         query.addCriteria(Criteria.where("studentState").is(state))
                 .addCriteria(Criteria.where("interviewsDate").ne(new TreeSet<>()));
 
+        return mongoOperations.find(query, Student.class);
+    }
+
+    public Flux<Student> findAllByIds(List<String> ids) {
+        Query query = Query.query(Criteria.where("id").in(ids));
         return mongoOperations.find(query, Student.class);
     }
 

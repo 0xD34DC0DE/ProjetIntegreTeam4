@@ -17,6 +17,7 @@ import java.util.Map;
 @AllArgsConstructor
 @Repository
 public class FileAssetRepository {
+
     private final AmazonS3 amazonS3;
 
     public Mono<PutObjectResult> create(String location, InputStream fileStream, Map<String, String> options) throws FileNotFoundException {

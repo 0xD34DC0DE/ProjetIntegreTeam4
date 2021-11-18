@@ -13,6 +13,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Set;
 
 import static com.team4.backend.model.enums.StudentState.*;
@@ -61,6 +62,10 @@ public class StudentService {
 
     public Flux<Student> findAllByEmails(Set<String> emails) {
         return studentRepository.findAllByEmails(emails);
+    }
+
+    public Flux<Student> findAllByIds(List<String> ids) {
+        return studentRepository.findAllByIds(ids);
     }
 
     public Mono<Student> updateCvValidity(String email, Boolean valid) {

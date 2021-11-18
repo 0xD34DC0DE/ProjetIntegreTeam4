@@ -36,12 +36,13 @@ public class JwtUtil {
     }
 
     public String generateToken(User user) {
-        Map<String, Role> claims = new HashMap<>();
+        Map<String, String> claims = new HashMap<>();
         Long expirationTimeLong = Long.parseLong(expirationTime);
         final Date createdDate = new Date();
         final Date expirationDate = new Date(createdDate.getTime() + expirationTimeLong * 1000);
 
-        claims.put("role", user.getRole());
+        claims.put("role", user.getRole().toString());
+        claims.put("id", user.getId());
 
         return Jwts.builder()
                 .setClaims(claims)
