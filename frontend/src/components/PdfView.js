@@ -60,32 +60,32 @@ function PdfView({ pdfUrl, params }) {
   }, []);
 
   return (
-      <Grid
-        item
-        container
-        direction="column"
-        justifyContent={"center"}
-        alignContent={"center"}
-        alignItems={"center"}
-      >
-        <Grid item>
-          <PdfContainer
-            pdfData={pdfData}
-            pageNumber={pageNumber}
-            setPageCount={setNumPages}
-          />
-          {error && <Typography> Erreur lors du chargement du PDF</Typography>}
-        </Grid>
-
-        <Grid item textAlign="center">
-          <Pagination
-            sx={{ mt: 1 }}
-            count={numPages}
-            page={pageNumber}
-            onChange={handlePageChange}
-          />
-        </Grid>
+    <Grid
+      item
+      container
+      direction="column"
+      justifyContent={"center"}
+      alignContent={"center"}
+      alignItems={"center"}
+    >
+      <Grid item>
+        <PdfContainer
+          pdfData={pdfData}
+          pageNumber={pageNumber}
+          setPageCount={setNumPages}
+        />
+        {error && <Typography> Erreur lors du chargement du PDF</Typography>}
       </Grid>
+
+      <Grid item textAlign="center">
+        <Pagination
+          sx={{ mt: 1 }}
+          count={numPages}
+          page={pageNumber}
+          onChange={handlePageChange}
+        />
+      </Grid>
+    </Grid>
   );
 }
 

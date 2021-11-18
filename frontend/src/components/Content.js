@@ -86,7 +86,7 @@ const Content = ({
               toggleDialog={toggleDialog}
               dialogVisibility={dialogVisibility}
             />
-          )} «
+          )}
           {userInfo.role === "SUPERVISOR" && (
             <AssignedStudentSupervisorView
               visible={selection.id === 10}

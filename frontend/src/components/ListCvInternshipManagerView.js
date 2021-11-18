@@ -98,7 +98,7 @@ const ListCvInternshipManagerView = ({ toggleDialog, visible, dialogVisibility }
           >
             <Grid item lg={12} xl={12} md={12} sm={6} xs={6} alignSelf="center">
               {cvs.map((cv, key) => (
-                  <CvInternshipManagerView
+                <CvInternshipManagerView
                   key={key}
                   id={cv.id}
                   assetId={cv.assetId}
@@ -106,7 +106,8 @@ const ListCvInternshipManagerView = ({ toggleDialog, visible, dialogVisibility }
                   filename={cv.filename}
                   uploadDate={cv.uploadDate}
                   removeCv={removeCv}
-                  setUrl={setUrl} />
+                  setUrl={setUrl} 
+                />
               ))}
             </Grid>
           </Grid>
