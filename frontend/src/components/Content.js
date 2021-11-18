@@ -59,7 +59,11 @@ const Content = ({
             description={selection.description}
           />
           {userInfo.role === "INTERNSHIP_MANAGER" && (
-            <ListCvInternshipManagerView visible={selection.id === 1} />
+            <ListCvInternshipManagerView 
+              toggleDialog={toggleDialog}
+              visible={selection.id === 1} 
+              dialogVisibility={dialogVisibility}
+            />
           )}
           {userInfo.role === "MONITOR" && (
             <ListStudentApplying
@@ -69,7 +73,11 @@ const Content = ({
             />
           )}
           {userInfo.role === "STUDENT" && (
-            <UploadCV visible={selection.id === 5} />
+            <UploadCV
+              visible={selection.id === 5}
+              toggleDialog={toggleDialog}
+              dialogVisibility={dialogVisibility}
+            />
           )}
           {userInfo.role === "STUDENT" && (
             <OfferViews visible={selection.id === 4} />
@@ -111,8 +119,8 @@ const Content = ({
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListReport
               toggleDialog={toggleDialog}
-              open={dialogVisibility.reportDialog}
               visible={selection.id === 14}
+              dialogVisibility={dialogVisibility}
             />
           )}
         </Box>

@@ -7,11 +7,20 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
+import java.io.File;
+import java.time.LocalDateTime;
+
 @Repository
 public interface FileMetaDataRepository extends ReactiveMongoRepository<FileMetaData, String> {
+
     Flux<FileMetaData> findFileMetaDataById(String id);
 
     Mono<Long> countAllByIsValidFalseAndIsSeenFalse();
 
     Flux<FileMetaData> findAllByIsValidFalseAndIsSeenFalse(Pageable pageable);
+
+    Flux<FileMetaData> findAllByUserEmail(String userEmail);
+
+    Flux<FileMetaData> findAllByUserEmailAndIsValidTrueOrderByUploadDate(String userEmail);
+    
 }

@@ -18,7 +18,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Service
 public class InternshipOfferService {
@@ -156,6 +155,7 @@ public class InternshipOfferService {
                     .flatMap(student -> addStudentEmailToOfferInterestedStudents(internshipOffer, student));
         });
     }
+
     public Flux<InternshipOfferStudentInterestViewDto> getInterestedStudents(String monitorEmail, String semesterFullName) {
 
         return semesterService.findByFullName(semesterFullName)
@@ -198,15 +198,20 @@ public class InternshipOfferService {
         });
     }
 
+    public Flux<InternshipOffer> getAllNonValidatedOffers(String semesterFullName) {
 
-    //TODO --> refactor so it will take semesterFullName and get range from SemesterService.findByFullName()
-    public Flux<InternshipOffer> getAllNonValidatedOffers(Date sessionStart, Date sessionEnd) {
-        return internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyBetween(sessionStart, sessionEnd);
+        return semesterService.findByFullName(semesterFullName)
+                .flatMapMany(semester ->
+                        internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyIsBetween(semester.getFrom(), semester.getTo())
+                );
     }
 
-    //TODO --> refactor so it will take semesterFullName and get range from SemesterService.findByFullName()
-    public Flux<InternshipOffer> getAllValidatedOffers(Date sessionStart, Date sessionEnd) {
-        return internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyBetween(sessionStart, sessionEnd);
+    public Flux<InternshipOffer> getAllValidatedOffers(String semesterFullName) {
+
+        return semesterService.findByFullName(semesterFullName)
+                .flatMapMany(semester ->
+                        internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyIsBetween(semester.getFrom(), semester.getTo())
+                );
     }
 
 }

@@ -19,16 +19,17 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    @GetMapping(value = "/generateAllNonValidatedOffersReport/{session}", produces = MediaType.APPLICATION_PDF_VALUE)
+
+    @GetMapping(value = "/generateAllNonValidatedOffersReport/{semesterFullName}", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Mono<byte[]> generateAllNonValidatedOffersReport(@PathVariable("session") Integer sessionNumber) {
-        return reportService.generateAllNonValidatedOffersReport(sessionNumber);
+    public Mono<byte[]> generateAllNonValidatedOffersReport(@PathVariable String semesterFullName) {
+        return reportService.generateAllNonValidatedOffersReport(semesterFullName);
     }
 
-    @GetMapping(value = "/generateAllValidatedOffersReport/{session}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/generateAllValidatedOffersReport/{semesterFullName}", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Mono<byte[]> generateAllValidatedOffersReport(@PathVariable("session") Integer sessionNumber) {
-        return reportService.generateAllValidatedOffersReport(sessionNumber);
+    public Mono<byte[]> generateAllValidatedOffersReport(@PathVariable String semesterFullName) {
+        return reportService.generateAllValidatedOffersReport(semesterFullName);
     }
 
     @GetMapping(value = "/generateAllStudentsReport", produces = MediaType.APPLICATION_PDF_VALUE)
@@ -73,16 +74,16 @@ public class ReportController {
         return reportService.generateStudentsWithInternshipReport();
     }
 
-    @GetMapping(value = "/generateStudentsNotEvaluatedReport/{session}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/generateStudentsNotEvaluatedReport/{fullName}", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Mono<byte[]> generateStudentsNotEvaluatedReport(@PathVariable("session") Integer sessionNumber) {
-        return reportService.generateStudentsNotEvaluatedReport(sessionNumber);
+    public Mono<byte[]> generateStudentsNotEvaluatedReport(@PathVariable("fullName") String semesterFullName) {
+        return reportService.generateStudentsNotEvaluatedReport(semesterFullName);
     }
 
-    @GetMapping(value = "/generateStudentsWithSupervisorWithNoCompanyEvaluation/{session}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/generateStudentsWithSupervisorWithNoCompanyEvaluation/{semesterFullName}", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Mono<byte[]> generateStudentsWithSupervisorWithNoCompanyEvaluation(@PathVariable("session") Integer sessionNumber) {
-        return reportService.generateStudentsWithSupervisorWithNoCompanyEvaluation(sessionNumber);
+    public Mono<byte[]> generateStudentsWithSupervisorWithNoCompanyEvaluation(@PathVariable String semesterFullName) {
+        return reportService.generateStudentsWithSupervisorWithNoCompanyEvaluation(semesterFullName);
     }
 
 }

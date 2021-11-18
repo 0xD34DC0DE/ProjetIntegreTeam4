@@ -10,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 public class SupervisorMockData {
@@ -36,7 +37,7 @@ public class SupervisorMockData {
                 .lastName("Poulin")
                 .studentEmails(getTimeStampedEntries().stream()
                         .map(TimestampedEntry::getEmail)
-                        .collect(Collectors.toSet()))
+                        .collect(Collectors.toCollection(TreeSet::new)))
                 .phoneNumber("438-999-1234")
                 .registrationDate(null) // Current date
                 .build();

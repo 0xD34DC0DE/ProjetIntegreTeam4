@@ -20,8 +20,10 @@ public abstract class FileMetaDataMapper {
         return FileMetaDataStudentViewDto.builder()
                 .filename(fileMetaData.getFilename())
                 .isValid(fileMetaData.getIsValid())
+                .isSeen(fileMetaData.getIsSeen())
                 .uploadDate(fileMetaData.getUploadDate())
                 .seenDate(fileMetaData.getSeenDate())
+                .rejectionExplanation(fileMetaData.getRejectionExplanation())
                 .build();
     }
 
