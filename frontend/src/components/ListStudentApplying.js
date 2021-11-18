@@ -52,7 +52,6 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
 
   const updateSemesterFullName = (fullName) => {
     setSemesterFullName(fullName);
-    console.log(fullName);
   };
 
   const getStudentInitials = (fullName) => {
@@ -69,12 +68,11 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
 
   useEffect(() => {
     if (url !== "") {
-        console.log('find cv with this url', url);
         toggleDialog("cvDialog", true);
     }
   }, [url])
 
-  const openCv = (email) => {
+  const showCv = (email, medium) => {
     var assetId = '';
     axios({
       method: "GET",
@@ -86,32 +84,16 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
     }) 
     .then((response) => {
       assetId = response.data;
-      setUrl("https://projetintegreteam4.s3.amazonaws.com/" + assetId)
+      if (medium) {
+        setUrl("https://projetintegreteam4.s3.amazonaws.com/" + assetId)
+      } else {
+        window.open("https://projetintegreteam4.s3.amazonaws.com/" + assetId);
+      }
     })
     .catch((error) => {
       console.error(error);
     });
   }
-
-  const download = (email) => {
-    var assetId = '';
-    axios({
-      method: "GET",
-      baseURL: "http://localhost:8080",
-      url: "/file/getLatestCv/" + email,
-      headers: {
-        Authorization: userInfo.jwt,
-      },
-    }) 
-    .then((response) => {
-      assetId = response.data;
-      window.open("https://projetintegreteam4.s3.amazonaws.com/" + assetId);
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-    
-  };
 
   return (
     <Grid
@@ -321,7 +303,7 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                           },
                                         }}
                                         onClick={() => {
-                                          download(student.email)
+                                          showCv(student.email, false)
                                         }}
                                       >
                                         <FileDownloadOutlinedIcon
@@ -383,7 +365,7 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                           },
                                         }}
                                         onClick={() => {
-                                          openCv(student.email)
+                                          showCv(student.email, true)
                                         }}
                                       >
                                         <RemoveRedEyeOutlinedIcon

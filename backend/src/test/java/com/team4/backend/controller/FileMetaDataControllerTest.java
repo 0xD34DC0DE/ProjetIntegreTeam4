@@ -143,4 +143,19 @@ class FileMetaDataControllerTest {
                 .expectBodyList(String.class);
     }
 
+    @Test
+    void shouldGetFirstValidCv() {
+        //ARRANGE
+        when(fileMetaDataService.getAssetIdLastWithUserEmail(any())).thenReturn(Mono.just("assetId"));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/file/getLatestCv/studentEmail")
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBody(String.class);
+    }
+
 }

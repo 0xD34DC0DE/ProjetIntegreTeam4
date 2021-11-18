@@ -3,6 +3,7 @@ package com.team4.backend.testdata;
 import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
 import com.team4.backend.model.FileMetaData;
 import com.team4.backend.model.enums.UploadType;
+import reactor.core.publisher.Flux;
 
 import java.time.LocalDateTime;
 
@@ -28,6 +29,15 @@ public abstract class FileMetaDataMockData {
                 .userEmail("123456@gmail.com")
                 .filename("CV.pdf")
                 .build();
+    }
+
+    public static Flux<FileMetaData> getAssetIdLastWithUserEmailFlux() {
+        return Flux.just(
+                FileMetaData.builder()
+                        .assetId("assetId1").build(),
+                FileMetaData.builder()
+                        .assetId("assetId2").build()
+        );
     }
 
 }

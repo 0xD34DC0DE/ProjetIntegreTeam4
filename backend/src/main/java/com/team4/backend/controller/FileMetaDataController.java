@@ -1,7 +1,6 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
-import com.team4.backend.exception.FileNotFoundException;
 import com.team4.backend.mapping.FileMetaDataMapper;
 import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.FileMetaDataService;
