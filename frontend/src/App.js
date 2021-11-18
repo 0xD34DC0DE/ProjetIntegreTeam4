@@ -26,6 +26,7 @@ function App() {
     reportDialog: false,
     cvDialog: false,
     signContractMonitorDialog: false,
+    cvRejectionExplanationDialog: false,
   });
 
   const onSelectionChanged = (item) => {

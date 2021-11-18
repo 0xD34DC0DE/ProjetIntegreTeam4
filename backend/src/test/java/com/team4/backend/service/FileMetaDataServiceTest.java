@@ -26,6 +26,7 @@ import reactor.test.StepVerifier;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -195,6 +196,24 @@ class FileMetaDataServiceTest {
         StepVerifier.create(fileMetaDataMono)
                 .expectError(FileNotFoundException.class)
                 .verify();
+    }
+
+    @Test
+    void getAllCvByUserEmail(){
+        //ARRANGE
+        List<FileMetaData> fileMetaDataList = FileMetaDataMockData.getAllRejectedFileMetaData();
+        when(fileMetaDataRepository.findAllByUserEmail(fileMetaDataList.get(0).getUserEmail())).thenReturn(Flux.fromIterable(fileMetaDataList));
+
+
+        //ACT
+        Flux<FileMetaData> fileMetaDataMono = fileMetaDataService.getAllCvByUserEmail(fileMetaDataList.get(0).getUserEmail());
+
+        //ASSERT
+        StepVerifier
+                .create(fileMetaDataMono)
+                .assertNext(f -> assertEquals(fileMetaDataList.get(0).getUserEmail(), f.getUserEmail()))
+                .assertNext(f -> assertEquals(fileMetaDataList.get(1).getUserEmail(), f.getUserEmail()))
+                .verifyComplete();
     }
 
     @Test
