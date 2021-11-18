@@ -78,4 +78,17 @@ public class InternshipContract {
 
         return false;
     }
+
+    public boolean isUserInContract(String userId) {
+        if (userId.equals(studentSignature.getUserId()))
+            return true;
+
+        if (userId.equals(internshipManagerSignature.getUserId()))
+            return true;
+
+        if (userId.equals(monitorSignature.getUserId()))
+            return true;
+
+        return false;
+    }
 }
