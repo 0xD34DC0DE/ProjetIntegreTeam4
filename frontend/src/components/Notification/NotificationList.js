@@ -8,7 +8,6 @@ import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { UserInfoContext } from "../../stores/UserInfoStore";
 import Notification from "./Notification";
-import { UserInfoContext } from "../../stores/UserInfoStore";
 import dispatchNotificationClickEvent from "./NotificationClickDispatch";
 
 const severity = {
