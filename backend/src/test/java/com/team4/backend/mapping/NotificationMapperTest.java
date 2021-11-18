@@ -42,8 +42,7 @@ public class NotificationMapperTest {
         assertEquals(notification.getContent(), notificationDto.getContent());
         assertEquals(notification.getSeverity(), notificationDto.getSeverity());
         assertEquals(notification.getData(), notificationDto.getData());
-        assertEquals(notification.getCreationDate(), notificationDto.getCreationDate());
-
+        assertNotNull(notificationDto.getCreationDate());
     }
 
 }

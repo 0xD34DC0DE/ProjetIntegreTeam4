@@ -12,6 +12,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Data
+@Builder
 @NoArgsConstructor
 public class NotificationDto implements Serializable {
 
@@ -21,7 +22,8 @@ public class NotificationDto implements Serializable {
     private Set<String> receiverIds;
     private Map<String, String> data;
     private NotificationSeverity severity;
-    private LocalDateTime creationDate;
+    @Builder.Default
+    private LocalDateTime creationDate = LocalDateTime.now();
 
     @Builder(builderMethodName = "notificationDtoBuilder")
     public NotificationDto(String id,

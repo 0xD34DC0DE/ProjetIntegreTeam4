@@ -2,6 +2,7 @@ package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipContractCreationDto;
 import com.team4.backend.dto.InternshipContractDto;
+import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.mapping.NotificationMapper;
 import com.team4.backend.model.*;
 import com.team4.backend.model.enums.NotificationSeverity;
@@ -287,13 +288,15 @@ public class InternshipContractService {
     }
 
     public Mono<Notification> createTwoWeeksNoticeNotification(Monitor monitor, Student student) {
-        Notification notification = Notification.notificationBuilder()
+        NotificationDto notificationDto = NotificationDto.notificationDtoBuilder()
+                .id(null)
+                .creationDate(null)
                 .title("Avis de fin de stage")
                 .content("Le stage de l'étudiant " + student.getFirstName() + " " + student.getLastName() + " se termine dans deux semaines (" + LocalDate.now() + ")")
                 .severity(NotificationSeverity.LOW)
                 .receiverIds(Set.of(monitor.getId()))
                 .build();
-        return notificationService.createNotification(NotificationMapper.toDto(notification));
+        return notificationService.createNotification(notificationDto);
     }
 
 }
