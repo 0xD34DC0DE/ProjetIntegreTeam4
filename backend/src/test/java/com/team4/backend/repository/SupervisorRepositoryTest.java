@@ -2,7 +2,6 @@ package com.team4.backend.repository;
 
 import com.team4.backend.model.Supervisor;
 import lombok.extern.java.Log;
-import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -16,6 +15,8 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 @Log
 @DataMongoTest
 @EnableAutoConfiguration
@@ -28,15 +29,16 @@ public class SupervisorRepositoryTest {
     SupervisorRepository supervisorRepository;
 
     @BeforeAll
-    void init(){
+    void init() {
         Flux<Supervisor> supervisors = Flux.just(Supervisor.supervisorBuilder()
                 .email("supervisortest@gmail.com")
                 .build());
 
         supervisorRepository.saveAll(supervisors).subscribe();
     }
+
     @Test
-    void shouldFindSupervisorByEmail(){
+    void shouldFindSupervisorByEmail() {
         //ARRANGE
         String supervisorEmail = "supervisortest@gmail.com";
 
@@ -45,12 +47,12 @@ public class SupervisorRepositoryTest {
 
         //ASSERT
         StepVerifier.create(supervisor)
-            .assertNext(s -> assertEquals(supervisorEmail, s.getEmail()))
-            .verifyComplete();
+                .assertNext(s -> assertEquals(supervisorEmail, s.getEmail()))
+                .verifyComplete();
     }
 
     @Test
-    void shouldNotFindSupervisorByEmail(){
+    void shouldNotFindSupervisorByEmail() {
         //ARRANGE
         String supervisorEmail = "test_wrong_email@gmail.com";
 
@@ -63,4 +65,5 @@ public class SupervisorRepositoryTest {
                 .expectNextCount(0)
                 .verifyComplete();
     }
+
 }

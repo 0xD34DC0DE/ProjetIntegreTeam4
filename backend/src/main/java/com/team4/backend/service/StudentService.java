@@ -28,10 +28,16 @@ public class StudentService {
 
     private final UserService userService;
 
-    public StudentService(StudentRepository studentRepository, PBKDF2Encoder pbkdf2Encoder, UserService userService) {
+    private final SemesterService semesterService;
+
+    public StudentService(StudentRepository studentRepository,
+                          PBKDF2Encoder pbkdf2Encoder,
+                          UserService userService,
+                          SemesterService semesterService) {
         this.studentRepository = studentRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
         this.userService = userService;
+        this.semesterService = semesterService;
     }
 
     public Mono<Student> registerStudent(Student student) {
@@ -142,22 +148,22 @@ public class StudentService {
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Could not find student with id: " + studentId)));
     }
 
-    //TODO --> refactor to pass semesterFullName in argument and get range from SemesterService.findByFullName()
-    public Flux<Student> getAllWithEvaluationDateBetween(LocalDate sessionStart, LocalDate sessionEnd) {
-        return studentRepository.findAllByEvaluationsDatesIsBetween(sessionStart, sessionEnd)
-                .collectList()
-                .flatMapMany(students -> {
-                    //TODO replace loops with .forEach() during refactor
-                    for (Student student : students) {
-                        for (LocalDate date : student.getEvaluationsDates()) {
-                            //TODO use anyMatch() to check if a date matches time period
-                            if (date.isAfter(sessionStart) && date.isBefore(sessionEnd)) {
-                                return Flux.just(student);
-                            }
-                        }
-                    }
-                    return Flux.empty();
-                });
+    public Flux<Student> getAllWithNoEvaluationDateDuringSemester(String semesterFullName) {
+
+        return semesterService
+                .findByFullName(semesterFullName)
+                .flatMapMany(semester -> studentRepository.findAllByStudentState(INTERNSHIP_FOUND)
+                        .filter(student ->
+                                student.getEvaluationsDates().isEmpty() ||
+                                        student.getEvaluationsDates()
+                                                .stream()
+                                                .anyMatch(date -> date.atStartOfDay().isBefore(semester.getFrom()) &&
+                                                        date.atStartOfDay().isAfter(semester.getTo())
+                                                )
+
+
+                        )
+                );
     }
 
     public Mono<Long> updateStudentStateForAllStudentThatInterviewDateHasPassed() {
@@ -165,7 +171,16 @@ public class StudentService {
                 .map(student -> {
                     student.setStudentState(StudentState.WAITING_FOR_RESPONSE);
                     log.info("STATE UPDATED : " + student.getFirstName() + ", " + student.getLastName());
-                    return studentRepository.save(student).subscribe();
+                    return save(student).subscribe();
+                }).count();
+    }
+
+    public Mono<Long> resetStudentStateForAllStudentWithInternship() {
+        return getStudentsWithInternship()
+                .map(student -> {
+                    log.info("RESET STATE : " + student.getFirstName() + ", " + student.getLastName());
+                    student.setStudentState(INTERNSHIP_NOT_FOUND);
+                    return save(student).subscribe();
                 }).count();
     }
 
