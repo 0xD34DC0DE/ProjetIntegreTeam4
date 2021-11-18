@@ -20,6 +20,8 @@ const NotificationList = ({
   menuOpen,
   setMenuOpen,
   handleMenuClose,
+  onSelectionChanged,
+  toggleDialog,
 }) => {
   const [notifications, setNotifications] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
@@ -67,6 +69,15 @@ const NotificationList = ({
       .catch(console.error);
   };
 
+  const onNotificationClick = (notification) => {
+    dispatchNotificationClickEvent({
+      notificationType: notification.notificationType,
+      data: notification.data,
+      toggleDialog,
+      onSelectionChanged,
+    });
+  };
+
   return (
     <Grid container justifyContent="flex-end">
       <Menu
@@ -93,6 +104,7 @@ const NotificationList = ({
                   backgroundColor: "rgba(100, 100, 100, 0.05)",
                   mb: 0.5,
                 }}
+                onClick={() => onNotificationClick(notification)}
               >
                 <Grid container>
                   <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
