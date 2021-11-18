@@ -7,7 +7,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @NoArgsConstructor
 @ResponseStatus(code = HttpStatus.NOT_FOUND)
 public class ContractNotFoundException extends Exception {
+
     public ContractNotFoundException(String message) {
         super(message);
     }
+
 }
