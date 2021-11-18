@@ -136,7 +136,44 @@ public class InternshipContractService {
 
     public Mono<InternshipContract> initiateContract(InternshipContractCreationDto internshipContractCreationDto) {
         return buildInternshipContractFromInternshipContractCreationDto(internshipContractCreationDto)
-                .flatMap(internshipContractRepository::save);
+                .flatMap(internshipContractRepository::save)
+                .flatMap(this::sendContractCreationNotifications);
+    }
+
+    private Mono<InternshipContract> sendContractCreationNotifications(InternshipContract internshipContract) {
+        return internshipOfferService.findInternshipOfferById(internshipContract.getInternshipOfferId())
+                .flatMap(internshipOffer -> {
+                    Signature studentSignature = internshipContract.getStudentSignature();
+                    Signature internshipManagerSignature = internshipContract.getInternshipManagerSignature();
+                    String companyName = internshipOffer.getCompanyName();
+
+                    Set<String> userIds = new HashSet<>() {{
+                        add(studentSignature.getUserId());
+                        add(internshipManagerSignature.getUserId());
+                    }};
+
+                    NotificationDto usersNotificationDto = getNotificationDto(
+                            internshipContract.getId(),
+                            userIds,
+                            companyName);
+
+                    return notificationService.createNotifications(usersNotificationDto)
+                            .map(unused -> internshipContract);
+                });
+    }
+
+    private NotificationDto getNotificationDto(String internshipContractId, Set<String> userIds, String companyName) {
+        Map<String, String> notificationData = new HashMap<>();
+        notificationData.put("contractId", internshipContractId);
+
+        return NotificationDto.notificationDtoBuilder()
+                .title("Signature de contrat")
+                .content("Signature du contrat pour: " + companyName)
+                .receiverIds(userIds)
+                .data(notificationData)
+                .severity(NotificationSeverity.HIGH)
+                .notificationType(NotificationType.SIGN_CONTRACT)
+                .build();
     }
 
     public Mono<byte[]> getContract(String internshipOfferId, String studentEmail) {
@@ -168,33 +205,19 @@ public class InternshipContractService {
     }
 
     private Mono<InternshipContract> verifyUserIsInContract(InternshipContract internshipContract, String userEmail) {
-        return Mono.zip(
-                internshipManagerService.findById(
-                        internshipContract.getInternshipManagerSignature().getUserId()
-                ).map(User::getEmail),
-                studentService.findById(
-                        internshipContract.getStudentSignature().getUserId()
-                ).map(User::getEmail),
-                monitorService.findById(
-                        internshipContract.getMonitorSignature().getUserId()
-                ).map(User::getEmail)
-        ).flatMap(tuple -> {
-            String internshipManagerEmail = tuple.getT1();
-            String studentEmail = tuple.getT2();
-            String monitorEmail = tuple.getT3();
+        return userService.findByEmail(userEmail)
+                .map(User::getId)
+                .flatMap(userId -> {
+                    if (!internshipContract.isUserInContract(userId)) {
+                        return Mono.error(
+                                new UnauthorizedException(
+                                        "User with email: " + userEmail + " was not found inside contract"
+                                )
+                        );
+                    }
 
-            List<String> userIds = List.of(internshipManagerEmail, studentEmail, monitorEmail);
-
-            if (!userIds.contains(userEmail)) {
-                return Mono.error(
-                        new UnauthorizedException(
-                                "User with email: " + userEmail + " was not found inside contract"
-                        )
-                );
-            }
-
-            return Mono.just(internshipContract);
-        });
+                    return Mono.just(internshipContract);
+                });
     }
 
     private Mono<byte[]> getPdfBytes(InternshipContract internshipContract) {
@@ -414,9 +437,9 @@ public class InternshipContractService {
                             Flux<Student> studentFlux = studentService.findAllByIds(studentList);
 
                             return Flux.zip(
-                                            monitorFlux,
-                                            studentFlux
-                                    )
+                                    monitorFlux,
+                                    studentFlux
+                            )
                                     .flatMap(tuple -> {
                                         Monitor monitor = tuple.getT1();
                                         Student student = tuple.getT2();
@@ -435,7 +458,7 @@ public class InternshipContractService {
                 .severity(NotificationSeverity.HIGH)
                 .receiverIds(Set.of(monitor.getId()))
                 .build();
-        return notificationService.createNotification(NotificationMapper.toDto(notification));
+        return notificationService.createNotifications(NotificationMapper.toDto(notification));
     }
 
 }
