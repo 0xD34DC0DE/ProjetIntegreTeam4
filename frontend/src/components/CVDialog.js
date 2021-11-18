@@ -9,7 +9,7 @@ function CVDialog({ open, toggleDialog, cvUrl, setUrl}) {
     const handleClose = (_, reason) => {
         if (reason === "backdropClick") {
             toggleDialog("cvDialog", false);
-            setUrl('');
+            setUrl("");
         }
     };
 
@@ -17,7 +17,6 @@ function CVDialog({ open, toggleDialog, cvUrl, setUrl}) {
         <Dialog open={open} onClose={handleClose}>
             <DialogContent ref={dialogRef}>
                 {dialogRef && <PdfView pdfUrl={cvUrl} dialogRef={dialogRef} />}
-                {/* {dialogRef && <iframe src={cvUrl}></iframe>} */}
             </DialogContent>
         </Dialog>
     )

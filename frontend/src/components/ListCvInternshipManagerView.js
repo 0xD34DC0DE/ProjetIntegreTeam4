@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import CVDialog from "./CVDialog";
 
-const ListCvInternshipManagerView = ({ open, toggleDialog, visible }) => {
+const ListCvInternshipManagerView = ({ toggleDialog, visible, dialogVisibility }) => {
   const [cvs, setCvs] = useState([]);
   const [nbrCvs, setNbrCvs] = useState(0);
   const [noPage, setNoPage] = useState(0);
@@ -127,7 +127,7 @@ const ListCvInternshipManagerView = ({ open, toggleDialog, visible }) => {
               />
             </motion.div>
           </Container>
-          <CVDialog open={open} toggleDialog={toggleDialog} cvUrl={url} setUrl={setUrl}/>
+          <CVDialog open={dialogVisibility.cvDialog} toggleDialog={toggleDialog} cvUrl={url} setUrl={setUrl}/>
         </>
       )}
     </>

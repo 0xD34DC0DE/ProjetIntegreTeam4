@@ -57,14 +57,13 @@ const Content = ({
           />
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListCvInternshipManagerView 
-              visible={selection.id === 1} 
               toggleDialog={toggleDialog}
+              visible={selection.id === 1} 
               dialogVisibility={dialogVisibility}
             />
           )}
           {userInfo.role === "MONITOR" && (
             <ListStudentApplying
-              open={dialogVisibility.cvDialog}
               visible={selection.id === 6}
               toggleDialog={toggleDialog}
               dialogVisibility={dialogVisibility}
@@ -113,8 +112,8 @@ const Content = ({
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListReport
               toggleDialog={toggleDialog}
-              open={dialogVisibility.reportDialog}
               visible={selection.id === 14}
+              dialogVisibility={dialogVisibility}
             />
           )}
         </Box>
