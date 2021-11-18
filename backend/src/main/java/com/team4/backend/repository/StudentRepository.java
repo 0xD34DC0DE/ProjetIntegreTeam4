@@ -24,5 +24,4 @@ public interface StudentRepository extends ReactiveMongoRepository<Student, Stri
     Flux<Student> findAllByStudentState(StudentState state);
 
     Flux<Student> findAllByEvaluationsDatesIsBetween(LocalDate sessionStart, LocalDate sessionEnd);
-
 }
