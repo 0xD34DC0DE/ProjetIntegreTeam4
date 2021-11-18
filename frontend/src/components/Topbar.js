@@ -1,25 +1,16 @@
-import React, { useState, useRef, useContext } from "react";
-import {
-  AppBar,
-  Toolbar,
-  Avatar,
-  Button,
-  Tooltip,
-  Menu,
-  MenuItem,
-  Typography,
-  Divider,
-  Box,
-  Grid,
-  IconButton,
-} from "@mui/material";
-import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import ArrowBackIosOutlinedIcon from "@mui/icons-material/ArrowBackIosOutlined";
 import ArrowForwardIosOutlinedIcon from "@mui/icons-material/ArrowForwardIosOutlined";
-import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
-import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import ExitToAppOutlinedIcon from "@mui/icons-material/ExitToAppOutlined";
 import LoginOutlinedIcon from "@mui/icons-material/LoginOutlined";
+import NotificationsNoneOutlinedIcon from "@mui/icons-material/NotificationsNoneOutlined";
 import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
+import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined";
+import {
+  AppBar, Avatar, Box, Button, Divider, Grid,
+  IconButton, Menu,
+  MenuItem, Toolbar, Tooltip, Typography
+} from "@mui/material";
+import React, { useContext, useRef, useState } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { roles, topbarMenuList } from "./Configuration";
 import NotificationList from "./Notification/NotificationList";
@@ -28,7 +19,7 @@ const Topbar = ({
   sidebarOpen,
   setSidebarOpen,
   toggleDialog,
-  onSelectionChanged,
+  onSelectionChanged
 }) => {
   const menuAnchorRef = useRef();
   const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
