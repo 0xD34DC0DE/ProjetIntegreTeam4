@@ -235,6 +235,8 @@ const Topbar = ({
         <NotificationList
           anchorEl={notficationMenuAnchorEl}
           handleMenuClose={handleNotificationMenuClose}
+          toggleDialog={toggleDialog}
+          onSelectionChanged={onSelectionChanged}
           setMenuOpen={setNotificationMenuOpen}
           menuOpen={notificationMenuOpen}
         />
