@@ -31,7 +31,6 @@ function SignContractForm({ contractId }) {
       })
         .then(() => {
           setAlreadySigned(true);
-          console.log("sign success");
         })
         .catch((error) => {
           console.error(error);
