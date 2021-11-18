@@ -7,6 +7,7 @@ import reactor.core.publisher.Flux;
 import java.util.Set;
 
 public interface CustomStudentRepository {
+
     Flux<Student> findAllByEmails(Set<String> emails);
 
     Flux<Student> findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState studentState);

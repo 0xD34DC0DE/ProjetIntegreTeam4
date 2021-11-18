@@ -7,6 +7,7 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface MonitorRepository extends ReactiveMongoRepository<Monitor, String> {
+
     Mono<Boolean> existsByEmailAndIsEnabledTrue(String email);
 
     Mono<Monitor> findByEmail(String monitorEmail);
