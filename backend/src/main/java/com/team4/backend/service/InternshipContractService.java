@@ -2,6 +2,7 @@ package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipContractCreationDto;
 import com.team4.backend.dto.InternshipContractDto;
+import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.exception.ContractNotFoundException;
 import com.team4.backend.exception.ForbiddenActionException;
 import com.team4.backend.exception.InternalServerErrorException;
@@ -9,6 +10,7 @@ import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.mapping.NotificationMapper;
 import com.team4.backend.model.*;
 import com.team4.backend.model.enums.NotificationSeverity;
+import com.team4.backend.model.enums.NotificationType;
 import com.team4.backend.model.enums.Role;
 import com.team4.backend.pdf.InternshipContractPdfTemplate;
 import com.team4.backend.repository.InternshipContractRepository;
@@ -21,10 +23,7 @@ import reactor.util.function.Tuple4;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -194,7 +193,6 @@ public class InternshipContractService {
     }
 
     public Mono<byte[]> getContractById(String contractId, String userEmail) {
-
         return internshipContractRepository.findById(contractId)
                 .flatMap(internshipContract -> verifyUserIsInContract(internshipContract, userEmail))
                 .flatMap(this::getPdfBytes)
@@ -417,7 +415,6 @@ public class InternshipContractService {
                     return Mono.just(tuple2s.get(0).getT2().getId());
                 });
     }
-
 
 
     public void getInternshipContractsTwoWeeksLeft() {
