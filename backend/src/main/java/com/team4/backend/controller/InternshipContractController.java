@@ -61,7 +61,7 @@ public class InternshipContractController {
     }
 
     @GetMapping(path = "/byId/{contractId}", produces = MediaType.APPLICATION_PDF_VALUE)
-    @PreAuthorize("hasAnyAuthority('INTERSHIP_MANAGER', 'STUDENT')")
+    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER', 'STUDENT')")
     public Mono<byte[]> getContractById(@PathVariable("contractId") String contractId, Principal principal) {
         return internshipContractService.getContractById(contractId, UserSessionService.getLoggedUserEmail(principal));
     }
