@@ -146,7 +146,7 @@ class FileMetaDataControllerTest {
     @Test
     void shouldGetFirstValidCv() {
         //ARRANGE
-        when(fileMetaDataService.getAssetIdLastWithUserEmail(any())).thenReturn(Mono.just("assetId"));
+        when(fileMetaDataService.getLastValidatedCvWithUserEmail(any())).thenReturn(Mono.just("assetId"));
 
         //ACT
         webTestClient

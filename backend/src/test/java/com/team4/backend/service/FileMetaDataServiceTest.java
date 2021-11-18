@@ -198,12 +198,12 @@ class FileMetaDataServiceTest {
     }
 
     @Test
-    void shouldGetAssetIdLastWithUserEmail() {
+    void shouldGetLastValidatedCvWithUserEmail() {
         //ARRANGE
         when(fileMetaDataRepository.findAllByUserEmailAndIsValidTrueOrderByUploadDate(any())).thenReturn(FileMetaDataMockData.getAssetIdLastWithUserEmailFlux());
 
         //ACT
-        Mono<String> response = fileMetaDataService.getAssetIdLastWithUserEmail("userEmail");
+        Mono<String> response = fileMetaDataService.getLastValidatedCvWithUserEmail("userEmail");
 
         //ASSERT
         StepVerifier.create(response)
@@ -213,12 +213,12 @@ class FileMetaDataServiceTest {
     }
 
     @Test
-    void shouldNotGetAssetIdLastWithUserEmail() {
+    void shouldNotGetLastValidatedCvWithUserEmail() {
         //ARRANGE
         when(fileMetaDataRepository.findAllByUserEmailAndIsValidTrueOrderByUploadDate(any())).thenReturn(Flux.empty());
 
         //ACT
-        Mono<String> response = fileMetaDataService.getAssetIdLastWithUserEmail("userEmail");
+        Mono<String> response = fileMetaDataService.getLastValidatedCvWithUserEmail("userEmail");
 
         //ASSERT
         StepVerifier.create(response)

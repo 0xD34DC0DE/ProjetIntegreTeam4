@@ -105,7 +105,7 @@ public class FileMetaDataService {
                 }).flatMap(fileMetaDataRepository::save);
     }
 
-    public Mono<String> getAssetIdLastWithUserEmail(String userEmail) {
+    public Mono<String> getLastValidatedCvWithUserEmail(String userEmail) {
         return fileMetaDataRepository.findAllByUserEmailAndIsValidTrueOrderByUploadDate(userEmail)
                 .switchIfEmpty(Mono.error(new FileNotFoundException()))
                 .collectList()

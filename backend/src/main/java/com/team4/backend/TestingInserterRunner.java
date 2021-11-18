@@ -516,7 +516,7 @@ public class TestingInserterRunner implements ApplicationRunner {
     private void insertCvs() {
         List<FileMetaData> fileMetaDataList = Arrays.asList(
                 FileMetaData.builder()
-                        .assetId("123456789%40gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("123456789@gmail.com")
                         .filename("cv1.pdf")
                         .isValid(true)

@@ -56,6 +56,6 @@ public class FileMetaDataController {
     @GetMapping("/getLatestCv/{studentEmail}")
     @PreAuthorize("hasAuthority('MONITOR')")
     public Mono<String> getFirstValidCv(@PathVariable String studentEmail) {
-        return fileMetaDataService.getAssetIdLastWithUserEmail(studentEmail);
+        return fileMetaDataService.getLastValidatedCvWithUserEmail(studentEmail);
     }
 }

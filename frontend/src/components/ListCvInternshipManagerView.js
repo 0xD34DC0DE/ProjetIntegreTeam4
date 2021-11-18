@@ -63,6 +63,12 @@ const ListCvInternshipManagerView = ({ toggleDialog, visible, dialogVisibility }
     getCvs(noPage);
   }, [noPage]);
 
+  useEffect(() => {
+    if (url !== "") {
+        toggleDialog("cvDialog", true);
+    }
+  }, [url])
+
   const handleChangePage = (_, newPage) => {
     setNoPage(newPage);
   };
@@ -77,12 +83,6 @@ const ListCvInternshipManagerView = ({ toggleDialog, visible, dialogVisibility }
   };
 
   const [url, setUrl] = useState("");
-
-  useEffect(() => {
-    if (url !== "") {
-        toggleDialog("cvDialog", true);
-    }
-  }, [url])
 
   return (
     <>
