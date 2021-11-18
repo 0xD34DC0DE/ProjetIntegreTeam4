@@ -11,7 +11,6 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import axios from "axios";
 import Notification from "./Notification";
 import { UserInfoContext } from "../../stores/UserInfoStore";
-import { KeyboardReturnOutlined } from "@mui/icons-material";
 
 const severity = {
   high: { color: "rgba(200, 100, 100, 1)" },
@@ -31,9 +30,12 @@ const NotificationList = ({
     if (userInfo === undefined) return;
     axios({
       method: "GET",
-      url: "http://localhost:8080/notification?receiverId=" + userInfo.id,
+      url: "http://localhost:8080/notification",
       headers: {
         Authorization: userInfo.jwt,
+      },
+      params: {
+        receiverId: userInfo.id,
       },
       responseType: "json",
     })
@@ -50,13 +52,13 @@ const NotificationList = ({
   const deleteNotification = (id) => {
     axios({
       method: "DELETE",
-      url:
-        "http://localhost:8080/notification?notificationId=" +
-        id +
-        "&userId=" +
-        userInfo.id,
+      url: "http://localhost:8080/notification",
       headers: {
         Authorization: userInfo.jwt,
+      },
+      params: {
+        notificationId: id,
+        userId: userInfo.id,
       },
       responseType: "json",
     })
@@ -125,7 +127,6 @@ const NotificationList = ({
                         md={12}
                         lg={12}
                         xl={12}
-                        xs={12}
                         sx={{
                           overflow: "hidden",
                           textOverflow: "ellipsis",
@@ -148,6 +149,7 @@ const NotificationList = ({
                     item
                     xl={2}
                     lg={2}
+                    xs={2}
                     md={2}
                     sm={2}
                     item
