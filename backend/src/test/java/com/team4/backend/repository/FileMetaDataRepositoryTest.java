@@ -65,7 +65,7 @@ public class FileMetaDataRepositoryTest {
     }
 
     @Test
-    void findByUserEmailAndIsValidFalseAndIsSeenTrue(){
+    void findAllCvByUserEmail(){
         //ACT
         String userEmail = "test_user_email@gmail.com";
         Flux<FileMetaData> fileMetaDataFlux = fileMetaDataRepository.findAllByUserEmail(userEmail);

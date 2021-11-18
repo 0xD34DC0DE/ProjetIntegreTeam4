@@ -199,7 +199,7 @@ class FileMetaDataServiceTest {
     }
 
     @Test
-    void getFileMetaDataByUserEmailAndIsValidFalseAndIsSeenTrue(){
+    void getAllCvByUserEmail(){
         //ARRANGE
         List<FileMetaData> fileMetaDataList = FileMetaDataMockData.getAllRejectedFileMetaData();
         when(fileMetaDataRepository.findAllByUserEmail(fileMetaDataList.get(0).getUserEmail())).thenReturn(Flux.fromIterable(fileMetaDataList));
@@ -215,6 +215,8 @@ class FileMetaDataServiceTest {
                 .assertNext(f -> assertEquals(fileMetaDataList.get(1).getUserEmail(), f.getUserEmail()))
                 .verifyComplete();
     }
+
+    @Test
     void shouldGetLastValidatedCvWithUserEmail() {
         //ARRANGE
         when(fileMetaDataRepository.findAllByUserEmailAndIsValidTrueOrderByUploadDate(any())).thenReturn(FileMetaDataMockData.getAssetIdLastWithUserEmailFlux());

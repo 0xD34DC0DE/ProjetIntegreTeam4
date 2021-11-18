@@ -26,7 +26,6 @@ import reactor.core.publisher.Mono;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -148,7 +147,7 @@ class FileMetaDataControllerTest {
     }
 
     @Test
-    void getFileMetaDataByUserEmailAndIsValidFalseAndIsSeenTrue(){
+    void getAllCvByUserEmail(){
         //ARRANGE
         List<FileMetaData> fileMetaDataList = FileMetaDataMockData.getAllRejectedFileMetaData();
         when(fileMetaDataService.getAllCvByUserEmail(fileMetaDataList.get(0).getUserEmail())).thenReturn(Flux.fromIterable(fileMetaDataList));

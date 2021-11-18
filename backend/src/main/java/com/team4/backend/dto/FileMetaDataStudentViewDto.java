@@ -28,7 +28,4 @@ public class FileMetaDataStudentViewDto implements Serializable {
     private LocalDateTime seenDate;
 
     private String rejectionExplanation;
-
-    private String userEmail;
-
 }

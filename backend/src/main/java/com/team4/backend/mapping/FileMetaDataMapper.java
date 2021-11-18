@@ -24,7 +24,6 @@ public abstract class FileMetaDataMapper {
                 .uploadDate(fileMetaData.getUploadDate())
                 .seenDate(fileMetaData.getSeenDate())
                 .rejectionExplanation(fileMetaData.getRejectionExplanation())
-                .userEmail(fileMetaData.getUserEmail())
                 .build();
     }
 
