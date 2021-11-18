@@ -1,8 +1,7 @@
-import { Dialog, DialogContent, Grid, Typography } from "@mui/material";
-import React, { useEffect, useContext, useState } from "react";
+import { Dialog, DialogContent, Grid } from "@mui/material";
+import React, { useContext, useEffect, useState } from "react";
 import { UserInfoContext } from "../../stores/UserInfoStore.js";
 import PdfView from "../PdfView.js";
-import axios from "axios";
 import SignContractForm from "./SignContractForm.js";
 
 function SignContractDialog({ open, toggleDialog, dialogData }) {
@@ -16,54 +15,46 @@ function SignContractDialog({ open, toggleDialog, dialogData }) {
   };
 
   const getPdfUrl = () => {
-    console.log("AAA");
-    //return `http://localhost:8080/contract/${dialogData.contractId}`;
-    return `http://localhost:8080/contract/byId/${contractId}`;
+    return `http://localhost:8080/contract/byId/${dialogData.contractId}`;
   };
 
   useEffect(() => {
-    if (open) {
-      axios({
-        method: "GET",
-        baseURL: "http://localhost:8080",
-        url: "/contract/tmp",
-        headers: {
-          Authorization: userInfo.jwt,
-        },
-      })
-        .then((response) => {
-          setContractId(response.data);
-        })
-        .catch((error) => {
-          console.error(error);
-        });
+    if(!!dialogData) {
+      setContractId(dialogData.contractId);
     }
+    return () => {
+      setContractId("");
+    };
   }, [open]);
 
   return (
-    <Dialog open={open} onClose={handleClose} fullWidth>
-      <DialogContent>
-        <Grid
-          container
-          direction="column"
-          justifyContent="center"
-          alignContent="center"
-          rowSpacing={2}
-        >
-          {contractId != "" && (
-            <>
-              <Grid item xs={12}>
-                <PdfView pdfUrl={getPdfUrl()} params={{}} />
-              </Grid>
+    <>
+      {!!dialogData && (
+        <Dialog open={open} onClose={handleClose} fullWidth>
+          <DialogContent>
+            <Grid
+              container
+              direction="column"
+              justifyContent="center"
+              alignContent="center"
+              rowSpacing={2}
+            >
+              {contractId != "" && (
+                <>
+                  <Grid item xs={12}>
+                    <PdfView pdfUrl={getPdfUrl()} params={{}} />
+                  </Grid>
 
-              <Grid item>
-                <SignContractForm contractId={contractId}/>
-              </Grid>
-            </>
-          )}
-        </Grid>
-      </DialogContent>
-    </Dialog>
+                  <Grid item>
+                    <SignContractForm contractId={contractId} />
+                  </Grid>
+                </>
+              )}
+            </Grid>
+          </DialogContent>
+        </Dialog>
+      )}
+    </>
   );
 }
 
