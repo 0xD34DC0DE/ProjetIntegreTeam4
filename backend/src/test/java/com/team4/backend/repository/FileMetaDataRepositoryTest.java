@@ -68,7 +68,7 @@ public class FileMetaDataRepositoryTest {
     void findByUserEmailAndIsValidFalseAndIsSeenTrue(){
         //ACT
         String userEmail = "test_user_email@gmail.com";
-        Flux<FileMetaData> fileMetaDataFlux = fileMetaDataRepository.findAllByUserEmailAndIsValidFalseAndIsSeenTrue(userEmail);
+        Flux<FileMetaData> fileMetaDataFlux = fileMetaDataRepository.findAllByUserEmail(userEmail);
 
         //ASSERT
         StepVerifier

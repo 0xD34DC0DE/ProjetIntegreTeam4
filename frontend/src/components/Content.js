@@ -66,7 +66,11 @@ const Content = ({
             />
           )}
           {userInfo.role === "STUDENT" && (
-            <UploadCV visible={selection.id === 5} />
+            <UploadCV
+              visible={selection.id === 5}
+              toggleDialog={toggleDialog}
+              dialogVisibility={dialogVisibility}
+            />
           )}
           {userInfo.role === "STUDENT" && (
             <OfferViews visible={selection.id === 4} />

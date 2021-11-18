@@ -202,11 +202,11 @@ class FileMetaDataServiceTest {
     void getFileMetaDataByUserEmailAndIsValidFalseAndIsSeenTrue(){
         //ARRANGE
         List<FileMetaData> fileMetaDataList = FileMetaDataMockData.getAllRejectedFileMetaData();
-        when(fileMetaDataRepository.findAllByUserEmailAndIsValidFalseAndIsSeenTrue(fileMetaDataList.get(0).getUserEmail())).thenReturn(Flux.fromIterable(fileMetaDataList));
+        when(fileMetaDataRepository.findAllByUserEmail(fileMetaDataList.get(0).getUserEmail())).thenReturn(Flux.fromIterable(fileMetaDataList));
 
 
         //ACT
-        Flux<FileMetaData> fileMetaDataMono = fileMetaDataService.getAllRejectedCvInfo(fileMetaDataList.get(0).getUserEmail());
+        Flux<FileMetaData> fileMetaDataMono = fileMetaDataService.getAllCvByUserEmail(fileMetaDataList.get(0).getUserEmail());
 
         //ASSERT
         StepVerifier

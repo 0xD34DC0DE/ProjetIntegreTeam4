@@ -17,6 +17,6 @@ public interface FileMetaDataRepository extends ReactiveMongoRepository<FileMeta
 
     Flux<FileMetaData> findAllByIsValidFalseAndIsSeenFalse(Pageable pageable);
 
-    Flux<FileMetaData> findAllByUserEmailAndIsValidFalseAndIsSeenTrue(String userEmail);
+    Flux<FileMetaData> findAllByUserEmail(String userEmail);
 
 }

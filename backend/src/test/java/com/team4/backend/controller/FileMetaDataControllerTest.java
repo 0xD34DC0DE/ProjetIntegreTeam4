@@ -151,14 +151,14 @@ class FileMetaDataControllerTest {
     void getFileMetaDataByUserEmailAndIsValidFalseAndIsSeenTrue(){
         //ARRANGE
         List<FileMetaData> fileMetaDataList = FileMetaDataMockData.getAllRejectedFileMetaData();
-        when(fileMetaDataService.getAllRejectedCvInfo(fileMetaDataList.get(0).getUserEmail())).thenReturn(Flux.fromIterable(fileMetaDataList));
+        when(fileMetaDataService.getAllCvByUserEmail(fileMetaDataList.get(0).getUserEmail())).thenReturn(Flux.fromIterable(fileMetaDataList));
 
         //ACT
         webTestClient
                 .get()
                 .uri(uriBuilder ->
                         uriBuilder
-                                .path("/file/getAllRejectedCvInfo/"+fileMetaDataList.get(0).getUserEmail())
+                                .path("/file/getAllCvByUserEmail/"+fileMetaDataList.get(0).getUserEmail())
                                 .build())
                 .exchange()
                 //ASSERT

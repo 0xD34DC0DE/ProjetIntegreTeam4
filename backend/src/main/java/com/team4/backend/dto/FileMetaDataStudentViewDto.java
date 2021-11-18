@@ -19,6 +19,8 @@ public class FileMetaDataStudentViewDto implements Serializable {
 
     private Boolean isValid;
 
+    private Boolean isSeen;
+
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime uploadDate;
 
