@@ -3,14 +3,8 @@ import { pdfjs } from "react-pdf";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import {
   Grid, Pagination, Typography
-  Pagination,
-  Grid,
-  Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
-import { pdfjs } from "react-pdf";
-import { UserInfoContext } from "../stores/UserInfoStore";
 import PdfContainer from "./PdfContainer";
 
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.min.js";
