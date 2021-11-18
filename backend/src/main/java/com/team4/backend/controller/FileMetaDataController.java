@@ -53,4 +53,9 @@ public class FileMetaDataController {
                 .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 
+    @GetMapping("/getLatestCv/{studentEmail}")
+    @PreAuthorize("hasAuthority('MONITOR')")
+    public Mono<String> getFirstValidCv(@PathVariable String studentEmail) {
+        return fileMetaDataService.getLastValidatedCvWithUserEmail(studentEmail);
+    }
 }

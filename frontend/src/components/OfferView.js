@@ -65,13 +65,11 @@ function OfferView({
                 offerId={id}
               />
             </Grid>
-            <Grid container>
-              <Grid item xs={12} xl={12} md={3} sm={12} xs={12} sx={{ mb: 2 }}>
-                <Typography sx={{ mt: 1, mb: 1 }} variant="h6">
-                  Description:
-                </Typography>
-                <Typography variant="body">{description}</Typography>
-              </Grid>
+            <Grid container item xl={12} md={3} sm={12} xs={12} sx={{ mb: 2 }}>
+              <Typography sx={{ mt: 1, mb: 1 }} variant="h6">
+                Description:
+              </Typography>
+              <Typography variant="body">{description}</Typography>
             </Grid>
           </Grid>
         </Paper>

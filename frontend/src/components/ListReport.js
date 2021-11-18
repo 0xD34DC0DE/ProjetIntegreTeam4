@@ -1,10 +1,6 @@
 import {
   Grid,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
   Box,
 } from "@mui/material";
 import React, { useState, useEffect } from "react";
@@ -12,7 +8,7 @@ import Report from "./Report";
 import ReportDialog from "./ReportDialog";
 import SemesterSelect from "./SemesterSelect";
 
-const ListReport = ({ open, toggleDialog, visible }) => {
+const ListReport = ({ toggleDialog, visible, dialogVisibility }) => {
   const [reports] = useState([
     {
       title: "Offres de stages non validées",
@@ -65,7 +61,6 @@ const ListReport = ({ open, toggleDialog, visible }) => {
 
   const updateSemesterFullName = (fullName) => {
     setSemesterFullName(fullName);
-    console.log(fullName);
   };
 
   return (
@@ -98,7 +93,7 @@ const ListReport = ({ open, toggleDialog, visible }) => {
             ))}
           </Grid>
           <ReportDialog
-            open={open}
+            open={dialogVisibility.reportDialog}
             toggleDialog={toggleDialog}
             reportUrl={reportUrl}
             semesterFullName={semesterFullName}

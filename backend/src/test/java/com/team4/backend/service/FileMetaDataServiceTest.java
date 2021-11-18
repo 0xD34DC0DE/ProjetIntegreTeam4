@@ -197,4 +197,33 @@ class FileMetaDataServiceTest {
                 .verify();
     }
 
+    @Test
+    void shouldGetLastValidatedCvWithUserEmail() {
+        //ARRANGE
+        when(fileMetaDataRepository.findAllByUserEmailAndIsValidTrueOrderByUploadDate(any())).thenReturn(FileMetaDataMockData.getAssetIdLastWithUserEmailFlux());
+
+        //ACT
+        Mono<String> response = fileMetaDataService.getLastValidatedCvWithUserEmail("userEmail");
+
+        //ASSERT
+        StepVerifier.create(response)
+                .assertNext(s ->{
+                    assertEquals("assetId2", s);
+                }).verifyComplete();
+    }
+
+    @Test
+    void shouldNotGetLastValidatedCvWithUserEmail() {
+        //ARRANGE
+        when(fileMetaDataRepository.findAllByUserEmailAndIsValidTrueOrderByUploadDate(any())).thenReturn(Flux.empty());
+
+        //ACT
+        Mono<String> response = fileMetaDataService.getLastValidatedCvWithUserEmail("userEmail");
+
+        //ASSERT
+        StepVerifier.create(response)
+                .expectError(FileNotFoundException.class)
+                .verify();
+    }
+
 }

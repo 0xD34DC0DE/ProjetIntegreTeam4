@@ -18,12 +18,14 @@ function ReportDialog({
     }
   };
 
-  if (
-    reportUrl === "/generateAllNonValidatedOffersReport" ||
-    reportUrl === "/generateAllValidatedOffersReport" ||
-    reportUrl === "/generateStudentsNotEvaluatedReport" ||
-    reportUrl === "/generateStudentsWithSupervisorWithNoCompanyEvaluation"
-  ) {
+  const semesterDependentUrls = [
+    "/generateAllNonValidatedOffersReport",
+    "/generateAllValidatedOffersReport",
+    "/generateStudentsNotEvaluatedReport",
+    "/generateStudentsWithSupervisorWithNoCompanyEvaluation"
+  ];
+
+  if (semesterDependentUrls.includes(reportUrl)) {
     reportUrl =
       "http://localhost:8080/report" + reportUrl + "/" + semesterFullName;
   } else {
