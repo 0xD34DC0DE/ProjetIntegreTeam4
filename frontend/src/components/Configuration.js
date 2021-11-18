@@ -110,6 +110,15 @@ export const sidebarList = [
     icon: <AssignmentSharp fontSize="small" sx={{ mr: 1 }} />,
     description: "Consultation des rapports",
   },
+  {
+    id: 15,
+    label: "signé",
+    role: ["STUDENT"],
+    isDialog: true,
+    dialogName: "signContractDialog",
+    icon: <AssignmentSharp fontSize="small" sx={{ mr: 1 }} />,
+    description: "signé",
+  },
 ];
 
 export const topbarMenuList = [

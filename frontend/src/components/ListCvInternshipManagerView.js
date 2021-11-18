@@ -12,7 +12,8 @@ const ListCvInternshipManagerView = ({ toggleDialog, visible, dialogVisibility }
   const [noPage, setNoPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [userInfo] = useContext(UserInfoContext);
-
+  const [url, setUrl] = useState("");
+  
   const fadeIn = {
     hidden: { opacity: 0 },
     show: {
@@ -82,7 +83,6 @@ const ListCvInternshipManagerView = ({ toggleDialog, visible, dialogVisibility }
     setNbrCvs(nbrCvs - 1);
   };
 
-  const [url, setUrl] = useState("");
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import ListCvInternshipManagerView from "./ListCvInternshipManagerView";
 import ContentTitle from "./ContentTitle";
 import { UserInfoContext } from "../stores/UserInfoStore";
@@ -18,12 +18,15 @@ import AssignedStudentSupervisorView from "./AssignedStudentSupervisorView";
 import StudentEvaluationForm from "./Evaluation/End/StudentEvaluationForm";
 import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMidForm";
 import ListReport from "./ListReport";
+import Notification from "./Notification/Notification";
+import SignContractDialog from "./contracts/SignContractDialog";
 
 const Content = ({
   isSidebarOpen,
   toggleDialog,
   dialogVisibility,
   selection,
+  dialogData,
 }) => {
   const [userInfo] = useContext(UserInfoContext);
 
@@ -134,6 +137,11 @@ const Content = ({
         open={dialogVisibility.loginDialog}
         toggleDialog={toggleDialog}
       ></Login>
+      <SignContractDialog
+        toggleDialog={toggleDialog}
+        open={dialogVisibility.signContractDialog}
+        dialogData={dialogData}
+      />
     </Box>
   );
 };
