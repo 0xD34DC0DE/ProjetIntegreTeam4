@@ -20,15 +20,15 @@ public class ReportController {
     }
 
 
-    @GetMapping(value = "/generateAllNonValidatedOffersReport/{fullName}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/generateAllNonValidatedOffersReport/{semesterFullName}", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Mono<byte[]> generateAllNonValidatedOffersReport(@PathVariable("fullName") String semesterFullName) {
+    public Mono<byte[]> generateAllNonValidatedOffersReport(@PathVariable String semesterFullName) {
         return reportService.generateAllNonValidatedOffersReport(semesterFullName);
     }
 
-    @GetMapping(value = "/generateAllValidatedOffersReport/{fullName}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/generateAllValidatedOffersReport/{semesterFullName}", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Mono<byte[]> generateAllValidatedOffersReport(@PathVariable("fullName") String semesterFullName) {
+    public Mono<byte[]> generateAllValidatedOffersReport(@PathVariable String semesterFullName) {
         return reportService.generateAllValidatedOffersReport(semesterFullName);
     }
 
@@ -80,9 +80,9 @@ public class ReportController {
         return reportService.generateStudentsNotEvaluatedReport(semesterFullName);
     }
 
-    @GetMapping(value = "/generateStudentsWithSupervisorWithNoCompanyEvaluation/{fullName}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @GetMapping(value = "/generateStudentsWithSupervisorWithNoCompanyEvaluation/{semesterFullName}", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Mono<byte[]> generateStudentsWithSupervisorWithNoCompanyEvaluation(@PathVariable("fullName") String semesterFullName) {
+    public Mono<byte[]> generateStudentsWithSupervisorWithNoCompanyEvaluation(@PathVariable String semesterFullName) {
         return reportService.generateStudentsWithSupervisorWithNoCompanyEvaluation(semesterFullName);
     }
 
