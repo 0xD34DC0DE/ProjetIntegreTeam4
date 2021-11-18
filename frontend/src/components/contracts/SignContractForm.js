@@ -66,12 +66,12 @@ function SignContractForm({ contractId }) {
 
   return (
     <>
-      {alreadySigned == true && (
+      {alreadySigned === true && (
         <Grid item alignItems="center" textAlign="center" sx={{ mt: 3 }}>
           <Typography color="green">Contrat signé!</Typography>
         </Grid>
       )}
-      {alreadySigned != null && alreadySigned == false && (
+      {alreadySigned != null && alreadySigned === false && (
         <>
           <Grid item sx={{ mt: 5 }} alignItems="center" textAlign="center">
             <FormControlLabel
