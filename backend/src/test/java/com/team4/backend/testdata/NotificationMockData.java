@@ -4,6 +4,7 @@ import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.model.Notification;
 import com.team4.backend.model.enums.NotificationSeverity;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
@@ -36,9 +37,9 @@ public abstract class NotificationMockData {
         );
     }
 
+
     public static Notification getNotification() {
-        return
-                Notification.notificationBuilder()
+        return Notification.notificationBuilder()
                         .id("507f191e810c19729de860ea")
                         .receiverIds(Set.of("61930b84d3475148583fdfee", "61930b84d3475148583fdff3"))
                         .title("Title 1")
@@ -50,8 +51,7 @@ public abstract class NotificationMockData {
     }
 
     public static NotificationDto getNotificationDto() {
-        return
-                NotificationDto.notificationDtoBuilder()
+        return NotificationDto.notificationDtoBuilder()
                         .receiverIds(Set.of("61930b84d3475148583fdfed"))
                         .title("Title 1")
                         .severity(NotificationSeverity.LOW)
@@ -63,8 +63,8 @@ public abstract class NotificationMockData {
 
     public static Map<String, String> getNotificationData(int count) {
         Map<String, String> data = new HashMap<>();
-        for(int i = 0; i <= count; i++) {
-            data.put("id"+count, String.valueOf(i));
+        for (int i = 0; i <= count; i++) {
+            data.put("id" + count, String.valueOf(i));
         }
         return data;
     }
