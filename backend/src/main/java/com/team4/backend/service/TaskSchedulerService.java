@@ -30,7 +30,7 @@ public class TaskSchedulerService {
     private void updateStudentStateForAllStudentThatInterviewDateHasPassed() {
         studentService.updateStudentStateForAllStudentThatInterviewDateHasPassed()
                 .subscribe(nbrOfUpdateStudent -> log.info(
-                        "NBR OF STUDENT THAT HAVE THEIR STATE UPDATED : " +
+                        "NBR OF STUDENT THAT HAD THEIR STATE UPDATED : " +
                                 nbrOfUpdateStudent +
                                 ", time : " +
                                 LocalDateTime.now()));
@@ -47,5 +47,26 @@ public class TaskSchedulerService {
         semesterService.initializeSemestersAnnually(SemesterUtil.getSemesters(currentDateTime))
                 .subscribe(semester -> log.info("NEW SEMESTER CREATED : " + semester.toString()));
     }
+
+    @Scheduled(cron = "0 00 1 30 5 ?")
+    private void resetAllStudentStateBeforeSummerSemester() {
+        studentService.resetStudentStateForAllStudentWithInternship()
+                .subscribe(nbrOfUpdateStudent -> log.info(
+                        "NBR OF STUDENT THAT HAD THEIR STATE RESET : " +
+                                nbrOfUpdateStudent +
+                                ", time : " +
+                                LocalDateTime.now()));
+    }
+
+    @Scheduled(cron = "0 00 1 30 8 ?")
+    private void resetAllStudentStateBeforeFallSemester() {
+        studentService.resetStudentStateForAllStudentWithInternship()
+                .subscribe(nbrOfUpdateStudent -> log.info(
+                        "NBR OF STUDENT THAT HAD THEIR STATE RESET : " +
+                                nbrOfUpdateStudent +
+                                ", time : " +
+                                LocalDateTime.now()));
+    }
+
 
 }

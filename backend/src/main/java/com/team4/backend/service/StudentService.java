@@ -166,7 +166,16 @@ public class StudentService {
                 .map(student -> {
                     student.setStudentState(StudentState.WAITING_FOR_RESPONSE);
                     log.info("STATE UPDATED : " + student.getFirstName() + ", " + student.getLastName());
-                    return studentRepository.save(student).subscribe();
+                    return save(student).subscribe();
+                }).count();
+    }
+
+    public Mono<Long> resetStudentStateForAllStudentWithInternship() {
+        return getStudentsWithInternship()
+                .map(student -> {
+                    log.info("RESET STATE : " + student.getFirstName() + ", " + student.getLastName());
+                    student.setStudentState(INTERNSHIP_NOT_FOUND);
+                    return save(student).subscribe();
                 }).count();
     }
 

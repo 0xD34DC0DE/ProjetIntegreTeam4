@@ -512,4 +512,37 @@ public class StudentServiceTest {
                 .verifyComplete();
     }
 
+    @Test
+    void shouldResetStudentStateForAllStudentWithInternship() {
+        //ARRANGE
+        List<Student> students = StudentMockData.getAllStudentsWithInternshipFound();
+
+        when(studentRepository.findAllByStudentState(StudentState.INTERNSHIP_FOUND)).thenReturn(Flux.fromIterable(students));
+        students.forEach(student -> when(studentRepository.save(student)).thenReturn(Mono.just(student)));
+
+        //ACT
+        Mono<Long> nbrOfStudentReset = studentService.resetStudentStateForAllStudentWithInternship();
+
+        //ASSERT
+        StepVerifier.create(nbrOfStudentReset)
+                .assertNext(n -> assertEquals(2, n))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotResetStudentStateForAllStudentWithInternship() {
+        //ARRANGE
+        List<Student> students = StudentMockData.getAllStudentsWithInternshipFound();
+
+        when(studentRepository.findAllByStudentState(StudentState.INTERNSHIP_FOUND)).thenReturn(Flux.empty());
+
+        //ACT
+        Mono<Long> nbrOfStudentReset = studentService.resetStudentStateForAllStudentWithInternship();
+
+        //ASSERT
+        StepVerifier.create(nbrOfStudentReset)
+                .assertNext(n -> assertEquals(0, n))
+                .verifyComplete();
+    }
+
 }
