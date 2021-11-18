@@ -26,7 +26,7 @@ const EmailSender = ({ open, toggleDialog, receiver }) => {
       subject: "",
       content: "",
     });
-  }, [receiver]);
+  }, [receiver, userInfo]);
 
   const sendEmail = () => {
     const formData = new FormData();
@@ -150,7 +150,6 @@ const EmailSender = ({ open, toggleDialog, receiver }) => {
             type="content"
             value={form.content}
             id="content"
-            sx={{ p: 0, m: 0 }}
             multiline
             rows={10}
             rowsmax={4}

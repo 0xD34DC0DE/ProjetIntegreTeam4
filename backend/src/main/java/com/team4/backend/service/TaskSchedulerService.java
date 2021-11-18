@@ -21,9 +21,12 @@ public class TaskSchedulerService {
 
     private final SemesterService semesterService;
 
-    public TaskSchedulerService(StudentService studentService, SemesterService semesterService) {
+    private final InternshipContractService internshipContractService;
+
+    public TaskSchedulerService(StudentService studentService, SemesterService semesterService, InternshipContractService internshipContractService) {
         this.studentService = studentService;
         this.semesterService = semesterService;
+        this.internshipContractService = internshipContractService;
     }
 
     @Scheduled(cron = "0 00 0 ? * *")
@@ -46,6 +49,13 @@ public class TaskSchedulerService {
 
         semesterService.initializeSemestersAnnually(SemesterUtil.getSemesters(currentDateTime))
                 .subscribe(semester -> log.info("NEW SEMESTER CREATED : " + semester.toString()));
+    }
+
+    @Scheduled(cron = "0 00 0 ? * *")
+    private void notifyMonitorsTwoWeeksLeftContract() {
+        internshipContractService.notifyMonitorsTwoWeeksLeft();
+
+        log.info("TWO WEEKS LEFT CONTRACT - NOTIFYING MONITORS");
     }
 
 }

@@ -343,7 +343,14 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Michel")
                         .lastName("Lamarck")
-                        .studentTimestampedEntries(new HashSet<>(Arrays.asList(
+                    .studentTimestampedEntries(new HashSet<>(Arrays.asList(
+                            new TimestampedEntry("3643283423@gmail.com", LocalDateTime.now())))).build(),
+                Supervisor.supervisorBuilder()
+                        .email("supervisor2@gmail.com")
+                        .password(pbkdf2Encoder.encode("supervisor1"))
+                        .firstName("Kendrick")
+                        .lastName("Lamar")
+                         .studentTimestampedEntries(new HashSet<>(Arrays.asList(
                                 new TimestampedEntry("studentInternFound@gmail.com", LocalDateTime.now()),
                                 new TimestampedEntry("123456789@gmail.com", LocalDateTime.now())))).build()
         );

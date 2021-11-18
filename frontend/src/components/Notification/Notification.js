@@ -3,7 +3,6 @@ import {
   Snackbar,
   SnackbarContent,
   Typography,
-  Button,
   Tooltip,
   IconButton,
 } from "@mui/material";
@@ -53,7 +52,6 @@ const Notification = ({ addNotification, deleteNotification }) => {
         content: data.content,
         title: data.title,
       });
-      console.log(event);
       addNotification(data);
     };
   }, [eventSource]);
@@ -66,7 +64,7 @@ const Notification = ({ addNotification, deleteNotification }) => {
     <>
       <Snackbar
         open={showSnackbar}
-        autoHideDuration={520300}
+        autoHideDuration={4000}
         onClose={handleOnClose}
       >
         <SnackbarContent

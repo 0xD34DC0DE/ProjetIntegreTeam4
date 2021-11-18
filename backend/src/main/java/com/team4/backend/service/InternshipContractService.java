@@ -21,6 +21,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple4;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
@@ -392,32 +393,7 @@ public class InternshipContractService {
         ).map(tuple -> tuple.getT2().hasUserSigned(tuple.getT1().getId()));
     }
 
-    public Mono<String> getContractIdTemporary() {
-        return internshipContractRepository
-                .findAll()
-                .collectList()
-                .flatMapMany(internshipContracts ->
-                        Flux.fromIterable(internshipContracts)
-                                .flatMap(internshipContract ->
-                                        Mono.zip(
-                                                studentService.findById(
-                                                        internshipContract.getStudentSignature().getUserId()
-                                                ),
-                                                Mono.just(internshipContract)
-                                        )
-                                )
-                ).filter(tuple -> tuple.getT1().getEmail().equals("student@gmail.com"))
-                .collectList()
-                .flatMap(tuple2s -> {
-                    if (tuple2s.size() != 1) {
-                        return Mono.error(new RuntimeException("oops"));
-                    }
-                    return Mono.just(tuple2s.get(0).getT2().getId());
-                });
-    }
-
-
-    public void getInternshipContractsTwoWeeksLeft() {
+    public void notifyMonitorsTwoWeeksLeft() {
         internshipContractRepository.findAll()
                 .filter(internshipContract -> LocalDate.now().until(internshipContract.getEndingDate()).getDays() == 14)
                 .collectList()
@@ -426,17 +402,23 @@ public class InternshipContractService {
                                     .map(internshipContract -> internshipContract.getMonitorSignature().getUserId())
                                     .collect(Collectors.toList()));
 
-                            Flux<Monitor> monitorFlux = monitorService.findAllByIds(monitorList);
+                            Flux<Monitor> monitorFlux = monitorService.findAllByIds(monitorList)
+                                    .flatMap(monitor -> {
+                                        int frequency = Collections.frequency(monitorList, monitor.getId());
+                                        return Flux.fromIterable(Collections.nCopies(frequency, monitor));
+                                    });
 
                             List<String> studentList = List.copyOf(internshipContracts.stream()
-                                    .map(internshipContract -> internshipContract.getStudentSignature().getUserId()).collect(Collectors.toList()));
+                                    .map(internshipContract -> internshipContract.getStudentSignature().getUserId())
+                                    .collect(Collectors.toList()));
 
                             Flux<Student> studentFlux = studentService.findAllByIds(studentList);
 
                             return Flux.zip(
-                                    monitorFlux,
-                                    studentFlux
-                            )
+                                            monitorFlux,
+                                            studentFlux
+                                    )
+                                    .delayElements(Duration.ofSeconds(1))
                                     .flatMap(tuple -> {
                                         Monitor monitor = tuple.getT1();
                                         Student student = tuple.getT2();
@@ -451,8 +433,8 @@ public class InternshipContractService {
     public Mono<Notification> createTwoWeeksNoticeNotification(Monitor monitor, Student student) {
         Notification notification = Notification.notificationBuilder()
                 .title("Avis de fin de stage")
-                .content("Le stage de l'étudiant " + student.getFirstName() + " " + student.getLastName() + " se termine dans deux semaines")
-                .severity(NotificationSeverity.HIGH)
+                .content("Le stage de l'étudiant " + student.getFirstName() + " " + student.getLastName() + " se termine dans deux semaines (" + LocalDate.now() + ")")
+                .severity(NotificationSeverity.LOW)
                 .receiverIds(Set.of(monitor.getId()))
                 .build();
         return notificationService.createNotifications(NotificationMapper.toDto(notification));
