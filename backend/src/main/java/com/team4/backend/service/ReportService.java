@@ -2,13 +2,14 @@ package com.team4.backend.service;
 
 import com.team4.backend.pdf.OffersPdf;
 import com.team4.backend.pdf.StudentsPdf;
+import com.team4.backend.util.SemesterUtil;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
-import java.time.ZoneId;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 
 @Service
@@ -17,8 +18,6 @@ public class ReportService {
     private final InternshipOfferService internshipOfferService;
 
     private final StudentService studentService;
-
-    private final EvaluationService evaluationService;
 
     private final SupervisorService supervisorService;
 
@@ -40,43 +39,37 @@ public class ReportService {
     private final int THIRTY_FIRST = 31;
 
 
-    public ReportService(InternshipOfferService internshipOfferService, StudentService studentService, EvaluationService evaluationService, SupervisorService supervisorService, PdfService pdfService) {
+    public ReportService(InternshipOfferService internshipOfferService, StudentService studentService, SupervisorService supervisorService, PdfService pdfService) {
         this.internshipOfferService = internshipOfferService;
         this.studentService = studentService;
-        this.evaluationService = evaluationService;
         this.supervisorService = supervisorService;
         this.pdfService = pdfService;
     }
 
-    //TODO --> refactor to pass semesterFullName in argument
-    //TODO --> internshipOfferService.getAllNonValidatedOffers(semesterFullName)
-    public Mono<byte[]> generateAllNonValidatedOffersReport(Integer sessionNumber) {
-        List<Date> dates = calculateDates(sessionNumber);
-        return internshipOfferService.getAllNonValidatedOffers(dates.get(0), dates.get(1)).collectList()
+    public Mono<byte[]> generateAllNonValidatedOffersReport(String semesterFullName) {
+        return internshipOfferService.getAllNonValidatedOffers(semesterFullName).collectList()
                 .flatMap(nonValidatedOffers -> {
                     Map<String, Object> variables = new HashMap<>();
                     variables.put("internshipOfferList", nonValidatedOffers);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Offres de stages non validées");
-                    variables.put("dates", calculateLocalDates(sessionNumber));
+                    variables.put("session", SemesterUtil.convertInFrench(semesterFullName));
                     return pdfService.renderPdf(new OffersPdf(variables));
                 });
     }
 
-    //TODO --> refactor to pass semesterFullName in argument
-    //TODO --> internshipOfferService.getAllValidatedOffers(semesterFullName)
-    public Mono<byte[]> generateAllValidatedOffersReport(Integer sessionNumber) {
-        List<Date> dates = calculateDates(sessionNumber);
-        return internshipOfferService.getAllValidatedOffers(dates.get(0), dates.get(1)).collectList()
-                .flatMap(validatedOffers -> {
+    public Mono<byte[]> generateAllValidatedOffersReport(String semesterFullName) {
+        return internshipOfferService.getAllValidatedOffers(semesterFullName).collectList()
+                .flatMap(nonValidatedOffers -> {
                     Map<String, Object> variables = new HashMap<>();
-                    variables.put("internshipOfferList", validatedOffers);
+                    variables.put("internshipOfferList", nonValidatedOffers);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Offres de stages validées");
-                    variables.put("dates", calculateLocalDates(sessionNumber));
+                    variables.put("session", SemesterUtil.convertInFrench(semesterFullName));
                     return pdfService.renderPdf(new OffersPdf(variables));
                 });
     }
+
 
     public Mono<byte[]> generateAllStudentsReport() {
         return studentService.getAll().collectList()
@@ -155,101 +148,29 @@ public class ReportService {
                 });
     }
 
-    //TODO --> refactor to pass semesterFullName in argument
-    //TODO --> studentService.getAllWithEvaluationDateBetween(semesterFullName)
-    public Mono<byte[]> generateStudentsNotEvaluatedReport(Integer sessionNumber) {
-        List<LocalDate> dates = calculateLocalDates(sessionNumber);
-        return studentService.getAllWithEvaluationDateBetween(dates.get(0), dates.get(1)).collectList()
+    public Mono<byte[]> generateStudentsNotEvaluatedReport(String semesterFullName) {
+        return studentService.getAllWithNoEvaluationDateDuringSemester(semesterFullName).collectList()
                 .flatMap(students -> {
                     Map<String, Object> variables = new HashMap<>();
                     variables.put("studentsList", students);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants qui n'ont pas encore été évalués par leur moniteur");
-                    variables.put("dates", calculateLocalDates(sessionNumber));
+                    variables.put("session", SemesterUtil.convertInFrench(semesterFullName));
                     return pdfService.renderPdf(new StudentsPdf(variables));
                 });
     }
 
-    public Mono<byte[]> generateStudentsWithSupervisorWithNoCompanyEvaluation(Integer sessionNumber) {
-        List<LocalDate> dates = calculateLocalDates(sessionNumber);
-        return supervisorService.getStudentsEmailWithSupervisorWithNoEvaluation(dates.get(0), dates.get(1))
+    public Mono<byte[]> generateStudentsWithSupervisorWithNoCompanyEvaluation(String semesterFullName) {
+        return supervisorService.getStudentsEmailWithSupervisorWithNoEvaluation(semesterFullName)
                 .flatMapMany(studentsEmail -> Flux.fromIterable(studentsEmail).flatMap(studentService::findByEmail)).collectList()
                 .flatMap(students -> {
                     Map<String, Object> variables = new HashMap<>();
                     variables.put("studentsList", students);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants dont le superviseur n'a pas encore évalué l'entreprise");
-                    variables.put("dates", calculateLocalDates(sessionNumber));
+                    variables.put("session", SemesterUtil.convertInFrench(semesterFullName));
                     return pdfService.renderPdf(new StudentsPdf(variables));
                 });
-    }
-
-
-    //TODO --> remove this because it will no longer be needed
-    protected List<Date> calculateDates(Integer sessionNumber) {
-        List<Date> dates = new ArrayList<>();
-
-        String season = sessionNumber.toString().substring(0, 1);
-        String year = 20 + sessionNumber.toString().substring(1, 3);
-
-        Date startDate = new Date();
-        Date endDate = new Date();
-        if (Integer.parseInt(season) == WINTER) {
-            LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), JANUARY, FIRST);
-            startDate = convertLocalDateToDate(startLocalDate);
-
-            LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), MAY, THIRTY_FIRST);
-            endDate = convertLocalDateToDate(endLocalDate);
-        } else if (Integer.parseInt(season) == SUMMER) {
-            LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), JUNE, FIRST);
-            startDate = convertLocalDateToDate(startLocalDate);
-
-            LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), AUGUST, THIRTY);
-            endDate = convertLocalDateToDate(endLocalDate);
-        } else if (Integer.parseInt(season) == FALL) {
-            LocalDate startLocalDate = LocalDate.of(Integer.parseInt(year), SEPTEMBER, FIRST);
-            startDate = convertLocalDateToDate(startLocalDate);
-
-            LocalDate endLocalDate = LocalDate.of(Integer.parseInt(year), DECEMBER, THIRTY_FIRST);
-            endDate = convertLocalDateToDate(endLocalDate);
-        }
-
-        dates.add(startDate);
-        dates.add(endDate);
-
-        return dates;
-    }
-
-    //TODO --> remove this because it will no longer be needed
-    protected List<LocalDate> calculateLocalDates(Integer sessionNumber) {
-        List<LocalDate> dates = new ArrayList<>();
-
-        String season = sessionNumber.toString().substring(0, 1);
-        String year = 20 + sessionNumber.toString().substring(1, 3);
-
-        LocalDate startLocalDate = null;
-        LocalDate endLocalDate = null;
-        if (Integer.parseInt(season) == WINTER) {
-            startLocalDate = LocalDate.of(Integer.parseInt(year), JANUARY, FIRST);
-            endLocalDate = LocalDate.of(Integer.parseInt(year), MAY, THIRTY_FIRST);
-        } else if (Integer.parseInt(season) == SUMMER) {
-            startLocalDate = LocalDate.of(Integer.parseInt(year), JUNE, FIRST);
-            endLocalDate = LocalDate.of(Integer.parseInt(year), AUGUST, THIRTY);
-        } else if (Integer.parseInt(season) == FALL) {
-            startLocalDate = LocalDate.of(Integer.parseInt(year), SEPTEMBER, FIRST);
-            endLocalDate = LocalDate.of(Integer.parseInt(year), DECEMBER, THIRTY_FIRST);
-        }
-
-        dates.add(startLocalDate);
-        dates.add(endLocalDate);
-
-        return dates;
-    }
-
-    //TODO --> remove this because it will no longer be needed
-    protected Date convertLocalDateToDate(LocalDate localDate) {
-        ZoneId defaultZoneId = ZoneId.systemDefault();
-        return Date.from(localDate.atStartOfDay(defaultZoneId).toInstant());
     }
 
 }

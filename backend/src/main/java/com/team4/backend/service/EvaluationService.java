@@ -22,9 +22,14 @@ public class EvaluationService {
 
     private final StudentService studentService;
 
-    public EvaluationService(EvaluationRepository evaluationRepository, StudentService studentService) {
+    private final SemesterService semesterService;
+
+    public EvaluationService(EvaluationRepository evaluationRepository,
+                             StudentService studentService,
+                             SemesterService semesterService) {
         this.evaluationRepository = evaluationRepository;
         this.studentService = studentService;
+        this.semesterService = semesterService;
     }
 
     public Mono<Evaluation> addEvaluation(EvaluationDto evaluationDto) {
@@ -46,14 +51,14 @@ public class EvaluationService {
                 }).flatMap(s -> Mono.just(atomicReference.get()));
     }
 
-    public Flux<Evaluation> getAllWithDateBetween(LocalDate sessionStart, LocalDate sessionEnd) {
-        return evaluationRepository.findAll()
-                .flatMap(evaluation -> {
-                    if (LocalDate.parse(evaluation.getText().get("date")).isAfter(sessionStart) && LocalDate.parse(evaluation.getText().get("date")).isBefore(sessionEnd)) {
-                        return Flux.just(evaluation);
-                    }
-                    return Flux.empty();
-                });
+    public Flux<Evaluation> getAllWithDateBetween(String semesterFullName) {
+        return semesterService.findByFullName(semesterFullName)
+                .flatMapMany(semester -> evaluationRepository.findAll()
+                        .filter(evaluation -> LocalDate.parse(evaluation.getText().get("date")).atStartOfDay().isAfter(semester.getFrom()) &&
+                                LocalDate.parse(evaluation.getText().get("date")).atStartOfDay().isBefore(semester.getTo())
+                        )
+
+                );
     }
 
 }

@@ -33,7 +33,6 @@ public class SemesterService {
         LocalDateTime currentDate = LocalDateTime.now();
 
         return semesterRepository.findByFromLessThanEqualAndToGreaterThanEqual(currentDate, currentDate)
-                //This should never happen, because we create the 3 semester yearly, but in case it happens
                 .switchIfEmpty(Mono.error(new SemesterNotFoundException("Can't find current semester!")));
     }
 
