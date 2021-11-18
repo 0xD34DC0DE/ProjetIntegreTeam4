@@ -3,6 +3,7 @@ package com.team4.backend.service;
 import com.team4.backend.pdf.OffersPdf;
 import com.team4.backend.pdf.StudentsPdf;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDate;
@@ -16,6 +17,10 @@ public class ReportService {
     private final InternshipOfferService internshipOfferService;
 
     private final StudentService studentService;
+
+    private final EvaluationService evaluationService;
+
+    private final SupervisorService supervisorService;
 
     private final PdfService pdfService;
 
@@ -35,9 +40,11 @@ public class ReportService {
     private final int THIRTY_FIRST = 31;
 
 
-    public ReportService(InternshipOfferService internshipOfferService, StudentService studentService, PdfService pdfService) {
+    public ReportService(InternshipOfferService internshipOfferService, StudentService studentService, EvaluationService evaluationService, SupervisorService supervisorService, PdfService pdfService) {
         this.internshipOfferService = internshipOfferService;
         this.studentService = studentService;
+        this.evaluationService = evaluationService;
+        this.supervisorService = supervisorService;
         this.pdfService = pdfService;
     }
 
@@ -158,6 +165,20 @@ public class ReportService {
                     variables.put("studentsList", students);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants qui n'ont pas encore été évalués par leur moniteur");
+                    variables.put("dates", calculateLocalDates(sessionNumber));
+                    return pdfService.renderPdf(new StudentsPdf(variables));
+                });
+    }
+
+    public Mono<byte[]> generateStudentsWithSupervisorWithNoCompanyEvaluation(Integer sessionNumber) {
+        List<LocalDate> dates = calculateLocalDates(sessionNumber);
+        return supervisorService.getStudentsEmailWithSupervisorWithNoEvaluation(dates.get(0), dates.get(1))
+                .flatMapMany(studentsEmail -> Flux.fromIterable(studentsEmail).flatMap(studentService::findByEmail)).collectList()
+                .flatMap(students -> {
+                    Map<String, Object> variables = new HashMap<>();
+                    variables.put("studentsList", students);
+                    variables.put("date", LocalDate.now());
+                    variables.put("title", "Étudiants dont le superviseur n'a pas encore évalué l'entreprise");
                     variables.put("dates", calculateLocalDates(sessionNumber));
                     return pdfService.renderPdf(new StudentsPdf(variables));
                 });

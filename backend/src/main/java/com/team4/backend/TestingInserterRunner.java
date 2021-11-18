@@ -1,6 +1,7 @@
 package com.team4.backend;
 
 import com.team4.backend.model.*;
+import com.team4.backend.model.enums.NotificationSeverity;
 import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.*;
@@ -43,6 +44,8 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final InternshipRepository internshipRepository;
 
+    private final NotificationRepository notificationRepository;
+
     private final EvaluationRepository evaluationRepository;
 
     private final InternshipManagerRepository internshipManagerRepository;
@@ -68,7 +71,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                                  FileMetaDataRepository fileMetaDataRepository,
                                  InternshipManagerRepository internshipManagerRepository,
                                  InternshipRepository internshipRepository,
-                                 SemesterRepository semesterRepository) {
+                                 SemesterRepository semesterRepository,
+                                 NotificationRepository notificationRepository) {
         this.userRepository = userRepository;
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
@@ -80,6 +84,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.internshipRepository = internshipRepository;
         this.evaluationRepository = evaluationRepository;
         this.internshipManagerRepository = internshipManagerRepository;
+        this.notificationRepository = notificationRepository;
         this.semesterRepository = semesterRepository;
         this.evaluationsDates = new TreeSet<>();
         this.evaluationsDates.add(LocalDate.of(2019, 4, 4));
@@ -103,6 +108,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         evaluationRepository.deleteAll().subscribe();
         internshipContractRepository.deleteAll().subscribe();
         semesterRepository.deleteAll().subscribe();
+        notificationRepository.deleteAll().subscribe();
 
         insertSemesters();
         insertInternshipOffersInternshipManagerView();
@@ -110,14 +116,37 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertMonitors();
         insertSupervisors();
         insertCvs();
-        insertInternship();
+        insertNotifications();
+        insertInternships();
     }
 
     private void insertSemesters() {
         semesterRepository.saveAll(SemesterUtil.getSemesters(LocalDateTime.now())).subscribe();
     }
 
-    private void insertInternship() {
+    private void insertNotifications() {
+        List<Notification> notifications = Arrays.asList(
+                Notification.notificationBuilder()
+                        .content("CV refusé!")
+                        .title("Notification")
+                        .receiverIds(Set.of(Objects.requireNonNull(studentRepository.findByEmail("student@gmail.com").map(User::getId).block())))
+                        .severity(NotificationSeverity.HIGH)
+                        .data(Collections.emptyMap())
+                        .build(),
+                Notification.notificationBuilder()
+                        .content("CV Accepté!")
+                        .title("Notification")
+                        .receiverIds(Set.of(Objects.requireNonNull(studentRepository.findByEmail("123456789@gmail.com").map(User::getId).block())))
+                        .data(Collections.singletonMap("id", "test"))
+                        .severity(NotificationSeverity.LOW)
+                        .build()
+        );
+
+        notificationRepository
+                .saveAll(notifications).subscribe(notification -> log.info("Notifications has been saved: {}", notification));
+    }
+
+    private void insertInternships() {
         List<Internship> internships = Arrays.asList(
                 Internship.builder()
                         .monitorEmail("9182738492@gmail.com")
@@ -134,25 +163,55 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private void insertInternshipContract() {
         String studentId = studentRepository.findByEmail("student@gmail.com").block().getId();
+        String studentId1 = studentRepository.findByEmail("123456789@gmail.com").block().getId();
+        String studentId2 = studentRepository.findByEmail("123667713@gmail.com").block().getId();
         String monitorId = monitorRepository.findByEmail("monitor@gmail.com").block().getId();
+        String monitorId1 = monitorRepository.findByEmail("monitor1@gmail.com").block().getId();
         String internshipManagerId = internshipManagerRepository.findByEmail("manager1@gmail.com")
                 .block().getId();
+        String internshipManagerId1 = internshipManagerRepository.findByEmail("manager2@gmail.com")
+                .block().getId();
 
-        InternshipContract internshipContract = InternshipContract.builder()
-                .internshipOfferId(internshipOfferId)
-                .address("123, Somewhere St., Montreal, Quebec")
-                .beginningDate(LocalDate.now().plusWeeks(1))
-                .endingDate(LocalDate.now().plusWeeks(5))
-                .dailySchedule("8:00 à 16:00")
-                .hourlyRate(21.50f)
-                .hoursPerWeek(40.0f)
-                .internTasks("Tasks")
-                .studentSignature(Signature.builder().userId(studentId).hasSigned(false).build())
-                .monitorSignature(Signature.builder().signDate(LocalDate.now()).userId(monitorId).hasSigned(true).build())
-                .internshipManagerSignature(Signature.builder().userId(internshipManagerId).hasSigned(false).build())
-                .build();
+        List<InternshipContract> internshipContracts = Arrays.asList(InternshipContract.builder()
+                        .internshipOfferId(internshipOfferId)
+                        .address("123, Somewhere St., Montreal, Quebec")
+                        .beginningDate(LocalDate.now().plusWeeks(1))
+                        .endingDate(LocalDate.now().plusWeeks(5))
+                        .dailySchedule("8:00 à 16:00")
+                        .hourlyRate(21.50f)
+                        .hoursPerWeek(40.0f)
+                        .internTasks("Tasks")
+                        .studentSignature(Signature.builder().userId(studentId).hasSigned(false).build())
+                        .monitorSignature(Signature.builder().signDate(LocalDate.now()).userId(monitorId).hasSigned(true).build())
+                        .internshipManagerSignature(Signature.builder().userId(internshipManagerId).hasSigned(false).build())
+                        .build(),
+                InternshipContract.builder()
+                        .address("456, Perdu à la campagne, St-Isidore, Quebec")
+                        .beginningDate(LocalDate.now())
+                        .endingDate(LocalDate.now().plusWeeks(2))
+                        .dailySchedule("4:00 à 21:00")
+                        .hourlyRate(520.0f)
+                        .hoursPerWeek(80.0f)
+                        .internTasks("Work")
+                        .studentSignature(Signature.builder().userId(studentId1).hasSigned(true).build())
+                        .monitorSignature(Signature.builder().signDate(LocalDate.now()).userId(monitorId1).hasSigned(true).build())
+                        .internshipManagerSignature(Signature.builder().userId(internshipManagerId1).hasSigned(true).build())
+                        .build(),
+                InternshipContract.builder()
+                        .address("789, Quelque part, Montréal, Québec")
+                        .beginningDate(LocalDate.now())
+                        .endingDate(LocalDate.now().plusWeeks(2))
+                        .dailySchedule("10:00 à 15:00")
+                        .hourlyRate(10.0f)
+                        .hoursPerWeek(15.0f)
+                        .internTasks("Work")
+                        .studentSignature(Signature.builder().userId(studentId2).hasSigned(true).build())
+                        .monitorSignature(Signature.builder().signDate(LocalDate.now()).userId(monitorId1).hasSigned(true).build())
+                        .internshipManagerSignature(Signature.builder().userId(internshipManagerId1).hasSigned(true).build())
+                        .build()
+        );
 
-        internshipContractRepository.save(internshipContract).block();
+        internshipContractRepository.saveAll(internshipContracts).subscribe(i -> log.info("Internship has been saved : {}", i));
     }
 
     private void insertStudents() {
@@ -262,7 +321,13 @@ public class TestingInserterRunner implements ApplicationRunner {
                 .lastName("Giovanna")
                 .build();
 
-        monitorRepository.save(monitor).subscribe(user -> log.info("Monitor has been saved: {}", user));
+        Monitor monitor2 = Monitor.monitorBuilder().email("monitor1@gmail.com")
+                .password(pbkdf2Encoder.encode("monitor1"))
+                .firstName("Amir")
+                .lastName("Fernandez")
+                .build();
+
+        monitorRepository.saveAll(Arrays.asList(monitor, monitor2)).subscribe(user -> log.info("Monitor has been saved: {}", user));
     }
 
     private void insertSupervisors() {
@@ -277,7 +342,14 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Michel")
                         .lastName("Lamarck")
-                        .studentTimestampedEntries(new HashSet<>(Arrays.asList(
+                    .studentTimestampedEntries(new HashSet<>(Arrays.asList(
+                            new TimestampedEntry("3643283423@gmail.com", LocalDateTime.now())))).build(),
+                Supervisor.supervisorBuilder()
+                        .email("supervisor2@gmail.com")
+                        .password(pbkdf2Encoder.encode("supervisor1"))
+                        .firstName("Kendrick")
+                        .lastName("Lamar")
+                         .studentTimestampedEntries(new HashSet<>(Arrays.asList(
                                 new TimestampedEntry("studentInternFound@gmail.com", LocalDateTime.now()),
                                 new TimestampedEntry("123456789@gmail.com", LocalDateTime.now())))).build()
         );

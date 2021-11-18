@@ -17,6 +17,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static reactor.core.publisher.Mono.when;
 
 @EnableAutoConfiguration
 @ExtendWith(MockitoExtension.class)
@@ -30,6 +31,9 @@ class ReportServiceTest {
 
     @Mock
     InternshipOfferService internshipOfferService;
+
+    @Mock
+    SupervisorService supervisorService;
 
     @InjectMocks
     ReportService reportService;
@@ -67,7 +71,7 @@ class ReportServiceTest {
     @Test
     void shouldGenerateAllStudentsReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudents()).when(studentService).getAll();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getAll();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
@@ -82,7 +86,7 @@ class ReportServiceTest {
     @Test
     void shouldGenerateStudentsNoCvReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudents()).when(studentService).getAllStudentsWithNoCv();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getAllStudentsWithNoCv();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
@@ -97,7 +101,7 @@ class ReportServiceTest {
     @Test
     void shouldGenerateStudentsUnvalidatedCvReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudents()).when(studentService).getAllStudentsWithUnvalidatedCv();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getAllStudentsWithUnvalidatedCv();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
@@ -112,7 +116,7 @@ class ReportServiceTest {
     @Test
     void shouldGenerateStudentsNoInternshipReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudents()).when(studentService).getStudentsNoInternship();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getStudentsNoInternship();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
@@ -127,7 +131,7 @@ class ReportServiceTest {
     @Test
     void shouldGenerateStudentsWaitingInterviewReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudents()).when(studentService).getStudentsWaitingInterview();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getStudentsWaitingInterview();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
@@ -142,7 +146,7 @@ class ReportServiceTest {
     @Test
     void generateStudentsWithInternshipReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudents()).when(studentService).getStudentsWaitingResponse();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getStudentsWaitingResponse();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
@@ -157,7 +161,7 @@ class ReportServiceTest {
     @Test
     void shouldGenerateStudentsWithInternshipReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudents()).when(studentService).getStudentsWithInternship();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getStudentsWithInternship();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
@@ -177,6 +181,22 @@ class ReportServiceTest {
 
         //ACT
         Mono<byte[]> response = reportService.generateStudentsNotEvaluatedReport(321);
+
+        //ASSERT
+        StepVerifier.create(response).consumeNextWith(s -> {
+            assertEquals(ReportMockData.getBytes()[0], s[0]);
+        }).verifyComplete();
+    }
+
+    @Test
+    void shouldGenerateStudentsWithSupervisorWithNoCompanyEvaluation() {
+        //ARRANGE
+        doReturn(ReportMockData.getStudentsEmailMonoList()).when(supervisorService).getStudentsEmailWithSupervisorWithNoEvaluation(any(), any());
+        doReturn(ReportMockData.getStudentMono()).when(studentService).findByEmail(any());
+        doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
+
+        //ACT
+        Mono<byte[]> response = reportService.generateStudentsWithSupervisorWithNoCompanyEvaluation(321);
 
         //ASSERT
         StepVerifier.create(response).consumeNextWith(s -> {
@@ -252,4 +272,5 @@ class ReportServiceTest {
         assertEquals(localDate0,dates.get(0));
         assertEquals(localDate1,dates.get(1));
     }
+
 }
