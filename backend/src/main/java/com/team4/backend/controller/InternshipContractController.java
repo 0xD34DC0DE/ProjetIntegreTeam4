@@ -66,12 +66,6 @@ public class InternshipContractController {
         return internshipContractService.getContractById(contractId, UserSessionService.getLoggedUserEmail(principal));
     }
 
-    @GetMapping("/tmp")
-    @PreAuthorize("hasAnyAuthority('MONITOR', 'STUDENT', 'INTERNSHIP_MANAGER')")
-    public Mono<String> tmp() {
-        return internshipContractService.getContractIdTemporary();
-    }
-
     @GetMapping("/signed")
     @PreAuthorize("hasAnyAuthority('MONITOR', 'STUDENT', 'INTERNSHIP_MANAGER')")
     public Mono<Boolean> hasSigned(@RequestParam("internshipOfferId") String internshipOfferId,
