@@ -57,4 +57,13 @@ public abstract class FileMetaDataMockData {
                 .build();
     }
 
+    public static Flux<FileMetaData> getAssetIdLastWithUserEmailFlux() {
+        return Flux.just(
+                FileMetaData.builder()
+                        .assetId("assetId1").build(),
+                FileMetaData.builder()
+                        .assetId("assetId2").build()
+        );
+    }
+
 }

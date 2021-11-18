@@ -1,14 +1,15 @@
 package com.team4.backend.util;
 
 import com.team4.backend.model.Semester;
+import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.testdata.SemesterMockData;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SemesterUtilTest {
 
@@ -55,6 +56,18 @@ public class SemesterUtilTest {
 
         //ASSERT
         assertFalse(isInsideRange);
+    }
+
+    @Test
+    void shouldConvertInFrench(){
+        //ARRANGE
+        String semesterFullName = SemesterName.FALL + "-" + LocalDateTime.now().getYear();
+
+        //ACT
+        String nameInFrench = SemesterUtil.convertInFrench(semesterFullName);
+
+        //ASSERT
+        assertEquals("AUTOMNE " + LocalDate.now().getYear(),nameInFrench);
     }
 
 }

@@ -88,7 +88,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.semesterRepository = semesterRepository;
         this.evaluationsDates = new TreeSet<>();
         this.evaluationsDates.add(LocalDate.of(2019, 4, 4));
-        this.evaluationsDates.add(LocalDate.of(2020, 9, 4));
+        this.evaluationsDates.add(LocalDate.of(2021, 9, 4));
         this.evaluationsDates.add(LocalDate.now());
         this.lorem = LoremIpsum.getInstance();
         this.studentSet = new HashSet<>();
@@ -238,6 +238,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("jean123"))
                         .hasValidCv(false)
                         .hasCv(true)
+                        .evaluationsDates(new TreeSet<>())
                         .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
@@ -252,6 +253,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasCv(true)
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
+                        .evaluationsDates(new TreeSet<>())
                         .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .build(),
@@ -264,6 +266,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>())
+                        .evaluationsDates(new TreeSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .hasValidCv(false)
                         .hasCv(true)
@@ -276,6 +279,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("student"))
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
+                        .evaluationsDates(new TreeSet<>())
                         .studentState(StudentState.INTERNSHIP_NOT_FOUND)
                         .hasValidCv(false)
                         .hasCv(false)
@@ -290,6 +294,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasCv(false)
                         .phoneNumber("123-123-1234")
                         .appliedOffersId(new HashSet<>())
+                        .evaluationsDates(new TreeSet<>())
                         .interviewsDate(new TreeSet<>())
                         .exclusiveOffersId(new HashSet<>() {
                             {
@@ -303,6 +308,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .phoneNumber("438-422-3344")
                         .password(pbkdf2Encoder.encode("maxime123"))
                         .hasValidCv(true)
+                        .hasCv(true)
+                        .evaluationsDates(new TreeSet<>())
                         .interviewsDate(new TreeSet<>())
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
@@ -342,14 +349,14 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Michel")
                         .lastName("Lamarck")
-                    .studentTimestampedEntries(new HashSet<>(Arrays.asList(
-                            new TimestampedEntry("3643283423@gmail.com", LocalDateTime.now())))).build(),
+                        .studentTimestampedEntries(new TreeSet<>(Arrays.asList(
+                                new TimestampedEntry("3643283423@gmail.com", LocalDateTime.now())))).build(),
                 Supervisor.supervisorBuilder()
                         .email("supervisor2@gmail.com")
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Kendrick")
                         .lastName("Lamar")
-                         .studentTimestampedEntries(new HashSet<>(Arrays.asList(
+                        .studentTimestampedEntries(new TreeSet<>(Arrays.asList(
                                 new TimestampedEntry("studentInternFound@gmail.com", LocalDateTime.now()),
                                 new TimestampedEntry("123456789@gmail.com", LocalDateTime.now())))).build()
         );
@@ -509,50 +516,50 @@ public class TestingInserterRunner implements ApplicationRunner {
     private void insertCvs() {
         List<FileMetaData> fileMetaDataList = Arrays.asList(
                 FileMetaData.builder()
-                        .assetId("123456789@gmail.com/06708b00-52fe-4054-90d0-a1cd4579b0e9")
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("123456789@gmail.com")
                         .filename("cv1.pdf")
-                        .isValid(false)
+                        .isValid(true)
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusDays(2))
                         .build(),
                 FileMetaData.builder()
-                        .assetId("123456789@gmail.com/3b134033-2463-41b2-b9d8-05238856bfef")
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("123456789@gmail.com")
                         .filename("cv2.pdf")
-                        .isValid(false)
+                        .isValid(true)
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusWeeks(2)).build(),
                 FileMetaData.builder()
-                        .assetId("123456789@gmail.com/8164ae59-a072-4bfe-8f03-2f350dd8086e")
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("123456789@gmail.com")
                         .filename("cv3.pdf")
                         .isValid(false)
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusDays(3)).build(),
                 FileMetaData.builder()
-                        .assetId("123456789@gmail.com/c31a51c5-74b0-4ecb-87a3-554bf5290dac")
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("123456789@gmail.com")
                         .filename("cv4.pdf")
                         .isValid(false)
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusMonths(1)).build(),
                 FileMetaData.builder()
-                        .assetId("123456789@gmail.com/c31a51c5-74b0-4ecb-87a3-554bf5290dac")
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("123456789@gmail.com")
                         .filename("cv5.pdf")
                         .isValid(false)
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusMonths(1)).build(),
                 FileMetaData.builder()
-                        .assetId("123456789@gmail.com/06708b00-52fe-4054-90d0-a1cd4579b0e9")
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("123667713@gmail.com")
                         .filename("cv1.pdf")
-                        .isValid(false)
+                        .isValid(true)
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusWeeks(2)).build(),
                 FileMetaData.builder()
-                        .assetId("123456789@gmail.com/3b134033-2463-41b2-b9d8-05238856bfef")
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("123667713@gmail.com")
                         .filename("cv2.pdf")
                         .isValid(false)
@@ -560,21 +567,21 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .uploadDate(LocalDateTime.now())
                         .build(),
                 FileMetaData.builder()
-                        .assetId("123456789@gmail.com/8164ae59-a072-4bfe-8f03-2f350dd8086e")
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("3643283423@gmail.com")
                         .filename("cv1.pdf")
                         .isValid(false)
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusDays(6)).build(),
                 FileMetaData.builder()
-                        .assetId("123456789@gmail.com/06708b00-52fe-4054-90d0-a1cd4579b0e9")
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("3643283423@gmail.com")
                         .filename("cv2.pdf")
-                        .isValid(false)
+                        .isValid(true)
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusDays(2)).build(),
                 FileMetaData.builder()
-                        .assetId("123456789@gmail.com/3b134033-2463-41b2-b9d8-05238856bfef")
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("902938912@gmail.com")
                         .filename("cv1.pdf")
                         .isValid(false)
@@ -582,7 +589,23 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .uploadDate(LocalDateTime.now())
                         .build(),
                 FileMetaData.builder()
-                        .assetId("123456789@gmail.com/8164ae59-a072-4bfe-8f03-2f350dd8086e")
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
+                        .userEmail("student@gmail.com")
+                        .filename("cv1.pdf")
+                        .isValid(true)
+                        .isSeen(false)
+                        .uploadDate(LocalDateTime.now().minusWeeks(2))
+                        .build(),
+                FileMetaData.builder()
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
+                        .userEmail("student@gmail.com")
+                        .filename("cv1.pdf")
+                        .isValid(true)
+                        .isSeen(false)
+                        .uploadDate(LocalDateTime.now().minusDays(3))
+                        .build(),
+                FileMetaData.builder()
+                        .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("902938912@gmail.com")
                         .filename("cv2.pdf")
                         .isValid(false)
@@ -632,6 +655,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .uploadDate(LocalDateTime.now())
                         .build()
                 );
+
 
         fileMetaDataRepository.saveAll(fileMetaDataList)
                 .subscribe(f -> log.info("new cv file has been created: {}", f));

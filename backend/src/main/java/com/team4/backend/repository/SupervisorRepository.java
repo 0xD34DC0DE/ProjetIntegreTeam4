@@ -8,6 +8,7 @@ import reactor.core.publisher.Mono;
 
 @Repository
 public interface SupervisorRepository extends ReactiveMongoRepository<Supervisor, String> {
+
     Mono<Supervisor> findSupervisorByEmail(String email);
 
     Flux<Supervisor> findAllByRole(String role);
