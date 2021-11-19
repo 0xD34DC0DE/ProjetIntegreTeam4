@@ -51,7 +51,6 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
 
   const updateSemesterFullName = (fullName) => {
     setSemesterFullName(fullName);
-    console.log(fullName);
   };
 
   const getStudentInitials = (fullName) => {
