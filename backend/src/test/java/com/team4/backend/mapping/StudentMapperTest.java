@@ -15,7 +15,7 @@ public class StudentMapperTest {
 
     @Test
     void mapDtoToEntity() {
-        //ARANGE
+        //ARRANGE
         StudentDetailsDto dto = StudentMockData.getMockStudentDto();
 
         //ACT
@@ -35,7 +35,7 @@ public class StudentMapperTest {
 
     @Test
     void mapEntityToDto() {
-        //ARANGE
+        //ARRANGE
         Student entity = StudentMockData.getMockStudent();
 
         //ACT
@@ -56,7 +56,7 @@ public class StudentMapperTest {
 
     @Test
     void mapEntityToProfileDto() {
-        //ARANGE
+        //ARRANGE
         LocalDate localDate = LocalDate.now();
         Student entity = StudentMockData.getMockStudent();
 

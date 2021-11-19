@@ -10,7 +10,6 @@ import {
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
-import { motion } from "framer-motion";
 
 const StudentInternshipDetailsDialog = ({
   open,

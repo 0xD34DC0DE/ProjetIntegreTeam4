@@ -4,14 +4,16 @@ import axios from "axios";
 import CvInternshipManagerView from "./CvInternshipManagerView";
 import { motion } from "framer-motion";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import CVDialog from "./CVDialog";
 
-const ListCvInternshipManagerView = ({ visible }) => {
+const ListCvInternshipManagerView = ({ toggleDialog, visible, dialogVisibility }) => {
   const [cvs, setCvs] = useState([]);
   const [nbrCvs, setNbrCvs] = useState(0);
   const [noPage, setNoPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [userInfo] = useContext(UserInfoContext);
-
+  const [url, setUrl] = useState("");
+  
   const fadeIn = {
     hidden: { opacity: 0 },
     show: {
@@ -62,6 +64,12 @@ const ListCvInternshipManagerView = ({ visible }) => {
     getCvs(noPage);
   }, [noPage]);
 
+  useEffect(() => {
+    if (url !== "") {
+        toggleDialog("cvDialog", true);
+    }
+  }, [url])
+
   const handleChangePage = (_, newPage) => {
     setNoPage(newPage);
   };
@@ -74,6 +82,7 @@ const ListCvInternshipManagerView = ({ visible }) => {
     setCvs(cvs.filter((cv) => cv.id !== id));
     setNbrCvs(nbrCvs - 1);
   };
+
 
   return (
     <>
@@ -97,6 +106,7 @@ const ListCvInternshipManagerView = ({ visible }) => {
                   filename={cv.filename}
                   uploadDate={cv.uploadDate}
                   removeCv={removeCv}
+                  setUrl={setUrl} 
                 />
               ))}
             </Grid>
@@ -118,6 +128,7 @@ const ListCvInternshipManagerView = ({ visible }) => {
               />
             </motion.div>
           </Container>
+          <CVDialog open={dialogVisibility.cvDialog} toggleDialog={toggleDialog} cvUrl={url} setUrl={setUrl}/>
         </>
       )}
     </>

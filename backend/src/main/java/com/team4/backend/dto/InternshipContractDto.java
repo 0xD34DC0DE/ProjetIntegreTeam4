@@ -8,12 +8,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class InternshipContractDto {
 
+    private String contractId;
+
     private String internshipOfferId;
 
     private String studentEmail;
 
     @Builder
-    public InternshipContractDto(String internshipOfferId, String studentEmail) {
+    public InternshipContractDto(String internshipOfferId, String studentEmail, String contractId) {
+        this.contractId = contractId;
         this.internshipOfferId = internshipOfferId;
         this.studentEmail = studentEmail;
     }

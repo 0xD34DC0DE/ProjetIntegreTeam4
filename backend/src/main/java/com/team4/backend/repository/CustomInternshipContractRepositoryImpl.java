@@ -4,8 +4,6 @@ import com.team4.backend.model.InternshipContract;
 import com.team4.backend.service.UserService;
 import com.team4.backend.util.JwtUtil;
 import com.team4.backend.util.PBKDF2Encoder;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;

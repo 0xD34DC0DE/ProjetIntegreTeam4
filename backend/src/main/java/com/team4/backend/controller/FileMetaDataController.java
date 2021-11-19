@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
+import com.team4.backend.dto.FileMetaDataStudentViewDto;
 import com.team4.backend.mapping.FileMetaDataMapper;
 import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.FileMetaDataService;
@@ -53,4 +54,15 @@ public class FileMetaDataController {
                 .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 
+    @GetMapping("/getAllCvByUserEmail/{userEmail}")
+    @PreAuthorize("hasAuthority('STUDENT')")
+    public Flux<FileMetaDataStudentViewDto> getAllCvByUserEmail(@PathVariable String userEmail) {
+        return fileMetaDataService.getAllCvByUserEmail(userEmail).map(FileMetaDataMapper::toStudentViewDto);
+    }
+
+    @GetMapping("/getLatestCv/{studentEmail}")
+    @PreAuthorize("hasAuthority('MONITOR')")
+    public Mono<String> getFirstValidCv(@PathVariable String studentEmail) {
+        return fileMetaDataService.getLastValidatedCvWithUserEmail(studentEmail);
+    }
 }
