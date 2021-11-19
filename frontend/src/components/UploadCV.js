@@ -164,10 +164,19 @@ const UploadCV = ({ visible, toggleDialog, dialogVisibility }) => {
               </Grid>
             </Grid>
           </Grid>
-          <ListCvStudentView
-            toggleDialog={toggleDialog}
-            dialogVisibility={dialogVisibility}
-          />
+          <motion.div
+            style={{ opacity: 0 }}
+            animate={{ opacity: [0, 1] }}
+            transition={{
+              duration: 0.75,
+              delay: 0.25,
+            }}
+          >
+            <ListCvStudentView
+              toggleDialog={toggleDialog}
+              dialogVisibility={dialogVisibility}
+            />
+          </motion.div>
         </>
       )}
     </>

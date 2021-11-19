@@ -17,6 +17,8 @@ public class FileMetaDataStudentViewDto implements Serializable {
 
     private String filename;
 
+    private String assetId;
+
     private Boolean isValid;
 
     private Boolean isSeen;

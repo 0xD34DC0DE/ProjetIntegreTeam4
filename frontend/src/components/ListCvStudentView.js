@@ -1,33 +1,34 @@
+import InfoIcon from "@mui/icons-material/Info";
+import ThumbDownIcon from "@mui/icons-material/ThumbDown";
+import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import {
-  Snackbar,
-  SnackbarContent,
-  Typography,
-  Paper,
-  Grid,
+  Box,
   Card,
   CardContent,
-  List,
-  ListItem,
   Container,
-  Divider,
-  Box,
-  Popover,
+  Grid,
+  Typography,
 } from "@mui/material";
-import React, { useContext, useState, useEffect } from "react";
-import { UserInfoContext } from "../stores/UserInfoStore";
 import axios from "axios";
-import { motion } from "framer-motion";
-import InfoIcon from "@mui/icons-material/Info";
-import ThumbUpIcon from "@mui/icons-material/ThumbUp";
-import ThumbDownIcon from "@mui/icons-material/ThumbDown";
-import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
+import React, { useContext, useEffect, useState } from "react";
+import { UserInfoContext } from "../stores/UserInfoStore";
 import CvRejectionExplanationDialog from "./CvRejectionExplanationDialog";
+import CVDialog from "./CVDialog";
 
 const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
   const [userInfo] = useContext(UserInfoContext);
-  const [rejectedCvs, setRejectedCvs] = useState([]);
-  const [selectedRejectionExplanation, setSelectedRejectionExplanation] =
-    useState("");
+  const [cvs, setCvs] = useState([]);
+  const [url, setUrl] = useState("");
+  const fadeIn = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: [0, 1],
+      transition: {
+        delay: 0.1,
+        staggerChildren: 0.5,
+      },
+    },
+  };
   useEffect(() => {
     const getAllCvByUserEmail = async () => {
       var response = await axios({
@@ -42,19 +43,26 @@ const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
       });
 
       console.log("response", response.data);
-      setRejectedCvs(response.data);
+      setCvs(response.data);
     };
 
     getAllCvByUserEmail();
   }, []);
 
   const isNotARenderedAttribute = (identifier) => {
-    return !["isValid", "isSeen", "rejectionExplanation"].includes(identifier);
+    return !["isValid", "isSeen", "rejectionExplanation", "assetId"].includes(
+      identifier
+    );
+  };
+
+  const openCv = (assetId) => {
+    console.log("assetId", assetId);
+    setUrl("https://projetintegreteam4.s3.amazonaws.com/" + assetId);
   };
 
   return (
     <>
-      {rejectedCvs && (
+      {cvs && (
         <Container sx={{ mt: 5 }}>
           <Typography
             variant="h4"
@@ -65,91 +73,113 @@ const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
             Vos C.V.
           </Typography>
           <Grid alignItems="center" container spacing={5}>
-            {rejectedCvs.map((cv) => {
-              console.log("cv seen valid", cv);
-              return (
-                <Grid item flexGrow="1">
-                  <Card
-                    variant="outlined"
-                    sx={{
-                      backgroundColor: "rgba(155, 155, 155, 0.1)",
-                      borderRadius: 4,
-                      boxShadow: "0px 0px 10px 1px rgba(255, 255, 255, 0.3)",
-                      mt: 2,
-                      mb: 5,
-                      textAlign: "right",
-                    }}
-                  >
-                    {cv.isSeen == false && (
-                      <Typography title="Le C.V. n'a pas encore été vérifié.">
-                        <InfoIcon
-                          sx={{
-                            float: "right",
-                            mr: 1,
-                            mt: 1,
-                            color: "lightgrey",
-                            ":hover": {
-                              color: "darkgray",
-                              cursor: "pointer",
-                            },
-                          }}
-                        />
-                      </Typography>
-                    )}
-                    {cv.isSeen == true && cv.isValid == true && (
-                      <Typography title="Le C.V. a été validé. Vous pouvez maintenant appliquer a des offres.">
-                        <ThumbUpIcon
-                          sx={{
-                            float: "right",
-                            mr: 1,
-                            mt: 1,
-                            color: "green",
-                            ":hover": {
-                              color: "darkgreen",
-                              cursor: "pointer",
-                            },
-                          }}
-                        />
-                      </Typography>
-                    )}
-                    {cv.isSeen == true && cv.isValid == false && (
-                      <Typography title="Voir la raison du rejet">
-                        <ThumbDownIcon
-                          onClick={() =>
-                            toggleDialog("cvRejectionExplanationDialog", true)
-                          }
-                          sx={{
-                            float: "right",
-                            mr: 1,
-                            mt: 1,
-                            color: "red",
-                            ":hover": {
-                              color: "darkred",
-                              cursor: "pointer",
-                            },
-                          }}
-                        />
-                        <CvRejectionExplanationDialog
-                          open={dialogVisibility.cvRejectionExplanationDialog}
-                          toggleDialog={toggleDialog}
-                          rejectionExplanation={cv.rejectionExplanation}
-                        />
-                      </Typography>
-                    )}
-                    <Box sx={{ textAlign: "center" }}>
-                      {Object.keys(cv).map((identifier, key) => {
-                        var value = Object.values(cv)[key];
-                        if (value && isNotARenderedAttribute(identifier))
-                          return <CardContent key={key}>{value}</CardContent>;
-                      })}
-                    </Box>
-                  </Card>
-                </Grid>
-              );
-            })}
+            {cvs
+              .sort(function (cv1, cv2) {
+                return cv1.isValid == true
+                  ? -1
+                  : Date.parse(cv1.uploadDate) - Date.parse(cv2.uploadDate);
+              })
+              .map((cv) => {
+                return (
+                  <Grid item flexGrow="1" xs={12} sm={6} md={4} lg={3} xl={3}>
+                    <Card
+                      variant="outlined"
+                      sx={{
+                        backgroundColor: "rgba(155, 155, 155, 0.1)",
+                        borderRadius: 4,
+                        boxShadow: "0px 0px 10px 1px rgba(255, 255, 255, 0.3)",
+                        mt: 2,
+                        mb: 5,
+                        textAlign: "right",
+                        ":hover": {
+                          backgroundColor: "rgba(200, 200, 200, 0.1)",
+                          cursor: "pointer",
+                        },
+                      }}
+                    >
+                      {cv.isSeen == false && (
+                        <Typography title="Le C.V. n'a pas encore été vérifié.">
+                          <InfoIcon
+                            sx={{
+                              float: "right",
+                              mr: 1,
+                              mt: 1,
+                              color: "lightgrey",
+                              ":hover": {
+                                color: "darkgray",
+                                cursor: "pointer",
+                              },
+                            }}
+                          />
+                        </Typography>
+                      )}
+                      {cv.isSeen == true && cv.isValid == true && (
+                        <Typography title="Le C.V. a été validé. Vous pouvez maintenant appliquer à des offres.">
+                          <ThumbUpIcon
+                            sx={{
+                              float: "right",
+                              mr: 1,
+                              mt: 1,
+                              color: "green",
+                              ":hover": {
+                                color: "darkgreen",
+                                cursor: "pointer",
+                              },
+                            }}
+                          />
+                        </Typography>
+                      )}
+                      {cv.isSeen == true && cv.isValid == false && (
+                        <Typography title="Le C.V. a été rejeté: cliquez ici pour voir la raison du rejet">
+                          <ThumbDownIcon
+                            onClick={() =>
+                              toggleDialog("cvRejectionExplanationDialog", true)
+                            }
+                            sx={{
+                              float: "right",
+                              mr: 1,
+                              mt: 1,
+                              color: "red",
+                              ":hover": {
+                                color: "darkred",
+                              },
+                            }}
+                          />
+                          <CvRejectionExplanationDialog
+                            open={dialogVisibility.cvRejectionExplanationDialog}
+                            toggleDialog={toggleDialog}
+                            rejectionExplanation={cv.rejectionExplanation}
+                          />
+                        </Typography>
+                      )}
+                      <Box
+                        sx={{
+                          textAlign: "center",
+                        }}
+                        onClick={() => {
+                          toggleDialog("cvDialog", true);
+                          openCv(cv.assetId);
+                        }}
+                      >
+                        {Object.keys(cv).map((identifier, key) => {
+                          var value = Object.values(cv)[key];
+                          if (value && isNotARenderedAttribute(identifier))
+                            return <CardContent key={key}>{value}</CardContent>;
+                        })}
+                      </Box>
+                    </Card>
+                  </Grid>
+                );
+              })}
           </Grid>
         </Container>
       )}
+      <CVDialog
+        open={dialogVisibility.cvDialog}
+        toggleDialog={toggleDialog}
+        cvUrl={url}
+        setUrl={setUrl}
+      />
     </>
   );
 };

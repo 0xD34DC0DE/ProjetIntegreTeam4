@@ -6,14 +6,17 @@ import { motion } from "framer-motion";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import CVDialog from "./CVDialog";
 
-const ListCvInternshipManagerView = ({ toggleDialog, visible, dialogVisibility }) => {
+const ListCvInternshipManagerView = ({
+  toggleDialog,
+  visible,
+  dialogVisibility,
+}) => {
   const [cvs, setCvs] = useState([]);
   const [nbrCvs, setNbrCvs] = useState(0);
   const [noPage, setNoPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [userInfo] = useContext(UserInfoContext);
   const [url, setUrl] = useState("");
-  
   const fadeIn = {
     hidden: { opacity: 0 },
     show: {
@@ -66,9 +69,9 @@ const ListCvInternshipManagerView = ({ toggleDialog, visible, dialogVisibility }
 
   useEffect(() => {
     if (url !== "") {
-        toggleDialog("cvDialog", true);
+      toggleDialog("cvDialog", true);
     }
-  }, [url])
+  }, [url]);
 
   const handleChangePage = (_, newPage) => {
     setNoPage(newPage);
@@ -82,7 +85,6 @@ const ListCvInternshipManagerView = ({ toggleDialog, visible, dialogVisibility }
     setCvs(cvs.filter((cv) => cv.id !== id));
     setNbrCvs(nbrCvs - 1);
   };
-
 
   return (
     <>
@@ -106,7 +108,7 @@ const ListCvInternshipManagerView = ({ toggleDialog, visible, dialogVisibility }
                   filename={cv.filename}
                   uploadDate={cv.uploadDate}
                   removeCv={removeCv}
-                  setUrl={setUrl} 
+                  setUrl={setUrl}
                 />
               ))}
             </Grid>
@@ -128,7 +130,12 @@ const ListCvInternshipManagerView = ({ toggleDialog, visible, dialogVisibility }
               />
             </motion.div>
           </Container>
-          <CVDialog open={dialogVisibility.cvDialog} toggleDialog={toggleDialog} cvUrl={url} setUrl={setUrl}/>
+          <CVDialog
+            open={dialogVisibility.cvDialog}
+            toggleDialog={toggleDialog}
+            cvUrl={url}
+            setUrl={setUrl}
+          />
         </>
       )}
     </>
