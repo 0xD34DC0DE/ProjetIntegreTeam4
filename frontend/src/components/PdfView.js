@@ -2,9 +2,7 @@ import React, { useState, useContext, useEffect } from "react";
 import { pdfjs } from "react-pdf";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import {
-  Pagination,
-  Grid,
-  Typography,
+  Grid, Pagination, Typography
 } from "@mui/material";
 import axios from "axios";
 import PdfContainer from "./PdfContainer";
@@ -39,14 +37,14 @@ function PdfView({ pdfUrl, params }) {
             'Access-Control-Allow-Methods':'GET',
           }
         }
-      
+
       axios({
         method: "GET",
         url: pdfUrl,
         headers: config,
         params: { ...params },
         responseType: "arraybuffer",
-      }) 
+      })
       .then((response) => {
         setPdfData(response.data);
       })

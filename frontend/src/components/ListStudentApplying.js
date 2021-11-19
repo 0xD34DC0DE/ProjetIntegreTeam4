@@ -19,7 +19,7 @@ import axios from "axios";
 import MailOutlineIcon from "@mui/icons-material/MailOutline";
 import EmailSender from "./EmailSender";
 import { UserInfoContext } from "../stores/UserInfoStore";
-import SignContractMonitorDialog from "./SignContractMonitorDialog";
+import CreateContractMonitorDialog from "./contracts/CreateContractMonitorDialog";
 import SemesterSelect from "./SemesterSelect";
 import CVDialog from "./CVDialog";
 
@@ -427,7 +427,7 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
         open={dialogVisibility.emailSenderDialog}
         receiver={receiver}
       />
-      <SignContractMonitorDialog
+      <CreateContractMonitorDialog
         toggleDialog={toggleDialog}
         open={dialogVisibility.signContractMonitorDialog}
         pdfUrl={`http://localhost:8080/contract`}

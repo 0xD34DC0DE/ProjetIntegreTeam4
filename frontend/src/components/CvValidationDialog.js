@@ -6,6 +6,7 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  Box,
   TextareaAutosize,
   Typography,
 } from "@mui/material";
@@ -88,8 +89,8 @@ const CvValidationDialog = ({ id, removeCv }) => {
                 <DialogTitle sx={{ pt: 0 }}>
                   Raison du rejet du C.V.
                 </DialogTitle>
-                {(rejectionExplanation === "" ||
-                  rejectionExplanation === null) && (
+                {(rejectionExplanation == "" ||
+                  rejectionExplanation == null) && (
                   <Typography sx={{ color: "red" }}>{errorMessage}</Typography>
                 )}
                 <TextareaAutosize
@@ -116,8 +117,8 @@ const CvValidationDialog = ({ id, removeCv }) => {
               <Button
                 onClick={() => {
                   if (
-                    rejectionExplanation !== null &&
-                    rejectionExplanation !== ""
+                    rejectionExplanation != null &&
+                    rejectionExplanation != ""
                   ) {
                     validateCv(false, rejectionExplanation);
                   } else {

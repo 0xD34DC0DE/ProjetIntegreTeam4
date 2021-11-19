@@ -71,8 +71,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                                  FileMetaDataRepository fileMetaDataRepository,
                                  InternshipManagerRepository internshipManagerRepository,
                                  InternshipRepository internshipRepository,
-                                 SemesterRepository semesterRepository,
-                                 NotificationRepository notificationRepository) {
+                                 NotificationRepository notificationRepository,
+                                 SemesterRepository semesterRepository) {
         this.userRepository = userRepository;
         this.monitorRepository = monitorRepository;
         this.internshipOfferRepository = internshipOfferRepository;
@@ -84,8 +84,8 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.internshipRepository = internshipRepository;
         this.evaluationRepository = evaluationRepository;
         this.internshipManagerRepository = internshipManagerRepository;
-        this.notificationRepository = notificationRepository;
         this.semesterRepository = semesterRepository;
+        this.notificationRepository = notificationRepository;
         this.evaluationsDates = new TreeSet<>();
         this.evaluationsDates.add(LocalDate.of(2019, 4, 4));
         this.evaluationsDates.add(LocalDate.of(2021, 9, 4));
@@ -217,6 +217,7 @@ public class TestingInserterRunner implements ApplicationRunner {
     private void insertStudents() {
         List<Student> students = Arrays.asList(
                 Student.studentBuilder()
+                        .id("61943f31f44ecd30d4f0b470")
                         .email("123456789@gmail.com")
                         .firstName("Travis")
                         .lastName("Scott")

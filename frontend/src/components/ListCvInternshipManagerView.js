@@ -17,7 +17,6 @@ const ListCvInternshipManagerView = ({
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [userInfo] = useContext(UserInfoContext);
   const [url, setUrl] = useState("");
-
   const fadeIn = {
     hidden: { opacity: 0 },
     show: {

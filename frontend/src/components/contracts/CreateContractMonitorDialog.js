@@ -1,9 +1,9 @@
 import { Dialog, DialogContent, Grid } from "@mui/material";
 import React from "react";
-import PdfView from "./PdfView.js";
-import SignContractMonitorForm from "./SignContractMonitorForm";
+import PdfView from "../PdfView.js";
+import CreateContractMonitorForm from "./CreateContractMonitorForm";
 
-function SignContractMonitorDialog({ open, toggleDialog, pdfUrl, params }) {
+function CreateContractMonitorDialog({ open, toggleDialog, pdfUrl, params }) {
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick") {
@@ -27,7 +27,7 @@ function SignContractMonitorDialog({ open, toggleDialog, pdfUrl, params }) {
             </Grid>
 
             <Grid item>
-              <SignContractMonitorForm
+              <CreateContractMonitorForm
                 studentEmail={params.studentEmail}
                 offerId={params.internshipOfferId}
               />
@@ -39,4 +39,4 @@ function SignContractMonitorDialog({ open, toggleDialog, pdfUrl, params }) {
   );
 }
 
-export default SignContractMonitorDialog;
+export default CreateContractMonitorDialog;

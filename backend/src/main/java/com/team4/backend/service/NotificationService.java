@@ -23,7 +23,7 @@ public class NotificationService {
         this.sinks = notificationFlux;
     }
 
-    public Mono<Notification> createNotification(NotificationDto notification) {
+    public Mono<Notification> createNotifications(NotificationDto notification) {
         return notificationRepository
                 .save(NotificationMapper.toEntity(notification))
                 .doOnSuccess(sinks::tryEmitNext);
