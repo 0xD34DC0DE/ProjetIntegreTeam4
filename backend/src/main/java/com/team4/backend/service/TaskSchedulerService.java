@@ -71,7 +71,6 @@ public class TaskSchedulerService {
                                 LocalDateTime.now()));
     }
 
-
     @Scheduled(cron = "0 00 0 ? * *")
     private void notifyMonitorsTwoWeeksLeftContract() {
         internshipContractService.notifyMonitorsTwoWeeksLeft();
