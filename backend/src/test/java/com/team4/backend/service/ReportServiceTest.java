@@ -1,5 +1,6 @@
 package com.team4.backend.service;
 
+import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.testdata.ReportMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -10,11 +11,9 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
+import java.time.LocalDateTime;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
 
@@ -31,20 +30,23 @@ class ReportServiceTest {
     @Mock
     InternshipOfferService internshipOfferService;
 
+    @Mock
+    SupervisorService supervisorService;
+
     @InjectMocks
     ReportService reportService;
 
     @Test
     void shouldGenerateAllNonValidatedOffersReport() {
         //ARRANGE
-        doReturn(ReportMockData.getInternshipOffers()).when(internshipOfferService).getAllNonValidatedOffers(any(), any());
+        doReturn(ReportMockData.getInternshipOffers()).when(internshipOfferService).getAllNonValidatedOffers(any());
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
-        Mono<byte[]> respone = reportService.generateAllNonValidatedOffersReport(119);
+        Mono<byte[]> response = reportService.generateAllNonValidatedOffersReport(SemesterName.FALL + "-" + LocalDateTime.now().getYear());
 
         //ASSERT
-        StepVerifier.create(respone).consumeNextWith(s -> {
+        StepVerifier.create(response).consumeNextWith(s -> {
             assertEquals(ReportMockData.getBytes()[0], s[0]);
         }).verifyComplete();
     }
@@ -52,11 +54,11 @@ class ReportServiceTest {
     @Test
     void shouldGenerateAllValidatedOffersReport() {
         //ARRANGE
-        doReturn(ReportMockData.getInternshipOffers()).when(internshipOfferService).getAllValidatedOffers(any(), any());
+        doReturn(ReportMockData.getInternshipOffers()).when(internshipOfferService).getAllValidatedOffers(any());
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
-        Mono<byte[]> response = reportService.generateAllValidatedOffersReport(321);
+        Mono<byte[]> response = reportService.generateAllValidatedOffersReport(SemesterName.FALL + "-" + LocalDateTime.now().getYear());
 
         //ASSERT
         StepVerifier.create(response).consumeNextWith(s -> {
@@ -67,7 +69,7 @@ class ReportServiceTest {
     @Test
     void shouldGenerateAllStudentsReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudents()).when(studentService).getAll();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getAll();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
@@ -82,7 +84,7 @@ class ReportServiceTest {
     @Test
     void shouldGenerateStudentsNoCvReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudents()).when(studentService).getAllStudentsWithNoCv();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getAllStudentsWithNoCv();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
@@ -97,7 +99,7 @@ class ReportServiceTest {
     @Test
     void shouldGenerateStudentsUnvalidatedCvReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudents()).when(studentService).getAllStudentsWithUnvalidatedCv();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getAllStudentsWithUnvalidatedCv();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
@@ -112,7 +114,7 @@ class ReportServiceTest {
     @Test
     void shouldGenerateStudentsNoInternshipReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudents()).when(studentService).getStudentsNoInternship();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getStudentsNoInternship();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
@@ -127,7 +129,7 @@ class ReportServiceTest {
     @Test
     void shouldGenerateStudentsWaitingInterviewReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudents()).when(studentService).getStudentsWaitingInterview();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getStudentsWaitingInterview();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
@@ -142,7 +144,7 @@ class ReportServiceTest {
     @Test
     void generateStudentsWithInternshipReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudents()).when(studentService).getStudentsWaitingResponse();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getStudentsWaitingResponse();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
@@ -157,7 +159,7 @@ class ReportServiceTest {
     @Test
     void shouldGenerateStudentsWithInternshipReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudents()).when(studentService).getStudentsWithInternship();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getStudentsWithInternship();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
@@ -172,11 +174,11 @@ class ReportServiceTest {
     @Test
     void shouldGenerateStudentsNotEvaluatedReport() {
         //ARRANGE
-        doReturn(ReportMockData.getInternshipOffers()).when(studentService).getAllWithEvaluationDateBetween(any(), any());
+        doReturn(ReportMockData.getInternshipOffers()).when(studentService).getAllWithNoEvaluationDateDuringSemester(any());
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
-        Mono<byte[]> response = reportService.generateStudentsNotEvaluatedReport(321);
+        Mono<byte[]> response = reportService.generateStudentsNotEvaluatedReport(SemesterName.FALL + "-" + LocalDateTime.now().getYear());
 
         //ASSERT
         StepVerifier.create(response).consumeNextWith(s -> {
@@ -185,71 +187,19 @@ class ReportServiceTest {
     }
 
     @Test
-    void shouldCalculateDatesWinter() {
-        //ACT
-        List<Date> dates = reportService.calculateDates(121);
-
-        //ASSERT
-        assertEquals("Fri Jan 01 00:00:00 EST 2021", dates.get(0).toString());
-        assertEquals("Mon May 31 00:00:00 EDT 2021", dates.get(1).toString());
-    }
-
-    @Test
-    void shouldCalculateDatesSummer() {
-        //ACT
-        List<Date> dates = reportService.calculateDates(221);
-
-        //ASSERT
-        assertEquals("Tue Jun 01 00:00:00 EDT 2021", dates.get(0).toString());
-        assertEquals("Mon Aug 30 00:00:00 EDT 2021", dates.get(1).toString());
-    }
-
-    @Test
-    void shouldCalculateDatesFall() {
-        //ACT
-        List<Date> dates = reportService.calculateDates(321);
-
-        //ASSERT
-        assertEquals("Wed Sep 01 00:00:00 EDT 2021", dates.get(0).toString());
-        assertEquals("Fri Dec 31 00:00:00 EST 2021", dates.get(1).toString());
-    }
-
-    @Test
-    void shouldCalculateLocalDatesWinter() {
+    void shouldGenerateStudentsWithSupervisorWithNoCompanyEvaluation() {
         //ARRANGE
-        LocalDate localDate0 = LocalDate.parse("2021-01-01");
-        LocalDate localDate1 = LocalDate.parse("2021-05-31");
+        doReturn(ReportMockData.getStudentsEmailMonoList()).when(supervisorService).getStudentsEmailWithSupervisorWithNoEvaluation(any());
+        doReturn(ReportMockData.getStudentMono()).when(studentService).findByEmail(any());
+        doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
+
         //ACT
-        List<LocalDate> dates = reportService.calculateLocalDates(121);
+        Mono<byte[]> response = reportService.generateStudentsWithSupervisorWithNoCompanyEvaluation(SemesterName.FALL + "-" + LocalDateTime.now().getYear());
 
         //ASSERT
-        assertEquals(localDate0,dates.get(0));
-        assertEquals(localDate1,dates.get(1));
+        StepVerifier.create(response).consumeNextWith(s -> {
+            assertEquals(ReportMockData.getBytes()[0], s[0]);
+        }).verifyComplete();
     }
 
-    @Test
-    void shouldCalculateLocalDatesSummer() {
-        //ARRANGE
-        LocalDate localDate0 = LocalDate.parse("2021-06-01");
-        LocalDate localDate1 = LocalDate.parse("2021-08-30");
-        //ACT
-        List<LocalDate> dates = reportService.calculateLocalDates(221);
-
-        //ASSERT
-        assertEquals(localDate0, dates.get(0));
-        assertEquals(localDate1, dates.get(1));
-    }
-
-    @Test
-    void shouldCalculateLocalDatesFall() {
-        //ARRANGE
-        LocalDate localDate0 = LocalDate.parse("2021-09-01");
-        LocalDate localDate1 = LocalDate.parse("2021-12-31");
-        //ACT
-        List<LocalDate> dates = reportService.calculateLocalDates(321);
-
-        //ASSERT
-        assertEquals(localDate0,dates.get(0));
-        assertEquals(localDate1,dates.get(1));
-    }
 }

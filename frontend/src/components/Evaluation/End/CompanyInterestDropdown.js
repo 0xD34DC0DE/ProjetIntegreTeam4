@@ -128,7 +128,7 @@ const CompanyInterestDropdown = ({ mergeForms }, ref) => {
             </Grid>
             <Grid item xl={5.8} lg={5.7} md={5.6} sm={5.5} xs={5.2}>
               <TextField
-                id="text#fonction"
+                id="text#fonction2"
                 type="text"
                 onChange={handleFormChange}
                 fullWidth

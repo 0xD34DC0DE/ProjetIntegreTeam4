@@ -4,6 +4,8 @@ import {
   DialogContentText,
   Typography,
   Divider,
+  Snackbar,
+  Alert,
 } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
@@ -17,6 +19,7 @@ const StudentInternshipDetailsDialog = ({
 }) => {
   const [internship, setInternship] = useState(null);
   const [userInfo] = useContext(UserInfoContext);
+  const [exists, setExists] = useState(false);
   const internshipLabels = [
     "Courriel du moniteur",
     "Courriel de l'étudiant",
@@ -34,6 +37,7 @@ const StudentInternshipDetailsDialog = ({
           Authorization: userInfo.jwt,
         },
       });
+      setExists(exists.data);
       return exists.data;
     };
 
@@ -55,36 +59,42 @@ const StudentInternshipDetailsDialog = ({
   }, [openedStudentEmail]);
 
   const handleClose = (_, reason) => {
-    if (reason === "backdropClick") {
+    if (reason === "backdropClick" || reason === "timeout") {
       resetOpenedStudentEmail();
       setInternship(null);
       toggleDialog("internshipDetailsDialog", false);
     }
+    console.log("reason", reason);
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogContent>
-        {internship ? (
-          Object.keys(internship).map((identifier, key) => {
-            return (
-              <Divider key={key}>
-                <Typography variant="h6" sx={{ m: 2, textAlign: "center" }}>
-                  {internshipLabels[key]}
-                </Typography>
-                <DialogContentText>
-                  {Object.values(internship)[key]}
-                </DialogContentText>
-              </Divider>
-            );
-          })
-        ) : (
-          <DialogContentText sx={{ m: 2, textAlign: "center" }}>
-            Cet étudiant n'a pas de stage d'attribué
-          </DialogContentText>
-        )}
-      </DialogContent>
-    </Dialog>
+    <>
+      {exists ? (
+        <Dialog open={open} onClose={handleClose}>
+          <DialogContent>
+            {internship &&
+              Object.keys(internship).map((identifier, key) => {
+                return (
+                  <Divider key={key}>
+                    <Typography variant="h6" sx={{ m: 2, textAlign: "center" }}>
+                      {internshipLabels[key]}
+                    </Typography>
+                    <DialogContentText>
+                      {Object.values(internship)[key]}
+                    </DialogContentText>
+                  </Divider>
+                );
+              })}
+          </DialogContent>
+        </Dialog>
+      ) : (
+        <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+          <Alert severity="warning" sx={{ width: "100%" }}>
+            {openedStudentEmail} n'a pas de stage d'attribué
+          </Alert>
+        </Snackbar>
+      )}
+    </>
   );
 };
 

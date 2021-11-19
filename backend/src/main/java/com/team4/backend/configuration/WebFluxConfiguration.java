@@ -1,12 +1,14 @@
 package com.team4.backend.configuration;
 
 
+import com.team4.backend.model.Notification;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.reactive.config.CorsRegistry;
 import org.springframework.web.reactive.config.EnableWebFlux;
 import org.springframework.web.reactive.config.WebFluxConfigurer;
 import org.springframework.web.reactive.config.WebFluxConfigurerComposite;
+import reactor.core.publisher.Sinks;
 
 @Configuration
 @EnableWebFlux
@@ -22,6 +24,11 @@ public class WebFluxConfiguration {
                         .allowedMethods("*");
             }
         };
+    }
+
+    @Bean
+    public Sinks.Many<Notification> notificationFlux() {
+        return Sinks.many().multicast().directBestEffort();
     }
 
 }

@@ -62,30 +62,28 @@ const StudentDashBoard = ({ visible }) => {
 
   useEffect(() => {
     const getProfile = () => {
-      {
-        axios({
-          method: "GET",
-          url: "http://localhost:8080/student/getProfile",
-          headers: {
-            Authorization: userInfo.jwt,
-          },
-          responseType: "json",
+      axios({
+        method: "GET",
+        url: "http://localhost:8080/student/getProfile",
+        headers: {
+          Authorization: userInfo.jwt,
+        },
+        responseType: "json",
+      })
+        .then((response) => {
+          setProfile(response.data);
+          setIsDisabled(
+            response.data.studentState !== listState[2] ||
+              !response.data.hasValidCv
+          );
         })
-          .then((response) => {
-            setProfile(response.data);
-            setIsDisabled(
-              response.data.studentState !== listState[2] ||
-                !response.data.hasValidCv
-            );
-          })
-          .catch((error) => {
-            console.error(error);
-          });
-      }
+        .catch((error) => {
+          console.error(error);
+        });
     };
 
     getProfile();
-  }, []);
+  });
 
   const updateStudentStatus = () => {
     axios({
@@ -131,7 +129,7 @@ const StudentDashBoard = ({ visible }) => {
   };
 
   const hasInternship = () => {
-    return profile.studentState == listState[1];
+    return profile.studentState === listState[1];
   };
 
   const handleChange = ($event) => {
@@ -145,7 +143,7 @@ const StudentDashBoard = ({ visible }) => {
     const dateValues = value.split("-");
 
     if (
-      currentDate.getFullYear() == parseInt(dateValues[0]) &&
+      currentDate.getFullYear() === parseInt(dateValues[0]) &&
       parseInt(dateValues[1]) >= currentDate.getMonth() + 1 &&
       parseInt(dateValues[2], 10) >= currentDate.getDate() &&
       !hasInternship()

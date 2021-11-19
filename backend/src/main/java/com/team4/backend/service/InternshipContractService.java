@@ -2,19 +2,29 @@ package com.team4.backend.service;
 
 import com.team4.backend.dto.InternshipContractCreationDto;
 import com.team4.backend.dto.InternshipContractDto;
+import com.team4.backend.dto.NotificationDto;
+import com.team4.backend.exception.ContractNotFoundException;
+import com.team4.backend.exception.ForbiddenActionException;
+import com.team4.backend.exception.InternalServerErrorException;
+import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.model.*;
+import com.team4.backend.model.enums.NotificationSeverity;
+import com.team4.backend.model.enums.NotificationType;
+import com.team4.backend.model.enums.Role;
 import com.team4.backend.pdf.InternshipContractPdfTemplate;
 import com.team4.backend.repository.InternshipContractRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple4;
 
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class InternshipContractService {
@@ -35,13 +45,15 @@ public class InternshipContractService {
 
     private final UserService userService;
 
+    private final NotificationService notificationService;
+
     public InternshipContractService(StudentService studentService,
                                      MonitorService monitorService,
                                      InternshipOfferService internshipOfferService,
                                      InternshipManagerService internshipManagerService,
                                      InternshipContractRepository internshipContractRepository,
                                      PdfService pdfService,
-                                     UserService userService) {
+                                     UserService userService, NotificationService notificationService) {
         this.studentService = studentService;
         this.monitorService = monitorService;
         this.internshipOfferService = internshipOfferService;
@@ -49,11 +61,118 @@ public class InternshipContractService {
         this.internshipContractRepository = internshipContractRepository;
         this.pdfService = pdfService;
         this.userService = userService;
+        this.notificationService = notificationService;
+    }
+
+    public Mono<InternshipContract> signContract(InternshipContractDto internshipContractDto, String userEmail) {
+        return Mono.zip(
+                userService.findByEmail(userEmail),
+                findInternshipContractById(internshipContractDto.getContractId())
+        ).flatMap(tuple -> {
+            User user = tuple.getT1();
+            InternshipContract contract = tuple.getT2();
+            return signContractByUser(contract, user);
+        }).flatMap(internshipContractRepository::save);
+    }
+
+    private Mono<InternshipContract> signContractByUser(InternshipContract contract, User user) {
+        return getSignatureByRole(contract, user.getRole())
+                .switchIfEmpty(
+                        Mono.error(
+                                new ForbiddenActionException("User with role: " +
+                                        user.getRole().toString() + " cannot sign contracts.")
+                        )
+                ).flatMap(signature -> {
+
+                    if (!signature.getUserId().equals(user.getId())) {
+                        return Mono.error(
+                                new UnauthorizedException("Id of user with role: " + user.getRole() +
+                                        " and id: " + user.getId() + " did not match, id of user in contract")
+                        );
+                    }
+
+                    signature.setHasSigned(true);
+                    signature.setSignDate(LocalDate.now());
+
+                    switch (user.getRole()) {
+                        case STUDENT:
+                            contract.setStudentSignature(signature);
+                            return Mono.just(contract);
+                        case INTERNSHIP_MANAGER:
+                            contract.setInternshipManagerSignature(signature);
+                            return Mono.just(contract);
+                        default:
+                            return Mono.error(
+                                    new InternalServerErrorException(
+                                            "Unexpected error: default case reached for role switch statement"
+                                    )
+                            );
+                    }
+                });
+    }
+
+    private Mono<Signature> getSignatureByRole(InternshipContract contract, Role role) {
+        switch (role) {
+            case STUDENT:
+                return Mono.just(contract.getStudentSignature());
+            case INTERNSHIP_MANAGER:
+                return Mono.just(contract.getInternshipManagerSignature());
+            default:
+                return Mono.empty();
+        }
+    }
+
+    private Mono<InternshipContract> findInternshipContractById(String contractId) {
+        return internshipContractRepository.findById(contractId)
+                .switchIfEmpty(
+                        Mono.error(
+                                new ContractNotFoundException(
+                                        "Could not find internship contract with id: " + contractId
+                                )
+                        )
+                );
     }
 
     public Mono<InternshipContract> initiateContract(InternshipContractCreationDto internshipContractCreationDto) {
         return buildInternshipContractFromInternshipContractCreationDto(internshipContractCreationDto)
-                .flatMap(internshipContractRepository::save);
+                .flatMap(internshipContractRepository::save)
+                .flatMap(this::sendContractCreationNotifications);
+    }
+
+    private Mono<InternshipContract> sendContractCreationNotifications(InternshipContract internshipContract) {
+        return internshipOfferService.findInternshipOfferById(internshipContract.getInternshipOfferId())
+                .flatMap(internshipOffer -> {
+                    Signature studentSignature = internshipContract.getStudentSignature();
+                    Signature internshipManagerSignature = internshipContract.getInternshipManagerSignature();
+                    String companyName = internshipOffer.getCompanyName();
+
+                    Set<String> userIds = new HashSet<>() {{
+                        add(studentSignature.getUserId());
+                        add(internshipManagerSignature.getUserId());
+                    }};
+
+                    NotificationDto usersNotificationDto = getNotificationDto(
+                            internshipContract.getId(),
+                            userIds,
+                            companyName);
+
+                    return notificationService.createNotification(usersNotificationDto)
+                            .map(unused -> internshipContract);
+                });
+    }
+
+    private NotificationDto getNotificationDto(String internshipContractId, Set<String> userIds, String companyName) {
+        Map<String, String> notificationData = new HashMap<>();
+        notificationData.put("contractId", internshipContractId);
+
+        return NotificationDto.notificationDtoBuilder()
+                .title("Signature de contrat")
+                .content("Signature du contrat pour: " + companyName)
+                .receiverIds(userIds)
+                .data(notificationData)
+                .severity(NotificationSeverity.HIGH)
+                .notificationType(NotificationType.SIGN_CONTRACT)
+                .build();
     }
 
     public Mono<byte[]> getContract(String internshipOfferId, String studentEmail) {
@@ -70,6 +189,32 @@ public class InternshipContractService {
                 .onErrorMap(throwable -> {
                     log.info(throwable.getLocalizedMessage());
                     return throwable;
+                });
+    }
+
+    public Mono<byte[]> getContractById(String contractId, String userEmail) {
+        return internshipContractRepository.findById(contractId)
+                .flatMap(internshipContract -> verifyUserIsInContract(internshipContract, userEmail))
+                .flatMap(this::getPdfBytes)
+                .onErrorMap(throwable -> {
+                    log.info(throwable.getLocalizedMessage());
+                    return throwable;
+                });
+    }
+
+    private Mono<InternshipContract> verifyUserIsInContract(InternshipContract internshipContract, String userEmail) {
+        return userService.findByEmail(userEmail)
+                .map(User::getId)
+                .flatMap(userId -> {
+                    if (!internshipContract.isUserInContract(userId)) {
+                        return Mono.error(
+                                new UnauthorizedException(
+                                        "User with email: " + userEmail + " was not found inside contract"
+                                )
+                        );
+                    }
+
+                    return Mono.just(internshipContract);
                 });
     }
 
@@ -187,7 +332,6 @@ public class InternshipContractService {
                     internshipContract.getEndingDate()
             );
 
-            //TODO use the objects instead -> monitor.firstname , monitor.lastName
             Map<String, Object> variables = new HashMap<>();
             variables.put("internshipManager", internshipManager);
             variables.put("monitor", monitor);
@@ -240,4 +384,61 @@ public class InternshipContractService {
                                 })
                 );
     }
+
+    public Mono<Boolean> hasSignedByContractId(String contractId, String userEmail) {
+        return Mono.zip(
+                userService.findByEmail(userEmail),
+                internshipContractRepository.findById(contractId)
+        ).map(tuple -> tuple.getT2().hasUserSigned(tuple.getT1().getId()));
+    }
+
+    public void notifyMonitorsTwoWeeksLeft() {
+        internshipContractRepository.findAll()
+                .filter(internshipContract -> LocalDate.now().until(internshipContract.getEndingDate()).getDays() == 14)
+                .collectList()
+                .flatMap(internshipContracts -> {
+                            List<String> monitorList = List.copyOf(internshipContracts.stream()
+                                    .map(internshipContract -> internshipContract.getMonitorSignature().getUserId())
+                                    .collect(Collectors.toList()));
+
+                            Flux<Monitor> monitorFlux = monitorService.findAllByIds(monitorList)
+                                    .flatMap(monitor -> {
+                                        int frequency = Collections.frequency(monitorList, monitor.getId());
+                                        return Flux.fromIterable(Collections.nCopies(frequency, monitor));
+                                    });
+
+                            List<String> studentList = List.copyOf(internshipContracts.stream()
+                                    .map(internshipContract -> internshipContract.getStudentSignature().getUserId())
+                                    .collect(Collectors.toList()));
+
+                            Flux<Student> studentFlux = studentService.findAllByIds(studentList);
+
+                            return Flux.zip(
+                                            monitorFlux,
+                                            studentFlux
+                                    )
+                                    .delayElements(Duration.ofSeconds(1))
+                                    .flatMap(tuple -> {
+                                        Monitor monitor = tuple.getT1();
+                                        Student student = tuple.getT2();
+                                        return createTwoWeeksNoticeNotification(monitor, student);
+                                    })
+                                    .collectList();
+                        }
+                )
+                .subscribe();
+    }
+
+    public Mono<Notification> createTwoWeeksNoticeNotification(Monitor monitor, Student student) {
+        NotificationDto notificationDto = NotificationDto.notificationDtoBuilder()
+                .id(null)
+                .creationDate(null)
+                .title("Avis de fin de stage")
+                .content("Le stage de l'étudiant " + student.getFirstName() + " " + student.getLastName() + " se termine dans deux semaines (" + LocalDate.now() + ")")
+                .severity(NotificationSeverity.LOW)
+                .receiverIds(Set.of(monitor.getId()))
+                .build();
+        return notificationService.createNotification(notificationDto);
+    }
+
 }

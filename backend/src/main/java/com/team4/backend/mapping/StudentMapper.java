@@ -23,6 +23,7 @@ public abstract class StudentMapper {
                 .phoneNumber(studentCreationDto.getPhoneNumber())
                 .studentState(studentCreationDto.getStudentState())
                 .appliedOffersId(new HashSet<>())
+                .evaluationsDates(new TreeSet<>())
                 .interviewsDate(new TreeSet<>())
                 .hasValidCv(false)
                 .build();

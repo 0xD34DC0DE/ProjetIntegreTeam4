@@ -8,6 +8,7 @@ const UserInfoReducer = (state, action) => {
       const decodedJWT = jwt_decode(action.payload.token);
 
       return {
+        id: decodedJWT.id,
         email: decodedJWT.sub,
         role: decodedJWT.role,
         loggedIn: true,
@@ -16,6 +17,7 @@ const UserInfoReducer = (state, action) => {
     case "LOGOUT":
       sessionStorage.removeItem("jwt");
       return {
+        id: "",
         email: "",
         role: "",
         loggedIn: false,
@@ -26,6 +28,7 @@ const UserInfoReducer = (state, action) => {
 
       if (!jwtToken) {
         return {
+          id: "",
           email: "",
           role: "",
           loggedIn: false,
@@ -35,6 +38,7 @@ const UserInfoReducer = (state, action) => {
         const decodedJwtToken = jwt_decode(jwtToken);
 
         return {
+          id: decodedJwtToken.id,
           email: decodedJwtToken.sub,
           role: decodedJwtToken.role,
           loggedIn: true,

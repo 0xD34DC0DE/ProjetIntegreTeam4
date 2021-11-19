@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import ListCvInternshipManagerView from "./ListCvInternshipManagerView";
 import ContentTitle from "./ContentTitle";
 import { UserInfoContext } from "../stores/UserInfoStore";
@@ -18,12 +18,15 @@ import AssignedStudentSupervisorView from "./AssignedStudentSupervisorView";
 import StudentEvaluationForm from "./Evaluation/End/StudentEvaluationForm";
 import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMidForm";
 import ListReport from "./ListReport";
+import Notification from "./Notification/Notification";
+import SignContractDialog from "./contracts/SignContractDialog";
 
 const Content = ({
   isSidebarOpen,
   toggleDialog,
   dialogVisibility,
   selection,
+  dialogData,
 }) => {
   const [userInfo] = useContext(UserInfoContext);
 
@@ -56,7 +59,11 @@ const Content = ({
             description={selection.description}
           />
           {userInfo.role === "INTERNSHIP_MANAGER" && (
-            <ListCvInternshipManagerView visible={selection.id === 1} />
+            <ListCvInternshipManagerView 
+              toggleDialog={toggleDialog}
+              visible={selection.id === 1} 
+              dialogVisibility={dialogVisibility}
+            />
           )}
           {userInfo.role === "MONITOR" && (
             <ListStudentApplying
@@ -66,7 +73,11 @@ const Content = ({
             />
           )}
           {userInfo.role === "STUDENT" && (
-            <UploadCV visible={selection.id === 5} />
+            <UploadCV
+              visible={selection.id === 5}
+              toggleDialog={toggleDialog}
+              dialogVisibility={dialogVisibility}
+            />
           )}
           {userInfo.role === "STUDENT" && (
             <OfferViews visible={selection.id === 4} />
@@ -100,7 +111,11 @@ const Content = ({
             <ListUserDraggable role="STUDENT" visible={selection.id === 11} />
           )}
           {userInfo.role === "MONITOR" && (
-            <StudentEvaluationForm visible={selection.id === 12} />
+            <StudentEvaluationForm
+              visible={selection.id === 12}
+              toggleDialog={toggleDialog}
+              dialogVisibility={dialogVisibility}
+            />
           )}
           {userInfo.role === "SUPERVISOR" && (
             <StudentEvaluationMidForm visible={selection.id === 13} />
@@ -108,8 +123,8 @@ const Content = ({
           {userInfo.role === "INTERNSHIP_MANAGER" && (
             <ListReport
               toggleDialog={toggleDialog}
-              open={dialogVisibility.reportDialog}
               visible={selection.id === 14}
+              dialogVisibility={dialogVisibility}
             />
           )}
         </Box>
@@ -126,6 +141,11 @@ const Content = ({
         open={dialogVisibility.loginDialog}
         toggleDialog={toggleDialog}
       ></Login>
+      <SignContractDialog
+        toggleDialog={toggleDialog}
+        open={dialogVisibility.signContractDialog}
+        dialogData={dialogData}
+      />
     </Box>
   );
 };

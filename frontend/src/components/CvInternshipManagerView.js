@@ -2,7 +2,6 @@ import React from "react";
 import {
   Card,
   CardActions,
-  Container,
   CardContent,
   Typography,
   Grid,
@@ -10,6 +9,7 @@ import {
 } from "@mui/material";
 import { motion } from "framer-motion";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
+import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
 import CvValidationDialog from "./CvValidationDialog";
 
 const CvInternshipManagerView = ({
@@ -19,10 +19,15 @@ const CvInternshipManagerView = ({
   filename,
   uploadDate,
   removeCv,
+  setUrl
 }) => {
   const download = () => {
     window.open("https://projetintegreteam4.s3.amazonaws.com/" + assetId);
   };
+
+  const openCv = () => {
+    setUrl("https://projetintegreteam4.s3.amazonaws.com/" + assetId)
+  }
 
   const fadeIn = {
     hidden: { opacity: 0 },
@@ -92,6 +97,15 @@ const CvInternshipManagerView = ({
                     id={id}
                     removeCv={removeCv}
                   ></CvValidationDialog>
+                  <Button
+                    size="medium"
+                    variant="contained"
+                    color="secondary"
+                    sx={{ mb: "6px" }}
+                    onClick={openCv}
+                  >
+                    AFFICHER <RemoveRedEyeIcon></RemoveRedEyeIcon>
+                  </Button>
                   <Button
                     size="medium"
                     variant="contained"

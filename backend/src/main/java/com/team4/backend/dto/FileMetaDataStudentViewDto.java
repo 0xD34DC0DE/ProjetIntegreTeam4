@@ -17,7 +17,11 @@ public class FileMetaDataStudentViewDto implements Serializable {
 
     private String filename;
 
+    private String assetId;
+
     private Boolean isValid;
+
+    private Boolean isSeen;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime uploadDate;
@@ -25,6 +29,5 @@ public class FileMetaDataStudentViewDto implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime seenDate;
 
-    private String cvRejectionExplanation;
-
+    private String rejectionExplanation;
 }

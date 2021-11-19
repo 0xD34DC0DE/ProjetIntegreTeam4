@@ -2,7 +2,6 @@ package com.team4.backend.repository;
 
 import com.team4.backend.model.FileMetaData;
 import lombok.extern.java.Log;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,6 +16,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @Log
 @DataMongoTest
@@ -35,7 +36,9 @@ public class FileMetaDataRepositoryTest {
                 FileMetaData.builder().isValid(false).isSeen(false).build(),
                 FileMetaData.builder().isValid(false).isSeen(false).build(),
                 FileMetaData.builder().isValid(false).isSeen(true).build(),
-                FileMetaData.builder().isValid(true).isSeen(true).build()
+                FileMetaData.builder().isValid(true).isSeen(true).build(),
+                FileMetaData.builder().userEmail("test_user_email@gmail.com").isValid(false).isSeen(true).build(),
+                FileMetaData.builder().userEmail("test_user_email@gmail.com").isValid(false).isSeen(true).build()
         );
 
         fileMetaDataRepository.saveAll(fileMetaDataFlux).subscribe();
@@ -48,7 +51,7 @@ public class FileMetaDataRepositoryTest {
 
         //ASSERT
         StepVerifier.create(nbrOfFileInvalidAndNotSeen)
-                .assertNext(n -> Assertions.assertEquals(2L, n))
+                .assertNext(n -> assertEquals(2L, n))
                 .verifyComplete();
     }
 
@@ -59,6 +62,20 @@ public class FileMetaDataRepositoryTest {
 
         //ASSERT
         StepVerifier.create(fileMetaDataFlux).expectNextCount(2).verifyComplete();
+    }
+
+    @Test
+    void findAllCvByUserEmail(){
+        //ACT
+        String userEmail = "test_user_email@gmail.com";
+        Flux<FileMetaData> fileMetaDataFlux = fileMetaDataRepository.findAllByUserEmail(userEmail);
+
+        //ASSERT
+        StepVerifier
+                .create(fileMetaDataFlux)
+                .assertNext(f -> assertEquals(userEmail, f.getUserEmail()))
+                .assertNext(f -> assertEquals(userEmail, f.getUserEmail()))
+                .verifyComplete();
     }
 
 }

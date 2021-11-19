@@ -19,9 +19,12 @@ public abstract class FileMetaDataMapper {
     public static FileMetaDataStudentViewDto toStudentViewDto(FileMetaData fileMetaData) {
         return FileMetaDataStudentViewDto.builder()
                 .filename(fileMetaData.getFilename())
+                .assetId(fileMetaData.getAssetId())
                 .isValid(fileMetaData.getIsValid())
+                .isSeen(fileMetaData.getIsSeen())
                 .uploadDate(fileMetaData.getUploadDate())
                 .seenDate(fileMetaData.getSeenDate())
+                .rejectionExplanation(fileMetaData.getRejectionExplanation())
                 .build();
     }
 

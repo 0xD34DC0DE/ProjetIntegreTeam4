@@ -6,8 +6,10 @@ import org.springframework.stereotype.Repository;
 import reactor.core.publisher.Mono;
 
 @Repository
-public interface MonitorRepository extends ReactiveMongoRepository<Monitor, String> {
+public interface MonitorRepository extends ReactiveMongoRepository<Monitor, String>, CustomMonitorRepository {
+
     Mono<Boolean> existsByEmailAndIsEnabledTrue(String email);
 
     Mono<Monitor> findByEmail(String monitorEmail);
+
 }
