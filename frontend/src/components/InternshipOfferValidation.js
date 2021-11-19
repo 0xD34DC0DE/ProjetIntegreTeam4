@@ -26,7 +26,6 @@ const InternshipOfferValidation = ({
   const [selectedOffer, setSelectedOffer] = useState(null);
 
   useEffect(() => {
-    
     const getUnvalidatedInternshipOffers = async () => {
       let response = await axios({
         method: "GET",

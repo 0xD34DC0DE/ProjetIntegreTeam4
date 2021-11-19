@@ -62,24 +62,24 @@ const StudentDashBoard = ({ visible }) => {
 
   useEffect(() => {
     const getProfile = () => {
-        axios({
-          method: "GET",
-          url: "http://localhost:8080/student/getProfile",
-          headers: {
-            Authorization: userInfo.jwt,
-          },
-          responseType: "json",
+      axios({
+        method: "GET",
+        url: "http://localhost:8080/student/getProfile",
+        headers: {
+          Authorization: userInfo.jwt,
+        },
+        responseType: "json",
+      })
+        .then((response) => {
+          setProfile(response.data);
+          setIsDisabled(
+            response.data.studentState !== listState[2] ||
+              !response.data.hasValidCv
+          );
         })
-          .then((response) => {
-            setProfile(response.data);
-            setIsDisabled(
-              response.data.studentState !== listState[2] ||
-                !response.data.hasValidCv
-            );
-          })
-          .catch((error) => {
-            console.error(error);
-          });
+        .catch((error) => {
+          console.error(error);
+        });
     };
 
     getProfile();

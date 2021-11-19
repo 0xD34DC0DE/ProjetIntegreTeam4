@@ -1,7 +1,10 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.InternshipOffer;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -71,7 +74,6 @@ public class InternshipOfferRepositoryTest {
         //ACT
         Flux<InternshipOffer> internshipOfferFlux = internshipOfferRepository.findAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(date1, date1.plusWeeks(3));
 
-
         //ASSERT
         StepVerifier.create(internshipOfferFlux)
                 .expectNextCount(2)
@@ -101,7 +103,7 @@ public class InternshipOfferRepositoryTest {
         //ACT
         Flux<InternshipOffer> internshipOfferFlux = internshipOfferRepository.findAllByIsExclusiveFalseAndIsValidatedTrueAndLimitDateToApplyIsBetween(date1,
                 date1.plusWeeks(3),
-                PageRequest.of(0,10));
+                PageRequest.of(0, 10));
 
 
         //ASSERT
@@ -111,7 +113,7 @@ public class InternshipOfferRepositoryTest {
     }
 
     @Test
-    void shouldFindByIdAndIsExclusiveTrueAndIsValidatedTrueAndLimitDateToApplyIsBetween(){
+    void shouldFindByIdAndIsExclusiveTrueAndIsValidatedTrueAndLimitDateToApplyIsBetween() {
         //ARRANGE
         String id = "618b68cae908a226e003d7e6";
         LocalDateTime date1 = LocalDateTime.now().minusDays(3);
@@ -125,13 +127,12 @@ public class InternshipOfferRepositoryTest {
 
         //ASSERT
         StepVerifier.create(internshipOfferMono)
-                .assertNext(internshipOffer -> Assertions.assertEquals(id,internshipOffer.getId()))
+                .assertNext(internshipOffer -> Assertions.assertEquals(id, internshipOffer.getId()))
                 .verifyComplete();
     }
 
-    @Disabled
     @Test
-    void shouldFindAllByMonitorEmailAndIsValidatedTrueAndLimitDateToApplyIsBetween(){
+    void shouldFindAllByMonitorEmailAndIsValidatedTrueAndLimitDateToApplyIsBetween() {
         //ARRANGE
         String monitorEmail = "monitor1";
         LocalDateTime date1 = LocalDateTime.now().minusDays(3);
@@ -142,10 +143,40 @@ public class InternshipOfferRepositoryTest {
                 date1,
                 date1.plusWeeks(3));
 
+        //ASSERT
+        StepVerifier.create(internshipOfferFlux)
+                .expectNextCount(2)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldFindAllAllByIsValidatedFalseAndLimitDateToApplyIsBetween() {
+        //ARRANGE
+        LocalDateTime date1 = LocalDateTime.now();
+
+        //ACT
+        Flux<InternshipOffer> internshipOfferFlux = internshipOfferRepository.findAllByIsValidatedFalseAndLimitDateToApplyIsBetween(
+                date1,
+                date1.plusWeeks(3));
 
         //ASSERT
         StepVerifier.create(internshipOfferFlux)
-                //TODO: fix test, result will differ if all tests are ran at the same time or individually
+                .expectNextCount(2)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldFindAllAllByIsValidatedTrueAndLimitDateToApplyIsBetween() {
+        //ARRANGE
+        LocalDateTime date1 = LocalDateTime.now();
+
+        //ACT
+        Flux<InternshipOffer> internshipOfferFlux = internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyIsBetween(
+                date1,
+                date1.plusWeeks(3));
+
+        //ASSERT
+        StepVerifier.create(internshipOfferFlux)
                 .expectNextCount(2)
                 .verifyComplete();
     }

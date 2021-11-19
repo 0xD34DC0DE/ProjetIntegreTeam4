@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.FileMetaDataInternshipManagerViewDto;
+import com.team4.backend.dto.FileMetaDataStudentViewDto;
 import com.team4.backend.exception.FileNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.model.FileMetaData;
@@ -22,6 +23,8 @@ import org.springframework.test.web.reactive.server.WebTestClient;
 import org.springframework.util.MultiValueMap;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -141,6 +144,40 @@ class FileMetaDataControllerTest {
                 //ASSERT
                 .expectStatus().isNotFound()
                 .expectBodyList(String.class);
+    }
+
+    @Test
+    void getAllCvByUserEmail(){
+        //ARRANGE
+        List<FileMetaData> fileMetaDataList = FileMetaDataMockData.getAllRejectedFileMetaData();
+        when(fileMetaDataService.getAllCvByUserEmail(fileMetaDataList.get(0).getUserEmail())).thenReturn(Flux.fromIterable(fileMetaDataList));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/file/getAllCvByUserEmail/"+fileMetaDataList.get(0).getUserEmail())
+                                .build())
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(FileMetaDataStudentViewDto.class);
+    }
+
+    @Test
+    void shouldGetFirstValidCv() {
+        //ARRANGE
+        when(fileMetaDataService.getLastValidatedCvWithUserEmail(any())).thenReturn(Mono.just("assetId"));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/file/getLatestCv/studentEmail")
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBody(String.class);
     }
 
 }

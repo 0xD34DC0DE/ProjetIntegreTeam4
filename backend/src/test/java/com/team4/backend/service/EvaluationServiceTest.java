@@ -3,9 +3,11 @@ package com.team4.backend.service;
 import com.team4.backend.dto.EvaluationDto;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Evaluation;
+import com.team4.backend.model.Semester;
 import com.team4.backend.model.Student;
 import com.team4.backend.repository.EvaluationRepository;
 import com.team4.backend.testdata.EvaluationMockData;
+import com.team4.backend.testdata.SemesterMockData;
 import com.team4.backend.testdata.StudentMockData;
 import lombok.extern.java.Log;
 import org.junit.jupiter.api.Assertions;
@@ -18,9 +20,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
-import java.time.LocalDate;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
@@ -33,6 +32,9 @@ public class EvaluationServiceTest {
 
     @Mock
     StudentService studentService;
+
+    @Mock
+    SemesterService semesterService;
 
     @InjectMocks
     EvaluationService evaluationService;
@@ -83,31 +85,37 @@ public class EvaluationServiceTest {
     @Test
     void shouldGetAllWithDateBetween() {
         //ARRANGE
-        Flux<Evaluation> evaluationFlux  = EvaluationMockData.getAllFlux();
+        Semester semester = SemesterMockData.getListSemester().get(0);
+        Flux<Evaluation> evaluationFlux = EvaluationMockData.getAllFlux();
+
+        when(semesterService.findByFullName(any())).thenReturn(Mono.just(semester));
         when(evaluationRepository.findAll()).thenReturn(evaluationFlux);
 
         //ACT
-        Flux<Evaluation> response = evaluationService.getAllWithDateBetween(LocalDate.of(2021, 9, 1), LocalDate.of(2021, 12, 31));
+        Flux<Evaluation> response = evaluationService.getAllWithDateBetween(semester.getFullName());
 
         //ASSERT
-        StepVerifier.create(response).assertNext(r1 -> {
-            assertEquals(EvaluationMockData.getEvaluation(), r1);
-        }).assertNext(r2 -> {
-            assertEquals(EvaluationMockData.getEvaluation2(), r2);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
     @Test
     void shouldNotGetAllWithDateBetween() {
         //ARRANGE
-        Flux<Evaluation> evaluationFlux  = EvaluationMockData.getAllFlux();
-        when(evaluationRepository.findAll()).thenReturn(evaluationFlux);
+        Semester semester = SemesterMockData.getListSemester().get(0);
+        Flux<Evaluation> evaluationFlux = EvaluationMockData.getAllFlux();
+
+        when(semesterService.findByFullName(any())).thenReturn(Mono.just(semester));
+        when(evaluationRepository.findAll()).thenReturn(Flux.empty());
 
         //ACT
-        Flux<Evaluation> response = evaluationService.getAllWithDateBetween(LocalDate.of(2020, 9, 1), LocalDate.of(2020, 12, 31));
+        Flux<Evaluation> response = evaluationService.getAllWithDateBetween(semester.getFullName());
 
         //ASSERT
-        StepVerifier.create(response).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(0)
+                .verifyComplete();
     }
 
 }

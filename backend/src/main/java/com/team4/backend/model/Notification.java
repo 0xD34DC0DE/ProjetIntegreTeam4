@@ -1,6 +1,7 @@
 package com.team4.backend.model;
 
 import com.team4.backend.model.enums.NotificationSeverity;
+import com.team4.backend.model.enums.NotificationType;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,7 @@ public class Notification implements Serializable {
     private Map<String, String> data;
     @Builder.Default
     private LocalDateTime creationDate = LocalDateTime.now();
+    private NotificationType notificationType;
 
     @Builder(builderMethodName = "notificationBuilder")
     public Notification(String id,
@@ -37,7 +39,8 @@ public class Notification implements Serializable {
                         Set<String> receiverIds,
                         NotificationSeverity severity,
                         Map<String, String> data,
-                        LocalDateTime creationDate) {
+                        LocalDateTime creationDate,
+                        NotificationType notificationType) {
         this.id = id;
         this.title = title;
         this.severity = severity;
@@ -45,6 +48,7 @@ public class Notification implements Serializable {
         this.receiverIds = receiverIds;
         this.data = data;
         this.creationDate = Optional.ofNullable(creationDate).orElse(LocalDateTime.now());
+        this.notificationType = notificationType;
     }
 
     @Override

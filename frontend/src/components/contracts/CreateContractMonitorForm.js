@@ -9,9 +9,9 @@ import {
 import React, { useState, useEffect, useContext } from "react";
 import { grey } from "@mui/material/colors";
 import axios from "axios";
-import { UserInfoContext } from "../stores/UserInfoStore";
+import { UserInfoContext } from "../../stores/UserInfoStore";
 
-const SignContractMonitorForm = ({ studentEmail, offerId }) => {
+const CreateContractMonitorForm = ({ studentEmail, offerId }) => {
   const [userInfo] = useContext(UserInfoContext);
   const [form, setForm] = useState({
     address: "",
@@ -105,12 +105,14 @@ const SignContractMonitorForm = ({ studentEmail, offerId }) => {
 
   return (
     <>
+      {/* TODO: find why must be == and not === so that code may work */}
       {alreadySigned == true && (
         <Grid item alignItems="center" textAlign="center" sx={{ mt: 3 }}>
           <Typography color="green">Contrat signé!</Typography>
         </Grid>
       )}
 
+      {/* TODO: find why must be == || != and not !=== || === so that code may work */}
       {alreadySigned != null && alreadySigned == false && (
         <>
           <Grid item alignItems="center" textAlign="center" sx={{ mt: 3 }}>
@@ -201,4 +203,4 @@ const SignContractMonitorForm = ({ studentEmail, offerId }) => {
   );
 };
 
-export default SignContractMonitorForm;
+export default CreateContractMonitorForm;

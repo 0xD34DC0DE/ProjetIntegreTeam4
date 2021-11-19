@@ -26,7 +26,7 @@ public class EvaluationController {
     @PreAuthorize("hasAnyAuthority('SUPERVISOR', 'MONITOR')")
     public Mono<ResponseEntity<String>> create(@RequestBody EvaluationDto evaluationDto) {
         return evaluationService.addEvaluation(evaluationDto)
-                .map(evaluation -> ResponseEntity.status(HttpStatus.CREATED).body(""));
+                .map(evaluation -> ResponseEntity.status(HttpStatus.CREATED).body(evaluation.getId()));
     }
 
     @GetMapping(value = "{evaluationId}", produces = MediaType.APPLICATION_PDF_VALUE)

@@ -3,9 +3,11 @@ package com.team4.backend.service;
 import com.team4.backend.exception.ForbiddenActionException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.model.Semester;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.StudentRepository;
+import com.team4.backend.testdata.SemesterMockData;
 import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.util.PBKDF2Encoder;
 import org.junit.jupiter.api.Test;
@@ -37,6 +39,9 @@ public class StudentServiceTest {
 
     @Mock
     UserService userService;
+
+    @Mock
+    SemesterService semesterService;
 
     @InjectMocks
     StudentService studentService;
@@ -297,11 +302,9 @@ public class StudentServiceTest {
         Flux<Student> response = studentService.getAll();
 
         //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).assertNext(s -> {
-            assertEquals(StudentMockData.getMockSecondStudent(), s);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
     @Test
@@ -315,11 +318,9 @@ public class StudentServiceTest {
         Flux<Student> response = studentService.getAllStudentsWithNoCv();
 
         //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).assertNext(s -> {
-            assertEquals(StudentMockData.getMockSecondStudent(), s);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
     @Test
@@ -333,11 +334,9 @@ public class StudentServiceTest {
         Flux<Student> response = studentService.getAllStudentsWithUnvalidatedCv();
 
         //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).assertNext(s -> {
-            assertEquals(StudentMockData.getMockSecondStudent(), s);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
     @Test
@@ -351,11 +350,9 @@ public class StudentServiceTest {
         Flux<Student> response = studentService.getStudentsNoInternship();
 
         //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).assertNext(s -> {
-            assertEquals(StudentMockData.getMockSecondStudent(), s);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
     @Test
@@ -369,11 +366,9 @@ public class StudentServiceTest {
         Flux<Student> response = studentService.getStudentsWaitingInterview();
 
         //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).assertNext(s -> {
-            assertEquals(StudentMockData.getMockSecondStudent(), s);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
     @Test
@@ -387,11 +382,9 @@ public class StudentServiceTest {
         Flux<Student> response = studentService.getStudentsWaitingResponse();
 
         //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).assertNext(s -> {
-            assertEquals(StudentMockData.getMockSecondStudent(), s);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
     @Test
@@ -405,41 +398,28 @@ public class StudentServiceTest {
         Flux<Student> response = studentService.getStudentsWithInternship();
 
         //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).assertNext(s -> {
-            assertEquals(StudentMockData.getMockSecondStudent(), s);
-        }).verifyComplete();
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
     }
 
-    @Test
-    void shouldGetAllWithEvaluationDateBetween() {
-        //ARRANGE
-        Flux<Student> students = StudentMockData.getAllStudentsFlux();
-
-        when(studentRepository.findAllByEvaluationsDatesIsBetween(any(), any())).thenReturn(students);
-
-        //ACT
-        Flux<Student> response = studentService.getAllWithEvaluationDateBetween(LocalDate.of(2019,1,1), LocalDate.of(2019,5,31));
-
-        //ASSERT
-        StepVerifier.create(response).assertNext(s -> {
-            assertEquals(StudentMockData.getMockStudent(), s);
-        }).verifyComplete();
-    }
 
     @Test
-    void shouldGetAllWithEvaluationDateBetweenNoCorrespondingStudent() {
+    void shouldGetAllWithNoEvaluationDateDuringSemester() {
         //ARRANGE
+        Semester semester = SemesterMockData.getListSemester().get(0);
         Flux<Student> students = StudentMockData.getAllStudentsFlux();
 
-        when(studentRepository.findAllByEvaluationsDatesIsBetween(any(), any())).thenReturn(students);
+        when(semesterService.findByFullName(semester.getFullName())).thenReturn(Mono.just(semester));
+        when(studentRepository.findAllByStudentState(StudentState.INTERNSHIP_FOUND)).thenReturn(students);
 
         //ACT
-        Flux<Student> response = studentService.getAllWithEvaluationDateBetween(LocalDate.of(2016,1,1), LocalDate.of(2016,5,31));
+        Flux<Student> studentFlux = studentService.getAllWithNoEvaluationDateDuringSemester(semester.getFullName());
 
         //ASSERT
-        StepVerifier.create(response).verifyComplete();
+        StepVerifier.create(studentFlux)
+                .expectNextCount(1)
+                .verifyComplete();
     }
 
     @Test
@@ -528,6 +508,39 @@ public class StudentServiceTest {
 
         //ASSERT
         StepVerifier.create(nbrOfUpdatedStudent)
+                .assertNext(n -> assertEquals(0, n))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldResetStudentStateForAllStudentWithInternship() {
+        //ARRANGE
+        List<Student> students = StudentMockData.getAllStudentsWithInternshipFound();
+
+        when(studentRepository.findAllByStudentState(StudentState.INTERNSHIP_FOUND)).thenReturn(Flux.fromIterable(students));
+        students.forEach(student -> when(studentRepository.save(student)).thenReturn(Mono.just(student)));
+
+        //ACT
+        Mono<Long> nbrOfStudentReset = studentService.resetStudentStateForAllStudentWithInternship();
+
+        //ASSERT
+        StepVerifier.create(nbrOfStudentReset)
+                .assertNext(n -> assertEquals(2, n))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotResetStudentStateForAllStudentWithInternship() {
+        //ARRANGE
+        List<Student> students = StudentMockData.getAllStudentsWithInternshipFound();
+
+        when(studentRepository.findAllByStudentState(StudentState.INTERNSHIP_FOUND)).thenReturn(Flux.empty());
+
+        //ACT
+        Mono<Long> nbrOfStudentReset = studentService.resetStudentStateForAllStudentWithInternship();
+
+        //ASSERT
+        StepVerifier.create(nbrOfStudentReset)
                 .assertNext(n -> assertEquals(0, n))
                 .verifyComplete();
     }

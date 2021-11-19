@@ -7,8 +7,10 @@ import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 public abstract class SemesterUtil {
+
 
     public static Boolean checkIfDatesAreInsideRangeOfSemester(Semester semester,
                                                                LocalDateTime date1,
@@ -16,6 +18,18 @@ public abstract class SemesterUtil {
         return (semester.getFrom().isEqual(date1) || semester.getFrom().isBefore(date1)) &&
                 (semester.getTo().isEqual(date2) || semester.getTo().isAfter(date2));
     }
+
+    public static String convertInFrench(String semesterFullName) {
+        String[] words = semesterFullName.split("-");
+        Map<String, String> frenchWord = Map.ofEntries(
+                Map.entry(SemesterName.FALL.name(), "AUTOMNE"),
+                Map.entry(SemesterName.WINTER.name(), "HIVER"),
+                Map.entry(SemesterName.SUMMER.name(), "ÉTÉ")
+        );
+
+        return frenchWord.get(words[0]) + " " + words[1];
+    }
+
 
     public static List<Semester> getSemesters(LocalDateTime currentDateTime) {
 

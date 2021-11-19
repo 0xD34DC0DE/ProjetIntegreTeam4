@@ -1,16 +1,14 @@
-import {
-  IconButton,
-  Menu,
-  MenuItem,
-  Typography,
-  Grid,
-  Tooltip,
-} from "@mui/material";
-import React, { useContext, useEffect, useState } from "react";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import {
+  Grid, IconButton,
+  Menu,
+  MenuItem, Tooltip, Typography
+} from "@mui/material";
 import axios from "axios";
-import Notification from "./Notification";
+import React, { useContext, useEffect, useState } from "react";
 import { UserInfoContext } from "../../stores/UserInfoStore";
+import Notification from "./Notification";
+import dispatchNotificationClickEvent from "./NotificationClickDispatch";
 
 const severity = {
   high: { color: "rgba(200, 100, 100, 1)" },
@@ -22,6 +20,8 @@ const NotificationList = ({
   menuOpen,
   setMenuOpen,
   handleMenuClose,
+  onSelectionChanged,
+  toggleDialog,
 }) => {
   const [notifications, setNotifications] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
@@ -72,6 +72,15 @@ const NotificationList = ({
       .catch(console.error);
   };
 
+  const onNotificationClick = (notification) => {
+    dispatchNotificationClickEvent({
+      notificationType: notification.notificationType,
+      data: notification.data,
+      toggleDialog,
+      onSelectionChanged,
+    });
+  };
+
   return (
     <Grid container justifyContent="flex-end">
       <Menu
@@ -98,6 +107,7 @@ const NotificationList = ({
                   backgroundColor: "rgba(100, 100, 100, 0.05)",
                   mb: 0.5,
                 }}
+                onClick={() => onNotificationClick(notification)}
               >
                 <Grid container>
                   <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
