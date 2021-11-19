@@ -21,16 +21,13 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    private final UserService userService;
-
-    public NotificationController(NotificationService notificationService, UserService userService) {
+    public NotificationController(NotificationService notificationService) {
         this.notificationService = notificationService;
-        this.userService = userService;
     }
 
     @PostMapping("/create")
     public Mono<ResponseEntity<Notification>> createNotification(@RequestBody NotificationDto notificationDto) {
-        return notificationService.createNotifications(notificationDto)
+        return notificationService.createNotification(notificationDto)
                 .map(n -> ResponseEntity.status(HttpStatus.CREATED).body(n));
     }
 

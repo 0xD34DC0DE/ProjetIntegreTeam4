@@ -11,6 +11,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 
@@ -48,6 +49,19 @@ public class Notification implements Serializable {
         this.data = data;
         this.creationDate = Optional.ofNullable(creationDate).orElse(LocalDateTime.now());
         this.notificationType = notificationType;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Notification that = (Notification) o;
+        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(content, that.content) && Objects.equals(receiverIds, that.receiverIds) && severity == that.severity && Objects.equals(data, that.data);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, title, content, receiverIds, severity, data);
     }
 
 }

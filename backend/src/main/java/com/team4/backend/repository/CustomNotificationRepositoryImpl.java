@@ -2,6 +2,7 @@ package com.team4.backend.repository;
 
 import com.mongodb.client.result.UpdateResult;
 import com.team4.backend.model.Notification;
+import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
@@ -20,16 +21,16 @@ public class CustomNotificationRepositoryImpl implements CustomNotificationRepos
     }
 
     @Override
-    public Flux<Notification> findByReceiverId(String id) {
+    public Flux<Notification> findAllByReceiverId(String id) {
         Query query = Query.query(Criteria.where("receiverIds").is(id));
         return mongoOperations.find(query, Notification.class);
     }
 
     @Override
-    public Mono<UpdateResult> deleteUserNotification(String notificationId, String userId) {
+    public Mono<Notification> deleteUserNotification(String notificationId, String userId) {
         Query query = Query.query(Criteria.where("id").is(notificationId));
         Update update = new Update().pull("receiverIds", userId);
-        return mongoOperations.upsert(query, update, Notification.class);
+        return mongoOperations.findAndModify(query, update, FindAndModifyOptions.options().upsert(true).returnNew(true), Notification.class);
     }
 
 }

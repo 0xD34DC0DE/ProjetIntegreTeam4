@@ -18,7 +18,7 @@ import {
 export const sidebarList = [
   {
     id: 0,
-    label: "Acceuil",
+    label: "Accueil",
     role: ["MONITOR", "INTERNSHIP_MANAGER", "STUDENT"],
     icon: <HomeOutlined sx={{ mr: 1 }} />,
     isDialog: false,
@@ -109,15 +109,6 @@ export const sidebarList = [
     role: ["INTERNSHIP_MANAGER"],
     icon: <AssignmentSharp fontSize="small" sx={{ mr: 1 }} />,
     description: "Consultation des rapports",
-  },
-  {
-    id: 15,
-    label: "signé",
-    role: ["STUDENT"],
-    isDialog: true,
-    dialogName: "signContractDialog",
-    icon: <AssignmentSharp fontSize="small" sx={{ mr: 1 }} />,
-    description: "signé",
   },
 ];
 

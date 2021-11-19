@@ -27,30 +27,29 @@ const CvValidationDialog = ({ id, removeCv }) => {
   };
 
   const validateCv = (valid, rejectionExplanation) => {
-    {
-      axios({
-        method: "PATCH",
-        url: "http://localhost:8080/file/validateCv",
-        headers: {
-          Authorization: userInfo.jwt,
-        },
-        params: {
-          id: id,
-          isValid: valid,
-        },
-        data: { rejectionExplanation },
-        responseType: "json",
+    axios({
+      method: "PATCH",
+      url: "http://localhost:8080/file/validateCv",
+      headers: {
+        Authorization: userInfo.jwt,
+        "Content-Type": "text/plain",
+      },
+      params: {
+        id: id,
+        isValid: valid,
+      },
+      data: rejectionExplanation,
+      responseType: "json",
+    })
+      .then(() => {
+        setRejectionExplanation(null);
+        setIsRejecting(false);
+        removeCv(id);
+        handleClose();
       })
-        .then(() => {
-          setRejectionExplanation(null);
-          setIsRejecting(false);
-          removeCv(id);
-          handleClose();
-        })
-        .catch((error) => {
-          console.error(error);
-        });
-    }
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   const handleClose = () => {
@@ -104,7 +103,8 @@ const CvValidationDialog = ({ id, removeCv }) => {
                   style={{
                     font: "14px arial, sans-serif",
                     borderColor:
-                      rejectionExplanation != "" || rejectionExplanation != null
+                      rejectionExplanation !== "" ||
+                      rejectionExplanation !== null
                         ? "black"
                         : "red",
                     resize: "none",
