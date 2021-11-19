@@ -16,7 +16,6 @@ public abstract class NotificationMapper {
                 .data(notificationDto.getData())
                 .creationDate(null)
                 .severity(notificationDto.getSeverity())
-                .creationDate(LocalDateTime.now())
                 .notificationType(notificationDto.getNotificationType())
                 .build();
     }

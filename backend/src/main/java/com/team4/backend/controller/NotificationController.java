@@ -21,11 +21,8 @@ public class NotificationController {
 
     private final NotificationService notificationService;
 
-    private final UserService userService;
-
-    public NotificationController(NotificationService notificationService, UserService userService) {
+    public NotificationController(NotificationService notificationService) {
         this.notificationService = notificationService;
-        this.userService = userService;
     }
 
     @PostMapping("/create")
