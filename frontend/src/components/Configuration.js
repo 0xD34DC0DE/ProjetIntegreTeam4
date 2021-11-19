@@ -18,7 +18,7 @@ import {
 export const sidebarList = [
   {
     id: 0,
-    label: "Acceuil",
+    label: "Accueil",
     role: ["MONITOR", "INTERNSHIP_MANAGER", "STUDENT"],
     icon: <HomeOutlined sx={{ mr: 1 }} />,
     isDialog: false,
