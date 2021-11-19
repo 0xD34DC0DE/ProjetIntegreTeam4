@@ -100,7 +100,11 @@ const Content = ({
             <ListUserDraggable role="STUDENT" visible={selection.id === 11} />
           )}
           {userInfo.role === "MONITOR" && (
-            <StudentEvaluationForm visible={selection.id === 12} />
+            <StudentEvaluationForm
+              visible={selection.id === 12}
+              toggleDialog={toggleDialog}
+              dialogVisibility={dialogVisibility}
+            />
           )}
           {userInfo.role === "SUPERVISOR" && (
             <StudentEvaluationMidForm visible={selection.id === 13} />

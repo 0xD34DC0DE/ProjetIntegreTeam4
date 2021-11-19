@@ -25,6 +25,7 @@ function App() {
     internshipDetailsDialog: false,
     reportDialog: false,
     signContractMonitorDialog: false,
+    evaluationDialogPreview: false,
   });
 
   const onSelectionChanged = (item) => {
