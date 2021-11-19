@@ -60,7 +60,7 @@ public abstract class PdfTemplate {
                 .replaceAll("È", "&Egrave;")
                 .replaceAll("é", "&eacute;")
                 .replaceAll("É", "&Eacute;")
-                .replaceAll("ê", "&Ecirc;")
+                .replaceAll("ê", "&ecirc;")
                 .replaceAll("Ê", "&Ecirc;")
                 .replaceAll("ï", "&iuml;")
                 .replaceAll("Ï", "&Iuml;")

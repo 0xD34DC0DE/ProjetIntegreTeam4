@@ -131,6 +131,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .title("Notification")
                         .receiverIds(Set.of(Objects.requireNonNull(studentRepository.findByEmail("student@gmail.com").map(User::getId).block())))
                         .severity(NotificationSeverity.HIGH)
+                        .creationDate(LocalDateTime.now())
                         .data(Collections.emptyMap())
                         .build(),
                 Notification.notificationBuilder()
@@ -138,6 +139,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .title("Notification")
                         .receiverIds(Set.of(Objects.requireNonNull(studentRepository.findByEmail("123456789@gmail.com").map(User::getId).block())))
                         .data(Collections.singletonMap("id", "test"))
+                        .creationDate(LocalDateTime.now())
                         .severity(NotificationSeverity.LOW)
                         .build()
         );

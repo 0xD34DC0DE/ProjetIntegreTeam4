@@ -1,5 +1,5 @@
 import { Grid, Typography } from "@mui/material";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import CompanyAppreciationDropdown from "./CompanyAppreciationDropdown";
 import CompanyInterestDropdown from "./CompanyInterestDropdown";
 import StudentContactDetailsDropdown from "./StudentContactDetailsDropdown";
@@ -11,8 +11,9 @@ import { UserInfoContext } from "../../../stores/UserInfoStore";
 import axios from "axios";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
+import EvaluationDialogPreview from "../EvaluationDialogPreview";
 
-const StudentEvaluationForm = ({ visible }) => {
+const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
   // TODO: Find a better way then useRef
   const evaluationForm = useRef({
     text: {},
@@ -23,6 +24,7 @@ const StudentEvaluationForm = ({ visible }) => {
   const [evaluationSent, setEvaluationSent] = useState(false);
   const [userInfo] = useContext(UserInfoContext);
   const [errorMessage, setErrorMessage] = useState("");
+  const [evaluationId, setEvaluationId] = useState("");
 
   const studentContactDetailsRef = useRef(null);
   const companyAppreciationRef = useRef(null);
@@ -48,14 +50,23 @@ const StudentEvaluationForm = ({ visible }) => {
         Authorization: userInfo.jwt,
       },
       responseType: "json",
-    }).catch((error) => {
-      setErrorMessage("Une erreur est survenue, veuillez réessayer.");
-      console.error(error);
-    });
+    })
+      .then((response) => {
+        setEvaluationId(response.data);
+      })
+      .catch((error) => {
+        setErrorMessage("Une erreur est survenue, veuillez réessayer.");
+        console.error(error);
+      });
 
     setEvaluationSent(true);
     resetForm();
   };
+
+  useEffect(() => {
+    if (!!evaluationId) return;
+    toggleDialog("evaluationDialogPreview", true);
+  }, [evaluationId]);
 
   const resetForm = () => {
     setTimeout(() => {
@@ -179,6 +190,12 @@ const StudentEvaluationForm = ({ visible }) => {
           </Grid>
         )
       )}
+      <EvaluationDialogPreview
+        open={dialogVisibility.evaluationDialogPreview}
+        toggleDialog={toggleDialog}
+        evaluationId={evaluationId}
+        setEvaluationId={setEvaluationId}
+      ></EvaluationDialogPreview>
     </>
   );
 };

@@ -1,0 +1,361 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <title>Evaluation</title>
+    <meta charset="UTF-8" />
+    <bookmarks>
+        <bookmark name="Évaluation" href="#evaluation"></bookmark>
+    </bookmarks>
+    <link th:rel="stylesheet" type="text/css" th:href="@{css/evaluation.css}"/>
+</head>
+    <body style="width: 90%; display: block; margin: 0 auto 0 auto">
+        <h1 style="text-align: center; font-size: 40px">Fiche d'évaluation du stagiaire</h1>
+        <div style="border: black 1px solid; margin-top: 50px">
+            <div style="padding-top: 10px; margin-left: 10px; display: block">
+                <label>
+                Nom de l'élève :
+                </label>
+                <input id="studentFullName" th:value="${text.studentFullName}" th:readonly="true" style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+            </div>
+            <div style=" padding-top: 10px; margin-left: 10px">
+                <label style="display: block">
+                    Programmes d'études :
+                </label>
+                <input id="studyProgram" th:readonly="true" th:value="${text.studyProgram}" style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+
+            </div>
+            <div style=" padding-top: 10px; margin-left: 10px">
+                <label style="display: block">
+                    Nom de l'entreprise :
+                </label>
+                <input id="companyName" th:readonly="true" th:value="${text.companyName}" style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+            </div>
+            <div style=" padding-top: 10px; margin-left: 10px">
+                <label style="display: block">
+                    Nom du superviseur :
+                </label>
+                <input id="supervisorFullName" th:readonly="true" th:value="${text.supervisorFullName}" style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+            </div>
+            <div style=" padding-top: 10px; padding-bottom: 10px; margin-left: 10px">
+                <label style="display: block">
+                    Fonction :
+                    <input id="fonction" th:readonly="true" th:value="${text.fonction}" style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+                </label>
+            </div>
+            <div style="padding-bottom: 10px; margin-left: 10px">
+                <label style="display: block">
+                    Téléphone :
+                    <input id="phoneNumber" th:readonly="true" th:value="${text.phoneNumber}" style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+                </label>
+            </div>
+        </div>
+
+        <div style="border: black 1px solid; margin-top: 50px">
+            <div style="width: 100%; text-align: center">
+                <h2 style="line-height: 0; width: 100%; text-align: center;">Productivité</h2>
+                <p style="text-align: center; width: 100%;">Capacité d'optimiser son rendement au travail</p>
+            </div>
+            <table style="width: 98%; margin: auto;">
+                <tr>
+                    <th></th>
+                    <th>Totalement en accord</th>
+                    <th>Plutôt en accord</th>
+                    <th>Plutôt en désaccord</th>
+                    <th>Totalement en désaccord</th>
+                    <th>N/A</th>
+                </tr>
+                <tr>
+                    <td>Planifier et organiser son travail de façon efficace</td>
+                    <td><input name="organizeEfficiently" th:readonly="true" th:checked="${rating.organizeEfficiently.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="organizeEfficiently" th:readonly="true" th:checked="${rating.organizeEfficiently.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="organizeEfficiently" th:readonly="true"th:checked="${rating.organizeEfficiently.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="organizeEfficiently" th:readonly="true" th:checked="${rating.organizeEfficiently.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="organizeEfficiently" th:readonly="true" th:checked="${rating.organizeEfficiently.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Comprendre rapidement les directives relatives à son travail</td>
+                    <td><input name="understandFast" th:readonly="true" th:checked="${rating.understandFast.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="understandFast" th:readonly="true" th:checked="${rating.understandFast.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="understandFast" th:readonly="true" th:checked="${rating.understandFast.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="understandFast" th:readonly="true" th:checked="${rating.understandFast.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="understandFast" th:readonly="true" th:checked="${rating.understandFast.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Maintenir un rythme de travail soutenu</td>
+                    <td><input name="keepRhythm" th:readonly="true" th:checked="${rating.keepRhythm.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="keepRhythm" th:readonly="true" th:checked="${rating.keepRhythm.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="keepRhythm" th:readonly="true" th:checked="${rating.keepRhythm.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="keepRhythm" th:readonly="true" th:checked="${rating.keepRhythm.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="keepRhythm" th:readonly="true" th:checked="${rating.keepRhythm.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Établir ses priorités</td>
+                    <td><input name="establishPriorities" th:readonly="true" th:checked="${rating.establishPriorities.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="establishPriorities" th:readonly="true" th:checked="${rating.establishPriorities.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="establishPriorities" th:readonly="true" th:checked="${rating.establishPriorities.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="establishPriorities" th:readonly="true" th:checked="${rating.establishPriorities.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="establishPriorities" th:readonly="true" th:checked="${rating.establishPriorities.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Respecter ses échéanciers</td>
+                    <td><input name="respectDeadlines" th:readonly="true" th:checked="${rating.respectDeadlines.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="respectDeadlines" th:readonly="true" th:checked="${rating.respectDeadlines.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="respectDeadlines" th:readonly="true" th:checked="${rating.respectDeadlines.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="respectDeadlines" th:readonly="true" th:checked="${rating.respectDeadlines.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="respectDeadlines" th:readonly="true" th:checked="${rating.respectDeadlines.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+            </table>
+            <div style="margin: 30px 0 0 0">
+                <p style="width: 98%; line-height: 0; display: block; margin: 0 auto 20px auto">Commentaires :</p>
+                <textarea th:text="${text.productivityComment}" th:readonly="true" rows="5" style="width: 98%; display: block; margin: 0 auto 10px auto; word-break: break-word"></textarea>
+            </div>
+        </div>
+
+        <div style="border: black 1px solid; margin-top: 50px; page-break-inside: avoid;">
+            <div style="width: 100%; text-align: center">
+                <h2 style="line-height: 0; width: 100%; text-align: center;">Qualité du travail</h2>
+                <p style="text-align: center; width: 100%;">Capacité de s'acquitter des tâches sous sa responsabilité en s'imposant personnellement des normes de qualité</p>
+            </div>
+            <table style="width: 98%; margin: auto;">
+                <tr>
+                    <th></th>
+                    <th>Totalement en accord</th>
+                    <th>Plutôt en accord</th>
+                    <th>Plutôt en désaccord</th>
+                    <th>Totalement en désaccord</th>
+                    <th>N/A</th>
+                </tr>
+                <tr>
+                    <td>Respecter les mandats qui lui on été confiés</td>
+                    <td><input name="respectMandates" th:readonly="true" th:checked="${rating.respectMandates.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="respectMandates" th:readonly="true" th:checked="${rating.respectMandates.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="respectMandates" th:readonly="true" th:checked="${rating.respectMandates.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="respectMandates" th:readonly="true" th:checked="${rating.respectMandates.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="respectMandates" th:readonly="true" th:checked="${rating.respectMandates.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Porter attention aux détails dans la réalisation de ses tâches</td>
+                    <td><input name="contributeTeamwork" th:readonly="true" th:checked="${rating.contributeTeamwork.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="contributeTeamwork" th:readonly="true" th:checked="${rating.contributeTeamwork.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="contributeTeamwork" th:readonly="true" th:checked="${rating.contributeTeamwork.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="contributeTeamwork" th:readonly="true" th:checked="${rating.contributeTeamwork.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="contributeTeamwork" th:readonly="true" th:checked="${rating.contributeTeamwork.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Vérifier son travail, s'assurer que rien n'a été oublié</td>
+                    <td><input name="adaptCompany" th:readonly="true" th:checked="${rating.adaptCompany.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="adaptCompany" th:readonly="true" th:checked="${rating.adaptCompany.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="adaptCompany" th:readonly="true" th:checked="${rating.adaptCompany.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="adaptCompany" th:readonly="true" th:checked="${rating.adaptCompany.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="adaptCompany" th:readonly="true" th:checked="${rating.adaptCompany.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Rechercher ses occasions de se perfectionner</td>
+                    <td><input name="acceptCriticism" th:readonly="true" th:checked="${rating.acceptCriticism.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="acceptCriticism" th:readonly="true" th:checked="${rating.acceptCriticism.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="acceptCriticism" th:readonly="true" th:checked="${rating.acceptCriticism.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="acceptCriticism" th:readonly="true" th:checked="${rating.acceptCriticism.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="acceptCriticism" th:readonly="true" th:checked="${rating.acceptCriticism.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Faire une bonne analyse des problèmes rencontrés</td>
+                    <td><input name="problemSolving" th:readonly="true" th:checked="${rating.problemSolving.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="problemSolving" th:readonly="true" th:checked="${rating.problemSolving.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="problemSolving" th:readonly="true" th:checked="${rating.problemSolving.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="problemSolving" th:readonly="true" th:checked="${rating.problemSolving.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="problemSolving" th:readonly="true" th:checked="${rating.problemSolving.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+            </table>
+            <div style="margin: 30px 0 0 0">
+                <p style="width: 98%; line-height: 0; display: block; margin: 0 auto 20px auto">Commentaires :</p>
+                <textarea th:text="${text.workQualityComment}" th:readonly="true" rows="5" style="width: 98%; display: block; margin: 0 auto 10px auto; word-break: break-word"></textarea>
+            </div>
+        </div>
+
+        <div style="border: black 1px solid; margin-top: 50px; page-break-inside: avoid;">
+            <div style="width: 100%; text-align: center">
+                <h2 style="line-height: 0; width: 100%; text-align: center;">Qualités des relations interpersonnelles</h2>
+                <p style="text-align: center; width: 100%;">Capacité d'établir des interrelations harmonieuses dans son milieu de travail</p>
+            </div>
+            <table style="width: 98%; margin: auto;">
+                <tr>
+                    <th></th>
+                    <th>Totalement en accord</th>
+                    <th>Plutôt en accord</th>
+                    <th>Plutôt en désaccord</th>
+                    <th>Totalement en désaccord</th>
+                    <th>N/A</th>
+                </tr>
+                <tr>
+                    <td>Établir facilement des contacts avec les gens</td>
+                    <td><input name="approchable" th:readonly="true" th:checked="${rating.approchable.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="approchable" th:readonly="true" th:checked="${rating.approchable.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="approchable" th:readonly="true" th:checked="${rating.approchable.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="approchable" th:readonly="true" th:checked="${rating.approchable.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="approchable" th:readonly="true" th:checked="${rating.approchable.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Contribuer activement au travail d'équipe</td>
+                    <td><input name="contributeTeamwork" th:readonly="true" th:checked="${rating.contributeTeamwork.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="contributeTeamwork" th:readonly="true" th:checked="${rating.contributeTeamwork.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="contributeTeamwork" th:readonly="true" th:checked="${rating.contributeTeamwork.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="contributeTeamwork" th:readonly="true" th:checked="${rating.contributeTeamwork.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="contributeTeamwork" th:readonly="true" th:checked="${rating.contributeTeamwork.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>S'adapter facilement à la culture de l'entreprise</td>
+                    <td><input name="adaptCompany" th:readonly="true" th:checked="${rating.adaptCompany.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="adaptCompany" th:readonly="true" th:checked="${rating.adaptCompany.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="adaptCompany" th:readonly="true" th:checked="${rating.adaptCompany.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="adaptCompany" th:readonly="true" th:checked="${rating.adaptCompany.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="adaptCompany" th:readonly="true" th:checked="${rating.adaptCompany.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Accepter les critiques constructives</td>
+                    <td><input name="acceptCriticism" th:readonly="true" th:checked="${rating.acceptCriticism.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="acceptCriticism" th:readonly="true" th:checked="${rating.acceptCriticism.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="acceptCriticism" th:readonly="true" th:checked="${rating.acceptCriticism.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="acceptCriticism" th:readonly="true"th:checked="${rating.acceptCriticism.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="acceptCriticism" th:readonly="true" th:checked="${rating.acceptCriticism.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Être respectueux envers les gens</td>
+                    <td><input name="respectful" th:readonly="true" th:checked="${rating.respectful.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="respectful" th:readonly="true" th:checked="${rating.respectful.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="respectful" th:readonly="true" th:checked="${rating.respectful.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="respectful" th:readonly="true" th:checked="${rating.respectful.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="respectful" th:readonly="true" th:checked="${rating.respectful.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Faire preuve d'écoute active en essayant de comprendre le point de vue de l'autre</td>
+                    <td><input name="listenOthers" th:readonly="true" th:checked="${rating.listenOthers.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="listenOthers" th:readonly="true" th:checked="${rating.listenOthers.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="listenOthers" th:readonly="true" th:checked="${rating.listenOthers.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="listenOthers" th:readonly="true" th:checked="${rating.listenOthers.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="listenOthers" th:readonly="true" th:checked="${rating.listenOthers.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+            </table>
+            <div style="margin: 30px 0 0 0">
+                <p style="width: 98%; line-height: 0; display: block; margin: 0 auto 20px auto">Commentaires :</p>
+                <textarea th:text="${text.interpersonalRelationshipsComment}" th:readonly="true" rows="5" style="width: 98%; display: block; margin: 0 auto 10px auto; word-break: break-word"></textarea>
+            </div>
+        </div>
+
+        <div style="border: black 1px solid; margin-top: 50px; page-break-inside: avoid;">
+            <div style="width: 100%; text-align: center">
+                <h2 style="line-height: 0; width: 100%; text-align: center;">Habiletés personnelles</h2>
+                <p style="text-align: center; width: 100%;">Capacité de faire preuve d'attitudes ou de comportements matures et responsables</p>
+            </div>
+            <table style="width: 98%; margin: auto;">
+                <tr>
+                    <th></th>
+                    <th>Totalement en accord</th>
+                    <th>Plutôt en accord</th>
+                    <th>Plutôt en désaccord</th>
+                    <th>Totalement en désaccord</th>
+                    <th>N/A</th>
+                </tr>
+                <tr>
+                    <td>Démontrer de l'intérêt et de la motivation au travail</td>
+                    <td><input name="showMotivation" th:readonly="true" th:checked="${rating.showMotivation.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="showMotivation" th:readonly="true" th:checked="${rating.showMotivation.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="showMotivation" th:readonly="true" th:checked="${rating.showMotivation.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="showMotivation" th:readonly="true" th:checked="${rating.showMotivation.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="showMotivation" th:readonly="true" th:checked="${rating.showMotivation.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Exprimer clairement ses idées</td>
+                    <td><input name="expressClearly" th:readonly="true" th:checked="${rating.expressClearly.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="expressClearly" th:readonly="true" th:checked="${rating.expressClearly.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="expressClearly" th:readonly="true" th:checked="${rating.expressClearly.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="expressClearly" th:readonly="true" th:checked="${rating.expressClearly.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="expressClearly" th:readonly="true" th:checked="${rating.expressClearly.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Faire preuve d'initiative</td>
+                    <td><input name="takeInitiative" th:readonly="true" th:checked="${rating.takeInitiative.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="takeInitiative" th:readonly="true" th:checked="${rating.takeInitiative.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="takeInitiative" th:readonly="true" th:checked="${rating.takeInitiative.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="takeInitiative" th:readonly="true" th:checked="${rating.takeInitiative.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="takeInitiative" th:readonly="true" th:checked="${rating.takeInitiative.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Travailler de façon sécuritaire</td>
+                    <td><input name="workSafely" th:readonly="true" th:checked="${rating.workSafely.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="workSafely" th:readonly="true" th:checked="${rating.workSafely.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="workSafely" th:readonly="true" th:checked="${rating.workSafely.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="workSafely" th:readonly="true" th:checked="${rating.workSafely.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="workSafely" th:readonly="true" th:checked="${rating.workSafely.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>Démontrer un bon sens des responsabilités ne réquérant qu'un minimum de supervision</td>
+                    <td><input name="showAutonomy" th:readonly="true" th:checked="${rating.showAutonomy.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="showAutonomy" th:readonly="true" th:checked="${rating.showAutonomy.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="showAutonomy" th:readonly="true" th:checked="${rating.showAutonomy.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="showAutonomy" th:readonly="true" th:checked="${rating.showAutonomy.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="showAutonomy" th:readonly="true" th:checked="${rating.showAutonomy.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+                <tr>
+                    <td>FÊtre ponctuel et assidu à son travail</td>
+                    <td><input name="punctual" th:readonly="true" checked th:checked="${rating.punctual.name().equals('TOTALLY_AGREE')}" type="checkbox" style="display: block; margin: auto;"/></td>
+                    <td><input name="punctual" th:readonly="true" th:checked="${rating.punctual.name().equals('SOMEWHAT_AGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="punctual" th:readonly="true" th:checked="${rating.punctual.name().equals('SOMEWHAT_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="punctual" th:readonly="true" th:checked="${rating.punctual.name().equals('TOTALLY_DISAGREE')}" type="checkbox" style="display: block; margin: auto"/></td>
+                    <td><input name="punctual" th:readonly="true" th:checked="${rating.punctual.name().equals('NA')}" type="checkbox" style="display: block; margin: auto"/></td>
+                </tr>
+            </table>
+            <div style="margin: 30px 0 0 0">
+                <p style="width: 98%; line-height: 0; display: block; margin: 0 auto 20px auto">Commentaires :</p>
+                <textarea th:text="${text.personalSkillsComment}" th:readonly="true" rows="5" style="width: 98%; display: block; margin: 0 auto 10px auto; word-break: break-word"></textarea>
+            </div>
+        </div>
+
+        <div style="border: black 1px solid; margin-top: 50px; page-break-inside: avoid;">
+            <h3 style="font-weight: bolder; text-align: center; line-height: 0; margin-bottom: 30px">APPRÉCIATION GLOBALE DU STAGIAIRE</h3>
+            <p style="text-align: center">Les habiletés démontrées dépassent de beaucoup les attentes <input name="studentAppreciation" th:readonly="true"  th:checked="${expectation.studentAppreciation.name().equals('FAR_EXCEEDS')}" type="checkbox"/></p>
+            <p style="text-align: center">Les habiletés démontrées dépassent les attentes <input name="studentAppreciation" th:readonly="true" th:checked="${expectation.studentAppreciation.name().equals('EXCEEDS')}" type="checkbox"/></p>
+            <p style="text-align: center">Les habiletés démontrées répondent pleinement aux attentes <input name="studentAppreciation" th:readonly="true" th:checked="${expectation.studentAppreciation.name().equals('FULLY_MEETS')}" type="checkbox"/></p>
+            <p style="text-align: center">Les habiletés démontrées répondent partiellement aux attentes <input name="studentAppreciation" th:readonly="true" th:checked="${expectation.studentAppreciation.name().equals('PARTLY_MEETS')}" type="checkbox"/></p>
+            <p style="text-align: center">Les habiletés démontrées ne répondent pas aux attentes <input name="studentAppreciation" th:readonly="true" th:checked="${expectation.studentAppreciation.name().equals('DOES_NOT_MEET')}"  type="checkbox"/></p>
+            <div>
+                <p style="width: 98%; line-height: 0; display: block; margin: 50px auto 20px auto">Précisez votre appréciation:</p>
+                <textarea id="appreciationComment" th:readonly="true" th:text="${text.appreciationComment}" rows="5" style="width: 98%; display: block; margin: 0 auto 10px auto; word-break: break-word"></textarea>
+            </div>
+            <p style="width: 98%; display: block; margin: 40px auto 10px auto">Cette évaluation a été discutée avec le stagiaire: Oui <input th:readonly="true" th:checked="${categorical.discussedEvaluation.name().equals('YES')}" type="checkbox"/> Non <input th:readonly="true" th:checked="${categorical.discussedEvaluation.name().equals('NO')}" type="checkbox"/></p>
+        </div>
+        <div style="border: black 1px solid; margin-top: 50px; margin-bottom: 50px; page-break-inside: avoid;">
+            <h3 style="font-weight: bolder; text-align: center; line-height: 1; margin-bottom: 30px; word-break: break-word; word-wrap: break-word;">L’ENTREPRISE AIMERAIT ACCUEILLIR CET ÉLÈVE <br/> POUR SON PROCHAIN STAGE :</h3>
+            <p style="text-align: center; line-height: 0; margin-top: 20px; margin-bottom: 40px">
+                Oui <input th:readonly="true" th:checked="${categorical.interestedNextInternship.name().equals('YES')}" type="checkbox"/>
+                Non <input th:readonly="true" th:checked="${categorical.interestedNextInternship.name().equals('NO')}" type="checkbox"/>
+                Peut-être <input th:readonly="true" th:checked="${categorical.interestedNextInternship.name().equals('MAYBE')}" type="checkbox"/>
+            </p>
+            <div>
+                <p style="width: 98%; line-height: 0; display: block; margin: 0 auto 20px auto">La formation technique du stagiare était-elle suffisante pour accomplir le mandat de stage:</p>
+                <textarea th:text="${text.technicalTrainingComment}"  th:readonly="true" rows="5" style="width: 98%; display: block; margin: 0 auto 40px auto; word-break: break-word"></textarea>
+            </div>
+            <div style="margin-right: auto; margin-left: auto; text-align: center">
+                <div style="display: block; margin: 10px 0 10px 0">
+                    <label>
+                        Nom :
+                        <input id="monitorFullName" th:readonly="true" th:value="${text.monitorFullName}" style="border: 0; border-bottom: 1px black solid; width: 25%"/>
+                    </label>
+                    <label>
+                        Fonction :
+                        <input id="fonction2" th:readonly="true" th:value="${text.fonction2}" style="border: 0; border-bottom: 1px black solid; width: 25%"/>
+                    </label>
+                </div>
+                <div style="display: block; margin: 10px 0 10px 0">
+                    <label>
+                        Signature :
+                    </label>
+                    <input id="signature" th:readonly="true" th:value="${text.signature}" style="border: 0; border-bottom: 1px black solid; width: 25%"/>
+                    <label>
+                        Date :
+                    </label>
+                    <input id="date" th:readonly="true" th:value="${text.date}" style="border: 0; border-bottom: 1px black solid; width: 25%"/>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

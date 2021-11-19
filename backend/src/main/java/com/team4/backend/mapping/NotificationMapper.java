@@ -9,12 +9,13 @@ public abstract class NotificationMapper {
 
     public static Notification toEntity(NotificationDto notificationDto) {
         return Notification.notificationBuilder()
+                .id(null)
                 .title(notificationDto.getTitle())
                 .receiverIds(notificationDto.getReceiverIds())
                 .content(notificationDto.getContent())
                 .data(notificationDto.getData())
+                .creationDate(null)
                 .severity(notificationDto.getSeverity())
-                .creationDate(LocalDateTime.now())
                 .notificationType(notificationDto.getNotificationType())
                 .build();
     }

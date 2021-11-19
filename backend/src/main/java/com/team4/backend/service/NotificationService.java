@@ -23,18 +23,18 @@ public class NotificationService {
         this.sinks = notificationFlux;
     }
 
-    public Mono<Notification> createNotifications(NotificationDto notification) {
+    public Mono<Notification> createNotification(NotificationDto notificationDto) {
         return notificationRepository
-                .save(NotificationMapper.toEntity(notification))
+                .save(NotificationMapper.toEntity(notificationDto))
                 .doOnSuccess(sinks::tryEmitNext);
     }
 
     public Flux<Notification> findAllNotifications(String receiverId) {
         return notificationRepository
-                .findByReceiverId(receiverId);
+                .findAllByReceiverId(receiverId);
     }
 
-    public Mono<UpdateResult> deleteUserNotification(String notificationId, String userId) {
+    public Mono<Notification> deleteUserNotification(String notificationId, String userId) {
         return notificationRepository
                 .deleteUserNotification(notificationId, userId);
     }

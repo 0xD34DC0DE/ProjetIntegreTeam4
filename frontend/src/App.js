@@ -28,6 +28,7 @@ function App() {
     reportDialog: false,
     cvDialog: false,
     signContractMonitorDialog: false,
+    evaluationDialogPreview: false,
     cvRejectionExplanationDialog: false,
     signContractDialog: false,
   });

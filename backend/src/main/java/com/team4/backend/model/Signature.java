@@ -15,7 +15,7 @@ public class Signature {
 
     private LocalDate signDate;
 
-    @Builder
+    @Builder(builderMethodName = "signatureBuild")
     public Signature(String userId, Boolean hasSigned, LocalDate signDate) {
         this.userId = userId;
         this.hasSigned = hasSigned;
