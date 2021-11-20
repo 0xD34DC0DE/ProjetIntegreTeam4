@@ -83,7 +83,7 @@ const StudentDashBoard = ({ visible }) => {
     };
 
     getProfile();
-  });
+  }, []);
 
   const updateStudentStatus = () => {
     axios({

@@ -1,5 +1,6 @@
 package com.team4.backend.testdata;
 
+import com.team4.backend.dto.InternshipContractDto;
 import com.team4.backend.model.InternshipContract;
 import com.team4.backend.model.Signature;
 
@@ -33,6 +34,14 @@ public abstract class InternshipContractMockData {
                         .signDate(LocalDate.now().plusDays(4))
                         .userId("gdsf34sfdfs32rf3")
                         .build())
+                .build();
+    }
+
+    public static InternshipContractDto getInternshipContractDto() {
+        return InternshipContractDto.builder()
+                .contractId("kfo39fk3lda2dsadad")
+                .internshipOfferId("dsaida932kklda32")
+                .studentEmail("student@gmail.com")
                 .build();
     }
 
