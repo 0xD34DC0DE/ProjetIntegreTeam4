@@ -28,7 +28,7 @@ const ListStudentApplying = () => {
   const [offers, setOffers] = useState([]);
   const [receiver, setReceiver] = useState("");
   const [userInfo] = useContext(UserInfoContext);
-  const [semesterFullName, setSemesterFullName] = useState();
+  const [semesterFullName, setSemesterFullName] = useState("");
   const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const fetchData = () => {
@@ -63,6 +63,7 @@ const ListStudentApplying = () => {
   };
 
   useEffect(() => {
+    if (semesterFullName === "") return;
     fetchData();
   }, [semesterFullName]);
 
