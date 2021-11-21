@@ -22,12 +22,14 @@ import { UserInfoContext } from "../stores/UserInfoStore";
 import CreateContractMonitorDialog from "./contracts/CreateContractMonitorDialog";
 import SemesterSelect from "./SemesterSelect";
 import CVDialog from "./CVDialog";
+import { DialogContext } from "../stores/DialogStore";
 
-const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
+const ListStudentApplying = ({ visible }) => {
   const [offers, setOffers] = useState([]);
   const [receiver, setReceiver] = useState("");
   const [userInfo] = useContext(UserInfoContext);
   const [semesterFullName, setSemesterFullName] = useState();
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const fetchData = () => {
     axios({
@@ -68,12 +70,15 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
 
   useEffect(() => {
     if (url !== "") {
-        toggleDialog("cvDialog", true);
+      dialogDispatch({
+        type: "OPEN",
+        dialogName: "cvDialog",
+      });
     }
-  }, [url])
+  }, [url]);
 
   const showCv = (email, medium) => {
-    var assetId = '';
+    var assetId = "";
     axios({
       method: "GET",
       baseURL: "http://localhost:8080",
@@ -81,19 +86,19 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
       headers: {
         Authorization: userInfo.jwt,
       },
-    }) 
-    .then((response) => {
-      assetId = response.data;
-      if (medium) {
-        setUrl("https://projetintegreteam4.s3.amazonaws.com/" + assetId)
-      } else {
-        window.open("https://projetintegreteam4.s3.amazonaws.com/" + assetId);
-      }
     })
-    .catch((error) => {
-      console.error(error);
-    });
-  }
+      .then((response) => {
+        assetId = response.data;
+        if (medium) {
+          setUrl("https://projetintegreteam4.s3.amazonaws.com/" + assetId);
+        } else {
+          window.open("https://projetintegreteam4.s3.amazonaws.com/" + assetId);
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
 
   return (
     <Grid
@@ -265,8 +270,7 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                               >
                                 <Divider
                                   sx={{
-                                    backgroundColor:
-                                      "rgba(255, 255, 255, 0.2)",
+                                    backgroundColor: "rgba(255, 255, 255, 0.2)",
                                   }}
                                 />
                               </Grid>
@@ -303,7 +307,7 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                           },
                                         }}
                                         onClick={() => {
-                                          showCv(student.email, false)
+                                          showCv(student.email, false);
                                         }}
                                       >
                                         <FileDownloadOutlinedIcon
@@ -333,10 +337,10 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                         }}
                                         onClick={() => {
                                           setReceiver(student.email);
-                                          toggleDialog(
-                                            "emailSenderDialog",
-                                            true
-                                          );
+                                          dialogDispatch({
+                                            type: "OPEN",
+                                            dialogName: "emailSenderDialog",
+                                          });
                                         }}
                                       >
                                         <MailOutlineIcon
@@ -365,7 +369,7 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                           },
                                         }}
                                         onClick={() => {
-                                          showCv(student.email, true)
+                                          showCv(student.email, true);
                                         }}
                                       >
                                         <RemoveRedEyeOutlinedIcon
@@ -398,15 +402,14 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
                                             internshipOfferId: offer.id,
                                             studentEmail: student.email,
                                           });
-                                          toggleDialog(
-                                            "signContractMonitorDialog",
-                                            true
-                                          );
+                                          dialogDispatch({
+                                            type: "OPEN",
+                                            dialogName:
+                                              "signContractMonitorDialog",
+                                          });
                                         }}
                                       >
-                                        <HowToRegIcon
-                                          sx={{ color: "white" }}
-                                        />
+                                        <HowToRegIcon sx={{ color: "white" }} />
                                       </Button>
                                     </Tooltip>
                                   </Grid>
@@ -422,21 +425,15 @@ const ListStudentApplying = ({ visible, toggleDialog, dialogVisibility }) => {
               </>
             );
           })}
-      <EmailSender
-        toggleDialog={toggleDialog}
-        open={dialogVisibility.emailSenderDialog}
-        receiver={receiver}
-      />
+      <EmailSender receiver={receiver} />
       <CreateContractMonitorDialog
-        toggleDialog={toggleDialog}
-        open={dialogVisibility.signContractMonitorDialog}
         pdfUrl={`http://localhost:8080/contract`}
         params={{
           internshipOfferId: receiver.internshipOfferId,
           studentEmail: receiver.studentEmail,
         }}
       />
-      <CVDialog open={dialogVisibility.cvDialog} toggleDialog={toggleDialog} cvUrl={url} setUrl={setUrl}/>
+      <CVDialog cvUrl={url} setUrl={setUrl} />
     </Grid>
   );
 };

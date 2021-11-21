@@ -51,26 +51,24 @@ const ListUserDraggable = ({ role, isDragging, visible }) => {
             columns={{ xs: 4, sm: 8, md: 12 }}
           >
             {users.map((user, index) => (
-              <>
-                <Grid
-                  item
-                  xs={6}
-                  sm={4}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  key={index}
-                  sx={{
-                    "&:hover": {
-                      cursor: "grab",
-                    },
-                  }}
-                >
-                  <motion.div variants={fadeIn} initial="hidden" animate="show">
-                    <UserCard isDragging={isDragging} user={user} />
-                  </motion.div>
-                </Grid>
-              </>
+              <Grid
+                item
+                xs={6}
+                sm={4}
+                md={4}
+                lg={3}
+                xl={2}
+                key={index}
+                sx={{
+                  "&:hover": {
+                    cursor: "grab",
+                  },
+                }}
+              >
+                <motion.div variants={fadeIn} initial="hidden" animate="show">
+                  <UserCard isDragging={isDragging} user={user} />
+                </motion.div>
+              </Grid>
             ))}
           </Grid>
         </DndProvider>

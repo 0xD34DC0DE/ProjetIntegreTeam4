@@ -44,9 +44,13 @@ public class NotificationController {
     }
 
     @GetMapping
-    public Flux<Notification> findAllNotifications(@RequestParam String receiverId) {
+    public Flux<Notification> findAllNotifications(
+            @RequestParam String receiverId,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "5") Integer size
+    ) {
         return notificationService
-                .findAllNotifications(receiverId);
+                .findAllNotifications(receiverId, page, size);
     }
 
     @DeleteMapping

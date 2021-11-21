@@ -14,11 +14,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import CvRejectionExplanationDialog from "./CvRejectionExplanationDialog";
 import CVDialog from "./CVDialog";
+import { DialogContext } from "../stores/DialogStore";
 
-const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
+const ListCvStudentView = () => {
   const [userInfo] = useContext(UserInfoContext);
   const [cvs, setCvs] = useState([]);
   const [url, setUrl] = useState("");
+  const [dialog, dialogDispatch] = useContext(DialogContext);
   const fadeIn = {
     hidden: { opacity: 0 },
     show: {
@@ -42,7 +44,6 @@ const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
         console.log(error);
       });
 
-      console.log("response", response.data);
       setCvs(response.data);
     };
 
@@ -79,9 +80,18 @@ const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
                   ? -1
                   : Date.parse(cv1.uploadDate) - Date.parse(cv2.uploadDate);
               })
-              .map((cv) => {
+              .map((cv, key) => {
                 return (
-                  <Grid item flexGrow="1" xs={12} sm={6} md={4} lg={3} xl={3}>
+                  <Grid
+                    item
+                    flexGrow="1"
+                    key={key}
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={3}
+                  >
                     <Card
                       variant="outlined"
                       sx={{
@@ -133,7 +143,10 @@ const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
                         <Typography title="Le C.V. a été rejeté: cliquez ici pour voir la raison du rejet">
                           <ThumbDownIcon
                             onClick={() =>
-                              toggleDialog("cvRejectionExplanationDialog", true)
+                              dialogDispatch({
+                                type: "OPEN",
+                                dialogName: "cvRejectionExplanationDialog",
+                              })
                             }
                             sx={{
                               float: "right",
@@ -146,8 +159,6 @@ const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
                             }}
                           />
                           <CvRejectionExplanationDialog
-                            open={dialogVisibility.cvRejectionExplanationDialog}
-                            toggleDialog={toggleDialog}
                             rejectionExplanation={cv.rejectionExplanation}
                           />
                         </Typography>
@@ -157,7 +168,10 @@ const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
                           textAlign: "center",
                         }}
                         onClick={() => {
-                          toggleDialog("cvDialog", true);
+                          dialogDispatch({
+                            type: "OPEN",
+                            dialogName: "cvDialog",
+                          });
                           openCv(cv.assetId);
                         }}
                       >
@@ -174,12 +188,7 @@ const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
           </Grid>
         </Container>
       )}
-      <CVDialog
-        open={dialogVisibility.cvDialog}
-        toggleDialog={toggleDialog}
-        cvUrl={url}
-        setUrl={setUrl}
-      />
+      <CVDialog cvUrl={url} setUrl={setUrl} />
     </>
   );
 };

@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { ratings } from "../EvaluationFields";
 
-const StudentEvaluationDropdown = ({ section, key, mergeForms }, ref) => {
+const StudentEvaluationDropdown = ({ section, keyRef, mergeForms }, ref) => {
   const [form, setForm] = useState({
     text: {},
     categorical: {},
@@ -43,7 +43,7 @@ const StudentEvaluationDropdown = ({ section, key, mergeForms }, ref) => {
   }));
 
   return (
-    <Grid item xl={12} lg={12} md={12} sm={12} xs={12} key={key}>
+    <Grid item xl={12} lg={12} md={12} sm={12} xs={12} key={keyRef}>
       <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
         <AccordionSummary>
           <Grid container flexDirection="row" textAlign="center">
@@ -96,7 +96,7 @@ const StudentEvaluationDropdown = ({ section, key, mergeForms }, ref) => {
               <Grid container flexDirection="row">
                 {section.tasks.map((task, key2) => {
                   return (
-                    <>
+                    <React.Fragment key={key2}>
                       <Grid
                         item
                         xl={6}
@@ -134,7 +134,7 @@ const StudentEvaluationDropdown = ({ section, key, mergeForms }, ref) => {
                           </Grid>
                         );
                       })}
-                    </>
+                    </React.Fragment>
                   );
                 })}
                 <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>

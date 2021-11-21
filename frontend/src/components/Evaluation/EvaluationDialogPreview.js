@@ -1,16 +1,15 @@
 import { Dialog, DialogContent, Grid } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
+import { DialogContext } from "../../stores/DialogStore.js";
 import PdfView from "../PdfView.js";
 
-function EvaluationDialogPreview({
-  open,
-  toggleDialog,
-  dialogData,
-  evaluationId,
-  setEvaluationId,
-}) {
+function EvaluationDialogPreview({ evaluationId, setEvaluationId }) {
+  const [dialog, dialogDispatch] = useContext(DialogContext);
   const handleClose = (_, reason) => {
-    toggleDialog("evaluationDialogPreview", false);
+    dialogDispatch({
+      type: "CLOSE",
+      dialogName: "evaluationDialogPreview",
+    });
     setEvaluationId("");
   };
 
@@ -21,7 +20,11 @@ function EvaluationDialogPreview({
   return (
     <>
       {evaluationId && (
-        <Dialog open={open} onClose={handleClose} fullWidth>
+        <Dialog
+          open={dialog.evaluationDialogPreview.visible}
+          onClose={handleClose}
+          fullWidth
+        >
           <DialogContent>
             <Grid
               container

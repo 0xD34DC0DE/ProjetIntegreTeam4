@@ -10,20 +10,20 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React, { useContext } from "react";
+import { DialogContext } from "../stores/DialogStore";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { listLabels } from "./InternshipOfferLabels";
 
-const InternshipOfferDescriptionDialog = ({
-  open,
-  toggleDialog,
-  offer,
-  removeInternshipOffer,
-}) => {
+const InternshipOfferDescriptionDialog = ({ offer, removeInternshipOffer }) => {
   const [userInfo] = useContext(UserInfoContext);
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick")
-      toggleDialog("internshipOfferDialogValidation", false);
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "internshipOfferDialogValidation",
+      });
   };
 
   const validateInternshipOffer = async (id, valid) => {
@@ -39,12 +39,18 @@ const InternshipOfferDescriptionDialog = ({
       },
       responseType: "json",
     });
-    toggleDialog("internshipOfferDialogValidation", false);
+    dialogDispatch({
+      type: "CLOSE",
+      dialogName: "internshipOfferDialogValidation",
+    });
     removeInternshipOffer(offer);
   };
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog
+      open={dialog.internshipOfferDialogValidation.visible}
+      onClose={handleClose}
+    >
       <DialogContent
         sx={{
           p: 0,

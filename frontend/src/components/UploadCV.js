@@ -6,7 +6,7 @@ import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 import { motion } from "framer-motion";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import ListCvStudentView from "./ListCvStudentView";
-const UploadCV = ({ visible, toggleDialog, dialogVisibility }) => {
+const UploadCV = ({ visible }) => {
   const [file, setFile] = useState();
   const [errorMessage, setErrorMessage] = useState("");
   const inputFileRef = useRef();
@@ -172,10 +172,7 @@ const UploadCV = ({ visible, toggleDialog, dialogVisibility }) => {
               delay: 0.25,
             }}
           >
-            <ListCvStudentView
-              toggleDialog={toggleDialog}
-              dialogVisibility={dialogVisibility}
-            />
+            <ListCvStudentView />
           </motion.div>
         </>
       )}

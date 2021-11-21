@@ -1,7 +1,8 @@
 package com.team4.backend.repository;
 
-import com.mongodb.client.result.UpdateResult;
 import com.team4.backend.model.Notification;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.FindAndModifyOptions;
 import org.springframework.data.mongodb.core.ReactiveMongoOperations;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -10,6 +11,8 @@ import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Comparator;
 
 @Component
 public class CustomNotificationRepositoryImpl implements CustomNotificationRepository {
@@ -21,8 +24,8 @@ public class CustomNotificationRepositoryImpl implements CustomNotificationRepos
     }
 
     @Override
-    public Flux<Notification> findAllByReceiverId(String id) {
-        Query query = Query.query(Criteria.where("receiverIds").is(id));
+    public Flux<Notification> findAllByReceiverId(String id, Pageable pageable) {
+        Query query = Query.query(Criteria.where("receiverIds").is(id)).with(pageable).with(Sort.by(Sort.Direction.DESC, "creationDate"));
         return mongoOperations.find(query, Notification.class);
     }
 

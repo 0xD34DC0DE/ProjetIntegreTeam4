@@ -58,7 +58,7 @@ const StudentContactDetailsDropdown = ({ mergeForms }, ref) => {
         <Grid container>
           {contactDetails.map((field, key) => {
             return (
-              <>
+              <React.Fragment key={key}>
                 <Grid
                   item
                   xl={1.5}
@@ -89,7 +89,7 @@ const StudentContactDetailsDropdown = ({ mergeForms }, ref) => {
                     fullWidth
                   ></TextField>
                 </Grid>
-              </>
+              </React.Fragment>
             );
           })}
         </Grid>

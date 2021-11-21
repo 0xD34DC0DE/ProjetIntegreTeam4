@@ -11,14 +11,16 @@ import { KeyboardArrowRight, KeyboardArrowLeft } from "@mui/icons-material";
 import axios from "axios";
 import React, { useState, useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import { DialogContext } from "../stores/DialogStore";
 
-const Login = ({ open, toggleDialog }) => {
+const Login = () => {
   const [errorMessage, setErrorMessage] = useState();
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
   const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const handleFormChange = (event) => {
     setForm((form) => ({
@@ -41,7 +43,10 @@ const Login = ({ open, toggleDialog }) => {
         userInfoDispatch({ type: "LOGIN", payload: { token: response.data } });
         resetForm();
         setErrorMessage();
-        toggleDialog("loginDialog", false);
+        dialogDispatch({
+          type: "CLOSE",
+          dialogName: "loginDialog",
+        });
       })
       .catch((error) => {
         let errorMessage =
@@ -58,7 +63,10 @@ const Login = ({ open, toggleDialog }) => {
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick") {
-      toggleDialog("loginDialog", false);
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "loginDialog",
+      });
       resetForm();
     }
   };
@@ -69,7 +77,7 @@ const Login = ({ open, toggleDialog }) => {
 
   if (!userInfo.loggedIn) {
     return (
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={dialog.loginDialog.visible} onClose={handleClose}>
         <DialogContent>
           <Typography
             variant="h4"
@@ -119,7 +127,10 @@ const Login = ({ open, toggleDialog }) => {
             sx={{ justifySelf: "flex-start", mr: 20, flexGrow: "1" }}
             color="primary"
             onClick={() => {
-              toggleDialog("loginDialog", false);
+              dialogDispatch({
+                type: "CLOSE",
+                dialogName: "loginDialog",
+              });
             }}
           >
             <KeyboardArrowLeft />

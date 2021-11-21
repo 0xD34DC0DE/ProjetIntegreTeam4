@@ -40,6 +40,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiBadge: {
+      styleOverrides: {
+        badge: {
+          backgroundColor: "red",
+        },
+      },
+    },
     MuiInput: {
       styleOverrides: {
         underline: {
@@ -66,10 +73,10 @@ const theme = createTheme({
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: "rgba(100, 100, 100, 0.5)",
           },
-          "& .MuiOutlinedInput-input.Mui-disabled" : {
+          "& .MuiOutlinedInput-input.Mui-disabled": {
             backgroundColor: "rgba(255, 255, 255, 0.6)",
-            opacity: 1
-          }
+            opacity: 1,
+          },
         },
       },
     },
@@ -157,7 +164,7 @@ const theme = createTheme({
             backgroundColor: "rgba(100, 100, 100, 0.3)",
           },
           "& .MuiList-root": {
-            backgroundColor: "rgba(24, 24, 27, 1)",
+            backgroundColor: "rgba(34, 34, 37, 0.5)",
           },
           "& .MuiPaper-root": {
             backgroundColor: "rgba(24, 24, 27, 1)",

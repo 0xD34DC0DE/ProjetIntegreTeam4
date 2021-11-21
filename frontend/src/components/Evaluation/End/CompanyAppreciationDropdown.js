@@ -67,7 +67,7 @@ const CompanyAppreciationDropdown = ({ mergeForms }, ref) => {
         <Grid container textAlign="center" alignItems="center">
           {companyAppreciation.ratings.map((field, key) => {
             return (
-              <>
+              <React.Fragment key={key}>
                 <Grid
                   item
                   xl={6}
@@ -98,7 +98,7 @@ const CompanyAppreciationDropdown = ({ mergeForms }, ref) => {
                     onChange={handleFormChange}
                   ></Radio>
                 </Grid>
-              </>
+              </React.Fragment>
             );
           })}
         </Grid>

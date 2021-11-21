@@ -43,6 +43,12 @@ public class SupervisorController {
         return supervisorService.getAllAssignedStudents(supervisorId, semesterFullName);
     }
 
+    @GetMapping("/getAllAssignedStudentsForCurrentSemester/{supervisorId}")
+    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER', 'SUPERVISOR')")
+    public Flux<StudentDetailsDto> getAllAssignedStudentsForCurrentSemester(@PathVariable String supervisorId) {
+        return supervisorService.getAllAssignedStudentsForCurrentSemester(supervisorId);
+    }
+
     @GetMapping("/{email}")
     @PreAuthorize("hasAnyAuthority('SUPERVISOR')")
     public Mono<SupervisorCreationDto> getSupervisor(@PathVariable("email") String email) {

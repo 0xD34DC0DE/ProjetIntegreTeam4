@@ -1,14 +1,11 @@
-import {
-  Grid,
-  Typography,
-  Box,
-} from "@mui/material";
-import React, { useState, useEffect } from "react";
+import { Grid, Typography, Box, Container } from "@mui/material";
+import React, { useState, useEffect, useContext } from "react";
+import { DialogContext } from "../stores/DialogStore";
 import Report from "./Report";
 import ReportDialog from "./ReportDialog";
 import SemesterSelect from "./SemesterSelect";
 
-const ListReport = ({ toggleDialog, visible, dialogVisibility }) => {
+const ListReport = ({ visible }) => {
   const [reports] = useState([
     {
       title: "Offres de stages non validées",
@@ -52,10 +49,14 @@ const ListReport = ({ toggleDialog, visible, dialogVisibility }) => {
 
   const [reportUrl, setReportUrl] = useState("");
   const [semesterFullName, setSemesterFullName] = useState("");
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   useEffect(() => {
     if (reportUrl !== "") {
-      toggleDialog("reportDialog", true);
+      dialogDispatch({
+        type: "OPEN",
+        dialogName: "reportDialog",
+      });
     }
   }, [reportUrl]);
 
@@ -67,23 +68,32 @@ const ListReport = ({ toggleDialog, visible, dialogVisibility }) => {
     //TODO: fix 'The Menu component doesn't accept a Fragment as a child."
     <>
       {visible && (
-        <Box>
-          <SemesterSelect updateSemesterFullName={updateSemesterFullName} />
-
-          <Typography
-            variant="h4"
-            sx={{ color: "white", ml: 2, mt: 2, display: "inline-block" }}
-          >
-            Rapports
-          </Typography>
+        <Grid container flexDirection="column">
+          <Grid item>
+            <SemesterSelect updateSemesterFullName={updateSemesterFullName} />
+          </Grid>
+          <Grid item>
+            <Typography
+              variant="subtitle2"
+              sx={{
+                color: "white",
+                ml: 3,
+                mb: 2,
+                fontSize: "2.5em",
+                lineHeight: "1",
+              }}
+            >
+              Rapports
+            </Typography>
+          </Grid>
           <Grid
-            sx={{ py: "1vh", mt: "10%", display: "flex" }}
             container
             spacing={{ xs: 2, md: 3 }}
             columns={{ xs: 4, sm: 8, md: 12 }}
+            justifyContent="center"
           >
             {reports.map((current, index) => (
-              <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={index}>
+              <Grid item xs={6} sm={6} md={8} lg={4} xl={2} key={index}>
                 <Report
                   title={current.title}
                   url={current.url}
@@ -93,13 +103,11 @@ const ListReport = ({ toggleDialog, visible, dialogVisibility }) => {
             ))}
           </Grid>
           <ReportDialog
-            open={dialogVisibility.reportDialog}
-            toggleDialog={toggleDialog}
             reportUrl={reportUrl}
             semesterFullName={semesterFullName}
             setReportUrl={setReportUrl}
           />
-        </Box>
+        </Grid>
       )}
     </>
   );

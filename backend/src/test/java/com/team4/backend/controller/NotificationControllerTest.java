@@ -41,7 +41,7 @@ public class NotificationControllerTest {
         String receiverId = "receiverId";
         Flux<Notification> notificationFlux = NotificationMockData.getNotifications();
 
-        when(notificationService.findAllNotifications(receiverId)).thenReturn(notificationFlux);
+        //when(notificationService.findAllNotifications(receiverId)).thenReturn(notificationFlux);
 
         //ACT
         webTestClient

@@ -9,21 +9,19 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
+import { DialogContext } from "../stores/DialogStore";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import InternshipOfferDialog from "./InternshipOfferDialog";
 import { listLabels } from "./InternshipOfferLabels";
 import SemesterSelect from "./SemesterSelect";
 
-const InternshipOfferValidation = ({
-  dialogVisibility,
-  toggleDialog,
-  visible,
-}) => {
+const InternshipOfferValidation = ({ visible }) => {
   const [unvalidatedOffers, setUnvalidatedOffers] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
   const [semesterFullName, setSemesterFullName] = useState(""); //TODO --> get From select component
   const [selectedOffer, setSelectedOffer] = useState(null);
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   useEffect(() => {
     const getUnvalidatedInternshipOffers = async () => {
@@ -129,16 +127,16 @@ const InternshipOfferValidation = ({
                               my: 1,
                             }}
                             onClick={() => {
-                              toggleDialog(
-                                "internshipOfferDialogValidation",
-                                true
-                              );
+                              dialogDispatch({
+                                type: "OPEN",
+                                dialogName: "internshipOfferDialogValidation",
+                              });
                               setSelectedOffer(offer);
                             }}
                           >
                             {Object.keys(offer).map((identifier, key) => {
                               return (
-                                <>
+                                <React.Fragment key={key}>
                                   {isNotARenderedAttribute(identifier) && (
                                     <Tooltip
                                       key={key}
@@ -154,7 +152,7 @@ const InternshipOfferValidation = ({
                                       </ListItem>
                                     </Tooltip>
                                   )}
-                                </>
+                                </React.Fragment>
                               );
                             })}
                           </ListItemButton>
@@ -169,8 +167,6 @@ const InternshipOfferValidation = ({
         </Grid>
       )}
       <InternshipOfferDialog
-        open={dialogVisibility.internshipOfferDialogValidation}
-        toggleDialog={toggleDialog}
         offer={selectedOffer}
         unvalidatedOffers={unvalidatedOffers}
         setUnvalidatedOffers={setUnvalidatedOffers}

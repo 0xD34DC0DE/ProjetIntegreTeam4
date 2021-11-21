@@ -12,11 +12,22 @@ import axios from "axios";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import EvaluationDialogPreview from "../EvaluationDialogPreview";
+import { DialogContext } from "../../../stores/DialogStore";
 
-const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
-  // TODO: Find a better way then useRef
+const StudentEvaluationForm = ({ visible }) => {
   const evaluationForm = useRef({
-    text: {},
+    text: {
+      studentFullName: "",
+      studyProgram: "",
+      companyName: "",
+      supervisorFullName: "",
+      fonction: "",
+      phoneNumber: "",
+      productivityComment: "",
+      workQualityComment: "",
+      interpersonalRelationshipsComment: "",
+      personalSkillsComment: "",
+    },
     categorical: {},
     rating: {},
     expectation: {},
@@ -25,7 +36,6 @@ const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
   const [userInfo] = useContext(UserInfoContext);
   const [errorMessage, setErrorMessage] = useState("");
   const [evaluationId, setEvaluationId] = useState("");
-
   const studentContactDetailsRef = useRef(null);
   const companyAppreciationRef = useRef(null);
   const companyInterestRef = useRef(null);
@@ -35,6 +45,7 @@ const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
     useRef(null),
     useRef(null),
   ];
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const handleSubmit = async () => {
     await studentContactDetailsRef.current.getForm();
@@ -65,7 +76,10 @@ const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
 
   useEffect(() => {
     if (!!evaluationId) return;
-    toggleDialog("evaluationDialogPreview", true);
+    dialogDispatch({
+      type: "OPEN",
+      dialogName: "evaluationDialogPreview",
+    });
   }, [evaluationId]);
 
   const resetForm = () => {
@@ -107,7 +121,7 @@ const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
           mergeForms={mergeForms}
           section={section}
           ref={evaluationRefs[key]}
-          key={key}
+          keyRef={key}
         />
       );
     }),
@@ -191,8 +205,6 @@ const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
         )
       )}
       <EvaluationDialogPreview
-        open={dialogVisibility.evaluationDialogPreview}
-        toggleDialog={toggleDialog}
         evaluationId={evaluationId}
         setEvaluationId={setEvaluationId}
       ></EvaluationDialogPreview>

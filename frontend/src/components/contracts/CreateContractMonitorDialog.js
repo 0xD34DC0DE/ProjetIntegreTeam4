@@ -1,19 +1,28 @@
 import { Dialog, DialogContent, Grid } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
 import PdfView from "../PdfView.js";
 import CreateContractMonitorForm from "./CreateContractMonitorForm";
+import { DialogContext } from "../../stores/DialogStore";
 
-function CreateContractMonitorDialog({ open, toggleDialog, pdfUrl, params }) {
+function CreateContractMonitorDialog({ pdfUrl, params }) {
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick") {
-      toggleDialog("signContractMonitorDialog", false);
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "signContractMonitorDialog",
+      });
     }
   };
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose} fullWidth>
+      <Dialog
+        open={dialog.signContractMonitorDialog.visible}
+        onClose={handleClose}
+        fullWidth
+      >
         <DialogContent>
           <Grid
             container

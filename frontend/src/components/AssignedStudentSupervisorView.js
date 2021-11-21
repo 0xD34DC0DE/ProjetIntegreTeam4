@@ -6,6 +6,7 @@ import StudentState from "./StudentState";
 import StudentInternshipDetailsDialog from "./StudentInternshipDetailsDialog";
 import { motion } from "framer-motion";
 import SemesterSelect from "./SemesterSelect";
+import { DialogContext } from "../stores/DialogStore";
 
 const fadeIn = {
   hidden: { opacity: 0 },
@@ -18,15 +19,12 @@ const fadeIn = {
   },
 };
 
-const AssignedStudentSupervisorView = ({
-  visible,
-  toggleDialog,
-  dialogVisibility,
-}) => {
+const AssignedStudentSupervisorView = ({ visible }) => {
   const [assignedStudents, setAssignedStudents] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
   const [openedStudentEmail, setOpenedStudentEmail] = useState("");
   const [semesterFullName, setSemesterFullName] = useState("");
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   useEffect(async () => {
     const getSupervisor = async () => {
@@ -85,7 +83,10 @@ const AssignedStudentSupervisorView = ({
                   <Card
                     onClick={() => {
                       setOpenedStudentEmail(student.email);
-                      toggleDialog("internshipDetailsDialog", true);
+                      dialogDispatch({
+                        type: "OPEN",
+                        dialogName: "internshipDetailsDialog",
+                      });
                     }}
                     sx={{
                       backgroundColor: "#1F2020",
@@ -118,10 +119,8 @@ const AssignedStudentSupervisorView = ({
         </>
       )}
       <StudentInternshipDetailsDialog
-        open={dialogVisibility.internshipDetailsDialog}
         resetOpenedStudentEmail={resetOpenedStudentEmail}
         openedStudentEmail={openedStudentEmail}
-        toggleDialog={toggleDialog}
       />
     </>
   );

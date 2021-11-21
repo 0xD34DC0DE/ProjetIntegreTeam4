@@ -1,19 +1,19 @@
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import {
-  Grid, IconButton,
+  Grid,
+  IconButton,
   Menu,
-  MenuItem, Tooltip, Typography
+  MenuItem,
+  Tooltip,
+  Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserInfoContext } from "../../stores/UserInfoStore";
 import Notification from "./Notification";
 import dispatchNotificationClickEvent from "./NotificationClickDispatch";
-
-const severity = {
-  high: { color: "rgba(200, 100, 100, 1)" },
-  low: { color: "rgba(100, 200, 100, 1)" },
-};
+import CachedIcon from "@mui/icons-material/Cached";
+import { DialogContext } from "../../stores/DialogStore";
 
 const NotificationList = ({
   anchorEl,
@@ -21,10 +21,48 @@ const NotificationList = ({
   setMenuOpen,
   handleMenuClose,
   onSelectionChanged,
-  toggleDialog,
+  setNotificationCount,
 }) => {
   const [notifications, setNotifications] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
+  const [dialog, dialogDispatch] = useContext(DialogContext);
+  const [page, setPage] = useState(0);
+  const [canLoadOlderNotifications, setCanLoadOlderNotifications] =
+    useState(true);
+  const notificationListBottomRef = useRef(null);
+
+  useEffect(() => {
+    if (page === 0) return;
+    axios({
+      method: "GET",
+      url: "http://localhost:8080/notification",
+      headers: {
+        Authorization: userInfo.jwt,
+      },
+      params: {
+        page: page,
+        receiverId: userInfo.id,
+      },
+      responseType: "json",
+    })
+      .then((response) => {
+        if (response.data.length === 0) {
+          setCanLoadOlderNotifications(false);
+        } else {
+          setNotifications((notifications) => [
+            ...notifications,
+            ...response.data,
+          ]);
+          scrollToBottom();
+        }
+      })
+      .catch((error) => console.error(error));
+  }, [page]);
+
+  const scrollToBottom = () => {
+    if (notifications.length === 0) return;
+    if (menuOpen) notificationListBottomRef.current.scrollIntoView();
+  };
 
   useEffect(() => {
     if (userInfo === undefined) return;
@@ -46,8 +84,13 @@ const NotificationList = ({
   }, [userInfo]);
 
   const addNotification = (notification) => {
-    setNotifications((notifications) => [...notifications, notification]);
+    setNotifications((notifications) => [notification, ...notifications]);
+    scrollToBottom();
   };
+
+  useEffect(() => {
+    setNotificationCount(notifications.length);
+  }, [notifications]);
 
   const deleteNotification = (id) => {
     axios({
@@ -76,7 +119,7 @@ const NotificationList = ({
     dispatchNotificationClickEvent({
       notificationType: notification.notificationType,
       data: notification.data,
-      toggleDialog,
+      dialogDispatch,
       onSelectionChanged,
     });
   };
@@ -90,23 +133,30 @@ const NotificationList = ({
         open={menuOpen && notifications.length > 0}
         PaperProps={{
           style: {
-            maxHeight: "200px",
+            maxHeight: "400px",
             width: "350px",
-            backgroundColor: "rgba(0, 0, 0, 0.3)",
             py: 0,
           },
         }}
         sx={{ "& .MuiList-root": { py: 0 } }}
       >
+        <Typography
+          variant="subtitle2"
+          fontSize="2em"
+          mx={2}
+          pt={1}
+          sx={{
+            borderBottom: "1px rgba(255, 255, 255, 0.1) solid",
+          }}
+        >
+          Notifications
+        </Typography>
+
         {notifications.map((notification, key) => {
           return [
             <Tooltip title={notification.content} placement="left">
               <MenuItem
                 key={key}
-                sx={{
-                  backgroundColor: "rgba(100, 100, 100, 0.05)",
-                  mb: 0.5,
-                }}
                 onClick={() => onNotificationClick(notification)}
               >
                 <Grid container>
@@ -120,12 +170,12 @@ const NotificationList = ({
                         lg={12}
                         xl={12}
                         sx={{
-                          color: severity[notification.severity.toLowerCase()],
+                          color: "white",
                         }}
                       >
                         <Typography
                           variant="subtitle2"
-                          sx={{ fontSize: "1em" }}
+                          sx={{ fontSize: "1em", display: "inline" }}
                         >
                           {notification.title}
                         </Typography>
@@ -141,13 +191,13 @@ const NotificationList = ({
                           overflow: "hidden",
                           textOverflow: "ellipsis",
                           whiteSpace: "nowrap",
+                          color: "rgba(255, 255, 255, 0.7)",
                         }}
                       >
                         <Typography
                           variant="caption"
                           sx={{
                             fontSize: "0.7em",
-                            color: "white",
                           }}
                         >
                           {notification.content}
@@ -189,6 +239,36 @@ const NotificationList = ({
             </Tooltip>,
           ];
         })}
+        {canLoadOlderNotifications && (
+          <MenuItem
+            onClick={() => {
+              setPage(page + 1);
+            }}
+            sx={{
+              color: "rgba(255, 255, 255, 1)",
+              ":hover": {
+                color: "rgba(255, 255, 255, 1)",
+                "& .MuiTypography-root": {
+                  color: "rgba(255, 255, 255, 1)",
+                },
+                backgroundColor: "rgba(255, 255, 255, 0.03) !important",
+              },
+            }}
+          >
+            <Grid container justifyContent="center" alignItems="center">
+              <CachedIcon sx={{ mr: 2 }}></CachedIcon>
+              <Typography
+                sx={{
+                  fontSize: "0.8em",
+                  color: "rgba(250, 250, 250, 0.8)",
+                }}
+              >
+                Charger plus de notifications
+              </Typography>
+            </Grid>
+          </MenuItem>
+        )}
+        <div ref={notificationListBottomRef}></div>
       </Menu>
       <Notification
         addNotification={addNotification}

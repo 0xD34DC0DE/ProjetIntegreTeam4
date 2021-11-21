@@ -4,19 +4,24 @@ import {
   Dialog,
   DialogContent,
 } from "@mui/material";
-import React from "react";
+import React, { useContext } from "react";
+import { DialogContext } from "../stores/DialogStore";
 
-const CvRejectionExplanationDialog = ({
-  rejectionExplanation,
-  open,
-  toggleDialog,
-}) => {
+const CvRejectionExplanationDialog = ({ rejectionExplanation }) => {
+  const [dialog, dialogDispatch] = useContext(DialogContext);
+
   const handleClose = (_, reason) => {
     if (reason === "backdropClick")
-      toggleDialog("cvRejectionExplanationDialog", false);
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "cvRejectionExplanationDialog",
+      });
   };
   return (
-    <Dialog onClose={handleClose} open={open}>
+    <Dialog
+      onClose={handleClose}
+      open={dialog.cvRejectionExplanationDialog.visible}
+    >
       <DialogTitle>Raison du rejet du C.V.</DialogTitle>
       <DialogContent>
         <DialogContentText>{rejectionExplanation}</DialogContentText>

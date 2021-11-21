@@ -1,11 +1,10 @@
 package com.team4.backend.service;
 
-import com.mongodb.client.result.UpdateResult;
 import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.mapping.NotificationMapper;
 import com.team4.backend.model.Notification;
 import com.team4.backend.repository.NotificationRepository;
-import com.team4.backend.repository.UserRepository;
+import com.team4.backend.util.ValidatingPageRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -29,9 +28,12 @@ public class NotificationService {
                 .doOnSuccess(sinks::tryEmitNext);
     }
 
-    public Flux<Notification> findAllNotifications(String receiverId) {
-        return notificationRepository
-                .findAllByReceiverId(receiverId);
+    public Flux<Notification> findAllNotifications(String receiverId, Integer page, Integer size) {
+        return ValidatingPageRequest.getPageRequestMono(page, size)
+                .flatMapMany(pageRequest ->
+                        notificationRepository
+                                .findAllByReceiverId(receiverId, pageRequest)
+                );
     }
 
     public Mono<Notification> deleteUserNotification(String notificationId, String userId) {

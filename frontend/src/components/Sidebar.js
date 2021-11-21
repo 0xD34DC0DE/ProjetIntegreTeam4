@@ -3,9 +3,11 @@ import { Drawer, Typography, Button, Divider } from "@mui/material";
 import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
 import { sidebarList } from "./Configuration";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import { DialogContext } from "../stores/DialogStore";
 
 const Sidebar = ({ open, onSelectionChanged }) => {
   const [userInfo] = useContext(UserInfoContext);
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   return (
     <>
@@ -52,7 +54,14 @@ const Sidebar = ({ open, onSelectionChanged }) => {
                     ml: 2,
                     mr: 2,
                   }}
-                  onClick={() => onSelectionChanged(item)}
+                  onClick={() => {
+                    if (item.isDialog)
+                      dialogDispatch({
+                        type: "OPEN",
+                        dialogName: item.dialogName,
+                      });
+                    onSelectionChanged(item);
+                  }}
                 >
                   {item.icon}
                   {item.label}
