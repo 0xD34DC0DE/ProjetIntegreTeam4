@@ -5,7 +5,7 @@ import Report from "./Report";
 import ReportDialog from "./ReportDialog";
 import SemesterSelect from "./SemesterSelect";
 
-const ListReport = ({ visible }) => {
+const ListReport = () => {
   const [reports] = useState([
     {
       title: "Offres de stages non validées",
@@ -65,51 +65,46 @@ const ListReport = ({ visible }) => {
   };
 
   return (
-    //TODO: fix 'The Menu component doesn't accept a Fragment as a child."
-    <>
-      {visible && (
-        <Grid container flexDirection="column">
-          <Grid item>
-            <SemesterSelect updateSemesterFullName={updateSemesterFullName} />
+    <Grid container flexDirection="column">
+      <Grid item>
+        <SemesterSelect updateSemesterFullName={updateSemesterFullName} />
+      </Grid>
+      <Grid item>
+        <Typography
+          variant="subtitle2"
+          sx={{
+            color: "white",
+            ml: 3,
+            mb: 2,
+            fontSize: "2.5em",
+            lineHeight: "1",
+          }}
+        >
+          Rapports
+        </Typography>
+      </Grid>
+      <Grid
+        container
+        spacing={{ xs: 2, md: 3 }}
+        columns={{ xs: 4, sm: 8, md: 12 }}
+        justifyContent="center"
+      >
+        {reports.map((current, index) => (
+          <Grid item xs={6} sm={6} md={8} lg={4} xl={2} key={index}>
+            <Report
+              title={current.title}
+              url={current.url}
+              setReportUrl={setReportUrl}
+            />
           </Grid>
-          <Grid item>
-            <Typography
-              variant="subtitle2"
-              sx={{
-                color: "white",
-                ml: 3,
-                mb: 2,
-                fontSize: "2.5em",
-                lineHeight: "1",
-              }}
-            >
-              Rapports
-            </Typography>
-          </Grid>
-          <Grid
-            container
-            spacing={{ xs: 2, md: 3 }}
-            columns={{ xs: 4, sm: 8, md: 12 }}
-            justifyContent="center"
-          >
-            {reports.map((current, index) => (
-              <Grid item xs={6} sm={6} md={8} lg={4} xl={2} key={index}>
-                <Report
-                  title={current.title}
-                  url={current.url}
-                  setReportUrl={setReportUrl}
-                />
-              </Grid>
-            ))}
-          </Grid>
-          <ReportDialog
-            reportUrl={reportUrl}
-            semesterFullName={semesterFullName}
-            setReportUrl={setReportUrl}
-          />
-        </Grid>
-      )}
-    </>
+        ))}
+      </Grid>
+      <ReportDialog
+        reportUrl={reportUrl}
+        semesterFullName={semesterFullName}
+        setReportUrl={setReportUrl}
+      />
+    </Grid>
   );
 };
 

@@ -28,36 +28,33 @@ const Content = ({ isSidebarOpen, selection }) => {
       case "STUDENT":
         return (
           <>
-            <StudentDashBoard visible={selection.id === 7} />
-            <UploadCV visible={selection.id === 5} />
-            <OfferViews visible={selection.id === 4} />
+            {selection.id === 7 && <StudentDashBoard />}
+            {selection.id === 5 && <UploadCV />}
+            {selection.id === 4 && <OfferViews />}
           </>
         );
       case "INTERNSHIP_MANAGER":
         return (
           <>
-            <ListCvInternshipManagerView visible={selection.id === 1} />
-            <InternshipOfferValidation visible={selection.id === 3} />
-            <ListUserDroppable
-              role="SUPERVISOR"
-              visible={selection.id === 11}
-            />
-            <ListUserDraggable role="STUDENT" visible={selection.id === 11} />
-            <ListReport visible={selection.id === 14} />
+            {selection.id === 1 && <ListCvInternshipManagerView />}
+            {selection.id === 3 && <InternshipOfferValidation />}
+            {selection.id === 11 && <ListUserDroppable role="SUPERVISOR" />}
+            {selection.id === 11 && <ListUserDraggable role="STUDENT" />}
+            {selection.id === 14 && <ListReport />}
           </>
         );
       case "SUPERVISOR":
         return (
           <>
-            <AssignedStudentSupervisorView visible={selection.id === 10} />
-            <StudentEvaluationMidForm visible={selection.id === 13} />
+            {selection.id === 10 && <AssignedStudentSupervisorView />}
+            {selection.id === 13 && <StudentEvaluationMidForm />}
           </>
         );
       case "MONITOR":
         return (
           <>
-            <ListStudentApplying visible={selection.id === 6} />
-            <StudentEvaluationForm visible={selection.id === 12} />
+            {selection.id === 6 && <ListStudentApplying />}
+            {selection.id === 12 && <StudentEvaluationForm />}
           </>
         );
       default:

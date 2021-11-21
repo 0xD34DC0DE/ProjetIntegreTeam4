@@ -88,19 +88,6 @@ public class SupervisorService {
         return mapAssignedStudents(Mono.zip(supervisorRepository.findById(supervisorId), semesterService.getCurrentSemester()));
     }
 
-    private Flux<StudentDetailsDto> mapAssignedStudents(Mono<Tuple2<Supervisor, Semester>> monoTuple) {
-        return monoTuple.map(tuple -> tuple.getT1().getStudentTimestampedEntries().stream()
-                        .filter(timestampedEntry -> SemesterUtil.checkIfDatesAreInsideRangeOfSemester(
-                                tuple.getT2(),
-                                timestampedEntry.getDate(),
-                                timestampedEntry.getDate())
-                        )
-                        .map(TimestampedEntry::getEmail)
-                        .collect(Collectors.toSet())
-                ).flatMapMany(studentService::findAllByEmails)
-                .map(StudentMapper::toDto);
-    }
-
     public Mono<Supervisor> getSupervisor(String email) {
         return supervisorRepository.findSupervisorByEmail(email)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find user with this email")));
@@ -109,7 +96,6 @@ public class SupervisorService {
     protected Flux<Supervisor> getAll() {
         return supervisorRepository.findAllByRole("SUPERVISOR");
     }
-
 
     public Mono<List<String>> getStudentsEmailWithSupervisorWithNoEvaluation(String semesterFullName) {
         AtomicReference<List<String>> reference = new AtomicReference<>();
@@ -159,4 +145,18 @@ public class SupervisorService {
                     return Mono.just(supervisors.get());
                 });
     }
+
+    private Flux<StudentDetailsDto> mapAssignedStudents(Mono<Tuple2<Supervisor, Semester>> monoTuple) {
+        return monoTuple.map(tuple -> tuple.getT1().getStudentTimestampedEntries().stream()
+                        .filter(timestampedEntry -> SemesterUtil.checkIfDatesAreInsideRangeOfSemester(
+                                tuple.getT2(),
+                                timestampedEntry.getDate(),
+                                timestampedEntry.getDate())
+                        )
+                        .map(TimestampedEntry::getEmail)
+                        .collect(Collectors.toSet())
+                ).flatMapMany(studentService::findAllByEmails)
+                .map(StudentMapper::toDto);
+    }
+
 }

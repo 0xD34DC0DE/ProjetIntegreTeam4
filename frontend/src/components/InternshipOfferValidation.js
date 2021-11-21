@@ -15,7 +15,7 @@ import InternshipOfferDialog from "./InternshipOfferDialog";
 import { listLabels } from "./InternshipOfferLabels";
 import SemesterSelect from "./SemesterSelect";
 
-const InternshipOfferValidation = ({ visible }) => {
+const InternshipOfferValidation = () => {
   const [unvalidatedOffers, setUnvalidatedOffers] = useState([]);
   const [companies, setCompanies] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
@@ -65,107 +65,105 @@ const InternshipOfferValidation = ({ visible }) => {
 
   return (
     <>
-      {visible && (
-        <Grid container>
-          <SemesterSelect updateSemesterFullName={updateSemesterFullName} />
-          <List
-            sx={{
-              width: "100vw",
-              pt: 5,
-            }}
-          >
-            {companies.map((name, key) => {
-              return (
-                <Paper
+      <Grid container>
+        <SemesterSelect updateSemesterFullName={updateSemesterFullName} />
+        <List
+          sx={{
+            width: "100vw",
+            pt: 5,
+          }}
+        >
+          {companies.map((name, key) => {
+            return (
+              <Paper
+                key={key}
+                className={name}
+                elevation={15}
+                sx={{
+                  mx: "5vw",
+                  mb: "5vh",
+                  px: "1vw",
+                  backgroundColor: "rgba(135, 135, 135, 0.05)",
+                  py: "1vw",
+                  overflow: "auto",
+                  borderRadius: "10px",
+                }}
+              >
+                <Typography
                   key={key}
-                  className={name}
-                  elevation={15}
+                  variant="h4"
                   sx={{
-                    mx: "5vw",
-                    mb: "5vh",
-                    px: "1vw",
-                    backgroundColor: "rgba(135, 135, 135, 0.05)",
-                    py: "1vw",
-                    overflow: "auto",
-                    borderRadius: "10px",
+                    display: "inline-block",
+                    p: "1rem",
+                    color: "white",
+                    pt: 2,
+                    borderRadius: "15px",
+                    backgroundColor: "rgba(0, 0, 0, 0.2)",
+                    mb: 2,
                   }}
                 >
-                  <Typography
-                    key={key}
-                    variant="h4"
-                    sx={{
-                      display: "inline-block",
-                      p: "1rem",
-                      color: "white",
-                      pt: 2,
-                      borderRadius: "15px",
-                      backgroundColor: "rgba(0, 0, 0, 0.2)",
-                      mb: 2,
-                    }}
-                  >
-                    {name}
-                  </Typography>
-                  {unvalidatedOffers.map((offer, key) => {
-                    if (name === offer.companyName) {
-                      return (
-                        <Tooltip
+                  {name}
+                </Typography>
+                {unvalidatedOffers.map((offer, key) => {
+                  if (name === offer.companyName) {
+                    return (
+                      <Tooltip
+                        key={key}
+                        title="Voir les détails"
+                        placement="top"
+                        followCursor={true}
+                      >
+                        <ListItemButton
                           key={key}
-                          title="Voir les détails"
-                          placement="top"
-                          followCursor={true}
+                          sx={{
+                            margin: "auto",
+                            boxShadow: "5px 5px 5px rgba(0, 0, 0, 0.5)",
+                            backgroundColor: "rgba(0, 0, 0, 0.1)",
+                            ":hover": {
+                              boxShadow: 5,
+                              backgroundColor: "rgba(50, 50, 50, 0.2)",
+                            },
+                            my: 1,
+                          }}
+                          onClick={() => {
+                            dialogDispatch({
+                              type: "OPEN",
+                              dialogName: "internshipOfferDialogValidation",
+                            });
+                            setSelectedOffer(offer);
+                          }}
                         >
-                          <ListItemButton
-                            key={key}
-                            sx={{
-                              margin: "auto",
-                              boxShadow: "5px 5px 5px rgba(0, 0, 0, 0.5)",
-                              backgroundColor: "rgba(0, 0, 0, 0.1)",
-                              ":hover": {
-                                boxShadow: 5,
-                                backgroundColor: "rgba(50, 50, 50, 0.2)",
-                              },
-                              my: 1,
-                            }}
-                            onClick={() => {
-                              dialogDispatch({
-                                type: "OPEN",
-                                dialogName: "internshipOfferDialogValidation",
-                              });
-                              setSelectedOffer(offer);
-                            }}
-                          >
-                            {Object.keys(offer).map((identifier, key) => {
-                              return (
-                                <React.Fragment key={key}>
-                                  {isNotARenderedAttribute(identifier) && (
-                                    <Tooltip
-                                      key={key}
-                                      title={listLabels[key]}
-                                      sx={{
-                                        alignItems: "center",
-                                        justifyContent: "center",
-                                      }}
-                                    >
-                                      <ListItem key={key}>
-                                        {Object.values(offer)[key]}
-                                        {identifier.includes("Salary") && "$"}
-                                      </ListItem>
-                                    </Tooltip>
-                                  )}
-                                </React.Fragment>
-                              );
-                            })}
-                          </ListItemButton>
-                        </Tooltip>
-                      );
-                    }
-                  })}
-                </Paper>
-              );
-            })}
-          </List>
-        </Grid>
-      )}
+                          {Object.keys(offer).map((identifier, key) => {
+                            return (
+                              <React.Fragment key={key}>
+                                {isNotARenderedAttribute(identifier) && (
+                                  <Tooltip
+                                    key={key}
+                                    title={listLabels[key]}
+                                    sx={{
+                                      alignItems: "center",
+                                      justifyContent: "center",
+                                    }}
+                                  >
+                                    <ListItem key={key}>
+                                      {Object.values(offer)[key]}
+                                      {identifier.includes("Salary") && "$"}
+                                    </ListItem>
+                                  </Tooltip>
+                                )}
+                              </React.Fragment>
+                            );
+                          })}
+                        </ListItemButton>
+                      </Tooltip>
+                    );
+                  }
+                })}
+              </Paper>
+            );
+          })}
+        </List>
+      </Grid>
       <InternshipOfferDialog
         offer={selectedOffer}
         unvalidatedOffers={unvalidatedOffers}

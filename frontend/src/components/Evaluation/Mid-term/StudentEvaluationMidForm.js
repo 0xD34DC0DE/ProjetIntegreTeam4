@@ -12,7 +12,7 @@ import { UserInfoContext } from "../../../stores/UserInfoStore";
 
 import axios from "axios";
 
-const StudentEvaluationMidForm = ({ visible }) => {
+const StudentEvaluationMidForm = () => {
   const [userInfo] = useContext(UserInfoContext);
   const [errorMessage, setErrorMessage] = useState("");
   const [midEvaluationSent, setMidEvaluationSent] = useState(false);
@@ -101,7 +101,7 @@ const StudentEvaluationMidForm = ({ visible }) => {
 
   return (
     <>
-      {midEvaluationSent && visible ? (
+      {midEvaluationSent ? (
         <Grid container px={5} pb={3} justifyContent="center">
           <motion.div
             animate={{ opacity: [0, 1] }}
@@ -137,35 +137,33 @@ const StudentEvaluationMidForm = ({ visible }) => {
           </motion.div>
         </Grid>
       ) : (
-        visible && (
-          <Grid container px={5} pb={3}>
-            {dropdowns.map((dropdown, key) => {
-              return (
-                <Grid
-                  item
-                  xl={12}
-                  lg={12}
-                  md={12}
-                  sm={12}
-                  xs={12}
-                  mt={5}
-                  key={key}
+        <Grid container px={5} pb={3}>
+          {dropdowns.map((dropdown, key) => {
+            return (
+              <Grid
+                item
+                xl={12}
+                lg={12}
+                md={12}
+                sm={12}
+                xs={12}
+                mt={5}
+                key={key}
+              >
+                <motion.div
+                  animate={{ opacity: [0, 1] }}
+                  transition={{
+                    duration: 0.2,
+                    delay: (key + 1) * 0.2,
+                  }}
                 >
-                  <motion.div
-                    animate={{ opacity: [0, 1] }}
-                    transition={{
-                      duration: 0.2,
-                      delay: (key + 1) * 0.2,
-                    }}
-                  >
-                    {dropdown}
-                  </motion.div>
-                </Grid>
-              );
-            })}
-            <SubmitEvaluationButton onClick={handleSubmit} delay={1} />
-          </Grid>
-        )
+                  {dropdown}
+                </motion.div>
+              </Grid>
+            );
+          })}
+          <SubmitEvaluationButton onClick={handleSubmit} delay={1} />
+        </Grid>
       )}
     </>
   );
