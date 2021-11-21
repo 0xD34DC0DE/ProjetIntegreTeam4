@@ -39,15 +39,11 @@ const AssignedStudentSupervisorView = () => {
       return response.data.id;
     });
 
-    getAssignedStudents(supervisorId);
-  }, [semesterFullName]);
-
-  const getAssignedStudents = async (id) => {
     axios({
       method: "GET",
       url: "http://localhost:8080/supervisor/getAssignedStudents",
       params: {
-        supervisorId: id,
+        supervisorId: supervisorId,
         semesterFullName: semesterFullName,
       },
       headers: {
@@ -57,7 +53,7 @@ const AssignedStudentSupervisorView = () => {
     }).then((response) => {
       setAssignedStudents(response.data);
     });
-  };
+  }, [semesterFullName]);
 
   const updateSemesterFullName = (fullName) => {
     setSemesterFullName(fullName);
