@@ -6,6 +6,7 @@ import com.team4.backend.model.Student;
 import com.team4.backend.model.User;
 
 public abstract class UserMapper {
+
     public static Student toEntity(UserDto userDto) {
         return Student.studentBuilder()
                 .email(userDto.getEmail())
