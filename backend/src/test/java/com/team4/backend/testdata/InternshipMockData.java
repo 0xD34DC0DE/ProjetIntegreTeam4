@@ -1,5 +1,6 @@
 package com.team4.backend.testdata;
 
+import com.team4.backend.dto.InternshipCreationDto;
 import com.team4.backend.dto.InternshipDetailedDto;
 import com.team4.backend.model.Internship;
 
@@ -23,6 +24,17 @@ public abstract class InternshipMockData {
         return InternshipDetailedDto
                 .internshipDetailedDtoBuilder()
                 .monitorEmail("monitorTest@gmail.com")
+                .internshipManagerEmail("internshipManagerTest@gmail.com")
+                .studentEmail("studentTest@gmail.com")
+                .startDate(LocalDate.now().plusDays(15))
+                .endDate(LocalDate.now().plusMonths(4))
+                .build();
+    }
+
+    public static InternshipCreationDto getInternshipCreationDto() {
+        return InternshipCreationDto
+                .internshipCreationDtoBuilder()
+                .internshipManagerEmail("monitorTest@gmail.com")
                 .internshipManagerEmail("internshipManagerTest@gmail.com")
                 .studentEmail("studentTest@gmail.com")
                 .startDate(LocalDate.now().plusDays(15))
