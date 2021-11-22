@@ -48,7 +48,7 @@ public abstract class PdfTemplate {
         return context;
     }
 
-    private String loadAndFillTemplate(SpringTemplateEngine templateEngine, Context context) {
+    protected String loadAndFillTemplate(SpringTemplateEngine templateEngine, Context context) {
         return replaceAccentLettersWithSpecialEntityCode(templateEngine.process(template_filename, context));
     }
 
