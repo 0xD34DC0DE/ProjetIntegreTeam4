@@ -14,13 +14,14 @@ import Notification from "./Notification";
 import dispatchNotificationClickEvent from "./NotificationClickDispatch";
 import CachedIcon from "@mui/icons-material/Cached";
 import { DialogContext } from "../../stores/DialogStore";
+import { Box } from "@mui/system";
+import { SelectionContext } from "../../stores/SelectionStore";
 
 const NotificationList = ({
   anchorEl,
   menuOpen,
   setMenuOpen,
   handleMenuClose,
-  onSelectionChanged,
   setNotificationCount,
 }) => {
   const [notifications, setNotifications] = useState([]);
@@ -30,6 +31,7 @@ const NotificationList = ({
   const [canLoadOlderNotifications, setCanLoadOlderNotifications] =
     useState(true);
   const notificationListBottomRef = useRef(null);
+  const [selection, selectionDispatch] = useContext(SelectionContext);
 
   useEffect(() => {
     if (page === 0) return;
@@ -89,7 +91,7 @@ const NotificationList = ({
   };
 
   useEffect(() => {
-    setNotificationCount(notifications.length);
+    setNotificationCount(getUnreadNotifications());
   }, [notifications]);
 
   const deleteNotification = (id) => {
@@ -115,13 +117,45 @@ const NotificationList = ({
       .catch(console.error);
   };
 
-  const onNotificationClick = (notification) => {
+  const onNotificationClick = (notification, index) => {
+    if (!notification.seenIds.includes(userInfo.id))
+      axios({
+        method: "GET",
+        url: "http://localhost:8080/notification/seen",
+        headers: {
+          Authorization: userInfo.jwt,
+        },
+        params: {
+          notificationId: notification.id,
+          userId: userInfo.id,
+        },
+        responseType: "json",
+      })
+        .then(() => {
+          userSeenNotification(index);
+        })
+        .catch((error) => console.error(error));
+
     dispatchNotificationClickEvent({
       notificationType: notification.notificationType,
       data: notification.data,
-      dialogDispatch,
-      onSelectionChanged,
+      dialogDispatch: dialogDispatch,
+      selectionDispatch: selectionDispatch,
     });
+  };
+
+  const getUnreadNotifications = () => {
+    let count = 0;
+    notifications.map((notification) => {
+      if (!notification.seenIds.includes(userInfo.id)) count++;
+    });
+    return count;
+  };
+
+  const userSeenNotification = (index) => {
+    let tempNotifications = [...notifications];
+    tempNotifications[index].seenIds.push(userInfo.id);
+    setNotifications(tempNotifications);
   };
 
   return (
@@ -152,93 +186,126 @@ const NotificationList = ({
           Notifications
         </Typography>
 
-        {notifications.map((notification, key) => {
-          return [
-            <Tooltip title={notification.content} placement="left">
-              <MenuItem
-                key={key}
-                onClick={() => onNotificationClick(notification)}
-              >
-                <Grid container>
-                  <Grid item xl={10} lg={10} md={10} sm={10} xs={10}>
-                    <Grid container>
-                      <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                        xl={12}
-                        sx={{
-                          color: "white",
-                        }}
-                      >
-                        <Typography
-                          variant="subtitle2"
-                          sx={{ fontSize: "1em", display: "inline" }}
-                        >
-                          {notification.title}
-                        </Typography>
-                      </Grid>
-                      <Grid
-                        item
-                        xs={12}
-                        sm={12}
-                        md={12}
-                        lg={12}
-                        xl={12}
-                        sx={{
-                          overflow: "hidden",
-                          textOverflow: "ellipsis",
-                          whiteSpace: "nowrap",
-                          color: "rgba(255, 255, 255, 0.7)",
-                        }}
-                      >
-                        <Typography
-                          variant="caption"
-                          sx={{
-                            fontSize: "0.7em",
-                          }}
-                        >
-                          {notification.content}
-                        </Typography>
-                      </Grid>
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    item
-                    xl={2}
-                    lg={2}
-                    xs={2}
-                    md={2}
-                    sm={2}
-                    item
-                    alignSelf="center"
-                    textAlign="end"
-                  >
-                    <Tooltip title="Supprimer">
-                      <IconButton
-                        variant="text"
-                        onClick={() => {
-                          deleteNotification(notification.id);
-                        }}
-                        sx={{ fontSize: "0.75em" }}
-                      >
-                        <CancelOutlinedIcon
+        {notifications &&
+          notifications.map((notification, key) => {
+            return [
+              <Tooltip title={notification.content} placement="left">
+                <MenuItem key={key}>
+                  <Grid container>
+                    <Grid
+                      item
+                      xl={10}
+                      lg={10}
+                      md={10}
+                      sm={10}
+                      xs={10}
+                      onClick={() => {
+                        onNotificationClick(notification, key);
+                      }}
+                    >
+                      <Grid container>
+                        <Grid
+                          item
+                          xs={12}
+                          sm={12}
+                          md={12}
+                          lg={12}
+                          xl={12}
                           sx={{
                             color: "white",
-                            ":hover": { color: "rgba(255, 100, 100, 1)" },
                           }}
-                          fontSize="small"
+                        >
+                          <Typography
+                            variant="subtitle2"
+                            sx={{ fontSize: "1em", display: "inline" }}
+                          >
+                            {notification.title}
+                          </Typography>
+                        </Grid>
+                        <Grid
+                          item
+                          xs={12}
+                          sm={12}
+                          md={12}
+                          lg={12}
+                          xl={12}
+                          sx={{
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            color: "rgba(255, 255, 255, 0.7)",
+                          }}
+                        >
+                          <Typography
+                            variant="caption"
+                            sx={{
+                              fontSize: "0.7em",
+                            }}
+                          >
+                            {notification.content}
+                          </Typography>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      item
+                      xl={1}
+                      lg={1}
+                      xs={1}
+                      md={1}
+                      sm={1}
+                      alignSelf="center"
+                      onClick={() => {
+                        onNotificationClick(notification, key);
+                      }}
+                    >
+                      {!notification.seenIds.includes(userInfo.id) && (
+                        <Box
+                          sx={{
+                            height: "10px",
+                            width: "10px",
+                            borderRadius: "50%",
+                            backgroundColor: "rgba(255, 71, 87, 1.0)",
+
+                            display: "inline-block",
+                          }}
                         />
-                      </IconButton>
-                    </Tooltip>
+                      )}
+                    </Grid>
+                    <Grid
+                      item
+                      xl={1}
+                      lg={1}
+                      xs={1}
+                      md={1}
+                      sm={1}
+                      item
+                      alignSelf="center"
+                      textAlign="end"
+                    >
+                      <Tooltip title="Supprimer">
+                        <IconButton
+                          variant="text"
+                          onClick={() => {
+                            deleteNotification(notification.id);
+                          }}
+                          sx={{ fontSize: "0.75em" }}
+                        >
+                          <CancelOutlinedIcon
+                            sx={{
+                              color: "white",
+                              ":hover": { color: "rgba(255, 100, 100, 1)" },
+                            }}
+                            fontSize="small"
+                          />
+                        </IconButton>
+                      </Tooltip>
+                    </Grid>
                   </Grid>
-                </Grid>
-              </MenuItem>
-            </Tooltip>,
-          ];
-        })}
+                </MenuItem>
+              </Tooltip>,
+            ];
+          })}
         {canLoadOlderNotifications && (
           <MenuItem
             onClick={() => {

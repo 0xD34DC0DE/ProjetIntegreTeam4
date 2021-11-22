@@ -4,10 +4,12 @@ import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBullet
 import { sidebarList } from "./Configuration";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { DialogContext } from "../stores/DialogStore";
+import { SelectionContext } from "../stores/SelectionStore";
 
-const Sidebar = ({ open, onSelectionChanged }) => {
+const Sidebar = ({ open }) => {
   const [userInfo] = useContext(UserInfoContext);
   const [dialog, dialogDispatch] = useContext(DialogContext);
+  const [selection, selectionDispatch] = useContext(SelectionContext);
 
   return (
     <>
@@ -60,7 +62,7 @@ const Sidebar = ({ open, onSelectionChanged }) => {
                         type: "OPEN",
                         dialogName: item.dialogName,
                       });
-                    onSelectionChanged(item);
+                    selectionDispatch(item);
                   }}
                 >
                   {item.icon}

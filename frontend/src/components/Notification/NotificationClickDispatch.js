@@ -4,7 +4,8 @@ const dispatchNotificationClickEvent = ({
   notificationType,
   data,
   dialogDispatch,
-  onSelectionChanged,
+  selectionDispatch,
+  selection,
 }) => {
   if (notificationType === undefined || notificationType === null) return;
 
@@ -12,7 +13,7 @@ const dispatchNotificationClickEvent = ({
     handlers[notificationType].handle({
       data,
       dialogDispatch,
-      onSelectionChanged,
+      selectionDispatch,
     });
   } else {
     console.error(`Unhandled notification type: ${notificationType}`);

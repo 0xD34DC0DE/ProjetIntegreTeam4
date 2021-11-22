@@ -7,6 +7,7 @@ import {
   CardContent,
   Container,
   Grid,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import axios from "axios";
@@ -66,10 +67,10 @@ const ListCvStudentView = () => {
       {cvs && (
         <Container sx={{ mt: 5 }}>
           <Typography
-            variant="h4"
+            variant="subtitle2"
             color="white"
             textAlign="center"
-            sx={{ my: 5 }}
+            sx={{ my: 5, fontSize: "2.5em" }}
           >
             Vos C.V.
           </Typography>
@@ -163,24 +164,32 @@ const ListCvStudentView = () => {
                           />
                         </Typography>
                       )}
-                      <Box
-                        sx={{
-                          textAlign: "center",
-                        }}
-                        onClick={() => {
-                          dialogDispatch({
-                            type: "OPEN",
-                            dialogName: "cvDialog",
-                          });
-                          openCv(cv.assetId);
-                        }}
+                      <Tooltip
+                        title={
+                          "Cliquer pour visualiser votre C.V " + cv.filename
+                        }
                       >
-                        {Object.keys(cv).map((identifier, key) => {
-                          var value = Object.values(cv)[key];
-                          if (value && isNotARenderedAttribute(identifier))
-                            return <CardContent key={key}>{value}</CardContent>;
-                        })}
-                      </Box>
+                        <Box
+                          sx={{
+                            textAlign: "center",
+                          }}
+                          onClick={() => {
+                            dialogDispatch({
+                              type: "OPEN",
+                              dialogName: "cvDialog",
+                            });
+                            openCv(cv.assetId);
+                          }}
+                        >
+                          {Object.keys(cv).map((identifier, key) => {
+                            var value = Object.values(cv)[key];
+                            if (value && isNotARenderedAttribute(identifier))
+                              return (
+                                <CardContent key={key}>{value}</CardContent>
+                              );
+                          })}
+                        </Box>
+                      </Tooltip>
                     </Card>
                   </Grid>
                 );

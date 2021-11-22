@@ -1,9 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { pdfjs } from "react-pdf";
 import { UserInfoContext } from "../stores/UserInfoStore";
-import {
-  Grid, Pagination, Typography
-} from "@mui/material";
+import { Grid, Pagination, Typography } from "@mui/material";
 import axios from "axios";
 import PdfContainer from "./PdfContainer";
 
@@ -23,20 +21,20 @@ function PdfView({ pdfUrl, params }) {
   useEffect(() => {
     const getPdf = () => {
       var config;
-        if (pdfUrl.indexOf('amazon') === -1) {
-          config = {
-            Accept: "application/pdf",
-            Authorization: userInfo.jwt,
-            "Access-Control-Allow-Origin": "*",
-            'Access-Control-Allow-Methods':'GET',
-          }
-        } else {
-          config = {
-            Accept: "application/pdf",
-            "Access-Control-Allow-Origin": "*",
-            'Access-Control-Allow-Methods':'GET',
-          }
-        }
+      if (pdfUrl.indexOf("amazon") === -1) {
+        config = {
+          Accept: "application/pdf",
+          Authorization: userInfo.jwt,
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET",
+        };
+      } else {
+        config = {
+          Accept: "application/pdf",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "GET",
+        };
+      }
 
       axios({
         method: "GET",
@@ -45,13 +43,13 @@ function PdfView({ pdfUrl, params }) {
         params: { ...params },
         responseType: "arraybuffer",
       })
-      .then((response) => {
-        setPdfData(response.data);
-      })
-      .catch((error) => {
-        setError(error);
-        console.error(error);
-      });
+        .then((response) => {
+          setPdfData(response.data);
+        })
+        .catch((error) => {
+          setError(error);
+          console.error(error);
+        });
     };
 
     getPdf();
@@ -59,7 +57,6 @@ function PdfView({ pdfUrl, params }) {
 
   return (
     <Grid
-      item
       container
       direction="column"
       justifyContent={"center"}

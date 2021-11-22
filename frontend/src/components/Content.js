@@ -19,11 +19,13 @@ import StudentEvaluationForm from "./Evaluation/End/StudentEvaluationForm";
 import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMidForm";
 import ListReport from "./ListReport";
 import SignContractDialog from "./contracts/SignContractDialog";
+import { SelectionContext } from "../stores/SelectionStore";
 
-const Content = ({ isSidebarOpen, selection }) => {
+const Content = ({ isSidebarOpen }) => {
+  const [selection] = useContext(SelectionContext);
   const [userInfo] = useContext(UserInfoContext);
 
-  const roleCondtionnal = (role) => {
+  const displayComponents = (role) => {
     switch (role) {
       case "STUDENT":
         return (
@@ -88,7 +90,7 @@ const Content = ({ isSidebarOpen, selection }) => {
             role={roles[userInfo.role]}
             description={selection.description}
           />
-          {roleCondtionnal(userInfo.role)}
+          {displayComponents(userInfo.role)}
         </Box>
       )}
       <Register></Register>
