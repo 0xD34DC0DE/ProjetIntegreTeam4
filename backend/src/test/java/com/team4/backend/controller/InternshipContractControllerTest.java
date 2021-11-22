@@ -16,11 +16,8 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
@@ -108,10 +105,12 @@ public class InternshipContractControllerTest {
         when(internshipContractService.hasSigned(any(), any(), any()))
                 .thenReturn(Mono.just(true));
 
+        String url = "/contract/signed?internshipOfferId=2947fh79ew" +
+                "&studentEmail=student@gmail.com&userEmail=123@gmail.com";
         //ACT
         webTestClient
                 .get()
-                .uri("/contract/signed")
+                .uri(url)
                 .exchange()
                 //ASSERT
                 .expectBody();
