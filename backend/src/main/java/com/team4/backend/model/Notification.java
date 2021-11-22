@@ -28,6 +28,7 @@ public class Notification implements Serializable {
     private Map<String, String> data;
     @Builder.Default
     private LocalDateTime creationDate = LocalDateTime.now();
+    private Set<String> seenIds;
     private NotificationType notificationType;
 
     @Builder(builderMethodName = "notificationBuilder")
@@ -37,6 +38,7 @@ public class Notification implements Serializable {
                         Set<String> receiverIds,
                         Map<String, String> data,
                         LocalDateTime creationDate,
+                        Set<String> seenIds,
                         NotificationType notificationType) {
         this.id = id;
         this.title = title;
@@ -44,6 +46,7 @@ public class Notification implements Serializable {
         this.receiverIds = receiverIds;
         this.data = data;
         this.creationDate = Optional.ofNullable(creationDate).orElse(LocalDateTime.now());
+        this.seenIds = seenIds;
         this.notificationType = notificationType;
     }
 
@@ -52,12 +55,12 @@ public class Notification implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Notification that = (Notification) o;
-        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(content, that.content) && Objects.equals(receiverIds, that.receiverIds) && Objects.equals(data, that.data);
+        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(content, that.content) && Objects.equals(receiverIds, that.receiverIds) && Objects.equals(seenIds, that.seenIds) && Objects.equals(data, that.data);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, content, receiverIds, data);
+        return Objects.hash(id, title, content, receiverIds, seenIds, data);
     }
 
 }

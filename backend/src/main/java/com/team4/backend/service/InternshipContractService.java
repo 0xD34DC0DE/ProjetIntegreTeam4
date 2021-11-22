@@ -168,6 +168,7 @@ public class InternshipContractService {
                 .title("Signature de contrat")
                 .content("Signature du contrat pour: " + companyName)
                 .receiverIds(userIds)
+                .seenIds(Set.of())
                 .data(notificationData)
                 .notificationType(NotificationType.SIGN_CONTRACT)
                 .build();

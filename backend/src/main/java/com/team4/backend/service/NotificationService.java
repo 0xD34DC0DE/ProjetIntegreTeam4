@@ -41,6 +41,11 @@ public class NotificationService {
                 .deleteUserNotification(notificationId, userId);
     }
 
+    public Mono<Notification> seenNotification(String userId, String notificationId) {
+        return notificationRepository
+                .addUserToSeenNotification(userId, notificationId);
+    }
+
     public Sinks.Many<Notification> getNotificationFluxSink() {
         return sinks;
     }

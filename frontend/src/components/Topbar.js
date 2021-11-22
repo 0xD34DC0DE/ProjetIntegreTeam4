@@ -72,14 +72,18 @@ const Topbar = ({ sidebarOpen, setSidebarOpen, onSelectionChanged }) => {
               onClick={handleNotificationMenuOpen}
               sx={{ ml: "auto", px: 0 }}
             >
-              <Badge
-                badgeContent={notificationCount <= 5 ? notificationCount : "+5"}
-                color="primary"
-              >
-                <NotificationsNoneOutlinedIcon
-                  sx={{ color: "text.primary", px: 0, mx: 0 }}
-                />
-              </Badge>
+              {userInfo.loggedIn && (
+                <Badge
+                  badgeContent={
+                    notificationCount <= 5 ? notificationCount : "+5"
+                  }
+                  color="primary"
+                >
+                  <NotificationsNoneOutlinedIcon
+                    sx={{ color: "text.primary", px: 0, mx: 0 }}
+                  />
+                </Badge>
+              )}
             </IconButton>
           </Tooltip>
           <Tooltip title="Menu">

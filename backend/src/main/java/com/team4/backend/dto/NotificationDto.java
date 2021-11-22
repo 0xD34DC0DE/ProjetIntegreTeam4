@@ -23,6 +23,7 @@ public class NotificationDto implements Serializable {
     private Map<String, String> data;
     @Builder.Default
     private LocalDateTime creationDate = LocalDateTime.now();
+    private Set<String> seenIds;
     private NotificationType notificationType;
 
     @Builder(builderMethodName = "notificationDtoBuilder")
@@ -32,6 +33,7 @@ public class NotificationDto implements Serializable {
                            Set<String> receiverIds,
                            Map<String, String> data,
                            LocalDateTime creationDate,
+                           Set<String> seenIds,
                            NotificationType notificationType) {
         this.id = id;
         this.title = title;
@@ -39,6 +41,7 @@ public class NotificationDto implements Serializable {
         this.data = data;
         this.receiverIds = receiverIds;
         this.creationDate = Optional.ofNullable(creationDate).orElse(LocalDateTime.now());
+        this.seenIds = seenIds;
         this.notificationType = notificationType;
     }
 

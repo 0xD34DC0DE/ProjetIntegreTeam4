@@ -43,6 +43,13 @@ public class NotificationController {
                         .build());
     }
 
+    @GetMapping("/seen")
+    public Mono<ResponseEntity<String>> seenNotification(@RequestParam String userId, @RequestParam String notificationId) {
+        return notificationService
+                .seenNotification(userId, notificationId)
+                .map(n -> ResponseEntity.ok(""));
+    }
+
     @GetMapping
     public Flux<Notification> findAllNotifications(
             @RequestParam String receiverId,

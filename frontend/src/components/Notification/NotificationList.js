@@ -259,18 +259,19 @@ const NotificationList = ({
                         onNotificationClick(notification, key);
                       }}
                     >
-                      {!notification.seenIds.includes(userInfo.id) && (
-                        <Box
-                          sx={{
-                            height: "10px",
-                            width: "10px",
-                            borderRadius: "50%",
-                            backgroundColor: "rgba(255, 71, 87, 1.0)",
+                      {notification.seenIds &&
+                        !notification.seenIds.includes(userInfo.id) && (
+                          <Box
+                            sx={{
+                              height: "10px",
+                              width: "10px",
+                              borderRadius: "50%",
+                              backgroundColor: "rgba(255, 71, 87, 1.0)",
 
-                            display: "inline-block",
-                          }}
-                        />
-                      )}
+                              display: "inline-block",
+                            }}
+                          />
+                        )}
                     </Grid>
                     <Grid
                       item

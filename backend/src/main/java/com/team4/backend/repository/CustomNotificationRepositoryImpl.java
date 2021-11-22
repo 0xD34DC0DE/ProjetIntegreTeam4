@@ -36,4 +36,11 @@ public class CustomNotificationRepositoryImpl implements CustomNotificationRepos
         return mongoOperations.findAndModify(query, update, FindAndModifyOptions.options().upsert(true).returnNew(true), Notification.class);
     }
 
+    @Override
+    public Mono<Notification> addUserToSeenNotification(String userId, String notificationId) {
+        Query query = Query.query(Criteria.where("id").is(notificationId));
+        Update update = new Update().push("seenIds", userId);
+        return mongoOperations.findAndModify(query, update, FindAndModifyOptions.options().upsert(true).returnNew(true), Notification.class);
+    }
+
 }

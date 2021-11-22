@@ -11,4 +11,6 @@ public interface CustomNotificationRepository {
 
     Mono<Notification> deleteUserNotification(String notificationId, String userId);
 
+    Mono<Notification> addUserToSeenNotification(String userId, String notificationId);
+
 }

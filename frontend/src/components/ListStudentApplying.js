@@ -116,7 +116,7 @@ const ListStudentApplying = () => {
         .filter((offer) => offer.interestedStudentList.length !== 0)
         .map((offer, key) => {
           return (
-            <>
+            <React.Fragment key={key}>
               <Grid container flexDirection="column">
                 <motion.div
                   animate={{ opacity: [0, 1] }}
@@ -410,7 +410,7 @@ const ListStudentApplying = () => {
                   </Grid>
                 );
               })}
-            </>
+            </React.Fragment>
           );
         })}
       <EmailSender receiver={receiver} />

@@ -14,6 +14,7 @@ public abstract class NotificationMapper {
                 .receiverIds(notificationDto.getReceiverIds())
                 .content(notificationDto.getContent())
                 .data(notificationDto.getData())
+                .seenIds(notificationDto.getSeenIds())
                 .creationDate(null)
                 .notificationType(notificationDto.getNotificationType())
                 .build();
@@ -24,6 +25,7 @@ public abstract class NotificationMapper {
                 .id(notification.getId())
                 .title(notification.getTitle())
                 .content(notification.getContent())
+                .seenIds(notification.getSeenIds())
                 .creationDate(notification.getCreationDate())
                 .data(notification.getData())
                 .receiverIds(notification.getReceiverIds())
