@@ -39,4 +39,15 @@ public abstract class InternshipMapper {
                 .build();
     }
 
+    public static Internship toEntity(InternshipCreationDto internshipCreationDto) {
+        return Internship.builder()
+                .monitorEmail(internshipCreationDto.getMonitorEmail())
+                .studentEmail(internshipCreationDto.getStudentEmail())
+                .internshipManagerEmail(internshipCreationDto.getInternshipManagerEmail())
+                .beginningDate(internshipCreationDto.getStartDate())
+                .endingDate(internshipCreationDto.getEndDate())
+                .internshipContract(new InternshipContract())
+                .build();
+    }
+
 }
