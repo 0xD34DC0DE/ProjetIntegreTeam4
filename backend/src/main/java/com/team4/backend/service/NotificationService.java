@@ -10,9 +10,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 
-import java.util.Set;
-import java.util.stream.Collectors;
-
 @Service
 public class NotificationService {
 
@@ -29,13 +26,6 @@ public class NotificationService {
         return notificationRepository
                 .save(NotificationMapper.toEntity(notificationDto))
                 .doOnSuccess(sinks::tryEmitNext);
-    }
-
-    public Flux<Notification> temp(Set<NotificationDto> notificationDtoSet) {
-        return notificationRepository.saveAll(notificationDtoSet
-                .stream()
-                .map(NotificationMapper::toEntity)
-                .collect(Collectors.toSet()));
     }
 
     public Flux<Notification> findAllNotifications(String receiverId, Integer page, Integer size) {

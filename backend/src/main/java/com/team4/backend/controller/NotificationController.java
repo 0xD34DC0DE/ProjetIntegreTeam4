@@ -12,7 +12,6 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/notification")
@@ -29,12 +28,6 @@ public class NotificationController {
     public Mono<ResponseEntity<Notification>> createNotification(@RequestBody NotificationDto notificationDto) {
         return notificationService.createNotification(notificationDto)
                 .map(n -> ResponseEntity.status(HttpStatus.CREATED).body(n));
-    }
-
-    @PostMapping("/temp")
-    public Mono<ResponseEntity<String>> temp(@RequestBody Set<NotificationDto> notificationDtoSet) {
-            notificationService.temp(notificationDtoSet).subscribe();
-            return Mono.just(ResponseEntity.status(HttpStatus.CREATED).body(""));
     }
 
     @GetMapping("/sse")
