@@ -189,7 +189,11 @@ const NotificationList = ({
         {notifications &&
           notifications.map((notification, key) => {
             return [
-              <Tooltip title={notification.content} placement="left">
+              <Tooltip
+                title={notification.content}
+                placement="left"
+                followCursor
+              >
                 <MenuItem key={key}>
                   <Grid container>
                     <Grid

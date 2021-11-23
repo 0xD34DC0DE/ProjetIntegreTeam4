@@ -24,11 +24,13 @@ public class Notification implements Serializable {
     private String id;
     private String title;
     private String content;
-    private Set<String> receiverIds;
+    @Builder.Default
+    private Set<String> receiverIds = Set.of();
     private Map<String, String> data;
     @Builder.Default
     private LocalDateTime creationDate = LocalDateTime.now();
-    private Set<String> seenIds;
+    @Builder.Default
+    private Set<String> seenIds = Set.of();
     private NotificationType notificationType;
 
     @Builder(builderMethodName = "notificationBuilder")
@@ -46,7 +48,7 @@ public class Notification implements Serializable {
         this.receiverIds = receiverIds;
         this.data = data;
         this.creationDate = Optional.ofNullable(creationDate).orElse(LocalDateTime.now());
-        this.seenIds = seenIds;
+        this.seenIds = Set.of();
         this.notificationType = notificationType;
     }
 

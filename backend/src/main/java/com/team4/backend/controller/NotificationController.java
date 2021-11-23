@@ -3,7 +3,6 @@ package com.team4.backend.controller;
 import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.model.Notification;
 import com.team4.backend.service.NotificationService;
-import com.team4.backend.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.ServerSentEvent;
@@ -13,6 +12,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/notification")
@@ -29,6 +29,12 @@ public class NotificationController {
     public Mono<ResponseEntity<Notification>> createNotification(@RequestBody NotificationDto notificationDto) {
         return notificationService.createNotification(notificationDto)
                 .map(n -> ResponseEntity.status(HttpStatus.CREATED).body(n));
+    }
+
+    @PostMapping("/temp")
+    public Mono<ResponseEntity<String>> temp(@RequestBody Set<NotificationDto> notificationDtoSet) {
+            notificationService.temp(notificationDtoSet).subscribe();
+            return Mono.just(ResponseEntity.status(HttpStatus.CREATED).body(""));
     }
 
     @GetMapping("/sse")
