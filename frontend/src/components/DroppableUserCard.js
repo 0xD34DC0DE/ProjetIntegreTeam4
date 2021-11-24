@@ -70,7 +70,6 @@ const DroppableUserCard = ({ user, index }) => {
     setAssignedStudents(data);
   };
 
-  //TODO: Use backdrop click to close the dialog
   return (
     <>
       <Card

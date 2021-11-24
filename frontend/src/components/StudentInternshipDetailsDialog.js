@@ -10,12 +10,11 @@ import {
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import { DialogContext } from "../stores/DialogStore";
 
 const StudentInternshipDetailsDialog = ({
-  open,
   resetOpenedStudentEmail,
   openedStudentEmail,
-  toggleDialog,
 }) => {
   const [internship, setInternship] = useState(null);
   const [userInfo] = useContext(UserInfoContext);
@@ -27,6 +26,7 @@ const StudentInternshipDetailsDialog = ({
     "Date de début du stage",
     "Date de fin du stage",
   ];
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   useEffect(() => {
     const existsByStudentEmail = async () => {
@@ -62,7 +62,10 @@ const StudentInternshipDetailsDialog = ({
     if (reason === "backdropClick" || reason === "timeout") {
       resetOpenedStudentEmail();
       setInternship(null);
-      toggleDialog("internshipDetailsDialog", false);
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "internshipDetailsDialog",
+      });
     }
     console.log("reason", reason);
   };
@@ -70,7 +73,10 @@ const StudentInternshipDetailsDialog = ({
   return (
     <>
       {exists ? (
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog
+          open={dialog.internshipDetailsDialog.visible}
+          onClose={handleClose}
+        >
           <DialogContent>
             {internship &&
               Object.keys(internship).map((identifier, key) => {
@@ -88,7 +94,7 @@ const StudentInternshipDetailsDialog = ({
           </DialogContent>
         </Dialog>
       ) : (
-        <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+        <Snackbar autoHideDuration={2000} onClose={handleClose}>
           <Alert severity="warning" sx={{ width: "100%" }}>
             {openedStudentEmail} n'a pas de stage d'attribué
           </Alert>

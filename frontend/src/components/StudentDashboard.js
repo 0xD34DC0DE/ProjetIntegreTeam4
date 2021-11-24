@@ -24,7 +24,7 @@ import ScheduleIcon from "@mui/icons-material/Schedule";
 import PeopleIcon from "@mui/icons-material/People";
 import { UserInfoContext } from "../stores/UserInfoStore";
 
-const StudentDashBoard = ({ visible }) => {
+const StudentDashBoard = () => {
   const listState = [
     "INTERNSHIP_NOT_FOUND",
     "INTERNSHIP_FOUND",
@@ -168,213 +168,108 @@ const StudentDashBoard = ({ visible }) => {
 
   return (
     <>
-      {visible && (
-        <Container>
-          <motion.div variants={fadeIn} initial="hidden" animate="show">
-            <Card
-              sx={{
-                p: 15,
-                mt: 10,
-                maxWidth: 1000,
-                border: "0.5px solid grey",
-                alignItems: "center",
-                backgroundColor: "rgba(0, 0, 0, 0.1)",
-                flexGrow: 1,
-                boxShadow: 6,
-              }}
+      <Container>
+        <motion.div variants={fadeIn} initial="hidden" animate="show">
+          <Card
+            sx={{
+              p: 15,
+              mt: 10,
+              maxWidth: 1000,
+              border: "0.5px solid grey",
+              alignItems: "center",
+              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              flexGrow: 1,
+              boxShadow: 6,
+            }}
+          >
+            <Grid
+              container
+              spacing={2}
+              sx={{ alignItems: "center" }}
+              justifyContent="center"
             >
-              <Grid
-                container
-                spacing={2}
-                sx={{ alignItems: "center" }}
-                justifyContent="center"
-              >
-                <Grid item justifyContent="center">
-                  <Avatar
-                    sx={{
-                      width: 200,
-                      height: 200,
-                      border: "1px solid white",
-                      boxShadow: 6,
-                    }}
+              <Grid item justifyContent="center">
+                <Avatar
+                  sx={{
+                    width: 200,
+                    height: 200,
+                    border: "1px solid white",
+                    boxShadow: 6,
+                  }}
+                >
+                  {profile.firstName.charAt(0)}
+                </Avatar>
+                {profile.hasValidCv ? (
+                  <Typography
+                    sx={{ color: "green", textAlign: "center", m: 1 }}
+                    variant="subtitle1"
+                    component="div"
+                    gutterBottom
                   >
-                    {profile.firstName.charAt(0)}
-                  </Avatar>
-                  {profile.hasValidCv ? (
+                    {"Vous avez un CV est valide"}
+                    <CheckCircleIcon />
+                  </Typography>
+                ) : (
+                  <Typography
+                    sx={{ color: "red", textAlign: "center", m: 1 }}
+                    variant="subtitle1"
+                    component="div"
+                    gutterBottom
+                  >
+                    {"Vous n'avez aucun CV valide"}
+                    <BlockIcon />
+                  </Typography>
+                )}
+              </Grid>
+              <Grid item xs={12} sm container justifyContent="center">
+                <Grid item xs container direction="column" spacing={3}>
+                  <Grid item xs sx={{ textAlign: "center" }}>
                     <Typography
-                      sx={{ color: "green", textAlign: "center", m: 1 }}
+                      gutterBottom
                       variant="subtitle1"
                       component="div"
-                      gutterBottom
+                      sx={{ m: 1 }}
                     >
-                      {"Vous avez un CV est valide"}
-                      <CheckCircleIcon />
+                      Name : {profile.lastName}, {profile.firstName}
+                      <AccountCircleIcon />
                     </Typography>
-                  ) : (
                     <Typography
-                      sx={{ color: "red", textAlign: "center", m: 1 }}
-                      variant="subtitle1"
+                      variant="body2"
                       component="div"
                       gutterBottom
+                      sx={{ m: 1 }}
                     >
-                      {"Vous n'avez aucun CV valide"}
-                      <BlockIcon />
+                      N° de téléphone : {profile.phoneNumber}
+                      <PhoneAndroidIcon />
                     </Typography>
-                  )}
-                </Grid>
-                <Grid item xs={12} sm container justifyContent="center">
-                  <Grid item xs container direction="column" spacing={3}>
-                    <Grid item xs sx={{ textAlign: "center" }}>
-                      <Typography
-                        gutterBottom
-                        variant="subtitle1"
-                        component="div"
-                        sx={{ m: 1 }}
-                      >
-                        Name : {profile.lastName}, {profile.firstName}
-                        <AccountCircleIcon />
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        component="div"
-                        gutterBottom
-                        sx={{ m: 1 }}
-                      >
-                        N° de téléphone : {profile.phoneNumber}
-                        <PhoneAndroidIcon />
-                      </Typography>
-                      <Typography
-                        variant="body2"
-                        component="div"
-                        gutterBottom
-                        sx={{ m: 1 }}
-                      >
-                        Membre depuis : {profile.registrationDate}
-                        <TodayIcon />
-                      </Typography>
-
-                      {!hasInternship() && profile.hasValidCv ? (
-                        <TextField
-                          sx={{
-                            border: "1px white",
-                            boxShadow: 4,
-                            borderRadius: 2,
-                            display: "flex",
-                            m: 2,
-                          }}
-                          InputLabelProps={{
-                            shrink: true,
-                          }}
-                          label="Date d'entrevue la plus proche"
-                          value={profile.closestInterviewDate}
-                          onChange={handleChangeDate}
-                          type={"date"}
-                        />
-                      ) : (
-                        <motion.div
-                          variants={fadeIn}
-                          initial="hidden"
-                          animate="show"
-                        >
-                          <Typography
-                            variant="subtitle1"
-                            sx={{
-                              color: "gray",
-                              textAlign: "center",
-                              alignItems: "center",
-                              m: 2,
-                            }}
-                          >
-                            {
-                              "L'ajout d'entrevue n'est pas disponible pour l'instant"
-                            }
-                            <ScheduleIcon />
-                          </Typography>
-                        </motion.div>
-                      )}
-
-                      {isInterviewDateUpdated ? (
-                        <motion.div
-                          variants={fadeIn}
-                          initial="hidden"
-                          animate="show"
-                        >
-                          <Typography
-                            variant="subtitle1"
-                            sx={{ color: "green", textAlign: "center" }}
-                          >
-                            {"DATE D'ENTREVUE AJOUTÉE"}
-                            <PublishedWithChangesIcon />
-                          </Typography>
-                        </motion.div>
-                      ) : null}
-
-                      {!isDateValid ? (
-                        <motion.div
-                          variants={fadeIn}
-                          initial="hidden"
-                          animate="show"
-                        >
-                          <Typography
-                            variant="subtitle1"
-                            sx={{ color: "red", textAlign: "center" }}
-                          >
-                            {"DATE D'ENTREVUE INVALIDE"}
-                            <WarningIcon />
-                          </Typography>
-                        </motion.div>
-                      ) : null}
-                    </Grid>
-                  </Grid>
-                  <Grid
-                    item
-                    sx={{ alignItems: "center", textAlign: "center" }}
-                    justifyContent="center"
-                  >
-                    <Typography variant="subtitle1" sx={{ m: 1 }}>
-                      <PeopleIcon /> Nombres d'entrevues :{" "}
-                      {profile.nbrOfInterviews}
-                    </Typography>
-                    <Typography variant="subtitle1" sx={{ m: 1 }}>
-                      <TouchAppIcon /> Nombres d'offres appliquées :{" "}
-                      {profile.nbrOfAppliedOffers}
-                    </Typography>
-                    <Typography variant="subtitle1" sx={{ m: 1 }}>
-                      <StarBorderPurple500Icon /> Nombres d'offres exlusives :{" "}
-                      {profile.nbrOfExclusiveOffers}
-                    </Typography>
-
-                    <Select
-                      sx={{
-                        margin: "auto",
-                        border: "1px white",
-                        display: "flex",
-                        justifyContent: "center",
-                        boxShadow: 3,
-                        textAlign: "center",
-                        m: 1,
-                      }}
-                      labelId="demo-simple-select-label"
-                      id="demo-simple-select"
-                      value={profile.studentState}
-                      label="Age"
-                      onChange={handleChange}
-                      disabled={isDisabled}
+                    <Typography
+                      variant="body2"
+                      component="div"
+                      gutterBottom
+                      sx={{ m: 1 }}
                     >
-                      {listState.map((value, key) => (
-                        <MenuItem
-                          key={key}
-                          value={value}
-                          disabled={
-                            value === listState[2] || value === listState[0]
-                          }
-                          sx={{ color: "white" }}
-                        >
-                          {listStateFrench[listState.indexOf(value)]}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                    {isStatusUpdated ? (
+                      Membre depuis : {profile.registrationDate}
+                      <TodayIcon />
+                    </Typography>
+
+                    {!hasInternship() && profile.hasValidCv ? (
+                      <TextField
+                        sx={{
+                          border: "1px white",
+                          boxShadow: 4,
+                          borderRadius: 2,
+                          display: "flex",
+                          m: 2,
+                        }}
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        label="Date d'entrevue la plus proche"
+                        value={profile.closestInterviewDate}
+                        onChange={handleChangeDate}
+                        type={"date"}
+                      />
+                    ) : (
                       <motion.div
                         variants={fadeIn}
                         initial="hidden"
@@ -382,20 +277,123 @@ const StudentDashBoard = ({ visible }) => {
                       >
                         <Typography
                           variant="subtitle1"
-                          sx={{ color: "green", textAlign: "center", m: 1 }}
+                          sx={{
+                            color: "gray",
+                            textAlign: "center",
+                            alignItems: "center",
+                            m: 2,
+                          }}
                         >
-                          {"STATUT MODIFIÉE"}
+                          {
+                            "L'ajout d'entrevue n'est pas disponible pour l'instant"
+                          }
+                          <ScheduleIcon />
+                        </Typography>
+                      </motion.div>
+                    )}
+
+                    {isInterviewDateUpdated ? (
+                      <motion.div
+                        variants={fadeIn}
+                        initial="hidden"
+                        animate="show"
+                      >
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ color: "green", textAlign: "center" }}
+                        >
+                          {"DATE D'ENTREVUE AJOUTÉE"}
                           <PublishedWithChangesIcon />
+                        </Typography>
+                      </motion.div>
+                    ) : null}
+
+                    {!isDateValid ? (
+                      <motion.div
+                        variants={fadeIn}
+                        initial="hidden"
+                        animate="show"
+                      >
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ color: "red", textAlign: "center" }}
+                        >
+                          {"DATE D'ENTREVUE INVALIDE"}
+                          <WarningIcon />
                         </Typography>
                       </motion.div>
                     ) : null}
                   </Grid>
                 </Grid>
+                <Grid
+                  item
+                  sx={{ alignItems: "center", textAlign: "center" }}
+                  justifyContent="center"
+                >
+                  <Typography variant="subtitle1" sx={{ m: 1 }}>
+                    <PeopleIcon /> Nombres d'entrevues :{" "}
+                    {profile.nbrOfInterviews}
+                  </Typography>
+                  <Typography variant="subtitle1" sx={{ m: 1 }}>
+                    <TouchAppIcon /> Nombres d'offres appliquées :{" "}
+                    {profile.nbrOfAppliedOffers}
+                  </Typography>
+                  <Typography variant="subtitle1" sx={{ m: 1 }}>
+                    <StarBorderPurple500Icon /> Nombres d'offres exlusives :{" "}
+                    {profile.nbrOfExclusiveOffers}
+                  </Typography>
+
+                  <Select
+                    sx={{
+                      margin: "auto",
+                      border: "1px white",
+                      display: "flex",
+                      justifyContent: "center",
+                      boxShadow: 3,
+                      textAlign: "center",
+                      m: 1,
+                    }}
+                    labelId="demo-simple-select-label"
+                    id="demo-simple-select"
+                    value={profile.studentState}
+                    label="Age"
+                    onChange={handleChange}
+                    disabled={isDisabled}
+                  >
+                    {listState.map((value, key) => (
+                      <MenuItem
+                        key={key}
+                        value={value}
+                        disabled={
+                          value === listState[2] || value === listState[0]
+                        }
+                        sx={{ color: "white" }}
+                      >
+                        {listStateFrench[listState.indexOf(value)]}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                  {isStatusUpdated ? (
+                    <motion.div
+                      variants={fadeIn}
+                      initial="hidden"
+                      animate="show"
+                    >
+                      <Typography
+                        variant="subtitle1"
+                        sx={{ color: "green", textAlign: "center", m: 1 }}
+                      >
+                        {"STATUT MODIFIÉE"}
+                        <PublishedWithChangesIcon />
+                      </Typography>
+                    </motion.div>
+                  ) : null}
+                </Grid>
               </Grid>
-            </Card>
-          </motion.div>
-        </Container>
-      )}
+            </Grid>
+          </Card>
+        </motion.div>
+      </Container>
     </>
   );
 };

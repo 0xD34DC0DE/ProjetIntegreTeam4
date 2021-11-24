@@ -1,19 +1,18 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { Dialog, DialogContent } from "@mui/material";
 import PdfView from "./PdfView";
+import { DialogContext } from "../stores/DialogStore";
 
-function ReportDialog({
-  open,
-  toggleDialog,
-  reportUrl,
-  semesterFullName,
-  setReportUrl,
-}) {
-  let dialogRef = useRef(null);
+function ReportDialog({ reportUrl, semesterFullName, setReportUrl }) {
+  const dialogRef = useRef(null);
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick") {
-      toggleDialog("reportDialog", false);
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "reportDialog",
+      });
       setReportUrl("");
     }
   };
@@ -22,7 +21,7 @@ function ReportDialog({
     "/generateAllNonValidatedOffersReport",
     "/generateAllValidatedOffersReport",
     "/generateStudentsNotEvaluatedReport",
-    "/generateStudentsWithSupervisorWithNoCompanyEvaluation"
+    "/generateStudentsWithSupervisorWithNoCompanyEvaluation",
   ];
 
   if (semesterDependentUrls.includes(reportUrl)) {
@@ -33,7 +32,7 @@ function ReportDialog({
   }
 
   return (
-    <Dialog open={open} onClose={handleClose}>
+    <Dialog open={dialog.reportDialog.visible} onClose={handleClose}>
       <DialogContent ref={dialogRef}>
         {dialogRef && <PdfView pdfUrl={reportUrl} dialogRef={dialogRef} />}
       </DialogContent>

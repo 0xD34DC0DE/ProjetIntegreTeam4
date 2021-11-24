@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
@@ -35,11 +36,12 @@ public class NotificationServiceTest {
         //ARRANGE
         String receiverId = "receiverId";
         Flux<Notification> notificationFluxMockData = NotificationMockData.getNotifications();
+        PageRequest pageRequest = PageRequest.of(1, 5);
 
-        when(notificationService.findAllNotifications(receiverId)).thenReturn(notificationFluxMockData);
+        when(notificationRepository.findAllByReceiverId(receiverId, pageRequest)).thenReturn(notificationFluxMockData);
 
         //ACT
-        Flux<Notification> notificationFlux = notificationRepository.findAllByReceiverId(receiverId);
+        Flux<Notification> notificationFlux = notificationRepository.findAllByReceiverId(receiverId, pageRequest);
 
         //ASSERT
         StepVerifier

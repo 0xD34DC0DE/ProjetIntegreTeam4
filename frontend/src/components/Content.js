@@ -18,19 +18,51 @@ import AssignedStudentSupervisorView from "./AssignedStudentSupervisorView";
 import StudentEvaluationForm from "./Evaluation/End/StudentEvaluationForm";
 import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMidForm";
 import ListReport from "./ListReport";
-import Notification from "./Notification/Notification";
 import SignContractDialog from "./contracts/SignContractDialog";
+import { SelectionContext } from "../stores/SelectionStore";
 
-const Content = ({
-  isSidebarOpen,
-  toggleDialog,
-  dialogVisibility,
-  selection,
-  dialogData,
-}) => {
+const Content = ({ isSidebarOpen }) => {
+  const [selection] = useContext(SelectionContext);
   const [userInfo] = useContext(UserInfoContext);
 
-  //TODO use switch instead of repeated conditionnal rendering
+  const displayComponents = (role) => {
+    switch (role) {
+      case "STUDENT":
+        return (
+          <>
+            {selection.id === 7 && <StudentDashBoard />}
+            {selection.id === 5 && <UploadCV />}
+            {selection.id === 4 && <OfferViews />}
+          </>
+        );
+      case "INTERNSHIP_MANAGER":
+        return (
+          <>
+            {selection.id === 1 && <ListCvInternshipManagerView />}
+            {selection.id === 3 && <InternshipOfferValidation />}
+            {selection.id === 11 && <ListUserDroppable role="SUPERVISOR" />}
+            {selection.id === 11 && <ListUserDraggable role="STUDENT" />}
+            {selection.id === 14 && <ListReport />}
+          </>
+        );
+      case "SUPERVISOR":
+        return (
+          <>
+            {selection.id === 10 && <AssignedStudentSupervisorView />}
+            {selection.id === 13 && <StudentEvaluationMidForm />}
+          </>
+        );
+      case "MONITOR":
+        return (
+          <>
+            {selection.id === 6 && <ListStudentApplying />}
+            {selection.id === 12 && <StudentEvaluationForm />}
+          </>
+        );
+      default:
+        break;
+    }
+  };
 
   return (
     <Box
@@ -58,94 +90,13 @@ const Content = ({
             role={roles[userInfo.role]}
             description={selection.description}
           />
-          {userInfo.role === "INTERNSHIP_MANAGER" && (
-            <ListCvInternshipManagerView 
-              toggleDialog={toggleDialog}
-              visible={selection.id === 1} 
-              dialogVisibility={dialogVisibility}
-            />
-          )}
-          {userInfo.role === "MONITOR" && (
-            <ListStudentApplying
-              visible={selection.id === 6}
-              toggleDialog={toggleDialog}
-              dialogVisibility={dialogVisibility}
-            />
-          )}
-          {userInfo.role === "STUDENT" && (
-            <UploadCV
-              visible={selection.id === 5}
-              toggleDialog={toggleDialog}
-              dialogVisibility={dialogVisibility}
-            />
-          )}
-          {userInfo.role === "STUDENT" && (
-            <OfferViews visible={selection.id === 4} />
-          )}
-          {userInfo.role === "STUDENT" && (
-            <StudentDashBoard
-              visible={selection.id === 7 && userInfo.role === "STUDENT"}
-            />
-          )}
-          {userInfo.role === "INTERNSHIP_MANAGER" && (
-            <InternshipOfferValidation
-              visible={selection.id === 3}
-              toggleDialog={toggleDialog}
-              dialogVisibility={dialogVisibility}
-            />
-          )}
-          {userInfo.role === "SUPERVISOR" && (
-            <AssignedStudentSupervisorView
-              visible={selection.id === 10}
-              toggleDialog={toggleDialog}
-              dialogVisibility={dialogVisibility}
-            />
-          )}
-          {userInfo.role === "INTERNSHIP_MANAGER" && (
-            <ListUserDroppable
-              role="SUPERVISOR"
-              visible={selection.id === 11}
-            />
-          )}
-          {userInfo.role === "INTERNSHIP_MANAGER" && (
-            <ListUserDraggable role="STUDENT" visible={selection.id === 11} />
-          )}
-          {userInfo.role === "MONITOR" && (
-            <StudentEvaluationForm
-              visible={selection.id === 12}
-              toggleDialog={toggleDialog}
-              dialogVisibility={dialogVisibility}
-            />
-          )}
-          {userInfo.role === "SUPERVISOR" && (
-            <StudentEvaluationMidForm visible={selection.id === 13} />
-          )}
-          {userInfo.role === "INTERNSHIP_MANAGER" && (
-            <ListReport
-              toggleDialog={toggleDialog}
-              visible={selection.id === 14}
-              dialogVisibility={dialogVisibility}
-            />
-          )}
+          {displayComponents(userInfo.role)}
         </Box>
       )}
-      <OfferForm
-        toggleDialog={toggleDialog}
-        open={dialogVisibility.internshipOfferDialog}
-      />
-      <Register
-        open={dialogVisibility.registerDialog}
-        toggleDialog={toggleDialog}
-      ></Register>
-      <Login
-        open={dialogVisibility.loginDialog}
-        toggleDialog={toggleDialog}
-      ></Login>
-      <SignContractDialog
-        toggleDialog={toggleDialog}
-        open={dialogVisibility.signContractDialog}
-        dialogData={dialogData}
-      />
+      <Register></Register>
+      <Login></Login>
+      <OfferForm />
+      <SignContractDialog />
     </Box>
   );
 };

@@ -23,7 +23,7 @@ const AssignedStudentsDialog = ({
     const getAssignedStudents = async () => {
       let response = await axios({
         method: "GET",
-        url: `http://localhost:8080/supervisor/getAssignedStudents/${user.id}`,
+        url: `http://localhost:8080/supervisor/getAllAssignedStudentsForCurrentSemester/${user.id}`,
         headers: {
           Authorization: userInfo.jwt,
         },
