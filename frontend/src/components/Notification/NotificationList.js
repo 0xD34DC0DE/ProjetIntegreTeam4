@@ -34,31 +34,35 @@ const NotificationList = ({
   const [selection, selectionDispatch] = useContext(SelectionContext);
 
   useEffect(() => {
-    if (page === 0) return;
-    axios({
-      method: "GET",
-      url: "http://localhost:8080/notification",
-      headers: {
-        Authorization: userInfo.jwt,
-      },
-      params: {
-        page: page,
-        receiverId: userInfo.id,
-      },
-      responseType: "json",
-    })
-      .then((response) => {
-        if (response.data.length === 0) {
-          setCanLoadOlderNotifications(false);
-        } else {
-          setNotifications((notifications) => [
-            ...notifications,
-            ...response.data,
-          ]);
-          scrollToBottom();
-        }
+    const fetchNextNotifications = () => {
+      if (page === 0) return;
+      axios({
+        method: "GET",
+        url: "http://localhost:8080/notification",
+        headers: {
+          Authorization: userInfo.jwt,
+        },
+        params: {
+          page: page,
+          receiverId: userInfo.id,
+        },
+        responseType: "json",
       })
-      .catch((error) => console.error(error));
+        .then((response) => {
+          if (response.data.length === 0) {
+            setCanLoadOlderNotifications(false);
+          } else {
+            setNotifications((notifications) => [
+              ...notifications,
+              ...response.data,
+            ]);
+            scrollToBottom();
+          }
+        })
+        .catch((error) => console.error(error));
+    };
+
+    fetchNextNotifications();
   }, [page]);
 
   const scrollToBottom = () => {
@@ -67,22 +71,26 @@ const NotificationList = ({
   };
 
   useEffect(() => {
-    if (userInfo === undefined) return;
-    axios({
-      method: "GET",
-      url: "http://localhost:8080/notification",
-      headers: {
-        Authorization: userInfo.jwt,
-      },
-      params: {
-        receiverId: userInfo.id,
-      },
-      responseType: "json",
-    })
-      .then((response) => {
-        setNotifications(response.data);
+    const fetchNotifications = () => {
+      if (userInfo === undefined) return;
+      axios({
+        method: "GET",
+        url: "http://localhost:8080/notification",
+        headers: {
+          Authorization: userInfo.jwt,
+        },
+        params: {
+          receiverId: userInfo.id,
+        },
+        responseType: "json",
       })
-      .catch(console.error);
+        .then((response) => {
+          setNotifications(response.data);
+        })
+        .catch(console.error);
+    };
+
+    fetchNotifications();
   }, [userInfo]);
 
   const addNotification = (notification) => {
@@ -117,7 +125,7 @@ const NotificationList = ({
       .catch(console.error);
   };
 
-  const onNotificationClick = (notification, index) => {
+  const setNotificationSeen = (notification, index) => {
     if (!notification.seenIds.includes(userInfo.id))
       axios({
         method: "GET",
@@ -132,7 +140,7 @@ const NotificationList = ({
         responseType: "json",
       })
         .then(() => {
-          userSeenNotification(index);
+          setUserSeenNotification(index);
         })
         .catch((error) => console.error(error));
 
@@ -152,7 +160,7 @@ const NotificationList = ({
     return count;
   };
 
-  const userSeenNotification = (index) => {
+  const setUserSeenNotification = (index) => {
     let tempNotifications = [...notifications];
     tempNotifications[index].seenIds.push(userInfo.id);
     setNotifications(tempNotifications);
@@ -198,23 +206,15 @@ const NotificationList = ({
                   <Grid container>
                     <Grid
                       item
-                      xl={10}
-                      lg={10}
-                      md={10}
-                      sm={10}
                       xs={10}
                       onClick={() => {
-                        onNotificationClick(notification, key);
+                        setNotificationSeen(notification, key);
                       }}
                     >
                       <Grid container>
                         <Grid
                           item
                           xs={12}
-                          sm={12}
-                          md={12}
-                          lg={12}
-                          xl={12}
                           sx={{
                             color: "white",
                           }}
@@ -229,10 +229,6 @@ const NotificationList = ({
                         <Grid
                           item
                           xs={12}
-                          sm={12}
-                          md={12}
-                          lg={12}
-                          xl={12}
                           sx={{
                             overflow: "hidden",
                             textOverflow: "ellipsis",
@@ -253,14 +249,10 @@ const NotificationList = ({
                     </Grid>
                     <Grid
                       item
-                      xl={1}
-                      lg={1}
                       xs={1}
-                      md={1}
-                      sm={1}
                       alignSelf="center"
                       onClick={() => {
-                        onNotificationClick(notification, key);
+                        setNotificationSeen(notification, key);
                       }}
                     >
                       {notification.seenIds &&
@@ -277,17 +269,7 @@ const NotificationList = ({
                           />
                         )}
                     </Grid>
-                    <Grid
-                      item
-                      xl={1}
-                      lg={1}
-                      xs={1}
-                      md={1}
-                      sm={1}
-                      item
-                      alignSelf="center"
-                      textAlign="end"
-                    >
+                    <Grid item xs={1} item alignSelf="center" textAlign="end">
                       <Tooltip title="Supprimer">
                         <IconButton
                           variant="text"

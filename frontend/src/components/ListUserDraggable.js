@@ -38,9 +38,14 @@ const ListUserDraggable = ({ role, isDragging }) => {
   }, []);
   return (
     <DndProvider backend={HTML5Backend}>
-      <Typography variant="h4" sx={{ color: "white", ml: 2 }}>
-        Étudiants
-      </Typography>
+      <motion.div variants={fadeIn} initial="hidden" animate="show">
+        <Typography
+          variant="subtitle2"
+          sx={{ color: "white", ml: 2, fontSize: "2.2em" }}
+        >
+          Étudiants
+        </Typography>
+      </motion.div>
 
       <Grid
         sx={{ py: "1vh", mt: "10%", display: "flex" }}

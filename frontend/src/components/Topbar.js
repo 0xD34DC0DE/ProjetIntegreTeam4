@@ -25,8 +25,9 @@ import { UserInfoContext } from "../stores/UserInfoStore";
 import { roles, topbarMenuList } from "./Configuration";
 import NotificationList from "./Notification/NotificationList";
 import { DialogContext } from "../stores/DialogStore";
+import { SelectionContext } from "../stores/SelectionStore";
 
-const Topbar = ({ sidebarOpen, setSidebarOpen, onSelectionChanged }) => {
+const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
   const menuAnchorRef = useRef();
   const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
   const [menuOpen, setMenuOpen] = useState(false);
@@ -34,6 +35,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen, onSelectionChanged }) => {
   const [notficationMenuAnchorEl, setNotficationMenuAnchorEl] = useState(null);
   const [notificationCount, setNotificationCount] = useState(0);
   const [dialog, dialogDispatch] = useContext(DialogContext);
+  const [selection, selectionDispatch] = useContext(SelectionContext);
 
   const handleSidebarClick = () => {
     setSidebarOpen(!sidebarOpen);
@@ -165,7 +167,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen, onSelectionChanged }) => {
                             <MenuItem
                               key={key}
                               onClick={() => {
-                                onSelectionChanged(item);
+                                selectionDispatch(item);
                               }}
                               sx={{
                                 ":hover": {
@@ -275,7 +277,6 @@ const Topbar = ({ sidebarOpen, setSidebarOpen, onSelectionChanged }) => {
           setNotificationCount={setNotificationCount}
           anchorEl={notficationMenuAnchorEl}
           handleMenuClose={handleNotificationMenuClose}
-          onSelectionChanged={onSelectionChanged}
           setMenuOpen={setNotificationMenuOpen}
           menuOpen={notificationMenuOpen}
         />

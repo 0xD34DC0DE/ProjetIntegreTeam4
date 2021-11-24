@@ -43,11 +43,11 @@ const StudentEvaluationDropdown = ({ section, keyRef, mergeForms }, ref) => {
   }));
 
   return (
-    <Grid item xl={12} lg={12} md={12} sm={12} xs={12} key={keyRef}>
+    <Grid item xs={12} key={keyRef}>
       <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
         <AccordionSummary>
           <Grid container flexDirection="row" textAlign="center">
-            <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+            <Grid item xs={12}>
               <Typography
                 variant="subtitle2"
                 sx={{ fontSize: "1.75em", lineHeight: "100%" }}
@@ -55,7 +55,7 @@ const StudentEvaluationDropdown = ({ section, keyRef, mergeForms }, ref) => {
                 {section.title}
               </Typography>
             </Grid>
-            <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+            <Grid item xs={12}>
               <Typography variant="caption">{section.description}</Typography>
             </Grid>
           </Grid>
@@ -64,20 +64,12 @@ const StudentEvaluationDropdown = ({ section, keyRef, mergeForms }, ref) => {
           sx={{ backgroundColor: "rgba(35, 35, 35, 0.6)", pb: 1 }}
         >
           <Grid container>
-            <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+            <Grid item xs={12}>
               <Grid container flexDirection="row" textAlign="center">
-                <Grid item xl={6} lg={6} md={6} sm={6} xs={6}></Grid>
+                <Grid item xs={6}></Grid>
                 {ratings.map((rating, key3) => {
                   return (
-                    <Grid
-                      item
-                      xl={1.2}
-                      lg={1.2}
-                      md={1.2}
-                      sm={1.2}
-                      xs={1.2}
-                      key={key3}
-                    >
+                    <Grid item xs={1} key={key3}>
                       <Typography
                         variant="caption"
                         sx={{
@@ -92,37 +84,19 @@ const StudentEvaluationDropdown = ({ section, keyRef, mergeForms }, ref) => {
                 })}
               </Grid>
             </Grid>
-            <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+            <Grid item xs={12}>
               <Grid container flexDirection="row">
                 {section.tasks.map((task, key2) => {
                   return (
                     <React.Fragment key={key2}>
-                      <Grid
-                        item
-                        xl={6}
-                        lg={6}
-                        md={6}
-                        sm={6}
-                        xs={6}
-                        alignSelf="center"
-                        key={key2}
-                      >
+                      <Grid item xs={6} alignSelf="center" key={key2}>
                         <Typography variant="caption">
                           {key2 + 1}) {task.label}
                         </Typography>
                       </Grid>
                       {ratings.map((rating, key3) => {
                         return (
-                          <Grid
-                            item
-                            textAlign="center"
-                            xl={1.2}
-                            lg={1.2}
-                            md={1.2}
-                            sm={1.2}
-                            xs={1.2}
-                            key={key3}
-                          >
+                          <Grid item textAlign="center" xs={1} key={key3}>
                             <Radio
                               value={rating.value}
                               id={task.id}
@@ -137,7 +111,7 @@ const StudentEvaluationDropdown = ({ section, keyRef, mergeForms }, ref) => {
                     </React.Fragment>
                   );
                 })}
-                <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                <Grid item xs={12}>
                   <Typography
                     variant="caption"
                     sx={{
@@ -150,7 +124,7 @@ const StudentEvaluationDropdown = ({ section, keyRef, mergeForms }, ref) => {
                     {section.comment.label}
                   </Typography>
                 </Grid>
-                <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                <Grid item xs={12}>
                   <TextField
                     fullWidth
                     multiline

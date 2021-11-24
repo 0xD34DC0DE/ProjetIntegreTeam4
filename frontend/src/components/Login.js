@@ -12,6 +12,7 @@ import axios from "axios";
 import React, { useState, useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { DialogContext } from "../stores/DialogStore";
+import { v4 as uuidv4 } from "uuid";
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState();
@@ -33,11 +34,12 @@ const Login = () => {
     axios({
       method: "POST",
       baseURL: "http://localhost:8080",
-      url: "/user/login",
+      url: "/user/login?" + uuidv4(),
       data: JSON.stringify({ email: form.email, password: form.password }),
       headers: {
-        "content-type": "application/json",
+        "Content-Type": "application/json",
       },
+      responseType: "json",
     })
       .then((response) => {
         userInfoDispatch({ type: "LOGIN", payload: { token: response.data } });

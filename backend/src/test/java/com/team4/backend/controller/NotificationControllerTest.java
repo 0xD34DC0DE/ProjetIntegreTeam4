@@ -1,12 +1,8 @@
 package com.team4.backend.controller;
 
-import com.mongodb.client.result.UpdateResult;
 import com.team4.backend.model.Notification;
 import com.team4.backend.service.NotificationService;
 import com.team4.backend.testdata.NotificationMockData;
-import org.bson.BsonDocument;
-import org.bson.BsonString;
-import org.bson.BsonValue;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,14 +10,11 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.reactive.ReactiveSecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.reactive.WebFluxTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.test.StepVerifier;
 
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
@@ -40,8 +33,10 @@ public class NotificationControllerTest {
         //ARRANGE
         String receiverId = "receiverId";
         Flux<Notification> notificationFlux = NotificationMockData.getNotifications();
+        int page = 1;
+        int size = 5;
 
-        //when(notificationService.findAllNotifications(receiverId)).thenReturn(notificationFlux);
+        when(notificationService.findAllNotifications(receiverId, page, size)).thenReturn(notificationFlux);
 
         //ACT
         webTestClient

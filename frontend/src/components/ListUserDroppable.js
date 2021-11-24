@@ -38,9 +38,14 @@ const ListUserDroppable = ({ role }) => {
   }, []);
   return (
     <DndProvider backend={HTML5Backend}>
-      <Typography variant="h4" sx={{ color: "white", ml: 2, mt: 2 }}>
-        Superviseurs
-      </Typography>
+      <motion.div variants={fadeIn} initial="hidden" animate="show">
+        <Typography
+          variant="subtitle2"
+          sx={{ color: "white", fontSize: "2.2em", ml: 2, mt: 2 }}
+        >
+          Superviseurs
+        </Typography>
+      </motion.div>
       <Grid
         sx={{ py: "1vh", mt: "10%", display: "flex" }}
         container

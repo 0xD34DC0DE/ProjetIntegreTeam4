@@ -2,12 +2,23 @@ import React from "react";
 import {
   Avatar,
   Box,
+  Tooltip,
   Card,
   Typography,
   ButtonBase,
   Container,
 } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import { keyframes } from "@mui/styled-engine";
+
+const transition = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
 
 const Report = ({ title, url, setReportUrl }) => {
   return (
@@ -16,24 +27,45 @@ const Report = ({ title, url, setReportUrl }) => {
         onClick={() => {
           setReportUrl(url);
         }}
-        sx={{ width: "100%" }}
+        sx={{ width: "430px", height: "100%", mb: 5 }}
       >
         <Card
           role="Handle"
           sx={{
             backgroundColor: "#1F2020",
-            alignItem: "center",
-            justifyContent: "center",
             width: "100%",
-            height: "80px",
-            pb: 3,
-            pt: 2,
+            height: "100%",
+            py: 5,
+            ":hover": {
+              boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.2)",
+              "#visualizeText": {
+                opacity: 0.8,
+              },
+            },
           }}
         >
-          <Avatar sx={{ mx: "auto" }}>
+          <Avatar sx={{ mx: "auto", mb: 5, px: 2, py: 2 }}>
             <AssignmentIcon />
           </Avatar>
-          <Typography sx={{ mt: 2 }}>{title}</Typography>
+          <Typography variant="subtitle2" sx={{ fontSize: "1.2em" }}>
+            {title}
+          </Typography>
+          <Typography
+            variant="subtitle2"
+            id="visualizeText"
+            sx={{
+              mt: 2,
+              color: "rgba(255, 255, 255, 0.6)",
+              opacity: 0,
+              fontSize: "0.9em",
+              lineHeight: "0",
+              height: 0,
+              mt: 2,
+              transition: "opacity 0.5s ease-in-out",
+            }}
+          >
+            APPUYEZ POUR VISUALISER
+          </Typography>{" "}
         </Card>
       </ButtonBase>
     </Container>

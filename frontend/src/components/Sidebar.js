@@ -62,7 +62,7 @@ const Sidebar = ({ open }) => {
                         type: "OPEN",
                         dialogName: item.dialogName,
                       });
-                    selectionDispatch(item);
+                    else selectionDispatch(item);
                   }}
                 >
                   {item.icon}

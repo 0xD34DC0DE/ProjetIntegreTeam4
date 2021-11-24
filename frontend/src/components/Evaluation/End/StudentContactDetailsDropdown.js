@@ -16,6 +16,7 @@ const StudentContactDetailsDropdown = ({ mergeForms }, ref) => {
     rating: {},
     expectation: {},
   });
+
   const handleFormChange = (event) => {
     const target = (
       event.target.id ? event.target.id : event.target.name
@@ -41,7 +42,7 @@ const StudentContactDetailsDropdown = ({ mergeForms }, ref) => {
     <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
       <AccordionSummary>
         <Grid container flexDirection="row" textAlign="center">
-          <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+          <Grid item xs={12}>
             <Typography
               variant="subtitle2"
               sx={{ fontSize: "1.75em", lineHeight: "100%" }}
@@ -49,7 +50,7 @@ const StudentContactDetailsDropdown = ({ mergeForms }, ref) => {
               Évaluation
             </Typography>
           </Grid>
-          <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+          <Grid item xs={12}>
             <Typography variant="caption">Coordonnées des pairs</Typography>
           </Grid>
         </Grid>
@@ -61,8 +62,8 @@ const StudentContactDetailsDropdown = ({ mergeForms }, ref) => {
               <React.Fragment key={key}>
                 <Grid
                   item
-                  xl={1.5}
-                  lg={1.5}
+                  xl={2}
+                  lg={2}
                   md={2}
                   sm={3}
                   xs={3}
@@ -72,8 +73,8 @@ const StudentContactDetailsDropdown = ({ mergeForms }, ref) => {
                 </Grid>
                 <Grid
                   item
-                  xl={10.5}
-                  lg={10.5}
+                  xl={10}
+                  lg={10}
                   md={10}
                   sm={9}
                   xs={9}

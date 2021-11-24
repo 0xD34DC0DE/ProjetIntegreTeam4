@@ -201,10 +201,6 @@ const ListStudentApplying = () => {
                             <Grid
                               item
                               sx={{ pt: 1 }}
-                              xl={12}
-                              md={12}
-                              lg={12}
-                              sm={12}
                               xs={12}
                               alignSelf="center"
                             >
@@ -226,7 +222,7 @@ const ListStudentApplying = () => {
                                 </Avatar>
                               </ListItemAvatar>
                             </Grid>
-                            <Grid item xl={12} md={12} lg={12} sm={12} xs={12}>
+                            <Grid item xs={12}>
                               <ListItemText
                                 sx={{
                                   textAlign: "center",
@@ -247,15 +243,7 @@ const ListStudentApplying = () => {
                                 </Typography>
                               </ListItemText>
                             </Grid>
-                            <Grid
-                              item
-                              xl={12}
-                              md={12}
-                              lg={12}
-                              sm={12}
-                              xs={12}
-                              mt={1}
-                            >
+                            <Grid item xs={12} mt={1}>
                               <Divider
                                 sx={{
                                   backgroundColor: "rgba(255, 255, 255, 0.2)",
@@ -264,10 +252,6 @@ const ListStudentApplying = () => {
                             </Grid>
                             <Grid
                               item
-                              xl={12}
-                              md={12}
-                              lg={12}
-                              sm={12}
                               xs={12}
                               sx={{
                                 backgroundColor: "rgba(0, 0, 0, 0.2)",
@@ -275,15 +259,7 @@ const ListStudentApplying = () => {
                               }}
                             >
                               <Grid container flexDirection={"row"}>
-                                <Grid
-                                  item
-                                  xl={3}
-                                  md={3}
-                                  lg={3}
-                                  sm={3}
-                                  xs={3}
-                                  textAlign="center"
-                                >
+                                <Grid item xs={3} textAlign="center">
                                   <Tooltip title="Télécharger le CV">
                                     <Button
                                       sx={{
@@ -304,15 +280,7 @@ const ListStudentApplying = () => {
                                     </Button>
                                   </Tooltip>
                                 </Grid>
-                                <Grid
-                                  item
-                                  xl={3}
-                                  md={3}
-                                  lg={3}
-                                  sm={3}
-                                  xs={3}
-                                  textAlign="center"
-                                >
+                                <Grid item xs={3} textAlign="center">
                                   <Tooltip title="Répondre à la demande">
                                     <Button
                                       sx={{
@@ -337,15 +305,7 @@ const ListStudentApplying = () => {
                                     </Button>
                                   </Tooltip>
                                 </Grid>
-                                <Grid
-                                  item
-                                  xl={3}
-                                  md={3}
-                                  lg={3}
-                                  sm={3}
-                                  xs={3}
-                                  textAlign="center"
-                                >
+                                <Grid item xs={3} textAlign="center">
                                   <Tooltip title="Visualiser le CV">
                                     <Button
                                       sx={{
@@ -366,15 +326,7 @@ const ListStudentApplying = () => {
                                     </Button>
                                   </Tooltip>
                                 </Grid>
-                                <Grid
-                                  item
-                                  xl={3}
-                                  md={3}
-                                  lg={3}
-                                  sm={3}
-                                  xs={3}
-                                  textAlign="center"
-                                >
+                                <Grid item xs={3} textAlign="center">
                                   <Tooltip title="Démarer la signature de contrat">
                                     <Button
                                       sx={{

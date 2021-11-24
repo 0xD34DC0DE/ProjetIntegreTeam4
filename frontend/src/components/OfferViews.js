@@ -145,6 +145,7 @@ function OfferViews() {
                 duration: 0.4,
                 delay: (i + 1) * 0.2,
               }}
+              key={i}
             >
               <OfferView key={i} {...offer} />
             </motion.div>

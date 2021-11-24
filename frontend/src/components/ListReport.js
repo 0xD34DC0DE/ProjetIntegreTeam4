@@ -75,7 +75,7 @@ const ListReport = () => {
           sx={{
             color: "white",
             ml: 3,
-            mb: 2,
+            mb: 5,
             fontSize: "2.5em",
             lineHeight: "1",
           }}
@@ -83,14 +83,18 @@ const ListReport = () => {
           Rapports
         </Typography>
       </Grid>
-      <Grid
-        container
-        spacing={{ xs: 2, md: 3 }}
-        columns={{ xs: 4, sm: 8, md: 12 }}
-        justifyContent="center"
-      >
+      <Grid container justifyContent="center">
         {reports.map((current, index) => (
-          <Grid item xs={6} sm={6} md={8} lg={4} xl={2} key={index}>
+          <Grid
+            item
+            key={index}
+            lg={6}
+            xl={4}
+            md={12}
+            sm={12}
+            xs={12}
+            textAlign="center"
+          >
             <Report
               title={current.title}
               url={current.url}

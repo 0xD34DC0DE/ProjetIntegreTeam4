@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import React, { useContext, useState, useEffect } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import axios from "axios";
@@ -42,10 +42,11 @@ function OfferApplicationButton({ disabled, offerId }) {
         ":hover": {
           backgroundColor: "rgba(100, 100, 100, 0.5)",
         },
+        width: "100%",
       }}
       onClick={() => apply()}
     >
-      Appliquer
+      <Typography variant="subtitle2">Appliquer</Typography>
     </Button>
   );
 }

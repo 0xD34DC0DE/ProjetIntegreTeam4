@@ -43,9 +43,9 @@ public class NotificationController {
     }
 
     @GetMapping("/seen")
-    public Mono<ResponseEntity<String>> seenNotification(@RequestParam String userId, @RequestParam String notificationId) {
+    public Mono<ResponseEntity<String>> addUserToSeenNotification(@RequestParam String userId, @RequestParam String notificationId) {
         return notificationService
-                .seenNotification(userId, notificationId)
+                .addUserToSeenNotification(userId, notificationId)
                 .map(n -> ResponseEntity.ok(""));
     }
 

@@ -42,7 +42,7 @@ const CompanyInterestDropdown = ({ mergeForms }, ref) => {
     <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
       <AccordionSummary>
         <Grid container flexDirection="row" textAlign="center">
-          <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+          <Grid item xs={12}>
             <Typography
               variant="subtitle2"
               sx={{ fontSize: "1.75em", lineHeight: "100%" }}
@@ -50,7 +50,7 @@ const CompanyInterestDropdown = ({ mergeForms }, ref) => {
               Intérêt
             </Typography>
           </Grid>
-          <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+          <Grid item xs={12}>
             <Typography variant="caption">
               Intérêt à la réembauche du stagiaire
             </Typography>
@@ -110,7 +110,7 @@ const CompanyInterestDropdown = ({ mergeForms }, ref) => {
             ></TextField>
           </Grid>
           <Grid container flexDirection="row" justifyContent="center" mt={1}>
-            <Grid item xl={5.8} lg={5.7} md={5.6} sm={5.5} xs={5.2} mr={5}>
+            <Grid item xl={5} lg={5} md={5} sm={5} xs={5} mr={5}>
               <TextField
                 id="text#monitorFullName"
                 type="text"
@@ -126,7 +126,7 @@ const CompanyInterestDropdown = ({ mergeForms }, ref) => {
                 }}
               ></TextField>
             </Grid>
-            <Grid item xl={5.8} lg={5.7} md={5.6} sm={5.5} xs={5.2}>
+            <Grid item xl={5} lg={5} md={5} sm={5} xs={5}>
               <TextField
                 id="text#fonction2"
                 type="text"
@@ -150,7 +150,7 @@ const CompanyInterestDropdown = ({ mergeForms }, ref) => {
             mb={2}
             mt={1}
           >
-            <Grid item xl={5.8} lg={5.7} md={5.6} sm={5.5} xs={5.2} mr={5}>
+            <Grid item xl={5} lg={5} md={5} sm={5} xs={5} mr={5}>
               <TextField
                 id="text#signature"
                 onChange={handleFormChange}
@@ -166,7 +166,7 @@ const CompanyInterestDropdown = ({ mergeForms }, ref) => {
                 }}
               ></TextField>
             </Grid>
-            <Grid item xl={5.8} lg={5.7} md={5.6} sm={5.5} xs={5.2}>
+            <Grid item xl={5} lg={5} md={5} sm={5} xs={5}>
               <TextField
                 id="text#date"
                 type="date"

@@ -28,31 +28,39 @@ const AssignedStudentSupervisorView = () => {
 
   useEffect(async () => {
     if (semesterFullName === "") return;
-    const supervisorId = await axios({
-      method: "GET",
-      url: `http://localhost:8080/supervisor/${userInfo.email}`,
-      headers: {
-        Authorization: userInfo.jwt,
-      },
-      responseType: "json",
-    }).then((response) => {
-      return response.data.id;
-    });
 
-    axios({
-      method: "GET",
-      url: "http://localhost:8080/supervisor/getAssignedStudents",
-      params: {
-        supervisorId: supervisorId,
-        semesterFullName: semesterFullName,
-      },
-      headers: {
-        Authorization: userInfo.jwt,
-      },
-      responseType: "json",
-    }).then((response) => {
-      setAssignedStudents(response.data);
-    });
+    const getSupervisorId = () => {
+      return axios({
+        method: "GET",
+        url: `http://localhost:8080/supervisor/${userInfo.email}`,
+        headers: {
+          Authorization: userInfo.jwt,
+        },
+        responseType: "json",
+      }).then((response) => {
+        return response.data.id;
+      });
+    };
+
+    const getAllAssignedStudentsFronmCurrentSemester = (supervisorId) => {
+      return axios({
+        method: "GET",
+        url: "http://localhost:8080/supervisor/getAssignedStudents",
+        params: {
+          supervisorId: supervisorId,
+          semesterFullName: semesterFullName,
+        },
+        headers: {
+          Authorization: userInfo.jwt,
+        },
+        responseType: "json",
+      }).then((response) => {
+        setAssignedStudents(response.data);
+      });
+    };
+
+    const supervisorId = await getSupervisorId();
+    getAllAssignedStudentsFronmCurrentSemester(supervisorId);
   }, [semesterFullName]);
 
   const updateSemesterFullName = (fullName) => {

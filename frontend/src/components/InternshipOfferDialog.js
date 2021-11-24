@@ -59,16 +59,20 @@ const InternshipOfferDescriptionDialog = ({ offer, removeInternshipOffer }) => {
           textAlign: "center",
         }}
       >
-        <Typography variant="h6" fontSize="2.5rem" sx={{ m: "2%" }}>
+        <Typography
+          variant="h6"
+          fontSize="2.7rem"
+          sx={{ m: "2%", lineHeight: 1, mt: 0 }}
+        >
           Détails
         </Typography>
         {offer && (
           <>
             {Object.keys(offer).map((identifier, key) => {
               return (
-                <>
+                <React.Fragment key={key}>
                   {identifier !== "id" && (
-                    <Container key={key} sx={{ textAlign: "left" }}>
+                    <Container sx={{ textAlign: "left" }}>
                       <Typography
                         variant="overline"
                         gutterBottom={true}
@@ -86,7 +90,7 @@ const InternshipOfferDescriptionDialog = ({ offer, removeInternshipOffer }) => {
                       </Typography>
                     </Container>
                   )}
-                </>
+                </React.Fragment>
               );
             })}
           </>
