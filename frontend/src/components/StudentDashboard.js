@@ -26,7 +26,7 @@ import { UserInfoContext } from "../stores/UserInfoStore";
 
 const StudentDashBoard = () => {
   const listState = [
-    "INTERNSHIP_NOT_FOUND",
+    "WAITING_INTERVIEW",
     "INTERNSHIP_FOUND",
     "WAITING_FOR_RESPONSE",
   ];

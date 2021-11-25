@@ -7,10 +7,10 @@ const StudentState = ({ studentState }) => {
           En attente de la réponse
         </Typography>
       );
-    case "INTERNSHIP_NOT_FOUND":
+    case "WAITING_INTERVIEW":
       return (
         <Typography sx={{ border: "2px red solid" }}>
-          Aucun stage trouvé
+          En attente d'entrevue
         </Typography>
       );
     case "INTERNSHIP_FOUND":
