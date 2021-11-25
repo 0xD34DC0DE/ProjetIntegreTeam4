@@ -152,38 +152,6 @@ public class StudentServiceTest {
     }
 
     @Test
-    void shouldFindStudent() {
-        //ARRANGE
-        Student student = StudentMockData.getMockStudent();
-
-        when(studentRepository.findByEmailAndIsEnabledTrue(same(student.getEmail()))).thenReturn(Mono.just(student));
-
-        //ACT
-        Mono<Student> studentMono = studentService.getStudent(student.getEmail());
-
-        //ASSERT
-        StepVerifier.create(studentMono)
-                .expectNextCount(1)
-                .verifyComplete();
-    }
-
-    @Test
-    void shouldNotFindStudent() {
-        //ARRANGE
-        Student student = StudentMockData.getMockStudent();
-
-        when(studentRepository.findByEmailAndIsEnabledTrue(same(student.getEmail()))).thenReturn(Mono.empty());
-
-        //ACT
-        Mono<Student> studentMono = studentService.getStudent(student.getEmail());
-
-        //ASSERT
-        StepVerifier.create(studentMono)
-                .expectNextCount(0)
-                .verifyComplete();
-    }
-
-    @Test
     void shouldAddAppliedOffer() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
