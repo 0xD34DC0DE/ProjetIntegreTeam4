@@ -23,7 +23,9 @@ public class TaskSchedulerService {
 
     private final InternshipContractService internshipContractService;
 
-    public TaskSchedulerService(StudentService studentService, SemesterService semesterService, InternshipContractService internshipContractService) {
+    public TaskSchedulerService(StudentService studentService,
+                                SemesterService semesterService,
+                                InternshipContractService internshipContractService) {
         this.studentService = studentService;
         this.semesterService = semesterService;
         this.internshipContractService = internshipContractService;
