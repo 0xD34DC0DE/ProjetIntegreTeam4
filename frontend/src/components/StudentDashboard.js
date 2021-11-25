@@ -86,7 +86,6 @@ const StudentDashBoard = () => {
   }, []);
 
   const showAndHideStatusUpdateSuccessMsg = () => {
-
     setTimeout(() => {
       setIsStatusUpdated(false);
       setIsDateValid(true);
@@ -158,15 +157,18 @@ const StudentDashBoard = () => {
     const dateValues = value.split("-");
 
     if (
-      currentDate.getFullYear() === parseInt(dateValues[0]) &&
-      parseInt(dateValues[1]) >= currentDate.getMonth() + 1 &&
-      parseInt(dateValues[2], 10) >= currentDate.getDate() &&
-      !hasInternship()
+      (currentDate.getFullYear() === parseInt(dateValues[0]) &&
+        parseInt(dateValues[1]) > currentDate.getMonth() + 1) ||
+      (parseInt(dateValues[2], 10) >= currentDate.getDate() &&
+        parseInt(dateValues[1]) === currentDate.getMonth() + 1 &&
+        !hasInternship())
     ) {
+      console.log("VALID");
       setProfile({ ...profile, closestInterviewDate: value });
       updateInterviewDate(value);
       setIsDateValid(true);
     } else {
+      console.log("INVALID");
       showAndHideInterviewDateErrorMsg();
     }
   };
