@@ -379,9 +379,7 @@ const StudentDashBoard = () => {
                       <MenuItem
                         key={key}
                         value={value}
-                        disabled={
-                          value === listState[2] || value === listState[0]
-                        }
+                        disabled={value !== listState[1]}
                         sx={{ color: "white" }}
                       >
                         {listStateFrench[listState.indexOf(value)]}
