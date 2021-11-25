@@ -14,10 +14,12 @@ import {
 import axios from "axios";
 import React, { useState, useContext, useEffect } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import { DialogContext } from "../stores/DialogStore";
 
-const EmailSender = ({ open, toggleDialog, receiver }) => {
+const EmailSender = ({ receiver }) => {
   const [userInfo] = useContext(UserInfoContext);
   const [form, setForm] = useState({});
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   useEffect(() => {
     setForm({
@@ -51,7 +53,10 @@ const EmailSender = ({ open, toggleDialog, receiver }) => {
       .catch((error) => {
         console.error(error);
       });
-    toggleDialog("emailSenderDialog", false);
+    dialogDispatch({
+      type: "CLOSE",
+      dialogName: "emailSenderDialog",
+    });
   };
 
   const handleFormChange = (event) => {
@@ -67,7 +72,10 @@ const EmailSender = ({ open, toggleDialog, receiver }) => {
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick") {
-      toggleDialog("emailSenderDialog", false);
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "emailSenderDialog",
+      });
       resetForm();
     }
   };
@@ -78,7 +86,7 @@ const EmailSender = ({ open, toggleDialog, receiver }) => {
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={dialog.emailSenderDialog.visible} onClose={handleClose}>
         <DialogContent>
           <Typography
             variant="h4"
@@ -162,7 +170,10 @@ const EmailSender = ({ open, toggleDialog, receiver }) => {
             sx={{ justifySelf: "flex-start", mr: 20, flexGrow: "1" }}
             color="primary"
             onClick={() => {
-              toggleDialog("emailSenderDialog", false);
+              dialogDispatch({
+                type: "CLOSE",
+                dialogName: "emailSenderDialog",
+              });
             }}
           >
             <KeyboardArrowLeft />

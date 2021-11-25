@@ -61,7 +61,7 @@ const StudentIdentificationDropdown = ({ mergeForms }, ref) => {
         <Grid container alignItems="center">
           {studentIdentification.fields.map((field, key) => {
             return (
-              <>
+              <React.Fragment key={key}>
                 <Grid
                   item
                   xl={1.5}
@@ -92,7 +92,7 @@ const StudentIdentificationDropdown = ({ mergeForms }, ref) => {
                     fullWidth
                   ></TextField>
                 </Grid>
-              </>
+              </React.Fragment>
             );
           })}
           <Grid item xl={1.5} lg={1.5} md={1.5} sm={12} xs={12}>

@@ -1,6 +1,5 @@
 package com.team4.backend.model;
 
-import com.team4.backend.model.enums.NotificationSeverity;
 import com.team4.backend.model.enums.NotificationType;
 import lombok.Builder;
 import lombok.Data;
@@ -25,11 +24,13 @@ public class Notification implements Serializable {
     private String id;
     private String title;
     private String content;
-    private Set<String> receiverIds;
-    private NotificationSeverity severity;
+    @Builder.Default
+    private Set<String> receiverIds = Set.of();
     private Map<String, String> data;
     @Builder.Default
     private LocalDateTime creationDate = LocalDateTime.now();
+    @Builder.Default
+    private Set<String> seenIds = Set.of();
     private NotificationType notificationType;
 
     @Builder(builderMethodName = "notificationBuilder")
@@ -37,17 +38,17 @@ public class Notification implements Serializable {
                         String title,
                         String content,
                         Set<String> receiverIds,
-                        NotificationSeverity severity,
                         Map<String, String> data,
                         LocalDateTime creationDate,
+                        Set<String> seenIds,
                         NotificationType notificationType) {
         this.id = id;
         this.title = title;
-        this.severity = severity;
         this.content = content;
         this.receiverIds = receiverIds;
         this.data = data;
         this.creationDate = Optional.ofNullable(creationDate).orElse(LocalDateTime.now());
+        this.seenIds = Set.of();
         this.notificationType = notificationType;
     }
 
@@ -56,12 +57,12 @@ public class Notification implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Notification that = (Notification) o;
-        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(content, that.content) && Objects.equals(receiverIds, that.receiverIds) && severity == that.severity && Objects.equals(data, that.data);
+        return Objects.equals(id, that.id) && Objects.equals(title, that.title) && Objects.equals(content, that.content) && Objects.equals(receiverIds, that.receiverIds) && Objects.equals(seenIds, that.seenIds) && Objects.equals(data, that.data);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, title, content, receiverIds, severity, data);
+        return Objects.hash(id, title, content, receiverIds, seenIds, data);
     }
 
 }

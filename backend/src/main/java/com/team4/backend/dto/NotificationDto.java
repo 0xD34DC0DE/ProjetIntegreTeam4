@@ -1,6 +1,5 @@
 package com.team4.backend.dto;
 
-import com.team4.backend.model.enums.NotificationSeverity;
 import com.team4.backend.model.enums.NotificationType;
 import lombok.Builder;
 import lombok.Data;
@@ -22,9 +21,9 @@ public class NotificationDto implements Serializable {
     private String content;
     private Set<String> receiverIds;
     private Map<String, String> data;
-    private NotificationSeverity severity;
     @Builder.Default
     private LocalDateTime creationDate = LocalDateTime.now();
+    private Set<String> seenIds;
     private NotificationType notificationType;
 
     @Builder(builderMethodName = "notificationDtoBuilder")
@@ -33,16 +32,16 @@ public class NotificationDto implements Serializable {
                            String content,
                            Set<String> receiverIds,
                            Map<String, String> data,
-                           NotificationSeverity severity,
                            LocalDateTime creationDate,
+                           Set<String> seenIds,
                            NotificationType notificationType) {
         this.id = id;
         this.title = title;
         this.content = content;
-        this.severity = severity;
         this.data = data;
         this.receiverIds = receiverIds;
         this.creationDate = Optional.ofNullable(creationDate).orElse(LocalDateTime.now());
+        this.seenIds = seenIds;
         this.notificationType = notificationType;
     }
 

@@ -80,12 +80,12 @@ const Notification = ({ addNotification, deleteNotification }) => {
               ml={2}
               sx={{ minWidth: "300px", maxWidth: "300px" }}
             >
-              <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+              <Grid item xs={12}>
                 <Typography variant="subtitle2" sx={{ fontSize: "1.35em" }}>
                   {notification.title}
                 </Typography>
               </Grid>
-              <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+              <Grid item xs={12}>
                 <Typography
                   variant="caption"
                   sx={{
@@ -99,7 +99,7 @@ const Notification = ({ addNotification, deleteNotification }) => {
           }
           action={
             <Grid container mr={2}>
-              <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+              <Grid item xs={12}>
                 <Tooltip title="Accuser la réception">
                   <IconButton
                     variant="text"
