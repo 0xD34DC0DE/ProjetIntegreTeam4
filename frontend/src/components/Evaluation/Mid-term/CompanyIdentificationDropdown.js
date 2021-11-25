@@ -60,7 +60,7 @@ const CompanyIdentificationDropdown = ({ mergeForms }, ref) => {
         <Grid container alignItems="center">
           {companyIdentification.fields.map((field, key) => {
             return (
-              <>
+              <React.Fragment key={key}>
                 <Grid
                   item
                   xl={1.5}
@@ -91,7 +91,7 @@ const CompanyIdentificationDropdown = ({ mergeForms }, ref) => {
                     fullWidth
                   ></TextField>
                 </Grid>
-              </>
+              </React.Fragment>
             );
           })}
         </Grid>

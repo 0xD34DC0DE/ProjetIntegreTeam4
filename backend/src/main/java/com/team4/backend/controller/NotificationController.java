@@ -3,7 +3,6 @@ package com.team4.backend.controller;
 import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.model.Notification;
 import com.team4.backend.service.NotificationService;
-import com.team4.backend.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.codec.ServerSentEvent;
@@ -43,10 +42,21 @@ public class NotificationController {
                         .build());
     }
 
-    @GetMapping
-    public Flux<Notification> findAllNotifications(@RequestParam String receiverId) {
+    @GetMapping("/seen")
+    public Mono<ResponseEntity<String>> addUserToSeenNotification(@RequestParam String userId, @RequestParam String notificationId) {
         return notificationService
-                .findAllNotifications(receiverId);
+                .addUserToSeenNotification(userId, notificationId)
+                .map(n -> ResponseEntity.ok(""));
+    }
+
+    @GetMapping
+    public Flux<Notification> findAllNotifications(
+            @RequestParam String receiverId,
+            @RequestParam(value = "page", defaultValue = "0") Integer page,
+            @RequestParam(value = "size", defaultValue = "5") Integer size
+    ) {
+        return notificationService
+                .findAllNotifications(receiverId, page, size);
     }
 
     @DeleteMapping

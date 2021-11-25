@@ -12,8 +12,9 @@ import React, { useContext, useState } from "react";
 import { OFFER_FORM_VALUES } from "../models/TextFormFieldValues";
 import TextFormField from "./TextFormField";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import { DialogContext } from "../stores/DialogStore";
 
-const OfferForm = ({ open, toggleDialog }) => {
+const OfferForm = () => {
   const emptyOffer = {
     title: "",
     limitDateToApply: new Date(),
@@ -28,6 +29,7 @@ const OfferForm = ({ open, toggleDialog }) => {
   const [offer, setOffer] = useState(emptyOffer);
   const [isValid, setIsValid] = useState(false);
   const [userInfo] = useContext(UserInfoContext);
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const handleFormChange = (event) => {
     setOffer((previousForm) => ({
@@ -42,7 +44,7 @@ const OfferForm = ({ open, toggleDialog }) => {
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick")
-      toggleDialog("internshipOfferDialog", false);
+      dialogDispatch({ type: "CLOSE", dialogName: "internshipOfferDialog" });
   };
 
   const saveInternshipOffer = () => {
@@ -61,12 +63,12 @@ const OfferForm = ({ open, toggleDialog }) => {
       .catch((error) => {
         console.error(error);
       });
-    toggleDialog("internshipOfferDialog", false);
+    dialogDispatch({ type: "CLOSE", dialogName: "internshipOfferDialog" });
   };
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={dialog.internshipOfferDialog.visible} onClose={handleClose}>
         <Typography variant="h4" sx={{ ml: 3, mt: 3 }}>
           Déposer une offre de stage <Create sx={{ mr: 3 }} />
         </Typography>

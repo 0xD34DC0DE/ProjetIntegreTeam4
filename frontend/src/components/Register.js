@@ -11,7 +11,7 @@ import {
   KeyboardArrowLeft,
   Create,
 } from "@mui/icons-material";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import EmailFormField from "./EmailFormField";
 import NameFormField from "./NameFormField";
 import PhoneNumberFormField from "./PhoneNumberFormField";
@@ -19,8 +19,9 @@ import PasswordFormField from "./PasswordFormField";
 import axios from "axios";
 import AccountFormField from "./AccountFormField";
 import CompanyNameFormField from "./CompanyNameFormField";
+import { DialogContext } from "../stores/DialogStore";
 
-const Register = ({ open, toggleDialog }) => {
+const Register = () => {
   const [step, setStep] = useState(0);
   const [stepCount, setStepCount] = useState(5);
   const [formValid, setFormValid] = useState(false);
@@ -34,6 +35,7 @@ const Register = ({ open, toggleDialog }) => {
     lastName: "",
     accountType: "",
   });
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const nextStep = () => {
     if (step === stepCount - 1) register();
@@ -42,7 +44,10 @@ const Register = ({ open, toggleDialog }) => {
 
   const prevStep = () => {
     if (step === 0) {
-      toggleDialog("registerDialog", false);
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "registerDialog",
+      });
       return;
     }
     setStep((lastStep) => (lastStep -= 1));
@@ -65,7 +70,10 @@ const Register = ({ open, toggleDialog }) => {
       responseType: "json",
     })
       .then(() => {
-        toggleDialog("registerDialog", false);
+        dialogDispatch({
+          type: "CLOSE",
+          dialogName: "registerDialog",
+        });
         setStep(0);
       })
       .catch((error) => {
@@ -74,7 +82,11 @@ const Register = ({ open, toggleDialog }) => {
   };
 
   const handleClose = (_, reason) => {
-    if (reason === "backdropClick") toggleDialog("registerDialog", false);
+    if (reason === "backdropClick")
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "registerDialog",
+      });
   };
 
   const handleFormChange = (event) => {
@@ -145,7 +157,7 @@ const Register = ({ open, toggleDialog }) => {
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={dialog.registerDialog.visible} onClose={handleClose}>
         <Typography variant="h4" sx={{ ml: 3, mt: 3 }}>
           Enregistrement <Create sx={{ ml: 1 }} />
         </Typography>

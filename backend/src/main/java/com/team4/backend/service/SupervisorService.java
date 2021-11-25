@@ -6,6 +6,7 @@ import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.model.Evaluation;
+import com.team4.backend.model.Semester;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.model.TimestampedEntry;
 import com.team4.backend.repository.SupervisorRepository;
@@ -14,6 +15,7 @@ import com.team4.backend.util.SemesterUtil;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -78,17 +80,12 @@ public class SupervisorService {
     }
 
     public Flux<StudentDetailsDto> getAllAssignedStudents(String supervisorId, String semesterFullName) {
-        return Mono.zip(supervisorRepository.findById(supervisorId), semesterService.findByFullName(semesterFullName))
-                .map(tuple -> tuple.getT1().getStudentTimestampedEntries().stream()
-                        .filter(timestampedEntry -> SemesterUtil.checkIfDatesAreInsideRangeOfSemester(
-                                tuple.getT2(),
-                                timestampedEntry.getDate(),
-                                timestampedEntry.getDate())
-                        )
-                        .map(TimestampedEntry::getEmail)
-                        .collect(Collectors.toSet())
-                ).flatMapMany(studentService::findAllByEmails)
-                .map(StudentMapper::toDto);
+        return mapAssignedStudents(Mono.zip(supervisorRepository.findById(supervisorId), semesterService.findByFullName(semesterFullName))
+        );
+    }
+
+    public Flux<StudentDetailsDto> getAllAssignedStudentsForCurrentSemester(String supervisorId) {
+        return mapAssignedStudents(Mono.zip(supervisorRepository.findById(supervisorId), semesterService.getCurrentSemester()));
     }
 
     public Mono<Supervisor> getSupervisor(String email) {
@@ -99,7 +96,6 @@ public class SupervisorService {
     protected Flux<Supervisor> getAll() {
         return supervisorRepository.findAllByRole("SUPERVISOR");
     }
-
 
     public Mono<List<String>> getStudentsEmailWithSupervisorWithNoEvaluation(String semesterFullName) {
         AtomicReference<List<String>> reference = new AtomicReference<>();
@@ -149,4 +145,18 @@ public class SupervisorService {
                     return Mono.just(supervisors.get());
                 });
     }
+
+    private Flux<StudentDetailsDto> mapAssignedStudents(Mono<Tuple2<Supervisor, Semester>> monoTuple) {
+        return monoTuple.map(tuple -> tuple.getT1().getStudentTimestampedEntries().stream()
+                        .filter(timestampedEntry -> SemesterUtil.checkIfDatesAreInsideRangeOfSemester(
+                                tuple.getT2(),
+                                timestampedEntry.getDate(),
+                                timestampedEntry.getDate())
+                        )
+                        .map(TimestampedEntry::getEmail)
+                        .collect(Collectors.toSet())
+                ).flatMapMany(studentService::findAllByEmails)
+                .map(StudentMapper::toDto);
+    }
+
 }

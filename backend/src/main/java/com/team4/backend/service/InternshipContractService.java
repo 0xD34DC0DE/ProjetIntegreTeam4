@@ -8,7 +8,6 @@ import com.team4.backend.exception.ForbiddenActionException;
 import com.team4.backend.exception.InternalServerErrorException;
 import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.model.*;
-import com.team4.backend.model.enums.NotificationSeverity;
 import com.team4.backend.model.enums.NotificationType;
 import com.team4.backend.model.enums.Role;
 import com.team4.backend.pdf.InternshipContractPdfTemplate;
@@ -169,8 +168,8 @@ public class InternshipContractService {
                 .title("Signature de contrat")
                 .content("Signature du contrat pour: " + companyName)
                 .receiverIds(userIds)
+                .seenIds(Set.of())
                 .data(notificationData)
-                .severity(NotificationSeverity.HIGH)
                 .notificationType(NotificationType.SIGN_CONTRACT)
                 .build();
     }
@@ -435,7 +434,6 @@ public class InternshipContractService {
                 .creationDate(null)
                 .title("Avis de fin de stage")
                 .content("Le stage de l'étudiant " + student.getFirstName() + " " + student.getLastName() + " se termine dans deux semaines (" + LocalDate.now() + ")")
-                .severity(NotificationSeverity.LOW)
                 .receiverIds(Set.of(monitor.getId()))
                 .build();
         return notificationService.createNotification(notificationDto);

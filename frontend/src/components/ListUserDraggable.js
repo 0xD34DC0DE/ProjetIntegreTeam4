@@ -18,7 +18,7 @@ const fadeIn = {
   },
 };
 
-const ListUserDraggable = ({ role, isDragging, visible }) => {
+const ListUserDraggable = ({ role, isDragging }) => {
   const [users, setUsers] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
 
@@ -37,45 +37,44 @@ const ListUserDraggable = ({ role, isDragging, visible }) => {
     getAllUsersByRole();
   }, []);
   return (
-    <>
-      {visible && (
-        <DndProvider backend={HTML5Backend}>
-          <Typography variant="h4" sx={{ color: "white", ml: 2 }}>
-            Étudiants
-          </Typography>
+    <DndProvider backend={HTML5Backend}>
+      <motion.div variants={fadeIn} initial="hidden" animate="show">
+        <Typography
+          variant="subtitle2"
+          sx={{ color: "white", ml: 2, fontSize: "2.2em" }}
+        >
+          Étudiants
+        </Typography>
+      </motion.div>
 
+      <Grid
+        sx={{ py: "1vh", mt: "10%", display: "flex" }}
+        container
+        spacing={{ xs: 2, md: 3 }}
+        columns={{ xs: 4, sm: 8, md: 12 }}
+      >
+        {users.map((user, index) => (
           <Grid
-            sx={{ py: "1vh", mt: "10%", display: "flex" }}
-            container
-            spacing={{ xs: 2, md: 3 }}
-            columns={{ xs: 4, sm: 8, md: 12 }}
+            item
+            xs={6}
+            sm={4}
+            md={4}
+            lg={3}
+            xl={2}
+            key={index}
+            sx={{
+              "&:hover": {
+                cursor: "grab",
+              },
+            }}
           >
-            {users.map((user, index) => (
-              <>
-                <Grid
-                  item
-                  xs={6}
-                  sm={4}
-                  md={4}
-                  lg={3}
-                  xl={2}
-                  key={index}
-                  sx={{
-                    "&:hover": {
-                      cursor: "grab",
-                    },
-                  }}
-                >
-                  <motion.div variants={fadeIn} initial="hidden" animate="show">
-                    <UserCard isDragging={isDragging} user={user} />
-                  </motion.div>
-                </Grid>
-              </>
-            ))}
+            <motion.div variants={fadeIn} initial="hidden" animate="show">
+              <UserCard isDragging={isDragging} user={user} />
+            </motion.div>
           </Grid>
-        </DndProvider>
-      )}
-    </>
+        ))}
+      </Grid>
+    </DndProvider>
   );
 };
 

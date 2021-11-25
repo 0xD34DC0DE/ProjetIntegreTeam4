@@ -7,6 +7,7 @@ import {
   CardContent,
   Container,
   Grid,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import axios from "axios";
@@ -14,11 +15,13 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import CvRejectionExplanationDialog from "./CvRejectionExplanationDialog";
 import CVDialog from "./CVDialog";
+import { DialogContext } from "../stores/DialogStore";
 
-const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
+const ListCvStudentView = () => {
   const [userInfo] = useContext(UserInfoContext);
   const [cvs, setCvs] = useState([]);
   const [url, setUrl] = useState("");
+  const [dialog, dialogDispatch] = useContext(DialogContext);
   const fadeIn = {
     hidden: { opacity: 0 },
     show: {
@@ -42,7 +45,6 @@ const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
         console.log(error);
       });
 
-      console.log("response", response.data);
       setCvs(response.data);
     };
 
@@ -65,10 +67,10 @@ const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
       {cvs && (
         <Container sx={{ mt: 5 }}>
           <Typography
-            variant="h4"
+            variant="subtitle2"
             color="white"
             textAlign="center"
-            sx={{ my: 5 }}
+            sx={{ my: 5, fontSize: "2.5em" }}
           >
             Vos C.V.
           </Typography>
@@ -79,9 +81,18 @@ const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
                   ? -1
                   : Date.parse(cv1.uploadDate) - Date.parse(cv2.uploadDate);
               })
-              .map((cv) => {
+              .map((cv, key) => {
                 return (
-                  <Grid item flexGrow="1" xs={12} sm={6} md={4} lg={3} xl={3}>
+                  <Grid
+                    item
+                    flexGrow="1"
+                    key={key}
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={3}
+                    xl={3}
+                  >
                     <Card
                       variant="outlined"
                       sx={{
@@ -133,7 +144,10 @@ const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
                         <Typography title="Le C.V. a été rejeté: cliquez ici pour voir la raison du rejet">
                           <ThumbDownIcon
                             onClick={() =>
-                              toggleDialog("cvRejectionExplanationDialog", true)
+                              dialogDispatch({
+                                type: "OPEN",
+                                dialogName: "cvRejectionExplanationDialog",
+                              })
                             }
                             sx={{
                               float: "right",
@@ -146,27 +160,36 @@ const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
                             }}
                           />
                           <CvRejectionExplanationDialog
-                            open={dialogVisibility.cvRejectionExplanationDialog}
-                            toggleDialog={toggleDialog}
                             rejectionExplanation={cv.rejectionExplanation}
                           />
                         </Typography>
                       )}
-                      <Box
-                        sx={{
-                          textAlign: "center",
-                        }}
-                        onClick={() => {
-                          toggleDialog("cvDialog", true);
-                          openCv(cv.assetId);
-                        }}
+                      <Tooltip
+                        title={
+                          "Cliquer pour visualiser votre C.V " + cv.filename
+                        }
                       >
-                        {Object.keys(cv).map((identifier, key) => {
-                          var value = Object.values(cv)[key];
-                          if (value && isNotARenderedAttribute(identifier))
-                            return <CardContent key={key}>{value}</CardContent>;
-                        })}
-                      </Box>
+                        <Box
+                          sx={{
+                            textAlign: "center",
+                          }}
+                          onClick={() => {
+                            dialogDispatch({
+                              type: "OPEN",
+                              dialogName: "cvDialog",
+                            });
+                            openCv(cv.assetId);
+                          }}
+                        >
+                          {Object.keys(cv).map((identifier, key) => {
+                            var value = Object.values(cv)[key];
+                            if (value && isNotARenderedAttribute(identifier))
+                              return (
+                                <CardContent key={key}>{value}</CardContent>
+                              );
+                          })}
+                        </Box>
+                      </Tooltip>
                     </Card>
                   </Grid>
                 );
@@ -174,12 +197,7 @@ const ListCvStudentView = ({ toggleDialog, dialogVisibility }) => {
           </Grid>
         </Container>
       )}
-      <CVDialog
-        open={dialogVisibility.cvDialog}
-        toggleDialog={toggleDialog}
-        cvUrl={url}
-        setUrl={setUrl}
-      />
+      <CVDialog cvUrl={url} setUrl={setUrl} />
     </>
   );
 };

@@ -5,16 +5,7 @@ import UploadFileOutlinedIcon from "@mui/icons-material/UploadFileOutlined";
 
 const SubmitEvaluationButton = ({ delay, onClick }) => {
   return (
-    <Grid
-      item
-      xl={12}
-      lg={12}
-      md={12}
-      sm={12}
-      xs={12}
-      mt={5}
-      textAlign="center"
-    >
+    <Grid item xs={12} mt={5} textAlign="center">
       <motion.div
         animate={{ opacity: [0, 1] }}
         transition={{
