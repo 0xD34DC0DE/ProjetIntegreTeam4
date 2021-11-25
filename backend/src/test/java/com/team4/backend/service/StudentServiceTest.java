@@ -232,7 +232,7 @@ public class StudentServiceTest {
         Student student = StudentMockData.getMockStudent();
 
         student.setHasValidCv(true);
-        student.setStudentState(StudentState.INTERNSHIP_NOT_FOUND);
+        student.setStudentState(StudentState.WAITING_INTERVIEW);
 
         when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
 
@@ -314,7 +314,7 @@ public class StudentServiceTest {
         //ARRANGE
         Flux<Student> students = StudentMockData.getAllStudentsFlux();
 
-        when(studentRepository.findAllByStudentState(StudentState.REGISTERED)).thenReturn(students);
+        when(studentRepository.findAllByStudentState(StudentState.NO_INTERVIEW)).thenReturn(students);
 
         //ACT
         Flux<Student> response = studentService.getStudentsNoInternship();
@@ -330,7 +330,7 @@ public class StudentServiceTest {
         //ARRANGE
         Flux<Student> students = StudentMockData.getAllStudentsFlux();
 
-        when(studentRepository.findAllByStudentState(StudentState.INTERNSHIP_NOT_FOUND)).thenReturn(students);
+        when(studentRepository.findAllByStudentState(StudentState.WAITING_INTERVIEW)).thenReturn(students);
 
         //ACT
         Flux<Student> response = studentService.getStudentsWaitingInterview();
@@ -402,7 +402,7 @@ public class StudentServiceTest {
         Student student = StudentMockData.getMockStudent();
 
         student.setHasValidCv(true);
-        student.setStudentState(StudentState.INTERNSHIP_NOT_FOUND);
+        student.setStudentState(StudentState.WAITING_INTERVIEW);
         student.setInterviewsDate(new TreeSet<>());
 
         when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
@@ -456,7 +456,7 @@ public class StudentServiceTest {
         //ARRANGE
         List<Student> students = StudentMockData.getAllStudentsToUpdate();
 
-        when(studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND))
+        when(studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.WAITING_INTERVIEW))
                 .thenReturn(Flux.fromIterable(students));
 
         students.forEach(student -> when(studentRepository.save(student)).thenReturn(Mono.just(student)));
@@ -474,7 +474,7 @@ public class StudentServiceTest {
     @Test
     void shouldNotUpdateStudentStateForAllStudentThatInterviewDateHasPassed() {
         //ARRANGE
-        when(studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND))
+        when(studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.WAITING_INTERVIEW))
                 .thenReturn(Flux.empty());
 
         //ACT

@@ -78,7 +78,7 @@ public class StudentService {
                         && student.getHasValidCv())
                 .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update your state if you're not waiting for a response to your recent interview!")))
                 .map(student -> {
-                    // TODO --> call function that will trigger the contract generation
+                    //TODO --> call function that will trigger the contract generation
                     student.setStudentState(studentState);
                     return student;
                 }).flatMap(studentRepository::save);
@@ -132,11 +132,11 @@ public class StudentService {
     }
 
     public Flux<Student> getStudentsNoInternship() {
-        return studentRepository.findAllByStudentState(REGISTERED);
+        return studentRepository.findAllByStudentState(NO_INTERVIEW);
     }
 
     public Flux<Student> getStudentsWaitingInterview() {
-        return studentRepository.findAllByStudentState(INTERNSHIP_NOT_FOUND);
+        return studentRepository.findAllByStudentState(WAITING_INTERVIEW);
     }
 
     public Flux<Student> getStudentsWaitingResponse() {
@@ -171,7 +171,7 @@ public class StudentService {
     }
 
     public Mono<Long> updateStudentStateForAllStudentThatInterviewDateHasPassed() {
-        return studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND)
+        return studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.WAITING_INTERVIEW)
                 .map(student -> {
                     student.setStudentState(StudentState.WAITING_FOR_RESPONSE);
                     log.info("STATE UPDATED : " + student.getFirstName() + ", " + student.getLastName());
@@ -183,7 +183,7 @@ public class StudentService {
         return getStudentsWithInternship()
                 .map(student -> {
                     log.info("RESET STATE : " + student.getFirstName() + ", " + student.getLastName());
-                    student.setStudentState(INTERNSHIP_NOT_FOUND);
+                    student.setStudentState(WAITING_INTERVIEW);
                     return save(student).subscribe();
                 }).count();
     }
