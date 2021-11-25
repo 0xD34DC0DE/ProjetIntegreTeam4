@@ -23,7 +23,7 @@ public abstract class NotificationMockData {
                         .build(),
                 Notification.notificationBuilder()
                         .id("615af409e2757ad51b0b02df")
-                        .receiverIds(Set.of("61930b84d3475148583fe010", "6192ec3bb711986676e590d9"))
+                        .receiverIds(Set.of("61930b84d3475148583fdff7", "6192ec3bb711986676e590d9"))
                         .title("Title 2")
                         .seenIds(Set.of())
                         .content("this is content")
@@ -50,6 +50,7 @@ public abstract class NotificationMockData {
                 .receiverIds(Set.of("61930b84d3475148583fdfed"))
                 .title("Title 1")
                 .seenIds(Set.of())
+                .notificationType(null)
                 .data(getNotificationData(3))
                 .creationDate(null)
                 .content("this is content 1")
