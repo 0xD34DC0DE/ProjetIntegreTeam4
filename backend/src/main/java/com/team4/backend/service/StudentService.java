@@ -3,10 +3,12 @@ package com.team4.backend.service;
 import com.team4.backend.exception.ForbiddenActionException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.model.Semester;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.util.PBKDF2Encoder;
+import com.team4.backend.util.SemesterUtil;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -89,6 +91,27 @@ public class StudentService {
 
     public Mono<Student> updateInterviewDate(String email, LocalDate interviewDate) {
         return findByEmail(email)
+                .filter(student -> !student.getStudentState().equals(StudentState.INTERNSHIP_FOUND) &&
+                        student.getHasValidCv())
+                .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't add an interview if you already have an internship for this semester!")))
+                .flatMap(student -> semesterService
+                        .getCurrentSemester()
+                        .filter(semester -> SemesterUtil.checkIfDatesAreInsideRangeOfSemester(semester, interviewDate.atStartOfDay(), interviewDate.atStartOfDay()))
+                        .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't add an interview that is not inside the range of this semester!")))
+                        .map((semester) -> {
+                            student.getInterviewsDate().add(interviewDate);
+                            log.info("GETTING HERE");
+                            return student;
+                        })
+
+                ).flatMap(studentRepository::save);
+
+    }
+
+    /*
+
+    public Mono<Student> updateInterviewDate(String email, LocalDate interviewDate) {
+        return findByEmail(email)
                 .filter(student -> !student.getStudentState().equals(StudentState.INTERNSHIP_FOUND)
                         && student.getHasValidCv())
                 .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update the interview date if you already have an internship")))
@@ -97,6 +120,7 @@ public class StudentService {
                     return student;
                 }).flatMap(studentRepository::save);
     }
+     */
 
     public Mono<Student> addOfferToStudentAppliedOffers(Student student, String offerId) {
         if (!student.getAppliedOffersId().contains(offerId)) {

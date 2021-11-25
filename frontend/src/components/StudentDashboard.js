@@ -152,7 +152,11 @@ const StudentDashBoard = ({ visible }) => {
       updateInterviewDate(value);
       setIsDateValid(true);
     } else {
+
       setIsDateValid(false);
+      setTimeout(() => {
+        setIsDateValid(true);
+      }, 3000);
     }
   };
 

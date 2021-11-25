@@ -43,6 +43,7 @@ public class SupervisorController {
         return supervisorService.getAllAssignedStudents(supervisorId, semesterFullName);
     }
 
+    //TODO --> followConvention
     @GetMapping("/{email}")
     @PreAuthorize("hasAnyAuthority('SUPERVISOR')")
     public Mono<SupervisorCreationDto> getSupervisor(@PathVariable("email") String email) {

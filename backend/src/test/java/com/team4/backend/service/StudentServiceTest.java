@@ -20,6 +20,8 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -425,13 +427,17 @@ public class StudentServiceTest {
     @Test
     void shouldUpdateInterviewDate() {
         //ARRANGE
-        LocalDate interviewDate = LocalDate.now();
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDate interviewDate = LocalDate.now().withMonth(Month.AUGUST.getValue())
+                .withYear(currentDateTime.getYear())
+                .withDayOfMonth(24);
         Student student = StudentMockData.getMockStudent();
 
         student.setHasValidCv(true);
         student.setStudentState(StudentState.INTERNSHIP_NOT_FOUND);
         student.setInterviewsDate(new TreeSet<>());
 
+        when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
         when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
         when(studentRepository.save(any(Student.class))).thenReturn(Mono.just(student));
 
