@@ -53,7 +53,7 @@ const StudentMidEvaluationDropdown = ({ mergeForms }, ref) => {
       <br />
       {ordinalNumbers.map((value, key) => {
         return (
-          <>
+          <React.Fragment key={key}>
             <Typography variant="caption">{value} mois: </Typography>
             <TextField
               id={"text#timeSpentWeeklyMonth" + (key + 1)}
@@ -66,7 +66,7 @@ const StudentMidEvaluationDropdown = ({ mergeForms }, ref) => {
                 },
               }}
             ></TextField>
-          </>
+          </React.Fragment>
         );
       })}
     </>
@@ -154,7 +154,7 @@ const StudentMidEvaluationDropdown = ({ mergeForms }, ref) => {
               <Grid container flexDirection="row">
                 {midTermEvaluation.tasks.map((task, key2) => {
                   return (
-                    <>
+                    <React.Fragment key={key2}>
                       <Grid
                         item
                         xl={6}
@@ -192,7 +192,7 @@ const StudentMidEvaluationDropdown = ({ mergeForms }, ref) => {
                           </Grid>
                         );
                       })}
-                    </>
+                    </React.Fragment>
                   );
                 })}
                 <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>

@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { motion } from "framer-motion";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
-import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye';
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import CvValidationDialog from "./CvValidationDialog";
 
 const CvInternshipManagerView = ({
@@ -19,15 +19,15 @@ const CvInternshipManagerView = ({
   filename,
   uploadDate,
   removeCv,
-  setUrl
+  setUrl,
 }) => {
   const download = () => {
     window.open("https://projetintegreteam4.s3.amazonaws.com/" + assetId);
   };
 
   const openCv = () => {
-    setUrl("https://projetintegreteam4.s3.amazonaws.com/" + assetId)
-  }
+    setUrl("https://projetintegreteam4.s3.amazonaws.com/" + assetId);
+  };
 
   const fadeIn = {
     hidden: { opacity: 0 },
@@ -44,7 +44,7 @@ const CvInternshipManagerView = ({
     <>
       <Grid container flexDirection="column">
         <motion.div variants={fadeIn} initial="hidden" animate="show">
-          <Grid item lg={12} xl={12} md={12} sm={12} xs={12}>
+          <Grid item xs={12}>
             <Card
               variant="outlined"
               sx={{

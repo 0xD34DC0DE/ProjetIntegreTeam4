@@ -60,7 +60,7 @@ const CompanyObservationDropdown = ({ mergeForms }, ref) => {
         <Grid container alignItems="center">
           {companyObservation.map((observation, key) => {
             return (
-              <>
+              <React.Fragment key={key}>
                 <Grid item xl={4} lg={4} md={4} xs={4} sm={4} key={key}>
                   <Typography variant="caption">{observation.label}</Typography>
                 </Grid>
@@ -75,7 +75,7 @@ const CompanyObservationDropdown = ({ mergeForms }, ref) => {
                 >
                   {observation.options.map((option, key2) => {
                     return (
-                      <>
+                      <React.Fragment key={key2}>
                         <Typography variant="caption" ml={5}>
                           {option.label}
                         </Typography>
@@ -91,17 +91,17 @@ const CompanyObservationDropdown = ({ mergeForms }, ref) => {
                           }
                           mr={5}
                         ></Radio>
-                      </>
+                      </React.Fragment>
                     );
                   })}
                 </Grid>
-              </>
+              </React.Fragment>
             );
           })}
           <Grid item xl={12} lg={12} md={12} sm={12} xs={12} mt={1}>
             {Array.from(Array(3), (_, key) => {
               return (
-                <>
+                <React.Fragment key={key}>
                   <Typography variant="caption">
                     De
                     <TextField
@@ -126,7 +126,7 @@ const CompanyObservationDropdown = ({ mergeForms }, ref) => {
                     ></TextField>
                   </Typography>
                   <br />
-                </>
+                </React.Fragment>
               );
             })}
           </Grid>

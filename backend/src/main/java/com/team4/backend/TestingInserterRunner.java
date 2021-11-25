@@ -1,7 +1,7 @@
 package com.team4.backend;
 
 import com.team4.backend.model.*;
-import com.team4.backend.model.enums.NotificationSeverity;
+import com.team4.backend.model.enums.NotificationType;
 import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.*;
@@ -130,17 +130,28 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .content("CV refusé!")
                         .title("Notification")
                         .receiverIds(Set.of(Objects.requireNonNull(studentRepository.findByEmail("student@gmail.com").map(User::getId).block())))
-                        .severity(NotificationSeverity.HIGH)
                         .creationDate(LocalDateTime.now())
+                        .notificationType(NotificationType.SHOW_CV)
+                        .seenIds(Set.of())
                         .data(Collections.emptyMap())
                         .build(),
                 Notification.notificationBuilder()
                         .content("CV Accepté!")
                         .title("Notification")
+                        .seenIds(Set.of())
+                        .notificationType(NotificationType.SHOW_CV)
                         .receiverIds(Set.of(Objects.requireNonNull(studentRepository.findByEmail("123456789@gmail.com").map(User::getId).block())))
                         .data(Collections.singletonMap("id", "test"))
                         .creationDate(LocalDateTime.now())
-                        .severity(NotificationSeverity.LOW)
+                        .build(),
+                Notification.notificationBuilder()
+                        .content("Nouvelle offre de stage disponible")
+                        .title("Offre de stage")
+                        .seenIds(Set.of())
+                        .notificationType(NotificationType.NEW_INTERNSHIP_OFFER)
+                        .receiverIds(Set.of(Objects.requireNonNull(studentRepository.findByEmail("123456789@gmail.com").map(User::getId).block())))
+                        .data(Collections.singletonMap("id", "test"))
+                        .creationDate(LocalDateTime.now())
                         .build()
         );
 

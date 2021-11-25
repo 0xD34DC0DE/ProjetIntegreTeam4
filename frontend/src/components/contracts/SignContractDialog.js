@@ -1,36 +1,45 @@
 import { Dialog, DialogContent, Grid } from "@mui/material";
 import React, { useContext, useEffect, useState } from "react";
+import { DialogContext } from "../../stores/DialogStore.js";
 import { UserInfoContext } from "../../stores/UserInfoStore.js";
 import PdfView from "../PdfView.js";
 import SignContractForm from "./SignContractForm.js";
 
-function SignContractDialog({ open, toggleDialog, dialogData }) {
+function SignContractDialog() {
   const [userInfo] = useContext(UserInfoContext);
   const [contractId, setContractId] = useState("");
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick") {
-      toggleDialog("signContractDialog", false);
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "signContractDialog",
+      });
     }
   };
 
   const getPdfUrl = () => {
-    return `http://localhost:8080/contract/byId/${dialogData.contractId}`;
+    return `http://localhost:8080/contract/byId/${dialog.signContractDialog.data.contractId}`;
   };
 
   useEffect(() => {
-    if(!!dialogData) {
-      setContractId(dialogData.contractId);
+    if (!!dialog.signContractDialog.data) {
+      setContractId(dialog.signContractDialog.data.contractId);
     }
     return () => {
       setContractId("");
     };
-  }, [open]);
+  }, [dialog.signContractDialog.visible]);
 
   return (
     <>
-      {!!dialogData && (
-        <Dialog open={open} onClose={handleClose} fullWidth>
+      {!!dialog.signContractDialog.data && (
+        <Dialog
+          open={dialog.signContractDialog.visible}
+          onClose={handleClose}
+          fullWidth
+        >
           <DialogContent>
             <Grid
               container

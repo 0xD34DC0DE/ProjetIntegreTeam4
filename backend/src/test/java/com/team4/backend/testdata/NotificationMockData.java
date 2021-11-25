@@ -2,7 +2,6 @@ package com.team4.backend.testdata;
 
 import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.model.Notification;
-import com.team4.backend.model.enums.NotificationSeverity;
 import reactor.core.publisher.Flux;
 
 import java.util.Collections;
@@ -18,15 +17,15 @@ public abstract class NotificationMockData {
                         .id("615af41de2757ad51b0b02ed")
                         .receiverIds(Set.of("61930b84d3475148583fdff7"))
                         .title("Title 1")
-                        .severity(NotificationSeverity.LOW)
                         .data(getNotificationData(2))
+                        .seenIds(Set.of("61930b84d3475148583fdff7"))
                         .content("this is content 1")
                         .build(),
                 Notification.notificationBuilder()
                         .id("615af409e2757ad51b0b02df")
                         .receiverIds(Set.of("61930b84d3475148583fe010", "6192ec3bb711986676e590d9"))
                         .title("Title 2")
-                        .severity(NotificationSeverity.HIGH)
+                        .seenIds(Set.of())
                         .content("this is content")
                         .data(Collections.emptyMap())
                         .build()
@@ -39,7 +38,7 @@ public abstract class NotificationMockData {
                 .id("507f191e810c19729de860ea")
                 .receiverIds(Set.of("61930b84d3475148583fdfee", "61930b84d3475148583fdff3"))
                 .title("Title 1")
-                .severity(NotificationSeverity.LOW)
+                .seenIds(Set.of("61930b84d3475148583fdfee"))
                 .data(getNotificationData(3))
                 .content("this is content 1")
                 .build();
@@ -50,7 +49,7 @@ public abstract class NotificationMockData {
                 .id(null)
                 .receiverIds(Set.of("61930b84d3475148583fdfed"))
                 .title("Title 1")
-                .severity(NotificationSeverity.LOW)
+                .seenIds(Set.of())
                 .data(getNotificationData(3))
                 .creationDate(null)
                 .content("this is content 1")

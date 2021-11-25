@@ -46,7 +46,7 @@ const CompanyAppreciationDropdown = ({ mergeForms }, ref) => {
     <Accordion sx={{ boxShadow: "3px 3px 15px 2px rgba(0, 0, 0, 1)" }}>
       <AccordionSummary>
         <Grid container flexDirection="row" textAlign="center">
-          <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+          <Grid item xs={12}>
             <Typography
               variant="subtitle2"
               sx={{ fontSize: "1.75em", lineHeight: "100%" }}
@@ -54,7 +54,7 @@ const CompanyAppreciationDropdown = ({ mergeForms }, ref) => {
               Appréciation
             </Typography>
           </Grid>
-          <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+          <Grid item xs={12}>
             <Typography variant="caption">
               Appréciation globale du stagiaire
             </Typography>
@@ -67,27 +67,11 @@ const CompanyAppreciationDropdown = ({ mergeForms }, ref) => {
         <Grid container textAlign="center" alignItems="center">
           {companyAppreciation.ratings.map((field, key) => {
             return (
-              <>
-                <Grid
-                  item
-                  xl={6}
-                  lg={6}
-                  md={6}
-                  sm={6}
-                  xs={6}
-                  key={"label" + key}
-                >
+              <React.Fragment key={key}>
+                <Grid item xs={6} key={"label" + key}>
                   <Typography variant="caption">{field.label} </Typography>
                 </Grid>
-                <Grid
-                  item
-                  xl={6}
-                  lg={6}
-                  md={6}
-                  sm={6}
-                  xs={6}
-                  key={"radio" + key}
-                >
+                <Grid item xs={6} key={"radio" + key}>
                   <Radio
                     checked={
                       getFieldValue(companyAppreciation.id) === field.value
@@ -98,12 +82,12 @@ const CompanyAppreciationDropdown = ({ mergeForms }, ref) => {
                     onChange={handleFormChange}
                   ></Radio>
                 </Grid>
-              </>
+              </React.Fragment>
             );
           })}
         </Grid>
         <Grid container>
-          <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+          <Grid item xs={12}>
             <Typography
               variant="caption"
               sx={{
@@ -116,7 +100,7 @@ const CompanyAppreciationDropdown = ({ mergeForms }, ref) => {
               Précisez votre appréciation :
             </Typography>
           </Grid>
-          <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+          <Grid item xs={12}>
             <TextField
               fullWidth
               multiline
@@ -134,7 +118,7 @@ const CompanyAppreciationDropdown = ({ mergeForms }, ref) => {
               size="small"
             ></TextField>
           </Grid>
-          <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+          <Grid item xs={12}>
             <Typography
               variant="caption"
               sx={{

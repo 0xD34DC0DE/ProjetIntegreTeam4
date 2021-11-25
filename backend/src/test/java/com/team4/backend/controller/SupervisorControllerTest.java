@@ -156,6 +156,24 @@ public class SupervisorControllerTest {
     }
 
     @Test
+    void shouldGetAllAssignedStudentsForCurrentSemester() {
+        //ARRANGE
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+
+        when(supervisorService.getAllAssignedStudentsForCurrentSemester(supervisor.getId()))
+                .thenReturn(StudentMockData.getAssignedStudents().map(StudentMapper::toDto));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/supervisor/getAllAssignedStudentsForCurrentSemester/" + supervisor.getId())
+                .exchange()
+                //ASSERT
+                .expectStatus().isEqualTo(HttpStatus.OK)
+                .expectBodyList(SupervisorCreationDto.class);
+    }
+
+    @Test
     void shouldGetSupervisor() {
         //ARRANGE
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
@@ -187,4 +205,5 @@ public class SupervisorControllerTest {
                 .isNotFound()
                 .expectBody(SupervisorCreationDto.class);
     }
+
 }

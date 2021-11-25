@@ -171,9 +171,31 @@ public class SupervisorServiceTest {
     }
 
     @Test
+    void shouldGetAssignedStudentsForCurrentSemester() {
+        //ARRANGE
+        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+        Flux<Student> assignedStudents = StudentMockData.getAssignedStudents();
+
+        when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
+        when(supervisorRepository.findById(supervisor.getId())).thenReturn(Mono.just(supervisor));
+        when(studentService.findAllByEmails(supervisor.getStudentTimestampedEntries().stream()
+                .map(TimestampedEntry::getEmail)
+                .collect(Collectors.toSet()))).thenReturn(assignedStudents);
+
+        //ACT
+        Flux<StudentDetailsDto> studentDetailsDtoFlux = supervisorService.getAllAssignedStudentsForCurrentSemester(supervisor.getId());
+
+        //ASSERT
+        StepVerifier.create(studentDetailsDtoFlux)
+                .expectNextCount(2)
+                .verifyComplete();
+    }
+
+    @Test
     void shouldGetSupervisor() {
         //ARRANGE
         Supervisor supervisor = SupervisorMockData.getMockSupervisor();
+
         when(supervisorRepository.findSupervisorByEmail(supervisor.getEmail())).thenReturn(Mono.just(supervisor));
 
         //ACT

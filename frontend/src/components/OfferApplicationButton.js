@@ -1,4 +1,4 @@
-import { Button } from "@mui/material";
+import { Button, Typography } from "@mui/material";
 import React, { useContext, useState, useEffect } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import axios from "axios";
@@ -33,22 +33,21 @@ function OfferApplicationButton({ disabled, offerId }) {
   };
 
   return (
-    <>
-      <Button
-        disabled={isDisabled}
-        variant="contained"
-        sx={{
-          textTransform: "uppercase",
-          backgroundColor: "rgba(100, 100, 100, 0.2)",
-          ":hover": {
-            backgroundColor: "rgba(100, 100, 100, 0.5)",
-          },
-        }}
-        onClick={() => apply()}
-      >
-        Appliquer
-      </Button>
-    </>
+    <Button
+      disabled={isDisabled}
+      variant="contained"
+      sx={{
+        textTransform: "uppercase",
+        backgroundColor: "rgba(100, 100, 100, 0.2)",
+        ":hover": {
+          backgroundColor: "rgba(100, 100, 100, 0.5)",
+        },
+        width: "100%",
+      }}
+      onClick={() => apply()}
+    >
+      <Typography variant="subtitle2">Appliquer</Typography>
+    </Button>
   );
 }
 
