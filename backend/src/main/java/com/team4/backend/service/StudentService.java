@@ -80,7 +80,6 @@ public class StudentService {
                         && student.getHasValidCv())
                 .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update your state if you're not waiting for a response to your recent interview!")))
                 .map(student -> {
-                    //TODO --> call function that will trigger the contract generation
                     student.setStudentState(studentState);
                     return student;
                 }).flatMap(studentRepository::save);
@@ -100,7 +99,6 @@ public class StudentService {
                             student.getInterviewsDate().add(interviewDate);
                             return student;
                         })
-
                 ).flatMap(studentRepository::save);
     }
 
