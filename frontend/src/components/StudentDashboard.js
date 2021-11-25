@@ -32,7 +32,7 @@ const StudentDashBoard = () => {
   ];
 
   const listStateFrench = [
-    "STAGE NON TROUVÉE",
+    "EN ATTENTE D'ENTREVUE",
     "STAGE TROUVÉE",
     "EN ATTENTE DE RÉPONSE",
   ];
