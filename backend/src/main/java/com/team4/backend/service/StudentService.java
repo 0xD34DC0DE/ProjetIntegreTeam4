@@ -3,7 +3,6 @@ package com.team4.backend.service;
 import com.team4.backend.exception.ForbiddenActionException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
-import com.team4.backend.model.Semester;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.StudentRepository;
@@ -100,27 +99,12 @@ public class StudentService {
                         .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't add an interview that is not inside the range of this semester!")))
                         .map((semester) -> {
                             student.getInterviewsDate().add(interviewDate);
-                            log.info("GETTING HERE");
                             return student;
                         })
 
                 ).flatMap(studentRepository::save);
 
     }
-
-    /*
-
-    public Mono<Student> updateInterviewDate(String email, LocalDate interviewDate) {
-        return findByEmail(email)
-                .filter(student -> !student.getStudentState().equals(StudentState.INTERNSHIP_FOUND)
-                        && student.getHasValidCv())
-                .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update the interview date if you already have an internship")))
-                .map(student -> {
-                    student.getInterviewsDate().add(interviewDate);
-                    return student;
-                }).flatMap(studentRepository::save);
-    }
-     */
 
     public Mono<Student> addOfferToStudentAppliedOffers(Student student, String offerId) {
         if (!student.getAppliedOffersId().contains(offerId)) {
