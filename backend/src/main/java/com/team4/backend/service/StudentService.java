@@ -93,9 +93,10 @@ public class StudentService {
                 .filter(student -> !student.getStudentState().equals(StudentState.INTERNSHIP_FOUND) &&
                         student.getHasValidCv())
                 .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't add an interview if you already have an internship for this semester!")))
-                .flatMap(student -> semesterService
-                        .getCurrentSemester()
-                        .filter(semester -> SemesterUtil.checkIfDatesAreInsideRangeOfSemester(semester, interviewDate.atStartOfDay(), interviewDate.atStartOfDay()))
+                .flatMap(student -> semesterService.getCurrentSemester()
+                        .filter(semester -> SemesterUtil
+                                .checkIfDatesAreInsideRangeOfSemester(semester, interviewDate.atStartOfDay(), interviewDate.atStartOfDay())
+                        )
                         .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't add an interview that is not inside the range of this semester!")))
                         .map((semester) -> {
                             student.getInterviewsDate().add(interviewDate);

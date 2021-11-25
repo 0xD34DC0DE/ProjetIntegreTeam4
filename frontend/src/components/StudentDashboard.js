@@ -83,7 +83,15 @@ const StudentDashBoard = () => {
     };
 
     getProfile();
-  },[]);
+  }, []);
+
+  const showAndHideStatusUpdateSuccessMsg = () => {
+
+    setTimeout(() => {
+      setIsStatusUpdated(false);
+      setIsDateValid(true);
+    }, 3000);
+  };
 
   const updateStudentStatus = () => {
     axios({
@@ -95,16 +103,26 @@ const StudentDashBoard = () => {
       responseType: "json",
     })
       .then(() => {
-        setIsStatusUpdated(true);
-
-        setTimeout(() => {
-          setIsStatusUpdated(false);
-          setIsDateValid(true);
-        }, 3000);
+        showAndHideStatusUpdateSuccessMsg();
       })
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const showAndHideInterviewDateErrorMsg = () => {
+    setIsDateValid(false);
+    setTimeout(() => {
+      setIsDateValid(true);
+    }, 3000);
+  };
+
+  const showAndHideInterviewUpdateSuccessMsg = () => {
+    setIsInterviewDateUpdated(true);
+
+    setTimeout(() => {
+      setIsInterviewDateUpdated(false);
+    }, 3000);
   };
 
   const updateInterviewDate = (date) => {
@@ -117,13 +135,10 @@ const StudentDashBoard = () => {
       responseType: "json",
     })
       .then(() => {
-        setIsInterviewDateUpdated(true);
-
-        setTimeout(() => {
-          setIsInterviewDateUpdated(false);
-        }, 3000);
+        showAndHideInterviewUpdateSuccessMsg();
       })
       .catch((error) => {
+        showAndHideInterviewDateErrorMsg();
         console.error(error);
       });
   };
@@ -152,11 +167,7 @@ const StudentDashBoard = () => {
       updateInterviewDate(value);
       setIsDateValid(true);
     } else {
-
-      setIsDateValid(false);
-      setTimeout(() => {
-        setIsDateValid(true);
-      }, 3000);
+      showAndHideInterviewDateErrorMsg();
     }
   };
 
