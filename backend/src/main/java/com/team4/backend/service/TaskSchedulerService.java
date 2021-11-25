@@ -51,18 +51,8 @@ public class TaskSchedulerService {
                 .subscribe(semester -> log.info("NEW SEMESTER CREATED : " + semester.toString()));
     }
 
-    @Scheduled(cron = "0 00 1 30 5 ?")
-    private void resetAllStudentStateBeforeSummerSemester() {
-        studentService.resetStudentStateForAllStudentWithInternship()
-                .subscribe(nbrOfUpdateStudent -> log.info(
-                        "NBR OF STUDENT THAT HAD THEIR STATE RESET : " +
-                                nbrOfUpdateStudent +
-                                ", time : " +
-                                LocalDateTime.now()));
-    }
-
     @Scheduled(cron = "0 00 1 30 8 ?")
-    private void resetAllStudentStateBeforeFallSemester() {
+    private void resetAllStudentStateAnnually() {
         studentService.resetStudentStateForAllStudentWithInternship()
                 .subscribe(nbrOfUpdateStudent -> log.info(
                         "NBR OF STUDENT THAT HAD THEIR STATE RESET : " +
