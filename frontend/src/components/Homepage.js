@@ -1,4 +1,4 @@
-import { Grid, Button } from "@mui/material";
+import { Grid, Button, Card } from "@mui/material";
 import React, { useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { sidebarList } from "./Configuration";
@@ -28,27 +28,36 @@ const Homepage = () => {
                 sm={12}
                 xs={12}
                 textAlign="center"
-              >
+                >
                 <Button
-                  key={item.id}
-                  sx={{
+                key={item.id}
+                sx={{
                     color: "text.primary",
-                    ":hover": { backgroundColor: "rgba(100, 100, 100, 0.2)" },
-                    justifyContent: "flex-start",
-                    ml: 2,
-                    mr: 2,
-                  }}
-                  onClick={() => {
+                    backgroundColor: "rgba(135, 135, 135, 0.03)",
+                    width: "95%",
+                    height: "25%",
+                    border: "0.5px solid grey",
+                    boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
+                    borderRadius: "10px",
+                    py: 5,
+                    ":hover": {
+                        boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
+                        "#visualizeText": {
+                            opacity: 0.8,
+                        },
+                    },
+                }}
+                onClick={() => {
                     if (item.isDialog)
-                      dialogDispatch({
+                    dialogDispatch({
                         type: "OPEN",
                         dialogName: item.dialogName,
-                      });
+                    });
                     else selectionDispatch(item);
-                  }}
+                }}
                 >
-                  {item.icon}
-                  {item.label}
+                {item.icon}
+                {item.label}
                 </Button>
               </Grid>
               );
