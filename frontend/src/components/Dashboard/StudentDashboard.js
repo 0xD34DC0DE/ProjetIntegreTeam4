@@ -12,14 +12,14 @@ import BasicInfo from "./BasicInfo";
 
 const StudentDashBoard = ({jwt}) => {
   const listState = [
-    "NO_INTERNSHIP",
+    "NO_INTERVIEW",
     "WAITING_INTERVIEW",
     "INTERNSHIP_FOUND",
     "WAITING_FOR_RESPONSE",
   ];
 
   const listStateFrench = [
-    "SANSENTREVUE",
+    "SANS ENTREVUE",
     "EN ATTENTE D'UNE ENTREVUE",
     "STAGE TROUVÉE",
     "EN ATTENTE DE RÉPONSE",
