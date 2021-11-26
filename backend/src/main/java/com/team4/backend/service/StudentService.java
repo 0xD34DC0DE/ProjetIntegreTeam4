@@ -127,7 +127,7 @@ public class StudentService {
         return studentRepository.findAllByHasValidCvFalse();
     }
 
-    public Flux<Student> getStudentsNoInternship() {
+    public Flux<Student> getStudentsNoInterview() {
         return studentRepository.findAllByStudentState(NO_INTERVIEW);
     }
 

@@ -347,7 +347,7 @@ public class StudentServiceTest {
         when(studentRepository.findAllByStudentState(StudentState.NO_INTERVIEW)).thenReturn(students);
 
         //ACT
-        Flux<Student> response = studentService.getStudentsNoInternship();
+        Flux<Student> response = studentService.getStudentsNoInterview();
 
         //ASSERT
         StepVerifier.create(response)
