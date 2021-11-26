@@ -4,7 +4,7 @@ const StudentState = ({ studentState }) => {
     case "NO_INTERVIEW":
       return (
         <Typography sx={{ border: "2px white solid" }}>
-          Nouvel étudiant
+          Sans entrevue
         </Typography>
       );
     case "WAITING_INTERVIEW":
