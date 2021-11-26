@@ -1,27 +1,13 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import {
-  Avatar,
-  Card,
   Typography,
-  Grid,
-  Select,
-  MenuItem,
-  Container,
   TextField,
 } from "@mui/material";
-import StarBorderPurple500Icon from "@mui/icons-material/StarBorderPurple500";
-import TouchAppIcon from "@mui/icons-material/TouchApp";
-import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
-import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-import BlockIcon from "@mui/icons-material/Block";
-import TodayIcon from "@mui/icons-material/Today";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { motion } from "framer-motion";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import WarningIcon from "@mui/icons-material/Warning";
 import ScheduleIcon from "@mui/icons-material/Schedule";
-import PeopleIcon from "@mui/icons-material/People";
 
 const SelectInterviewDate = ({
   hasInternship,
