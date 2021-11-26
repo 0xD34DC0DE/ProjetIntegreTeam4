@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Typography, Grid, Container } from "@mui/material";
+import { Typography } from "@mui/material";
 import PhoneAndroidIcon from "@mui/icons-material/PhoneAndroid";
 import TodayIcon from "@mui/icons-material/Today";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
