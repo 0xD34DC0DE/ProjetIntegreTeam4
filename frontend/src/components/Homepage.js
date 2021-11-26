@@ -12,11 +12,11 @@ const Homepage = () => {
 
   const [userInfo] = useContext(UserInfoContext);
 
-  return (
+  return ( 
     <Grid container flexDirection="column">
     <Grid sx={{mt:4}} container justifyContent="center">
     {sidebarList
-            .filter((item) => item.role.includes(userInfo.role))
+            .filter((item) => item.role.includes(userInfo.role) && item.id !== 0)
             .map((item, key) => {
               return (  
                 <Grid
@@ -49,30 +49,6 @@ const Homepage = () => {
               );
             })}
       </Grid>
-      {/* <Grid sx={{mt:4}} container justifyContent="center">
-      {sidebarList
-            .filter((item) => item.role.includes(userInfo.role))
-            .map((item, key) => {
-              return (
-                <Button
-                  key={item.id}
-                  sx={{
-                    color: "text.primary",
-                    ":hover": { backgroundColor: "rgba(100, 100, 100, 0.2)" },
-                    justifyContent: "flex-start",
-                    ml: 2,
-                    mr: 2,
-                  }}
-                  onClick={() => {
-                    console.log(item.id)
-                  }}
-                >
-                  {item.icon}
-                  {item.label}
-                </Button>
-              );
-            })}
-      </Grid> */}
     </Grid>
   );
 };
