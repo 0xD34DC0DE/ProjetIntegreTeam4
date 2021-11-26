@@ -3,7 +3,7 @@ import { Dialog, DialogContent } from "@mui/material";
 import PdfView from "./PdfView";
 import { DialogContext } from "../stores/DialogStore";
 
-function CVDialog({ cvUrl, setUrl }) {
+const CVDialog = ({ cvUrl, setUrl }) => {
   let dialogRef = useRef(null);
   const [dialog, dialogDispatch] = useContext(DialogContext);
 

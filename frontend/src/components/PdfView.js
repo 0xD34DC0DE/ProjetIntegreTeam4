@@ -7,7 +7,7 @@ import PdfContainer from "./PdfContainer";
 
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.min.js";
 
-function PdfView({ pdfUrl, params }) {
+const PdfView = ({ pdfUrl, params }) => {
   const [numPages, setNumPages] = useState(1);
   const [pageNumber, setPageNumber] = useState(1);
   const [userInfo] = useContext(UserInfoContext);
@@ -56,32 +56,34 @@ function PdfView({ pdfUrl, params }) {
   }, []);
 
   return (
-    <Grid
-      container
-      direction="column"
-      justifyContent={"center"}
-      alignContent={"center"}
-      alignItems={"center"}
-    >
-      <Grid item>
-        <PdfContainer
-          pdfData={pdfData}
-          pageNumber={pageNumber}
-          setPageCount={setNumPages}
-        />
-        {error && <Typography> Erreur lors du chargement du PDF</Typography>}
-      </Grid>
+    <>
+      <Grid
+        container
+        direction="column"
+        justifyContent={"center"}
+        alignContent={"center"}
+        alignItems={"center"}
+      >
+        <Grid item>
+          <PdfContainer
+            pdfData={pdfData}
+            pageNumber={pageNumber}
+            setPageCount={setNumPages}
+          />
+          {error && <Typography> Erreur lors du chargement du PDF</Typography>}
+        </Grid>
 
-      <Grid item textAlign="center">
-        <Pagination
-          sx={{ mt: 1 }}
-          count={numPages}
-          page={pageNumber}
-          onChange={handlePageChange}
-        />
+        <Grid item textAlign="center">
+          <Pagination
+            sx={{ mt: 1 }}
+            count={numPages}
+            page={pageNumber}
+            onChange={handlePageChange}
+          />
+        </Grid>
       </Grid>
-    </Grid>
+    </>
   );
-}
+};
 
 export default PdfView;
