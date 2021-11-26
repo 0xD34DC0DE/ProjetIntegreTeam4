@@ -18,7 +18,7 @@ export default function UserCard({ user }) {
       role="Handle"
       ref={drag}
       sx={{
-        backgroundColor: "rgba(135, 135, 135, 0.05)",
+        backgroundColor: "rgba(135, 135, 135, 0.03)",
         alignItem: "center",
         border: "0.5px solid grey",
         borderRadius: "10px",

@@ -84,7 +84,7 @@ const InternshipOfferValidation = () => {
                   mx: "5vw",
                   mb: "5vh",
                   px: "1vw",
-                  backgroundColor: "rgba(135, 135, 135, 0.05)",
+                  backgroundColor: "rgba(135, 135, 135, 0.03)",
                   py: "1vw",
                   overflow: "auto",
                   borderRadius: "10px",

@@ -118,7 +118,7 @@ const ListCvInternshipManagerView = ({ visible }) => {
             disabled
             component="div"
             sx={{
-              boxShadow: "0px 0px 5px 1px rgba(255, 255, 255, 0.2)",
+              boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
               backgroundColor: "rgba(100, 100, 100, 0.1)",
             }}
             count={nbrCvs}

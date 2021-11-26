@@ -80,7 +80,7 @@ const DroppableUserCard = ({ user, index }) => {
           border: "0.5px solid grey",
           backgroundColor: isOver
             ? "rgba(135, 135, 135, 0.1)"
-            : "rgba(135, 135, 135, 0.05)",
+            : "rgba(135, 135, 135, 0.03)",
           alignItem: "center",
           borderRadius: "10px",
           justifyContent: "center",

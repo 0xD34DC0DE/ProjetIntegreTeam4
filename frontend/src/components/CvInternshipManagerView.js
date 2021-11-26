@@ -48,7 +48,7 @@ const CvInternshipManagerView = ({
             <Card
               variant="outlined"
               sx={{
-                backgroundColor: "rgba(135, 135, 135, 0.05)",
+                backgroundColor: "rgba(135, 135, 135, 0.03)",
                 borderRadius: "10px",
                 border: "0.5px solid grey",
                 display:"flex",
@@ -57,6 +57,7 @@ const CvInternshipManagerView = ({
                 mt: 2,
                 mb: 5,
                 p:4,
+                boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
                 ":hover": {
                   boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
                 }

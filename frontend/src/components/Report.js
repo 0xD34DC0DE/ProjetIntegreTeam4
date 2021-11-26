@@ -32,10 +32,11 @@ const Report = ({ title, url, setReportUrl }) => {
         <Card
           role="Handle"
           sx={{
-            backgroundColor: "rgba(135, 135, 135, 0.05)",
+            backgroundColor: "rgba(135, 135, 135, 0.03)",
             width: "100%",
             height: "100%",
             border: "0.5px solid grey",
+            boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
             borderRadius: "10px",
             py: 5,
             ":hover": {
