@@ -1,16 +1,16 @@
-import { Grid, Typography, Box, Container, Button } from "@mui/material";
-import React, { useState, useEffect, useContext } from "react";
-import { DialogContext } from "../stores/DialogStore";
-import Report from "./Report";
-import ReportDialog from "./ReportDialog";
-import SemesterSelect from "./SemesterSelect";
+import { Grid, Button } from "@mui/material";
+import React, { useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { sidebarList } from "./Configuration";
+import { DialogContext } from "../stores/DialogStore";
+import { SelectionContext } from "../stores/SelectionStore";
 
 
 const Homepage = () => {
 
   const [userInfo] = useContext(UserInfoContext);
+  const [dialog, dialogDispatch] = useContext(DialogContext);
+  const [selection, selectionDispatch] = useContext(SelectionContext);
 
   return ( 
     <Grid container flexDirection="column">
@@ -39,7 +39,12 @@ const Homepage = () => {
                     mr: 2,
                   }}
                   onClick={() => {
-                    console.log(item.id)
+                    if (item.isDialog)
+                      dialogDispatch({
+                        type: "OPEN",
+                        dialogName: item.dialogName,
+                      });
+                    else selectionDispatch(item);
                   }}
                 >
                   {item.icon}
