@@ -57,12 +57,10 @@ public class StudentService {
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find student with email" + email)));
     }
 
-    //TODO --> test
     public Flux<Student> findAllByEmails(Set<String> emails) {
         return studentRepository.findAllByEmails(emails);
     }
 
-    //TODO --> test
     public Flux<Student> findAllByIds(List<String> ids) {
         return studentRepository.findAllByIds(ids);
     }
@@ -150,7 +148,6 @@ public class StudentService {
         return studentRepository.findAllByStudentState(INTERNSHIP_FOUND);
     }
 
-    //TODO --> test
     public Mono<Student> findById(String studentId) {
         return studentRepository.findById(studentId)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Could not find student with id: " + studentId)));

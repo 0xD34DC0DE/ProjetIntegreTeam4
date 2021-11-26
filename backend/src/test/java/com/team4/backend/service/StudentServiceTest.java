@@ -26,8 +26,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -118,6 +117,34 @@ public class StudentServiceTest {
         //ASSERT
         StepVerifier.create(studentMono)
                 .verifyError(UserNotFoundException.class);
+    }
+
+    @Test
+    void shouldFindAllByEmails() {
+        //ARRANGE
+        when(studentRepository.findAllByEmails(anySet())).thenReturn(Flux.fromIterable(StudentMockData.getListStudent(3)));
+
+        //ACT
+        Flux<Student> studentFlux = studentService.findAllByEmails(anySet());
+
+        //ASSERT
+        StepVerifier.create(studentFlux)
+                .expectNextCount(3)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldFindAllByIds() {
+        //ARRANGE
+        when(studentRepository.findAllByIds(anyList())).thenReturn(Flux.fromIterable(StudentMockData.getListStudent(3)));
+
+        //ACT
+        Flux<Student> studentFlux = studentService.findAllByIds(anyList());
+
+        //ASSERT
+        StepVerifier.create(studentFlux)
+                .expectNextCount(3)
+                .verifyComplete();
     }
 
     @Test
@@ -373,6 +400,35 @@ public class StudentServiceTest {
                 .verifyComplete();
     }
 
+    @Test
+    void shouldFindById() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        when(studentRepository.findById(anyString())).thenReturn(Mono.just(student));
+
+        //ACT
+        Mono<Student> studentMono = studentService.findById(anyString());
+
+        //ASSERT
+        StepVerifier.create(studentMono)
+                .assertNext(s -> assertEquals(student.getStudentState(), s.getStudentState()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotFindById() {
+        //ARRANGE
+        when(studentRepository.findById(anyString())).thenReturn(Mono.error(UserNotFoundException::new));
+
+        //ACT
+        Mono<Student> studentMono = studentService.findById(anyString());
+
+        //ACT && ASSERT
+        StepVerifier.create(studentMono)
+                .verifyError(UserNotFoundException.class);
+
+    }
 
     @Test
     void shouldGetAllWithNoEvaluationDateDuringSemester() {
