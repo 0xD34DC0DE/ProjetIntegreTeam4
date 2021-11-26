@@ -72,7 +72,7 @@ const SelectStudentState = ({
           <MenuItem
             key={key}
             value={value}
-            disabled={value !== listState[1]}
+            disabled={value !== listState[2]}
             sx={{ color: "white" }}
           >
             {listStateFrench[listState.indexOf(value)]}

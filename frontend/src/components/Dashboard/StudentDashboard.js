@@ -12,13 +12,15 @@ import BasicInfo from "./BasicInfo";
 
 const StudentDashBoard = ({jwt}) => {
   const listState = [
+    "NO_INTERVIEW",
     "WAITING_INTERVIEW",
     "INTERNSHIP_FOUND",
     "WAITING_FOR_RESPONSE",
   ];
 
   const listStateFrench = [
-    "EN ATTENTE D'ENTREVUE",
+    "SANS ENTREVUE",
+    "EN ATTENTE D'UNE ENTREVUE",
     "STAGE TROUVÉE",
     "EN ATTENTE DE RÉPONSE",
   ];
@@ -51,8 +53,9 @@ const StudentDashBoard = ({jwt}) => {
       })
         .then((response) => {
           setProfile(response.data);
+          console.log(response.data);
           setIsDisabled(
-            response.data.studentState !== listState[2] ||
+            response.data.studentState !== listState[3] ||
               !response.data.hasValidCv
           );
         })
@@ -65,7 +68,7 @@ const StudentDashBoard = ({jwt}) => {
   }, []);
 
   const hasInternship = () => {
-    return profile.studentState === listState[1];
+    return profile.studentState === listState[2];
   };
 
   const fadeIn = {
@@ -89,9 +92,12 @@ const StudentDashBoard = ({jwt}) => {
               maxWidth: 1000,
               border: "0.5px solid grey",
               alignItems: "center",
-              backgroundColor: "rgba(0, 0, 0, 0.1)",
+              backgroundColor: "rgba(135, 135, 135, 0.03)",
               flexGrow: 1,
-              boxShadow: 6,
+              boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
+              ":hover": {
+                boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
+              }
             }}
           >
             <Grid

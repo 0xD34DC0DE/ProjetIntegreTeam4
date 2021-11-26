@@ -69,21 +69,7 @@ const ListReport = () => {
       <Grid item>
         <SemesterSelect updateSemesterFullName={updateSemesterFullName} />
       </Grid>
-      <Grid item>
-        <Typography
-          variant="subtitle2"
-          sx={{
-            color: "white",
-            ml: 3,
-            mb: 5,
-            fontSize: "2.5em",
-            lineHeight: "1",
-          }}
-        >
-          Rapports
-        </Typography>
-      </Grid>
-      <Grid container justifyContent="center">
+      <Grid sx={{mt:4}} container justifyContent="center">
         {reports.map((current, index) => (
           <Grid
             item

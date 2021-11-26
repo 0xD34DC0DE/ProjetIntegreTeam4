@@ -59,7 +59,7 @@ export const sidebarList = [
   },
   {
     id: 5,
-    label: "Mes CV",
+    label: "Vos C.V.",
     role: ["STUDENT"],
     icon: <FileUploadOutlined sx={{ mr: 1 }} />,
     isDialog: false,
