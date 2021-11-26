@@ -10,7 +10,7 @@ import ListStudentApplying from "./ListStudentApplying";
 import { roles } from "./Configuration";
 import OfferForm from "./OfferForm";
 import OfferViews from "./OfferViews";
-import StudentDashBoard from "./StudentDashboard";
+import StudentDashBoard from "./Dashboard/StudentDashboard";
 import InternshipOfferValidation from "./InternshipOfferValidation";
 import ListUserDroppable from "./ListUserDroppable";
 import ListUserDraggable from "./ListUserDraggable";
@@ -30,7 +30,7 @@ const Content = ({ isSidebarOpen }) => {
       case "STUDENT":
         return (
           <>
-            {selection.id === 7 && <StudentDashBoard />}
+            {selection.id === 7 && <StudentDashBoard jwt={userInfo.jwt} />}
             {selection.id === 5 && <UploadCV />}
             {selection.id === 4 && <OfferViews />}
           </>

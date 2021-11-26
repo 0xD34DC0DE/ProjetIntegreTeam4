@@ -1,6 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.SupervisorCreationDto;
+import com.team4.backend.dto.SupervisorDetailsDto;
 import com.team4.backend.exception.DuplicateEntryException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
@@ -41,7 +41,7 @@ public class SupervisorControllerTest {
     @Test
     public void shouldCreateSupervisor() {
         //ARRANGE
-        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
         supervisorDto.setId(null);
 
@@ -68,7 +68,7 @@ public class SupervisorControllerTest {
     @Test
     public void shouldNotCreateSupervisor() {
         //ARRANGE
-        SupervisorCreationDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorDetailsDto supervisorDto = SupervisorMockData.getMockSupervisorDto();
 
         supervisorDto.setId(null);
 
@@ -152,7 +152,7 @@ public class SupervisorControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isEqualTo(HttpStatus.OK)
-                .expectBodyList(SupervisorCreationDto.class);
+                .expectBodyList(SupervisorDetailsDto.class);
     }
 
     @Test
@@ -170,7 +170,7 @@ public class SupervisorControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isEqualTo(HttpStatus.OK)
-                .expectBodyList(SupervisorCreationDto.class);
+                .expectBodyList(SupervisorDetailsDto.class);
     }
 
     @Test
@@ -186,7 +186,7 @@ public class SupervisorControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
-                .expectBody(SupervisorCreationDto.class);
+                .expectBody(SupervisorDetailsDto.class);
     }
 
     @Test
@@ -203,7 +203,7 @@ public class SupervisorControllerTest {
                 //ASSERT
                 .expectStatus()
                 .isNotFound()
-                .expectBody(SupervisorCreationDto.class);
+                .expectBody(SupervisorDetailsDto.class);
     }
 
 }

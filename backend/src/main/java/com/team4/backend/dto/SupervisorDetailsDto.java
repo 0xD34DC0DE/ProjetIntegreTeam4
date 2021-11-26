@@ -13,19 +13,19 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class SupervisorCreationDto extends UserDetailsDto implements Serializable {
+public class SupervisorDetailsDto extends UserDetailsDto implements Serializable {
 
     private Set<String> studentEmails;
 
     @Builder
-    public SupervisorCreationDto(String id,
-                                 String email,
-                                 String password,
-                                 String firstName,
-                                 String lastName,
-                                 Set<String> studentEmails,
-                                 LocalDate registrationDate,
-                                 String phoneNumber) {
+    public SupervisorDetailsDto(String id,
+                                String email,
+                                String password,
+                                String firstName,
+                                String lastName,
+                                Set<String> studentEmails,
+                                LocalDate registrationDate,
+                                String phoneNumber) {
         super(id,
                 email,
                 password,

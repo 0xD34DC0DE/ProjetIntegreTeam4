@@ -20,6 +20,8 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -147,38 +149,6 @@ public class StudentServiceTest {
 
         //ASSERT
         StepVerifier.create(studentMono).verifyError(UserNotFoundException.class);
-    }
-
-    @Test
-    void shouldFindStudent() {
-        //ARRANGE
-        Student student = StudentMockData.getMockStudent();
-
-        when(studentRepository.findByEmailAndIsEnabledTrue(same(student.getEmail()))).thenReturn(Mono.just(student));
-
-        //ACT
-        Mono<Student> studentMono = studentService.getStudent(student.getEmail());
-
-        //ASSERT
-        StepVerifier.create(studentMono)
-                .expectNextCount(1)
-                .verifyComplete();
-    }
-
-    @Test
-    void shouldNotFindStudent() {
-        //ARRANGE
-        Student student = StudentMockData.getMockStudent();
-
-        when(studentRepository.findByEmailAndIsEnabledTrue(same(student.getEmail()))).thenReturn(Mono.empty());
-
-        //ACT
-        Mono<Student> studentMono = studentService.getStudent(student.getEmail());
-
-        //ASSERT
-        StepVerifier.create(studentMono)
-                .expectNextCount(0)
-                .verifyComplete();
     }
 
     @Test
@@ -425,13 +395,17 @@ public class StudentServiceTest {
     @Test
     void shouldUpdateInterviewDate() {
         //ARRANGE
-        LocalDate interviewDate = LocalDate.now();
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDate interviewDate = LocalDate.now().withMonth(Month.AUGUST.getValue())
+                .withYear(currentDateTime.getYear())
+                .withDayOfMonth(24);
         Student student = StudentMockData.getMockStudent();
 
         student.setHasValidCv(true);
         student.setStudentState(StudentState.WAITING_INTERVIEW);
         student.setInterviewsDate(new TreeSet<>());
 
+        when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
         when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
         when(studentRepository.save(any(Student.class))).thenReturn(Mono.just(student));
 

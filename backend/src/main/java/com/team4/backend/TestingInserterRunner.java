@@ -296,7 +296,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .evaluationsDates(new TreeSet<>())
                         .studentState(StudentState.WAITING_INTERVIEW)
                         .hasValidCv(false)
-                        .hasCv(false)
+                        .hasCv(true)
                         .build(),
                 Student.studentBuilder()
                         .email("student@gmail.com")
@@ -304,8 +304,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .firstName("Shia")
                         .lastName("LaBeouf").registrationDate(LocalDate.now())
                         .studentState(StudentState.NO_INTERVIEW)
-                        .hasValidCv(false)
-                        .hasCv(false)
+                        .hasValidCv(true)
+                        .hasCv(true)
                         .phoneNumber("123-123-1234")
                         .appliedOffersId(new HashSet<>())
                         .evaluationsDates(new TreeSet<>())
@@ -652,7 +652,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isSeen(true)
                         .rejectionExplanation("Rejet Cv par Manager")
                         .uploadDate(LocalDateTime.now().minusMinutes(10))
-                        .build(),FileMetaData.builder()
+                        .build(), FileMetaData.builder()
                         .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("student@gmail.com")
                         .filename("cv1.pdf")
@@ -660,7 +660,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isSeen(true)
                         .rejectionExplanation("Rejet CV test")
                         .uploadDate(LocalDateTime.now().minusHours(2))
-                        .build(),FileMetaData.builder()
+                        .build(), FileMetaData.builder()
                         .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("student@gmail.com")
                         .filename("cv1.pdf")
@@ -668,7 +668,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusDays(5))
                         .build()
-                );
+        );
 
 
         fileMetaDataRepository.saveAll(fileMetaDataList)
