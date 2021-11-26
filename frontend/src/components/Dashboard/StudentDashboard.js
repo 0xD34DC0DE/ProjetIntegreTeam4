@@ -53,7 +53,6 @@ const StudentDashBoard = ({jwt}) => {
       })
         .then((response) => {
           setProfile(response.data);
-          console.log(response.data);
           setIsDisabled(
             response.data.studentState !== listState[3] ||
               !response.data.hasValidCv

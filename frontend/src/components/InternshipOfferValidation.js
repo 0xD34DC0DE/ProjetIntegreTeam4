@@ -56,7 +56,6 @@ const InternshipOfferValidation = () => {
 
   const updateSemesterFullName = (fullName) => {
     setSemesterFullName(fullName);
-    console.log(fullName);
   };
 
   const isNotARenderedAttribute = (identifier) => {

@@ -58,7 +58,6 @@ const ListCvStudentView = () => {
   };
 
   const openCv = (assetId) => {
-    console.log("assetId", assetId);
     setUrl("https://projetintegreteam4.s3.amazonaws.com/" + assetId);
   };
 
