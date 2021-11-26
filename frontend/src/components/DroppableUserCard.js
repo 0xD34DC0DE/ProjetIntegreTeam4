@@ -77,10 +77,17 @@ const DroppableUserCard = ({ user, index }) => {
         ref={drop}
         role={"Dustbin"}
         sx={{
-          backgroundColor: isOver ? "#2F3030" : "#1F2020",
+          border: "0.5px solid grey",
+          backgroundColor: isOver
+            ? "rgba(135, 135, 135, 0.1)"
+            : "rgba(135, 135, 135, 0.05)",
           alignItem: "center",
+          borderRadius: "10px",
           justifyContent: "center",
           mx: 2,
+          ":hover": {
+            boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
+          },
         }}
       >
         {justDropped && (
