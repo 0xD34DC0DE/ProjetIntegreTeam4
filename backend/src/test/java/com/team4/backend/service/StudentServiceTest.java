@@ -419,6 +419,35 @@ public class StudentServiceTest {
     }
 
     @Test
+    void shouldUpdateInterviewDateAndSetStudentState() {
+        //ARRANGE
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        LocalDate interviewDate = LocalDate.now().withMonth(Month.AUGUST.getValue())
+                .withYear(currentDateTime.getYear())
+                .withDayOfMonth(24);
+        Student student = StudentMockData.getMockStudent();
+
+        student.setHasValidCv(true);
+        student.setStudentState(StudentState.NO_INTERVIEW);
+        student.setInterviewsDate(new TreeSet<>());
+
+        when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
+        when(studentRepository.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
+        when(studentRepository.save(any(Student.class))).thenReturn(Mono.just(student));
+
+        //ACT
+        Mono<Student> studentMono = studentService.updateInterviewDate(student.getEmail(), interviewDate);
+
+        //ASSERT
+        StepVerifier.create(studentMono)
+                .assertNext(s -> {
+                    assertEquals(interviewDate, s.getInterviewsDate().stream().findFirst().get());
+                    assertEquals(StudentState.WAITING_INTERVIEW, s.getStudentState());
+                })
+                .verifyComplete();
+    }
+
+    @Test
     void shouldNotUpdateInterviewDateWhenNotFound() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();
@@ -506,8 +535,6 @@ public class StudentServiceTest {
     @Test
     void shouldNotResetStudentStateForAllStudentWithInternship() {
         //ARRANGE
-        List<Student> students = StudentMockData.getAllStudentsWithInternshipFound();
-
         when(studentRepository.findAllByStudentState(StudentState.INTERNSHIP_FOUND)).thenReturn(Flux.empty());
 
         //ACT

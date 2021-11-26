@@ -129,7 +129,7 @@ const ListStudentApplying = () => {
                     <Paper
                       elevation={5}
                       sx={{
-                        backgroundColor: "rgba(255, 255, 255, 0.01)",
+                        backgroundColor: "rgba(255, 255, 255, 0.05)",
                         px: 2,
                         py: 2,
                       }}

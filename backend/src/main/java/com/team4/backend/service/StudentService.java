@@ -96,6 +96,9 @@ public class StudentService {
                         )
                         .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't add an interview that is not inside the range of this semester!")))
                         .map((semester) -> {
+                            if (student.getStudentState().equals(NO_INTERVIEW))
+                                student.setStudentState(WAITING_INTERVIEW);
+
                             student.getInterviewsDate().add(interviewDate);
                             return student;
                         })
@@ -184,7 +187,7 @@ public class StudentService {
         return getStudentsWithInternship()
                 .map(student -> {
                     log.info("RESET STATE : " + student.getFirstName() + ", " + student.getLastName());
-                    student.setStudentState(WAITING_INTERVIEW);
+                    student.setStudentState(NO_INTERVIEW);
                     return save(student).subscribe();
                 }).count();
     }

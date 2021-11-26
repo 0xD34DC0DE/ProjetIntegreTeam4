@@ -97,7 +97,7 @@ const ListCvInternshipManagerView = ({ visible }) => {
           mt: 5,
         }}
       >
-        <Grid item lg={12} xl={12} md={12} sm={6} xs={6} alignSelf="center">
+        <Grid  item lg={12} xl={12} md={12} sm={8} xs={6} alignSelf="center">
           {cvs.map((cv, key) => (
             <CvInternshipManagerView
               key={key}
