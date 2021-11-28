@@ -1,5 +1,6 @@
 package com.team4.backend.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ public class SupervisorProfileDto extends UserProfileDto implements Serializable
 
     private Integer nbrOfAssignedStudents;
 
+    @Builder
     public SupervisorProfileDto(String id,
                                 String email,
                                 String firstName,
@@ -24,5 +26,5 @@ public class SupervisorProfileDto extends UserProfileDto implements Serializable
         super(id, email, firstName, lastName, registrationDate, phoneNumber);
         this.nbrOfAssignedStudents = nbrOfAssignedStudents;
     }
-    
+
 }

@@ -1,5 +1,6 @@
 package com.team4.backend.dto;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ public class MonitorProfileDto extends UserProfileDto implements Serializable {
 
     private String companyName;
 
+    @Builder
     public MonitorProfileDto(String id,
                              String email,
                              String firstName,
@@ -24,5 +26,5 @@ public class MonitorProfileDto extends UserProfileDto implements Serializable {
         super(id, email, firstName, lastName, registrationDate, phoneNumber);
         this.companyName = companyName;
     }
-    
+
 }
