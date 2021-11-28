@@ -9,8 +9,9 @@ security:
     secret : ThisIsSecretForJWTHS512SignatureAlgorithmThatMUSTHave64ByteLength
     expiration : 28800
 
-
 spring:
+  codec:
+    max-in-memory-size: 10MB
   servlet:
     multipart:
       max-file-size: 5MB
@@ -34,4 +35,5 @@ spring:
     test-connection: false
   thymeleaf:
     enabled: false
+
 

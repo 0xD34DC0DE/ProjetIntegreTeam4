@@ -25,7 +25,8 @@ public class SupervisorCreationDto extends UserDetailsDto implements Serializabl
                                  String lastName,
                                  Set<String> studentEmails,
                                  LocalDate registrationDate,
-                                 String phoneNumber) {
+                                 String phoneNumber,
+                                 String profileImageId) {
         super(id,
                 email,
                 password,
@@ -33,7 +34,8 @@ public class SupervisorCreationDto extends UserDetailsDto implements Serializabl
                 lastName,
                 registrationDate,
                 phoneNumber,
-                Role.SUPERVISOR);
+                Role.SUPERVISOR,
+                profileImageId);
         this.studentEmails = studentEmails;
     }
 

@@ -20,12 +20,13 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { roles, topbarMenuList } from "./Configuration";
 import NotificationList from "./Notification/NotificationList";
 import { DialogContext } from "../stores/DialogStore";
 import { SelectionContext } from "../stores/SelectionStore";
+import axios from "axios";
 
 const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
   const menuAnchorRef = useRef();
@@ -36,6 +37,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
   const [notificationCount, setNotificationCount] = useState(0);
   const [dialog, dialogDispatch] = useContext(DialogContext);
   const [selection, selectionDispatch] = useContext(SelectionContext);
+  const [profileImage, setProfileImage] = useState(undefined);
 
   const handleSidebarClick = () => {
     setSidebarOpen(!sidebarOpen);
@@ -53,6 +55,39 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
   const handleNotificationMenuClose = () => {
     setNotficationMenuAnchorEl(null);
     setNotificationMenuOpen(false);
+  };
+
+  useEffect(() => {
+    if (userInfo === undefined) return;
+
+    fetchUserProfileImage();
+  }, [userInfo]);
+
+  const fetchUserProfileImage = () => {
+    axios({
+      method: "GET",
+      url: "http://localhost:8080/profileImage",
+      headers: {
+        Authorization: userInfo.jwt,
+      },
+      params: {
+        userId: userInfo.id,
+      },
+      responseType: "arraybuffer",
+    })
+      .then(async (response) => {
+        const arrayBuffer = response.data;
+        const headers = response.headers;
+        const blobUrl = await arrayBufferToBlobUrl(arrayBuffer, headers);
+        setProfileImage(blobUrl);
+      })
+      .catch((error) => console.error(error));
+  };
+
+  const arrayBufferToBlobUrl = (arrayBuffer, headers) => {
+    const imageType = headers["Content-Type"];
+    const blob = new Blob([arrayBuffer], { type: imageType });
+    return window.URL.createObjectURL(blob);
   };
 
   return (
@@ -116,17 +151,18 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                         <Grid container flexDirection="row" sx={{ mb: 1 }}>
                           <Grid item md={2}>
                             <Avatar
+                              src={
+                                profileImage !== undefined ? profileImage : ""
+                              }
                               sx={{
-                                width: 40,
-                                height: 40,
+                                width: 50,
+                                height: 50,
                                 mb: 2,
                                 p: 0,
                                 m: 0,
                                 ml: 1,
                               }}
-                            >
-                              AA
-                            </Avatar>
+                            ></Avatar>
                           </Grid>
                           <Grid item md={10}>
                             <Grid

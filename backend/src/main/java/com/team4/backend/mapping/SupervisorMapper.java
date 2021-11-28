@@ -19,6 +19,7 @@ public abstract class SupervisorMapper {
                 .studentTimestampedEntries(new HashSet<>())
                 .registrationDate(LocalDate.now())
                 .phoneNumber(supervisorDto.getPhoneNumber())
+                .profileImageId("")
                 .build();
     }
 
@@ -33,6 +34,7 @@ public abstract class SupervisorMapper {
                         .collect(Collectors.toSet()))
                 .registrationDate(supervisor.getRegistrationDate())
                 .phoneNumber(supervisor.getPhoneNumber())
+                .profileImageId(supervisor.getProfileImageId())
                 .build();
     }
 

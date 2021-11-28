@@ -42,6 +42,7 @@ const Login = () => {
       responseType: "json",
     })
       .then((response) => {
+        console.log(response);
         userInfoDispatch({ type: "LOGIN", payload: { token: response.data } });
         resetForm();
         setErrorMessage();
@@ -52,7 +53,7 @@ const Login = () => {
       })
       .catch((error) => {
         let errorMessage =
-          "L’identifiant ou le mot de passe que vous avez fourni n’est pas valide.";
+          "L’identifiant ou le mot de passe que vous avez fourni n’est pas valide";
         setErrorMessage(errorMessage);
         console.error(error);
       });
@@ -88,7 +89,7 @@ const Login = () => {
           >
             Connexion
           </Typography>
-          <DialogContentText style={{ color: "red", p: 0, m: 0 }}>
+          <DialogContentText style={{ color: "rgba(220, 50, 50)", p: 0, m: 0 }}>
             {errorMessage}
           </DialogContentText>
           <TextField

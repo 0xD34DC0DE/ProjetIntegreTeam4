@@ -25,7 +25,8 @@ public class Supervisor extends User implements Serializable {
                       Set<TimestampedEntry> studentTimestampedEntries,
                       String password,
                       String phoneNumber,
-                      LocalDate registrationDate) {
+                      LocalDate registrationDate,
+                      String profileImageId) {
         super(id,
                 email,
                 firstName,
@@ -34,7 +35,8 @@ public class Supervisor extends User implements Serializable {
                 phoneNumber,
                 Role.SUPERVISOR,
                 true,
-                registrationDate);
+                registrationDate,
+                profileImageId);
         this.studentTimestampedEntries = studentTimestampedEntries;
     }
 

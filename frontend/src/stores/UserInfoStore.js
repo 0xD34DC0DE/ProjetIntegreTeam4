@@ -5,6 +5,7 @@ const initialState = {
   email: "",
   role: "",
   loggedIn: false,
+
   jwt: "",
 };
 

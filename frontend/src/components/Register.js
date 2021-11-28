@@ -34,6 +34,7 @@ const Register = () => {
     firstName: "",
     lastName: "",
     accountType: "",
+    profileImageId: "",
   });
   const [dialog, dialogDispatch] = useContext(DialogContext);
 
@@ -66,6 +67,7 @@ const Register = () => {
         firstName: form.firstName,
         companyName: form.companyName,
         lastName: form.lastName,
+        profileImageId: "",
       },
       responseType: "json",
     })
@@ -109,6 +111,10 @@ const Register = () => {
     else if (accountType === "monitor") setStepCount(6);
   };
 
+  const handleFieldKeyUp = (event) => {
+    if (event.code === "Enter" && formValid) nextStep();
+  };
+
   const displayFormFields = () => {
     return (
       <>
@@ -116,30 +122,35 @@ const Register = () => {
           valid={setFormValid}
           step={step}
           visibleStep={0}
+          handleFieldKeyUp={handleFieldKeyUp}
           onFieldChange={handleAccountTypeChange}
         />
         <EmailFormField
           valid={setFormValid}
           step={step}
           visibleStep={1}
+          handleFieldKeyUp={handleFieldKeyUp}
           onFieldChange={handleFormChange}
         />
         <NameFormField
           valid={setFormValid}
           step={step}
           visibleStep={2}
+          handleFieldKeyUp={handleFieldKeyUp}
           onFieldChange={handleFormChange}
         />
         <PhoneNumberFormField
           valid={setFormValid}
           step={step}
           visibleStep={3}
+          handleFieldKeyUp={handleFieldKeyUp}
           onFieldChange={handleFormChange}
         />
         <PasswordFormField
           valid={setFormValid}
           step={step}
           visibleStep={4}
+          handleFieldKeyUp={handleFieldKeyUp}
           onFieldChange={handleFormChange}
         />
         {/* Special form field for each individual role */}
@@ -147,6 +158,7 @@ const Register = () => {
           <CompanyNameFormField
             valid={setFormValid}
             step={step}
+            handleFieldKeyUp={handleFieldKeyUp}
             visibleStep={5}
             onFieldChange={handleFormChange}
           />

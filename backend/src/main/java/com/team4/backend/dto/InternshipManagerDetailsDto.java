@@ -21,7 +21,8 @@ public class InternshipManagerDetailsDto extends UserDetailsDto implements Seria
                                        String firstName,
                                        String lastName,
                                        LocalDate registrationDate,
-                                       String phoneNumber) {
+                                       String phoneNumber,
+                                       String profileImageId) {
         super(id,
                 email,
                 password,
@@ -29,7 +30,8 @@ public class InternshipManagerDetailsDto extends UserDetailsDto implements Seria
                 lastName,
                 registrationDate,
                 phoneNumber,
-                Role.INTERNSHIP_MANAGER);
+                Role.INTERNSHIP_MANAGER,
+                profileImageId);
     }
 
 }

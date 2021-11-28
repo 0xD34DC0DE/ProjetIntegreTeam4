@@ -9,6 +9,7 @@ import {
   MenuItem,
   Container,
   TextField,
+  Button,
 } from "@mui/material";
 import StarBorderPurple500Icon from "@mui/icons-material/StarBorderPurple500";
 import TouchAppIcon from "@mui/icons-material/TouchApp";
@@ -59,8 +60,11 @@ const StudentDashBoard = () => {
   const [isDateValid, setIsDateValid] = useState(true);
   const [userInfo] = useContext(UserInfoContext);
   const [isInterviewDateUpdated, setIsInterviewDateUpdated] = useState(false);
+  const [profileImage, setProfileImage] = useState("");
 
   useEffect(() => {
+    console.log(userInfo);
+
     const getProfile = () => {
       axios({
         method: "GET",
@@ -71,6 +75,7 @@ const StudentDashBoard = () => {
         responseType: "json",
       })
         .then((response) => {
+          console.log(response.data);
           setProfile(response.data);
           setIsDisabled(
             response.data.studentState !== listState[2] ||
@@ -83,7 +88,7 @@ const StudentDashBoard = () => {
     };
 
     getProfile();
-  });
+  }, [userInfo]);
 
   const updateStudentStatus = () => {
     axios({
@@ -105,6 +110,38 @@ const StudentDashBoard = () => {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  useEffect(() => {
+    if (userInfo === undefined) return;
+    const fetchUserProfileImage = () => {
+      axios({
+        method: "GET",
+        url: "http://localhost:8080/profileImage",
+        headers: {
+          Authorization: userInfo.jwt,
+        },
+        params: {
+          userId: userInfo.id,
+        },
+        responseType: "arraybuffer",
+      })
+        .then(async (response) => {
+          const arrayBuffer = response.data;
+          const headers = response.headers;
+          const blobUrl = await arrayBufferToBlobUrl(arrayBuffer, headers);
+          setProfileImage(blobUrl);
+        })
+        .catch((error) => console.error(error));
+    };
+
+    fetchUserProfileImage();
+  }, [userInfo]);
+
+  const arrayBufferToBlobUrl = (arrayBuffer, headers) => {
+    const imageType = headers["Content-Type"];
+    const blob = new Blob([arrayBuffer], { type: imageType });
+    return window.URL.createObjectURL(blob);
   };
 
   const updateInterviewDate = (date) => {
@@ -167,8 +204,8 @@ const StudentDashBoard = () => {
   };
 
   return (
-    <>
-      <Container>
+    <Grid container justifyContent="center">
+      <Grid item xs={8} alignSelf="center">
         <motion.div variants={fadeIn} initial="hidden" animate="show">
           <Card
             sx={{
@@ -196,9 +233,8 @@ const StudentDashBoard = () => {
                     border: "1px solid white",
                     boxShadow: 6,
                   }}
-                >
-                  {profile.firstName.charAt(0)}
-                </Avatar>
+                  src={profileImage}
+                ></Avatar>
                 {profile.hasValidCv ? (
                   <Typography
                     sx={{ color: "green", textAlign: "center", m: 1 }}
@@ -393,8 +429,8 @@ const StudentDashBoard = () => {
             </Grid>
           </Card>
         </motion.div>
-      </Container>
-    </>
+      </Grid>
+    </Grid>
   );
 };
 

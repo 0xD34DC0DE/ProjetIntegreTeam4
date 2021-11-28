@@ -24,7 +24,8 @@ public class Monitor extends User {
                    String companyName,
                    String password,
                    String phoneNumber,
-                   LocalDate registrationDate) {
+                   LocalDate registrationDate,
+                   String profileImageId) {
         super(id,
                 email,
                 firstName,
@@ -33,7 +34,8 @@ public class Monitor extends User {
                 phoneNumber,
                 Role.MONITOR,
                 true,
-                registrationDate);
+                registrationDate,
+                profileImageId);
         this.companyName = companyName;
     }
 

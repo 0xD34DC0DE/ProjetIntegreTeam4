@@ -14,6 +14,7 @@ public abstract class MonitorMapper {
                 .companyName(monitorDto.getCompanyName())
                 .registrationDate(monitorDto.getRegistrationDate())
                 .phoneNumber(monitorDto.getPhoneNumber())
+                .profileImageId("")
                 .build();
     }
 
@@ -25,6 +26,7 @@ public abstract class MonitorMapper {
                 .lastName(monitor.getLastName())
                 .companyName(monitor.getCompanyName())
                 .registrationDate(monitor.getRegistrationDate())
+                .profileImageId(monitor.getProfileImageId())
                 .phoneNumber(monitor.getPhoneNumber())
                 .build();
     }

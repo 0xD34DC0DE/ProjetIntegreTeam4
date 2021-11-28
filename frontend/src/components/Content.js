@@ -20,6 +20,7 @@ import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMid
 import ListReport from "./ListReport";
 import SignContractDialog from "./contracts/SignContractDialog";
 import { SelectionContext } from "../stores/SelectionStore";
+import ProfileImageUpload from "./ProfileImageUpload";
 
 const Content = ({ isSidebarOpen }) => {
   const [selection] = useContext(SelectionContext);

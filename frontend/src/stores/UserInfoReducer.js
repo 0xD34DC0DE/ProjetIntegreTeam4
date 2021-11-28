@@ -4,7 +4,6 @@ const UserInfoReducer = (state, action) => {
   switch (action.type) {
     case "LOGIN":
       sessionStorage.setItem("jwt", `Bearer ${action.payload.token}`);
-
       const decodedJWT = jwt_decode(action.payload.token);
 
       return {

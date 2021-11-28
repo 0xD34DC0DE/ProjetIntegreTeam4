@@ -40,6 +40,8 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final PBKDF2Encoder pbkdf2Encoder;
 
+    private final ProfileImageRepository profileImageRepository;
+
     private final FileMetaDataRepository fileMetaDataRepository;
 
     private final InternshipRepository internshipRepository;
@@ -68,7 +70,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                                  EvaluationRepository evaluationRepository,
                                  InternshipContractRepository internshipContractRepository,
                                  PBKDF2Encoder pbkdf2Encoder,
-                                 FileMetaDataRepository fileMetaDataRepository,
+                                 ProfileImageRepository profileImageRepository, FileMetaDataRepository fileMetaDataRepository,
                                  InternshipManagerRepository internshipManagerRepository,
                                  InternshipRepository internshipRepository,
                                  NotificationRepository notificationRepository,
@@ -80,6 +82,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.supervisorRepository = supervisorRepository;
         this.internshipContractRepository = internshipContractRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
+        this.profileImageRepository = profileImageRepository;
         this.fileMetaDataRepository = fileMetaDataRepository;
         this.internshipRepository = internshipRepository;
         this.evaluationRepository = evaluationRepository;
@@ -109,6 +112,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         internshipContractRepository.deleteAll().subscribe();
         semesterRepository.deleteAll().subscribe();
         notificationRepository.deleteAll().subscribe();
+        profileImageRepository.deleteAll().subscribe();
 
         insertSemesters();
         insertInternshipOffersInternshipManagerView();
@@ -118,6 +122,24 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertCvs();
         insertNotifications();
         insertInternships();
+        insertProfileImages();
+    }
+
+    private void insertProfileImages() {
+        List<ProfileImage> profileImages = Arrays.asList(
+                ProfileImage.profileImageBuilder()
+                        .fileName("filename1")
+                        .uploaderId("123")
+                        .image(null)
+                        .build(),
+                ProfileImage.profileImageBuilder()
+                        .fileName("filename2")
+                        .uploaderId("abc")
+                        .image(null)
+                        .build()
+        );
+
+        profileImageRepository.saveAll(profileImages).subscribe();
     }
 
     private void insertSemesters() {
@@ -652,7 +674,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isSeen(true)
                         .rejectionExplanation("Rejet Cv par Manager")
                         .uploadDate(LocalDateTime.now().minusMinutes(10))
-                        .build(),FileMetaData.builder()
+                        .build(), FileMetaData.builder()
                         .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("student@gmail.com")
                         .filename("cv1.pdf")
@@ -660,7 +682,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isSeen(true)
                         .rejectionExplanation("Rejet CV test")
                         .uploadDate(LocalDateTime.now().minusHours(2))
-                        .build(),FileMetaData.builder()
+                        .build(), FileMetaData.builder()
                         .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("student@gmail.com")
                         .filename("cv1.pdf")
@@ -668,7 +690,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusDays(5))
                         .build()
-                );
+        );
 
 
         fileMetaDataRepository.saveAll(fileMetaDataList)

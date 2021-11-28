@@ -11,6 +11,7 @@ public abstract class InternshipManagerMapper {
                 .email(internshipManager.getEmail())
                 .firstName(internshipManager.getFirstName())
                 .lastName(internshipManager.getLastName())
+                .profileImageId(internshipManager.getProfileImageId())
                 .phoneNumber(internshipManager.getPhoneNumber())
                 .registrationDate(internshipManager.getRegistrationDate())
                 .build();
@@ -23,6 +24,7 @@ public abstract class InternshipManagerMapper {
                 .password(internshipManagerDto.getPassword())
                 .firstName(internshipManagerDto.getFirstName())
                 .lastName(internshipManagerDto.getLastName())
+                .profileImageId(internshipManagerDto.getProfileImageId())
                 .phoneNumber(internshipManagerDto.getPhoneNumber())
                 .registrationDate(internshipManagerDto.getRegistrationDate())
                 .build();
