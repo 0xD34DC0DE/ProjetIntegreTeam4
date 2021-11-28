@@ -1,15 +1,9 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipManagerProfileDto;
-import com.team4.backend.dto.SupervisorProfileDto;
 import com.team4.backend.exception.UserNotFoundException;
-import com.team4.backend.model.Internship;
-import com.team4.backend.model.InternshipManager;
-import com.team4.backend.model.Supervisor;
 import com.team4.backend.service.InternshipManagerService;
-import com.team4.backend.service.MonitorService;
 import com.team4.backend.testdata.InternshipManagerMockData;
-import com.team4.backend.testdata.SupervisorMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;

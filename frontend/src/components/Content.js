@@ -11,6 +11,7 @@ import { roles } from "./Configuration";
 import OfferForm from "./OfferForm";
 import OfferViews from "./OfferViews";
 import StudentDashBoard from "./Dashboard/StudentDashboard";
+import SupervisorDashBoard from "./Dashboard/SupervisorDashBoard";
 import InternshipOfferValidation from "./InternshipOfferValidation";
 import ListUserDroppable from "./ListUserDroppable";
 import ListUserDraggable from "./ListUserDraggable";
@@ -48,6 +49,7 @@ const Content = ({ isSidebarOpen }) => {
       case "SUPERVISOR":
         return (
           <>
+            {selection.id === 7 && <SupervisorDashBoard />}
             {selection.id === 10 && <AssignedStudentSupervisorView />}
             {selection.id === 13 && <StudentEvaluationMidForm />}
           </>
