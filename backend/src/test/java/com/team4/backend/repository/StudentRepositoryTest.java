@@ -41,7 +41,7 @@ public class StudentRepositoryTest {
                 Student.studentBuilder()
                         .email("testing_1@gmail.com")
                         .password("password1")
-                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .studentState(StudentState.WAITING_INTERVIEW)
                         .interviewsDate(new TreeSet<>(Arrays.asList(
                                 LocalDate.now().minusWeeks(3),
                                 LocalDate.now(),
@@ -49,7 +49,7 @@ public class StudentRepositoryTest {
                         .build(),
                 Student.studentBuilder()
                         .email("testing_2@gmail.com")
-                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .studentState(StudentState.WAITING_INTERVIEW)
                         .password("password2")
                         .interviewsDate(new TreeSet<>())
                         .evaluationsDates(Stream.of(LocalDate.now(),LocalDate.now().plusYears(2))
@@ -58,7 +58,7 @@ public class StudentRepositoryTest {
                 Student.studentBuilder()
                         .email("testing_3@gmail.com")
                         .password("password1")
-                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .studentState(StudentState.WAITING_INTERVIEW)
                         .evaluationsDates(Stream.of(LocalDate.now().plusYears(2))
                                 .collect(Collectors.toCollection(TreeSet::new)))
                         .interviewsDate(new TreeSet<>(Arrays.asList(
@@ -132,7 +132,7 @@ public class StudentRepositoryTest {
     @Test
     void shouldFindAllByStudentStateAndInterviewsDateIsNotEmpty() {
         //ARRANGE && ACT
-        Flux<Student> studentFlux = studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND);
+        Flux<Student> studentFlux = studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.WAITING_INTERVIEW);
 
         //ASSERT
         StepVerifier.create(studentFlux)

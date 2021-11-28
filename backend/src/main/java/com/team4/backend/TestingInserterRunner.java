@@ -255,7 +255,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .evaluationsDates(new TreeSet<>())
                         .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
-                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .studentState(StudentState.WAITING_INTERVIEW)
                         .build(),
                 Student.studentBuilder()
                         .email("123667713@gmail.com")
@@ -269,7 +269,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .exclusiveOffersId(new HashSet<>())
                         .evaluationsDates(new TreeSet<>())
                         .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
-                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .studentState(StudentState.WAITING_INTERVIEW)
                         .build(),
                 Student.studentBuilder()
                         .email("902938912@gmail.com")
@@ -281,7 +281,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>())
                         .evaluationsDates(new TreeSet<>())
-                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .studentState(StudentState.WAITING_INTERVIEW)
                         .hasValidCv(false)
                         .hasCv(true)
                         .build(),
@@ -294,18 +294,18 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
                         .evaluationsDates(new TreeSet<>())
-                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .studentState(StudentState.WAITING_INTERVIEW)
                         .hasValidCv(false)
-                        .hasCv(false)
+                        .hasCv(true)
                         .build(),
                 Student.studentBuilder()
                         .email("student@gmail.com")
                         .password(pbkdf2Encoder.encode("student"))
                         .firstName("Shia")
                         .lastName("LaBeouf").registrationDate(LocalDate.now())
-                        .studentState(StudentState.REGISTERED)
-                        .hasValidCv(false)
-                        .hasCv(false)
+                        .studentState(StudentState.NO_INTERVIEW)
+                        .hasValidCv(true)
+                        .hasCv(true)
                         .phoneNumber("123-123-1234")
                         .appliedOffersId(new HashSet<>())
                         .evaluationsDates(new TreeSet<>())
@@ -652,7 +652,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isSeen(true)
                         .rejectionExplanation("Rejet Cv par Manager")
                         .uploadDate(LocalDateTime.now().minusMinutes(10))
-                        .build(),FileMetaData.builder()
+                        .build(), FileMetaData.builder()
                         .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("student@gmail.com")
                         .filename("cv1.pdf")
@@ -660,7 +660,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isSeen(true)
                         .rejectionExplanation("Rejet CV test")
                         .uploadDate(LocalDateTime.now().minusHours(2))
-                        .build(),FileMetaData.builder()
+                        .build(), FileMetaData.builder()
                         .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("student@gmail.com")
                         .filename("cv1.pdf")
@@ -668,7 +668,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusDays(5))
                         .build()
-                );
+        );
 
 
         fileMetaDataRepository.saveAll(fileMetaDataList)

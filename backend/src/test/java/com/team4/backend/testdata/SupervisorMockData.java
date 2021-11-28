@@ -1,6 +1,6 @@
 package com.team4.backend.testdata;
 
-import com.team4.backend.dto.SupervisorCreationDto;
+import com.team4.backend.dto.SupervisorDetailsDto;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.model.TimestampedEntry;
 import reactor.core.publisher.Flux;
@@ -28,8 +28,8 @@ public class SupervisorMockData {
                 .build();
     }
 
-    public static SupervisorCreationDto getMockSupervisorDto() {
-        return SupervisorCreationDto.builder()
+    public static SupervisorDetailsDto getMockSupervisorDto() {
+        return SupervisorDetailsDto.builder()
                 .id("615a32ce577ae63d7b159b17")
                 .email("jonathan_22@outlook.com")
                 .password("soleil31@")
@@ -88,8 +88,8 @@ public class SupervisorMockData {
                 .build());
     }
 
-    public static Flux<SupervisorCreationDto> getAllSupervisorsDto() {
-        return Flux.just(SupervisorCreationDto.builder()
+    public static Flux<SupervisorDetailsDto> getAllSupervisorsDto() {
+        return Flux.just(SupervisorDetailsDto.builder()
                 .id("123a45ce678ae91d0b111b21")
                 .email("professeur@outlook.com")
                 .password("prof123")
@@ -100,7 +100,7 @@ public class SupervisorMockData {
                         .collect(Collectors.toSet()))
                 .phoneNumber("514-111-2222")
                 .registrationDate(null) // Current date
-                .build(), SupervisorCreationDto.builder()
+                .build(), SupervisorDetailsDto.builder()
                 .id("222a44ce555ae66d0b777b88")
                 .email("enseignant@outlook.com")
                 .password("enseignant123")

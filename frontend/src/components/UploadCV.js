@@ -91,7 +91,10 @@ const UploadCV = () => {
                   alignItems: "center",
                   cursor: "pointer",
                   backgroundColor: "rgba(100, 100, 100, 0.1)",
-                  boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
+                  boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
+                  ":hover": {
+                    boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
+                  }
                 }}
                 align="center"
                 onClick={openFileExplorer}
