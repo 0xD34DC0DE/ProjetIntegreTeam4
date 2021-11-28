@@ -38,13 +38,12 @@ public class InternshipManagerControllerTest {
     @Test
     void shouldGetProfile() {
         //ARRANGE
-        InternshipManager internshipManager = InternshipManagerMockData.GetInternshipManager();
-        when(internshipManagerService.findByEmail(internshipManager.getEmail())).thenReturn(Mono.just(internshipManager));
+        when(internshipManagerService.findByEmail(any())).thenReturn(Mono.just(InternshipManagerMockData.GetInternshipManager()));
 
         //ACT
         webTestClient
                 .get()
-                .uri("/internshipManager/getProfile/" + internshipManager.getEmail())
+                .uri("/internshipManager/getProfile")
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
@@ -54,13 +53,12 @@ public class InternshipManagerControllerTest {
     @Test
     void shouldNotGetProfile() {
         //ARRANGE
-        InternshipManager internshipManager = InternshipManagerMockData.GetInternshipManager();
         when(internshipManagerService.findByEmail(any())).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
         webTestClient
                 .get()
-                .uri("/internshipManager/getProfile/" + internshipManager.getEmail())
+                .uri("/internshipManager/getProfile")
                 .exchange()
                 //ASSERT
                 .expectStatus()

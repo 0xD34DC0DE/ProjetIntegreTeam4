@@ -210,13 +210,12 @@ public class SupervisorControllerTest {
     @Test
     void shouldGetProfile() {
         //ARRANGE
-        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
-        when(supervisorService.getSupervisor(supervisor.getEmail())).thenReturn(Mono.just(supervisor));
+        when(supervisorService.getSupervisor(any())).thenReturn(Mono.just(SupervisorMockData.getMockSupervisor()));
 
         //ACT
         webTestClient
                 .get()
-                .uri("/supervisor/getProfile/" + supervisor.getEmail())
+                .uri("/supervisor/getProfile")
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
@@ -226,13 +225,12 @@ public class SupervisorControllerTest {
     @Test
     void shouldNotGetProfile() {
         //ARRANGE
-        Supervisor supervisor = SupervisorMockData.getMockSupervisor();
         when(supervisorService.getSupervisor(any())).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
         webTestClient
                 .get()
-                .uri("/supervisor/getProfile/" + supervisor.getEmail())
+                .uri("/supervisor/getProfile")
                 .exchange()
                 //ASSERT
                 .expectStatus()

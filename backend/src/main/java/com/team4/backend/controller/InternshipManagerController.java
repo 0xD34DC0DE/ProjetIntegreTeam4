@@ -24,7 +24,7 @@ public class InternshipManagerController {
         this.internshipManagerService = internshipManagerService;
     }
 
-    @GetMapping("/getProfile/{email}")
+    @GetMapping("/getProfile")
     public Mono<InternshipManagerProfileDto> getProfile(Principal principal) {
         return internshipManagerService.findByEmail(UserSessionService.getLoggedUserEmail(principal))
                 .map(InternshipManagerMapper::toProfileDto);

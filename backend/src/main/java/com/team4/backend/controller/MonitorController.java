@@ -29,7 +29,7 @@ public class MonitorController {
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")));
     }
 
-    @GetMapping("/getProfile/{email}")
+    @GetMapping("/getProfile")
     @PreAuthorize("hasAuthority('MONITOR')")
     public Mono<MonitorProfileDto> getProfile(Principal principal) {
         return monitorService.findByEmail(UserSessionService.getLoggedUserEmail(principal))

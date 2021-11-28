@@ -83,13 +83,12 @@ public class MonitorControllerTest {
     @Test
     void shouldGetProfile() {
         //ARRANGE
-        Monitor monitor = MonitorMockData.getMockMonitor();
-        when(monitorService.findByEmail(monitor.getEmail())).thenReturn(Mono.just(monitor));
+        when(monitorService.findByEmail(any())).thenReturn(Mono.just(MonitorMockData.getMockMonitor()));
 
         //ACT
         webTestClient
                 .get()
-                .uri("/monitor/getProfile/" + monitor.getEmail())
+                .uri("/monitor/getProfile")
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
@@ -99,13 +98,12 @@ public class MonitorControllerTest {
     @Test
     void shouldNotGetProfile() {
         //ARRANGE
-        Monitor monitor = MonitorMockData.getMockMonitor();
-        when(monitorService.findByEmail(monitor.getEmail())).thenReturn(Mono.error(UserNotFoundException::new));
+        when(monitorService.findByEmail(any())).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
         webTestClient
                 .get()
-                .uri("/monitor/getProfile/" + monitor.getEmail())
+                .uri("/monitor/getProfile")
                 .exchange()
                 //ASSERT
                 .expectStatus()

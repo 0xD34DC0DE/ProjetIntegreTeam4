@@ -59,7 +59,7 @@ public class SupervisorController {
                 .map(SupervisorMapper::toDetailsDto);
     }
 
-    @GetMapping("/getProfile/{email}")
+    @GetMapping("/getProfile")
     @PreAuthorize("hasAuthority('SUPERVISOR')")
     public Mono<SupervisorProfileDto> getProfile(Principal principal) {
         return supervisorService.getSupervisor(UserSessionService.getLoggedUserEmail(principal))
