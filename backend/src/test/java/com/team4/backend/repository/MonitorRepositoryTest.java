@@ -34,7 +34,7 @@ public class MonitorRepositoryTest {
                 Monitor.monitorBuilder().email("johnnyJ@cae-tech.com").password("johnny123").build()
         );
 
-        monitorRepository.saveAll(users).subscribe();
+        monitorRepository.saveAll(users).blockLast();
     }
 
     @Test
