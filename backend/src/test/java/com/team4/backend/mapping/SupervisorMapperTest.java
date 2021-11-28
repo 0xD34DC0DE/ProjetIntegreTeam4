@@ -1,6 +1,6 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.SupervisorCreationDto;
+import com.team4.backend.dto.SupervisorDetailsDto;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.model.TimestampedEntry;
 import com.team4.backend.testdata.SupervisorMockData;
@@ -16,7 +16,7 @@ public class SupervisorMapperTest {
     @Test
     void mapDtoToEntity() {
         //ARRANGE
-        SupervisorCreationDto dto = SupervisorMockData.getMockSupervisorDto();
+        SupervisorDetailsDto dto = SupervisorMockData.getMockSupervisorDto();
 
         dto.setStudentEmails(new HashSet<>());
 
@@ -40,7 +40,7 @@ public class SupervisorMapperTest {
         Supervisor entity = SupervisorMockData.getMockSupervisor();
 
         //ACT
-        SupervisorCreationDto dto = SupervisorMapper.toDetailsDto(entity);
+        SupervisorDetailsDto dto = SupervisorMapper.toDetailsDto(entity);
 
         //ASSERT
         assertNull(dto.getPassword()); // password shouldn't be given to frontend

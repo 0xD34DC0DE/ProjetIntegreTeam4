@@ -3,7 +3,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import axios from "axios";
 
-function OfferApplicationButton({ disabled, offerId }) {
+const OfferApplicationButton = ({ disabled, offerId }) => {
   const [userInfo] = useContext(UserInfoContext);
   const [isWaitingResponse, setIsWaitingResponse] = useState(false);
   const [isDisabled, setIsDisabled] = useState(disabled);
@@ -49,6 +49,6 @@ function OfferApplicationButton({ disabled, offerId }) {
       <Typography variant="subtitle2">Appliquer</Typography>
     </Button>
   );
-}
+};
 
 export default OfferApplicationButton;

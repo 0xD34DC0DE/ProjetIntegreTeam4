@@ -48,13 +48,19 @@ const CvInternshipManagerView = ({
             <Card
               variant="outlined"
               sx={{
-                backgroundColor: "rgba(155, 155, 155, 0.1)",
-                borderRadius: 4,
-                boxShadow: "0px 0px 10px 1px rgba(255, 255, 255, 0.3)",
+                backgroundColor: "rgba(135, 135, 135, 0.03)",
+                borderRadius: "10px",
+                border: "0.5px solid grey",
+                display:"flex",
                 ml: "auto",
                 mr: "auto",
                 mt: 2,
                 mb: 5,
+                p:4,
+                boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
+                ":hover": {
+                  boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
+                }
               }}
             >
               <CardContent>
@@ -100,7 +106,7 @@ const CvInternshipManagerView = ({
                   <Button
                     size="medium"
                     variant="contained"
-                    color="secondary"
+                    color="info"
                     sx={{ mb: "6px" }}
                     onClick={openCv}
                   >

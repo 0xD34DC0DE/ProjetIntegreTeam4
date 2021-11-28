@@ -112,13 +112,13 @@ class ReportServiceTest {
     }
 
     @Test
-    void shouldGenerateStudentsNoInternshipReport() {
+    void shouldGenerateStudentsNoInterviewReport() {
         //ARRANGE
-        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getStudentsNoInternship();
+        doReturn(ReportMockData.getStudentsFlux()).when(studentService).getStudentsNoInterview();
         doReturn(ReportMockData.getMonoBytes()).when(pdfService).renderPdf(any());
 
         //ACT
-        Mono<byte[]> response = reportService.generateStudentsNoInternshipReport();
+        Mono<byte[]> response = reportService.generateStudentsNoInterviewReport();
 
         //ASSERT
         StepVerifier.create(response).consumeNextWith(s -> {

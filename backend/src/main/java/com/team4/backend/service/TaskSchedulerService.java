@@ -23,7 +23,9 @@ public class TaskSchedulerService {
 
     private final InternshipContractService internshipContractService;
 
-    public TaskSchedulerService(StudentService studentService, SemesterService semesterService, InternshipContractService internshipContractService) {
+    public TaskSchedulerService(StudentService studentService,
+                                SemesterService semesterService,
+                                InternshipContractService internshipContractService) {
         this.studentService = studentService;
         this.semesterService = semesterService;
         this.internshipContractService = internshipContractService;
@@ -51,18 +53,8 @@ public class TaskSchedulerService {
                 .subscribe(semester -> log.info("NEW SEMESTER CREATED : " + semester.toString()));
     }
 
-    @Scheduled(cron = "0 00 1 30 5 ?")
-    private void resetAllStudentStateBeforeSummerSemester() {
-        studentService.resetStudentStateForAllStudentWithInternship()
-                .subscribe(nbrOfUpdateStudent -> log.info(
-                        "NBR OF STUDENT THAT HAD THEIR STATE RESET : " +
-                                nbrOfUpdateStudent +
-                                ", time : " +
-                                LocalDateTime.now()));
-    }
-
     @Scheduled(cron = "0 00 1 30 8 ?")
-    private void resetAllStudentStateBeforeFallSemester() {
+    private void resetAllStudentStateAnnually() {
         studentService.resetStudentStateForAllStudentWithInternship()
                 .subscribe(nbrOfUpdateStudent -> log.info(
                         "NBR OF STUDENT THAT HAD THEIR STATE RESET : " +
@@ -70,7 +62,6 @@ public class TaskSchedulerService {
                                 ", time : " +
                                 LocalDateTime.now()));
     }
-
 
     @Scheduled(cron = "0 00 0 ? * *")
     private void notifyMonitorsTwoWeeksLeftContract() {

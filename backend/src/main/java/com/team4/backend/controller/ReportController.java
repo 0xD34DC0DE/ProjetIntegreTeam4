@@ -53,7 +53,7 @@ public class ReportController {
     @GetMapping(value = "/generateStudentsNoInternshipReport", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Mono<byte[]> generateStudentsNoInternshipReport() {
-        return reportService.generateStudentsNoInternshipReport();
+        return reportService.generateStudentsNoInterviewReport();
     }
 
     @GetMapping(value = "/generateStudentsWaitingInterviewReport", produces = MediaType.APPLICATION_PDF_VALUE)

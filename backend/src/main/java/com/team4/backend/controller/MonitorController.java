@@ -22,6 +22,7 @@ public class MonitorController {
     }
 
     @PostMapping("/register")
+    //TODO --> followConvention MonitorCreationDto
     public Mono<ResponseEntity<String>> register(@RequestBody MonitorDetailsDto monitorDto) {
         return monitorService.registerMonitor(MonitorMapper.toEntity(monitorDto))
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")));

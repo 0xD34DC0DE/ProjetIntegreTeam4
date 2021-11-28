@@ -104,8 +104,8 @@ public class ReportService {
                 });
     }
 
-    public Mono<byte[]> generateStudentsNoInternshipReport() {
-        return studentService.getStudentsNoInternship().collectList()
+    public Mono<byte[]> generateStudentsNoInterviewReport() {
+        return studentService.getStudentsNoInterview().collectList()
                 .flatMap(students -> {
                     Map<String, Object> variables = new HashMap<>();
                     variables.put("studentsList", students);

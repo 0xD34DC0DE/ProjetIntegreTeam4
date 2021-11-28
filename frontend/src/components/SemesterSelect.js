@@ -79,6 +79,7 @@ const SemesterSelect = ({ updateSemesterFullName }) => {
             display: "flex",
             mt: 5,
             mb: 2,
+            boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);"
           }}
           labelId="semesterSelectLabel"
           id="semesterSelect"
