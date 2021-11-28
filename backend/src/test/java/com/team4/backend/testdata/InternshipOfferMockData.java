@@ -26,6 +26,7 @@ public abstract class InternshipOfferMockData {
                 .title("Développeur Web")
                 .description("Description de Desjardins")
                 .listEmailInterestedStudents(getInterestedStudentsEmailList())
+                .emailOfApprovingInternshipManager("manager@gmail.com")
                 .isValidated(true)
                 .isExclusive(false)
                 .build();
