@@ -20,52 +20,53 @@ const Homepage = () => {
             .map((item, key) => {
               return (  
                 <Grid
-                item
-                key={item.id}
-                lg={6}
-                xl={4}
-                md={12}
-                sm={12}
-                xs={12}
-                textAlign="center"
+                  item
+                  key={item.id}
+                  lg={12}
+                  xl={12}
+                  md={12}
+                  sm={12}
+                  xs={12}
+                  marginX="25%"
                 >
                 <Button
-                key={item.id}
-                sx={{
-                    color: "text.primary",
-                    fontSize: "1.5em",
-                    backgroundColor: "rgba(135, 135, 135, 0.03)",
-                    width: "95%",
-                    height: "25%",
-                    border: "0.5px solid grey",
-                    boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
-                    borderRadius: "10px",
-                    py: 5,
-                    ":hover": {
-                        boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
-                        "#visualizeText": {
-                            opacity: 0.8,
-                        },
-                    },
-                }}
-                onClick={() => {
-                    if (item.isDialog)
-                    dialogDispatch({
-                        type: "OPEN",
-                        dialogName: item.dialogName,
-                    });
-                    else selectionDispatch(item);
-                }}
+                  key={item.id}
+                  sx={{
+                      color: "text.primary",
+                      fontSize: "1.5em",
+                      backgroundColor: "rgba(135, 135, 135, 0.03)",
+                      width: "100%",
+                      height: "25%",
+                      border: "0.5px solid grey",
+                      boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
+                      borderRadius: "10px",
+                      py: 5,
+                      mb: 3,
+                      ":hover": {
+                          boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
+                          "#visualizeText": {
+                              opacity: 0.8,
+                          },
+                      },
+                  }}
+                  onClick={() => {
+                      if (item.isDialog)
+                      dialogDispatch({
+                          type: "OPEN",
+                          dialogName: item.dialogName,
+                      });
+                      else selectionDispatch(item);
+                  }}
                 >
                 {item.icon}
                 {item.label}
                 </Button>
                 <Typography
-                    color= "text.primary"
-                    variant="subtitle2"
-                    fontSize="1em"
-                    align="justify"
-                    sx={{ mt: 2, textAlign: "justify", mx: 3 }}
+                    variant="subtitle"
+                    sx={{ 
+                        fontSize: "1em",
+                        color: "#CDCDCD",
+                    }}
                 >
                     {item.explication}
                 </Typography>
