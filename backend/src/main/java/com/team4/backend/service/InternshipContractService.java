@@ -194,11 +194,7 @@ public class InternshipContractService {
     public Mono<byte[]> getContractById(String contractId, String userEmail) {
         return internshipContractRepository.findById(contractId)
                 .flatMap(internshipContract -> verifyUserIsInContract(internshipContract, userEmail))
-                .flatMap(this::getPdfBytes)
-                .onErrorMap(throwable -> {
-                    log.info(throwable.getLocalizedMessage());
-                    return throwable;
-                });
+                .flatMap(this::getPdfBytes);
     }
 
     private Mono<InternshipContract> verifyUserIsInContract(InternshipContract internshipContract, String userEmail) {
