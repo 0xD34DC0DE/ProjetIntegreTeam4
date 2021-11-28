@@ -32,7 +32,7 @@ const Content = ({ isSidebarOpen }) => {
         return (
           <>
             {selection.id === 0 && <Homepage />}
-            {selection.id === 7 && <StudentDashBoard jwt={userInfo.jwt} />}
+            {selection.id === 7 && <StudentDashBoard />}
             {selection.id === 5 && <UploadCV />}
             {selection.id === 4 && <OfferViews />}
           </>

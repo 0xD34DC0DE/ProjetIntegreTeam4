@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import { Card, Typography, Grid, Container } from "@mui/material";
 import StarBorderPurple500Icon from "@mui/icons-material/StarBorderPurple500";
+import { UserInfoContext } from "../../stores/UserInfoStore";
 import TouchAppIcon from "@mui/icons-material/TouchApp";
 import { motion } from "framer-motion";
 import PeopleIcon from "@mui/icons-material/People";
@@ -10,7 +11,7 @@ import SelectStudentState from "./SelectStudentState";
 import IconImage from "./IconImage";
 import BasicInfo from "./BasicInfo";
 
-const StudentDashBoard = ({jwt}) => {
+const StudentDashBoard = () => {
   const listState = [
     "NO_INTERVIEW",
     "WAITING_INTERVIEW",
@@ -39,6 +40,7 @@ const StudentDashBoard = ({jwt}) => {
     hasValidCv: false,
   });
 
+  const [userInfo] = useContext(UserInfoContext);
   const [isDisabled, setIsDisabled] = useState(true);
 
   useEffect(() => {
@@ -47,7 +49,7 @@ const StudentDashBoard = ({jwt}) => {
         method: "GET",
         url: "http://localhost:8080/student/getProfile",
         headers: {
-          Authorization: jwt,
+          Authorization: userInfo.jwt,
         },
         responseType: "json",
       })
@@ -114,7 +116,6 @@ const StudentDashBoard = ({jwt}) => {
                       hasInternship={hasInternship}
                       profile={profile}
                       setProfile={setProfile}
-                      jwt={jwt}
                       fadeIn={fadeIn}
                     />
                   </Grid>
@@ -142,7 +143,6 @@ const StudentDashBoard = ({jwt}) => {
                     setProfile={setProfile}
                     isDisabled={isDisabled}
                     setIsDisabled={setIsDisabled}
-                    jwt={jwt}
                     fadeIn={fadeIn}
                     listState={listState}
                     listStateFrench={listStateFrench}

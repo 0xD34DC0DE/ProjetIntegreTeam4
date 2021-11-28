@@ -1,10 +1,8 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import axios from "axios";
-import {
-  Typography,
-  TextField,
-} from "@mui/material";
+import { Typography, TextField } from "@mui/material";
 import { motion } from "framer-motion";
+import { UserInfoContext } from "../../stores/UserInfoStore";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 import WarningIcon from "@mui/icons-material/Warning";
 import ScheduleIcon from "@mui/icons-material/Schedule";
@@ -13,11 +11,11 @@ const SelectInterviewDate = ({
   hasInternship,
   profile,
   setProfile,
-  jwt,
   fadeIn,
 }) => {
   const currentDate = new Date();
   const [isDateValid, setIsDateValid] = useState(true);
+  const [userInfo] = useContext(UserInfoContext);
   const [isInterviewDateUpdated, setIsInterviewDateUpdated] = useState(false);
 
   const showAndHideInterviewUpdateSuccessMsg = () => {
@@ -40,7 +38,7 @@ const SelectInterviewDate = ({
       method: "PATCH",
       url: "http://localhost:8080/student/updateInterviewDate/" + date,
       headers: {
-        Authorization: jwt,
+        Authorization: userInfo.jwt,
       },
       responseType: "json",
     })
@@ -102,7 +100,7 @@ const SelectInterviewDate = ({
               m: 2,
             }}
           >
-            {"L'ajout d'entrevue n'est pas disponible pour l'instant"}
+            L'ajout d'entrevue n'est pas disponible pour l'instant
             <ScheduleIcon />
           </Typography>
         </motion.div>
@@ -114,7 +112,7 @@ const SelectInterviewDate = ({
             variant="subtitle1"
             sx={{ color: "green", textAlign: "center" }}
           >
-            {"DATE D'ENTREVUE AJOUTÉE"}
+            DATE D'ENTREVUE AJOUTÉE
             <PublishedWithChangesIcon />
           </Typography>
         </motion.div>
@@ -126,7 +124,7 @@ const SelectInterviewDate = ({
             variant="subtitle1"
             sx={{ color: "red", textAlign: "center" }}
           >
-            {"DATE D'ENTREVUE INVALIDE"}
+            DATE D'ENTREVUE INVALIDE
             <WarningIcon />
           </Typography>
         </motion.div>
