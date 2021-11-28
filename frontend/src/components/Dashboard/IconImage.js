@@ -24,7 +24,7 @@ const IconImage = ({ profile }) => {
             component="div"
             gutterBottom
           >
-            {"Vous avez un CV est valide"}
+            Vous avez un CV est valide
             <CheckCircleIcon />
           </Typography>
         ) : (
@@ -34,7 +34,7 @@ const IconImage = ({ profile }) => {
             component="div"
             gutterBottom
           >
-            {"Vous n'avez aucun CV valide"}
+            Vous n'avez aucun CV valide
             <BlockIcon />
           </Typography>
         )}

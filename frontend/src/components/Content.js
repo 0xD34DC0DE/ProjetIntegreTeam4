@@ -30,7 +30,7 @@ const Content = ({ isSidebarOpen }) => {
       case "STUDENT":
         return (
           <>
-            {selection.id === 7 && <StudentDashBoard jwt={userInfo.jwt} />}
+            {selection.id === 7 && <StudentDashBoard />}
             {selection.id === 5 && <UploadCV />}
             {selection.id === 4 && <OfferViews />}
           </>

@@ -1,11 +1,8 @@
-import React, { useState } from "react";
+import React, { useState,useContext } from "react";
 import axios from "axios";
-import {
-  Typography,
-  Select,
-  MenuItem,
-} from "@mui/material";
+import { Typography, Select, MenuItem } from "@mui/material";
 import { motion } from "framer-motion";
+import { UserInfoContext } from "../../stores/UserInfoStore";
 import PublishedWithChangesIcon from "@mui/icons-material/PublishedWithChanges";
 
 const SelectStudentState = ({
@@ -13,14 +10,15 @@ const SelectStudentState = ({
   setProfile,
   isDisabled,
   setIsDisabled,
-  jwt,
   fadeIn,
   listState,
   listStateFrench,
 }) => {
   const [isStatusUpdated, setIsStatusUpdated] = useState(false);
+  const [userInfo] = useContext(UserInfoContext);
 
   const showAndHideStatusUpdateSuccessMsg = () => {
+    setIsStatusUpdated(true);
     setTimeout(() => {
       setIsStatusUpdated(false);
     }, 3000);
@@ -31,7 +29,7 @@ const SelectStudentState = ({
       method: "PATCH",
       url: "http://localhost:8080/student/updateStudentState",
       headers: {
-        Authorization: jwt,
+        Authorization: userInfo.jwt,
       },
       responseType: "json",
     })
