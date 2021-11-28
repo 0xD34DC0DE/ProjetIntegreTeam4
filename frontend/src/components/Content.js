@@ -12,6 +12,7 @@ import OfferForm from "./OfferForm";
 import OfferViews from "./OfferViews";
 import StudentDashBoard from "./Dashboard/StudentDashboard";
 import SupervisorDashBoard from "./Dashboard/SupervisorDashBoard";
+import MonitorDashBoard from "./Dashboard/MonitorDashBoard";
 import InternshipOfferValidation from "./InternshipOfferValidation";
 import ListUserDroppable from "./ListUserDroppable";
 import ListUserDraggable from "./ListUserDraggable";
@@ -58,6 +59,7 @@ const Content = ({ isSidebarOpen }) => {
         return (
           <>
             {selection.id === 6 && <ListStudentApplying />}
+            {selection.id === 7 && <MonitorDashBoard />}
             {selection.id === 12 && <StudentEvaluationForm />}
           </>
         );

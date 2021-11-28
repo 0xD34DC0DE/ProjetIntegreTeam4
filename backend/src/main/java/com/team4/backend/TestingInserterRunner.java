@@ -339,12 +339,16 @@ public class TestingInserterRunner implements ApplicationRunner {
         Monitor monitor = Monitor.monitorBuilder().email("monitor@gmail.com")
                 .password(pbkdf2Encoder.encode("monitor"))
                 .firstName("Giorno")
+                .companyName("Google")
+                .phoneNumber("438-998-7654")
                 .lastName("Giovanna")
                 .build();
 
         Monitor monitor2 = Monitor.monitorBuilder().email("monitor1@gmail.com")
                 .password(pbkdf2Encoder.encode("monitor1"))
                 .firstName("Amir")
+                .companyName("CAE")
+                .phoneNumber("438-529-0976")
                 .lastName("Fernandez")
                 .build();
 

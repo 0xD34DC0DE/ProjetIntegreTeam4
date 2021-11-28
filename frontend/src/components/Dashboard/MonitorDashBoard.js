@@ -7,7 +7,7 @@ import PeopleIcon from "@mui/icons-material/People";
 import IconImage from "./IconImage";
 import BasicInfo from "./BasicInfo";
 
-const SupervisorDashBoard = () => {
+const MonitorDashBoard = () => {
   const [userInfo] = useContext(UserInfoContext);
   const [profile, setProfile] = useState({
     id: "",
@@ -16,14 +16,14 @@ const SupervisorDashBoard = () => {
     lastName: "",
     registrationDate: "",
     phoneNumber: "",
-    nbrOfAssignedStudents: 0,
+    companyName: "",
   });
 
   useEffect(() => {
     const getProfile = () => {
       axios({
         method: "GET",
-        url: "http://localhost:8080/supervisor/getProfile",
+        url: "http://localhost:8080/monitor/getProfile",
         headers: {
           Authorization: userInfo.jwt,
         },
@@ -93,8 +93,8 @@ const SupervisorDashBoard = () => {
                   justifyContent="center"
                 >
                   <Typography variant="subtitle1" sx={{ m: 1 }}>
-                    <PeopleIcon /> Nombres d'élèves assignés :{" "}
-                    {profile.nbrOfAssignedStudents}
+                    <PeopleIcon /> Nom de la compagnie :{" "}
+                    {profile.companyName}
                   </Typography>
                 </Grid>
               </Grid>
@@ -106,4 +106,4 @@ const SupervisorDashBoard = () => {
   );
 };
 
-export default SupervisorDashBoard;
+export default MonitorDashBoard;
