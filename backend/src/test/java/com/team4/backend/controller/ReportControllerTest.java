@@ -102,7 +102,7 @@ class ReportControllerTest {
     @Test
     void shouldGenerateStudentsNoInternshipReport() {
         //ARRANGE
-        doReturn(ReportMockData.getMonoBytes()).when(reportService).generateStudentsNoInternshipReport();
+        doReturn(ReportMockData.getMonoBytes()).when(reportService).generateStudentsNoInterviewReport();
 
         //ACT
         webTestClient

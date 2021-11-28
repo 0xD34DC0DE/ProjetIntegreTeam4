@@ -7,6 +7,7 @@ import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.StudentRepository;
 import com.team4.backend.util.PBKDF2Encoder;
+import com.team4.backend.util.SemesterUtil;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -51,10 +52,6 @@ public class StudentService {
         });
     }
 
-    public Mono<Student> getStudent(String studentEmail) {
-        return studentRepository.findByEmailAndIsEnabledTrue(studentEmail);
-    }
-
     public Mono<Student> findByEmail(String email) {
         return studentRepository.findByEmail(email)
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find student with email" + email)));
@@ -81,7 +78,6 @@ public class StudentService {
                         && student.getHasValidCv())
                 .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update your state if you're not waiting for a response to your recent interview!")))
                 .map(student -> {
-                    // TODO --> call function that will trigger the contract generation
                     student.setStudentState(studentState);
                     return student;
                 }).flatMap(studentRepository::save);
@@ -89,13 +85,22 @@ public class StudentService {
 
     public Mono<Student> updateInterviewDate(String email, LocalDate interviewDate) {
         return findByEmail(email)
-                .filter(student -> !student.getStudentState().equals(StudentState.INTERNSHIP_FOUND)
-                        && student.getHasValidCv())
-                .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't update the interview date if you already have an internship")))
-                .map(student -> {
-                    student.getInterviewsDate().add(interviewDate);
-                    return student;
-                }).flatMap(studentRepository::save);
+                .filter(student -> !student.getStudentState().equals(StudentState.INTERNSHIP_FOUND) &&
+                        student.getHasValidCv())
+                .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't add an interview if you already have an internship for this semester!")))
+                .flatMap(student -> semesterService.getCurrentSemester()
+                        .filter(semester -> SemesterUtil
+                                .checkIfDatesAreInsideRangeOfSemester(semester, interviewDate.atStartOfDay(), interviewDate.atStartOfDay())
+                        )
+                        .switchIfEmpty(Mono.error(new ForbiddenActionException("Can't add an interview that is not inside the range of this semester!")))
+                        .map((semester) -> {
+                            if (student.getStudentState().equals(NO_INTERVIEW))
+                                student.setStudentState(WAITING_INTERVIEW);
+
+                            student.getInterviewsDate().add(interviewDate);
+                            return student;
+                        })
+                ).flatMap(studentRepository::save);
     }
 
     public Mono<Student> addOfferToStudentAppliedOffers(Student student, String offerId) {
@@ -127,12 +132,12 @@ public class StudentService {
         return studentRepository.findAllByHasValidCvFalse();
     }
 
-    public Flux<Student> getStudentsNoInternship() {
-        return studentRepository.findAllByStudentState(REGISTERED);
+    public Flux<Student> getStudentsNoInterview() {
+        return studentRepository.findAllByStudentState(NO_INTERVIEW);
     }
 
     public Flux<Student> getStudentsWaitingInterview() {
-        return studentRepository.findAllByStudentState(INTERNSHIP_NOT_FOUND);
+        return studentRepository.findAllByStudentState(WAITING_INTERVIEW);
     }
 
     public Flux<Student> getStudentsWaitingResponse() {
@@ -167,7 +172,7 @@ public class StudentService {
     }
 
     public Mono<Long> updateStudentStateForAllStudentThatInterviewDateHasPassed() {
-        return studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND)
+        return studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.WAITING_INTERVIEW)
                 .map(student -> {
                     student.setStudentState(StudentState.WAITING_FOR_RESPONSE);
                     log.info("STATE UPDATED : " + student.getFirstName() + ", " + student.getLastName());
@@ -179,7 +184,7 @@ public class StudentService {
         return getStudentsWithInternship()
                 .map(student -> {
                     log.info("RESET STATE : " + student.getFirstName() + ", " + student.getLastName());
-                    student.setStudentState(INTERNSHIP_NOT_FOUND);
+                    student.setStudentState(NO_INTERVIEW);
                     return save(student).subscribe();
                 }).count();
     }

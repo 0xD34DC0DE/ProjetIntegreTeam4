@@ -351,7 +351,7 @@ public class InternshipContractService {
         }
     }
 
-    // TODO Make this method more generic, not just for the monitor
+    //TODO Make this method more generic, not just for the monitor
     // Aka take a contract id instead of this mess
     public Mono<Boolean> hasSigned(String internshipOfferId, String studentEmail, String userEmail) {
 

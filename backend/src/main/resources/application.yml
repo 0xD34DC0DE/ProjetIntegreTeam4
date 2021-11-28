@@ -34,4 +34,6 @@ spring:
     test-connection: false
   thymeleaf:
     enabled: false
-
+server:
+  error:
+    include-message: always
