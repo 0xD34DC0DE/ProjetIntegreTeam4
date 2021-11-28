@@ -1,4 +1,4 @@
-import { Grid, Button, Card } from "@mui/material";
+import { Grid, Button, Typography, } from "@mui/material";
 import React, { useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { sidebarList } from "./Configuration";
@@ -33,6 +33,7 @@ const Homepage = () => {
                 key={item.id}
                 sx={{
                     color: "text.primary",
+                    fontSize: "1.5em",
                     backgroundColor: "rgba(135, 135, 135, 0.03)",
                     width: "95%",
                     height: "25%",
@@ -59,6 +60,15 @@ const Homepage = () => {
                 {item.icon}
                 {item.label}
                 </Button>
+                <Typography
+                    color= "text.primary"
+                    variant="subtitle2"
+                    fontSize="1em"
+                    align="justify"
+                    sx={{ mt: 2, textAlign: "justify", mx: 3 }}
+                >
+                    {item.explication}
+                </Typography>
               </Grid>
               );
             })}
