@@ -43,7 +43,10 @@ const HomeJumbotron = ({
           <Typography variant="h3" sx={{ px: 5, py: 5 }}>
             {title}
           </Typography>
-          <Typography variant="body1" sx={{ p: 5 }}>
+          <Typography variant="body1" sx={{
+              p: 5,
+              fontSize: "2rem",
+            }}>
             {description}
           </Typography>
           <div className="steps">

@@ -20,7 +20,7 @@ const HomeButtons = () => {
     <Grid container>
       {buttonsInfo.map((buttonInfo, key) => {
         return (
-          <Grid item xs={12} sm={6} sx={{ p: 1 }}>
+          <Grid item xs={12} sm={6} sx={{ p: 1 }} key={key}>
             <motion.div
               animate={{ opacity: [0, 1] }}
               transition={{

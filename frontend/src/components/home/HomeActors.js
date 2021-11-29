@@ -61,6 +61,7 @@ const HomeActors = () => {
                   }}
                 >
                   <HomeCard
+                    keyProp={key}
                     role={value}
                     description={descriptions[key]}
                     image={resource[key]}

@@ -1,4 +1,4 @@
-import { Container, Grid, Paper, Typography } from "@mui/material";
+import { Container, Paper, Typography } from "@mui/material";
 import React from "react";
 import HomeButtons from "./HomeButtons";
 
@@ -11,8 +11,11 @@ const HomeTitle = () => {
           textAlign: "center",
         }}
       >
-        <Typography sx={{ p: 2 }} variant="h1">
-          Bienvenu sur le site
+        <Typography sx={{ pt: 2 }} variant="h1">
+          OSER
+        </Typography>
+        <Typography sx={{ p: 1 }} variant="h3">
+          Offre-Stage-Emplois-Rénové
         </Typography>
         <HomeButtons />
       </Paper>

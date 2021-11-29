@@ -1,10 +1,10 @@
 import { Typography } from "@mui/material";
 const StudentState = ({ studentState }) => {
   switch (studentState) {
-    case "WAITING_FOR_RESPONSE":
+    case "NO_INTERVIEW":
       return (
-        <Typography sx={{ border: "2px orange solid" }}>
-          En attente de la réponse
+        <Typography sx={{ border: "2px white solid" }}>
+          Sans entrevue
         </Typography>
       );
     case "WAITING_INTERVIEW":
@@ -13,15 +13,15 @@ const StudentState = ({ studentState }) => {
           En attente d'entrevue
         </Typography>
       );
+    case "WAITING_FOR_RESPONSE":
+      return (
+        <Typography sx={{ border: "2px orange solid" }}>
+          En attente de la réponse
+        </Typography>
+      );
     case "INTERNSHIP_FOUND":
       return (
         <Typography sx={{ border: "2px green solid" }}>Stage trouvé</Typography>
-      );
-    case "REGISTERED":
-      return (
-        <Typography sx={{ border: "2px white solid" }}>
-          Nouvel étudiant
-        </Typography>
       );
     default:
       break;
