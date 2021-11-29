@@ -18,11 +18,16 @@ export default function UserCard({ user }) {
       role="Handle"
       ref={drag}
       sx={{
-        backgroundColor: "#1F2020",
+        backgroundColor: "rgba(135, 135, 135, 0.03)",
         alignItem: "center",
+        border: "0.5px solid grey",
+        borderRadius: "10px",
         justifyContent: "center",
         p: 2,
         mx: 2,
+        ":hover": {
+          boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
+        }
       }}
     >
       <Box sx={{ textAlign: "center" }}>

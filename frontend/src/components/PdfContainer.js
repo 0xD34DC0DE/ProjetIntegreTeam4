@@ -4,13 +4,13 @@ import { Document, Page } from "react-pdf/dist/esm/entry.webpack";
 
 pdfjs.GlobalWorkerOptions.workerSrc = "pdf.worker.min.js";
 
-function PdfContainer({ pdfData, pageNumber, setPageCount }) {
+const PdfContainer = ({ pdfData, pageNumber, setPageCount }) => {
   function onDocumentLoadSuccess({ numPages: nextNumPages }) {
     setPageCount(nextNumPages);
   }
 
   return (
-    <div>
+    <>
       <div
         sx={{
           display: "flex",
@@ -51,8 +51,8 @@ function PdfContainer({ pdfData, pageNumber, setPageCount }) {
           )}
         </div>
       </div>
-    </div>
+    </>
   );
-}
+};
 
 export default PdfContainer;

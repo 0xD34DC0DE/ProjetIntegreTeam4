@@ -110,7 +110,6 @@ public class InternshipOfferService {
         }).flatMap(internshipOfferRepository::save);
     }
 
-
     public Mono<Long> getInternshipOffersPageCount(Integer size) {
         if (size < 1) {
             return Mono.error(InvalidPageRequestException::new);

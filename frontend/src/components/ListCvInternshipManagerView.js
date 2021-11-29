@@ -97,7 +97,7 @@ const ListCvInternshipManagerView = ({ visible }) => {
           mt: 5,
         }}
       >
-        <Grid item lg={12} xl={12} md={12} sm={6} xs={6} alignSelf="center">
+        <Grid  item lg={12} xl={12} md={12} sm={8} xs={6} alignSelf="center">
           {cvs.map((cv, key) => (
             <CvInternshipManagerView
               key={key}
@@ -118,7 +118,7 @@ const ListCvInternshipManagerView = ({ visible }) => {
             disabled
             component="div"
             sx={{
-              boxShadow: "0px 0px 5px 1px rgba(255, 255, 255, 0.2)",
+              boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
               backgroundColor: "rgba(100, 100, 100, 0.1)",
             }}
             count={nbrCvs}

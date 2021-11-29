@@ -98,7 +98,7 @@ const ListCvStudentView = () => {
                       sx={{
                         backgroundColor: "rgba(155, 155, 155, 0.1)",
                         borderRadius: 4,
-                        boxShadow: "0px 0px 10px 1px rgba(255, 255, 255, 0.3)",
+                        boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
                         mt: 2,
                         mb: 5,
                         textAlign: "right",
@@ -106,6 +106,9 @@ const ListCvStudentView = () => {
                           backgroundColor: "rgba(200, 200, 200, 0.1)",
                           cursor: "pointer",
                         },
+                        ":hover": {
+                          boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
+                        }
                       }}
                     >
                       {cv.isSeen == false && (

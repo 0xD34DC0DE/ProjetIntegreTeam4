@@ -14,7 +14,7 @@ import axios from "axios";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { motion } from "framer-motion";
 
-function OfferViews() {
+const OfferViews = () => {
   const offersPerPage = 3;
   const [userInfo] = useContext(UserInfoContext);
   const [internshipOffers, setInternshipOffers] = useState(null);
