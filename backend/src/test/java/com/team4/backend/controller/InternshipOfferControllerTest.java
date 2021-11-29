@@ -81,7 +81,7 @@ public class InternshipOfferControllerTest {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.changeInternshipOfferExclusivity(internshipOffer.getId(), false)).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferService.changeInternshipOfferExclusivity(any(), any())).thenReturn(Mono.just(internshipOffer));
 
         //ACT
         webTestClient
@@ -94,8 +94,7 @@ public class InternshipOfferControllerTest {
                                 .build())
                 .exchange()
                 //ASSERT
-                .expectStatus().isNoContent()
-                .expectBody(String.class);
+                .expectStatus().isNoContent();
     }
 
     @Test
@@ -103,7 +102,7 @@ public class InternshipOfferControllerTest {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.changeInternshipOfferExclusivity(internshipOffer.getId(), false)).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
+        when(internshipOfferService.changeInternshipOfferExclusivity(any(), any())).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
 
         //ACT
         webTestClient
@@ -116,8 +115,28 @@ public class InternshipOfferControllerTest {
                                 .build())
                 .exchange()
                 //ASSERT
-                .expectStatus().isNotFound()
-                .expectBody(String.class);
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    void shouldNotChangeInternshipOfferExclusivityWhenItIsNotValidated() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.changeInternshipOfferExclusivity(any(), any())).thenReturn(Mono.error(ForbiddenActionException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/internshipOffer/changeInternshipOfferExclusivity")
+                                .queryParam("id", internshipOffer.getId())
+                                .queryParam("isExclusive", true)
+                                .build())
+                .exchange()
+                //ASSERT
+                .expectStatus().isForbidden();
     }
 
     @Test

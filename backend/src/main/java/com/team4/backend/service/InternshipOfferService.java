@@ -117,8 +117,6 @@ public class InternshipOfferService {
                 });
     }
 
-
-
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers(String semesterFullName) {
         return semesterService.findByFullName(semesterFullName)
                 .flatMapMany(semester -> internshipOfferRepository
