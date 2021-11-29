@@ -24,8 +24,7 @@ const HomeCard = ({ role, description, functionnalities, image }) => {
       y: 10,
       transition: {
         type: "tween",
-        bounce: 0.4,
-        duration: 0.4,
+        duration: 0.5,
       },
     },
   };
@@ -37,7 +36,8 @@ const HomeCard = ({ role, description, functionnalities, image }) => {
       sx={{
         m: 2,
         height: "75vh",
-        backgroundRepeat: "round",
+        backgroundRepeat: "no-repeat",
+        backgroundSize: "cover",
         backgroundImage: `url(${image})`,
       }}
     >

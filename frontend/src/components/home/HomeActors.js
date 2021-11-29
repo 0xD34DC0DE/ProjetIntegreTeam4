@@ -1,16 +1,7 @@
-import React, { useState } from "react";
-import {
-  Box,
-  Grid,
-  Typography,
-  Paper,
-  Button,
-  Card,
-  CardMedia,
-} from "@mui/material";
-import { motion } from "framer-motion";
+import { Grid } from "@mui/material";
+import React from "react";
 import HomeCard from "./HomeCard";
-
+import { motion } from "framer-motion";
 const HomeActors = () => {
   const roles = ["Moniteur", "Superviseur", "Étudiant"];
   const descriptions = [
@@ -36,12 +27,22 @@ const HomeActors = () => {
       "Afficher votre profil",
       "Changer le statut de votre demande de stage",
       "Téléverser un C.V.",
-      "Afficher ses C.V. téléversés",
+      "Afficher les C.V. téléversés",
       "Appliquer à une offre de stage",
     ],
   ];
   const resource = ["downtown.jpg", "cegep.jpg", "etudiant.jpg"];
 
+  const scrolled = {
+    offscreen: {
+      y: 300,
+      opacity: 0,
+    },
+    onscreen: {
+      y: 0,
+      opacity: 1,
+    },
+  };
   return (
     <>
       <Grid sx={{ flexGrow: 1 }} container spacing={2}>
@@ -49,12 +50,23 @@ const HomeActors = () => {
           <Grid container justifyContent="center" spacing={5}>
             {roles.map((value, key) => (
               <Grid key={key} item xs={12} sm={12} md={6} lg={4} xl={4}>
-                <HomeCard
-                  role={value}
-                  description={descriptions[key]}
-                  image={resource[key]}
-                  functionnalities={functionnalities[key]}
-                />
+                <motion.div
+                  variants={scrolled}
+                  initial="offscreen"
+                  animate="onscreen"
+                  transition={{
+                    type: "tween",
+                    duration: 1,
+                    delay: (key + 1) * 0.2,
+                  }}
+                >
+                  <HomeCard
+                    role={value}
+                    description={descriptions[key]}
+                    image={resource[key]}
+                    functionnalities={functionnalities[key]}
+                  />
+                </motion.div>
               </Grid>
             ))}
           </Grid>
