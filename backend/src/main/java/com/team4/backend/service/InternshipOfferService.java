@@ -13,6 +13,7 @@ import com.team4.backend.util.ValidatingPageRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 import java.time.LocalDateTime;
 
@@ -104,6 +105,8 @@ public class InternshipOfferService {
 
     public Mono<Boolean> addExclusiveOfferToStudent(String email, String id) {
         return Mono.zip(studentService.findByEmail(email), internshipOfferRepository.existsByIdAndIsExclusiveTrue(id))
+                .filter(tuple -> !tuple.getT1().getExclusiveOffersId().contains(id))
+                .switchIfEmpty(Mono.error(new DuplicateEntryException("The student already has this exclusive offer")))
                 .map(tuple -> {
                     Student student = tuple.getT1();
                     Boolean exist = tuple.getT2();
