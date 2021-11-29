@@ -48,7 +48,7 @@ function SignContractDialog() {
               alignContent="center"
               rowSpacing={2}
             >
-              {contractId != "" && (
+              {contractId !== "" && (
                 <>
                   <Grid item xs={12}>
                     <PdfView pdfUrl={getPdfUrl()} params={{}} />

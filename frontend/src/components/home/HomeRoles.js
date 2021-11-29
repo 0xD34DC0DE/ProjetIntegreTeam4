@@ -34,7 +34,6 @@ const HomeRoles = () => {
                   sx={{
                       color: "text.primary",
                       fontSize: "1.5em",
-                      // backgroundColor: "rgba(135, 135, 135, 0.03)",
                       backgroundColor: "#5d1f94",
                       width: "100%",
                       height: "25%",

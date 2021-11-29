@@ -76,7 +76,7 @@ const ListCvStudentView = () => {
           <Grid alignItems="center" container spacing={5}>
             {cvs
               .sort(function (cv1, cv2) {
-                return cv1.isValid == true
+                return cv1.isValid === true
                   ? -1
                   : Date.parse(cv1.uploadDate) - Date.parse(cv2.uploadDate);
               })
@@ -104,13 +104,11 @@ const ListCvStudentView = () => {
                         ":hover": {
                           backgroundColor: "rgba(200, 200, 200, 0.1)",
                           cursor: "pointer",
-                        },
-                        ":hover": {
                           boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
-                        }
+                        },
                       }}
                     >
-                      {cv.isSeen == false && (
+                      {cv.isSeen === false && (
                         <Typography title="Le C.V. n'a pas encore été vérifié.">
                           <InfoIcon
                             sx={{
@@ -126,7 +124,7 @@ const ListCvStudentView = () => {
                           />
                         </Typography>
                       )}
-                      {cv.isSeen == true && cv.isValid == true && (
+                      {cv.isSeen === true && cv.isValid === true && (
                         <Typography title="Le C.V. a été validé. Vous pouvez maintenant appliquer à des offres.">
                           <ThumbUpIcon
                             sx={{
@@ -142,7 +140,7 @@ const ListCvStudentView = () => {
                           />
                         </Typography>
                       )}
-                      {cv.isSeen == true && cv.isValid == false && (
+                      {cv.isSeen === true && cv.isValid === false && (
                         <Typography title="Le C.V. a été rejeté: cliquez ici pour voir la raison du rejet">
                           <ThumbDownIcon
                             onClick={() =>
