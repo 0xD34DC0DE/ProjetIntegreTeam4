@@ -1,16 +1,6 @@
-import {
-  Container,
-  Divider,
-  Grid,
-  List,
-  ListItem,
-  ListItemText,
-  Paper,
-  Typography,
-} from "@mui/material";
-import { Box } from "@mui/system";
-import React, { useState } from "react";
+import { Container, Divider, Paper, Typography } from "@mui/material";
 import { motion } from "framer-motion";
+import React, { useState } from "react";
 import "./HomeJumbotron.css";
 
 const HomeJumbotron = ({

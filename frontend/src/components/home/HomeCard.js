@@ -1,18 +1,7 @@
-import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Grid,
-  Typography,
-  Paper,
-  Button,
-  Card,
-  CardMedia,
-  List,
-  ListItem,
-  ListItemText,
-} from "@mui/material";
+import { Card, Grid, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import PropTypes from "prop-types";
+import React, { useState } from "react";
 
 const HomeCard = ({ role, description, functionnalities, image }) => {
   const [showDescription, setShowDescription] = useState(false);
