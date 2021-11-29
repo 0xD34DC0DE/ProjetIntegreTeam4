@@ -79,12 +79,20 @@ public class InternshipOfferController {
         return internshipOfferService.getInternshipOffersPageCount(size);
     }
 
+    @PatchMapping("/makeInternshipOfferExclusive/{id}")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
+    public Mono<ResponseEntity<String>> makeInternshipOfferExclusive(@PathVariable String id) {
+        return internshipOfferService.makeInternshipOfferExclusive(id)
+                .flatMap(i -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
+
+    }
+
     @PatchMapping("/validateInternshipOffer")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
     public Mono<ResponseEntity<String>> validateInternshipOffer(@RequestParam("id") String id,
                                                                 @RequestParam("isValid") Boolean isValid) {
         return internshipOfferService.validateInternshipOffer(id, isValid)
-                .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
+                .flatMap(i -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 
     @GetMapping("/getNotYetValidatedInternshipOffers/{semesterFullName}")

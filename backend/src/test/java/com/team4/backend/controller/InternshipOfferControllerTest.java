@@ -80,6 +80,40 @@ public class InternshipOfferControllerTest {
     }
 
     @Test
+    void shouldMakeInternshipOfferExclusive() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.makeInternshipOfferExclusive(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/internshipOffer/makeInternshipOfferExclusive/" + internshipOffer.getId())
+                .exchange()
+                //ASSERT
+                .expectStatus().isNoContent()
+                .expectBody(String.class);
+    }
+
+    @Test
+    void shouldNotMakeInternshipOfferExclusive() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.makeInternshipOfferExclusive(internshipOffer.getId())).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/internshipOffer/makeInternshipOfferExclusive/" + internshipOffer.getId())
+                .exchange()
+                //ASSERT
+                .expectStatus().isNotFound()
+                .expectBody(String.class);
+    }
+
+    @Test
     void shouldValidateInternshipOffer() {
         //ARRANGE
         InternshipOfferDetailedDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
@@ -104,24 +138,6 @@ public class InternshipOfferControllerTest {
     }
 
     @Test
-    void shouldGetNotYetValidatedInternshipOffer() {
-        //ARRANGE
-        String semesterFullName = SemesterName.WINTER + "-" + LocalDateTime.now().getYear();
-        Flux<InternshipOffer> internshipOfferFlux = InternshipOfferMockData.getNonValidatedInternshipOffers();
-
-        when(internshipOfferService.getNotYetValidatedInternshipOffers(semesterFullName)).thenReturn(internshipOfferFlux);
-
-        //ACT
-        webTestClient
-                .get()
-                .uri("/internshipOffer/getNotYetValidatedInternshipOffers/" + semesterFullName)
-                .exchange()
-                //ASSERT
-                .expectStatus().isOk()
-                .expectBodyList(InternshipOfferDetailedDto.class);
-    }
-
-    @Test
     void shouldNotValidateInternshipOffer() {
         //ARRANGE
         InternshipOfferDetailedDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
@@ -142,6 +158,24 @@ public class InternshipOfferControllerTest {
                 //ASSERT
                 .expectStatus().isNotFound()
                 .expectBody(String.class);
+    }
+
+    @Test
+    void shouldGetNotYetValidatedInternshipOffer() {
+        //ARRANGE
+        String semesterFullName = SemesterName.WINTER + "-" + LocalDateTime.now().getYear();
+        Flux<InternshipOffer> internshipOfferFlux = InternshipOfferMockData.getNonValidatedInternshipOffers();
+
+        when(internshipOfferService.getNotYetValidatedInternshipOffers(semesterFullName)).thenReturn(internshipOfferFlux);
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/internshipOffer/getNotYetValidatedInternshipOffers/" + semesterFullName)
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(InternshipOfferDetailedDto.class);
     }
 
     @Test
