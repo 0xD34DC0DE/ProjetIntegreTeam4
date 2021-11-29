@@ -10,7 +10,7 @@ import SelectionStore from "./stores/SelectionStore";
 import UserInfoStore from "./stores/UserInfoStore";
 
 function App() {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
     <UserInfoStore>

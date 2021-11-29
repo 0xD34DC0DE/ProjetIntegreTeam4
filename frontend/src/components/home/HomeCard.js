@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import PropTypes from "prop-types";
 import React, { useState } from "react";
 
-const HomeCard = ({ role, description, functionnalities, image }) => {
+const HomeCard = ({ keyProp, role, description, functionnalities, image }) => {
   const [showDescription, setShowDescription] = useState(false);
   const mouseEnter = {
     offscreen: {
@@ -32,6 +32,7 @@ const HomeCard = ({ role, description, functionnalities, image }) => {
     >
       <Grid
         container
+        key={keyProp}
         sx={{
           color: "white",
           height: "100%",
