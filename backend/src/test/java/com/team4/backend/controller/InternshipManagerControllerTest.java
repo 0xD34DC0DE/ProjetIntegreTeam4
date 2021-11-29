@@ -1,9 +1,9 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.InternshipDetailsDto;
-import com.team4.backend.model.Internship;
-import com.team4.backend.service.InternshipService;
-import com.team4.backend.testdata.InternshipMockData;
+import com.team4.backend.dto.InternshipManagerProfileDto;
+import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.service.InternshipManagerService;
+import com.team4.backend.testdata.InternshipManagerMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,50 +15,48 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @EnableAutoConfiguration
 @ExtendWith(SpringExtension.class)
-@WebFluxTest(value = InternshipController.class, excludeAutoConfiguration = ReactiveSecurityAutoConfiguration.class)
-public class InternshipControllerTest {
+@WebFluxTest(value = InternshipManagerController.class, excludeAutoConfiguration = ReactiveSecurityAutoConfiguration.class)
+public class InternshipManagerControllerTest {
 
     @Autowired
     WebTestClient webTestClient;
 
     @MockBean
-    InternshipService internshipService;
-
+    InternshipManagerService internshipManagerService;
 
     @Test
-    void shouldGetInternshipByStudentEmail() {
+    void shouldGetProfile() {
         //ARRANGE
-        Internship internship = InternshipMockData.getInternship();
-        when(internshipService.getInternshipByEmail(internship.getStudentEmail())).thenReturn(Mono.just(internship));
+        when(internshipManagerService.findByEmail(any())).thenReturn(Mono.just(InternshipManagerMockData.GetInternshipManager()));
 
         //ACT
         webTestClient
                 .get()
-                .uri("/internship/" + internship.getStudentEmail())
+                .uri("/internshipManager/getProfile")
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
-                .expectBody(InternshipDetailsDto.class);
+                .expectBody(InternshipManagerProfileDto.class);
     }
 
     @Test
-    void shouldExistsInternshipByStudentEmail() {
+    void shouldNotGetProfile() {
         //ARRANGE
-        Internship internship = InternshipMockData.getInternship();
-        when(internshipService.existsByStudentEmail(internship.getStudentEmail())).thenReturn(Mono.just(true));
+        when(internshipManagerService.findByEmail(any())).thenReturn(Mono.error(UserNotFoundException::new));
 
         //ACT
         webTestClient
                 .get()
-                .uri("/internship/exists/" + internship.getStudentEmail())
+                .uri("/internshipManager/getProfile")
                 .exchange()
                 //ASSERT
-                .expectStatus().isOk()
-                .expectBody(Boolean.class);
+                .expectStatus()
+                .isNotFound()
+                .expectBody(InternshipManagerProfileDto.class);
     }
-
 }

@@ -112,7 +112,7 @@ const StudentDashBoard = () => {
               <Grid item xs={12} sm container justifyContent="center">
                 <Grid item xs container direction="column" spacing={3}>
                   <Grid item xs sx={{ textAlign: "center" }}>
-                    <BasicInfo profile={profile} />
+                    <BasicInfo profile={profile} role={userInfo.role} />
                     <SelectInterviewDate
                       hasInternship={hasInternship}
                       profile={profile}

@@ -38,6 +38,7 @@ public class InternshipOfferRepositoryTest {
                         .isExclusive(true)
                         .limitDateToApply(LocalDate.now().plusWeeks(2))
                         .isValidated(true)
+                        .isExclusive(true)
                         .validationDate(LocalDateTime.now())
                         .build(),
                 InternshipOffer.builder()
@@ -63,7 +64,7 @@ public class InternshipOfferRepositoryTest {
                         .validationDate(LocalDateTime.now()).build()
         );
 
-        internshipOfferRepository.saveAll(internshipOffers).subscribe();
+        internshipOfferRepository.saveAll(internshipOffers).blockLast();
     }
 
     @Test
@@ -178,6 +179,20 @@ public class InternshipOfferRepositoryTest {
         //ASSERT
         StepVerifier.create(internshipOfferFlux)
                 .expectNextCount(2)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldExistByIdAndIsExclusiveTrue() {
+        //ARRANGE
+        String id = "618b68cae908a226e003d7e6";
+
+        //ACT
+        Mono<Boolean> exist = internshipOfferRepository.existsByIdAndIsExclusiveTrue(id);
+
+        //ASSERT
+        StepVerifier.create(exist)
+                .assertNext(Assertions::assertTrue)
                 .verifyComplete();
     }
 

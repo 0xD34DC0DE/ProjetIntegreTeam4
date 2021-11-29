@@ -1,6 +1,7 @@
 package com.team4.backend.mapping;
 
 import com.team4.backend.dto.InternshipManagerDetailsDto;
+import com.team4.backend.dto.InternshipManagerProfileDto;
 import com.team4.backend.model.InternshipManager;
 
 public abstract class InternshipManagerMapper {
@@ -25,6 +26,17 @@ public abstract class InternshipManagerMapper {
                 .lastName(internshipManagerDto.getLastName())
                 .phoneNumber(internshipManagerDto.getPhoneNumber())
                 .registrationDate(internshipManagerDto.getRegistrationDate())
+                .build();
+    }
+
+    public static InternshipManagerProfileDto toProfileDto(InternshipManager internshipManager) {
+        return InternshipManagerProfileDto.builder()
+                .id(internshipManager.getId())
+                .email(internshipManager.getEmail())
+                .firstName(internshipManager.getFirstName())
+                .lastName(internshipManager.getLastName())
+                .registrationDate(internshipManager.getRegistrationDate())
+                .phoneNumber(internshipManager.getPhoneNumber())
                 .build();
     }
 

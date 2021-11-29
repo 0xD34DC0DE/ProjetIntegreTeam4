@@ -12,7 +12,7 @@ import java.util.Set;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class InternshipOfferMonitorViewDto extends InternshipOfferDetailedDto implements Serializable {
+public class InternshipOfferMonitorViewDto extends InternshipOfferDetailsDto implements Serializable {
 
     private Set<String> listEmailInterestedStudents;
 

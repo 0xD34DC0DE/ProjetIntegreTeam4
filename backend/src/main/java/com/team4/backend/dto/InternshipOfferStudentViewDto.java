@@ -10,7 +10,7 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @EqualsAndHashCode(callSuper = true)
-public class InternshipOfferStudentViewDto extends InternshipOfferDetailedDto {
+public class InternshipOfferStudentViewDto extends InternshipOfferDetailsDto {
 
     Boolean hasAlreadyApplied;
 

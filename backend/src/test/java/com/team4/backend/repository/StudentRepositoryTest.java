@@ -68,7 +68,7 @@ public class StudentRepositoryTest {
                         .build()
         );
 
-        studentRepository.saveAll(users).subscribe();
+        studentRepository.saveAll(users).blockLast();
     }
 
     @Test

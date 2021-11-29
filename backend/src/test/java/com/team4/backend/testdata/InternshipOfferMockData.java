@@ -1,7 +1,7 @@
 package com.team4.backend.testdata;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
-import com.team4.backend.dto.InternshipOfferDetailedDto;
+import com.team4.backend.dto.InternshipOfferDetailsDto;
 import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.model.InternshipOffer;
@@ -181,8 +181,8 @@ public abstract class InternshipOfferMockData {
                         .build());
     }
 
-    public static InternshipOfferDetailedDto getInternshipOfferDetailedDto() {
-        return InternshipOfferDetailedDto.internshipOfferDetailedDtoBuilder()
+    public static InternshipOfferDetailsDto getInternshipOfferDetailedDto() {
+        return InternshipOfferDetailsDto.internshipOfferDetailedDtoBuilder()
                 .id("234dsd2egd54ter")
                 .title("Développeur Web")
                 .limitDateToApply(LocalDate.now().plusMonths(1))

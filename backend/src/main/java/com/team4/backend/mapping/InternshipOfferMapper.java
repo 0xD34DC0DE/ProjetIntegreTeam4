@@ -49,8 +49,8 @@ public abstract class InternshipOfferMapper {
                 .build();
     }
 
-    public static InternshipOfferDetailedDto toDto(InternshipOffer internshipOffer) {
-        return InternshipOfferDetailedDto.internshipOfferDetailedDtoBuilder()
+    public static InternshipOfferDetailsDto toDto(InternshipOffer internshipOffer) {
+        return InternshipOfferDetailsDto.internshipOfferDetailedDtoBuilder()
                 .id(internshipOffer.getId())
                 .title(internshipOffer.getTitle())
                 .limitDateToApply(internshipOffer.getLimitDateToApply())

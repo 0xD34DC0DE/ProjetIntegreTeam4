@@ -10,12 +10,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.cglib.core.Local;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Component
@@ -49,6 +51,7 @@ public class InternshipManagerRegistration implements ApplicationRunner {
             });
 
             managers.forEach(internshipManager -> {
+                internshipManager.setRegistrationDate(LocalDate.now());
 
                 Boolean managerAlreadyExists = userService.existsByEmail(internshipManager.getEmail()).block();
 
@@ -59,6 +62,7 @@ public class InternshipManagerRegistration implements ApplicationRunner {
                 }
 
                 if (!managerAlreadyExists) {
+                    internshipManager.setRegistrationDate(LocalDate.now());
                     internshipManagerService.register(internshipManager).subscribe(result -> {
                         if (result.getId() == null) {
                             throw new RuntimeException("Failed to automatically create internship managers");

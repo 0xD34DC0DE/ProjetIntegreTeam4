@@ -11,6 +11,9 @@ import { roles } from "./Configuration";
 import OfferForm from "./OfferForm";
 import OfferViews from "./OfferViews";
 import StudentDashBoard from "./Dashboard/StudentDashboard";
+import SupervisorDashBoard from "./Dashboard/SupervisorDashBoard";
+import MonitorDashBoard from "./Dashboard/MonitorDashBoard";
+import InternshipManagerDashboard from "./Dashboard/InternshipManagerDashboard";
 import InternshipOfferValidation from "./InternshipOfferValidation";
 import ListUserDroppable from "./ListUserDroppable";
 import ListUserDraggable from "./ListUserDraggable";
@@ -42,6 +45,7 @@ const Content = ({ isSidebarOpen }) => {
           <>
             {selection.id === 1 && <ListCvInternshipManagerView />}
             {selection.id === 3 && <InternshipOfferValidation />}
+            {selection.id === 7 && <InternshipManagerDashboard />}
             {selection.id === 11 && <ListUserDroppable role="SUPERVISOR" />}
             {selection.id === 11 && <ListUserDraggable role="STUDENT" />}
             {selection.id === 14 && <ListReport />}
@@ -50,6 +54,7 @@ const Content = ({ isSidebarOpen }) => {
       case "SUPERVISOR":
         return (
           <>
+            {selection.id === 7 && <SupervisorDashBoard />}
             {selection.id === 10 && <AssignedStudentSupervisorView />}
             {selection.id === 13 && <StudentEvaluationMidForm />}
           </>
@@ -58,6 +63,7 @@ const Content = ({ isSidebarOpen }) => {
         return (
           <>
             {selection.id === 6 && <ListStudentApplying />}
+            {selection.id === 7 && <MonitorDashBoard />}
             {selection.id === 12 && <StudentEvaluationForm />}
           </>
         );
