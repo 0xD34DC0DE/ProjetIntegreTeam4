@@ -79,10 +79,20 @@ public class InternshipOfferController {
         return internshipOfferService.getInternshipOffersPageCount(size);
     }
 
-    @PatchMapping("/makeInternshipOfferExclusive/{id}")
+    @PatchMapping("/changeInternshipOfferExclusivity")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Mono<ResponseEntity<String>> makeInternshipOfferExclusive(@PathVariable String id) {
-        return internshipOfferService.makeInternshipOfferExclusive(id)
+    public Mono<ResponseEntity<String>> changeInternshipOfferExclusivity(@RequestParam("id") String id,
+                                                                         @RequestParam("isExclusive") Boolean isExclusive) {
+        return internshipOfferService.changeInternshipOfferExclusivity(id, isExclusive)
+                .flatMap(i -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
+
+    }
+
+    @PatchMapping("/addExclusiveOfferToStudent")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
+    public Mono<ResponseEntity<String>> addExclusiveOfferToStudent(@RequestParam("email") String email,
+                                                                   @RequestParam("id") String id) {
+        return internshipOfferService.addExclusiveOfferToStudent(email, id)
                 .flatMap(i -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
 
     }
@@ -101,10 +111,10 @@ public class InternshipOfferController {
         return internshipOfferService.getNotYetValidatedInternshipOffers(semesterFullName).map(InternshipOfferMapper::toDto);
     }
 
-    @GetMapping("/getNotYetExclusiveInternshipOffers/{semesterFullName}")
+    @GetMapping("/getAllValidatedOffers/{semesterFullName}")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Flux<InternshipOfferDetailsDto> getNotYetExclusiveInternshipOffers(@PathVariable String semesterFullName) {
-        return internshipOfferService.getNotYetExclusiveInternshipOffers(semesterFullName)
+    public Flux<InternshipOfferDetailsDto> getAllValidatedOffers(@PathVariable String semesterFullName) {
+        return internshipOfferService.getAllValidatedOffers(semesterFullName)
                 .map(InternshipOfferMapper::toDto);
     }
 

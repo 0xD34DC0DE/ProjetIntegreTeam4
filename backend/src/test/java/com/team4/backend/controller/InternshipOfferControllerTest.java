@@ -4,10 +4,7 @@ import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.dto.InternshipOfferDetailsDto;
 import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
-import com.team4.backend.exception.InternshipOfferNotFoundException;
-import com.team4.backend.exception.InvalidPageRequestException;
-import com.team4.backend.exception.UnauthorizedException;
-import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.exception.*;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.service.InternshipOfferService;
@@ -80,16 +77,21 @@ public class InternshipOfferControllerTest {
     }
 
     @Test
-    void shouldMakeInternshipOfferExclusive() {
+    void shouldChangeInternshipOfferExclusivity() {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.makeInternshipOfferExclusive(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferService.changeInternshipOfferExclusivity(internshipOffer.getId(), false)).thenReturn(Mono.just(internshipOffer));
 
         //ACT
         webTestClient
                 .patch()
-                .uri("/internshipOffer/makeInternshipOfferExclusive/" + internshipOffer.getId())
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/internshipOffer/changeInternshipOfferExclusivity")
+                                .queryParam("id", internshipOffer.getId())
+                                .queryParam("isExclusive", true)
+                                .build())
                 .exchange()
                 //ASSERT
                 .expectStatus().isNoContent()
@@ -97,19 +99,70 @@ public class InternshipOfferControllerTest {
     }
 
     @Test
-    void shouldNotMakeInternshipOfferExclusive() {
+    void shouldNotChangeInternshipOfferExclusivityWhenItIsNotFound() {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.makeInternshipOfferExclusive(internshipOffer.getId())).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
+        when(internshipOfferService.changeInternshipOfferExclusivity(internshipOffer.getId(), false)).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
 
         //ACT
         webTestClient
                 .patch()
-                .uri("/internshipOffer/makeInternshipOfferExclusive/" + internshipOffer.getId())
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/internshipOffer/changeInternshipOfferExclusivity")
+                                .queryParam("id", internshipOffer.getId())
+                                .queryParam("isExclusive", true)
+                                .build())
                 .exchange()
                 //ASSERT
                 .expectStatus().isNotFound()
+                .expectBody(String.class);
+    }
+
+    @Test
+    void shouldAddExclusiveOfferToStudent() {
+        //ARRANGE
+        String email = "test@gmail.com";
+        String id = "id_test";
+
+        when(internshipOfferService.addExclusiveOfferToStudent(email, id)).thenReturn(Mono.just(true));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/internshipOffer/addExclusiveOfferToStudent")
+                                .queryParam("email", email)
+                                .queryParam("id", id)
+                                .build())
+                .exchange()
+                //ASSERT
+                .expectStatus().isNoContent()
+                .expectBody(String.class);
+    }
+
+    @Test
+    void shouldNotAddExclusiveOffer() {
+        //ARRANGE
+        String email = "test@gmail.com";
+        String id = "id_test";
+
+        when(internshipOfferService.addExclusiveOfferToStudent(email, id)).thenReturn(Mono.just(true));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/internshipOffer/addExclusiveOfferToStudent")
+                                .queryParam("email", email)
+                                .queryParam("id", id)
+                                .build())
+                .exchange()
+                //ASSERT
+                .expectStatus().isNoContent()
                 .expectBody(String.class);
     }
 
@@ -158,6 +211,24 @@ public class InternshipOfferControllerTest {
                 //ASSERT
                 .expectStatus().isNotFound()
                 .expectBody(String.class);
+    }
+
+    @Test
+    void shouldGetNotYetExclusiveInternshipOffers() {
+        //ARRANGE
+        String semesterFullName = SemesterName.WINTER + "-" + LocalDateTime.now().getYear();
+        Flux<InternshipOffer> internshipOfferFlux = InternshipOfferMockData.getNonValidatedInternshipOffers();
+
+        when(internshipOfferService.getAllValidatedOffers(semesterFullName)).thenReturn(internshipOfferFlux);
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/internshipOffer/getAllValidatedOffers/" + semesterFullName)
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(InternshipOfferDetailsDto.class);
     }
 
     @Test

@@ -3,10 +3,7 @@ package com.team4.backend.service;
 import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
-import com.team4.backend.exception.InternshipOfferNotFoundException;
-import com.team4.backend.exception.InvalidPageRequestException;
-import com.team4.backend.exception.UnauthorizedException;
-import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.exception.*;
 import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.Semester;
@@ -95,25 +92,32 @@ public class InternshipOfferService {
                 });
     }
 
-    public Flux<InternshipOffer> getNotYetExclusiveInternshipOffers(String semesterFullName) {
-        return semesterService.findByFullName(semesterFullName)
-                .flatMapMany(semester -> internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyIsBetween(
-                        semester.getFrom(),
-                        semester.getTo()
-                ));
-    }
-
-    public Flux<InternshipOffer> getExclusiveInternshipOffers(String semesterFullName) {
-        return null;
-    }
-
-    public Mono<InternshipOffer> makeInternshipOfferExclusive(String id) {
+    public Mono<InternshipOffer> changeInternshipOfferExclusivity(String id, Boolean isExclusive) {
         return findInternshipOfferById(id)
+                .filter(InternshipOffer::getIsValidated)
+                .switchIfEmpty(Mono.error(new ForbiddenActionException("The offer has to be valid!")))
                 .map(internshipOffer -> {
-                    internshipOffer.setIsExclusive(true);
+                    internshipOffer.setIsExclusive(isExclusive);
                     return internshipOffer;
                 }).flatMap(internshipOfferRepository::save);
     }
+
+    public Mono<Boolean> addExclusiveOfferToStudent(String email, String id) {
+        return Mono.zip(studentService.findByEmail(email), internshipOfferRepository.existsByIdAndIsExclusiveTrue(id))
+                .map(tuple -> {
+                    Student student = tuple.getT1();
+                    Boolean exist = tuple.getT2();
+
+                    if (exist) {
+                        student.getExclusiveOffersId().add(id);
+                        studentService.save(student).subscribe();
+                    }
+
+                    return exist;
+                });
+    }
+
+
 
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers(String semesterFullName) {
         return semesterService.findByFullName(semesterFullName)
