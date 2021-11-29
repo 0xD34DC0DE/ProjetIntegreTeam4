@@ -20,6 +20,8 @@ import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMid
 import ListReport from "./ListReport";
 import SignContractDialog from "./contracts/SignContractDialog";
 import { SelectionContext } from "../stores/SelectionStore";
+import HomeActors from "./home/HomeActors";
+import Home from "./home/Home";
 
 const Content = ({ isSidebarOpen }) => {
   const [selection] = useContext(SelectionContext);
@@ -76,11 +78,7 @@ const Content = ({ isSidebarOpen }) => {
         width: "100%",
       }}
     >
-      {!userInfo.loggedIn && (
-        <Typography variant="h3" color="white" sx={{ pl: 2, pt: 2 }}>
-          Bonjour visiteur.
-        </Typography>
-      )}
+      {!userInfo.loggedIn && <Home />}
       {userInfo.loggedIn && selection.id !== undefined && (
         <Box
           sx={{ transition: "margin 300ms ease", ml: isSidebarOpen ? 36 : 0 }}
