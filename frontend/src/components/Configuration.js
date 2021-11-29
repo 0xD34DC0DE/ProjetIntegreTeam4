@@ -115,7 +115,7 @@ export const sidebarList = [
   },
   {
     id: 6,
-    label: "Liste des postulations",
+    label: "Liste des candidatures",
     role: ["MONITOR"],
     isDialog: false,
     icon: <FormatListBulletedOutlined sx={{ mr: 1 }} />,
@@ -149,7 +149,7 @@ export const sidebarList = [
   },
   {
     id: 11,
-    label: "Assignation superviseurs",
+    label: "Assigner les élèves aux superviseurs",
     role: ["INTERNSHIP_MANAGER"],
     icon: <SupervisedUserCircleOutlined fontSize="small" sx={{ mr: 1 }} />,
     description: "Assignations des superviseurs aux élèves",
@@ -182,7 +182,7 @@ export const sidebarList = [
   },
   {
     id: 14,
-    label: "Consulter rapports",
+    label: "Consulter les rapports",
     role: ["INTERNSHIP_MANAGER"],
     icon: <AssignmentSharp fontSize="small" sx={{ mr: 1 }} />,
     description: "Consultation des rapports",

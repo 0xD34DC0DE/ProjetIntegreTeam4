@@ -34,16 +34,18 @@ const Homepage = () => {
                   sx={{
                       color: "text.primary",
                       fontSize: "1.5em",
-                      backgroundColor: "rgba(135, 135, 135, 0.03)",
+                      // backgroundColor: "rgba(135, 135, 135, 0.03)",
+                      backgroundColor: "#702963",
                       width: "100%",
                       height: "25%",
                       border: "0.5px solid grey",
                       boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
                       borderRadius: "10px",
                       py: 5,
-                      mb: 3,
+                      mb: 1,
                       ":hover": {
                           boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
+                          backgroundColor: "#702963",
                           "#visualizeText": {
                               opacity: 0.8,
                           },
