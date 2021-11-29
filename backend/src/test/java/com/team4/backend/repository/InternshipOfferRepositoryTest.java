@@ -63,7 +63,7 @@ public class InternshipOfferRepositoryTest {
                         .validationDate(LocalDateTime.now()).build()
         );
 
-        internshipOfferRepository.saveAll(internshipOffers).subscribe();
+        internshipOfferRepository.saveAll(internshipOffers).blockLast();
     }
 
     @Test

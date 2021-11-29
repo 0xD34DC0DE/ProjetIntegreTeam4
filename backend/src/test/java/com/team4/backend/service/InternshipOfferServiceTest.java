@@ -30,12 +30,10 @@ import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.same;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 
 @Log
@@ -294,6 +292,36 @@ public class InternshipOfferServiceTest {
 
         //ASSERT
         StepVerifier.create(pageCountMono).expectError(UserNotFoundException.class).verify();
+    }
+
+    @Test
+    void shouldMakeInternshipOfferExclusive() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferRepository.findById(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferRepository.save(any())).thenReturn(Mono.just(internshipOffer));
+
+        //ACT
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.makeInternshipOfferExclusive(internshipOffer.getId());
+
+        //ASSERT
+        StepVerifier.create(internshipOfferMono)
+                .assertNext(i -> assertTrue(i.getIsExclusive()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotMakeInternshipOfferExclusive() {
+        //ARRANGE
+        when(internshipOfferRepository.findById(anyString())).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
+
+        //ACT
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.makeInternshipOfferExclusive(anyString());
+
+        //ASSERT
+        StepVerifier.create(internshipOfferMono)
+                .verifyError(InternshipOfferNotFoundException.class);
     }
 
     @Test

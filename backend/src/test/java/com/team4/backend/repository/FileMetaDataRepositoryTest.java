@@ -41,7 +41,7 @@ public class FileMetaDataRepositoryTest {
                 FileMetaData.builder().userEmail("test_user_email@gmail.com").isValid(false).isSeen(true).build()
         );
 
-        fileMetaDataRepository.saveAll(fileMetaDataFlux).subscribe();
+        fileMetaDataRepository.saveAll(fileMetaDataFlux).blockLast();
     }
 
     @Test

@@ -95,6 +95,14 @@ public class InternshipOfferService {
                 });
     }
 
+    public Mono<InternshipOffer> makeInternshipOfferExclusive(String id) {
+        return findInternshipOfferById(id)
+                .map(internshipOffer -> {
+                    internshipOffer.setIsExclusive(true);
+                    return internshipOffer;
+                }).flatMap(internshipOfferRepository::save);
+    }
+
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers(String semesterFullName) {
         return semesterService.findByFullName(semesterFullName)
                 .flatMapMany(semester -> internshipOfferRepository
