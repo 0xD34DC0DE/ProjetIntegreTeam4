@@ -1,6 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.InternshipDetailedDto;
+import com.team4.backend.dto.InternshipDetailsDto;
 import com.team4.backend.model.Internship;
 import com.team4.backend.service.InternshipService;
 import com.team4.backend.testdata.InternshipMockData;
@@ -42,7 +42,7 @@ public class InternshipControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
-                .expectBody(InternshipDetailedDto.class);
+                .expectBody(InternshipDetailsDto.class);
     }
 
     @Test

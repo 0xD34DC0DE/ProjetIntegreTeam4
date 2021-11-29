@@ -1,7 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
-import com.team4.backend.dto.InternshipOfferDetailedDto;
+import com.team4.backend.dto.InternshipOfferDetailsDto;
 import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InternshipOfferNotFoundException;
@@ -116,7 +116,7 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldValidateInternshipOffer() {
         //ARRANGE
-        InternshipOfferDetailedDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
+        InternshipOfferDetailsDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
         when(internshipOfferService.validateInternshipOffer(internshipOfferDto.getId(), true)).thenReturn(Mono.just(internshipOffer));
@@ -140,7 +140,7 @@ public class InternshipOfferControllerTest {
     @Test
     void shouldNotValidateInternshipOffer() {
         //ARRANGE
-        InternshipOfferDetailedDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
+        InternshipOfferDetailsDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
 
         when(internshipOfferService.validateInternshipOffer(internshipOfferDto.getId(), true)).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
 
@@ -175,7 +175,7 @@ public class InternshipOfferControllerTest {
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()
-                .expectBodyList(InternshipOfferDetailedDto.class);
+                .expectBodyList(InternshipOfferDetailsDto.class);
     }
 
     @Test

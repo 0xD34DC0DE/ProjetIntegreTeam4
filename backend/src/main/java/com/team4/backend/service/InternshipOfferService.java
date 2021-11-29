@@ -95,6 +95,18 @@ public class InternshipOfferService {
                 });
     }
 
+    public Flux<InternshipOffer> getNotYetExclusiveInternshipOffers(String semesterFullName) {
+        return semesterService.findByFullName(semesterFullName)
+                .flatMapMany(semester -> internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyIsBetween(
+                        semester.getFrom(),
+                        semester.getTo()
+                ));
+    }
+
+    public Flux<InternshipOffer> getExclusiveInternshipOffers(String semesterFullName) {
+        return null;
+    }
+
     public Mono<InternshipOffer> makeInternshipOfferExclusive(String id) {
         return findInternshipOfferById(id)
                 .map(internshipOffer -> {

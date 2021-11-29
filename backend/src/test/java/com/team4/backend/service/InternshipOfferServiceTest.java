@@ -211,6 +211,22 @@ public class InternshipOfferServiceTest {
     }
 
     @Test
+    void shouldGetNotYetExclusiveInternshipOffers() {
+        //ARRANGE
+        when(semesterService.findByFullName(anyString())).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
+        when(internshipOfferRepository.findAllByIsValidatedTrueAndLimitDateToApplyIsBetween(any(LocalDateTime.class), any(LocalDateTime.class)))
+                .thenReturn(Flux.fromIterable(InternshipOfferMockData.getListInternshipOffer(4)));
+
+        //ACT
+        Flux<InternshipOffer> internshipOfferFlux = internshipOfferService.getNotYetExclusiveInternshipOffers(anyString());
+
+        //ASSERT
+        StepVerifier.create(internshipOfferFlux)
+                .expectNextCount(4)
+                .verifyComplete();
+    }
+
+    @Test
     void shouldNotGetGeneralInternshipOfferStudentViewsInvalidPage() {
         //ARRANGE
         Student student = StudentMockData.getMockStudent();

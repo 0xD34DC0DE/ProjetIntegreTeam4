@@ -1,7 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
-import com.team4.backend.dto.InternshipOfferDetailedDto;
+import com.team4.backend.dto.InternshipOfferDetailsDto;
 import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.InvalidPageRequestException;
@@ -97,8 +97,15 @@ public class InternshipOfferController {
 
     @GetMapping("/getNotYetValidatedInternshipOffers/{semesterFullName}")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Flux<InternshipOfferDetailedDto> getNotYetValidatedInternshipOffers(@PathVariable String semesterFullName) {
+    public Flux<InternshipOfferDetailsDto> getNotYetValidatedInternshipOffers(@PathVariable String semesterFullName) {
         return internshipOfferService.getNotYetValidatedInternshipOffers(semesterFullName).map(InternshipOfferMapper::toDto);
+    }
+
+    @GetMapping("/getNotYetExclusiveInternshipOffers/{semesterFullName}")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
+    public Flux<InternshipOfferDetailsDto> getNotYetExclusiveInternshipOffers(@PathVariable String semesterFullName) {
+        return internshipOfferService.getNotYetExclusiveInternshipOffers(semesterFullName)
+                .map(InternshipOfferMapper::toDto);
     }
 
     @GetMapping("/interestedStudents")
