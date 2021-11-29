@@ -66,23 +66,25 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
     <Box>
       <AppBar sx={{ position: "fixed" }}>
         <Toolbar>
-          <IconButton
-            onClick={handleSidebarClick}
-            sx={{
-              color: "text.primary",
-              borderRadius: "20%",
-              ":hover": {
-                backgroundColor: "rgba(125, 51, 235, 0.8) !important",
-              },
-              p: 0.75,
-            }}
-          >
-            {sidebarOpen ? (
-              <ArrowBackIosOutlinedIcon />
-            ) : (
-              <ArrowForwardIosOutlinedIcon />
-            )}
-          </IconButton>
+          {userInfo.loggedIn && (
+            <IconButton
+              onClick={handleSidebarClick}
+              sx={{
+                color: "text.primary",
+                borderRadius: "20%",
+                ":hover": {
+                  backgroundColor: "rgba(125, 51, 235, 0.8) !important",
+                },
+                p: 0.75,
+              }}
+            >
+              {sidebarOpen ? (
+                <ArrowBackIosOutlinedIcon />
+              ) : (
+                <ArrowForwardIosOutlinedIcon />
+              )}
+            </IconButton>
+          )}
           <Tooltip title="Notifications">
             <IconButton
               onClick={handleNotificationMenuOpen}
@@ -94,12 +96,14 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                     notificationCount <= 5 ? notificationCount : "+5"
                   }
                   color="primary"
+                  overlap="circular"
                 >
                   <NotificationsNoneOutlinedIcon
                     sx={{
                       color: "text.primary",
                       py: 0.75,
                       px: 0.75,
+
                       borderRadius: "20%",
                       ":hover": { backgroundColor: "rgba(125, 51, 235, 0.8)" },
                     }}
@@ -132,7 +136,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                   sx: {
                     backgroundColor: "primary.main",
                     pr: 1,
-                    pl: 1,
+                    width: "250px",
                   },
                   square: true,
                   elevation: 3,

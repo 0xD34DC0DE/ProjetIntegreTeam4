@@ -72,9 +72,7 @@ const SemesterSelect = ({ updateSemesterFullName }) => {
         <Select
           sx={{
             border: "1px white",
-            display: "flex",
             justifyContent: "center",
-            boxShadow: 5,
             textAlign: "center",
             display: "flex",
             mt: 5,

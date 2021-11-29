@@ -269,7 +269,7 @@ const NotificationList = ({
                           />
                         )}
                     </Grid>
-                    <Grid item xs={1} item alignSelf="center" textAlign="end">
+                    <Grid item xs={1} alignSelf="center" textAlign="end">
                       <Tooltip title="Supprimer">
                         <IconButton
                           variant="text"

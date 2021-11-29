@@ -1,5 +1,5 @@
-import { Box, Typography } from "@mui/material";
-import React, { useContext, useEffect } from "react";
+import { Box } from "@mui/material";
+import React, { useContext } from "react";
 import ListCvInternshipManagerView from "./ListCvInternshipManagerView";
 import ContentTitle from "./ContentTitle";
 import { UserInfoContext } from "../stores/UserInfoStore";
@@ -20,6 +20,8 @@ import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMid
 import ListReport from "./ListReport";
 import SignContractDialog from "./contracts/SignContractDialog";
 import { SelectionContext } from "../stores/SelectionStore";
+import HomeRoles from "./home/HomeRoles";
+import Home from "./home/Home";
 import ProfileImageUpload from "./ProfileImageUpload";
 
 const Content = ({ isSidebarOpen }) => {
@@ -66,7 +68,12 @@ const Content = ({ isSidebarOpen }) => {
   };
 
   const showComponents = () => {
-    return <>{selection.id === 9 && <ProfileImageUpload />}</>;
+    return (
+      <>
+        {selection.id === 9 && <ProfileImageUpload />}
+        {selection.id === 0 && <HomeRoles />}
+      </>
+    );
   };
 
   return (
@@ -81,11 +88,6 @@ const Content = ({ isSidebarOpen }) => {
         width: "100%",
       }}
     >
-      {!userInfo.loggedIn && (
-        <Typography variant="h3" color="white" sx={{ pl: 2, pt: 2 }}>
-          Bonjour visiteur.
-        </Typography>
-      )}
       {userInfo.loggedIn && selection.id !== undefined && (
         <Box
           sx={{ transition: "margin 300ms ease", ml: isSidebarOpen ? 36 : 0 }}

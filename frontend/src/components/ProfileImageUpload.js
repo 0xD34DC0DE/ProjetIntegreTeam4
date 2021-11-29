@@ -138,8 +138,8 @@ const ProfileImageUpload = () => {
                 backgroundColor: "rgba(22, 22, 22, 0.04)",
                 py: 2,
                 px: 5,
-                border: "1px solid rgba(255, 255, 255, 0.5)",
-                boxShadow: "0px 0px 10px 3px rgba(0, 0, 0, 0.5)",
+                border: "1px solid rgba(255, 255, 255, 0.3)",
+                boxShadow: "15px 15px 10px 3px rgba(0, 0, 0, 0.5)",
               }}
             >
               <Grid item xs={12}>

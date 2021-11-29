@@ -31,12 +31,8 @@ const Sidebar = ({ open }) => {
             fontSize="2.5em"
             sx={{ mt: 2, textAlign: "left", ml: 3 }}
           >
-            OSE
-            <FormatListBulletedOutlinedIcon
-              sx={{
-                ml: 2,
-              }}
-            />
+            OSER
+            <FormatListBulletedOutlinedIcon sx={{ ml: 2 }} />
           </Typography>
           <Divider
             sx={{

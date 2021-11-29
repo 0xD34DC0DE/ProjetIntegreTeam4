@@ -84,7 +84,7 @@ const Login = () => {
           <Typography
             variant="h4"
             align="left"
-            sx={{ minHeight: "5vh", p: 0, m: 0 }}
+            sx={{ minHeight: "6vh", p: 0, m: 0, minWidth: "600px" }}
           >
             Connexion
           </Typography>
@@ -126,7 +126,14 @@ const Login = () => {
           <Button
             type="submit"
             variant="text"
-            sx={{ justifySelf: "flex-start", mr: 20, flexGrow: "1" }}
+            sx={{
+              justifySelf: "flex-start",
+              mr: 20,
+              flexGrow: "1",
+              ":hover": {
+                color: "rgba(125, 51, 235, 1) !important",
+              },
+            }}
             color="primary"
             onClick={() => {
               dialogDispatch({
@@ -143,7 +150,14 @@ const Login = () => {
             variant="text"
             color="primary"
             onClick={logUserIn}
-            sx={{ justifySelf: "flex-end", ml: 20, flexGrow: "1" }}
+            sx={{
+              justifySelf: "flex-end",
+              ml: 20,
+              flexGrow: "1",
+              ":hover": {
+                color: "rgba(125, 51, 235, 1) !important",
+              },
+            }}
           >
             Envoyer
             <KeyboardArrowRight />
