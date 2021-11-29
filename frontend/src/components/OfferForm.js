@@ -1,4 +1,4 @@
-import { Create } from "@mui/icons-material";
+import { Create, LocalHospital } from "@mui/icons-material";
 import {
   Button,
   Dialog,
@@ -36,11 +36,49 @@ const OfferForm = () => {
       ...previousForm,
       [event.target.id || event.target.name]: event.target.value,
     }));
-
-    Object.values(offer).map((value, key, array) =>
-      setIsValid(!array.includes("" || null))
-    );
+    setIsValid(validateDateEntries());
+    validateEmailEntries();
   };
+
+  const validateDateEntries = () => {
+    var dates = getDates();
+    var previousDate = dates[0];
+    var validDateCount = 0;
+
+    for (let i = 1; i < dates.length; i++) {
+      if (compareDate(previousDate, dates[i])) {
+        validDateCount++;
+        previousDate = dates[i];
+      }
+    }
+
+    return validDateCount === dates.length - 1;
+  };
+
+  //TODO: Not Done
+  const validateEmailEntries = () => {
+    var validRegex =
+      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    Object.values(offer).map((value, key) => {
+      if (Object.keys(offer)[key].toLowerCase().includes("email")) {
+        console.log(Object.keys(offer)[key].toLowerCase());
+      }
+    });
+  };
+
+  const getDates = () => {
+    var dates = [];
+    Object.values(offer).map((value, key) => {
+      if (Object.keys(offer)[key].toLowerCase().includes("date")) {
+        dates = [...dates, value];
+      }
+    });
+    return dates;
+  };
+
+  function compareDate(date1, date2) {
+    return new Date(date1).valueOf() < new Date(date2).valueOf();
+  }
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick")
