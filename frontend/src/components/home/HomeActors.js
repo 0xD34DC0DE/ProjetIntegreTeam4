@@ -15,11 +15,11 @@ const HomeActors = () => {
       "Voir la liste des postulations",
       "Démarrer le processus de signature de contrat",
       "Contacter un étudiant",
-      "Télécharger/Afficher le C.V. d'un étudiant",
-      "Évaluer le stagiaire",
+      "Afficher/Télécharger le C.V. d'un étudiant",
+      "Évaluer un stagiaire",
     ],
     [
-      "Afficher ses élèves assignés",
+      "Afficher vos élèves assignés",
       "Voir l'état de la demande de stage d'un étudiant",
       "Évaluer un stagiaire",
     ],
@@ -27,7 +27,7 @@ const HomeActors = () => {
       "Afficher votre profil",
       "Changer le statut de votre demande de stage",
       "Téléverser un C.V.",
-      "Afficher les C.V. téléversés",
+      "Afficher vos C.V. téléversés",
       "Appliquer à une offre de stage",
     ],
   ];
