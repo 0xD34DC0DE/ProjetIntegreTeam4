@@ -1,10 +1,24 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Grid, Button } from "@mui/material";
 import { motion } from "framer-motion";
+import { DialogContext } from "../../stores/DialogStore";
+
 const HomeButtons = () => {
+  const [dialog, dialogDispatch] = useContext(DialogContext);
+  const buttonsInfo = [
+    { dialog: "loginDialog", text: "Se Connecter" },
+    { dialog: "registerDialog", text: "S'enregistrer" },
+  ];
+
+  const openDialog = (dialog) => {
+    dialogDispatch({
+      type: "OPEN",
+      dialogName: dialog,
+    });
+  };
   return (
     <Grid container>
-      {["Se Connecter", "S'enregistrer"].map((text, key) => {
+      {buttonsInfo.map((buttonInfo, key) => {
         return (
           <Grid item xs={12} sm={6} sx={{ p: 1 }}>
             <motion.div
@@ -15,6 +29,7 @@ const HomeButtons = () => {
               }}
             >
               <Button
+                onClick={() => openDialog(buttonInfo.dialog)}
                 variant="contained"
                 sx={{
                   width: "100%",
@@ -22,7 +37,7 @@ const HomeButtons = () => {
                   backgroundColor: "rgba(125, 51, 235, 0.8)",
                 }}
               >
-                {text}
+                {buttonInfo.text}
               </Button>
             </motion.div>
           </Grid>
