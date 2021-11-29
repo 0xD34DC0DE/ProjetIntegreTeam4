@@ -1,5 +1,5 @@
-import { Box, Typography } from "@mui/material";
-import React, { useContext, useEffect } from "react";
+import { Box } from "@mui/material";
+import React, { useContext } from "react";
 import ListCvInternshipManagerView from "./ListCvInternshipManagerView";
 import ContentTitle from "./ContentTitle";
 import { UserInfoContext } from "../stores/UserInfoStore";
@@ -20,9 +20,8 @@ import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMid
 import ListReport from "./ListReport";
 import SignContractDialog from "./contracts/SignContractDialog";
 import { SelectionContext } from "../stores/SelectionStore";
-import Homepage from "./Homepage";
-import HomeActors from "./home/HomeActors";
-import Home from "./home/Home";
+import HomeRoles from "./Home/HomeRoles";
+import Home from "./Home/Home";
 
 const Content = ({ isSidebarOpen }) => {
   const [selection] = useContext(SelectionContext);
@@ -33,7 +32,7 @@ const Content = ({ isSidebarOpen }) => {
       case "STUDENT":
         return (
           <>
-            {selection.id === 0 && <Homepage />}
+            {selection.id === 0 && <HomeRoles />}
             {selection.id === 7 && <StudentDashBoard />}
             {selection.id === 5 && <UploadCV />}
             {selection.id === 4 && <OfferViews />}
@@ -42,7 +41,7 @@ const Content = ({ isSidebarOpen }) => {
       case "INTERNSHIP_MANAGER":
         return (
           <>
-            {selection.id === 0 && <Homepage />}
+            {selection.id === 0 && <HomeRoles />}
             {selection.id === 1 && <ListCvInternshipManagerView />}
             {selection.id === 3 && <InternshipOfferValidation />}
             {selection.id === 11 && <ListUserDroppable role="SUPERVISOR" />}
@@ -53,7 +52,7 @@ const Content = ({ isSidebarOpen }) => {
       case "SUPERVISOR":
         return (
           <>
-            {selection.id === 0 && <Homepage />}
+            {selection.id === 0 && <HomeRoles />}
             {selection.id === 10 && <AssignedStudentSupervisorView />}
             {selection.id === 13 && <StudentEvaluationMidForm />}
           </>
@@ -61,7 +60,7 @@ const Content = ({ isSidebarOpen }) => {
       case "MONITOR":
         return (
           <>
-            {selection.id === 0 && <Homepage />}
+            {selection.id === 0 && <HomeRoles />}
             {selection.id === 6 && <ListStudentApplying />}
             {selection.id === 12 && <StudentEvaluationForm />}
           </>

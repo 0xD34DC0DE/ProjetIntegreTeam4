@@ -1,12 +1,12 @@
 import { Grid, Button, Typography, } from "@mui/material";
 import React, { useContext } from "react";
-import { UserInfoContext } from "../stores/UserInfoStore";
-import { sidebarList } from "./Configuration";
-import { DialogContext } from "../stores/DialogStore";
-import { SelectionContext } from "../stores/SelectionStore";
+import { UserInfoContext } from "../../stores/UserInfoStore";
+import { sidebarList } from "../Configuration";
+import { DialogContext } from "../../stores/DialogStore";
+import { SelectionContext } from "../../stores/SelectionStore";
 
 
-const Homepage = () => {
+const HomeRoles = () => {
 
   const [userInfo] = useContext(UserInfoContext);
   const [dialog, dialogDispatch] = useContext(DialogContext);
@@ -80,4 +80,4 @@ const Homepage = () => {
   );
 };
 
-export default Homepage;
+export default HomeRoles;
