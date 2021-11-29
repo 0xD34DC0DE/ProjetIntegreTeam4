@@ -35,7 +35,7 @@ const Homepage = () => {
                       color: "text.primary",
                       fontSize: "1.5em",
                       // backgroundColor: "rgba(135, 135, 135, 0.03)",
-                      backgroundColor: "#702963",
+                      backgroundColor: "#5d1f94",
                       width: "100%",
                       height: "25%",
                       border: "0.5px solid grey",
@@ -45,7 +45,7 @@ const Homepage = () => {
                       mb: 1,
                       ":hover": {
                           boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
-                          backgroundColor: "#702963",
+                          backgroundColor: "#5d1f94",
                           "#visualizeText": {
                               opacity: 0.8,
                           },
