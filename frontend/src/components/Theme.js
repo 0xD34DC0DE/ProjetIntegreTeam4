@@ -83,7 +83,7 @@ const theme = createTheme({
     MuiTabs: {
       styleOverrides: {
         indicator: {
-          backgroundColor: "white",
+          backgroundColor: "rgba(125, 51, 235, 1.0)",
         },
         root: {
           "& .MuiButtonBase-root": {
@@ -110,6 +110,15 @@ const theme = createTheme({
           color: "gray",
           "&.Mui-checked": {
             color: "white",
+          },
+        },
+      },
+    },
+    MuiPaginationItem: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            backgroundColor: "rgba(125, 51, 235, 1.0) !important",
           },
         },
       },

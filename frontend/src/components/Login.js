@@ -42,7 +42,6 @@ const Login = () => {
       responseType: "json",
     })
       .then((response) => {
-        console.log(response);
         userInfoDispatch({ type: "LOGIN", payload: { token: response.data } });
         resetForm();
         setErrorMessage();

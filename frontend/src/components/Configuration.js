@@ -124,6 +124,7 @@ export const topbarMenuList = [
     label: "Espace Personnelle",
     icon: <DashboardOutlined fontSize="small" sx={{ mr: 1 }} />,
     description: "Espace personnelle",
+    disabled: true,
   },
   {
     id: 9,

@@ -26,7 +26,6 @@ import { roles, topbarMenuList } from "./Configuration";
 import NotificationList from "./Notification/NotificationList";
 import { DialogContext } from "../stores/DialogStore";
 import { SelectionContext } from "../stores/SelectionStore";
-import axios from "axios";
 
 const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
   const menuAnchorRef = useRef();
@@ -57,38 +56,11 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
     setNotificationMenuOpen(false);
   };
 
-  useEffect(() => {
+  useEffect(async () => {
     if (userInfo === undefined) return;
-
-    fetchUserProfileImage();
+    let profileImage = await userInfo.profileImage;
+    setProfileImage(profileImage);
   }, [userInfo]);
-
-  const fetchUserProfileImage = () => {
-    axios({
-      method: "GET",
-      url: "http://localhost:8080/profileImage",
-      headers: {
-        Authorization: userInfo.jwt,
-      },
-      params: {
-        userId: userInfo.id,
-      },
-      responseType: "arraybuffer",
-    })
-      .then(async (response) => {
-        const arrayBuffer = response.data;
-        const headers = response.headers;
-        const blobUrl = await arrayBufferToBlobUrl(arrayBuffer, headers);
-        setProfileImage(blobUrl);
-      })
-      .catch((error) => console.error(error));
-  };
-
-  const arrayBufferToBlobUrl = (arrayBuffer, headers) => {
-    const imageType = headers["Content-Type"];
-    const blob = new Blob([arrayBuffer], { type: imageType });
-    return window.URL.createObjectURL(blob);
-  };
 
   return (
     <Box>
@@ -96,7 +68,14 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
         <Toolbar>
           <IconButton
             onClick={handleSidebarClick}
-            sx={{ color: "text.primary" }}
+            sx={{
+              color: "text.primary",
+              borderRadius: "20%",
+              ":hover": {
+                backgroundColor: "rgba(125, 51, 235, 0.8) !important",
+              },
+              p: 0.75,
+            }}
           >
             {sidebarOpen ? (
               <ArrowBackIosOutlinedIcon />
@@ -117,7 +96,13 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                   color="primary"
                 >
                   <NotificationsNoneOutlinedIcon
-                    sx={{ color: "text.primary", px: 0, mx: 0 }}
+                    sx={{
+                      color: "text.primary",
+                      py: 0.75,
+                      px: 0.75,
+                      borderRadius: "20%",
+                      ":hover": { backgroundColor: "rgba(125, 51, 235, 0.8)" },
+                    }}
                   />
                 </Badge>
               )}
@@ -126,7 +111,15 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
           <Tooltip title="Menu">
             <Button ref={menuAnchorRef} onClick={handleMenuClick}>
               <PersonOutlineOutlinedIcon
-                sx={{ color: "text.primary", px: 0, mx: 0 }}
+                sx={{
+                  color: "text.primary",
+                  px: 0,
+                  mx: 0,
+                  py: 0.75,
+                  px: 0.75,
+                  borderRadius: "20%",
+                  ":hover": { backgroundColor: "rgba(125, 51, 235, 0.8)" },
+                }}
               />
               <Menu
                 open={menuOpen}
@@ -201,6 +194,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                         topbarMenuList.map((item, key) => {
                           return (
                             <MenuItem
+                              disabled={item.disabled}
                               key={key}
                               onClick={() => {
                                 selectionDispatch(item);

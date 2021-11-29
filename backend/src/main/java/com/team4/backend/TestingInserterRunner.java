@@ -129,12 +129,12 @@ public class TestingInserterRunner implements ApplicationRunner {
         List<ProfileImage> profileImages = Arrays.asList(
                 ProfileImage.profileImageBuilder()
                         .fileName("filename1")
-                        .uploaderId("123")
+                        .uploaderEmail("123")
                         .image(null)
                         .build(),
                 ProfileImage.profileImageBuilder()
                         .fileName("filename2")
-                        .uploaderId("abc")
+                        .uploaderEmail("abc")
                         .image(null)
                         .build()
         );

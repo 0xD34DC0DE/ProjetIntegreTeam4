@@ -32,7 +32,7 @@ public class WebFluxConfiguration implements WebFluxConfigurer {
     @Override
     public void configureHttpMessageCodecs(ServerCodecConfigurer configurer) {
         DefaultPartHttpMessageReader partReader = new DefaultPartHttpMessageReader();
-        partReader.setMaxHeadersSize(10 * 1024 * 1024);
+        partReader.setMaxHeadersSize(4 * 1024 * 1024);
 
         MultipartHttpMessageReader multipartReader = new MultipartHttpMessageReader(partReader);
 

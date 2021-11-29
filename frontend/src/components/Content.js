@@ -26,7 +26,7 @@ const Content = ({ isSidebarOpen }) => {
   const [selection] = useContext(SelectionContext);
   const [userInfo] = useContext(UserInfoContext);
 
-  const displayComponents = (role) => {
+  const showRoleBasedComponents = (role) => {
     switch (role) {
       case "STUDENT":
         return (
@@ -65,6 +65,10 @@ const Content = ({ isSidebarOpen }) => {
     }
   };
 
+  const showComponents = () => {
+    return <>{selection.id === 9 && <ProfileImageUpload />}</>;
+  };
+
   return (
     <Box
       sx={{
@@ -91,7 +95,8 @@ const Content = ({ isSidebarOpen }) => {
             role={roles[userInfo.role]}
             description={selection.description}
           />
-          {displayComponents(userInfo.role)}
+          {showRoleBasedComponents(userInfo.role)}
+          {showComponents()}
         </Box>
       )}
       <Register></Register>

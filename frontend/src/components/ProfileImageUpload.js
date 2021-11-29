@@ -14,20 +14,15 @@ import { Box } from "@mui/system";
 import { motion } from "framer-motion";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import ErrorOutlineOutlinedIcon from "@mui/icons-material/ErrorOutlineOutlined";
-import { useTheme } from "@mui/material/styles";
-import useMediaQuery from "@mui/material/useMediaQuery";
 
 const ProfileImageUpload = () => {
   const [image, setImage] = useState(undefined);
   const [uploadImage, setUploadImage] = useState(undefined);
   const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
-  const uploadImageMaxSize = 1024 * 1024 * 10;
+  const uploadImageMaxSize = 1024 * 1024 * 4;
   const [errorMessage, setErrorMessage] = useState("");
   const [uploadImageSrc, setUploadImageSrc] = useState("");
   const [uploadingState, setUploadingState] = useState("NOT_UPLOADED");
-  const theme = useTheme();
-  const matchesBreakpointLg = useMediaQuery(theme.breakpoints.down("lg"));
-
   const fileNameRegexValidation = /[^A-Za-z0-9]+/;
   const allowedImageTypes = ["jpeg", "jpg", "png"];
 
@@ -35,7 +30,7 @@ const ProfileImageUpload = () => {
     const formData = new FormData();
 
     formData.append("image", uploadImage);
-    formData.append("uploaderId", userInfo.id);
+    formData.append("uploaderEmail", userInfo.email);
 
     axios({
       method: "POST",
@@ -49,12 +44,20 @@ const ProfileImageUpload = () => {
       .then((response) => {
         userInfoDispatch({
           type: "UPDATE_PROFILE_IMAGE",
-          payload: uploadImage,
+          payload: {
+            profileImage: arrayBufferToBlobUrl(uploadImage, uploadImage.type),
+          },
         });
       })
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const arrayBufferToBlobUrl = (arrayBuffer, headers) => {
+    const imageType = headers["Content-Type"];
+    const blob = new Blob([arrayBuffer], { type: imageType });
+    return window.URL.createObjectURL(blob);
   };
 
   const validateUploadImage = (file) => {
@@ -64,7 +67,7 @@ const ProfileImageUpload = () => {
 
     if (size > uploadImageMaxSize)
       setErrorMessage(
-        "L'image est trop volumineuse, les images doivent être moins que 10MB"
+        "L'image est trop volumineuse, les images doivent être moins que 4MB"
       );
     else if (fileNameRegexValidation.test(fileName))
       setErrorMessage(
@@ -129,7 +132,7 @@ const ProfileImageUpload = () => {
         }}
       >
         <Grid container justifyContent="center" mt={5} pb={3}>
-          <Grid item xs={8} alignSelf="center">
+          <Grid item xs={8} alignSelf="center" textAlign="center">
             <Paper
               sx={{
                 backgroundColor: "rgba(22, 22, 22, 0.04)",
@@ -141,7 +144,7 @@ const ProfileImageUpload = () => {
             >
               <Grid item xs={12}>
                 <Typography
-                  variant="h2"
+                  variant="subtitle2"
                   sx={{
                     fontSize: "1.8em",
                     display: "inline-block",
@@ -172,9 +175,10 @@ const ProfileImageUpload = () => {
                     <Box
                       sx={{
                         boxShadow: "0px 0px 10px 2px rgba(255, 255, 255, 0.2)",
-                        width: "150px",
-                        height: "150px",
+                        width: "200px",
+                        height: "200px",
                         mx: "auto",
+                        borderRadius: "50%",
                       }}
                     >
                       {uploadImageSrc !== "" && errorMessage === "" && (
@@ -188,7 +192,6 @@ const ProfileImageUpload = () => {
                           <Avatar
                             src={uploadImageSrc}
                             sx={{ width: "100%", height: "100%", opacity: 1 }}
-                            variant="square"
                           ></Avatar>
                         </motion.div>
                       )}
@@ -210,7 +213,6 @@ const ProfileImageUpload = () => {
                           id="uploadImageDragnDrop"
                           onDragOver={(event) => {
                             event.preventDefault();
-                            console.log(event);
                           }}
                           sx={{
                             ":hover": {
@@ -287,9 +289,9 @@ const ProfileImageUpload = () => {
                         >
                           <Grid item textAlign="center">
                             <Typography
-                              variant="body2"
+                              variant="h2"
                               sx={{
-                                fontSize: "1.3em",
+                                fontSize: "1.1em",
                                 color: "rgba(255, 255, 255, 0.9)",
                                 textShadow: "2px 2px black",
                               }}
@@ -314,7 +316,7 @@ const ProfileImageUpload = () => {
                             <Typography
                               variant="body2"
                               sx={{
-                                fontSize: "1.3em",
+                                fontSize: "1.1em",
                                 color: "rgba(255, 255, 255, 0.9)",
                                 textShadow: "2px 2px black",
                               }}

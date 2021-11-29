@@ -72,7 +72,6 @@ const InternshipOfferValidation = () => {
             width: "100vw",
             pt: 5,
           }}
-          
         >
           {companies.map((name, key) => {
             return (
@@ -89,8 +88,8 @@ const InternshipOfferValidation = () => {
                   overflow: "auto",
                   borderRadius: "10px",
                   ":hover": {
-                    boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
-                  }
+                    boxShadow: "0px 0px 15px 1px rgba(125, 51, 235, 0.8)",
+                  },
                 }}
               >
                 <Typography

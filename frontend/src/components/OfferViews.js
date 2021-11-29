@@ -30,7 +30,6 @@ const OfferViews = () => {
 
   useEffect(() => {
     if (userInfo.loggedIn) {
-      console.log(userInfo);
       const getInternshipOffersPagingCount = () => {
         setPagingCount(1);
 
@@ -163,6 +162,6 @@ const OfferViews = () => {
       </Stack>
     </Container>
   );
-}
+};
 
 export default OfferViews;

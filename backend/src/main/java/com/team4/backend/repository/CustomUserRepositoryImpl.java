@@ -8,7 +8,10 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.util.Set;
 
 @Component
 public class CustomUserRepositoryImpl implements CustomUserRepository {
@@ -20,12 +23,19 @@ public class CustomUserRepositoryImpl implements CustomUserRepository {
     }
 
     @Override
-    public Mono<User> findByIdAndUpdateProfileImageId(String id, String profileImageId) {
-        Query query = Query.query(Criteria.where("id").is(id));
+    public Mono<User> findByEmailAndUpdateProfileImageId(String email, String profileImageId) {
+        Query query = Query.query(Criteria.where("email").is(email));
 
         Update update = new Update().set("profileImageId", profileImageId);
 
         return mongoOperations.findAndModify(query, update, FindAndModifyOptions.options().upsert(true).returnNew(true), User.class);
+    }
+
+    @Override
+    public Flux<User> findByEmails(Set<String> emails) {
+        Query query = Query.query(Criteria.where("email").in(emails));
+
+        return mongoOperations.find(query, User.class);
     }
 
 }

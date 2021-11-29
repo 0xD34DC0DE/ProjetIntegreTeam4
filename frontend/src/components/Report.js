@@ -35,12 +35,12 @@ const Report = ({ title, url, setReportUrl }) => {
             backgroundColor: "rgba(135, 135, 135, 0.03)",
             width: "100%",
             height: "100%",
-            border: "0.5px solid grey",
-            boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
+            border: "0.5px solid rgba(150, 150, 150, 0.3)",
+            boxShadow: "15px 15px 10px 0px rgba(0, 0, 0, 0.35);",
             borderRadius: "10px",
             py: 5,
             ":hover": {
-              boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
+              boxShadow: "0px 0px 15px 1px rgba(125, 51, 235, 0.8)",
               "#visualizeText": {
                 opacity: 0.8,
               },

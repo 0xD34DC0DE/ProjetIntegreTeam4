@@ -38,15 +38,16 @@ const OfferApplicationButton = ({ disabled, offerId }) => {
       variant="contained"
       sx={{
         textTransform: "uppercase",
-        backgroundColor: "rgba(100, 100, 100, 0.2)",
+        backgroundColor: "rgba(125, 51, 235, 1.0)",
         ":hover": {
-          backgroundColor: "rgba(100, 100, 100, 0.5)",
+          backgroundColor: "rgba(95, 21, 205, 1.0)",
         },
-        width: "100%",
       }}
       onClick={() => apply()}
     >
-      <Typography variant="subtitle2">Appliquer</Typography>
+      <Typography variant="subtitle2" sx={{ ml: "auto" }}>
+        Appliquer
+      </Typography>
     </Button>
   );
 };

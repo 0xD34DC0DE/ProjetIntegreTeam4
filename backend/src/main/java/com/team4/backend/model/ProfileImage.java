@@ -21,7 +21,7 @@ public class ProfileImage implements Serializable {
     private String id;
     private Binary image;
     private String fileName;
-    private String uploaderId;
+    private String uploaderEmail;
     @Builder.Default
     private LocalDateTime creationDate = LocalDateTime.now();
 
@@ -29,12 +29,12 @@ public class ProfileImage implements Serializable {
     public ProfileImage(String id,
                         Binary image,
                         String fileName,
-                        String uploaderId,
+                        String uploaderEmail,
                         LocalDateTime creationDate) {
         this.id = id;
         this.image = image;
         this.fileName = fileName;
-        this.uploaderId = uploaderId;
+        this.uploaderEmail = uploaderEmail;
         this.creationDate = Optional.ofNullable(creationDate).orElse(LocalDateTime.now());
     }
 
