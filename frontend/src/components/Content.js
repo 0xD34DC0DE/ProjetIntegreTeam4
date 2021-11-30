@@ -25,6 +25,7 @@ import SignContractDialog from "./contracts/SignContractDialog";
 import { SelectionContext } from "../stores/SelectionStore";
 import HomeRoles from "./Home/HomeRoles";
 import Home from "./Home/Home";
+import InternshipManagerOfferViews from "./InternshipManagerOfferViews";
 
 const Content = ({ isSidebarOpen }) => {
   const [selection] = useContext(SelectionContext);
@@ -51,6 +52,7 @@ const Content = ({ isSidebarOpen }) => {
             {selection.id === 11 && <ListUserDroppable role="SUPERVISOR" />}
             {selection.id === 11 && <ListUserDraggable role="STUDENT" />}
             {selection.id === 14 && <ListReport />}
+            {selection.id === 4 && <InternshipManagerOfferViews />}
           </>
         );
       case "SUPERVISOR":
