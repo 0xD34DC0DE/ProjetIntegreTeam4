@@ -13,7 +13,7 @@ public class InternshipManagerMapperTest {
     @Test
     void mapEntityToDto() {
         //ARRANGE
-        InternshipManager internshipManager = InternshipManagerMockData.GetInternshipManager();
+        InternshipManager internshipManager = InternshipManagerMockData.getInternshipManager();
 
         //ACT
         InternshipManagerDetailsDto internshipManagerDto = InternshipManagerMapper.toDto(internshipManager);
@@ -32,7 +32,7 @@ public class InternshipManagerMapperTest {
     @Test
     void mapDtoToEntity() {
         //ARRANGE
-        InternshipManagerDetailsDto internshipManagerDto = InternshipManagerMockData.GetInternshipManagerDto();
+        InternshipManagerDetailsDto internshipManagerDto = InternshipManagerMockData.getInternshipManagerDto();
 
         //ACT
         InternshipManager internshipManager = InternshipManagerMapper.toEntity(internshipManagerDto);

@@ -1,7 +1,7 @@
 package com.team4.backend.service;
 
 import com.team4.backend.pdf.OffersPdf;
-import com.team4.backend.pdf.StudentsPdf;
+import com.team4.backend.pdf.StudentsPdfTemplate;
 import com.team4.backend.util.SemesterUtil;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
@@ -78,7 +78,7 @@ public class ReportService {
                     variables.put("studentsList", students);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants inscrits");
-                    return pdfService.renderPdf(new StudentsPdf(variables));
+                    return pdfService.renderPdf(new StudentsPdfTemplate(variables));
                 });
     }
 
@@ -89,7 +89,7 @@ public class ReportService {
                     variables.put("studentsList", students);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants sans CV");
-                    return pdfService.renderPdf(new StudentsPdf(variables));
+                    return pdfService.renderPdf(new StudentsPdfTemplate(variables));
                 });
     }
 
@@ -100,7 +100,7 @@ public class ReportService {
                     variables.put("studentsList", students);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants dont le CV n'est pas validé");
-                    return pdfService.renderPdf(new StudentsPdf(variables));
+                    return pdfService.renderPdf(new StudentsPdfTemplate(variables));
                 });
     }
 
@@ -111,7 +111,7 @@ public class ReportService {
                     variables.put("studentsList", students);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants n'ayant aucune covocation à une entrevue");
-                    return pdfService.renderPdf(new StudentsPdf(variables));
+                    return pdfService.renderPdf(new StudentsPdfTemplate(variables));
                 });
     }
 
@@ -122,7 +122,7 @@ public class ReportService {
                     variables.put("studentsList", students);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants en attente d'entrevue");
-                    return pdfService.renderPdf(new StudentsPdf(variables));
+                    return pdfService.renderPdf(new StudentsPdfTemplate(variables));
                 });
     }
 
@@ -133,7 +133,7 @@ public class ReportService {
                     variables.put("studentsList", students);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants en attente d'une réponse d'entrevue");
-                    return pdfService.renderPdf(new StudentsPdf(variables));
+                    return pdfService.renderPdf(new StudentsPdfTemplate(variables));
                 });
     }
 
@@ -144,7 +144,7 @@ public class ReportService {
                     variables.put("studentsList", students);
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants qui ont trouvé un stage");
-                    return pdfService.renderPdf(new StudentsPdf(variables));
+                    return pdfService.renderPdf(new StudentsPdfTemplate(variables));
                 });
     }
 
@@ -156,7 +156,7 @@ public class ReportService {
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants qui n'ont pas encore été évalués par leur moniteur");
                     variables.put("session", SemesterUtil.convertInFrench(semesterFullName));
-                    return pdfService.renderPdf(new StudentsPdf(variables));
+                    return pdfService.renderPdf(new StudentsPdfTemplate(variables));
                 });
     }
 
@@ -169,7 +169,7 @@ public class ReportService {
                     variables.put("date", LocalDate.now());
                     variables.put("title", "Étudiants dont le superviseur n'a pas encore évalué l'entreprise");
                     variables.put("session", SemesterUtil.convertInFrench(semesterFullName));
-                    return pdfService.renderPdf(new StudentsPdf(variables));
+                    return pdfService.renderPdf(new StudentsPdfTemplate(variables));
                 });
     }
 
