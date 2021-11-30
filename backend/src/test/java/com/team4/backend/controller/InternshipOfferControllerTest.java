@@ -163,29 +163,6 @@ public class InternshipOfferControllerTest {
     }
 
     @Test
-    void shouldNotAddExclusiveOffer() {
-        //ARRANGE
-        String email = "test@gmail.com";
-        String id = "id_test";
-
-        when(internshipOfferService.addExclusiveOfferToStudent(email, id)).thenReturn(Mono.just(true));
-
-        //ACT
-        webTestClient
-                .patch()
-                .uri(uriBuilder ->
-                        uriBuilder
-                                .path("/internshipOffer/addExclusiveOfferToStudent")
-                                .queryParam("email", email)
-                                .queryParam("id", id)
-                                .build())
-                .exchange()
-                //ASSERT
-                .expectStatus().isNoContent()
-                .expectBody(String.class);
-    }
-
-    @Test
     void shouldValidateInternshipOffer() {
         //ARRANGE
         InternshipOfferDetailsDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
