@@ -5,6 +5,7 @@ import com.team4.backend.dto.UserDto;
 import com.team4.backend.mapping.UserMapper;
 import com.team4.backend.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -31,6 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/getAll")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Flux<UserDto> getAll(@RequestParam String role) {
         return userService.getAll(role.toUpperCase()).map(UserMapper::toDto);
     }

@@ -1,6 +1,7 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.Student;
+import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -42,6 +43,7 @@ public class StudentRepositoryTest {
                         .email("testing_1@gmail.com")
                         .password("password1")
                         .studentState(StudentState.WAITING_INTERVIEW)
+                        .exclusiveOffersId(Set.of("61a679bf094df9767f779234"))
                         .interviewsDate(new TreeSet<>(Arrays.asList(
                                 LocalDate.now().minusWeeks(3),
                                 LocalDate.now(),
@@ -51,6 +53,7 @@ public class StudentRepositoryTest {
                         .email("testing_2@gmail.com")
                         .studentState(StudentState.WAITING_INTERVIEW)
                         .password("password2")
+                        .exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>())
                         .evaluationsDates(Stream.of(LocalDate.now(),LocalDate.now().plusYears(2))
                                 .collect(Collectors.toCollection(TreeSet::new)))
@@ -58,6 +61,7 @@ public class StudentRepositoryTest {
                 Student.studentBuilder()
                         .email("testing_3@gmail.com")
                         .password("password1")
+                        .exclusiveOffersId(new HashSet<>())
                         .studentState(StudentState.WAITING_INTERVIEW)
                         .evaluationsDates(Stream.of(LocalDate.now().plusYears(2))
                                 .collect(Collectors.toCollection(TreeSet::new)))
@@ -111,6 +115,23 @@ public class StudentRepositoryTest {
         StepVerifier.create(studentFlux)
                 .assertNext(s -> Assertions.assertNotNull(s.getEmail()))
                 .expectNextCount(1)
+                .expectComplete()
+                .verify();
+    }
+
+    @Test
+    void shouldAllByRoleAndExclusiveOffersIdNotContains() {
+        //ARRANGE
+        String id = "61a679bf094df9767f779234";
+        String role = Role.STUDENT.toString();
+
+
+        //ACT
+        Flux<Student> studentFlux = studentRepository.findAllByRoleAndExclusiveOffersIdNotContains(role,id);
+
+        //ASSERT
+        StepVerifier.create(studentFlux)
+                .expectNextCount(2)
                 .expectComplete()
                 .verify();
     }

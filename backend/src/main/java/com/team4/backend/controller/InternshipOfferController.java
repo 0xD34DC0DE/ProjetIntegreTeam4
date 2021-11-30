@@ -14,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.security.Principal;
+import java.util.Set;
 
 @Log
 @RestController
@@ -85,11 +86,11 @@ public class InternshipOfferController {
 
     }
 
-    @PatchMapping("/addExclusiveOfferToStudent")
+    @PatchMapping("/addExclusiveOfferToStudents/{id}")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Mono<ResponseEntity<String>> addExclusiveOfferToStudent(@RequestParam("email") String email,
-                                                                   @RequestParam("id") String id) {
-        return internshipOfferService.addExclusiveOfferToStudent(email, id)
+    public Mono<ResponseEntity<String>> addExclusiveOfferToStudents(@PathVariable String id,
+                                                                    @RequestBody Set<String> emails) {
+        return internshipOfferService.addExclusiveOfferToStudents(id, emails)
                 .flatMap(i -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body(i.toString())));
 
     }

@@ -253,7 +253,8 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasValidCv(false)
                         .hasCv(true)
                         .evaluationsDates(new TreeSet<>())
-                        .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
+                        .appliedOffersId(new HashSet<>())
+                        .exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
                         .studentState(StudentState.WAITING_INTERVIEW)
                         .build(),

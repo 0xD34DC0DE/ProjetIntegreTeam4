@@ -27,10 +27,14 @@ import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.same;
 import static org.mockito.Mockito.when;
 
 @Log
@@ -371,74 +375,42 @@ public class InternshipOfferServiceTest {
     }
 
     @Test
-    void shouldAddExclusiveOfferToStudent() {
+    void shouldAddExclusiveOfferToStudents() {
         //ARRANGE
-        Student student = StudentMockData.getMockStudent();
+        List<Student> students = StudentMockData.getListStudent(3)
+                .stream().peek(student -> student.setExclusiveOffersId(new HashSet<>())).collect(Collectors.toList());
+        Set<String> studentEmails = students.stream().map(Student::getEmail).collect(Collectors.toSet());
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(studentService.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
+        when(studentService.findAllByEmails(studentEmails)).thenReturn(Flux.fromIterable(students));
         when(internshipOfferRepository.existsByIdAndIsExclusiveTrue(internshipOffer.getId())).thenReturn(Mono.just(true));
-        when(studentService.save(student)).thenReturn(Mono.just(student));
+        students.forEach(s -> when(studentService.save(s)).thenReturn(Mono.just(s)));
+
         //ACT
-        Mono<Boolean> updated = internshipOfferService.addExclusiveOfferToStudent(student.getEmail(), internshipOffer.getId());
+        Mono<Long> count = internshipOfferService.addExclusiveOfferToStudents(internshipOffer.getId(), studentEmails);
 
         //ASSERT
-        StepVerifier.create(updated)
-                .assertNext(Assertions::assertTrue)
+        StepVerifier.create(count)
+                .assertNext(c -> assertEquals(3, c))
                 .verifyComplete();
     }
 
     @Test
-    void shouldNotAddExclusiveOfferToStudentWhenStudentIsNotFound() {
+    void shouldAddExclusiveOfferToStudentsWhenInternshipOfferDoNotExistOrNotExclusive() {
         //ARRANGE
-        Student student = StudentMockData.getMockStudent();
+        List<Student> students = StudentMockData.getListStudent(3)
+                .stream().peek(student -> student.setExclusiveOffersId(new HashSet<>())).collect(Collectors.toList());
+        Set<String> studentEmails = students.stream().map(Student::getEmail).collect(Collectors.toSet());
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(studentService.findByEmail(student.getEmail())).thenReturn(Mono.error(UserNotFoundException::new));
-        when(internshipOfferRepository.existsByIdAndIsExclusiveTrue(internshipOffer.getId())).thenReturn(Mono.just(true));
-
-        //ACT
-        Mono<Boolean> updated = internshipOfferService.addExclusiveOfferToStudent(student.getEmail(), internshipOffer.getId());
-
-        //ASSERT
-        StepVerifier.create(updated)
-                .verifyError(UserNotFoundException.class);
-    }
-
-    @Test
-    void shouldNotAddExclusiveOfferToStudentWhenInternshipOfferDoNotExistOrNotExclusive() {
-        Student student = StudentMockData.getMockStudent();
-        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
-
-        when(studentService.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
         when(internshipOfferRepository.existsByIdAndIsExclusiveTrue(internshipOffer.getId())).thenReturn(Mono.just(false));
 
         //ACT
-        Mono<Boolean> updated = internshipOfferService.addExclusiveOfferToStudent(student.getEmail(), internshipOffer.getId());
+        Mono<Long> count = internshipOfferService.addExclusiveOfferToStudents(internshipOffer.getId(), studentEmails);
 
         //ASSERT
-        StepVerifier.create(updated)
-                .assertNext(Assertions::assertFalse)
-                .verifyComplete();
-    }
-
-    @Test
-    void shouldNotAddExclusiveOfferToStudentWhenStudentAlreadyHasExclusiveOffer() {
-        //ARRANGE
-        Student student = StudentMockData.getMockStudent();
-        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
-
-        student.getExclusiveOffersId().add(internshipOffer.getId());
-
-        when(studentService.findByEmail(student.getEmail())).thenReturn(Mono.just(student));
-        when(internshipOfferRepository.existsByIdAndIsExclusiveTrue(internshipOffer.getId())).thenReturn(Mono.just(true));
-
-        //ACT
-        Mono<Boolean> updated = internshipOfferService.addExclusiveOfferToStudent(student.getEmail(), internshipOffer.getId());
-
-        //ASSERT
-        StepVerifier.create(updated)
-                .verifyError(DuplicateEntryException.class);
+        StepVerifier.create(count)
+                .verifyError(ForbiddenActionException.class);
     }
 
     @Test
