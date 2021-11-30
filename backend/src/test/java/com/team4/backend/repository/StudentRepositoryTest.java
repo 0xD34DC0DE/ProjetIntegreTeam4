@@ -55,7 +55,7 @@ public class StudentRepositoryTest {
                         .password("password2")
                         .exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>())
-                        .evaluationsDates(Stream.of(LocalDate.now(),LocalDate.now().plusYears(2))
+                        .evaluationsDates(Stream.of(LocalDate.now(), LocalDate.now().plusYears(2))
                                 .collect(Collectors.toCollection(TreeSet::new)))
                         .build(),
                 Student.studentBuilder()
@@ -120,18 +120,35 @@ public class StudentRepositoryTest {
     }
 
     @Test
-    void shouldAllByRoleAndExclusiveOffersIdNotContains() {
+    void shouldFindAllByRoleAndExclusiveOffersIdNotContains() {
         //ARRANGE
         String id = "61a679bf094df9767f779234";
         String role = Role.STUDENT.toString();
 
 
         //ACT
-        Flux<Student> studentFlux = studentRepository.findAllByRoleAndExclusiveOffersIdNotContains(role,id);
+        Flux<Student> studentFlux = studentRepository.findAllByRoleAndExclusiveOffersIdNotContains(role, id);
 
         //ASSERT
         StepVerifier.create(studentFlux)
                 .expectNextCount(2)
+                .expectComplete()
+                .verify();
+    }
+
+    @Test
+    void shouldFindAllByRoleAndExclusiveOffersIdContains() {
+        //ARRANGE
+        String id = "61a679bf094df9767f779234";
+        String role = Role.STUDENT.toString();
+
+
+        //ACT
+        Flux<Student> studentFlux = studentRepository.findAllByRoleAndExclusiveOffersIdContains(role, id);
+
+        //ASSERT
+        StepVerifier.create(studentFlux)
+                .expectNextCount(1)
                 .expectComplete()
                 .verify();
     }

@@ -100,7 +100,16 @@ public class InternshipOfferService {
                 .filter(InternshipOffer::getIsValidated)
                 .switchIfEmpty(Mono.error(new ForbiddenActionException("The offer has to be valid!")))
                 .map(internshipOffer -> {
+
                     internshipOffer.setIsExclusive(isExclusive);
+
+                    if (!isExclusive)
+                        studentService.getAllStudentContainingExclusiveOffer(id)
+                                .subscribe(student -> {
+                                    student.getExclusiveOffersId().removeIf(id::equals);
+                                    studentService.save(student).subscribe();
+                                });
+
                     return internshipOffer;
                 }).flatMap(internshipOfferRepository::save);
     }

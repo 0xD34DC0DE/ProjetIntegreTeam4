@@ -26,10 +26,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -296,7 +293,7 @@ public class InternshipOfferServiceTest {
     }
 
     @Test
-    void shouldChangeInternshipOfferExclusivity() {
+    void shouldChangeInternshipOfferExclusivityWhenIsTrue() {
         //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
@@ -309,6 +306,32 @@ public class InternshipOfferServiceTest {
         //ASSERT
         StepVerifier.create(internshipOfferMono)
                 .assertNext(i -> assertTrue(i.getIsExclusive()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldChangeInternshipOfferExclusivityAndRemoveIdFromExclusiveOfferOfStudentWhenIsFalse() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        internshipOffer.setId(student.getExclusiveOffersId().stream().findFirst().get());
+
+        when(internshipOfferRepository.findById(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
+        when(studentService.getAllStudentContainingExclusiveOffer(any())).thenReturn(Flux.fromIterable(Arrays.asList(student)));
+        when(studentService.save(any())).thenReturn(Mono.just(student));
+        when(internshipOfferRepository.save(any())).thenReturn(Mono.just(internshipOffer));
+
+        //ACT
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.changeInternshipOfferExclusivity(internshipOffer.getId(), false);
+
+        //ASSERT
+        StepVerifier.create(internshipOfferMono)
+                .assertNext(i -> {
+                    assertFalse(i.getIsExclusive());
+                    assertFalse(student.getExclusiveOffersId().contains(i.getId()));
+                })
                 .verifyComplete();
     }
 

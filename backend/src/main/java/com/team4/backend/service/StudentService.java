@@ -128,6 +128,10 @@ public class StudentService {
         return studentRepository.findAllByRoleAndExclusiveOffersIdNotContains("STUDENT", offerId);
     }
 
+    public Flux<Student> getAllStudentContainingExclusiveOffer(String offerId) {
+        return studentRepository.findAllByRoleAndExclusiveOffersIdContains("STUDENT", offerId);
+    }
+
     public Flux<Student> getAllStudentsWithNoCv() {
         return studentRepository.findAllByHasCvFalse();
     }

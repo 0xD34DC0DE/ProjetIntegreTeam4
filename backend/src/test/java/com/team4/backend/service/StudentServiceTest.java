@@ -310,10 +310,27 @@ public class StudentServiceTest {
         String id = "id_test";
         Flux<Student> students = StudentMockData.getAllStudentsFlux();
 
-        when(studentRepository.findAllByRoleAndExclusiveOffersIdNotContains("STUDENT",id)).thenReturn(students);
+        when(studentRepository.findAllByRoleAndExclusiveOffersIdNotContains("STUDENT", id)).thenReturn(students);
 
         //ACT
         Flux<Student> response = studentService.getAllStudentNotContainingExclusiveOffer(id);
+
+        //ASSERT
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldGetAllStudentContainingExclusiveOffer() {
+        //ARRANGE
+        String id = "id_test";
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+
+        when(studentRepository.findAllByRoleAndExclusiveOffersIdContains("STUDENT", id)).thenReturn(students);
+
+        //ACT
+        Flux<Student> response = studentService.getAllStudentContainingExclusiveOffer(id);
 
         //ASSERT
         StepVerifier.create(response)

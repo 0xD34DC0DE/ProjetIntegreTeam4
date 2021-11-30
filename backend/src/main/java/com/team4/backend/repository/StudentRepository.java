@@ -18,6 +18,8 @@ public interface StudentRepository extends ReactiveMongoRepository<Student, Stri
 
     Flux<Student> findAllByRoleAndExclusiveOffersIdNotContains(String role, String offerId);
 
+    Flux<Student> findAllByRoleAndExclusiveOffersIdContains(String role,String offerId);
+
     Flux<Student> findAllByHasCvFalse();
 
     Flux<Student> findAllByHasValidCvFalse();
