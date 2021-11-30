@@ -35,7 +35,7 @@ public class SemesterRepositoryTest {
 
     @BeforeAll
     void init() {
-        semesterRepository.saveAll(Flux.fromIterable(SemesterMockData.getListSemester())).subscribe();
+        semesterRepository.saveAll(Flux.fromIterable(SemesterMockData.getListSemester())).blockLast();
     }
 
     @Test

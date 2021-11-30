@@ -38,7 +38,7 @@ public class InternshipRepositoryTest {
                         .studentEmail("test_student2@gmail.com")
                         .build());
 
-        internshipRepository.saveAll(internshipFlux).subscribe();
+        internshipRepository.saveAll(internshipFlux).blockLast();
     }
 
     @Test
