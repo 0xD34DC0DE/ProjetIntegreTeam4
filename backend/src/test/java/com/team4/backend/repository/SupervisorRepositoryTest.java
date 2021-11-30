@@ -34,7 +34,7 @@ public class SupervisorRepositoryTest {
                 .email("supervisortest@gmail.com")
                 .build());
 
-        supervisorRepository.saveAll(supervisors).subscribe();
+        supervisorRepository.saveAll(supervisors).blockLast();
     }
 
     @Test
