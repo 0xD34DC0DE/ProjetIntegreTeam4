@@ -11,8 +11,7 @@ const OfferView = ({
   minSalary,
   maxSalary,
   description,
-  hasAlreadyApplied,
-  id,
+  buttons,
 }) => {
   return (
     <Container sx={{ maxWidth: "md" }}>
@@ -26,7 +25,7 @@ const OfferView = ({
           boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
           ":hover": {
             boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
-          }
+          },
         }}
         elevation={5}
       >
@@ -63,7 +62,10 @@ const OfferView = ({
             </Typography>
           </Grid>
           <Grid item xl={2} lg={2} md={3} sm={6} xs={12}>
-            <OfferApplicationButton disabled={hasAlreadyApplied} offerId={id} />
+            {buttons &&
+              buttons.map((button) => {
+                return button;
+              })}
           </Grid>
         </Grid>
         <Grid container alignContent="center">

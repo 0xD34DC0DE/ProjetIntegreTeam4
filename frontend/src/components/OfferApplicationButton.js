@@ -41,8 +41,10 @@ const OfferApplicationButton = ({ disabled, offerId }) => {
         backgroundColor: "rgba(100, 100, 100, 0.2)",
         ":hover": {
           backgroundColor: "rgba(100, 100, 100, 0.5)",
+          boxShadow: "5px 5px 2px 2px rgba(0, 0, 0, 0.5)",
         },
         width: "100%",
+        boxShadow: "5px 5px 2px 2px rgba(0, 0, 0, 0.5)",
       }}
       onClick={() => apply()}
     >

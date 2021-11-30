@@ -1,5 +1,5 @@
 ::-webkit-scrollbar {
-  display: none;
+  display:none;
 }
 
 /* Hack pour empêcher le webkit de mettre le background blanc lorsque autofill est utilisé pour un input */
@@ -14,3 +14,4 @@ input:-webkit-autofill:active {
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(100%);
 }
+

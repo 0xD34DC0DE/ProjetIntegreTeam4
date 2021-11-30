@@ -1,8 +1,6 @@
 import React from "react";
 import {
   Avatar,
-  Box,
-  Tooltip,
   Card,
   Typography,
   ButtonBase,
@@ -63,7 +61,6 @@ const Report = ({ title, url, setReportUrl }) => {
               fontSize: "0.9em",
               lineHeight: "0",
               height: 0,
-              mt: 2,
               transition: "opacity 0.5s ease-in-out",
             }}
           >

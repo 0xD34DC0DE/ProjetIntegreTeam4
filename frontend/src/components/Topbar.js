@@ -59,16 +59,18 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
     <Box>
       <AppBar sx={{ position: "fixed" }}>
         <Toolbar>
-          <IconButton
-            onClick={handleSidebarClick}
-            sx={{ color: "text.primary" }}
-          >
-            {sidebarOpen ? (
-              <ArrowBackIosOutlinedIcon />
-            ) : (
-              <ArrowForwardIosOutlinedIcon />
-            )}
-          </IconButton>
+          {userInfo.loggedIn && (
+            <IconButton
+              onClick={handleSidebarClick}
+              sx={{ color: "text.primary" }}
+            >
+              {sidebarOpen ? (
+                <ArrowBackIosOutlinedIcon />
+              ) : (
+                <ArrowForwardIosOutlinedIcon />
+              )}
+            </IconButton>
+          )}
           <Tooltip title="Notifications">
             <IconButton
               onClick={handleNotificationMenuOpen}
