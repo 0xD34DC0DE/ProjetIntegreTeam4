@@ -1,6 +1,7 @@
 package com.team4.backend.mapping;
 
 import com.team4.backend.dto.MonitorDetailsDto;
+import com.team4.backend.dto.MonitorProfileDto;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.testdata.MonitorMockData;
 import org.junit.jupiter.api.Test;
@@ -47,6 +48,25 @@ public class MonitorMapperTest {
         assertEquals(dto.getCompanyName(), entity.getCompanyName());
         assertEquals(dto.getPhoneNumber(), entity.getPhoneNumber());
         assertEquals(dto.getRegistrationDate(), entity.getRegistrationDate());
+    }
+
+    @Test
+    void mapEntityToProfileDto() {
+        //ARANGE
+        Monitor entity = MonitorMockData.getMockMonitor();
+
+        //ACT
+        MonitorProfileDto dto = MonitorMapper.toProfileDto(entity);
+
+        //ASSERT
+
+        assertEquals(entity.getId(), dto.getId());
+        assertEquals(entity.getEmail(), dto.getEmail());
+        assertEquals(entity.getFirstName(), dto.getFirstName());
+        assertEquals(entity.getLastName(), dto.getLastName());
+        assertEquals(entity.getPhoneNumber(), dto.getPhoneNumber());
+        assertEquals(entity.getCompanyName(), dto.getCompanyName());
+        assertEquals(entity.getRegistrationDate(), dto.getRegistrationDate());
     }
 
 }

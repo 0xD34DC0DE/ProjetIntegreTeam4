@@ -1,11 +1,10 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Avatar, Typography, Grid } from "@mui/material";
+import { Avatar, Typography, Grid, Button } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import BlockIcon from "@mui/icons-material/Block";
 import { UserInfoContext } from "../../stores/UserInfoStore";
-import axios from "axios";
 
-const IconImage = ({ profile }) => {
+const IconImage = ({ profile, role }) => {
   const [userInfo] = useContext(UserInfoContext);
   const [profileImage, setProfileImage] = useState("");
 
@@ -28,25 +27,29 @@ const IconImage = ({ profile }) => {
         >
           {profile.firstName.charAt(0)}
         </Avatar>
-        {profile.hasValidCv ? (
-          <Typography
-            sx={{ color: "green", textAlign: "center", m: 1, mt: 2 }}
-            variant="subtitle1"
-            component="div"
-          >
-            Vous avez un CV valide
-            <CheckCircleIcon sx={{ ml: 1, verticalAlign: "middle" }} />
-          </Typography>
-        ) : (
-          <Typography
-            sx={{ color: "red", textAlign: "center", m: 1, mt: 2 }}
-            variant="subtitle1"
-            component="div"
-            gutterBottom
-          >
-            Vous n'avez aucun CV valide
-            <BlockIcon sx={{ ml: 2, verticalAlign: "middle" }} />
-          </Typography>
+        {role === "STUDENT" && (
+          <div>
+            {profile.hasValidCv ? (
+              <Typography
+                sx={{ color: "green", textAlign: "center", m: 1, mt: 2 }}
+                variant="subtitle1"
+                component="div"
+              >
+                Vous avez un CV valide
+                <CheckCircleIcon sx={{ ml: 1, verticalAlign: "middle" }} />
+              </Typography>
+            ) : (
+              <Typography
+                sx={{ color: "red", textAlign: "center", m: 1, mt: 2 }}
+                variant="subtitle1"
+                component="div"
+                gutterBottom
+              >
+                Vous n'avez aucun CV valide
+                <BlockIcon sx={{ ml: 2, verticalAlign: "middle" }} />
+              </Typography>
+            )}
+          </div>
         )}
       </Grid>
     </>

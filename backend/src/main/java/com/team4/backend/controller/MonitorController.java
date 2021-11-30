@@ -1,15 +1,17 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.MonitorDetailsDto;
+import com.team4.backend.dto.MonitorProfileDto;
 import com.team4.backend.mapping.MonitorMapper;
+import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.MonitorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/monitor")
@@ -22,10 +24,16 @@ public class MonitorController {
     }
 
     @PostMapping("/register")
-    //TODO --> followConvention MonitorCreationDto
     public Mono<ResponseEntity<String>> register(@RequestBody MonitorDetailsDto monitorDto) {
         return monitorService.registerMonitor(MonitorMapper.toEntity(monitorDto))
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")));
+    }
+
+    @GetMapping("/getProfile")
+    @PreAuthorize("hasAuthority('MONITOR')")
+    public Mono<MonitorProfileDto> getProfile(Principal principal) {
+        return monitorService.findByEmail(UserSessionService.getLoggedUserEmail(principal))
+                .map(MonitorMapper::toProfileDto);
     }
 
 }

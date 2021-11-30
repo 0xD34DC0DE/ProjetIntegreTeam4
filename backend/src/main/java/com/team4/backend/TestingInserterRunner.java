@@ -361,12 +361,16 @@ public class TestingInserterRunner implements ApplicationRunner {
         Monitor monitor = Monitor.monitorBuilder().email("monitor@gmail.com")
                 .password(pbkdf2Encoder.encode("monitor"))
                 .firstName("Giorno")
+                .companyName("Google")
+                .phoneNumber("438-998-7654")
                 .lastName("Giovanna")
                 .build();
 
         Monitor monitor2 = Monitor.monitorBuilder().email("monitor1@gmail.com")
                 .password(pbkdf2Encoder.encode("monitor1"))
                 .firstName("Amir")
+                .companyName("CAE")
+                .phoneNumber("438-529-0976")
                 .lastName("Fernandez")
                 .build();
 
@@ -379,12 +383,14 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .email("supervisor@gmail.com").password(pbkdf2Encoder.encode("supervisor"))
                         .firstName("Ginette")
                         .lastName("Renaud")
+                        .phoneNumber("514-334-5667")
                         .studentTimestampedEntries(new HashSet<>()).build(),
                 Supervisor.supervisorBuilder()
                         .email("supervisor1@gmail.com")
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Michel")
                         .lastName("Lamarck")
+                        .phoneNumber("514-324-5667")
                         .studentTimestampedEntries(new TreeSet<>(Arrays.asList(
                                 new TimestampedEntry("3643283423@gmail.com", LocalDateTime.now())))).build(),
                 Supervisor.supervisorBuilder()
@@ -392,6 +398,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Kendrick")
                         .lastName("Lamar")
+                        .phoneNumber("514-545-5667")
                         .studentTimestampedEntries(new TreeSet<>(Arrays.asList(
                                 new TimestampedEntry("studentInternFound@gmail.com", LocalDateTime.now()),
                                 new TimestampedEntry("123456789@gmail.com", LocalDateTime.now())))).build()
