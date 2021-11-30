@@ -101,6 +101,7 @@ const Content = ({ isSidebarOpen }) => {
           {showComponents()}
         </Box>
       )}
+      {!userInfo.loggedIn && <Home />}
       <Register></Register>
       <Login></Login>
       <OfferForm />

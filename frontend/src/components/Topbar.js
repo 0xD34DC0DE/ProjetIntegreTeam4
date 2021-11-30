@@ -235,7 +235,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                           sx={{
                             ":hover": {
                               backgroundColor: "rgba(100, 100, 100, 0.4)",
-                              color: "red",
+                              color: "rgba(255, 30, 30, 1)",
                             },
                             pl: 1,
                           }}

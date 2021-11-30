@@ -52,6 +52,7 @@ const UserInfoReducer = (state, action) => {
       return decodeJwtToken(bearerToken);
     case "LOGOUT":
       sessionStorage.removeItem("jwt");
+      sessionStorage.removeItem("selection");
       return initialState;
     case "REFRESH":
       return decodeJwtToken(jwtToken);

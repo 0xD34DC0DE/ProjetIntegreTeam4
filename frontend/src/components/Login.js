@@ -82,13 +82,27 @@ const Login = () => {
       <Dialog open={dialog.loginDialog.visible} onClose={handleClose}>
         <DialogContent>
           <Typography
-            variant="h4"
+            variant="h2"
             align="left"
-            sx={{ minHeight: "6vh", p: 0, m: 0, minWidth: "600px" }}
+            sx={{
+              minHeight: "6vh",
+              p: 0,
+              m: 0,
+              minWidth: "600px",
+              lineHeight: 1.5,
+              fontSize: "2.5em",
+            }}
           >
             Connexion
           </Typography>
-          <DialogContentText style={{ color: "rgba(220, 50, 50)", p: 0, m: 0 }}>
+          <DialogContentText
+            sx={{
+              color: "rgba(240, 50, 50, 1) !important",
+              p: 0,
+              m: 0,
+              mb: 1,
+            }}
+          >
             {errorMessage}
           </DialogContentText>
           <TextField
@@ -122,44 +136,52 @@ const Login = () => {
             autoComplete="current-password"
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ mb: 1 }}>
           <Button
-            type="submit"
-            variant="text"
-            sx={{
-              justifySelf: "flex-start",
-              mr: 20,
-              flexGrow: "1",
-              ":hover": {
-                color: "rgba(125, 51, 235, 1) !important",
-              },
-            }}
-            color="primary"
             onClick={() => {
               dialogDispatch({
                 type: "CLOSE",
                 dialogName: "loginDialog",
               });
             }}
-          >
-            <KeyboardArrowLeft />
-            Quitter
-          </Button>
-          <Button
-            type="submit"
-            variant="text"
-            color="primary"
-            onClick={logUserIn}
+            size="small"
             sx={{
-              justifySelf: "flex-end",
-              ml: 20,
-              flexGrow: "1",
               ":hover": {
-                color: "rgba(125, 51, 235, 1) !important",
+                backgroundColor: "rgba(125, 51, 235, 1) !important",
               },
+              ml: 2,
+              mr: "auto",
             }}
           >
-            Envoyer
+            <KeyboardArrowLeft />
+            <Typography
+              variant="subtitle2"
+              sx={{
+                verticalAlign: "middle",
+                textAlign: "center",
+                pr: 1,
+              }}
+            >
+              Quitter
+            </Typography>
+          </Button>
+          <Button
+            onClick={() => logUserIn()}
+            size="small"
+            sx={{
+              textAlign: "center",
+              ":hover": {
+                backgroundColor: "rgba(125, 51, 235, 1) !important",
+              },
+              mr: 2,
+            }}
+          >
+            <Typography
+              variant="subtitle2"
+              sx={{ verticalAlign: "middle", pl: 1 }}
+            >
+              Envoyer
+            </Typography>
             <KeyboardArrowRight />
           </Button>
         </DialogActions>

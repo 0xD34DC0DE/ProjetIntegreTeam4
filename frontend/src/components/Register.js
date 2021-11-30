@@ -170,8 +170,20 @@ const Register = () => {
   return (
     <>
       <Dialog open={dialog.registerDialog.visible} onClose={handleClose}>
-        <Typography variant="h4" sx={{ ml: 3, mt: 3 }}>
-          Enregistrement <Create sx={{ ml: 1 }} />
+        <Typography
+          variant="h2"
+          align="left"
+          sx={{
+            p: 0,
+            m: 0,
+            minWidth: "600px",
+            lineHeight: 1.5,
+            fontSize: "2.3em",
+            ml: 3,
+            mt: 2,
+          }}
+        >
+          Enregistrement
         </Typography>
         <DialogContent sx={{ minWidth: "380px" }}>
           {displayFormFields()}
@@ -184,15 +196,49 @@ const Register = () => {
             activeStep={step}
             sx={{ flexGrow: 1 }}
             nextButton={
-              <Button size="small" onClick={nextStep} disabled={!formValid}>
-                {step === stepCount - 1 ? "Envoyer" : "Suivant"}
+              <Button
+                size="small"
+                onClick={nextStep}
+                disabled={!formValid}
+                sx={{
+                  textAlign: "center",
+                  ":hover": {
+                    backgroundColor: "rgba(125, 51, 235, 1) !important",
+                  },
+                  mr: 1,
+                }}
+              >
+                <Typography
+                  variant="subtitle2"
+                  sx={{ verticalAlign: "middle", pl: 1 }}
+                >
+                  {step === stepCount - 1 ? "Envoyer" : "Suivant"}
+                </Typography>
                 <KeyboardArrowRight />
               </Button>
             }
             backButton={
-              <Button size="small" onClick={prevStep}>
+              <Button
+                size="small"
+                onClick={prevStep}
+                sx={{
+                  ":hover": {
+                    backgroundColor: "rgba(125, 51, 235, 1) !important",
+                  },
+                  ml: 1,
+                }}
+              >
                 <KeyboardArrowLeft />
-                {step === 0 ? "Quitter" : "Retour"}
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    verticalAlign: "middle",
+                    textAlign: "center",
+                    pr: 1,
+                  }}
+                >
+                  {step === 0 ? "Quitter" : "Retour"}
+                </Typography>
               </Button>
             }
           />
