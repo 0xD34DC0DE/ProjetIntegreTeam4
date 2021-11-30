@@ -61,25 +61,6 @@ export const sidebarList = [
     ),
   },
   {
-    id: 3,
-    label: "Valider les offres de stage",
-    role: ["INTERNSHIP_MANAGER"],
-    icon: <CheckOutlined sx={{ mr: 1 }} />,
-    isDialog: false,
-    description: "Liste d'offres de stage en attente de validation",
-    explication: (
-      <Grid>
-        <Typography>
-          Consultez toutes les offres de stages en attente de validation.
-        </Typography>
-        <Typography>
-          Visualisez les informations du stage que vous sélectionnez.
-        </Typography>
-        <Typography>Approuvez ou refusez l'offre voulue.</Typography>
-      </Grid>
-    ),
-  },
-  {
     id: 4,
     label: "Voir les offres de stage",
     role: ["STUDENT"],
