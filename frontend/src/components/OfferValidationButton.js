@@ -35,6 +35,7 @@ const OfferValidationButton = ({ offerId, isValid, setLastRemovedOfferId }) => {
           backgroundColor: `${
             isValid ? "rgba(125, 51, 235, 1)" : "rgba(100, 100, 100, 0.5)"
           }`,
+          boxShadow: "5px 5px 2px 2px rgba(0, 0, 0, 0.5)",
         },
         width: "100%",
         mt: 1,

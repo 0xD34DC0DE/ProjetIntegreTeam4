@@ -52,7 +52,7 @@ const Content = ({ isSidebarOpen }) => {
             {selection.id === 11 && <ListUserDroppable role="SUPERVISOR" />}
             {selection.id === 11 && <ListUserDraggable role="STUDENT" />}
             {selection.id === 14 && <ListReport />}
-            {selection.id === 4 && <InternshipManagerOfferViews />}
+            {selection.id === 15 && <InternshipManagerOfferViews />}
           </>
         );
       case "SUPERVISOR":

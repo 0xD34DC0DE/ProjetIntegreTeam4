@@ -13,6 +13,7 @@ import {
   SupervisedUserCircleOutlined,
   FormatListBulletedOutlined,
   AssignmentSharp,
+  ManageSearch,
 } from "@mui/icons-material";
 import { Grid, Typography } from "@mui/material";
 
@@ -81,7 +82,7 @@ export const sidebarList = [
   {
     id: 4,
     label: "Voir les offres de stage",
-    role: ["STUDENT", "INTERNSHIP_MANAGER"],
+    role: ["STUDENT"],
     icon: <SearchOutlined sx={{ mr: 1 }} />,
     isDialog: false,
     description: "Liste d'offres de stage disponible",
@@ -206,6 +207,22 @@ export const sidebarList = [
         Consultez les rapports concernants divers informations sur l'état des
         offres de stage, des étudiants et des tout ce qui tourne autour.
       </Typography>
+    ),
+  },
+  {
+    id: 15,
+    label: "Gérer les offres de stage",
+    role: ["INTERNSHIP_MANAGER"],
+    icon: <ManageSearch sx={{ mr: 1 }} />,
+    isDialog: false,
+    description: "Valider les offres de stage et les rendre exclusives",
+    explication: (
+      <Grid>
+        <Typography>Valider les offres de stage des moniteurs.</Typography>
+        <Typography>
+          Assigner des élèves à des offres de stage exclusives
+        </Typography>
+      </Grid>
     ),
   },
 ];
