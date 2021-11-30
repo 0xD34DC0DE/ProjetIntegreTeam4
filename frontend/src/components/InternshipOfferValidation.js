@@ -1,20 +1,10 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
-import {
-  CircularProgress,
-  Stack,
-  Typography,
-  Box,
-  Tab,
-  Tabs,
-  Tooltip,
-  Container,
-  Button,
-} from "@mui/material";
-import OfferView from "./OfferView";
+import { CircularProgress, Stack, Typography } from "@mui/material";
 import axios from "axios";
-import { UserInfoContext } from "../stores/UserInfoStore";
 import { motion } from "framer-motion";
+import React, { useContext, useEffect, useState } from "react";
+import { UserInfoContext } from "../stores/UserInfoStore";
 import OfferValidationButton from "./OfferValidationButton";
+import OfferView from "./OfferView";
 
 const InternshipOfferValidation = ({ semesterFullName }) => {
   const [userInfo] = useContext(UserInfoContext);

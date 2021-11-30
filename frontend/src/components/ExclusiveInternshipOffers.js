@@ -1,21 +1,11 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
-import {
-  CircularProgress,
-  Stack,
-  Typography,
-  Box,
-  Tab,
-  Tabs,
-  Tooltip,
-  Container,
-  Button,
-} from "@mui/material";
-import OfferView from "./OfferView";
+import { CircularProgress, Stack, Typography } from "@mui/material";
 import axios from "axios";
-import { UserInfoContext } from "../stores/UserInfoStore";
 import { motion } from "framer-motion";
-import OfferExclusivitySwitch from "./OfferExclusivitySwitch";
+import React, { useContext, useEffect, useState } from "react";
+import { UserInfoContext } from "../stores/UserInfoStore";
 import AssignedExclusiveOfferDialog from "./AssignedExclusiveOfferDialog";
+import OfferExclusivitySwitch from "./OfferExclusivitySwitch";
+import OfferView from "./OfferView";
 
 const ExclusiveInternshipOffers = ({ semesterFullName }) => {
   const [userInfo] = useContext(UserInfoContext);

@@ -1,27 +1,26 @@
 import { Search } from "@mui/icons-material";
 import {
-  DialogContent,
-  DialogContentText,
+  Alert,
+  Avatar,
+  Button,
   Dialog,
-  Typography,
+  DialogContent,
   FormControl,
   Grid,
   List,
   ListItem,
-  ListItemText,
-  Avatar,
   ListItemButton,
-  Button,
-  Tooltip,
+  ListItemText,
   Snackbar,
-  Alert,
+  Tooltip,
+  Typography,
 } from "@mui/material";
+import { Box } from "@mui/system";
+import axios from "axios";
+import { motion } from "framer-motion";
 import React, { useContext, useEffect, useState } from "react";
 import { DialogContext } from "../stores/DialogStore";
-import axios from "axios";
 import { UserInfoContext } from "../stores/UserInfoStore";
-import { Box } from "@mui/system";
-import { motion } from "framer-motion";
 
 const AssignedExclusiveOfferDialog = ({ offer }) => {
   const [userInfo] = useContext(UserInfoContext);
