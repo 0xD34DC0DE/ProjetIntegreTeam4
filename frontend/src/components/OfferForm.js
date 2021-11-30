@@ -32,7 +32,6 @@ const OfferForm = () => {
   const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const handleFormChange = (event) => {
-    console.log(offer);
     setOffer((previousForm) => ({
       ...previousForm,
       [event.target.id || event.target.name]: event.target.value,

@@ -37,7 +37,11 @@ public class FileMetaDataService {
 
     private final NotificationService notificationService;
 
-    public FileMetaDataService(FileMetaDataRepository fileMetaDataRepository, StudentService studentService, FileAssetService fileAssetService, UserService userService, NotificationService notificationService) {
+    public FileMetaDataService(FileMetaDataRepository fileMetaDataRepository,
+                               StudentService studentService,
+                               FileAssetService fileAssetService,
+                               UserService userService,
+                               NotificationService notificationService) {
         this.fileMetaDataRepository = fileMetaDataRepository;
         this.studentService = studentService;
         this.fileAssetService = fileAssetService;

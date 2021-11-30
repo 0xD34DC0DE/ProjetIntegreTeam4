@@ -39,7 +39,9 @@ public class InternshipOfferService {
     public InternshipOfferService(InternshipOfferRepository internshipOfferRepository,
                                   MonitorService monitorService,
                                   StudentService studentService,
-                                  SemesterService semesterService, NotificationService notificationService, UserService userService) {
+                                  SemesterService semesterService,
+                                  NotificationService notificationService,
+                                  UserService userService) {
         this.internshipOfferRepository = internshipOfferRepository;
         this.monitorService = monitorService;
         this.studentService = studentService;
