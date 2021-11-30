@@ -15,7 +15,6 @@ public abstract class InternshipContractMapper {
                 .studentSignature(new Signature())
                 .monitorSignature(new Signature())
                 .build();
-
     }
 
     public static InternshipContractDto toDto(InternshipContract internshipContract) {
