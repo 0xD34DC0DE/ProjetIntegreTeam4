@@ -42,8 +42,8 @@ const OfferValidationButton = ({ offerId, isValid, setLastRemovedOfferId }) => {
         boxShadow: "5px 5px 2px 2px rgba(0, 0, 0, 0.5)",
       }}
       onClick={() => {
-        validateInternshipOffer();
         setLastRemovedOfferId(offerId);
+        validateInternshipOffer();
       }}
     >
       <Typography variant="subtitle2">
