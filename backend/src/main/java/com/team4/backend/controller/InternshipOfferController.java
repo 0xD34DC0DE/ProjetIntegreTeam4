@@ -88,7 +88,7 @@ public class InternshipOfferController {
 
     @PatchMapping("/addExclusiveOfferToStudents/{id}")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Mono<ResponseEntity<String>> addExclusiveOfferToStudent2(@PathVariable String id,
+    public Mono<ResponseEntity<String>> addExclusiveOfferToStudents(@PathVariable String id,
                                                                     @RequestBody Set<String> emails) {
         return internshipOfferService.addExclusiveOfferToStudents(id, emails)
                 .flatMap(i -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body(i.toString())));
