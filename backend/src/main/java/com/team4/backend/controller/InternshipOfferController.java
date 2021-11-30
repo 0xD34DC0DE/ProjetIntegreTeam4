@@ -1,9 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.InternshipOfferCreationDto;
-import com.team4.backend.dto.InternshipOfferDetailsDto;
-import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
-import com.team4.backend.dto.InternshipOfferStudentViewDto;
+import com.team4.backend.dto.*;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.security.UserSessionService;
@@ -113,9 +110,9 @@ public class InternshipOfferController {
 
     @GetMapping("/getAllValidatedOffers/{semesterFullName}")
     @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
-    public Flux<InternshipOfferDetailsDto> getAllValidatedOffers(@PathVariable String semesterFullName) {
+    public Flux<InternshipOfferInternshipManagerViewDto> getAllValidatedOffers(@PathVariable String semesterFullName) {
         return internshipOfferService.getAllValidatedOffers(semesterFullName)
-                .map(InternshipOfferMapper::toDto);
+                .map(InternshipOfferMapper::toInternshipManagerViewDto);
     }
 
     @GetMapping("/interestedStudents")
