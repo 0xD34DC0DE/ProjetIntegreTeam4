@@ -93,7 +93,7 @@ public class InternshipOfferController {
     public Mono<ResponseEntity<String>> addExclusiveOfferToStudent(@RequestParam("email") String email,
                                                                    @RequestParam("id") String id) {
         return internshipOfferService.addExclusiveOfferToStudent(email, id)
-                .flatMap(i -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
+                .flatMap(i -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body(i.toString())));
 
     }
 
