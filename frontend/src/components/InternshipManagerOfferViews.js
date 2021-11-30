@@ -6,44 +6,47 @@ import {
   Box,
   Tab,
   Tabs,
-  Pagination,
+  Tooltip,
   Container,
+  Button,
 } from "@mui/material";
 import OfferView from "./OfferView";
 import axios from "axios";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { motion } from "framer-motion";
 import SemesterSelect from "./SemesterSelect";
+import OfferValidationButton from "./OfferValidationButton";
 
 const InternshipManagerOfferViews = () => {
   const [userInfo] = useContext(UserInfoContext);
   const [semesterFullName, setSemesterFullName] = useState("");
   const [internshipOffers, setInternshipOffers] = useState(null);
+  const [lastRemovedOfferId, setLastRemovedOfferId] = useState("");
   const [currentTab, setCurrentTab] = useState(0);
 
-  useEffect(async () => {
+  useEffect(() => {
     if (semesterFullName === "") return;
-    if (userInfo.loggedIn) {
-      const getAllValidatedOffers = async () => {
-        const endpoint = `http://localhost:8080/internshipOffer/getAllValidatedOffers/${semesterFullName}`;
-
-        var response = await axios({
+    if (!!userInfo) {
+      const getUnvalidatedInternshipOffers = async () => {
+        axios({
           method: "GET",
-          url: endpoint,
+          url: `http://localhost:8080/internshipOffer/getNotYetValidatedInternshipOffers/${semesterFullName}`,
           headers: {
             Authorization: userInfo.jwt,
           },
           responseType: "json",
-        }).catch((error) => {
-          console.error(error);
-        });
-
-        setInternshipOffers(response.data);
+        })
+          .then((response) => {
+            setInternshipOffers(response.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
       };
 
-      getAllValidatedOffers();
+      getUnvalidatedInternshipOffers();
     }
-  }, [currentTab, userInfo, semesterFullName]);
+  }, [lastRemovedOfferId, currentTab, semesterFullName]);
 
   const handleTabChange = (event, selectedTab) => {
     setCurrentTab(selectedTab);
@@ -70,7 +73,7 @@ const InternshipManagerOfferViews = () => {
           aria-label="Affichage des offres"
           centered
         >
-          <Tab label="Offres générales" index={0} sx={{ width: "50%" }} />
+          <Tab label="Offres à valider" index={0} sx={{ width: "50%" }} />
           <Tab label="Offres exclusives" index={1} sx={{ width: "50%" }} />
         </Tabs>
       </Box>
@@ -92,7 +95,22 @@ const InternshipManagerOfferViews = () => {
               }}
               key={i}
             >
-              <OfferView key={i} {...offer} />
+              <OfferView
+                key={i}
+                {...offer}
+                buttons={[
+                  <OfferValidationButton
+                    offerId={offer.id}
+                    isValid={true}
+                    setLastRemovedOfferId={setLastRemovedOfferId}
+                  />,
+                  <OfferValidationButton
+                    offerId={offer.id}
+                    isValid={false}
+                    setLastRemovedOfferId={setLastRemovedOfferId}
+                  />,
+                ]}
+              />
             </motion.div>
           ))
         )}

@@ -5,32 +5,30 @@ import axios from "axios";
 
 const OfferApplicationButton = ({ disabled, offerId }) => {
   const [userInfo] = useContext(UserInfoContext);
-  const [isWaitingResponse, setIsWaitingResponse] = useState(false);
   const [isDisabled, setIsDisabled] = useState(disabled);
-
+  const [isExclusive, setIsExclusive] = useState(false);
   useEffect(() => {
-    if (userInfo.loggedIn && isWaitingResponse) {
+    if (userInfo.loggedIn && !isExclusive) {
       axios({
         method: "PATCH",
-        url: `http://localhost:8080/internshipOffer/apply/${offerId}`,
+        url: `http://localhost:8080/internshipOffer/changeInternshipOfferExclusivity`,
+        params: {
+          id: offerId,
+          isExclusive: true,
+        },
         headers: {
           Authorization: userInfo.jwt,
         },
         responseType: "json",
       })
         .then(() => {
-          setIsWaitingResponse(false);
           setIsDisabled(true);
         })
         .catch((error) => {
           console.error(error);
         });
     }
-  }, [userInfo, isWaitingResponse]);
-
-  const apply = () => {
-    setIsWaitingResponse(true);
-  };
+  }, [userInfo, isExclusive]);
 
   return (
     <Button
@@ -43,11 +41,10 @@ const OfferApplicationButton = ({ disabled, offerId }) => {
           backgroundColor: "rgba(100, 100, 100, 0.5)",
         },
         width: "100%",
-        boxShadow: "5px 5px 2px 2px rgba(0, 0, 0, 0.5)",
       }}
-      onClick={() => apply()}
+      onClick={() => setIsExclusive(true)}
     >
-      <Typography variant="subtitle2">Appliquer</Typography>
+      <Typography variant="subtitle2">Rendre exclusive</Typography>
     </Button>
   );
 };
