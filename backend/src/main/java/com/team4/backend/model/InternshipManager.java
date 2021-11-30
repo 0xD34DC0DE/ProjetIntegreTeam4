@@ -22,7 +22,8 @@ public class InternshipManager extends User {
                              String lastName,
                              String password,
                              String phoneNumber,
-                             LocalDate registrationDate) {
+                             LocalDate registrationDate,
+                             String profileImageId) {
         super(id,
                 email,
                 firstName,
@@ -31,7 +32,8 @@ public class InternshipManager extends User {
                 phoneNumber,
                 Role.INTERNSHIP_MANAGER,
                 true,
-                registrationDate);
+                registrationDate,
+                profileImageId);
     }
 
 }

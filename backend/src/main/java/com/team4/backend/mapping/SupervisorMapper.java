@@ -1,6 +1,7 @@
 package com.team4.backend.mapping;
 
 import com.team4.backend.dto.SupervisorDetailsDto;
+import com.team4.backend.dto.SupervisorProfileDto;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.model.TimestampedEntry;
 
@@ -19,6 +20,7 @@ public abstract class SupervisorMapper {
                 .studentTimestampedEntries(new HashSet<>())
                 .registrationDate(LocalDate.now())
                 .phoneNumber(supervisorDto.getPhoneNumber())
+                .profileImageId("")
                 .build();
     }
 
@@ -33,6 +35,19 @@ public abstract class SupervisorMapper {
                         .collect(Collectors.toSet()))
                 .registrationDate(supervisor.getRegistrationDate())
                 .phoneNumber(supervisor.getPhoneNumber())
+                .profileImageId(supervisor.getProfileImageId())
+                .build();
+    }
+
+    public static SupervisorProfileDto toProfileDto(Supervisor supervisor){
+        return SupervisorProfileDto.builder()
+                .id(supervisor.getId())
+                .email(supervisor.getEmail())
+                .firstName(supervisor.getFirstName())
+                .lastName(supervisor.getLastName())
+                .registrationDate(supervisor.getRegistrationDate())
+                .phoneNumber(supervisor.getPhoneNumber())
+                .nbrOfAssignedStudents(supervisor.getStudentTimestampedEntries().size())
                 .build();
     }
 

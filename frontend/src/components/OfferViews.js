@@ -162,6 +162,6 @@ const OfferViews = () => {
       </Stack>
     </Container>
   );
-}
+};
 
 export default OfferViews;

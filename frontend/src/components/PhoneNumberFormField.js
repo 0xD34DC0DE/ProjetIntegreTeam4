@@ -4,7 +4,13 @@ import TextFormField from "./TextFormField";
 const phoneNumberRegexValidation =
   /^(\+\d{1,2}\s?)?1?\-?\.?\s?\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}$/;
 
-const PhoneNumberFormField = ({ valid, onFieldChange, step, visibleStep }) => {
+const PhoneNumberFormField = ({
+  valid,
+  onFieldChange,
+  step,
+  visibleStep,
+  handleFieldKeyUp,
+}) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
 
@@ -37,6 +43,7 @@ const PhoneNumberFormField = ({ valid, onFieldChange, step, visibleStep }) => {
         onChange={handlePhoneNumberChange}
         value={phoneNumber}
         error={errorMessage}
+        handleFieldKeyUp={handleFieldKeyUp}
         type="tel"
         visible={step === visibleStep}
       />

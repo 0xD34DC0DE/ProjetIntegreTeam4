@@ -61,7 +61,7 @@ public class SupervisorMockData {
                 .lastName("Doe")
                 .phoneNumber("514-222-1111")
                 .registrationDate(null)
-                .studentTimestampedEntries(getStudentEmailsTimeStampedEntries())// Current date
+                .studentTimestampedEntries(getTimeStampedEntries())// Current date
                 .build());
     }
 
@@ -72,10 +72,10 @@ public class SupervisorMockData {
                 .password("prof123")
                 .firstName("Maxime")
                 .lastName("Dupuis")
-                .studentTimestampedEntries(getStudentEmailsTimeStampedEntries())
+                .studentTimestampedEntries(getTimeStampedEntries())
                 .phoneNumber("514-111-2222")
                 .registrationDate(null)
-                .studentTimestampedEntries(getStudentEmailsTimeStampedEntries())
+                .studentTimestampedEntries(getTimeStampedEntries())
                 .build(), Supervisor.supervisorBuilder()
                 .id("222a44ce555ae66d0b777b88")
                 .email("enseignant@outlook.com")
@@ -84,7 +84,7 @@ public class SupervisorMockData {
                 .lastName("Doe")
                 .phoneNumber("514-222-1111")
                 .registrationDate(null)
-                .studentTimestampedEntries(getStudentEmailsTimeStampedEntries())
+                .studentTimestampedEntries(getTimeStampedEntries())
                 .build());
     }
 
@@ -119,7 +119,7 @@ public class SupervisorMockData {
                 .password("prof123")
                 .firstName("Maxime")
                 .lastName("Dupuis")
-                .studentTimestampedEntries(getStudentEmailsTimeStampedEntries())
+                .studentTimestampedEntries(getTimeStampedEntries())
                 .phoneNumber("514-111-2222")
                 .registrationDate(null) // Current date
                 .build(), Supervisor.supervisorBuilder()
@@ -130,7 +130,7 @@ public class SupervisorMockData {
                 .lastName("Doe")
                 .phoneNumber("514-222-1111")
                 .registrationDate(null)
-                .studentTimestampedEntries(getStudentEmailsTimeStampedEntries())// Current date
+                .studentTimestampedEntries(getTimeStampedEntries())// Current date
                 .build());
     }
 
@@ -138,12 +138,6 @@ public class SupervisorMockData {
         return new HashSet<>(Arrays.asList("12395432@gmail.com", "3643283423@gmail.com"));
     }
 
-    public static Set<TimestampedEntry> getStudentEmailsTimeStampedEntries() {
-        return new HashSet<>(Arrays.asList(
-                new TimestampedEntry("12395432@gmail.com", LocalDateTime.now()),
-                new TimestampedEntry("3643283423@gmail.com", LocalDateTime.now())));
-    }
-    
     public static Set<TimestampedEntry> getTimeStampedEntries() {
         return new HashSet<>(Arrays.asList(
                 new TimestampedEntry("12395432@gmail.com", LocalDateTime.now()),

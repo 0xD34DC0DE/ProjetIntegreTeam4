@@ -104,7 +104,7 @@ const ListCvStudentView = () => {
                         ":hover": {
                           backgroundColor: "rgba(200, 200, 200, 0.1)",
                           cursor: "pointer",
-                          boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
+                          boxShadow: "0px 0px 15px 1px rgba(125, 51, 235, 0.8)",
                         },
                       }}
                     >

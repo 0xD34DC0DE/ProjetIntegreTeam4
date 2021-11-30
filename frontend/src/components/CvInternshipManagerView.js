@@ -6,11 +6,15 @@ import {
   Typography,
   Grid,
   Button,
+  Box,
+  Avatar,
 } from "@mui/material";
 import { motion } from "framer-motion";
 import CloudDownloadIcon from "@mui/icons-material/CloudDownload";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import CvValidationDialog from "./CvValidationDialog";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 const CvInternshipManagerView = ({
   id,
@@ -20,6 +24,7 @@ const CvInternshipManagerView = ({
   uploadDate,
   removeCv,
   setUrl,
+  profileImage,
 }) => {
   const download = () => {
     window.open("https://projetintegreteam4.s3.amazonaws.com/" + assetId);
@@ -28,6 +33,9 @@ const CvInternshipManagerView = ({
   const openCv = () => {
     setUrl("https://projetintegreteam4.s3.amazonaws.com/" + assetId);
   };
+
+  const theme = useTheme();
+  const matchesBreakpointMd = useMediaQuery(theme.breakpoints.down("md"));
 
   const fadeIn = {
     hidden: { opacity: 0 },
@@ -42,91 +50,157 @@ const CvInternshipManagerView = ({
 
   return (
     <>
-      <Grid container flexDirection="column">
-        <motion.div variants={fadeIn} initial="hidden" animate="show">
+      <motion.div variants={fadeIn} initial="hidden" animate="show">
+        <Grid container flexDirection="column">
           <Grid item xs={12}>
             <Card
               variant="outlined"
               sx={{
                 backgroundColor: "rgba(135, 135, 135, 0.03)",
                 borderRadius: "10px",
-                border: "0.5px solid grey",
-                display:"flex",
+                border: "2px solid rgba(100, 100, 100, 0.4)",
+                display: "flex",
                 ml: "auto",
                 mr: "auto",
                 mt: 2,
                 mb: 5,
-                p:4,
-                boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
-                ":hover": {
-                  boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
-                }
+                p: 4,
+                boxShadow: "15px 15px 10px 0px rgba(0, 0, 0, 0.35);",
               }}
             >
               <CardContent>
                 <Grid
                   container
                   spacing={0}
-                  direction="column"
+                  direction="row"
                   alignItems="start"
                   justify="start"
                 >
-                  <Typography
-                    sx={{ fontWeight: "bold", textAlign: "start" }}
-                    variant="overline"
+                  <Grid
+                    item
+                    xl={3}
+                    lg={3}
+                    md={3}
+                    sm={12}
+                    xs={12}
+                    sx={{ mb: matchesBreakpointMd ? 5 : 0 }}
                   >
-                    Email de l'étudiant : {userEmail}
-                  </Typography>
-                  <Typography
-                    sx={{ fontWeight: "bold", textAlign: "start" }}
-                    variant="overline"
+                    <Box
+                      sx={{
+                        mx: matchesBreakpointMd ? "auto" : "",
+                        borderRadius: "50%",
+                        width: "150px",
+                        height: "150px",
+                      }}
+                    >
+                      <Avatar
+                        src={profileImage}
+                        sx={{
+                          width: "150px",
+                          height: "150px",
+                        }}
+                      ></Avatar>
+                    </Box>
+                  </Grid>
+                  <Grid
+                    item
+                    container
+                    alignSelf="center"
+                    xl={6}
+                    lg={6}
+                    md={6}
+                    sm={12}
+                    xs={12}
                   >
-                    Nom du fichier : {filename}
-                  </Typography>
-                  <Typography
-                    sx={{ fontWeight: "bold", textAlign: "start" }}
-                    variant="overline"
+                    <Grid item xs={12}>
+                      <Typography
+                        sx={{
+                          fontWeight: "bold",
+                          textAlign: "start",
+                        }}
+                        variant="overline"
+                      >
+                        Email de l'étudiant : {userEmail}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography
+                        sx={{ fontWeight: "bold", textAlign: "start" }}
+                        variant="overline"
+                      >
+                        Nom du fichier : {filename}
+                      </Typography>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <Typography
+                        sx={{ fontWeight: "bold", textAlign: "start" }}
+                        variant="overline"
+                      >
+                        Date de dépôt : {uploadDate}
+                      </Typography>
+                    </Grid>
+                  </Grid>
+
+                  <Grid
+                    item
+                    container
+                    alignSelf="center"
+                    xl={3}
+                    lg={3}
+                    md={3}
+                    sm={12}
+                    xs={12}
                   >
-                    Date de dépôt : {uploadDate}
-                  </Typography>
+                    <Grid
+                      container
+                      spacing={0}
+                      direction="column"
+                      justify="center"
+                    >
+                      <Button
+                        size="medium"
+                        variant="contained"
+                        sx={{
+                          mb: "6px",
+                          backgroundColor: "rgba(50, 51, 50, 0.8)",
+                          ":hover": {
+                            backgroundColor: "rgba(100, 101, 100, 0.8)",
+                          },
+                          width: "100%",
+                        }}
+                        onClick={openCv}
+                      >
+                        AFFICHER
+                        <RemoveRedEyeIcon sx={{ ml: 1 }}></RemoveRedEyeIcon>
+                      </Button>
+                      <Button
+                        size="medium"
+                        variant="contained"
+                        sx={{
+                          mb: "6px",
+                          backgroundColor: "rgba(50, 51, 50, 0.8)",
+                          width: "100%",
+                          ":hover": {
+                            backgroundColor: "rgba(100, 101, 100, 0.8)",
+                          },
+                        }}
+                        onClick={download}
+                      >
+                        TÉLÉCHARGER
+                        <CloudDownloadIcon sx={{ ml: 1 }}></CloudDownloadIcon>
+                      </Button>
+                      <CvValidationDialog
+                        id={id}
+                        removeCv={removeCv}
+                      ></CvValidationDialog>
+                    </Grid>
+                  </Grid>
                 </Grid>
               </CardContent>
-              <CardActions>
-                <Grid
-                  container
-                  spacing={0}
-                  direction="column"
-                  alignItems="center"
-                  justify="center"
-                >
-                  <CvValidationDialog
-                    id={id}
-                    removeCv={removeCv}
-                  ></CvValidationDialog>
-                  <Button
-                    size="medium"
-                    variant="contained"
-                    color="info"
-                    sx={{ mb: "6px" }}
-                    onClick={openCv}
-                  >
-                    AFFICHER <RemoveRedEyeIcon></RemoveRedEyeIcon>
-                  </Button>
-                  <Button
-                    size="medium"
-                    variant="contained"
-                    color="primary"
-                    sx={{ mb: "6px" }}
-                    onClick={download}
-                  >
-                    TÉLÉCHARGER <CloudDownloadIcon></CloudDownloadIcon>
-                  </Button>
-                </Grid>
-              </CardActions>
             </Card>
           </Grid>
-        </motion.div>
-      </Grid>
+        </Grid>
+      </motion.div>
     </>
   );
 };

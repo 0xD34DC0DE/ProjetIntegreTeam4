@@ -7,22 +7,17 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 const BasicInfo = ({ profile }) => {
   return (
     <>
-      <Typography
-        gutterBottom
-        variant="subtitle1"
-        component="div"
-        sx={{ m: 1 }}
-      >
-        Name : {profile.lastName}, {profile.firstName}
-        <AccountCircleIcon />
+      <Typography variant="subtitle1" sx={{ m: 1 }}>
+        Nom : {profile.lastName}, {profile.firstName}
+        <AccountCircleIcon sx={{ ml: 2, verticalAlign: "middle" }} />
       </Typography>
-      <Typography variant="body2" component="div" gutterBottom sx={{ m: 1 }}>
+      <Typography variant="subtitle1" sx={{ m: 1 }}>
         N° de téléphone : {profile.phoneNumber}
-        <PhoneAndroidIcon />
+        <PhoneAndroidIcon sx={{ ml: 2, verticalAlign: "middle" }} />
       </Typography>
-      <Typography variant="body2" component="div" gutterBottom sx={{ m: 1 }}>
+      <Typography variant="subtitle1" sx={{ m: 1 }}>
         Membre depuis : {profile.registrationDate}
-        <TodayIcon />
+        <TodayIcon sx={{ ml: 2, verticalAlign: "middle" }} />
       </Typography>
     </>
   );

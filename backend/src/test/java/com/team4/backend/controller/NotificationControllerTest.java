@@ -1,5 +1,7 @@
 package com.team4.backend.controller;
 
+import com.team4.backend.dto.NotificationDto;
+import com.team4.backend.mapping.NotificationMapper;
 import com.team4.backend.model.Notification;
 import com.team4.backend.service.NotificationService;
 import com.team4.backend.testdata.NotificationMockData;
@@ -27,6 +29,24 @@ public class NotificationControllerTest {
 
     @MockBean
     private NotificationService notificationService;
+
+    @Test
+    void shouldCreateNotification() {
+        //ARRANGE
+        NotificationDto notificationDto = NotificationMockData.getNotificationDto();
+
+        when(notificationService.createNotification(notificationDto)).thenReturn(Mono.just(NotificationMapper.toEntity(notificationDto)));
+
+        //ACT
+        webTestClient
+                .post()
+                .uri("/notification/create")
+                .bodyValue(notificationDto)
+                .exchange()
+                //ASSERT
+                .expectStatus().isCreated()
+                .expectBody(Notification.class);
+    }
 
     @Test
     void shouldFindAllNotifications() {
@@ -73,6 +93,30 @@ public class NotificationControllerTest {
                                 .queryParam("userId", userId)
                                 .build()
                 )
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBody(String.class);
+    }
+
+    @Test
+    void shouldAddUserToSeenNotification() {
+        //ARRANGE
+        Notification notification = NotificationMockData.getNotification();
+        String userId = "userId";
+
+        when(notificationService.addUserToSeenNotification(userId, notification.getId())).thenReturn(Mono.just(notification));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/notification/seen")
+                                .queryParam("userId", userId)
+                                .queryParam("notificationId", notification.getId())
+                                .build()
+                        )
                 .exchange()
                 //ASSERT
                 .expectStatus().isOk()

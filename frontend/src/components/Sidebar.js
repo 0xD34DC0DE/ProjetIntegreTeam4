@@ -51,7 +51,7 @@ const Sidebar = ({ open }) => {
                   key={item.id}
                   sx={{
                     color: "text.primary",
-                    ":hover": { backgroundColor: "rgba(100, 100, 100, 0.2)" },
+                    ":hover": { backgroundColor: "rgba(125, 51, 235, 0.8)" },
                     justifyContent: "flex-start",
                     ml: 2,
                     mr: 2,

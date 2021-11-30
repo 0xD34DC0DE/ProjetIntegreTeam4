@@ -7,7 +7,7 @@ import { UserInfoContext } from "../stores/UserInfoStore";
 import CVDialog from "./CVDialog";
 import { DialogContext } from "../stores/DialogStore";
 
-const ListCvInternshipManagerView = ({ visible }) => {
+const ListCvInternshipManagerView = () => {
   const [cvs, setCvs] = useState([]);
   const [nbrCvs, setNbrCvs] = useState(0);
   const [noPage, setNoPage] = useState(0);
@@ -15,6 +15,7 @@ const ListCvInternshipManagerView = ({ visible }) => {
   const [userInfo] = useContext(UserInfoContext);
   const [dialog, dialogDispatch] = useContext(DialogContext);
   const [url, setUrl] = useState("");
+  const [studentsProfileImage, setStudentsProfileImage] = useState([]);
   const fadeIn = {
     hidden: { opacity: 0 },
     show: {
@@ -23,6 +24,28 @@ const ListCvInternshipManagerView = ({ visible }) => {
         delay: 0.5,
       },
     },
+  };
+
+  const fetchProfileImages = (uploadersEmails) => {
+    axios({
+      method: "POST",
+      url: "http://localhost:8080/profileImage/emails",
+      headers: {
+        Authorization: userInfo.jwt,
+      },
+      data: uploadersEmails,
+      responseType: "json",
+    })
+      .then(async (response) => {
+        const images = response.data.map((data) => {
+          return {
+            uploaderEmail: data.uploaderEmail,
+            image: "data:image/jpg;base64," + data.image,
+          };
+        });
+        setStudentsProfileImage(images);
+      })
+      .catch((error) => console.error(error));
   };
 
   useEffect(() => {
@@ -74,6 +97,14 @@ const ListCvInternshipManagerView = ({ visible }) => {
     }
   }, [url]);
 
+  useEffect(() => {
+    if (cvs.length === 0) return;
+    const uploadersEmails = cvs.map((cv) => {
+      return cv.userEmail;
+    });
+    fetchProfileImages(uploadersEmails);
+  }, [cvs]);
+
   const handleChangePage = (_, newPage) => {
     setNoPage(newPage);
   };
@@ -97,10 +128,15 @@ const ListCvInternshipManagerView = ({ visible }) => {
           mt: 5,
         }}
       >
-        <Grid  item lg={12} xl={12} md={12} sm={8} xs={6} alignSelf="center">
+        <Grid item lg={12} xl={6} md={12} sm={8} xs={6} sx={{ mx: "auto" }}>
           {cvs.map((cv, key) => (
             <CvInternshipManagerView
               key={key}
+              profileImage={studentsProfileImage
+                .filter((data) => data.uploaderEmail === cv.userEmail)
+                .map((data) => {
+                  return data.image;
+                })}
               id={cv.id}
               assetId={cv.assetId}
               userEmail={cv.userEmail}
@@ -118,8 +154,9 @@ const ListCvInternshipManagerView = ({ visible }) => {
             disabled
             component="div"
             sx={{
-              boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
               backgroundColor: "rgba(100, 100, 100, 0.1)",
+              boxShadow: "10px 10px 10px 0px rgba(0,0,0,0.35)",
+              border: "1px solid rgba(100, 100, 100, 0.4)",
             }}
             count={nbrCvs}
             page={noPage}

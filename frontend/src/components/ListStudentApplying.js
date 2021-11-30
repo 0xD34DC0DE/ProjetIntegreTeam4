@@ -30,6 +30,7 @@ const ListStudentApplying = () => {
   const [userInfo] = useContext(UserInfoContext);
   const [semesterFullName, setSemesterFullName] = useState("");
   const [dialog, dialogDispatch] = useContext(DialogContext);
+  const [studentsProfileImage, setStudentsProfileImage] = useState([]);
 
   const fetchData = () => {
     axios({
@@ -55,6 +56,8 @@ const ListStudentApplying = () => {
   const updateSemesterFullName = (fullName) => {
     setSemesterFullName(fullName);
   };
+
+  useEffect(() => {}, [offers]);
 
   const getStudentInitials = (fullName) => {
     let initials = "";
@@ -99,6 +102,44 @@ const ListStudentApplying = () => {
       .catch((error) => {
         console.error(error);
       });
+  };
+
+  const getStudentProfilePicture = (student) => {
+    const profileImageObject = studentsProfileImage.find(
+      (data) => data.uploaderEmail === student.email
+    );
+
+    return profileImageObject !== undefined ? profileImageObject.image : "";
+  };
+
+  useEffect(async () => {
+    if (offers === []) return;
+    const interestedStudentEmails = await offers.flatMap((offer) =>
+      offer.interestedStudentList.map((student) => student.email)
+    );
+    fetchProfileImages(interestedStudentEmails);
+  }, [offers]);
+
+  const fetchProfileImages = (uploadersEmails) => {
+    axios({
+      method: "POST",
+      url: "http://localhost:8080/profileImage/emails",
+      headers: {
+        Authorization: userInfo.jwt,
+      },
+      data: uploadersEmails,
+      responseType: "json",
+    })
+      .then(async (response) => {
+        const images = response.data.map((data) => {
+          return {
+            uploaderEmail: data.uploaderEmail,
+            image: "data:image/jpg;base64," + data.image,
+          };
+        });
+        setStudentsProfileImage(images);
+      })
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -206,7 +247,7 @@ const ListStudentApplying = () => {
                             >
                               <ListItemAvatar>
                                 <Avatar
-                                  src={null}
+                                  src={getStudentProfilePicture(student)}
                                   sx={{
                                     width: 75,
                                     height: 75,
@@ -265,9 +306,10 @@ const ListStudentApplying = () => {
                                       sx={{
                                         p: 0,
                                         m: 0,
+                                        py: 0.5,
                                         ":hover": {
                                           backgroundColor:
-                                            "rgba(255, 255, 255, 0.1)",
+                                            "rgba(125, 51, 235, 0.8)",
                                         },
                                       }}
                                       onClick={() => {
@@ -286,9 +328,10 @@ const ListStudentApplying = () => {
                                       sx={{
                                         p: 0,
                                         m: 0,
+                                        py: 0.5,
                                         ":hover": {
                                           backgroundColor:
-                                            "rgba(255, 255, 255, 0.1)",
+                                            "rgba(125, 51, 235, 0.8)",
                                         },
                                       }}
                                       onClick={() => {
@@ -311,9 +354,10 @@ const ListStudentApplying = () => {
                                       sx={{
                                         p: 0,
                                         m: 0,
+                                        py: 0.5,
                                         ":hover": {
                                           backgroundColor:
-                                            "rgba(255, 255, 255, 0.1)",
+                                            "rgba(125, 51, 235, 0.8)",
                                         },
                                       }}
                                       onClick={() => {
@@ -332,9 +376,10 @@ const ListStudentApplying = () => {
                                       sx={{
                                         p: 0,
                                         m: 0,
+                                        py: 0.5,
                                         ":hover": {
                                           backgroundColor:
-                                            "rgba(255, 255, 255, 0.1)",
+                                            "rgba(125, 51, 235, 0.8)",
                                         },
                                       }}
                                       onClick={() => {

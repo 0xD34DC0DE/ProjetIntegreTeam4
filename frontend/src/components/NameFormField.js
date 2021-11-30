@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import TextFormField from "./TextFormField";
 
-const NameFormField = ({ valid, step, onFieldChange, visibleStep }) => {
+const NameFormField = ({
+  valid,
+  step,
+  onFieldChange,
+  visibleStep,
+  handleFieldKeyUp,
+}) => {
   const [errorMessage] = useState({
     firstName: "",
     lastName: "",
@@ -39,6 +45,7 @@ const NameFormField = ({ valid, step, onFieldChange, visibleStep }) => {
         value={field.firstName}
         error={errorMessage.firstName}
         type="text"
+        handleFieldKeyUp={handleFieldKeyUp}
         visible={step === visibleStep}
       />
       <TextFormField
@@ -50,6 +57,7 @@ const NameFormField = ({ valid, step, onFieldChange, visibleStep }) => {
         value={field.lastName}
         error={errorMessage.lastName}
         type="text"
+        handleFieldKeyUp={handleFieldKeyUp}
         visible={step === visibleStep}
       />
     </>

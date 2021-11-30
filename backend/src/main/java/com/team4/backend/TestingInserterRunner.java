@@ -40,6 +40,8 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final PBKDF2Encoder pbkdf2Encoder;
 
+    private final ProfileImageRepository profileImageRepository;
+
     private final FileMetaDataRepository fileMetaDataRepository;
 
     private final InternshipRepository internshipRepository;
@@ -68,7 +70,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                                  EvaluationRepository evaluationRepository,
                                  InternshipContractRepository internshipContractRepository,
                                  PBKDF2Encoder pbkdf2Encoder,
-                                 FileMetaDataRepository fileMetaDataRepository,
+                                 ProfileImageRepository profileImageRepository, FileMetaDataRepository fileMetaDataRepository,
                                  InternshipManagerRepository internshipManagerRepository,
                                  InternshipRepository internshipRepository,
                                  NotificationRepository notificationRepository,
@@ -80,6 +82,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.supervisorRepository = supervisorRepository;
         this.internshipContractRepository = internshipContractRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
+        this.profileImageRepository = profileImageRepository;
         this.fileMetaDataRepository = fileMetaDataRepository;
         this.internshipRepository = internshipRepository;
         this.evaluationRepository = evaluationRepository;
@@ -109,6 +112,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         internshipContractRepository.deleteAll().subscribe();
         semesterRepository.deleteAll().subscribe();
         notificationRepository.deleteAll().subscribe();
+        profileImageRepository.deleteAll().subscribe();
 
         insertSemesters();
         insertInternshipOffersInternshipManagerView();
@@ -118,6 +122,24 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertCvs();
         insertNotifications();
         insertInternships();
+        insertProfileImages();
+    }
+
+    private void insertProfileImages() {
+        List<ProfileImage> profileImages = Arrays.asList(
+                ProfileImage.profileImageBuilder()
+                        .fileName("filename1")
+                        .uploaderEmail("123")
+                        .image(null)
+                        .build(),
+                ProfileImage.profileImageBuilder()
+                        .fileName("filename2")
+                        .uploaderEmail("abc")
+                        .image(null)
+                        .build()
+        );
+
+        profileImageRepository.saveAll(profileImages).subscribe();
     }
 
     private void insertSemesters() {
@@ -339,12 +361,16 @@ public class TestingInserterRunner implements ApplicationRunner {
         Monitor monitor = Monitor.monitorBuilder().email("monitor@gmail.com")
                 .password(pbkdf2Encoder.encode("monitor"))
                 .firstName("Giorno")
+                .companyName("Google")
+                .phoneNumber("438-998-7654")
                 .lastName("Giovanna")
                 .build();
 
         Monitor monitor2 = Monitor.monitorBuilder().email("monitor1@gmail.com")
                 .password(pbkdf2Encoder.encode("monitor1"))
                 .firstName("Amir")
+                .companyName("CAE")
+                .phoneNumber("438-529-0976")
                 .lastName("Fernandez")
                 .build();
 
@@ -357,12 +383,14 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .email("supervisor@gmail.com").password(pbkdf2Encoder.encode("supervisor"))
                         .firstName("Ginette")
                         .lastName("Renaud")
+                        .phoneNumber("514-334-5667")
                         .studentTimestampedEntries(new HashSet<>()).build(),
                 Supervisor.supervisorBuilder()
                         .email("supervisor1@gmail.com")
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Michel")
                         .lastName("Lamarck")
+                        .phoneNumber("514-324-5667")
                         .studentTimestampedEntries(new TreeSet<>(Arrays.asList(
                                 new TimestampedEntry("3643283423@gmail.com", LocalDateTime.now())))).build(),
                 Supervisor.supervisorBuilder()
@@ -370,6 +398,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Kendrick")
                         .lastName("Lamar")
+                        .phoneNumber("514-545-5667")
                         .studentTimestampedEntries(new TreeSet<>(Arrays.asList(
                                 new TimestampedEntry("studentInternFound@gmail.com", LocalDateTime.now()),
                                 new TimestampedEntry("123456789@gmail.com", LocalDateTime.now())))).build()

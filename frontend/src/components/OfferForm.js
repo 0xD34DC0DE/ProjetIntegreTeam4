@@ -20,7 +20,7 @@ const OfferForm = () => {
     limitDateToApply: new Date(),
     beginningDate: new Date(),
     endingDate: new Date(),
-    emailOfMonitor: "",
+    monitorEmail: "",
     companyName: "",
     minSalary: 0,
     maxSalary: 0,
@@ -130,11 +130,7 @@ const OfferForm = () => {
           </FormGroup>
         </DialogContent>
         <DialogActions sx={{ mt: 0 }}>
-          <Button
-            size="small"
-            onClick={saveInternshipOffer}
-            disabled={!isValid}
-          >
+          <Button size="small" onClick={saveInternshipOffer}>
             Envoyer
           </Button>
         </DialogActions>
