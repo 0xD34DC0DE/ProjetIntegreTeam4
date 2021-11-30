@@ -32,10 +32,10 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
   const [userUpdatedCount, setUserUpdatedCount] = useState(0);
 
   useEffect(() => {
-    const getAllUsersByRole = async () => {
+    const getAllStudentNotContainingExclusiveOffer = async () => {
       let response = await axios({
         method: "GET",
-        url: `http://localhost:8080/user/getAll?role=STUDENT`,
+        url: `http://localhost:8080/student/getAllStudentNotContainingExclusiveOffer/${offer.id}`,
         headers: {
           Authorization: userInfo.jwt,
         },
@@ -43,17 +43,14 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
       });
       setUsers(response.data);
     };
-    getAllUsersByRole();
+    getAllStudentNotContainingExclusiveOffer();
   }, []);
 
-  const addExclusiveOfferToStudent = (email) => {
+  const addExclusiveOfferToStudents = (emails) => {
     axios({
       method: "PATCH",
-      url: `http://localhost:8080/internshipOffer/addExclusiveOfferToStudent`,
-      params: {
-        email: email,
-        id: offer.id,
-      },
+      url: `http://localhost:8080/internshipOffer/addExclusiveOfferToStudents/${offer.id}`,
+      data: emails,
       headers: {
         Authorization: userInfo.jwt,
       },
@@ -122,9 +119,7 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
                   ":hover": { backgroundColor: "rgba(125, 51, 235, 0.8)" },
                 }}
                 onClick={() => {
-                  selectedUsersEmail.map((email) => {
-                    addExclusiveOfferToStudent(email);
-                  });
+                  addExclusiveOfferToStudents(selectedUsersEmail);
                 }}
               >
                 Assigner
