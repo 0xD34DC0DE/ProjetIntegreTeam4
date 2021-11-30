@@ -211,4 +211,20 @@ public class StudentControllerTest {
                 .expectBodyList(StudentProfileDto.class);
     }
 
+    @Test
+    void shouldGetAllStudentNotContainingExclusiveOffer() {
+        //ARRANGE
+        String id = "id_test";
+        when(studentService.getAllStudentNotContainingExclusiveOffer(any())).thenReturn(StudentMockData.getAllStudentsFlux());
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/student/getAllStudentNotContainingExclusiveOffer/" + id)
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(StudentDetailsDto.class);
+    }
+
 }

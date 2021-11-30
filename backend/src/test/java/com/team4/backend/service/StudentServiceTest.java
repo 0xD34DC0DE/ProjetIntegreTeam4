@@ -305,6 +305,23 @@ public class StudentServiceTest {
     }
 
     @Test
+    void shouldGetAllStudentNotContainingExclusiveOffer() {
+        //ARRANGE
+        String id = "id_test";
+        Flux<Student> students = StudentMockData.getAllStudentsFlux();
+
+        when(studentRepository.findAllByRoleAndExclusiveOffersIdNotContains("STUDENT",id)).thenReturn(students);
+
+        //ACT
+        Flux<Student> response = studentService.getAllStudentNotContainingExclusiveOffer(id);
+
+        //ASSERT
+        StepVerifier.create(response)
+                .expectNextCount(2)
+                .verifyComplete();
+    }
+
+    @Test
     void shouldGetAllStudentsWithNoCv() {
         //ARRANGE
         Flux<Student> students = StudentMockData.getAllStudentsFlux();
