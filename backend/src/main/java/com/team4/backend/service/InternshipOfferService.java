@@ -16,6 +16,8 @@ import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class InternshipOfferService {
@@ -103,21 +105,16 @@ public class InternshipOfferService {
                 }).flatMap(internshipOfferRepository::save);
     }
 
-    public Mono<Boolean> addExclusiveOfferToStudent(String email, String id) {
-        return Mono.zip(studentService.findByEmail(email), internshipOfferRepository.existsByIdAndIsExclusiveTrue(id))
-                .filter(tuple -> !tuple.getT1().getExclusiveOffersId().contains(id))
-                .switchIfEmpty(Mono.error(new DuplicateEntryException("The student already has this exclusive offer")))
-                .map(tuple -> {
-                    Student student = tuple.getT1();
-                    Boolean exist = tuple.getT2();
-
-                    if (exist) {
-                        student.getExclusiveOffersId().add(id);
-                        studentService.save(student).subscribe();
-                    }
-
-                    return exist;
-                });
+    public Mono<Long> addExclusiveOfferToStudents(String id, Set<String> emails) {
+        return internshipOfferRepository.existsByIdAndIsExclusiveTrue(id)
+                .filter(exist -> exist)
+                .switchIfEmpty(Mono.error(new ForbiddenActionException("You can't add student to an non existent/exclusive offer")))
+                .flatMap(exist -> studentService.findAllByEmails(emails)
+                        .map(student -> {
+                            student.getExclusiveOffersId().add(id);
+                            return studentService.save(student).subscribe();
+                        }).count()
+                );
     }
 
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers(String semesterFullName) {

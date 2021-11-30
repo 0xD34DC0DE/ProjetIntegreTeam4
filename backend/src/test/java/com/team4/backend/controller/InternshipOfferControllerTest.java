@@ -23,6 +23,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -140,22 +141,18 @@ public class InternshipOfferControllerTest {
     }
 
     @Test
-    void shouldAddExclusiveOfferToStudent() {
+    void shouldAddExclusiveOfferToStudents() {
         //ARRANGE
-        String email = "test@gmail.com";
+        Set<String> emails = Set.of("test@gmail.com","test2@gmail.com");
         String id = "id_test";
 
-        when(internshipOfferService.addExclusiveOfferToStudent(email, id)).thenReturn(Mono.just(true));
+        when(internshipOfferService.addExclusiveOfferToStudents(any(),any())).thenReturn(Mono.just(2L));
 
         //ACT
         webTestClient
                 .patch()
-                .uri(uriBuilder ->
-                        uriBuilder
-                                .path("/internshipOffer/addExclusiveOfferToStudent")
-                                .queryParam("email", email)
-                                .queryParam("id", id)
-                                .build())
+                .uri("/internshipOffer/addExclusiveOfferToStudents/" + id)
+                .bodyValue(emails)
                 .exchange()
                 //ASSERT
                 .expectStatus().isNoContent()
