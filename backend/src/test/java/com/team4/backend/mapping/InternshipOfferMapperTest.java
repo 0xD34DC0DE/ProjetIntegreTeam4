@@ -1,9 +1,6 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.InternshipOfferCreationDto;
-import com.team4.backend.dto.InternshipOfferMonitorViewDto;
-import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
-import com.team4.backend.dto.InternshipOfferStudentViewDto;
+import com.team4.backend.dto.*;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.testdata.InternshipOfferMockData;
 import org.junit.jupiter.api.Test;
@@ -63,6 +60,26 @@ public class InternshipOfferMapperTest {
         assertEquals(internshipOffer.getDescription(), internshipOfferStudentViewDto.getDescription());
         assertEquals(internshipOffer.getMinSalary(), internshipOfferStudentViewDto.getMinSalary());
         assertEquals(internshipOffer.getMaxSalary(), internshipOfferStudentViewDto.getMaxSalary());
+    }
+
+    @Test
+    void mapInternshipOfferEntityToInternshipManagerViewDto() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        //ACT
+        InternshipOfferInternshipManagerViewDto internshipOfferInternshipManagerViewDto = InternshipOfferMapper.toInternshipManagerViewDto(internshipOffer);
+
+        //ASSERT
+        assertEquals(internshipOffer.getId(), internshipOfferInternshipManagerViewDto.getId());
+        assertEquals(internshipOffer.getIsExclusive(), internshipOfferInternshipManagerViewDto.getIsExclusive());
+        assertEquals(internshipOffer.getLimitDateToApply(), internshipOfferInternshipManagerViewDto.getLimitDateToApply());
+        assertEquals(internshipOffer.getBeginningDate(), internshipOfferInternshipManagerViewDto.getBeginningDate());
+        assertEquals(internshipOffer.getEndingDate(), internshipOfferInternshipManagerViewDto.getEndingDate());
+        assertEquals(internshipOffer.getCompanyName(), internshipOfferInternshipManagerViewDto.getCompanyName());
+        assertEquals(internshipOffer.getDescription(), internshipOfferInternshipManagerViewDto.getDescription());
+        assertEquals(internshipOffer.getMinSalary(), internshipOfferInternshipManagerViewDto.getMinSalary());
+        assertEquals(internshipOffer.getMaxSalary(), internshipOfferInternshipManagerViewDto.getMaxSalary());
     }
 
     @Test
