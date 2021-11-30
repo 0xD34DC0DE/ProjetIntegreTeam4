@@ -67,7 +67,6 @@ const StudentInternshipDetailsDialog = ({
         dialogName: "internshipDetailsDialog",
       });
     }
-    console.log("reason", reason);
   };
 
   return (

@@ -31,7 +31,6 @@ const MonitorDashBoard = () => {
       })
         .then((response) => {
           setProfile(response.data);
-          console.log(response.data);
         })
         .catch((error) => {
           console.error(error);
@@ -93,8 +92,8 @@ const MonitorDashBoard = () => {
                   justifyContent="center"
                 >
                   <Typography variant="subtitle1" sx={{ m: 1 }}>
-                    <PeopleIcon /> Nom de la compagnie :{" "}
-                    {profile.companyName}
+                    <PeopleIcon sx={{ verticalAlign: "middle", mr: 2 }} />
+                    Nom de la compagnie : {profile.companyName}
                   </Typography>
                 </Grid>
               </Grid>

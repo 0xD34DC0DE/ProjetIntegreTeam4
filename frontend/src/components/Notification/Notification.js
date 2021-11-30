@@ -11,10 +11,12 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import EventSource from "eventsource";
 import { UserInfoContext } from "../../stores/UserInfoStore";
+import { SelectionContext } from "../../stores/SelectionStore";
 
 const Notification = ({ addNotification, deleteNotification }) => {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [userInfo] = useContext(UserInfoContext);
+  const [selection] = useContext(SelectionContext);
   const [notification, setNotification] = useState({
     id: "",
     title: "",
@@ -53,6 +55,9 @@ const Notification = ({ addNotification, deleteNotification }) => {
         title: data.title,
       });
       addNotification(data);
+    };
+    return () => {
+      eventSource.close();
     };
   }, [eventSource]);
 

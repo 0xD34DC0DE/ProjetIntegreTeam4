@@ -24,6 +24,7 @@ public abstract class StudentMapper {
                 .studentState(studentCreationDto.getStudentState())
                 .appliedOffersId(new HashSet<>())
                 .evaluationsDates(new TreeSet<>())
+                .profileImageId("")
                 .interviewsDate(new TreeSet<>())
                 .hasValidCv(false)
                 .build();
@@ -37,6 +38,7 @@ public abstract class StudentMapper {
                 .lastName(student.getLastName())
                 .registrationDate(student.getRegistrationDate())
                 .phoneNumber(student.getPhoneNumber())
+                .profileImageId(student.getProfileImageId())
                 .studentState(student.getStudentState())
                 .hasValidCv(student.getHasValidCv())
                 .build();
@@ -51,6 +53,7 @@ public abstract class StudentMapper {
                 .registrationDate(student.getRegistrationDate())
                 .phoneNumber(student.getPhoneNumber())
                 .studentState(student.getStudentState())
+                .profileImageId(student.getProfileImageId())
                 .nbrOfAppliedOffers(student.getAppliedOffersId().size())
                 .nbrOfExclusiveOffers(student.getExclusiveOffersId().size())
                 .nbrOfInterviews(student.getInterviewsDate().size())

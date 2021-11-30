@@ -32,7 +32,8 @@ public class UserDetailsDto extends UserDto implements Serializable {
                           String lastName,
                           LocalDate registrationDate,
                           String phoneNumber,
-                          Role role) {
+                          Role role,
+                          String profileImageId) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -41,6 +42,7 @@ public class UserDetailsDto extends UserDto implements Serializable {
         this.phoneNumber = phoneNumber;
         this.registrationDate = Optional.ofNullable(registrationDate).orElse(LocalDate.now());
         this.role = role;
+        this.profileImageId = profileImageId;
     }
 
 }

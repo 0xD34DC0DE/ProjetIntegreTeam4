@@ -1,7 +1,5 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.model.Student;
-import com.team4.backend.pdf.StudentPdfTemplate;
 import com.team4.backend.service.PdfService;
 import com.team4.backend.service.StudentService;
 import org.apache.http.protocol.ResponseServer;
@@ -12,10 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.support.RequestPartServletServerHttpRequest;
 import reactor.core.publisher.Mono;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/pdf")
@@ -34,13 +28,14 @@ public class PdfController {
     @PreAuthorize("hasAnyAuthority('STUDENT', 'INTERNSHIP_MANAGER')")
     @GetMapping(value = "/test", produces = MediaType.APPLICATION_PDF_VALUE)
     public Mono<byte[]> getTestPdf() {
-        return studentService.getAll().collectList()
-                .flatMap(student -> {
-                    List<Student> studentList = student;
-                    Map<String, Object> variables = new HashMap<>();
-                    variables.put("students", studentList);
-                    return pdfService.renderPdf(new StudentPdfTemplate(variables));
-                });
+        return Mono.just(new byte[]{0});
+//        return studentService.getAll().collectList()
+//                .flatMap(student -> {
+//                    List<Student> studentList = student;
+//                    Map<String, Object> variables = new HashMap<>();
+//                    variables.put("students", studentList);
+//                    return pdfService.renderPdf(new TestingStudentPdfTemplate(variables));
+//                });
     }
 
 }

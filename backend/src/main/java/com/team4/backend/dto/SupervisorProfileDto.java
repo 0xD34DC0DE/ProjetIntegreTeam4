@@ -22,8 +22,9 @@ public class SupervisorProfileDto extends UserProfileDto implements Serializable
                                 String lastName,
                                 LocalDate registrationDate,
                                 String phoneNumber,
-                                Integer nbrOfAssignedStudents) {
-        super(id, email, firstName, lastName, registrationDate, phoneNumber);
+                                Integer nbrOfAssignedStudents,
+                                String profileImageId) {
+        super(id, email, firstName, lastName, registrationDate, phoneNumber, profileImageId);
         this.nbrOfAssignedStudents = nbrOfAssignedStudents;
     }
 

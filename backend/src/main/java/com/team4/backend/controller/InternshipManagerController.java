@@ -14,7 +14,6 @@ import java.security.Principal;
 
 @RestController
 @RequestMapping("/internshipManager")
-@PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
 public class InternshipManagerController {
 
     private final InternshipManagerService internshipManagerService;
@@ -24,6 +23,7 @@ public class InternshipManagerController {
     }
 
     @GetMapping("/getProfile")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Mono<InternshipManagerProfileDto> getProfile(Principal principal) {
         return internshipManagerService.findByEmail(UserSessionService.getLoggedUserEmail(principal))
                 .map(InternshipManagerMapper::toProfileDto);

@@ -17,7 +17,7 @@ public class InternshipManagerMapperTest {
     @Test
     void mapEntityToDto() {
         //ARRANGE
-        InternshipManager internshipManager = InternshipManagerMockData.GetInternshipManager();
+        InternshipManager internshipManager = InternshipManagerMockData.getInternshipManager();
 
         //ACT
         InternshipManagerDetailsDto internshipManagerDto = InternshipManagerMapper.toDto(internshipManager);
@@ -36,7 +36,7 @@ public class InternshipManagerMapperTest {
     @Test
     void mapDtoToEntity() {
         //ARRANGE
-        InternshipManagerDetailsDto internshipManagerDto = InternshipManagerMockData.GetInternshipManagerDto();
+        InternshipManagerDetailsDto internshipManagerDto = InternshipManagerMockData.getInternshipManagerDto();
 
         //ACT
         InternshipManager internshipManager = InternshipManagerMapper.toEntity(internshipManagerDto);
@@ -53,14 +53,13 @@ public class InternshipManagerMapperTest {
 
     @Test
     void mapEntityToProfileDto() {
-        //ARANGE
-        InternshipManager entity = InternshipManagerMockData.GetInternshipManager();
+        //ARRANGE
+        InternshipManager entity = InternshipManagerMockData.getInternshipManager();
 
         //ACT
         InternshipManagerProfileDto dto = InternshipManagerMapper.toProfileDto(entity);
 
         //ASSERT
-
         assertEquals(entity.getId(), dto.getId());
         assertEquals(entity.getEmail(), dto.getEmail());
         assertEquals(entity.getFirstName(), dto.getFirstName());

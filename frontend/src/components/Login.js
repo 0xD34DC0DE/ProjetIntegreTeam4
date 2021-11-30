@@ -52,7 +52,7 @@ const Login = () => {
       })
       .catch((error) => {
         let errorMessage =
-          "L’identifiant ou le mot de passe que vous avez fourni n’est pas valide.";
+          "L’identifiant ou le mot de passe que vous avez fourni n’est pas valide";
         setErrorMessage(errorMessage);
         console.error(error);
       });
@@ -82,13 +82,27 @@ const Login = () => {
       <Dialog open={dialog.loginDialog.visible} onClose={handleClose}>
         <DialogContent>
           <Typography
-            variant="h4"
+            variant="h2"
             align="left"
-            sx={{ minHeight: "5vh", p: 0, m: 0 }}
+            sx={{
+              minHeight: "6vh",
+              p: 0,
+              m: 0,
+              minWidth: "600px",
+              lineHeight: 1.5,
+              fontSize: "2.5em",
+            }}
           >
             Connexion
           </Typography>
-          <DialogContentText style={{ color: "red", p: 0, m: 0 }}>
+          <DialogContentText
+            sx={{
+              color: "rgba(240, 50, 50, 1) !important",
+              p: 0,
+              m: 0,
+              mb: 1,
+            }}
+          >
             {errorMessage}
           </DialogContentText>
           <TextField
@@ -122,30 +136,52 @@ const Login = () => {
             autoComplete="current-password"
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ mb: 1 }}>
           <Button
-            type="submit"
-            variant="text"
-            sx={{ justifySelf: "flex-start", mr: 20, flexGrow: "1" }}
-            color="primary"
             onClick={() => {
               dialogDispatch({
                 type: "CLOSE",
                 dialogName: "loginDialog",
               });
             }}
+            size="small"
+            sx={{
+              ":hover": {
+                backgroundColor: "rgba(125, 51, 235, 1) !important",
+              },
+              ml: 2,
+              mr: "auto",
+            }}
           >
             <KeyboardArrowLeft />
-            Quitter
+            <Typography
+              variant="subtitle2"
+              sx={{
+                verticalAlign: "middle",
+                textAlign: "center",
+                pr: 1,
+              }}
+            >
+              Quitter
+            </Typography>
           </Button>
           <Button
-            type="submit"
-            variant="text"
-            color="primary"
-            onClick={logUserIn}
-            sx={{ justifySelf: "flex-end", ml: 20, flexGrow: "1" }}
+            onClick={() => logUserIn()}
+            size="small"
+            sx={{
+              textAlign: "center",
+              ":hover": {
+                backgroundColor: "rgba(125, 51, 235, 1) !important",
+              },
+              mr: 2,
+            }}
           >
-            Envoyer
+            <Typography
+              variant="subtitle2"
+              sx={{ verticalAlign: "middle", pl: 1 }}
+            >
+              Envoyer
+            </Typography>
             <KeyboardArrowRight />
           </Button>
         </DialogActions>

@@ -98,7 +98,7 @@ const StudentDashBoard = () => {
               boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
               ":hover": {
                 boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
-              }
+              },
             }}
           >
             <Grid
@@ -126,16 +126,18 @@ const StudentDashBoard = () => {
                   justifyContent="center"
                 >
                   <Typography variant="subtitle1" sx={{ m: 1 }}>
-                    <PeopleIcon /> Nombres d'entrevues :{" "}
-                    {profile.nbrOfInterviews}
+                    <PeopleIcon sx={{ mr: 1, verticalAlign: "middle" }} />
+                    Nombres d'entrevues : {profile.nbrOfInterviews}
                   </Typography>
                   <Typography variant="subtitle1" sx={{ m: 1 }}>
-                    <TouchAppIcon /> Nombres d'offres appliquées :{" "}
-                    {profile.nbrOfAppliedOffers}
+                    <TouchAppIcon sx={{ mr: 1, verticalAlign: "middle" }} />
+                    Nombres d'offres appliquées : {profile.nbrOfAppliedOffers}
                   </Typography>
                   <Typography variant="subtitle1" sx={{ m: 1 }}>
-                    <StarBorderPurple500Icon /> Nombres d'offres exlusives :{" "}
-                    {profile.nbrOfExclusiveOffers}
+                    <StarBorderPurple500Icon
+                      sx={{ mr: 1, verticalAlign: "middle" }}
+                    />
+                    Nombres d'offres exclusives : {profile.nbrOfExclusiveOffers}
                   </Typography>
 
                   <SelectStudentState

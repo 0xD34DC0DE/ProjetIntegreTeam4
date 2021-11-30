@@ -59,7 +59,6 @@ public class MonitorMapperTest {
         MonitorProfileDto dto = MonitorMapper.toProfileDto(entity);
 
         //ASSERT
-
         assertEquals(entity.getId(), dto.getId());
         assertEquals(entity.getEmail(), dto.getEmail());
         assertEquals(entity.getFirstName(), dto.getFirstName());

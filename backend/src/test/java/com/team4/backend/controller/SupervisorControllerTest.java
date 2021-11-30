@@ -204,7 +204,7 @@ public class SupervisorControllerTest {
                 //ASSERT
                 .expectStatus()
                 .isNotFound()
-                .expectBody(SupervisorDetailsDto.class);
+                .expectBody();
     }
 
     @Test

@@ -32,18 +32,11 @@ export const sidebarList = [
     icon: <FactCheckOutlined sx={{ mr: 1 }} />,
     isDialog: false,
     description: "Liste de CV en attente de validation",
-    explication: (
-      <Grid>
-        <Typography>
-          Visualisez le CV directement dans l'application.
-        </Typography>
-        <Typography>Téléchargez le CV de l'étudiant.</Typography>
-        <Typography>
-          Approuvez ou refusez le CV, en pouvant préciser la rasion du refus si
-          tel est le cas.
-        </Typography>
-      </Grid>
-    ),
+    explication: [
+      "Visualisez le CV directement dans l'application",
+      "Téléchargez le CV de l'étudiant",
+      "Approuvez ou Refusez le CV, en pouvant préciser la rasion du refus si tel est le cas",
+    ],
   },
   {
     id: 2,
@@ -53,11 +46,9 @@ export const sidebarList = [
     isDialog: true,
     dialogName: "internshipOfferDialog",
     description: "",
-    explication: (
-      <Typography>
-        Entrez les informations concernant l'offre que vous souhaitez ajouter.
-      </Typography>
-    ),
+    explication: [
+      "Entrez les informations concernant l'offre que vous souhaitez ajouter",
+    ],
   },
   {
     id: 4,
@@ -66,35 +57,23 @@ export const sidebarList = [
     icon: <SearchOutlined sx={{ mr: 1 }} />,
     isDialog: false,
     description: "Liste d'offres de stage disponible",
-    explication: (
-      <Grid>
-        <Typography>
-          Consultez les offres de stage disponible à tous, ainsi que les offres
-          de stage exclusives.
-        </Typography>
-        <Typography>Appliquez aux offres après les avoir consulté.</Typography>
-      </Grid>
-    ),
+    explication: [
+      "Consultez les offres de stage disponible à tous, ainsi que les offres de stage qui vous sont exclusives",
+      "Appliquez aux offres après avoir consulté leurs détails",
+    ],
   },
   {
     id: 5,
-    label: "Vos C.V.",
+    label: "Vos CV",
     role: ["STUDENT"],
     icon: <FileUploadOutlined sx={{ mr: 1 }} />,
     isDialog: false,
     description:
       "Téléversez votre CV en le glissant ou en cliquant sur la boite ci-dessous",
-    explication: (
-      <Grid>
-        <Typography>
-          Téléversez votre CV et consultez tous ceux que vous avez déjà ajouté.
-        </Typography>
-        <Typography>
-          Dans le cas d'un refus de votre CV, consultez sa raison pour pouvoir
-          en déposez un autre en appliquant les commentaires suggérés.
-        </Typography>
-      </Grid>
-    ),
+    explication: [
+      "Téléversez votre CV et consultez tous ceux que vous avez déjà ajouté",
+      "Dans le cas d'un refus de votre CV, consultez sa rasion pour pouvoir en déposez un autre en appliquant les commentaires suggérés",
+    ],
   },
   {
     id: 6,
@@ -103,19 +82,10 @@ export const sidebarList = [
     isDialog: false,
     icon: <FormatListBulletedOutlined sx={{ mr: 1 }} />,
     description: "Liste des étudiants ayant postulés à l'une de vos offres",
-    explication: (
-      <Grid>
-        <Typography>
-          Consultez la liste des élèves qui ont appliqués aux offres de stage
-          que vous avez déposé.
-        </Typography>
-        <Typography>
-          Pour chacun des élèves, vous pouvez télécharger leur CV ou le
-          consulter dans l'application, contacter l'étudiant et démarrer le
-          processus de signature de contrat.
-        </Typography>
-      </Grid>
-    ),
+    explication: [
+      "Consultez la liste des élèves qui ont appliqués aux offres de stage que vous avez déposé",
+      "Pour chacun des élèves, vous pouvez télécharger leur CV ou le consulter dans l'application, contacter l'étudiant et démarrer le processus de signature s'il est sélectionné",
+    ],
   },
   {
     id: 10,
@@ -124,18 +94,10 @@ export const sidebarList = [
     isDialog: false,
     icon: <PeopleAltOutlined sx={{ mr: 1 }} />,
     description: "Liste des étudiants ayant été assigné",
-    explication: (
-      <Grid>
-        <Typography>
-          Consultez la liste des élèves qui vous ont été assignés ainsi que le
-          statut du processus de recherche de stage.
-        </Typography>
-        <Typography>
-          Pour les élèves ayant trouvez un stage, consultez les informations
-          concernant le stage de l'élève.
-        </Typography>
-      </Grid>
-    ),
+    explication: [
+      "Consultez la liste des élèves qui vous ont été assignés ainsi que le statut du processus de recherche de stage",
+      "Pour les élèves ayant trouvez un stage, consultez les informations concernant le stage de l'élève",
+    ],
   },
   {
     id: 11,
@@ -143,12 +105,9 @@ export const sidebarList = [
     role: ["INTERNSHIP_MANAGER"],
     icon: <SupervisedUserCircleOutlined fontSize="small" sx={{ mr: 1 }} />,
     description: "Assignations des superviseurs aux élèves",
-    explication: (
-      <Typography>
-        Assignez les étudiants aux professeurs qui seront responsables de
-        superviser l'étudiant durant son stage.
-      </Typography>
-    ),
+    explication: [
+      "Assignez les étudiants aux professeurs qui seront responsables de superviser l'étudiant durant son stage",
+    ],
   },
   {
     id: 12,
@@ -156,12 +115,9 @@ export const sidebarList = [
     role: ["MONITOR"],
     icon: <FindInPageOutlined sx={{ mr: 1 }} />,
     description: "Évaluation du stagiaire à la fin de son contrat",
-    explication: (
-      <Typography>
-        Remplissez le formulaire d'évaluation de l'étudiant voulu une fois sont
-        stage terminé.
-      </Typography>
-    ),
+    explication: [
+      "Remplissez le formulaire d'évaluation de l'étudiant voulu une fois sont stage terminé",
+    ],
   },
   {
     id: 13,
@@ -169,12 +125,9 @@ export const sidebarList = [
     role: ["SUPERVISOR"],
     icon: <FindInPageOutlined sx={{ mr: 1 }} />,
     description: "Évaluation du stagiaire à son mi-mandat",
-    explication: (
-      <Typography>
-        Remplissez le formulaire d'évaluation de l'étudiant voulu lorsque son
-        stage est arrivé à la la moitié du mandat.
-      </Typography>
-    ),
+    explication: [
+      "Remplissez le formulaire d'évaluation de l'étudiant voulu lorsque son stage est arrivé à la la moitié du mandat",
+    ],
   },
   {
     id: 14,
@@ -182,12 +135,9 @@ export const sidebarList = [
     role: ["INTERNSHIP_MANAGER"],
     icon: <AssignmentSharp fontSize="small" sx={{ mr: 1 }} />,
     description: "Consultation des rapports",
-    explication: (
-      <Typography>
-        Consultez les rapports concernants divers informations sur l'état des
-        offres de stage, des étudiants et des tout ce qui tourne autour.
-      </Typography>
-    ),
+    explication: [
+      "Consultez les rapports concernants divers informations sur l'état des offres de stage, des étudiants et des tout ce qui tourne autour",
+    ],
   },
   {
     id: 15,
@@ -196,14 +146,10 @@ export const sidebarList = [
     icon: <ManageSearch sx={{ mr: 1 }} />,
     isDialog: false,
     description: "Valider les offres de stage et les rendre exclusives",
-    explication: (
-      <Grid>
-        <Typography>Valider les offres de stage des moniteurs.</Typography>
-        <Typography>
-          Assigner des élèves à des offres de stage exclusives
-        </Typography>
-      </Grid>
-    ),
+    explication: [
+      "Valider les offres de stage des moniteurs.",
+      "Assigner des élèves à des offres de stage exclusives",
+    ],
   },
 ];
 
@@ -219,6 +165,7 @@ export const topbarMenuList = [
     label: "Espace Personnelle",
     icon: <DashboardOutlined fontSize="small" sx={{ mr: 1 }} />,
     description: "Espace personnelle",
+    disabled: true,
   },
   {
     id: 9,

@@ -32,7 +32,7 @@ public class InternshipManagerControllerTest {
     @Test
     void shouldGetProfile() {
         //ARRANGE
-        when(internshipManagerService.findByEmail(any())).thenReturn(Mono.just(InternshipManagerMockData.GetInternshipManager()));
+        when(internshipManagerService.findByEmail(any())).thenReturn(Mono.just(InternshipManagerMockData.getInternshipManager()));
 
         //ACT
         webTestClient

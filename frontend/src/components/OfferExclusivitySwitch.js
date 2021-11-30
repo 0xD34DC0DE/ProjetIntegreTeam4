@@ -24,7 +24,6 @@ const OfferExclusivitySwitch = ({ offer, setLastExclusiveOffer }) => {
     }).catch((error) => {
       console.error(error);
     });
-    console.log("Res", res);
   };
 
   return (

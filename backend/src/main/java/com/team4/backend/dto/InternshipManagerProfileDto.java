@@ -19,7 +19,8 @@ public class InternshipManagerProfileDto extends UserProfileDto implements Seria
                                        String firstName,
                                        String lastName,
                                        LocalDate registrationDate,
-                                       String phoneNumber) {
-        super(id, email, firstName, lastName, registrationDate, phoneNumber);
+                                       String phoneNumber,
+                                       String profileImageId) {
+        super(id, email, firstName, lastName, registrationDate, phoneNumber, profileImageId);
     }
 }

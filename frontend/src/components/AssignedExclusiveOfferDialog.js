@@ -158,7 +158,6 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
                   user.lastName.toLowerCase().includes(searchText.toLowerCase())
               )
               .map((user, key) => {
-                console.log("user offers", user);
                 return (
                   <motion.div
                     animate={{ opacity: [0, 1] }}

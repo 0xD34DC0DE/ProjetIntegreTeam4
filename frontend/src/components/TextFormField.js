@@ -11,6 +11,7 @@ const TextFormField = ({
   onChange,
   visible,
   dialogContentText,
+  handleFieldKeyUp,
 }) => {
   return (
     <>
@@ -28,6 +29,7 @@ const TextFormField = ({
               sx={{ flexGrow: 1 }}
               value={value}
               error={error !== ""}
+              onKeyUp={handleFieldKeyUp}
               onChange={onChange}
               visible={visible.toString()}
               variant="standard"

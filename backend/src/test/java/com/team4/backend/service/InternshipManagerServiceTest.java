@@ -32,7 +32,7 @@ public class InternshipManagerServiceTest {
     @Test
     void shouldCreateInternshipManager() {
         //ARRANGE
-        InternshipManager internshipManager = InternshipManagerMockData.GetInternshipManager();
+        InternshipManager internshipManager = InternshipManagerMockData.getInternshipManager();
         internshipManager.setId(null); // Id is null when coming from auto-register
 
         when(internshipManagerRepository.save(any(InternshipManager.class)))
@@ -49,7 +49,7 @@ public class InternshipManagerServiceTest {
         //ASSERT
         StepVerifier.create(internshipManagerMono).consumeNextWith(result -> {
             assertNotNull(result.getId());
-            assertNotEquals(InternshipManagerMockData.GetInternshipManager().getPassword(), result.getPassword());
+            assertNotEquals(InternshipManagerMockData.getInternshipManager().getPassword(), result.getPassword());
         }).verifyComplete();
     }
 

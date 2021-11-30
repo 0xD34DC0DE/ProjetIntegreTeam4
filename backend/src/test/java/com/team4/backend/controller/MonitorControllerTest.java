@@ -108,7 +108,7 @@ public class MonitorControllerTest {
                 //ASSERT
                 .expectStatus()
                 .isNotFound()
-                .expectBody(MonitorProfileDto.class);
+                .expectBody();
     }
 
 }

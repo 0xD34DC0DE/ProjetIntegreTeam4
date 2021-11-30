@@ -22,8 +22,9 @@ public class MonitorProfileDto extends UserProfileDto implements Serializable {
                              String lastName,
                              LocalDate registrationDate,
                              String phoneNumber,
-                             String companyName) {
-        super(id, email, firstName, lastName, registrationDate, phoneNumber);
+                             String companyName,
+                             String profileImageId) {
+        super(id, email, firstName, lastName, registrationDate, phoneNumber, profileImageId);
         this.companyName = companyName;
     }
 

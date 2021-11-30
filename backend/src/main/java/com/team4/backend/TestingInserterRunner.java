@@ -40,6 +40,8 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final PBKDF2Encoder pbkdf2Encoder;
 
+    private final ProfileImageRepository profileImageRepository;
+
     private final FileMetaDataRepository fileMetaDataRepository;
 
     private final InternshipRepository internshipRepository;
@@ -68,7 +70,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                                  EvaluationRepository evaluationRepository,
                                  InternshipContractRepository internshipContractRepository,
                                  PBKDF2Encoder pbkdf2Encoder,
-                                 FileMetaDataRepository fileMetaDataRepository,
+                                 ProfileImageRepository profileImageRepository, FileMetaDataRepository fileMetaDataRepository,
                                  InternshipManagerRepository internshipManagerRepository,
                                  InternshipRepository internshipRepository,
                                  NotificationRepository notificationRepository,
@@ -80,6 +82,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.supervisorRepository = supervisorRepository;
         this.internshipContractRepository = internshipContractRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
+        this.profileImageRepository = profileImageRepository;
         this.fileMetaDataRepository = fileMetaDataRepository;
         this.internshipRepository = internshipRepository;
         this.evaluationRepository = evaluationRepository;
@@ -109,6 +112,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         internshipContractRepository.deleteAll().subscribe();
         semesterRepository.deleteAll().subscribe();
         notificationRepository.deleteAll().subscribe();
+        profileImageRepository.deleteAll().subscribe();
 
         insertSemesters();
         insertInternshipOffersInternshipManagerView();
@@ -118,6 +122,24 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertCvs();
         insertNotifications();
         insertInternships();
+        insertProfileImages();
+    }
+
+    private void insertProfileImages() {
+        List<ProfileImage> profileImages = Arrays.asList(
+                ProfileImage.profileImageBuilder()
+                        .fileName("filename1")
+                        .uploaderEmail("123")
+                        .image(null)
+                        .build(),
+                ProfileImage.profileImageBuilder()
+                        .fileName("filename2")
+                        .uploaderEmail("abc")
+                        .image(null)
+                        .build()
+        );
+
+        profileImageRepository.saveAll(profileImages).subscribe();
     }
 
     private void insertSemesters() {

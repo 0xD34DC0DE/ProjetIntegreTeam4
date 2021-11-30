@@ -1,7 +1,11 @@
 package com.team4.backend.service;
 
+import com.team4.backend.dto.NotificationDto;
 import com.team4.backend.exception.FileNotFoundException;
 import com.team4.backend.model.FileMetaData;
+import com.team4.backend.model.Notification;
+import com.team4.backend.model.User;
+import com.team4.backend.model.enums.NotificationType;
 import com.team4.backend.model.enums.UploadType;
 import com.team4.backend.repository.FileMetaDataRepository;
 import com.team4.backend.util.ValidatingPageRequest;
@@ -16,6 +20,7 @@ import reactor.core.scheduler.Schedulers;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.Set;
 import java.util.UUID;
 
 @Log
@@ -28,10 +33,20 @@ public class FileMetaDataService {
 
     private final FileAssetService fileAssetService;
 
-    public FileMetaDataService(FileMetaDataRepository fileMetaDataRepository, StudentService studentService, FileAssetService fileAssetService) {
+    private final UserService userService;
+
+    private final NotificationService notificationService;
+
+    public FileMetaDataService(FileMetaDataRepository fileMetaDataRepository,
+                               StudentService studentService,
+                               FileAssetService fileAssetService,
+                               UserService userService,
+                               NotificationService notificationService) {
         this.fileMetaDataRepository = fileMetaDataRepository;
         this.studentService = studentService;
         this.fileAssetService = fileAssetService;
+        this.userService = userService;
+        this.notificationService = notificationService;
     }
 
     public Mono<FileMetaData> create(FileMetaData fileMetadata) {
@@ -102,8 +117,27 @@ public class FileMetaDataService {
                     else
                         file.setRejectionExplanation(rejectionExplanation);
                     return file;
-                }).flatMap(fileMetaDataRepository::save);
+                }).flatMap(fileMetaDataRepository::save)
+                .doOnSuccess(fileMetaData -> createCvValidationNotification(fileMetaData.getUserEmail(), fileMetaData.getIsValid(), fileMetaData.getRejectionExplanation()).subscribe());
     }
+
+    public Mono<Notification> createCvValidationNotification(String userEmail, boolean isValid, String reason) {
+        return userService
+                .findByEmail(userEmail)
+                .map(User::getId)
+                .flatMap(studentId -> notificationService
+                        .createNotification(
+                                NotificationDto.notificationDtoBuilder()
+                                        .receiverIds(Set.of(studentId))
+                                        .data(null)
+                                        .seenIds(Set.of())
+                                        .title(isValid ? "Votre CV a été accepté" : "Votre CV a été refusé")
+                                        .content(isValid ? "Appuyez pour consulter vos CV" : reason)
+                                        .notificationType(NotificationType.SHOW_CV)
+                                        .build()
+                        ));
+    }
+
 
     public Flux<FileMetaData> getAllCvByUserEmail(String userEmail) {
         return fileMetaDataRepository.findAllByUserEmail(userEmail)

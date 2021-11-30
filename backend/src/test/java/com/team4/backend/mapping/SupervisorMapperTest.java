@@ -67,7 +67,6 @@ public class SupervisorMapperTest {
         SupervisorProfileDto dto = SupervisorMapper.toProfileDto(entity);
 
         //ASSERT
-
         assertEquals(entity.getId(), dto.getId());
         assertEquals(entity.getEmail(), dto.getEmail());
         assertEquals(entity.getFirstName(), dto.getFirstName());
