@@ -20,7 +20,7 @@ const OfferForm = () => {
     limitDateToApply: new Date(),
     beginningDate: new Date(),
     endingDate: new Date(),
-    emailOfMonitor: "",
+    monitorEmail: "",
     companyName: "",
     minSalary: 0,
     maxSalary: 0,
@@ -32,6 +32,7 @@ const OfferForm = () => {
   const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const handleFormChange = (event) => {
+    console.log(offer);
     setOffer((previousForm) => ({
       ...previousForm,
       [event.target.id || event.target.name]: event.target.value,
@@ -130,11 +131,7 @@ const OfferForm = () => {
           </FormGroup>
         </DialogContent>
         <DialogActions sx={{ mt: 0 }}>
-          <Button
-            size="small"
-            onClick={saveInternshipOffer}
-            disabled={!isValid}
-          >
+          <Button size="small" onClick={saveInternshipOffer}>
             Envoyer
           </Button>
         </DialogActions>
