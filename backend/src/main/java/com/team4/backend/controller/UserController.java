@@ -32,7 +32,7 @@ public class UserController {
     }
 
     @GetMapping("/getAll")
-    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER','SUPERVISOR')")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
     public Flux<UserDto> getAll(@RequestParam String role) {
         return userService.getAll(role.toUpperCase()).map(UserMapper::toDto);
     }
