@@ -52,9 +52,9 @@ public class SupervisorController {
         return supervisorService.getAllAssignedStudentsForCurrentSemester(supervisorId);
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/{getByEmail}")
     @PreAuthorize("hasAnyAuthority('SUPERVISOR')")
-    public Mono<SupervisorDetailsDto> getSupervisor(@PathVariable("email") String email) {
+    public Mono<SupervisorDetailsDto> getSupervisor(@PathVariable("getByEmail") String email) {
         return supervisorService.getSupervisor(email)
                 .map(SupervisorMapper::toDetailsDto);
     }

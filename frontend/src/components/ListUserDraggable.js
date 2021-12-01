@@ -1,7 +1,6 @@
 import { Grid, Typography } from "@mui/material";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import React, { useState, useEffect, useContext } from "react";
-import axios from "axios";
 import UserCard from "./DraggableUserCard";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
@@ -18,30 +17,14 @@ const fadeIn = {
   },
 };
 
-const ListUserDraggable = ({ role, isDragging }) => {
-  const [users, setUsers] = useState([]);
-  const [userInfo] = useContext(UserInfoContext);
+const ListUserDraggable = ({ role, isDragging, students, setStudents }) => {
 
-  useEffect(() => {
-    const getAllUsersByRole = async () => {
-      let response = await axios({
-        method: "GET",
-        url: `http://localhost:8080/user/getAll?role=${role}`,
-        headers: {
-          Authorization: userInfo.jwt,
-        },
-        responseType: "json",
-      });
-      setUsers(response.data);
-    };
-    getAllUsersByRole();
-  }, []);
   return (
     <DndProvider backend={HTML5Backend}>
       <motion.div variants={fadeIn} initial="hidden" animate="show">
         <Typography
           variant="subtitle2"
-          sx={{ color: "white", ml: 2, fontSize: "2.2em" }}
+          sx={{ color: "white", ml: 2, fontSize: "2.2em", pt: "1rem" }}
         >
           Étudiants
         </Typography>
@@ -53,26 +36,34 @@ const ListUserDraggable = ({ role, isDragging }) => {
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
-        {users.map((user, index) => (
-          <Grid
-            item
-            xs={6}
-            sm={4}
-            md={4}
-            lg={3}
-            xl={2}
-            key={index}
-            sx={{
-              "&:hover": {
-                cursor: "grab",
-              },
-            }}
-          >
-            <motion.div variants={fadeIn} initial="hidden" animate="show">
-              <UserCard isDragging={isDragging} user={user} />
-            </motion.div>
-          </Grid>
-        ))}
+
+        {students.length > 0 ? (
+          students.map((user, index) => (
+            <Grid
+              item
+              xs={6}
+              sm={4}
+              md={4}
+              lg={3}
+              xl={2}
+              key={index}
+              sx={{
+                "&:hover": {
+                  cursor: "grab",
+                },
+              }}
+            >
+              <motion.div variants={fadeIn} initial="hidden" animate="show">
+                <UserCard isDragging={isDragging} user={user} key={user.id}/>
+              </motion.div>
+            </Grid>
+          ))
+        ) : (
+          <Typography color={"text.primary"} sx={{mx: "auto", py: "2rem", fontSize: "2rem"}}>
+            Aucun étudiant sans superviseur
+          </Typography>
+        )}
+
       </Grid>
     </DndProvider>
   );

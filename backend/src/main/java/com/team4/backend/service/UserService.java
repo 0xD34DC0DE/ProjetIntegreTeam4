@@ -52,12 +52,4 @@ public class UserService {
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Could not find user with email: " + userEmail)));
     }
 
-    /*
-    TODO --> resetPassword() --> Nice To Have
-            -take email of user
-            -send url of front-end + randomstring
-            -front end will forward request to backend
-            -the backend will return true or false, if the verification code is still valid
-            -depending on the answer the frontend will forward to the form or not
-     */
 }
