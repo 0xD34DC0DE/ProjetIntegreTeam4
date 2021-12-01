@@ -63,9 +63,9 @@ const CompanyIdentificationDropdown = ({ mergeForms }, ref) => {
               <React.Fragment key={key}>
                 <Grid
                   item
-                  xl={1.5}
-                  lg={1.5}
-                  md={1.5}
+                  xl={2}
+                  lg={2}
+                  md={2}
                   sm={12}
                   xs={12}
                   key={"label" + key}
@@ -74,9 +74,9 @@ const CompanyIdentificationDropdown = ({ mergeForms }, ref) => {
                 </Grid>
                 <Grid
                   item
-                  xl={10.5}
-                  lg={10.5}
-                  md={10.5}
+                  xl={10}
+                  lg={10}
+                  md={10}
                   sm={12}
                   xs={12}
                   key={"field" + key}

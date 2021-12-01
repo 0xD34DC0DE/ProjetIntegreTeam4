@@ -1,7 +1,6 @@
 import React from "react";
 import {
   Card,
-  CardActions,
   CardContent,
   Typography,
   Grid,
@@ -50,7 +49,12 @@ const CvInternshipManagerView = ({
 
   return (
     <>
-      <motion.div variants={fadeIn} initial="hidden" animate="show">
+      <motion.div
+        variants={fadeIn}
+        initial="hidden"
+        animate="show"
+        style={{ width: "100%" }}
+      >
         <Grid container flexDirection="column">
           <Grid item xs={12}>
             <Card
@@ -59,23 +63,12 @@ const CvInternshipManagerView = ({
                 backgroundColor: "rgba(135, 135, 135, 0.03)",
                 borderRadius: "10px",
                 border: "2px solid rgba(100, 100, 100, 0.4)",
-                display: "flex",
-                ml: "auto",
-                mr: "auto",
-                mt: 2,
-                mb: 5,
-                p: 4,
+                my: 2,
                 boxShadow: "15px 15px 10px 0px rgba(0, 0, 0, 0.35);",
               }}
             >
               <CardContent>
-                <Grid
-                  container
-                  spacing={0}
-                  direction="row"
-                  alignItems="start"
-                  justify="start"
-                >
+                <Grid container spacing={0} direction="row">
                   <Grid
                     item
                     xl={3}
@@ -86,6 +79,7 @@ const CvInternshipManagerView = ({
                     sx={{ mb: matchesBreakpointMd ? 5 : 0 }}
                   >
                     <Box
+                      alignSelf="center"
                       sx={{
                         mx: matchesBreakpointMd ? "auto" : "",
                         borderRadius: "50%",
@@ -94,7 +88,7 @@ const CvInternshipManagerView = ({
                       }}
                     >
                       <Avatar
-                        src={profileImage}
+                        src={profileImage || ""}
                         sx={{
                           width: "150px",
                           height: "150px",
@@ -161,7 +155,7 @@ const CvInternshipManagerView = ({
                         size="medium"
                         variant="contained"
                         sx={{
-                          mb: "6px",
+                          mt: "6px",
                           backgroundColor: "rgba(50, 51, 50, 0.8)",
                           ":hover": {
                             backgroundColor: "rgba(100, 101, 100, 0.8)",
@@ -177,7 +171,7 @@ const CvInternshipManagerView = ({
                         size="medium"
                         variant="contained"
                         sx={{
-                          mb: "6px",
+                          mt: "6px",
                           backgroundColor: "rgba(50, 51, 50, 0.8)",
                           width: "100%",
                           ":hover": {

@@ -128,15 +128,17 @@ const ListCvInternshipManagerView = () => {
           mt: 5,
         }}
       >
-        <Grid item lg={12} xl={6} md={12} sm={8} xs={6} sx={{ mx: "auto" }}>
+        <Grid item lg={9} xl={7} md={11} sm={11} xs={11} sx={{ mx: "auto" }}>
           {cvs.map((cv, key) => (
             <CvInternshipManagerView
               key={key}
-              profileImage={studentsProfileImage
-                .filter((data) => data.uploaderEmail === cv.userEmail)
-                .map((data) => {
-                  return data.image;
-                })}
+              profileImage={
+                studentsProfileImage
+                  .filter((data) => data.uploaderEmail === cv.userEmail)
+                  .map((data) => {
+                    return data.image;
+                  })[0]
+              }
               id={cv.id}
               assetId={cv.assetId}
               userEmail={cv.userEmail}

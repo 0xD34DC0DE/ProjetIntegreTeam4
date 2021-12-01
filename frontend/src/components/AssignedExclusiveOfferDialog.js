@@ -160,13 +160,14 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
               .map((user, key) => {
                 return (
                   <motion.div
+                    key={key}
                     animate={{ opacity: [0, 1] }}
                     transition={{
                       duration: 0.5,
                       delay: (key + 1) * 0.2,
                     }}
                   >
-                    <ListItem key={key} sx={{ width: "100%", mr: 5 }}>
+                    <ListItem sx={{ width: "100%", mr: 5 }}>
                       <ListItemButton
                         onClick={() => {
                           if (!selectedUsersEmail.includes(user.email))

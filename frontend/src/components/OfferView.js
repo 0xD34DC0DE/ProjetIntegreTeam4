@@ -1,5 +1,5 @@
 import { Container, Grid, Paper, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 
@@ -12,8 +12,6 @@ const OfferView = ({
   minSalary,
   maxSalary,
   description,
-   hasAlreadyApplied,
-   id,
   buttons,
 }) => {
   const theme = useTheme();
@@ -70,9 +68,9 @@ const OfferView = ({
             mt={matchesBreakpointLg ? 1 : 0}
           >
             {buttons &&
-            buttons.map((button) => {
-              return button;
-            })}
+              buttons.map((button) => {
+                return button;
+              })}
           </Grid>
         </Grid>
         <Grid container alignContent="center">

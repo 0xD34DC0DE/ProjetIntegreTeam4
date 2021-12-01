@@ -52,11 +52,13 @@ const InternshipOfferValidation = ({ semesterFullName }) => {
               {...offer}
               buttons={[
                 <OfferValidationButton
+                  key={"btn1-" + i}
                   offerId={offer.id}
                   isValid={true}
                   setLastRemovedOfferId={setLastRemovedOfferId}
                 />,
                 <OfferValidationButton
+                  key={"btn2-" + i}
                   offerId={offer.id}
                   isValid={false}
                   setLastRemovedOfferId={setLastRemovedOfferId}

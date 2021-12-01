@@ -71,9 +71,10 @@ const HomeRoles = () => {
                     </Box>
                   </Typography>
                 </Button>
-                {item.explication.map((explication) => {
+                {item.explication.map((explication, key) => {
                   return (
                     <Typography
+                      key={key}
                       sx={{
                         color: "white",
                         width: "100%",

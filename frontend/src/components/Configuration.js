@@ -14,7 +14,6 @@ import {
   SettingsOutlined,
   SupervisedUserCircleOutlined,
 } from "@mui/icons-material";
-import { Grid, Typography } from "@mui/material";
 
 export const sidebarList = [
   {
