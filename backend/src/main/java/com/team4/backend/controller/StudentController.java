@@ -35,7 +35,6 @@ public class StudentController {
     public Mono<ResponseEntity<String>> register(@RequestBody StudentDetailsDto studentCreationDto) {
         return studentService.registerStudent(StudentMapper.toEntity(studentCreationDto))
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")));
-        //TODO add a non-handled exception to make sure it returns 500 and not 409
     }
 
     @PatchMapping("/updateStudentState")

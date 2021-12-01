@@ -27,11 +27,10 @@ const fadeIn = {
   },
 };
 
-const DroppableUserCard = ({ user, index, handleRemoval }) => {
+const DroppableUserCard = ({ user, index, fetchStudents }) => {
   const [open, setOpen] = useState(false);
   const [justDropped, setJustDropped] = useState(false);
   const [assignedStudents, setAssignedStudents] = useState([]);
-  const [droppedItem, setDroppedItem] = useState();
   const [userInfo] = useContext(UserInfoContext);
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     // The type (or types) to accept - strings or symbols
@@ -43,9 +42,6 @@ const DroppableUserCard = ({ user, index, handleRemoval }) => {
     }),
     drop: async (item, monitor) => {
       if (monitor.isOver()) {
-        console.log('item', item);
-        console.log('user email: ', item.user.email);
-        console.log('user firstName: ', item.user.firstName);
         await axios({
           method: "PATCH",
           url: `http://localhost:8080/supervisor/addEmailToStudentList?id=${user.id}&studentEmail=${item.user.email}`,
@@ -53,7 +49,7 @@ const DroppableUserCard = ({ user, index, handleRemoval }) => {
             Authorization: userInfo.jwt,
           },
           responseType: "json",
-        }).then(() => handleRemoval()).catch(console.error);
+        }).then(() => fetchStudents()).catch(console.error);
 
 
         setJustDropped(true);

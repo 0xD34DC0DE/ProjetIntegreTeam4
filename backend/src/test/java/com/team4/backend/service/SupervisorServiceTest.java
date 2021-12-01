@@ -257,8 +257,9 @@ public class SupervisorServiceTest {
         //ASSERT
         StepVerifier.create(response)
                 .assertNext(s -> {
-                    assertEquals(s.size(), 2);
-                });
+                    assertEquals(s.size(), 3);
+                })
+                .verifyComplete();
     }
 
     @Test
@@ -295,7 +296,7 @@ public class SupervisorServiceTest {
         //ASSERT
         StepVerifier.create(response)
                 .assertNext(s -> {
-                    assertEquals("eleve@gmail.com", s.getEmail());
+                    assertEquals(StudentMockData.getMockSecondStudent().getEmail(), s.getEmail());
                 })
                 .verifyComplete();
     }

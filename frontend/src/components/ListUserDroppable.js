@@ -18,7 +18,7 @@ const fadeIn = {
   },
 };
 
-const ListUserDroppable = ({ role, students, setStudents, handleRemoval }) => {
+const ListUserDroppable = ({ role, students, setStudents, fetchStudents }) => {
   const [supervisors, setSupervisors] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
 
@@ -55,7 +55,7 @@ const ListUserDroppable = ({ role, students, setStudents, handleRemoval }) => {
         {supervisors.map((user, index) => (
           <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={index}>
             <motion.div variants={fadeIn} initial="hidden" animate="show">
-              <DroppableUserCard user={user} key={index} index={index} students={students} setStudents={setStudents} handleRemoval={handleRemoval}/>
+              <DroppableUserCard user={user} key={index} index={index} students={students} setStudents={setStudents} fetchStudents={fetchStudents}/>
             </motion.div>
           </Grid>
         ))}

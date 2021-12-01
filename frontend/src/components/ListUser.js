@@ -10,10 +10,10 @@ const ListUser = () => {
   const [students, setStudents] = useState([]);
 
   useEffect(() => {
-    handleRemoval();
+    fetchStudents();
   }, []);
 
-  const handleRemoval = async () => {
+  const fetchStudents = async () => {
     let response = await axios({
       method: "GET",
       url: `http://localhost:8080/student/getAllStudentsNoSupervisor`,
@@ -22,13 +22,12 @@ const ListUser = () => {
       },
       responseType: "json",
     });
-    console.log('students', students)
     setStudents(response.data);
   };
 
   return (
     <>
-      <ListUserDroppable role="SUPERVISOR" students={students} setStudents={setStudents} handleRemoval={handleRemoval} />
+      <ListUserDroppable role="SUPERVISOR" students={students} setStudents={setStudents} fetchStudents={fetchStudents} />
       <ListUserDraggable role="STUDENT" students={students} setStudents={setStudents} />
     </>
   )
