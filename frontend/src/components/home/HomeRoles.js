@@ -25,7 +25,7 @@ const HomeRoles = () => {
                     color: "text.primary",
                     fontSize: "1.5em",
                     backgroundColor:
-                      key % 2 == 0
+                      key % 2 === 0
                         ? "rgba(125, 51, 235, 0.8)"
                         : "rgba(50, 50, 50, 0.5)",
                     width: "100%",
@@ -37,11 +37,11 @@ const HomeRoles = () => {
                     mb: 1,
                     ":hover": {
                       backgroundColor:
-                        key % 2 == 0
+                        key % 2 === 0
                           ? "rgba(125, 51, 235, 0.8)"
                           : "rgba(50, 50, 50, 0.5)",
                       boxShadow:
-                        key % 2 == 0
+                        key % 2 === 0
                           ? "0px 0px 15px 2px rgba(95, 21, 205, 0.9)"
                           : "0px 0px 15px 2px rgba(125, 51, 235, 0.8)",
                       "#visualizeText": {
