@@ -18,7 +18,9 @@ import reactor.util.function.Tuple2;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -168,27 +170,25 @@ public class SupervisorService {
             List<Student> allStudents = tuple.getT2();
             List<Supervisor> allSupervisors = tuple.getT3();
 
-            List<Student> allStudentsWithSupervisor = new ArrayList<>();
-            List<UserDto> allStudentsNoSupervisor = new ArrayList<>();
+            Set<String> studentWithSupervisorEmails = allSupervisors.stream()
+                    .map(Supervisor::getStudentTimestampedEntries)
+                    .flatMap(Collection::stream)
+                    .filter(timestampedEntry ->
+                            SemesterUtil.checkIfDatesAreInsideRangeOfSemester(
+                                    semester,
+                                    timestampedEntry.getDate(),
+                                    timestampedEntry.getDate()
+                            )
+                    )
+                    .map(TimestampedEntry::getEmail)
+                    .collect(Collectors.toSet());
 
-            allStudents.forEach(student -> {
-                allSupervisors.forEach(supervisor -> {
-                    supervisor.getStudentTimestampedEntries().forEach(timestampedEntry -> {
-                        if (timestampedEntry.getEmail().equals(student.getEmail()) &&
-                                SemesterUtil.checkIfDatesAreInsideRangeOfSemester(semester, timestampedEntry.getDate(), timestampedEntry.getDate())
-                        ) {
-                            allStudentsWithSupervisor.add(student);
-                        }
-                    });
-                });
-            });
+            List<UserDto> allStudentsWithoutSupervisorDto = allStudents.stream()
+                    .filter(student -> !studentWithSupervisorEmails.contains(student.getEmail()))
+                    .map(UserMapper::toDto)
+                    .collect(Collectors.toList());
 
-            for (Student student : allStudents) {
-                if (!allStudentsWithSupervisor.contains(student)) {
-                    allStudentsNoSupervisor.add(UserMapper.toDto(student));
-                }
-            }
-            return Flux.fromIterable(allStudentsNoSupervisor);
+            return Flux.fromIterable(allStudentsWithoutSupervisorDto);
         });
     }
 
