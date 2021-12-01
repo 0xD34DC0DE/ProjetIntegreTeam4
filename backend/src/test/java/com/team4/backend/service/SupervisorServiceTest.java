@@ -283,7 +283,7 @@ public class SupervisorServiceTest {
     }
 
     @Test
-    void shouldGetAllStudentsNoSupervisor() {
+    void shouldGetAllStudentsNoSupervisorOne() {
         //ARRANGE
         when(semesterService.getCurrentSemester()).thenReturn(Mono.just(SemesterMockData.getListSemester().get(0)));
         when(studentService.getAll()).thenReturn(StudentMockData.getAllStudentsFlux());
@@ -294,9 +294,6 @@ public class SupervisorServiceTest {
 
         //ASSERT
         StepVerifier.create(response)
-                .assertNext(s -> {
-                    assertEquals("123456789@gmail.com", s.getEmail());
-                })
                 .assertNext(s -> {
                     assertEquals("eleve@gmail.com", s.getEmail());
                 })
