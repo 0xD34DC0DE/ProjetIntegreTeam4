@@ -112,7 +112,7 @@ public class SupervisorMockData {
                 .build());
     }
 
-    public static Flux<Supervisor> getAllSupervisorsUpdated() {
+    public static Flux<Supervisor> getAllSupervisorsFlux() {
         return Flux.just(Supervisor.supervisorBuilder()
                 .id("123a45ce678ae91d0b111b21")
                 .email("professeur@outlook.com")
@@ -146,7 +146,7 @@ public class SupervisorMockData {
     
     public static Set<TimestampedEntry> getTimeStampedEntries() {
         return new HashSet<>(Arrays.asList(
-                new TimestampedEntry("12395432@gmail.com", LocalDateTime.now()),
+                new TimestampedEntry("123456789@gmail.com", LocalDateTime.now()),
                 new TimestampedEntry("toto23@outlook.com", LocalDateTime.now())));
     }
 

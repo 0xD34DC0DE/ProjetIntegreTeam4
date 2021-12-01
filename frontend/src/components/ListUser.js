@@ -28,8 +28,8 @@ const ListUser = () => {
 
   return (
     <>
-      <ListUserDroppable role="SUPERVISOR" students={students} setStudents={setStudents} handleRemoval={handleRemoval}/>
-      <ListUserDraggable role="STUDENT" students={students} setStudents={setStudents}/>
+      <ListUserDroppable role="SUPERVISOR" students={students} setStudents={setStudents} handleRemoval={handleRemoval} />
+      <ListUserDraggable role="STUDENT" students={students} setStudents={setStudents} />
     </>
   )
 }
