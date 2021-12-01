@@ -20,7 +20,7 @@ public class StudentDetailsDto extends UserDetailsDto implements Serializable {
 
     private Boolean hasValidCv;
 
-    @Builder
+    @Builder(builderMethodName = "studentDetailsDtoBuilder")
     public StudentDetailsDto(String id,
                              String email,
                              String password,

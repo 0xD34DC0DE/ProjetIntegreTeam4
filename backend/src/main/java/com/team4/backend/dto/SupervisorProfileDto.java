@@ -15,7 +15,7 @@ public class SupervisorProfileDto extends UserProfileDto implements Serializable
 
     private Integer nbrOfAssignedStudents;
 
-    @Builder
+    @Builder(builderMethodName = "supervisorProfileDtoBuilder")
     public SupervisorProfileDto(String id,
                                 String email,
                                 String firstName,

@@ -42,7 +42,7 @@ public abstract class StudentMockData {
     }
 
     public static StudentDetailsDto getMockStudentDto() {
-        return StudentDetailsDto.builder()
+        return StudentDetailsDto.studentDetailsDtoBuilder()
                 .id("mock_id")
                 .email("123456789@gmail.com")
                 .password("passwd")

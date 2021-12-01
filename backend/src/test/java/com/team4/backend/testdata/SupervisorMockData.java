@@ -29,7 +29,7 @@ public class SupervisorMockData {
     }
 
     public static SupervisorDetailsDto getMockSupervisorDto() {
-        return SupervisorDetailsDto.builder()
+        return SupervisorDetailsDto.supervisorDetailsDtoBuilder()
                 .id("615a32ce577ae63d7b159b17")
                 .email("jonathan_22@outlook.com")
                 .password("soleil31@")
@@ -89,7 +89,7 @@ public class SupervisorMockData {
     }
 
     public static Flux<SupervisorDetailsDto> getAllSupervisorsDto() {
-        return Flux.just(SupervisorDetailsDto.builder()
+        return Flux.just(SupervisorDetailsDto.supervisorDetailsDtoBuilder()
                 .id("123a45ce678ae91d0b111b21")
                 .email("professeur@outlook.com")
                 .password("prof123")
@@ -100,7 +100,7 @@ public class SupervisorMockData {
                         .collect(Collectors.toSet()))
                 .phoneNumber("514-111-2222")
                 .registrationDate(null) // Current date
-                .build(), SupervisorDetailsDto.builder()
+                .build(), SupervisorDetailsDto.supervisorDetailsDtoBuilder()
                 .id("222a44ce555ae66d0b777b88")
                 .email("enseignant@outlook.com")
                 .password("enseignant123")

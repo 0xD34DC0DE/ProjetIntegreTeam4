@@ -19,7 +19,7 @@ public abstract class MonitorMockData {
     }
 
     public static MonitorDetailsDto getMockMonitorDto() {
-        return MonitorDetailsDto.builder()
+        return MonitorDetailsDto.monitorDetailsDtoBuilder()
                 .id("6151f7ac87d8fbea963710fd")
                 .email("9182738492@gmail.com")
                 .password("lao@dkv23")
