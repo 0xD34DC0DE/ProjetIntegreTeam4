@@ -63,7 +63,8 @@ const SelectInterviewDate = ({
         !hasInternship())
     ) {
       setProfile({ ...profile, closestInterviewDate: value });
-      setProfile({ ...profile, studentState: "WAITING_INTERVIEW" });
+      if (profile.studentState === "NO_INTERVIEW")
+        setProfile({ ...profile, studentState: "WAITING_INTERVIEW" });
       updateInterviewDate(value);
       setIsDateValid(true);
     } else {
