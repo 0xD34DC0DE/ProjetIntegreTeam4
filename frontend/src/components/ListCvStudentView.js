@@ -44,7 +44,6 @@ const ListCvStudentView = ({ cvSent }) => {
       }).catch((error) => {
         console.log(error);
       });
-      console.log("cvSent", cvSent);
       setCvs(response.data);
     };
 
