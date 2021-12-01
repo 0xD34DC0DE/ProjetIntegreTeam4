@@ -28,7 +28,7 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
   const [searchText, setSearchText] = useState("");
   const [users, setUsers] = useState([]);
   const [selectedUsersEmail, setSelectedUsersEmail] = useState([]);
-  const [userUpdatedCount, setUserUpdatedCount] = useState(0);
+  const [userUpdatedCount, setUserUpdatedCount] = useState(-1);
 
   useEffect(() => {
     const getAllStudentNotContainingExclusiveOffer = async () => {
@@ -80,7 +80,7 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
 
   const handleSnackBarClose = (_, reason) => {
     if (reason === "timeout") {
-      setUserUpdatedCount(0);
+      setUserUpdatedCount(-1);
     }
   };
 
@@ -160,13 +160,14 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
               .map((user, key) => {
                 return (
                   <motion.div
+                    key={key}
                     animate={{ opacity: [0, 1] }}
                     transition={{
                       duration: 0.5,
                       delay: (key + 1) * 0.2,
                     }}
                   >
-                    <ListItem key={key} sx={{ width: "100%", mr: 5 }}>
+                    <ListItem sx={{ width: "100%", mr: 5 }}>
                       <ListItemButton
                         onClick={() => {
                           if (!selectedUsersEmail.includes(user.email))
@@ -208,11 +209,11 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
         </DialogContent>
       </Dialog>
       <Snackbar
-        open={userUpdatedCount > 0}
+        open={userUpdatedCount >= 0}
         autoHideDuration={2000}
         onClose={handleSnackBarClose}
       >
-        <Alert severity="success">
+        <Alert severity={userUpdatedCount > 0 ? "success" : "warning"}>
           {userUpdatedCount} étudiants ont été ajoutés à l'offre{" "}
           {offer.companyName} | {offer.title}
         </Alert>
