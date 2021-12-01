@@ -17,7 +17,7 @@ public abstract class InternshipManagerMockData {
     }
 
     public static InternshipManagerDetailsDto getInternshipManagerDto() {
-        return InternshipManagerDetailsDto.builder()
+        return InternshipManagerDetailsDto.internshipManagerDetailsDtoBuilder()
                 .id("internship_manager_id")
                 .email("intership.manager@email.com")
                 .firstName("John")

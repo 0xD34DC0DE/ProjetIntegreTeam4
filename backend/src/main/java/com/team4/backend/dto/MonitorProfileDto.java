@@ -15,7 +15,7 @@ public class MonitorProfileDto extends UserProfileDto implements Serializable {
 
     private String companyName;
 
-    @Builder
+    @Builder(builderMethodName = "monitorProfileDtoBuilder")
     public MonitorProfileDto(String id,
                              String email,
                              String firstName,

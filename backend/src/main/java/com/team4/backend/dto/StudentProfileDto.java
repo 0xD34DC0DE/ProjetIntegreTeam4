@@ -26,7 +26,7 @@ public class StudentProfileDto extends UserProfileDto implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate closestInterviewDate;
 
-    @Builder
+    @Builder(builderMethodName = "studentProfileDtoBuilder")
     public StudentProfileDto(String id,
                              String email,
                              String firstName,

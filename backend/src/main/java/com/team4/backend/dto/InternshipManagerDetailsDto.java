@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 public class InternshipManagerDetailsDto extends UserDetailsDto implements Serializable {
 
-    @Builder
+    @Builder(builderMethodName = "internshipManagerDetailsDtoBuilder")
     public InternshipManagerDetailsDto(String id,
                                        String email,
                                        String password,
