@@ -13,6 +13,7 @@ import OfferView from "./OfferView";
 import axios from "axios";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { motion } from "framer-motion";
+import OfferApplicationButton from "./OfferApplicationButton";
 
 const OfferViews = () => {
   const offersPerPage = 3;
@@ -147,7 +148,16 @@ const OfferViews = () => {
               }}
               key={i}
             >
-              <OfferView key={i} {...offer} />
+              <OfferView
+                key={i}
+                {...offer}
+                buttons={[
+                  <OfferApplicationButton
+                    disabled={offer.hasAlreadyApplied}
+                    offerId={offer.id}
+                  />,
+                ]}
+              />
             </motion.div>
           ))
         )}

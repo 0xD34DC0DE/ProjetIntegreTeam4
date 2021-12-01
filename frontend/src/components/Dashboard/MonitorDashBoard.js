@@ -31,7 +31,6 @@ const MonitorDashBoard = () => {
       })
         .then((response) => {
           setProfile(response.data);
-          console.log(response.data);
         })
         .catch((error) => {
           console.error(error);

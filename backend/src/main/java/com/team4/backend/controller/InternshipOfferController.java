@@ -1,9 +1,6 @@
 package com.team4.backend.controller;
 
-import com.team4.backend.dto.InternshipOfferCreationDto;
-import com.team4.backend.dto.InternshipOfferDetailedDto;
-import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
-import com.team4.backend.dto.InternshipOfferStudentViewDto;
+import com.team4.backend.dto.*;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.security.UserSessionService;
@@ -17,6 +14,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.security.Principal;
+import java.util.Set;
 
 @Log
 @RestController
@@ -79,18 +77,43 @@ public class InternshipOfferController {
         return internshipOfferService.getInternshipOffersPageCount(size);
     }
 
+    @PatchMapping("/changeInternshipOfferExclusivity")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
+    public Mono<ResponseEntity<String>> changeInternshipOfferExclusivity(@RequestParam("id") String id,
+                                                                         @RequestParam("isExclusive") Boolean isExclusive) {
+        return internshipOfferService.changeInternshipOfferExclusivity(id, isExclusive)
+                .flatMap(i -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
+
+    }
+
+    @PatchMapping("/addExclusiveOfferToStudents/{id}")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
+    public Mono<ResponseEntity<String>> addExclusiveOfferToStudents(@PathVariable String id,
+                                                                    @RequestBody Set<String> emails) {
+        return internshipOfferService.addExclusiveOfferToStudents(id, emails)
+                .flatMap(i -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body(i.toString())));
+
+    }
+
     @PatchMapping("/validateInternshipOffer")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
     public Mono<ResponseEntity<String>> validateInternshipOffer(@RequestParam("id") String id,
                                                                 @RequestParam("isValid") Boolean isValid) {
         return internshipOfferService.validateInternshipOffer(id, isValid)
-                .flatMap(fileMetaData -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
+                .flatMap(i -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 
     @GetMapping("/getNotYetValidatedInternshipOffers/{semesterFullName}")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
-    public Flux<InternshipOfferDetailedDto> getNotYetValidatedInternshipOffers(@PathVariable String semesterFullName) {
+    public Flux<InternshipOfferDetailsDto> getNotYetValidatedInternshipOffers(@PathVariable String semesterFullName) {
         return internshipOfferService.getNotYetValidatedInternshipOffers(semesterFullName).map(InternshipOfferMapper::toDto);
+    }
+
+    @GetMapping("/getAllValidatedOffers/{semesterFullName}")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
+    public Flux<InternshipOfferInternshipManagerViewDto> getAllValidatedOffers(@PathVariable String semesterFullName) {
+        return internshipOfferService.getAllValidatedOffers(semesterFullName)
+                .map(InternshipOfferMapper::toInternshipManagerViewDto);
     }
 
     @GetMapping("/interestedStudents")

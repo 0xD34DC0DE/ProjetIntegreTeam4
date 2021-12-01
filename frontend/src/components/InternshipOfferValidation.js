@@ -1,29 +1,18 @@
-import {
-  Grid,
-  List,
-  ListItem,
-  ListItemButton,
-  Paper,
-  Tooltip,
-  Typography,
-} from "@mui/material";
+import { CircularProgress, Stack, Typography } from "@mui/material";
 import axios from "axios";
+import { motion } from "framer-motion";
 import React, { useContext, useEffect, useState } from "react";
-import { DialogContext } from "../stores/DialogStore";
 import { UserInfoContext } from "../stores/UserInfoStore";
-import InternshipOfferDialog from "./InternshipOfferDialog";
-import { listLabels } from "./InternshipOfferLabels";
-import SemesterSelect from "./SemesterSelect";
+import OfferValidationButton from "./OfferValidationButton";
+import OfferView from "./OfferView";
 
-const InternshipOfferValidation = () => {
-  const [unvalidatedOffers, setUnvalidatedOffers] = useState([]);
-  const [companies, setCompanies] = useState([]);
+const InternshipOfferValidation = ({ semesterFullName }) => {
   const [userInfo] = useContext(UserInfoContext);
-  const [semesterFullName, setSemesterFullName] = useState(""); //TODO --> get From select component
-  const [selectedOffer, setSelectedOffer] = useState(null);
-  const [dialog, dialogDispatch] = useContext(DialogContext);
+  const [internshipOffers, setInternshipOffers] = useState(null);
+  const [lastRemovedOfferId, setLastRemovedOfferId] = useState("");
 
   useEffect(() => {
+    if (semesterFullName === "") return;
     const getUnvalidatedInternshipOffers = async () => {
       let response = await axios({
         method: "GET",
@@ -33,146 +22,51 @@ const InternshipOfferValidation = () => {
         },
         responseType: "json",
       });
-      var companiesName = [
-        ...new Set(Array.from(response.data, ({ companyName }) => companyName)),
-      ];
-      setCompanies(companiesName);
-      setUnvalidatedOffers(response.data);
+      setInternshipOffers(response.data);
     };
 
     getUnvalidatedInternshipOffers();
-  }, [semesterFullName]);
-
-  const removeInternshipOffer = (offer) => {
-    var index = unvalidatedOffers.indexOf(offer);
-    unvalidatedOffers.splice(index, 1);
-    setUnvalidatedOffers(unvalidatedOffers);
-    setCompanies([
-      ...new Set(
-        Array.from(unvalidatedOffers, ({ companyName }) => companyName)
-      ),
-    ]);
-  };
-
-  const updateSemesterFullName = (fullName) => {
-    setSemesterFullName(fullName);
-  };
-
-  const isNotARenderedAttribute = (identifier) => {
-    return !["id", "companyName", "description"].includes(identifier);
-  };
+  }, [lastRemovedOfferId, semesterFullName]);
 
   return (
-    <>
-      <Grid container>
-        <SemesterSelect updateSemesterFullName={updateSemesterFullName} />
-        <List
-          sx={{
-            width: "100vw",
-            pt: 5,
-          }}
-        >
-          {companies.map((name, key) => {
-            return (
-              <Paper
-                key={key}
-                className={name}
-                elevation={15}
-                sx={{
-                  mx: "5vw",
-                  mb: "5vh",
-                  px: "1vw",
-                  backgroundColor: "rgba(135, 135, 135, 0.03)",
-                  py: "1vw",
-                  overflow: "auto",
-                  borderRadius: "10px",
-                  ":hover": {
-                    boxShadow: "0px 0px 15px 1px rgba(125, 51, 235, 0.8)",
-                  },
-                }}
-              >
-                <Typography
-                  key={key}
-                  variant="h4"
-                  sx={{
-                    display: "inline-block",
-                    p: "1rem",
-                    color: "white",
-                    pt: 2,
-                    borderRadius: "15px",
-                    backgroundColor: "rgba(0, 0, 0, 0.2)",
-                    mb: 2,
-                  }}
-                >
-                  {name}
-                </Typography>
-                {unvalidatedOffers.map((offer, key) => {
-                  if (name === offer.companyName) {
-                    return (
-                      <Tooltip
-                        key={key}
-                        title="Voir les détails"
-                        placement="top"
-                        followCursor={true}
-                      >
-                        <ListItemButton
-                          key={key}
-                          sx={{
-                            margin: "auto",
-                            boxShadow: "5px 5px 5px rgba(0, 0, 0, 0.5)",
-                            backgroundColor: "rgba(0, 0, 0, 0.1)",
-                            ":hover": {
-                              boxShadow: 5,
-                              backgroundColor: "rgba(50, 50, 50, 0.2)",
-                            },
-                            my: 1,
-                          }}
-                          onClick={() => {
-                            dialogDispatch({
-                              type: "OPEN",
-                              dialogName: "internshipOfferDialogValidation",
-                            });
-                            setSelectedOffer(offer);
-                          }}
-                        >
-                          {Object.keys(offer).map((identifier, key) => {
-                            return (
-                              <React.Fragment key={key}>
-                                {isNotARenderedAttribute(identifier) && (
-                                  <Tooltip
-                                    key={key}
-                                    title={listLabels[key]}
-                                    sx={{
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                    }}
-                                  >
-                                    <ListItem key={key}>
-                                      {Object.values(offer)[key]}
-                                      {identifier.includes("Salary") && "$"}
-                                    </ListItem>
-                                  </Tooltip>
-                                )}
-                              </React.Fragment>
-                            );
-                          })}
-                        </ListItemButton>
-                      </Tooltip>
-                    );
-                  }
-                })}
-              </Paper>
-            );
-          })}
-        </List>
-      </Grid>
-      <InternshipOfferDialog
-        offer={selectedOffer}
-        unvalidatedOffers={unvalidatedOffers}
-        setUnvalidatedOffers={setUnvalidatedOffers}
-        removeInternshipOffer={removeInternshipOffer}
-      />
-    </>
+    <Stack mt={5} alignItems="center" justifyContent="center">
+      {internshipOffers == null ? (
+        <CircularProgress sx={{ mt: 10, mb: 5 }} />
+      ) : internshipOffers.length === 0 ? (
+        <Typography color={"text.primary"}>
+          Aucune offre disponible pour l'instant.
+        </Typography>
+      ) : (
+        internshipOffers.map((offer, i) => (
+          <motion.div
+            style={{ width: "100%", height: "100%", opacity: 0 }}
+            animate={{ opacity: [0, 1] }}
+            transition={{
+              duration: 0.4,
+              delay: (i + 1) * 0.2,
+            }}
+            key={i}
+          >
+            <OfferView
+              key={i}
+              {...offer}
+              buttons={[
+                <OfferValidationButton
+                  offerId={offer.id}
+                  isValid={true}
+                  setLastRemovedOfferId={setLastRemovedOfferId}
+                />,
+                <OfferValidationButton
+                  offerId={offer.id}
+                  isValid={false}
+                  setLastRemovedOfferId={setLastRemovedOfferId}
+                />,
+              ]}
+            />
+          </motion.div>
+        ))
+      )}
+    </Stack>
   );
 };
 

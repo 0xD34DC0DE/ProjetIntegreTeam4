@@ -1,13 +1,10 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipOfferCreationDto;
-import com.team4.backend.dto.InternshipOfferDetailedDto;
+import com.team4.backend.dto.InternshipOfferDetailsDto;
 import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
-import com.team4.backend.exception.InternshipOfferNotFoundException;
-import com.team4.backend.exception.InvalidPageRequestException;
-import com.team4.backend.exception.UnauthorizedException;
-import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.exception.*;
 import com.team4.backend.model.InternshipOffer;
 import com.team4.backend.model.enums.SemesterName;
 import com.team4.backend.service.InternshipOfferService;
@@ -26,6 +23,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Set;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -80,9 +78,91 @@ public class InternshipOfferControllerTest {
     }
 
     @Test
+    void shouldChangeInternshipOfferExclusivity() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.changeInternshipOfferExclusivity(any(), any())).thenReturn(Mono.just(internshipOffer));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/internshipOffer/changeInternshipOfferExclusivity")
+                                .queryParam("id", internshipOffer.getId())
+                                .queryParam("isExclusive", true)
+                                .build())
+                .exchange()
+                //ASSERT
+                .expectStatus().isNoContent();
+    }
+
+    @Test
+    void shouldNotChangeInternshipOfferExclusivityWhenItIsNotFound() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.changeInternshipOfferExclusivity(any(), any())).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/internshipOffer/changeInternshipOfferExclusivity")
+                                .queryParam("id", internshipOffer.getId())
+                                .queryParam("isExclusive", true)
+                                .build())
+                .exchange()
+                //ASSERT
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    void shouldNotChangeInternshipOfferExclusivityWhenItIsNotValidated() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferService.changeInternshipOfferExclusivity(any(), any())).thenReturn(Mono.error(ForbiddenActionException::new));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri(uriBuilder ->
+                        uriBuilder
+                                .path("/internshipOffer/changeInternshipOfferExclusivity")
+                                .queryParam("id", internshipOffer.getId())
+                                .queryParam("isExclusive", true)
+                                .build())
+                .exchange()
+                //ASSERT
+                .expectStatus().isForbidden();
+    }
+
+    @Test
+    void shouldAddExclusiveOfferToStudents() {
+        //ARRANGE
+        Set<String> emails = Set.of("test@gmail.com","test2@gmail.com");
+        String id = "id_test";
+
+        when(internshipOfferService.addExclusiveOfferToStudents(any(),any())).thenReturn(Mono.just(2L));
+
+        //ACT
+        webTestClient
+                .patch()
+                .uri("/internshipOffer/addExclusiveOfferToStudents/" + id)
+                .bodyValue(emails)
+                .exchange()
+                //ASSERT
+                .expectStatus().isNoContent()
+                .expectBody(String.class);
+    }
+
+    @Test
     void shouldValidateInternshipOffer() {
         //ARRANGE
-        InternshipOfferDetailedDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
+        InternshipOfferDetailsDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
         when(internshipOfferService.validateInternshipOffer(internshipOfferDto.getId(), true)).thenReturn(Mono.just(internshipOffer));
@@ -104,27 +184,9 @@ public class InternshipOfferControllerTest {
     }
 
     @Test
-    void shouldGetNotYetValidatedInternshipOffer() {
-        //ARRANGE
-        String semesterFullName = SemesterName.WINTER + "-" + LocalDateTime.now().getYear();
-        Flux<InternshipOffer> internshipOfferFlux = InternshipOfferMockData.getNonValidatedInternshipOffers();
-
-        when(internshipOfferService.getNotYetValidatedInternshipOffers(semesterFullName)).thenReturn(internshipOfferFlux);
-
-        //ACT
-        webTestClient
-                .get()
-                .uri("/internshipOffer/getNotYetValidatedInternshipOffers/" + semesterFullName)
-                .exchange()
-                //ASSERT
-                .expectStatus().isOk()
-                .expectBodyList(InternshipOfferDetailedDto.class);
-    }
-
-    @Test
     void shouldNotValidateInternshipOffer() {
         //ARRANGE
-        InternshipOfferDetailedDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
+        InternshipOfferDetailsDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
 
         when(internshipOfferService.validateInternshipOffer(internshipOfferDto.getId(), true)).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
 
@@ -142,6 +204,42 @@ public class InternshipOfferControllerTest {
                 //ASSERT
                 .expectStatus().isNotFound()
                 .expectBody(String.class);
+    }
+
+    @Test
+    void shouldGetNotYetExclusiveInternshipOffers() {
+        //ARRANGE
+        String semesterFullName = SemesterName.WINTER + "-" + LocalDateTime.now().getYear();
+        Flux<InternshipOffer> internshipOfferFlux = InternshipOfferMockData.getNonValidatedInternshipOffers();
+
+        when(internshipOfferService.getAllValidatedOffers(semesterFullName)).thenReturn(internshipOfferFlux);
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/internshipOffer/getAllValidatedOffers/" + semesterFullName)
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(InternshipOfferDetailsDto.class);
+    }
+
+    @Test
+    void shouldGetNotYetValidatedInternshipOffer() {
+        //ARRANGE
+        String semesterFullName = SemesterName.WINTER + "-" + LocalDateTime.now().getYear();
+        Flux<InternshipOffer> internshipOfferFlux = InternshipOfferMockData.getNonValidatedInternshipOffers();
+
+        when(internshipOfferService.getNotYetValidatedInternshipOffers(semesterFullName)).thenReturn(internshipOfferFlux);
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/internshipOffer/getNotYetValidatedInternshipOffers/" + semesterFullName)
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(InternshipOfferDetailsDto.class);
     }
 
     @Test

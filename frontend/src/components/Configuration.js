@@ -1,19 +1,20 @@
 import {
   AccountCircleOutlined,
-  DashboardOutlined,
-  SettingsOutlined,
-  PeopleAltOutlined,
-  HomeOutlined,
-  FindInPageOutlined,
-  SearchOutlined,
-  FileUploadOutlined,
-  FactCheckOutlined,
   AddCircleOutlineOutlined,
-  CheckOutlined,
-  SupervisedUserCircleOutlined,
-  FormatListBulletedOutlined,
   AssignmentSharp,
+  DashboardOutlined,
+  FactCheckOutlined,
+  FileUploadOutlined,
+  FindInPageOutlined,
+  FormatListBulletedOutlined,
+  HomeOutlined,
+  ManageSearch,
+  PeopleAltOutlined,
+  SearchOutlined,
+  SettingsOutlined,
+  SupervisedUserCircleOutlined,
 } from "@mui/icons-material";
+import { Grid, Typography } from "@mui/material";
 
 export const sidebarList = [
   {
@@ -47,18 +48,6 @@ export const sidebarList = [
     description: "",
     explication: [
       "Entrez les informations concernant l'offre que vous souhaitez ajouter",
-    ],
-  },
-  {
-    id: 3,
-    label: "Valider les offres de stage",
-    role: ["INTERNSHIP_MANAGER"],
-    icon: <CheckOutlined sx={{ mr: 1 }} />,
-    isDialog: false,
-    description: "Liste d'offres de stage en attente de validation",
-    explication: [
-      "Consultez toutes les offres de stages en attente de validation",
-      "Visualisez les informations du stage que vous sélectionnez",
     ],
   },
   {
@@ -148,6 +137,18 @@ export const sidebarList = [
     description: "Consultation des rapports",
     explication: [
       "Consultez les rapports concernants divers informations sur l'état des offres de stage, des étudiants et des tout ce qui tourne autour",
+    ],
+  },
+  {
+    id: 15,
+    label: "Gérer les offres de stage",
+    role: ["INTERNSHIP_MANAGER"],
+    icon: <ManageSearch sx={{ mr: 1 }} />,
+    isDialog: false,
+    description: "Valider les offres de stage et les rendre exclusives",
+    explication: [
+      "Valider les offres de stage des moniteurs.",
+      "Assigner des élèves à des offres de stage exclusives",
     ],
   },
 ];

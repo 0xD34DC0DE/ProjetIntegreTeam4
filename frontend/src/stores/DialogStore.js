@@ -14,6 +14,7 @@ export const dialogContextinitialState = {
   evaluationDialogPreview: { visible: false, data: null },
   cvRejectionExplanationDialog: { visible: false, data: null },
   signContractDialog: { visible: false, data: null },
+  exclusiveOfferDialog: { visible: false, data: null },
 };
 
 const DialogStore = ({ children }) => {

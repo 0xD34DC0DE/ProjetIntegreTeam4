@@ -1,6 +1,5 @@
 import { Container, Grid, Paper, Typography } from "@mui/material";
 import React, { useEffect } from "react";
-import OfferApplicationButton from "./OfferApplicationButton";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 
@@ -13,15 +12,12 @@ const OfferView = ({
   minSalary,
   maxSalary,
   description,
-  hasAlreadyApplied,
-  id,
+   hasAlreadyApplied,
+   id,
+  buttons,
 }) => {
   const theme = useTheme();
   const matchesBreakpointLg = useMediaQuery(theme.breakpoints.down("lg"));
-
-  useEffect(() => {
-    console.log(matchesBreakpointLg);
-  }, [matchesBreakpointLg]);
 
   return (
     <Container sx={{ maxWidth: "md" }}>
@@ -73,7 +69,10 @@ const OfferView = ({
             textAlign={matchesBreakpointLg ? "start" : "end"}
             mt={matchesBreakpointLg ? 1 : 0}
           >
-            <OfferApplicationButton disabled={hasAlreadyApplied} offerId={id} />
+            {buttons &&
+            buttons.map((button) => {
+              return button;
+            })}
           </Grid>
         </Grid>
         <Grid container alignContent="center">

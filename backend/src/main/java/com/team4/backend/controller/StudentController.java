@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.security.Principal;
@@ -52,6 +53,13 @@ public class StudentController {
     public Mono<StudentProfileDto> getStudentProfile(Principal principal) {
         return studentService.findByEmail(UserSessionService.getLoggedUserEmail(principal))
                 .map(StudentMapper::toProfileDto);
+    }
+
+    @GetMapping("/getAllStudentNotContainingExclusiveOffer/{offerId}")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
+    public Flux<StudentDetailsDto> getAllStudentNotContainingExclusiveOffer(@PathVariable String offerId) {
+        return studentService.getAllStudentNotContainingExclusiveOffer(offerId)
+                .map(StudentMapper::toDto);
     }
 
 }

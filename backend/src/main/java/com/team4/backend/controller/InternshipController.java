@@ -1,14 +1,13 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipCreationDto;
-import com.team4.backend.dto.InternshipDetailedDto;
+import com.team4.backend.dto.InternshipDetailsDto;
 import com.team4.backend.mapping.InternshipMapper;
 import com.team4.backend.service.InternshipService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Mono;
 
 @RestController
@@ -29,7 +28,7 @@ public class InternshipController {
 
     @GetMapping("/{studentEmail}")
     @PreAuthorize("hasAnyAuthority('SUPERVISOR')")
-    public Mono<InternshipDetailedDto> getInternshipByStudentEmail(@PathVariable("studentEmail") String studentEmail) {
+    public Mono<InternshipDetailsDto> getInternshipByStudentEmail(@PathVariable("studentEmail") String studentEmail) {
         return internshipService.getInternshipByEmail(studentEmail)
                 .map(InternshipMapper::toDetailedDto);
     }

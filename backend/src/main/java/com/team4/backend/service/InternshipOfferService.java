@@ -8,6 +8,7 @@ import com.team4.backend.exception.InternshipOfferNotFoundException;
 import com.team4.backend.exception.InvalidPageRequestException;
 import com.team4.backend.exception.UnauthorizedException;
 import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.exception.*;
 import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.model.*;
 import com.team4.backend.model.enums.NotificationType;
@@ -16,10 +17,12 @@ import com.team4.backend.util.ValidatingPageRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.util.function.Tuple2;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.util.List;
 
 @Service
 public class InternshipOfferService {
@@ -122,6 +125,37 @@ public class InternshipOfferService {
                                 return Mono.just(internshipOfferDto);
                             });
                 });
+    }
+
+    public Mono<InternshipOffer> changeInternshipOfferExclusivity(String id, Boolean isExclusive) {
+        return findInternshipOfferById(id)
+                .filter(InternshipOffer::getIsValidated)
+                .switchIfEmpty(Mono.error(new ForbiddenActionException("The offer has to be valid!")))
+                .map(internshipOffer -> {
+
+                    internshipOffer.setIsExclusive(isExclusive);
+
+                    if (!isExclusive)
+                        studentService.getAllStudentContainingExclusiveOffer(id)
+                                .subscribe(student -> {
+                                    student.getExclusiveOffersId().removeIf(id::equals);
+                                    studentService.save(student).subscribe();
+                                });
+
+                    return internshipOffer;
+                }).flatMap(internshipOfferRepository::save);
+    }
+
+    public Mono<Long> addExclusiveOfferToStudents(String id, Set<String> emails) {
+        return internshipOfferRepository.existsByIdAndIsExclusiveTrue(id)
+                .filter(exist -> exist)
+                .switchIfEmpty(Mono.error(new ForbiddenActionException("You can't add student to an non existent/exclusive offer")))
+                .flatMap(exist -> studentService.findAllByEmails(emails)
+                        .map(student -> {
+                            student.getExclusiveOffersId().add(id);
+                            return studentService.save(student).subscribe();
+                        }).count()
+                );
     }
 
     public Flux<InternshipOffer> getNotYetValidatedInternshipOffers(String semesterFullName) {
