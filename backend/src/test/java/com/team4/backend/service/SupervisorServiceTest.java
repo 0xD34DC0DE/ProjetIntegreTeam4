@@ -257,7 +257,7 @@ public class SupervisorServiceTest {
         //ASSERT
         StepVerifier.create(response)
                 .assertNext(s -> {
-                    assertEquals(s.size(), 3);
+                    assertEquals(2, s.size());
                 })
                 .verifyComplete();
     }
