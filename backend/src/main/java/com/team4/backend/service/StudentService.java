@@ -57,6 +57,10 @@ public class StudentService {
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find student with email" + email)));
     }
 
+    public Flux<Student> findAll() {
+        return studentRepository.findAll();
+    }
+
     public Flux<Student> findAllByEmails(Set<String> emails) {
         return studentRepository.findAllByEmails(emails);
     }
@@ -122,6 +126,14 @@ public class StudentService {
 
     public Flux<Student> getAll() {
         return studentRepository.findAllByRole("STUDENT");
+    }
+
+    public Flux<Student> getAllStudentNotContainingExclusiveOffer(String offerId) {
+        return studentRepository.findAllByRoleAndExclusiveOffersIdNotContains("STUDENT", offerId);
+    }
+
+    public Flux<Student> getAllStudentContainingExclusiveOffer(String offerId) {
+        return studentRepository.findAllByRoleAndExclusiveOffersIdContains("STUDENT", offerId);
     }
 
     public Flux<Student> getAllStudentsWithNoCv() {

@@ -1,7 +1,7 @@
 package com.team4.backend.mapping;
 
+import com.team4.backend.dto.InternshipDetailsDto;
 import com.team4.backend.dto.InternshipCreationDto;
-import com.team4.backend.dto.InternshipDetailedDto;
 import com.team4.backend.dto.InternshipDto;
 import com.team4.backend.model.Internship;
 import com.team4.backend.testdata.InternshipMockData;
@@ -14,17 +14,17 @@ public class InternshipMapperTest {
     @Test
     void mapInternshipDtoToEntity() {
         //ARRANGE
-        InternshipDetailedDto internshipDetailedDto = InternshipMockData.getInternshipDetailedDto();
+        InternshipDetailsDto internshipDetailsDto = InternshipMockData.getInternshipDetailedDto();
 
         //ACT
-        Internship internship = InternshipMapper.toEntity(internshipDetailedDto);
+        Internship internship = InternshipMapper.toEntity(internshipDetailsDto);
 
         //ASSERT
-        assertEquals(internshipDetailedDto.getStudentEmail(), internship.getStudentEmail());
-        assertEquals(internshipDetailedDto.getInternshipManagerEmail(), internship.getInternshipManagerEmail());
-        assertEquals(internshipDetailedDto.getMonitorEmail(), internship.getMonitorEmail());
-        assertEquals(internshipDetailedDto.getStartDate(), internship.getBeginningDate());
-        assertEquals(internshipDetailedDto.getEndDate(), internship.getEndingDate());
+        assertEquals(internshipDetailsDto.getStudentEmail(), internship.getStudentEmail());
+        assertEquals(internshipDetailsDto.getInternshipManagerEmail(), internship.getInternshipManagerEmail());
+        assertEquals(internshipDetailsDto.getMonitorEmail(), internship.getMonitorEmail());
+        assertEquals(internshipDetailsDto.getStartDate(), internship.getBeginningDate());
+        assertEquals(internshipDetailsDto.getEndDate(), internship.getEndingDate());
     }
 
     @Test
@@ -65,14 +65,14 @@ public class InternshipMapperTest {
         Internship internship = InternshipMockData.getInternship();
 
         //ACT
-        InternshipDetailedDto internshipDetailedDto = InternshipMapper.toDetailedDto(internship);
+        InternshipDetailsDto internshipDetailsDto = InternshipMapper.toDetailedDto(internship);
 
         //ASSERT
-        assertEquals(internshipDetailedDto.getStudentEmail(), internship.getStudentEmail());
-        assertEquals(internshipDetailedDto.getInternshipManagerEmail(), internship.getInternshipManagerEmail());
-        assertEquals(internshipDetailedDto.getMonitorEmail(), internship.getMonitorEmail());
-        assertEquals(internshipDetailedDto.getStartDate(), internship.getBeginningDate());
-        assertEquals(internshipDetailedDto.getEndDate(), internship.getEndingDate());
+        assertEquals(internshipDetailsDto.getStudentEmail(), internship.getStudentEmail());
+        assertEquals(internshipDetailsDto.getInternshipManagerEmail(), internship.getInternshipManagerEmail());
+        assertEquals(internshipDetailsDto.getMonitorEmail(), internship.getMonitorEmail());
+        assertEquals(internshipDetailsDto.getStartDate(), internship.getBeginningDate());
+        assertEquals(internshipDetailsDto.getEndDate(), internship.getEndingDate());
     }
 
 }

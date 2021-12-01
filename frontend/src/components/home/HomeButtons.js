@@ -6,7 +6,7 @@ import { DialogContext } from "../../stores/DialogStore";
 const HomeButtons = () => {
   const [dialog, dialogDispatch] = useContext(DialogContext);
   const buttonsInfo = [
-    { dialog: "loginDialog", text: "Se Connecter" },
+    { dialog: "loginDialog", text: "Se connecter" },
     { dialog: "registerDialog", text: "S'enregistrer" },
   ];
 

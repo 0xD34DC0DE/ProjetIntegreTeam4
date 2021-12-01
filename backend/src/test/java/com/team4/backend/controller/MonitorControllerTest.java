@@ -1,10 +1,11 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.MonitorDetailsDto;
+import com.team4.backend.dto.MonitorProfileDto;
 import com.team4.backend.exception.UserAlreadyExistsException;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Monitor;
 import com.team4.backend.service.MonitorService;
-import com.team4.backend.service.UserService;
 import com.team4.backend.testdata.MonitorMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,13 +28,10 @@ import static org.mockito.Mockito.when;
 public class MonitorControllerTest {
 
     @Autowired
-    private WebTestClient webTestClient;
+    WebTestClient webTestClient;
 
     @MockBean
     MonitorService monitorService;
-
-    @MockBean
-    UserService userService;
 
     @Test
     public void shouldCreateMonitor() {
@@ -80,6 +78,37 @@ public class MonitorControllerTest {
                 .expectStatus().isEqualTo(HttpStatus.CONFLICT)
                 .expectBody(String.class);
 
+    }
+
+    @Test
+    void shouldGetProfile() {
+        //ARRANGE
+        when(monitorService.findByEmail(any())).thenReturn(Mono.just(MonitorMockData.getMockMonitor()));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/monitor/getProfile")
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBody(MonitorProfileDto.class);
+    }
+
+    @Test
+    void shouldNotGetProfile() {
+        //ARRANGE
+        when(monitorService.findByEmail(any())).thenReturn(Mono.error(UserNotFoundException::new));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/monitor/getProfile")
+                .exchange()
+                //ASSERT
+                .expectStatus()
+                .isNotFound()
+                .expectBody();
     }
 
 }

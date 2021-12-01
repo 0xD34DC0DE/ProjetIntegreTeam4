@@ -1,4 +1,4 @@
-import React, { useState,useContext } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import { Typography, Select, MenuItem } from "@mui/material";
 import { motion } from "framer-motion";
@@ -58,6 +58,7 @@ const SelectStudentState = ({
           boxShadow: 3,
           textAlign: "center",
           m: 1,
+          mt: 2,
         }}
         labelId="demo-simple-select-label"
         id="demo-simple-select"
@@ -83,7 +84,7 @@ const SelectStudentState = ({
             variant="subtitle1"
             sx={{ color: "green", textAlign: "center", m: 1 }}
           >
-            {"STATUT MODIFIÉE"}
+            STATUT MODIFIÉE
             <PublishedWithChangesIcon />
           </Typography>
         </motion.div>

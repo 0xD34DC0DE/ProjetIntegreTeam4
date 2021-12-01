@@ -20,7 +20,7 @@ import {
   Tooltip,
   Typography,
 } from "@mui/material";
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { roles, topbarMenuList } from "./Configuration";
 import NotificationList from "./Notification/NotificationList";
@@ -36,6 +36,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
   const [notificationCount, setNotificationCount] = useState(0);
   const [dialog, dialogDispatch] = useContext(DialogContext);
   const [selection, selectionDispatch] = useContext(SelectionContext);
+  const [profileImage, setProfileImage] = useState(undefined);
 
   const handleSidebarClick = () => {
     setSidebarOpen(!sidebarOpen);
@@ -55,6 +56,12 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
     setNotificationMenuOpen(false);
   };
 
+  useEffect(async () => {
+    if (userInfo === undefined) return;
+    let profileImage = await userInfo.profileImage;
+    setProfileImage(profileImage);
+  }, [userInfo]);
+
   return (
     <Box>
       <AppBar sx={{ position: "fixed" }}>
@@ -62,7 +69,14 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
           {userInfo.loggedIn && (
             <IconButton
               onClick={handleSidebarClick}
-              sx={{ color: "text.primary" }}
+              sx={{
+                color: "text.primary",
+                borderRadius: "20%",
+                ":hover": {
+                  backgroundColor: "rgba(125, 51, 235, 0.8) !important",
+                },
+                p: 0.75,
+              }}
             >
               {sidebarOpen ? (
                 <ArrowBackIosOutlinedIcon />
@@ -82,9 +96,17 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                     notificationCount <= 5 ? notificationCount : "+5"
                   }
                   color="primary"
+                  overlap="circular"
                 >
                   <NotificationsNoneOutlinedIcon
-                    sx={{ color: "text.primary", px: 0, mx: 0 }}
+                    sx={{
+                      color: "text.primary",
+                      py: 0.75,
+                      px: 0.75,
+
+                      borderRadius: "20%",
+                      ":hover": { backgroundColor: "rgba(125, 51, 235, 0.8)" },
+                    }}
                   />
                 </Badge>
               )}
@@ -93,7 +115,15 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
           <Tooltip title="Menu">
             <Button ref={menuAnchorRef} onClick={handleMenuClick}>
               <PersonOutlineOutlinedIcon
-                sx={{ color: "text.primary", px: 0, mx: 0 }}
+                sx={{
+                  color: "text.primary",
+                  px: 0,
+                  mx: 0,
+                  py: 0.75,
+                  px: 0.75,
+                  borderRadius: "20%",
+                  ":hover": { backgroundColor: "rgba(125, 51, 235, 0.8)" },
+                }}
               />
               <Menu
                 open={menuOpen}
@@ -106,7 +136,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                   sx: {
                     backgroundColor: "primary.main",
                     pr: 1,
-                    pl: 1,
+                    width: "250px",
                   },
                   square: true,
                   elevation: 3,
@@ -118,17 +148,18 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                         <Grid container flexDirection="row" sx={{ mb: 1 }}>
                           <Grid item md={2}>
                             <Avatar
+                              src={
+                                profileImage !== undefined ? profileImage : ""
+                              }
                               sx={{
-                                width: 40,
-                                height: 40,
+                                width: 50,
+                                height: 50,
                                 mb: 2,
                                 p: 0,
                                 m: 0,
                                 ml: 1,
                               }}
-                            >
-                              AA
-                            </Avatar>
+                            ></Avatar>
                           </Grid>
                           <Grid item md={10}>
                             <Grid
@@ -167,6 +198,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                         topbarMenuList.map((item, key) => {
                           return (
                             <MenuItem
+                              disabled={item.disabled}
                               key={key}
                               onClick={() => {
                                 selectionDispatch(item);
@@ -203,7 +235,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                           sx={{
                             ":hover": {
                               backgroundColor: "rgba(100, 100, 100, 0.4)",
-                              color: "red",
+                              color: "rgba(255, 30, 30, 1)",
                             },
                             pl: 1,
                           }}

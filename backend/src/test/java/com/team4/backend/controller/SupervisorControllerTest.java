@@ -1,6 +1,7 @@
 package com.team4.backend.controller;
 
 import com.team4.backend.dto.SupervisorDetailsDto;
+import com.team4.backend.dto.SupervisorProfileDto;
 import com.team4.backend.exception.DuplicateEntryException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
@@ -203,7 +204,38 @@ public class SupervisorControllerTest {
                 //ASSERT
                 .expectStatus()
                 .isNotFound()
-                .expectBody(SupervisorDetailsDto.class);
+                .expectBody();
+    }
+
+    @Test
+    void shouldGetProfile() {
+        //ARRANGE
+        when(supervisorService.getSupervisor(any())).thenReturn(Mono.just(SupervisorMockData.getMockSupervisor()));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/supervisor/getProfile")
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBody(SupervisorProfileDto.class);
+    }
+
+    @Test
+    void shouldNotGetProfile() {
+        //ARRANGE
+        when(supervisorService.getSupervisor(any())).thenReturn(Mono.error(UserNotFoundException::new));
+
+        //ACT
+        webTestClient
+                .get()
+                .uri("/supervisor/getProfile")
+                .exchange()
+                //ASSERT
+                .expectStatus()
+                .isNotFound()
+                .expectBody(SupervisorProfileDto.class);
     }
 
 }

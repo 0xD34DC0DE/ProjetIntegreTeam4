@@ -1,6 +1,7 @@
 import { Container, Grid, Paper, Typography } from "@mui/material";
-import React from "react";
-import OfferApplicationButton from "./OfferApplicationButton";
+import React, { useEffect } from "react";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { useTheme } from "@mui/material/styles";
 
 const OfferView = ({
   title,
@@ -11,9 +12,13 @@ const OfferView = ({
   minSalary,
   maxSalary,
   description,
-  hasAlreadyApplied,
-  id,
+   hasAlreadyApplied,
+   id,
+  buttons,
 }) => {
+  const theme = useTheme();
+  const matchesBreakpointLg = useMediaQuery(theme.breakpoints.down("lg"));
+
   return (
     <Container sx={{ maxWidth: "md" }}>
       <Paper
@@ -24,18 +29,10 @@ const OfferView = ({
           backgroundColor: "rgba(135, 135, 135, 0.05)",
           borderRadius: "10px",
           boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
-          ":hover": {
-            boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
-          }
         }}
         elevation={5}
       >
-        <Grid
-          container
-          sx={{ pt: 2, pb: 2 }}
-          rowSpacing={1}
-          alignContent="center"
-        >
+        <Grid container sx={{ pt: 2, pb: 2 }} rowSpacing={1}>
           <Grid item xl={10} lg={10} md={12} sm={12} xs={12}>
             <Typography type="title" variant="h4">
               {companyName}
@@ -62,8 +59,20 @@ const OfferView = ({
               Taux horaire: {minSalary}$ - {maxSalary}$
             </Typography>
           </Grid>
-          <Grid item xl={2} lg={2} md={3} sm={6} xs={12}>
-            <OfferApplicationButton disabled={hasAlreadyApplied} offerId={id} />
+          <Grid
+            item
+            xl={2}
+            lg={2}
+            md={3}
+            sm={6}
+            xs={12}
+            textAlign={matchesBreakpointLg ? "start" : "end"}
+            mt={matchesBreakpointLg ? 1 : 0}
+          >
+            {buttons &&
+            buttons.map((button) => {
+              return button;
+            })}
           </Grid>
         </Grid>
         <Grid container alignContent="center">

@@ -63,11 +63,17 @@ const CvValidationDialog = ({ id, removeCv }) => {
       <Button
         size="medium"
         variant="contained"
-        color="success"
-        sx={{ mb: "6px" }}
+        sx={{
+          mb: "6px",
+          backgroundColor: "rgba(125, 51, 235, 0.8)",
+          width: "100%",
+          ":hover": {
+            backgroundColor: "rgba(85, 11, 185, 0.8)",
+          },
+        }}
         onClick={handleOpen}
       >
-        VALIDER <ApprovalIcon></ApprovalIcon>
+        VALIDER <ApprovalIcon sx={{ ml: 1 }} />
       </Button>
       <Dialog
         open={open}
@@ -76,7 +82,7 @@ const CvValidationDialog = ({ id, removeCv }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Validation du C.V. étudiant(e)"}
+          Validation du C.V. étudiant(e)
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">

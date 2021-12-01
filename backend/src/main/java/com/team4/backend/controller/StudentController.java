@@ -63,5 +63,12 @@ public class StudentController {
     public Flux<UserDto> getAllStudentsNoSupervisor() {
         return supervisorService.getAllStudentsNoSupervisor();
     }
+    
+    @GetMapping("/getAllStudentNotContainingExclusiveOffer/{offerId}")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
+    public Flux<StudentDetailsDto> getAllStudentNotContainingExclusiveOffer(@PathVariable String offerId) {
+        return studentService.getAllStudentNotContainingExclusiveOffer(offerId)
+                .map(StudentMapper::toDto);
+    }
 
 }

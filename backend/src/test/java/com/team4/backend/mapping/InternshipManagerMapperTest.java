@@ -1,8 +1,12 @@
 package com.team4.backend.mapping;
 
 import com.team4.backend.dto.InternshipManagerDetailsDto;
+import com.team4.backend.dto.InternshipManagerProfileDto;
+import com.team4.backend.dto.MonitorProfileDto;
 import com.team4.backend.model.InternshipManager;
+import com.team4.backend.model.Monitor;
 import com.team4.backend.testdata.InternshipManagerMockData;
+import com.team4.backend.testdata.MonitorMockData;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -45,6 +49,23 @@ public class InternshipManagerMapperTest {
         assertEquals(internshipManagerDto.getLastName(), internshipManager.getLastName());
         assertEquals(internshipManagerDto.getPhoneNumber(), internshipManager.getPhoneNumber());
         assertEquals(internshipManagerDto.getRegistrationDate(), internshipManager.getRegistrationDate());
+    }
+
+    @Test
+    void mapEntityToProfileDto() {
+        //ARRANGE
+        InternshipManager entity = InternshipManagerMockData.getInternshipManager();
+
+        //ACT
+        InternshipManagerProfileDto dto = InternshipManagerMapper.toProfileDto(entity);
+
+        //ASSERT
+        assertEquals(entity.getId(), dto.getId());
+        assertEquals(entity.getEmail(), dto.getEmail());
+        assertEquals(entity.getFirstName(), dto.getFirstName());
+        assertEquals(entity.getLastName(), dto.getLastName());
+        assertEquals(entity.getPhoneNumber(), dto.getPhoneNumber());
+        assertEquals(entity.getRegistrationDate(), dto.getRegistrationDate());
     }
 
 }

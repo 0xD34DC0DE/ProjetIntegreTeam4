@@ -11,6 +11,9 @@ import { roles } from "./Configuration";
 import OfferForm from "./OfferForm";
 import OfferViews from "./OfferViews";
 import StudentDashBoard from "./Dashboard/StudentDashboard";
+import SupervisorDashBoard from "./Dashboard/SupervisorDashBoard";
+import MonitorDashBoard from "./Dashboard/MonitorDashBoard";
+import InternshipManagerDashboard from "./Dashboard/InternshipManagerDashboard";
 import InternshipOfferValidation from "./InternshipOfferValidation";
 import AssignedStudentSupervisorView from "./AssignedStudentSupervisorView";
 import StudentEvaluationForm from "./Evaluation/End/StudentEvaluationForm";
@@ -21,17 +24,18 @@ import { SelectionContext } from "../stores/SelectionStore";
 import HomeRoles from "./Home/HomeRoles";
 import Home from "./Home/Home";
 import ListUser from "./ListUser";
+import InternshipManagerOfferViews from "./InternshipManagerOfferViews";
+import ProfileImageUpload from "./ProfileImageUpload";
 
 const Content = ({ isSidebarOpen }) => {
   const [selection] = useContext(SelectionContext);
   const [userInfo] = useContext(UserInfoContext);
 
-  const displayComponents = (role) => {
+  const showRoleBasedComponents = (role) => {
     switch (role) {
       case "STUDENT":
         return (
           <>
-            {selection.id === 0 && <HomeRoles />}
             {selection.id === 7 && <StudentDashBoard />}
             {selection.id === 5 && <UploadCV />}
             {selection.id === 4 && <OfferViews />}
@@ -40,19 +44,18 @@ const Content = ({ isSidebarOpen }) => {
       case "INTERNSHIP_MANAGER":
         return (
           <>
-            {selection.id === 0 && <HomeRoles />}
             {selection.id === 1 && <ListCvInternshipManagerView />}
             {selection.id === 3 && <InternshipOfferValidation />}
-            {/* {selection.id === 11 && <ListUserDroppable role="SUPERVISOR" />}
-            {selection.id === 11 && <ListUserDraggable role="STUDENT" />} */}
+            {selection.id === 7 && <InternshipManagerDashboard />}
             {selection.id === 11 && <ListUser />}
             {selection.id === 14 && <ListReport />}
+            {selection.id === 15 && <InternshipManagerOfferViews />}
           </>
         );
       case "SUPERVISOR":
         return (
           <>
-            {selection.id === 0 && <HomeRoles />}
+            {selection.id === 7 && <SupervisorDashBoard />}
             {selection.id === 10 && <AssignedStudentSupervisorView />}
             {selection.id === 13 && <StudentEvaluationMidForm />}
           </>
@@ -60,14 +63,23 @@ const Content = ({ isSidebarOpen }) => {
       case "MONITOR":
         return (
           <>
-            {selection.id === 0 && <HomeRoles />}
             {selection.id === 6 && <ListStudentApplying />}
+            {selection.id === 7 && <MonitorDashBoard />}
             {selection.id === 12 && <StudentEvaluationForm />}
           </>
         );
       default:
         break;
     }
+  };
+
+  const showComponents = () => {
+    return (
+      <>
+        {selection.id === 9 && <ProfileImageUpload />}
+        {selection.id === 0 && <HomeRoles />}
+      </>
+    );
   };
 
   return (
@@ -82,7 +94,6 @@ const Content = ({ isSidebarOpen }) => {
         width: "100%",
       }}
     >
-      {!userInfo.loggedIn && <Home />}
       {userInfo.loggedIn && selection.id !== undefined && (
         <Box
           sx={{ transition: "margin 300ms ease", ml: isSidebarOpen ? 36 : 0 }}
@@ -92,9 +103,11 @@ const Content = ({ isSidebarOpen }) => {
             role={roles[userInfo.role]}
             description={selection.description}
           />
-          {displayComponents(userInfo.role)}
+          {showRoleBasedComponents(userInfo.role)}
+          {showComponents()}
         </Box>
       )}
+      {!userInfo.loggedIn && <Home />}
       <Register></Register>
       <Login></Login>
       <OfferForm />

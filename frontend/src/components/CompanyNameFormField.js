@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import TextFormField from "./TextFormField";
 
-const CompanyNameFormField = ({ valid, onFieldChange, step, visibleStep }) => {
+const CompanyNameFormField = ({
+  valid,
+  onFieldChange,
+  step,
+  visibleStep,
+  handleFieldKeyUp,
+}) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [companyName, setCompanyName] = useState("");
 
@@ -32,6 +38,7 @@ const CompanyNameFormField = ({ valid, onFieldChange, step, visibleStep }) => {
         onChange={handleCompanyNameChange}
         value={companyName}
         error={errorMessage}
+        handleFieldKeyUp={handleFieldKeyUp}
         type="text"
         visible={step === visibleStep}
       />

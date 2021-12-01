@@ -217,10 +217,27 @@ public class StudentControllerTest {
     }
 
     @Test
+    void shouldGetAllStudentNotContainingExclusiveOffer() {
+        //ARRANGE
+        String id = "id_test";
+        when(studentService.getAllStudentNotContainingExclusiveOffer(any())).thenReturn(StudentMockData.getAllStudentsFlux());
+
+        
+        //ACT
+        webTestClient
+                .get()
+                .uri("/student/getAllStudentNotContainingExclusiveOffer/" + id)
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(StudentDetailsDto.class);
+    }
+    
+    @Test
     void shouldGetAllStudentsNoSupervisor() {
         //ARRANGE
         when(supervisorService.getAllStudentsNoSupervisor()).thenReturn(StudentMockData.getAllFluxUserDto());
-
+        
         //ACT
         webTestClient
                 .get()

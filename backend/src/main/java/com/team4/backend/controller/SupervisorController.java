@@ -3,7 +3,9 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.dto.SupervisorDetailsDto;
+import com.team4.backend.dto.SupervisorProfileDto;
 import com.team4.backend.mapping.SupervisorMapper;
+import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.SupervisorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/supervisor")
@@ -53,6 +57,13 @@ public class SupervisorController {
     public Mono<SupervisorDetailsDto> getSupervisor(@PathVariable("getByEmail") String email) {
         return supervisorService.getSupervisor(email)
                 .map(SupervisorMapper::toDetailsDto);
+    }
+
+    @GetMapping("/getProfile")
+    @PreAuthorize("hasAuthority('SUPERVISOR')")
+    public Mono<SupervisorProfileDto> getProfile(Principal principal) {
+        return supervisorService.getSupervisor(UserSessionService.getLoggedUserEmail(principal))
+                .map(SupervisorMapper::toProfileDto);
     }
 
 }

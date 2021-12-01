@@ -24,7 +24,8 @@ public class MonitorDetailsDto extends UserDetailsDto implements Serializable {
                              String lastName,
                              String companyName,
                              LocalDate registrationDate,
-                             String phoneNumber) {
+                             String phoneNumber,
+                             String profileImageId) {
         super(id,
                 email,
                 password,
@@ -32,7 +33,8 @@ public class MonitorDetailsDto extends UserDetailsDto implements Serializable {
                 lastName,
                 registrationDate,
                 phoneNumber,
-                Role.MONITOR);
+                Role.MONITOR,
+                profileImageId);
         this.companyName = companyName;
     }
 

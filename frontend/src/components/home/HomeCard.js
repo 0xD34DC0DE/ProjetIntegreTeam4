@@ -62,9 +62,14 @@ const HomeCard = ({ keyProp, role, description, functionnalities, image }) => {
                 Ce que vous pouvez faire:
               </Typography>
               {functionnalities &&
-                functionnalities.map((job) => {
+                functionnalities.map((job, key) => {
                   return (
-                    <Grid item sx={{ p: 2, textAlign: "left" }} xs={12}>
+                    <Grid
+                      item
+                      sx={{ p: 2, textAlign: "left" }}
+                      xs={12}
+                      key={key}
+                    >
                       <Typography>{job}</Typography>
                     </Grid>
                   );

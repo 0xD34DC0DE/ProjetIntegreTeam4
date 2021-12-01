@@ -17,4 +17,6 @@ public class UserDto {
 
     protected String lastName;
 
+    protected String profileImageId;
+
 }
