@@ -17,7 +17,7 @@ import CvRejectionExplanationDialog from "./CvRejectionExplanationDialog";
 import CVDialog from "./CVDialog";
 import { DialogContext } from "../stores/DialogStore";
 
-const ListCvStudentView = () => {
+const ListCvStudentView = ({ cvSent }) => {
   const [userInfo] = useContext(UserInfoContext);
   const [cvs, setCvs] = useState([]);
   const [url, setUrl] = useState("");
@@ -44,12 +44,12 @@ const ListCvStudentView = () => {
       }).catch((error) => {
         console.log(error);
       });
-
+      console.log("cvSent", cvSent);
       setCvs(response.data);
     };
 
     getAllCvByUserEmail();
-  }, []);
+  }, [cvSent]);
 
   const isNotARenderedAttribute = (identifier) => {
     return !["isValid", "isSeen", "rejectionExplanation", "assetId"].includes(

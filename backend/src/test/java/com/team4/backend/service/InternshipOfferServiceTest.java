@@ -369,7 +369,7 @@ public class InternshipOfferServiceTest {
     @Test
     void shouldValidateInternshipOffer() {
         //ARRANGE
-        String id = "234dsd2egd54ter";
+        String id = "id";
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
         when(internshipOfferRepository.findById(id)).thenReturn(Mono.just(internshipOffer));
