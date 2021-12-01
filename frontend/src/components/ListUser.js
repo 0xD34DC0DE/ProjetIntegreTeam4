@@ -22,8 +22,8 @@ const ListUser = () => {
       },
       responseType: "json",
     });
+    console.log('students', students)
     setStudents(response.data);
-    console.log('setStudents', response.data)
   };
 
   return (

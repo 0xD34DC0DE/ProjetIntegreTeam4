@@ -23,26 +23,6 @@ const ListUserDroppable = ({ role, students, setStudents, handleRemoval }) => {
   const [userInfo] = useContext(UserInfoContext);
 
   useEffect(() => {
-    console.log('ListUserDroppable useEffect', students)
-  }, [students])
-
-  // const handleRemoval = (id) => {
-  //   console.log('id', id);
-  //   // var temp = students.filter(student => student.id != id);
-  //   var temp = [];
-  //   console.log('handleRemoval students', students);
-  //   for (var student in students) {
-  //     if (student.id != id) {
-  //       temp.push(student);
-  //       console.log('pushed', student)
-  //     }
-  //     console.log('iteration', student)
-  //   }
-  //   console.log('temp', temp);
-  //   // setStudents(temp);
-  // }
-
-  useEffect(() => {
     const getAllUsersByRole = async () => {
       let response = await axios({
         method: "GET",

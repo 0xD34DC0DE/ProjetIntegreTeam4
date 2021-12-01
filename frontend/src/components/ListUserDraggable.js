@@ -52,7 +52,7 @@ const ListUserDraggable = ({ role, isDragging, students, setStudents }) => {
             }}
           >
             <motion.div variants={fadeIn} initial="hidden" animate="show">
-              <UserCard isDragging={isDragging} user={user} />
+              <UserCard isDragging={isDragging} user={user} key={user.id}/>
             </motion.div>
           </Grid>
         ))}
