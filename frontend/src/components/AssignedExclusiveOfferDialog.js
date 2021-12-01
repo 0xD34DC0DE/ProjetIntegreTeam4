@@ -29,6 +29,7 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
   const [users, setUsers] = useState([]);
   const [selectedUsersEmail, setSelectedUsersEmail] = useState([]);
   const [userUpdatedCount, setUserUpdatedCount] = useState(0);
+  const [usersProfileImage, setUsersProfileImage] = useState([]);
 
   useEffect(() => {
     const getAllStudentNotContainingExclusiveOffer = async () => {
@@ -89,6 +90,36 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
     setSearchText("");
   };
 
+  const fetchProfileImages = (uploadersEmails) => {
+    axios({
+      method: "POST",
+      url: "http://localhost:8080/profileImage/emails",
+      headers: {
+        Authorization: userInfo.jwt,
+      },
+      data: uploadersEmails,
+      responseType: "json",
+    })
+      .then(async (response) => {
+        const images = response.data.map((data) => {
+          return {
+            uploaderEmail: data.uploaderEmail,
+            image: "data:image/jpg;base64," + data.image,
+          };
+        });
+        setUsersProfileImage(images);
+      })
+      .catch((error) => console.error(error));
+  };
+
+  useEffect(() => {
+    if (users.length === 0) return;
+    const uploadersEmails = users.map((user) => {
+      return user.email;
+    });
+    fetchProfileImages(uploadersEmails);
+  }, [users]);
+
   return (
     <>
       <Dialog
@@ -124,7 +155,7 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
                 Assigner
               </Button>
             </Box>
-            <Typography variant="h4">
+            <Typography variant="subtitle2" sx={{ fontSize: "2.3em" }}>
               {offer.companyName} | {offer.title}
             </Typography>
 
@@ -192,9 +223,19 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
                       >
                         <Grid container>
                           <Grid item xs={1}>
-                            <Avatar></Avatar>
+                            <Avatar
+                              src={
+                                usersProfileImage
+                                  .filter(
+                                    (data) => data.uploaderEmail === user.email
+                                  )
+                                  .map((data) => {
+                                    return data.image;
+                                  })[0]
+                              }
+                            ></Avatar>
                           </Grid>
-                          <Grid item xs={11} sx={{ px: 2 }}>
+                          <Grid item xs={11} sx={{ px: 2 }} alignSelf="center">
                             <ListItemText>
                               {user.firstName} {user.lastName}
                             </ListItemText>
