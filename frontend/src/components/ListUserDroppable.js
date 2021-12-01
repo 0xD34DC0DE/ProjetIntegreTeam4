@@ -18,9 +18,29 @@ const fadeIn = {
   },
 };
 
-const ListUserDroppable = ({ role }) => {
-  const [users, setUsers] = useState([]);
+const ListUserDroppable = ({ role, students, setStudents, handleRemoval }) => {
+  const [supervisors, setSupervisors] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
+
+  useEffect(() => {
+    console.log('ListUserDroppable useEffect', students)
+  }, [students])
+
+  // const handleRemoval = (id) => {
+  //   console.log('id', id);
+  //   // var temp = students.filter(student => student.id != id);
+  //   var temp = [];
+  //   console.log('handleRemoval students', students);
+  //   for (var student in students) {
+  //     if (student.id != id) {
+  //       temp.push(student);
+  //       console.log('pushed', student)
+  //     }
+  //     console.log('iteration', student)
+  //   }
+  //   console.log('temp', temp);
+  //   // setStudents(temp);
+  // }
 
   useEffect(() => {
     const getAllUsersByRole = async () => {
@@ -32,7 +52,7 @@ const ListUserDroppable = ({ role }) => {
         },
         responseType: "json",
       });
-      setUsers(response.data);
+      setSupervisors(response.data);
     };
     getAllUsersByRole();
   }, []);
@@ -52,10 +72,10 @@ const ListUserDroppable = ({ role }) => {
         spacing={{ xs: 2, md: 3 }}
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
-        {users.map((user, index) => (
+        {supervisors.map((user, index) => (
           <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={index}>
             <motion.div variants={fadeIn} initial="hidden" animate="show">
-              <DroppableUserCard user={user} key={index} index={index} />
+              <DroppableUserCard user={user} key={index} index={index} students={students} setStudents={setStudents} handleRemoval={handleRemoval}/>
             </motion.div>
           </Grid>
         ))}

@@ -1,14 +1,13 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.StudentDetailsDto;
+import com.team4.backend.dto.UserDto;
 import com.team4.backend.exception.DuplicateEntryException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.StudentMapper;
-import com.team4.backend.model.Evaluation;
-import com.team4.backend.model.Semester;
-import com.team4.backend.model.Supervisor;
-import com.team4.backend.model.TimestampedEntry;
+import com.team4.backend.mapping.UserMapper;
+import com.team4.backend.model.*;
 import com.team4.backend.repository.SupervisorRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import com.team4.backend.util.SemesterUtil;
@@ -157,6 +156,38 @@ public class SupervisorService {
                         .collect(Collectors.toSet())
                 ).flatMapMany(studentService::findAllByEmails)
                 .map(StudentMapper::toDto);
+    }
+
+    public Flux<UserDto> getAllStudentsNoSupervisor() {
+        return Mono.zip(
+                semesterService.getCurrentSemester(),
+                studentService.getAll().collectList(),
+                getAll().collectList()
+        ).flatMapMany(tuple -> {
+            Semester semester = tuple.getT1();
+            List<Student> allStudents = tuple.getT2();
+            List<Supervisor> allSupervisors = tuple.getT3();
+
+            List<Student> allStudentsWithSupervisor = new ArrayList<>();
+            List<UserDto> allStudentsNoSupervisor = new ArrayList<>();
+
+            allStudents.forEach(student -> {
+                allSupervisors.forEach(supervisor -> {
+                    supervisor.getStudentTimestampedEntries().forEach(timestampedEntry -> {
+                        if (timestampedEntry.getEmail().equals(student.getEmail())) {
+                            allStudentsWithSupervisor.add(student);
+                        }
+                    });
+                });
+            });
+
+            for (Student student : allStudents) {
+                if (!allStudentsWithSupervisor.contains(student)) {
+                    allStudentsNoSupervisor.add(UserMapper.toDto(student));
+                }
+            }
+            return Flux.fromIterable(allStudentsNoSupervisor);
+        });
     }
 
 }

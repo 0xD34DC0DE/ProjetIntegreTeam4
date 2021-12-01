@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 import { motion } from "framer-motion";
-import { useContext, useState } from "react";
+import { useContext, useState, useEffect } from "react";
 import { useDrop } from "react-dnd";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import AssignedStudentsDialog from "./AssignedStudentsDialog";
@@ -27,7 +27,7 @@ const fadeIn = {
   },
 };
 
-const DroppableUserCard = ({ user, index }) => {
+const DroppableUserCard = ({ user, index, students, setStudents, handleRemoval }) => {
   const [open, setOpen] = useState(false);
   const [justDropped, setJustDropped] = useState(false);
   const [assignedStudents, setAssignedStudents] = useState([]);
@@ -43,6 +43,7 @@ const DroppableUserCard = ({ user, index }) => {
     }),
     drop: async (item, monitor) => {
       if (monitor.isOver()) {
+        console.log(item.user.email);
         await axios({
           method: "PATCH",
           url: `http://localhost:8080/supervisor/addEmailToStudentList?id=${user.id}&studentEmail=${item.user.email}`,
@@ -50,7 +51,8 @@ const DroppableUserCard = ({ user, index }) => {
             Authorization: userInfo.jwt,
           },
           responseType: "json",
-        }).catch(console.error);
+        }).then(() => handleRemoval()).catch(console.error);
+
 
         setJustDropped(true);
         setTimeout(() => {

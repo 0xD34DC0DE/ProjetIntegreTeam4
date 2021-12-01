@@ -2,15 +2,18 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.dto.StudentProfileDto;
+import com.team4.backend.dto.UserDto;
 import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.StudentService;
+import com.team4.backend.service.SupervisorService;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.security.Principal;
@@ -21,9 +24,11 @@ import java.time.LocalDate;
 public class StudentController {
 
     private final StudentService studentService;
+    private final SupervisorService supervisorService;
 
-    public StudentController(StudentService studentService) {
+    public StudentController(StudentService studentService, SupervisorService supervisorService) {
         this.studentService = studentService;
+        this.supervisorService = supervisorService;
     }
 
     @PostMapping("/register")
@@ -52,6 +57,12 @@ public class StudentController {
     public Mono<StudentProfileDto> getStudentProfile(Principal principal) {
         return studentService.findByEmail(UserSessionService.getLoggedUserEmail(principal))
                 .map(StudentMapper::toProfileDto);
+    }
+
+    @GetMapping("/getAllStudentsNoSupervisor")
+    @PreAuthorize("hasAuthority('INTERNSHIP_MANAGER')")
+    public Flux<UserDto> getAllStudentsNoSupervisor() {
+        return supervisorService.getAllStudentsNoSupervisor();
     }
 
 }

@@ -12,8 +12,6 @@ import OfferForm from "./OfferForm";
 import OfferViews from "./OfferViews";
 import StudentDashBoard from "./Dashboard/StudentDashboard";
 import InternshipOfferValidation from "./InternshipOfferValidation";
-import ListUserDroppable from "./ListUserDroppable";
-import ListUserDraggable from "./ListUserDraggable";
 import AssignedStudentSupervisorView from "./AssignedStudentSupervisorView";
 import StudentEvaluationForm from "./Evaluation/End/StudentEvaluationForm";
 import StudentEvaluationMidForm from "./Evaluation/Mid-term/StudentEvaluationMidForm";
@@ -22,6 +20,7 @@ import SignContractDialog from "./contracts/SignContractDialog";
 import { SelectionContext } from "../stores/SelectionStore";
 import HomeRoles from "./Home/HomeRoles";
 import Home from "./Home/Home";
+import ListUser from "./ListUser";
 
 const Content = ({ isSidebarOpen }) => {
   const [selection] = useContext(SelectionContext);
@@ -44,8 +43,9 @@ const Content = ({ isSidebarOpen }) => {
             {selection.id === 0 && <HomeRoles />}
             {selection.id === 1 && <ListCvInternshipManagerView />}
             {selection.id === 3 && <InternshipOfferValidation />}
-            {selection.id === 11 && <ListUserDroppable role="SUPERVISOR" />}
-            {selection.id === 11 && <ListUserDraggable role="STUDENT" />}
+            {/* {selection.id === 11 && <ListUserDroppable role="SUPERVISOR" />}
+            {selection.id === 11 && <ListUserDraggable role="STUDENT" />} */}
+            {selection.id === 11 && <ListUser />}
             {selection.id === 14 && <ListReport />}
           </>
         );
