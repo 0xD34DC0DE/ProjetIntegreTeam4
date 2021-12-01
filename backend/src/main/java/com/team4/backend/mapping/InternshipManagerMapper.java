@@ -7,7 +7,7 @@ import com.team4.backend.model.InternshipManager;
 public abstract class InternshipManagerMapper {
 
     public static InternshipManagerDetailsDto toDto(InternshipManager internshipManager) {
-        return InternshipManagerDetailsDto.builder()
+        return InternshipManagerDetailsDto.internshipManagerDetailsDtoBuilder()
                 .id(internshipManager.getId())
                 .email(internshipManager.getEmail())
                 .firstName(internshipManager.getFirstName())
@@ -32,7 +32,7 @@ public abstract class InternshipManagerMapper {
     }
 
     public static InternshipManagerProfileDto toProfileDto(InternshipManager internshipManager) {
-        return InternshipManagerProfileDto.builder()
+        return InternshipManagerProfileDto.internshipManagerProfileDtoBuilder()
                 .id(internshipManager.getId())
                 .email(internshipManager.getEmail())
                 .firstName(internshipManager.getFirstName())

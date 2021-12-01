@@ -5,6 +5,7 @@ import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.exception.*;
 import com.team4.backend.model.InternshipOffer;
+import com.team4.backend.model.Notification;
 import com.team4.backend.model.Semester;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.SemesterName;
@@ -32,7 +33,7 @@ import java.util.stream.Collectors;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @Log
 @ExtendWith(MockitoExtension.class)
@@ -372,11 +373,15 @@ public class InternshipOfferServiceTest {
         String id = "id";
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
+        InternshipOfferService internshipOfferServiceSpy = spy(internshipOfferService);
+
         when(internshipOfferRepository.findById(id)).thenReturn(Mono.just(internshipOffer));
         when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
+        doReturn(Mono.just(new Notification())).when(internshipOfferServiceSpy).createInternshipOfferValidationNotification(any(), any(Boolean.class));
+        doReturn(Mono.just(new Notification())).when(internshipOfferServiceSpy).createNewInternshipNotification();
 
         //ACT
-        Mono<InternshipOffer> internshipOfferDtoMono = internshipOfferService.validateInternshipOffer(id, true);
+        Mono<InternshipOffer> internshipOfferDtoMono = internshipOfferServiceSpy.validateInternshipOffer(id, true);
 
         //ASSERT
         StepVerifier.create(internshipOfferDtoMono).assertNext(e -> assertTrue(e.getIsValidated()))
