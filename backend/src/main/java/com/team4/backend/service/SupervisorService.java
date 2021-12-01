@@ -172,8 +172,8 @@ public class SupervisorService {
 
             Set<String> studentWithSupervisorEmails = allSupervisors.stream()
                     .map(Supervisor::getStudentTimestampedEntries)
-                    .flatMap(Collection::stream
-                    ).filter(timestampedEntry ->
+                    .flatMap(Collection::stream)
+                    .filter(timestampedEntry ->
                             SemesterUtil.checkIfDatesAreInsideRangeOfSemester(
                                     semester,
                                     timestampedEntry.getDate(),
