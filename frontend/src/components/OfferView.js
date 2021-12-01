@@ -12,8 +12,8 @@ const OfferView = ({
   minSalary,
   maxSalary,
   description,
-   hasAlreadyApplied,
-   id,
+  hasAlreadyApplied,
+  id,
   buttons,
 }) => {
   const theme = useTheme();
@@ -70,9 +70,9 @@ const OfferView = ({
             mt={matchesBreakpointLg ? 1 : 0}
           >
             {buttons &&
-            buttons.map((button) => {
-              return button;
-            })}
+              buttons.map((button, key) => {
+                return { ...button, key: key };
+              })}
           </Grid>
         </Grid>
         <Grid container alignContent="center">
