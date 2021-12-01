@@ -147,14 +147,14 @@ public class SupervisorService {
 
     private Flux<StudentDetailsDto> mapAssignedStudents(Mono<Tuple2<Supervisor, Semester>> monoTuple) {
         return monoTuple.map(tuple -> tuple.getT1().getStudentTimestampedEntries().stream()
-                        .filter(timestampedEntry -> SemesterUtil.checkIfDatesAreInsideRangeOfSemester(
-                                tuple.getT2(),
-                                timestampedEntry.getDate(),
-                                timestampedEntry.getDate())
-                        )
-                        .map(TimestampedEntry::getEmail)
-                        .collect(Collectors.toSet())
-                ).flatMapMany(studentService::findAllByEmails)
+                .filter(timestampedEntry -> SemesterUtil.checkIfDatesAreInsideRangeOfSemester(
+                        tuple.getT2(),
+                        timestampedEntry.getDate(),
+                        timestampedEntry.getDate())
+                )
+                .map(TimestampedEntry::getEmail)
+                .collect(Collectors.toSet())
+        ).flatMapMany(studentService::findAllByEmails)
                 .map(StudentMapper::toDto);
     }
 
@@ -174,7 +174,9 @@ public class SupervisorService {
             allStudents.forEach(student -> {
                 allSupervisors.forEach(supervisor -> {
                     supervisor.getStudentTimestampedEntries().forEach(timestampedEntry -> {
-                        if (timestampedEntry.getEmail().equals(student.getEmail())) {
+                        if (timestampedEntry.getEmail().equals(student.getEmail()) &&
+                                SemesterUtil.checkIfDatesAreInsideRangeOfSemester(semester, timestampedEntry.getDate(), timestampedEntry.getDate())
+                        ) {
                             allStudentsWithSupervisor.add(student);
                         }
                     });
