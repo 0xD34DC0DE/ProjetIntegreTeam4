@@ -18,6 +18,7 @@ import reactor.util.function.Tuple2;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -171,10 +172,15 @@ public class SupervisorService {
 
             Set<String> studentWithSupervisorEmails = allSupervisors.stream()
                     .map(Supervisor::getStudentTimestampedEntries)
-                    .flatMap(timestampedEntries ->
-                            timestampedEntries.stream()
-                                    .map(TimestampedEntry::getEmail)
+                    .flatMap(Collection::stream
+                    ).filter(timestampedEntry ->
+                            SemesterUtil.checkIfDatesAreInsideRangeOfSemester(
+                                    semester,
+                                    timestampedEntry.getDate(),
+                                    timestampedEntry.getDate()
+                            )
                     )
+                    .map(TimestampedEntry::getEmail)
                     .collect(Collectors.toSet());
 
             List<UserDto> allStudentsWithoutSupervisorDto = allStudents.stream()
