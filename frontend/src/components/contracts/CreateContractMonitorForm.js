@@ -22,6 +22,12 @@ const CreateContractMonitorForm = ({ studentEmail, offerId }) => {
   const [hasAccepted, setHasAccepted] = useState(false);
   const [success, setSuccess] = useState(false);
   const [alreadySigned, setAlreadySigned] = useState(null);
+  const [error, setError] = useState({
+    address: { isValid: true, message: "" },
+    dailySchedule: { isValid: true, message: "" },
+    hoursPerWeek: { isValid: true, message: "" },
+    hourlyRate: { isValid: true, message: "" },
+  });
 
   const handleChange = (event) => {
     setHasAccepted(event.target.checked);
@@ -41,8 +47,43 @@ const CreateContractMonitorForm = ({ studentEmail, offerId }) => {
       hoursPerWeek: "",
       hourlyRate: "",
     }));
+    resetErrors();
     setHasAccepted(false);
     setSuccess(false);
+  };
+
+  const resetErrors = () => {
+    setError(getResetErrorState());
+  }
+
+  const getResetErrorState = () => {
+    return {
+      address: { isValid: true, message: "" },
+      dailySchedule: { isValid: true, message: "" },
+      hoursPerWeek: { isValid: true, message: "" },
+      hourlyRate: { isValid: true, message: "" },
+    };
+  }
+
+  const validateForm = () => {    
+    let isValid = true;
+    const errorEmpty = { isValid: false, message: "Veuillez remplir le champ" };
+
+    const fields = ["address", "dailySchedule", "hoursPerWeek", "hourlyRate"];
+
+    let newState = getResetErrorState();
+
+    for (let field of fields) {
+      if (form[field] === "") {
+        newState = { ...newState, [field]: errorEmpty };
+        isValid = false;
+
+      }
+    }
+    
+    setError(newState);
+
+    return isValid;
   };
 
   useEffect(() => {
@@ -54,6 +95,10 @@ const CreateContractMonitorForm = ({ studentEmail, offerId }) => {
 
   const onSubmit = () => {
     if (hasAccepted) {
+      if (!validateForm()) {
+        return;
+      }
+
       axios({
         method: "POST",
         baseURL: "http://localhost:8080",
@@ -120,6 +165,8 @@ const CreateContractMonitorForm = ({ studentEmail, offerId }) => {
               label="Addresse du lieu de stage"
               type="text"
               variant="standard"
+              error={!error.address.isValid}
+              helperText={error.address.message}
               onChange={handleFormChange}
               sx={{ "& .MuiInput-input": { fontSize: "0.8em" }, width: "70%" }}
             ></TextField>
@@ -132,6 +179,8 @@ const CreateContractMonitorForm = ({ studentEmail, offerId }) => {
               label="Horaire journalier"
               type="text"
               variant="standard"
+              error={!error.dailySchedule.isValid}
+              helperText={error.dailySchedule.message}
               onChange={handleFormChange}
               sx={{ "& .MuiInput-input": { fontSize: "0.8em" }, width: "70%" }}
             ></TextField>
@@ -142,8 +191,10 @@ const CreateContractMonitorForm = ({ studentEmail, offerId }) => {
               id={"hoursPerWeek"}
               value={form.hoursPerWeek}
               label="Nombre d'heures par semaine"
-              type="text"
+              type="number"
               variant="standard"
+              error={!error.hoursPerWeek.isValid}
+              helperText={error.hoursPerWeek.message}
               onChange={handleFormChange}
               sx={{ "& .MuiInput-input": { fontSize: "0.8em" }, width: "70%" }}
             ></TextField>
@@ -154,8 +205,10 @@ const CreateContractMonitorForm = ({ studentEmail, offerId }) => {
               id={"hourlyRate"}
               value={form.hourlyRate}
               label="Salaire horaire"
-              type="text"
+              type="number"
               variant="standard"
+              error={!error.hourlyRate.isValid}
+              helperText={error.hourlyRate.message}
               onChange={handleFormChange}
               sx={{ "& .MuiInput-input": { fontSize: "0.8em" }, width: "70%" }}
             ></TextField>
