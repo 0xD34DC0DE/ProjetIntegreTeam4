@@ -77,7 +77,6 @@ const CreateContractMonitorForm = ({ studentEmail, offerId }) => {
       if (form[field] === "") {
         newState = { ...newState, [field]: errorEmpty };
         isValid = false;
-
       }
     }
     
