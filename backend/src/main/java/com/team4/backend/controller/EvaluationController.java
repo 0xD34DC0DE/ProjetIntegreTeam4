@@ -31,9 +31,16 @@ public class EvaluationController {
 
     @GetMapping(value = "{evaluationId}", produces = MediaType.APPLICATION_PDF_VALUE)
     @PreAuthorize("hasAnyAuthority('SUPERVISOR', 'MONITOR')")
-    public Mono<byte[]> generatePdf(@PathVariable String evaluationId) {
+    public Mono<byte[]> generateEvaluationPdf(@PathVariable String evaluationId) {
         return evaluationService
-                .generatePdf(evaluationId);
+                .generateEvaluationPdf(evaluationId);
+    }
+
+    @GetMapping(value = "/mid/{evaluationId}", produces = MediaType.APPLICATION_PDF_VALUE)
+    @PreAuthorize("hasAnyAuthority('SUPERVISOR', 'MONITOR')")
+    public Mono<byte[]> generateMidEvaluationPdf(@PathVariable String evaluationId) {
+        return evaluationService
+                .generateMidEvaluationPdf(evaluationId);
     }
 
 }

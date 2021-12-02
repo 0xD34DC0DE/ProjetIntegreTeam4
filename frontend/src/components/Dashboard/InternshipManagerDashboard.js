@@ -1,12 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import { Card, Typography, Grid, Container } from "@mui/material";
+import { Card, Grid, Container } from "@mui/material";
 import { UserInfoContext } from "../../stores/UserInfoStore";
 import { motion } from "framer-motion";
-import PeopleIcon from "@mui/icons-material/People";
 import IconImage from "./IconImage";
 import BasicInfo from "./BasicInfo";
-
 
 const InternshipManagerDashboard = () => {
   const [userInfo] = useContext(UserInfoContext);

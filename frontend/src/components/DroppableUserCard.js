@@ -49,8 +49,9 @@ const DroppableUserCard = ({ user, index, fetchStudents }) => {
             Authorization: userInfo.jwt,
           },
           responseType: "json",
-        }).then(() => fetchStudents()).catch(console.error);
-
+        })
+          .then(() => fetchStudents())
+          .catch(console.error);
 
         setJustDropped(true);
         setTimeout(() => {
@@ -77,16 +78,18 @@ const DroppableUserCard = ({ user, index, fetchStudents }) => {
         ref={drop}
         role={"Dustbin"}
         sx={{
-          border: "0.5px solid grey",
+          border: "0.5px solid rgba(255, 255, 255, 0.2)",
+          boxShadow: "3px 3px 15px 5px rgba(0, 0, 0, 0.5)",
           backgroundColor: isOver
             ? "rgba(135, 135, 135, 0.1)"
             : "rgba(135, 135, 135, 0.03)",
           alignItem: "center",
-          borderRadius: "10px",
+          borderRadius: "5px",
           justifyContent: "center",
           mx: 2,
           ":hover": {
-            boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
+            border: "0.5px solid rgba(255, 255, 255, 0)",
+            boxShadow: "0px 0px 15px 1px rgba(125, 51, 235, 0.8) !important",
           },
         }}
       >
@@ -99,27 +102,42 @@ const DroppableUserCard = ({ user, index, fetchStudents }) => {
           </motion.div>
         )}
         <Box sx={{ textAlign: "center" }}>
-          <Avatar sx={{ mx: "auto", my: 2, clear: "right" }}></Avatar>
+          <Avatar
+            sx={{
+              mx: "auto",
+              my: 2,
+              clear: "right",
+              width: "75px",
+              height: "75px",
+            }}
+          ></Avatar>
           <Typography>{user.email}</Typography>
           <Typography>
             {user.firstName}, {user.lastName}
           </Typography>
           <CardActions>
             <Tooltip title="Voir les étudiants assignés">
-              <IconButton
-                sx={{ 
-                  margin: "auto",
-                  backgroundColor: "#5d1f94",
-                  ":hover": {
-                    backgroundColor: "#5d1f94"
-                  },
-                }}
-                onClick={() => {
-                  setOpen(true);
-                }}
+              <motion.div
+                style={{ margin: "0 auto 0 auto" }}
+                whileHover={{ scale: [1, 1, 1, 1.5, 1, 1] }}
+                animate={{}}
               >
-                <People sx={{ color: "white" }} />
-              </IconButton>
+                <IconButton
+                  sx={{
+                    margin: "auto",
+                    backgroundColor: "rgba(125, 51, 235, 0.8)",
+
+                    ":hover": {
+                      backgroundColor: "#5d1f94",
+                    },
+                  }}
+                  onClick={() => {
+                    setOpen(true);
+                  }}
+                >
+                  <People sx={{ color: "white" }} />
+                </IconButton>
+              </motion.div>
             </Tooltip>
           </CardActions>
         </Box>

@@ -143,7 +143,6 @@ const NotificationList = ({
           setUserSeenNotification(index);
         })
         .catch((error) => console.error(error));
-
     dispatchNotificationClickEvent({
       notificationType: notification.notificationType,
       data: notification.data,

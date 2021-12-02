@@ -39,8 +39,10 @@ const OfferApplicationButton = ({ disabled, offerId }) => {
       sx={{
         textTransform: "uppercase",
         backgroundColor: "rgba(125, 51, 235, 1.0)",
+        boxShadow: "5px 5px 2px 2px rgba(0, 0, 0, 0.5)",
         ":hover": {
           backgroundColor: "rgba(95, 21, 205, 1.0)",
+          boxShadow: "5px 5px 2px 2px rgba(0, 0, 0, 0.5)",
         },
       }}
       onClick={() => apply()}

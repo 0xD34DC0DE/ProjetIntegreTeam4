@@ -1,5 +1,5 @@
 import { Container, Grid, Paper, Typography } from "@mui/material";
-import React, { useEffect } from "react";
+import React from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 

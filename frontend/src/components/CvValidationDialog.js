@@ -64,7 +64,7 @@ const CvValidationDialog = ({ id, removeCv }) => {
         size="medium"
         variant="contained"
         sx={{
-          mb: "6px",
+          mt: "6px",
           backgroundColor: "rgba(125, 51, 235, 0.8)",
           width: "100%",
           ":hover": {

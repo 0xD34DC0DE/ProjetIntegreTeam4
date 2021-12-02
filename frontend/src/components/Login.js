@@ -13,6 +13,8 @@ import React, { useState, useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
 import { DialogContext } from "../stores/DialogStore";
 import { v4 as uuidv4 } from "uuid";
+import { SelectionContext } from "../stores/SelectionStore";
+import { sidebarList } from "./Configuration";
 
 const Login = () => {
   const [errorMessage, setErrorMessage] = useState();
@@ -22,6 +24,7 @@ const Login = () => {
   });
   const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
   const [dialog, dialogDispatch] = useContext(DialogContext);
+  const [selection, selectionDispatch] = useContext(SelectionContext);
 
   const handleFormChange = (event) => {
     setForm((form) => ({
@@ -49,6 +52,7 @@ const Login = () => {
           type: "CLOSE",
           dialogName: "loginDialog",
         });
+        selectionDispatch(sidebarList[0]);
       })
       .catch((error) => {
         let errorMessage =

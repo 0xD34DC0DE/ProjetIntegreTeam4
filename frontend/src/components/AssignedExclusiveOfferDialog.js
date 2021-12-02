@@ -29,6 +29,7 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
   const [users, setUsers] = useState([]);
   const [selectedUsersEmail, setSelectedUsersEmail] = useState([]);
   const [userUpdatedCount, setUserUpdatedCount] = useState(-1);
+  const [usersProfileImage, setUsersProfileImage] = useState([]);
 
   useEffect(() => {
     const getAllStudentNotContainingExclusiveOffer = async () => {
@@ -89,6 +90,36 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
     setSearchText("");
   };
 
+  const fetchProfileImages = (uploadersEmails) => {
+    axios({
+      method: "POST",
+      url: "http://localhost:8080/profileImage/emails",
+      headers: {
+        Authorization: userInfo.jwt,
+      },
+      data: uploadersEmails,
+      responseType: "json",
+    })
+      .then(async (response) => {
+        const images = response.data.map((data) => {
+          return {
+            uploaderEmail: data.uploaderEmail,
+            image: "data:image/jpg;base64," + data.image,
+          };
+        });
+        setUsersProfileImage(images);
+      })
+      .catch((error) => console.error(error));
+  };
+
+  useEffect(() => {
+    if (users.length === 0) return;
+    const uploadersEmails = users.map((user) => {
+      return user.email;
+    });
+    fetchProfileImages(uploadersEmails);
+  }, [users]);
+
   return (
     <>
       <Dialog
@@ -115,7 +146,11 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
               <Button
                 variant="contained"
                 sx={{
-                  ":hover": { backgroundColor: "rgba(125, 51, 235, 0.8)" },
+                  backgroundColor: "rgba(125, 51, 235, 0.8)",
+                  color: "rgba(255, 255, 255, 0.8) !important",
+                  ":hover": {
+                    backgroundColor: "rgba(95, 21, 195, 0.8)",
+                  },
                 }}
                 onClick={() => {
                   addExclusiveOfferToStudents(selectedUsersEmail);
@@ -124,7 +159,7 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
                 Assigner
               </Button>
             </Box>
-            <Typography variant="h4">
+            <Typography variant="subtitle2" sx={{ fontSize: "2.3em" }}>
               {offer.companyName} | {offer.title}
             </Typography>
 
@@ -136,7 +171,20 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
                 <Grid item xs={11}>
                   <Tooltip title="Chercher un élève par son nom ou son prénom">
                     <input
-                      style={{ width: "100%" }}
+                      style={{
+                        width: "100%",
+                        color: "white",
+                        backgroundColor: "rgba(50, 50, 50, 0.)",
+                        border: "1px solid rgba(255, 255, 255, 0.1)",
+                        fontSize: "0.9em",
+                        height: "30px",
+                        "::focus": {
+                          boxShadow: "0px 0px 15px 2px red !important",
+                        },
+                        ":placeholder": {
+                          color: "white !important",
+                        },
+                      }}
                       type="search"
                       onChange={(e) => {
                         setSearchText(e.target.value);
@@ -192,9 +240,20 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
                       >
                         <Grid container>
                           <Grid item xs={1}>
-                            <Avatar></Avatar>
+                            <Avatar
+                              sx={{ width: "50px", height: "50px" }}
+                              src={
+                                usersProfileImage
+                                  .filter(
+                                    (data) => data.uploaderEmail === user.email
+                                  )
+                                  .map((data) => {
+                                    return data.image;
+                                  })[0]
+                              }
+                            ></Avatar>
                           </Grid>
-                          <Grid item xs={11} sx={{ px: 2 }}>
+                          <Grid item xs={11} sx={{ px: 2 }} alignSelf="center">
                             <ListItemText>
                               {user.firstName} {user.lastName}
                             </ListItemText>

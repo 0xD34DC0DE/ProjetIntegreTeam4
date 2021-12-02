@@ -16,9 +16,9 @@ const SubmitEvaluationButton = ({ delay, onClick }) => {
         <Button
           sx={{
             color: "white",
-            backgroundColor: "rgba(35, 35, 35, 1)",
-            boxShadow: "0px 4px 5px 3px rgba(0, 0, 0, 0.5)",
-            ":hover": { backgroundColor: "rgba(50, 50, 50, 1)" },
+            backgroundColor: "rgba(70, 70, 70, 0.8)",
+            boxShadow: "0px 0px 5px 3px rgba(0, 0, 0, 0.5)",
+            ":hover": { backgroundColor: "rgba(50, 50, 50, 0.8)" },
             px: 15,
           }}
           onClick={onClick}

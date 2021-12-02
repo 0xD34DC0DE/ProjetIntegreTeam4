@@ -146,14 +146,14 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                   ? [
                       [
                         <Grid container flexDirection="row" sx={{ mb: 1 }}>
-                          <Grid item md={2}>
+                          <Grid item xs={2}>
                             <Avatar
                               src={
                                 profileImage !== undefined ? profileImage : ""
                               }
                               sx={{
-                                width: 50,
-                                height: 50,
+                                width: 43,
+                                height: 43,
                                 mb: 2,
                                 p: 0,
                                 m: 0,
@@ -161,7 +161,7 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
                               }}
                             ></Avatar>
                           </Grid>
-                          <Grid item md={10}>
+                          <Grid item xs={10}>
                             <Grid
                               container
                               flexDirection="column"
