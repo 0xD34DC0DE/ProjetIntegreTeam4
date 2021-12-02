@@ -70,13 +70,8 @@ const OfferView = ({
             mt={matchesBreakpointLg ? 1 : 0}
           >
             {buttons &&
-<<<<<<< HEAD
               buttons.map((button, key) => {
                 return { ...button, key: key };
-=======
-              buttons.map((button) => {
-                return button;
->>>>>>> 8c55171c00715004b1b8660cd7e9779be6bcc79a
               })}
           </Grid>
         </Grid>

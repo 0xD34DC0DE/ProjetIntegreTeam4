@@ -10,7 +10,7 @@ import {
   Typography,
 } from "@mui/material";
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState, useCallback } from "react";
 import { OFFER_FORM_VALUES } from "../models/TextFormFieldValues";
 import TextFormField from "./TextFormField";
 import { UserInfoContext } from "../stores/UserInfoStore";
@@ -19,9 +19,9 @@ import { DialogContext } from "../stores/DialogStore";
 const OfferForm = () => {
   const emptyOffer = {
     title: "",
-    limitDateToApply: new Date(),
-    beginningDate: new Date(),
-    endingDate: new Date(),
+    limitDateToApply: "",
+    beginningDate: "",
+    endingDate: "",
     monitorEmail: "",
     companyName: "",
     minSalary: 0,
@@ -33,17 +33,29 @@ const OfferForm = () => {
   const [userInfo] = useContext(UserInfoContext);
   const [dialog, dialogDispatch] = useContext(DialogContext);
   const [errorMessage, setErrorMessage] = useState("");
-
+  const [snackBarErrorMessage, setSnackBarErrorMessage] = useState("");
+  const [currentFieldKey, setCurrentFieldKey] = useState();
   const handleFormChange = (event) => {
     setOffer((previousForm) => ({
       ...previousForm,
       [event.target.id || event.target.name]: event.target.value,
     }));
+  };
+
+  useEffect(() => {
+    const fillMonitorEmail = () => {
+      if (userInfo.role === "MONITOR" && offer.monitorEmail === "")
+        setOffer({ ...offer, monitorEmail: userInfo.email });
+    };
+    fillMonitorEmail();
 
     setIsValid(
-      validateIsNotNull() && validateDateEntries() && validateSalary()
+      validateIsNotNull() &
+        validateDateEntries() &
+        validateSalary(offer.minSalary, offer.maxSalary) &
+        validateEmailEntries()
     );
-  };
+  }, [offer]);
 
   const validateIsNotNull = () => {
     let nbValid = 0;
@@ -70,13 +82,19 @@ const OfferForm = () => {
   };
 
   const validateEmailEntries = () => {
-    var validRegex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const emailRegexValidation =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    var isValidEmail;
     Object.values(offer).map((value, key) => {
       if (Object.keys(offer)[key].toLowerCase().includes("email")) {
-        console.log(Object.keys(offer)[key].toLowerCase());
+        isValidEmail = emailRegexValidation.test(value);
       }
     });
+    if (isValidEmail) {
+      setErrorMessage("");
+      return isValidEmail;
+    }
+    setErrorMessage("Le format du courriel n'est pas valide.");
   };
 
   const getDates = () => {
@@ -90,13 +108,10 @@ const OfferForm = () => {
   };
 
   function compareDate(date1, date2) {
-    console.log("date 1", new Date(date1).valueOf());
-    console.log("date 2", new Date(date2).valueOf());
     return new Date(date1).valueOf() < new Date(date2).valueOf();
   }
 
   const validateSalary = (minSalary, maxSalary) => {
-    console.log("salary valid", minSalary < maxSalary);
     return minSalary < maxSalary;
   };
 
@@ -106,7 +121,7 @@ const OfferForm = () => {
   };
 
   const handleSnackBarClose = (_, reason) => {
-    if (reason === "timeout") setErrorMessage("");
+    if (reason === "timeout") setSnackBarErrorMessage("");
   };
 
   const saveInternshipOffer = () => {
@@ -123,8 +138,9 @@ const OfferForm = () => {
         setOffer(emptyOffer);
       })
       .catch((error) => {
-        setErrorMessage(
-          "Une erreur est survenue. L'offre n'a pas été ajoutée."
+        setOffer(emptyOffer);
+        setSnackBarErrorMessage(
+          "Une erreur est survenue. Le courriel du moniteur n'existe pas."
         );
         console.error(error);
       });
@@ -140,7 +156,6 @@ const OfferForm = () => {
         <DialogContent sx={{ minWidth: 425 }}>
           {Object.keys(offer).map((offerKey, key) => {
             let currentField = OFFER_FORM_VALUES[key];
-            console.log("offer", offer);
 
             return (
               <TextFormField
@@ -148,18 +163,18 @@ const OfferForm = () => {
                 id={offerKey}
                 dialogContentText={currentField.contentText}
                 onChange={handleFormChange}
+                handleFieldKeyUp={() => setCurrentFieldKey(key)}
                 value={
                   offerKey === "monitorEmail" && userInfo.role === "MONITOR"
                     ? userInfo.email
                     : Object.values(offer)[key]
                 }
                 type={currentField.type}
-                error={errorMessage}
+                error={currentFieldKey === key ? errorMessage : ""}
                 visible={true}
                 readonly={
                   offerKey === "monitorEmail" && userInfo.role === "MONITOR"
                 }
-                required
               />
             );
           })}
@@ -175,11 +190,11 @@ const OfferForm = () => {
         </DialogActions>
       </Dialog>
       <Snackbar
-        open={!!errorMessage}
+        open={!!snackBarErrorMessage}
         onClose={handleSnackBarClose}
         autoHideDuration={2000}
       >
-        <Alert severity="error">{errorMessage}</Alert>
+        <Alert severity="error">{snackBarErrorMessage}</Alert>
       </Snackbar>
     </>
   );
