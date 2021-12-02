@@ -34,14 +34,7 @@ const OfferForm = () => {
   const [dialog, dialogDispatch] = useContext(DialogContext);
   const [errorMessage, setErrorMessage] = useState("");
   const [snackBarErrorMessage, setSnackBarErrorMessage] = useState("");
-  const [currentFieldKey, setCurrentFieldKey] = useState();
-  const handleFormChange = (event) => {
-    setOffer((previousForm) => ({
-      ...previousForm,
-      [event.target.id || event.target.name]: event.target.value,
-    }));
-  };
-
+  const [snackBarSuccessMessage, setSnackBarSuccessMessage] = useState("");
   useEffect(() => {
     const fillMonitorEmail = () => {
       if (userInfo.role === "MONITOR" && offer.monitorEmail === "")
@@ -56,6 +49,13 @@ const OfferForm = () => {
         validateEmailEntries()
     );
   }, [offer]);
+
+  const handleFormChange = (event) => {
+    setOffer((previousForm) => ({
+      ...previousForm,
+      [event.target.id || event.target.name]: event.target.value,
+    }));
+  };
 
   const validateIsNotNull = () => {
     let nbValid = 0;
@@ -90,11 +90,8 @@ const OfferForm = () => {
         isValidEmail = emailRegexValidation.test(value);
       }
     });
-    if (isValidEmail) {
-      setErrorMessage("");
-      return isValidEmail;
-    }
-    setErrorMessage("Le format du courriel n'est pas valide.");
+
+    return isValidEmail;
   };
 
   const getDates = () => {
@@ -121,7 +118,10 @@ const OfferForm = () => {
   };
 
   const handleSnackBarClose = (_, reason) => {
-    if (reason === "timeout") setSnackBarErrorMessage("");
+    if (reason === "timeout") {
+      setSnackBarErrorMessage("");
+      setSnackBarSuccessMessage("");
+    }
   };
 
   const saveInternshipOffer = () => {
@@ -136,6 +136,7 @@ const OfferForm = () => {
     })
       .then(() => {
         setOffer(emptyOffer);
+        setSnackBarSuccessMessage("Votre offre a été envoyée avec succès.");
       })
       .catch((error) => {
         setOffer(emptyOffer);
@@ -163,14 +164,13 @@ const OfferForm = () => {
                 id={offerKey}
                 dialogContentText={currentField.contentText}
                 onChange={handleFormChange}
-                handleFieldKeyUp={() => setCurrentFieldKey(key)}
                 value={
                   offerKey === "monitorEmail" && userInfo.role === "MONITOR"
                     ? userInfo.email
                     : Object.values(offer)[key]
                 }
                 type={currentField.type}
-                error={currentFieldKey === key ? errorMessage : ""}
+                error={""}
                 visible={true}
                 readonly={
                   offerKey === "monitorEmail" && userInfo.role === "MONITOR"
@@ -190,11 +190,15 @@ const OfferForm = () => {
         </DialogActions>
       </Dialog>
       <Snackbar
-        open={!!snackBarErrorMessage}
+        open={!!snackBarErrorMessage || !!snackBarSuccessMessage}
         onClose={handleSnackBarClose}
-        autoHideDuration={2000}
+        autoHideDuration={4000}
       >
-        <Alert severity="error">{snackBarErrorMessage}</Alert>
+        {!!snackBarSuccessMessage ? (
+          <Alert severity="success">{snackBarSuccessMessage}</Alert>
+        ) : (
+          <Alert severity="error">{snackBarErrorMessage}</Alert>
+        )}
       </Snackbar>
     </>
   );
