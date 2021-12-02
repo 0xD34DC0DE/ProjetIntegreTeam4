@@ -24,12 +24,6 @@ public class InternshipContractController {
         this.internshipContractService = internshipContractService;
     }
 
-    @ExceptionHandler(UserNotFoundException.class)
-    public ResponseEntity<String> onException(UserNotFoundException e) {
-        System.err.println(e.getMessage());
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-    }
-
     @PostMapping("/initiate")
     @PreAuthorize("hasAnyAuthority('MONITOR')")
     public Mono<ResponseEntity<String>> initiateContract(
