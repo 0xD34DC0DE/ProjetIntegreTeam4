@@ -12,13 +12,15 @@ const OfferView = ({
   minSalary,
   maxSalary,
   description,
+  hasAlreadyApplied,
+  id,
   buttons,
 }) => {
   const theme = useTheme();
   const matchesBreakpointLg = useMediaQuery(theme.breakpoints.down("lg"));
 
   return (
-    <Container sx={{ maxWidth: "md" }}>
+    <Container key={id} sx={{ maxWidth: "md" }}>
       <Paper
         sx={{
           mb: 5,

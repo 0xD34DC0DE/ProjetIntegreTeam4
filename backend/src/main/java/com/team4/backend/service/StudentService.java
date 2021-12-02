@@ -197,6 +197,10 @@ public class StudentService {
                 }).count();
     }
 
+    public Mono<Boolean> hasValidCv(String studentEmail) {
+        return findByEmail(studentEmail).map(Student::getHasValidCv);
+    }
+
     public Mono<Student> save(Student student) {
         return studentRepository.save(student);
     }
