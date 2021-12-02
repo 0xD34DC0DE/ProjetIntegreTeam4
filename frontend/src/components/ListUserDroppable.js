@@ -41,7 +41,7 @@ const ListUserDroppable = ({ role, students, setStudents, fetchStudents }) => {
       <motion.div variants={fadeIn} initial="hidden" animate="show">
         <Typography
           variant="subtitle2"
-          sx={{ color: "white", fontSize: "2.2em", ml: 2, mt: 2 }}
+          sx={{ color: "white", fontSize: "2.2em", mt: 2, ml: 2 }}
         >
           Superviseurs
         </Typography>
@@ -54,14 +54,25 @@ const ListUserDroppable = ({ role, students, setStudents, fetchStudents }) => {
       >
         {supervisors.length > 0 ? (
           supervisors.map((user, index) => (
-            <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={index}>
+            <Grid item xs={10} sm={11} md={6} lg={4} xl={2} key={index}>
               <motion.div variants={fadeIn} initial="hidden" animate="show">
-                <DroppableUserCard user={user} key={index} index={index} students={students} setStudents={setStudents} fetchStudents={fetchStudents}/>
+                <DroppableUserCard
+                  user={user}
+                  key={index}
+                  index={index}
+                  students={students}
+                  setStudents={setStudents}
+                  fetchStudents={fetchStudents}
+                />
               </motion.div>
             </Grid>
           ))
         ) : (
-          <Typography color={"text.primary"} sx={{mx: "auto", py: "2rem", fontSize: "2rem"}}>
+          <Typography
+            color={"text.primary"}
+            variant="h2"
+            sx={{ mx: "auto", py: "2rem", fontSize: "2rem" }}
+          >
             Aucun superviseur
           </Typography>
         )}

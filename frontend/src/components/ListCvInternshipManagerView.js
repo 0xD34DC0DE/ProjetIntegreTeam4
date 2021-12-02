@@ -128,7 +128,7 @@ const ListCvInternshipManagerView = () => {
           mt: 5,
         }}
       >
-        <Grid item lg={9} xl={7} md={11} sm={11} xs={11} sx={{ mx: "auto" }}>
+        <Grid item lg={9} xl={7} md={9} sm={11} xs={11} sx={{ mx: "auto" }}>
           {cvs.map((cv, key) => (
             <CvInternshipManagerView
               key={key}

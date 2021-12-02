@@ -77,21 +77,21 @@ const CvInternshipManagerView = ({
                     sm={12}
                     xs={12}
                     sx={{ mb: matchesBreakpointMd ? 5 : 0 }}
+                    alignSelf="center"
                   >
                     <Box
-                      alignSelf="center"
                       sx={{
                         mx: matchesBreakpointMd ? "auto" : "",
                         borderRadius: "50%",
-                        width: "150px",
-                        height: "150px",
+                        width: "130px",
+                        height: "130px",
                       }}
                     >
                       <Avatar
                         src={profileImage || ""}
                         sx={{
-                          width: "150px",
-                          height: "150px",
+                          width: "130px",
+                          height: "130px",
                         }}
                       ></Avatar>
                     </Box>
@@ -155,7 +155,6 @@ const CvInternshipManagerView = ({
                         size="medium"
                         variant="contained"
                         sx={{
-                          mt: "6px",
                           backgroundColor: "rgba(50, 51, 50, 0.8)",
                           ":hover": {
                             backgroundColor: "rgba(100, 101, 100, 0.8)",

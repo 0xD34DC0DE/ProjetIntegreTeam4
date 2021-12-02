@@ -41,10 +41,11 @@ const ListCvStudentView = ({ cvSent }) => {
           Authorization: userInfo.jwt,
         },
         responseType: "json",
-      }).catch((error) => {
-        console.log(error);
-      });
-      setCvs(response.data);
+      })
+        .then((response) => setCvs(response.data))
+        .catch((error) => {
+          console.log(error);
+        });
     };
 
     getAllCvByUserEmail();
@@ -64,14 +65,6 @@ const ListCvStudentView = ({ cvSent }) => {
     <>
       {cvs && (
         <Container sx={{ mt: 5 }}>
-          <Typography
-            variant="subtitle2"
-            color="white"
-            textAlign="center"
-            sx={{ my: 5, fontSize: "2.5em" }}
-          >
-            Vos C.V.
-          </Typography>
           <Grid alignItems="center" container spacing={5}>
             {cvs
               .sort(function (cv1, cv2) {

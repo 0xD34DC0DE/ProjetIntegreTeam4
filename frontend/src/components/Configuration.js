@@ -100,7 +100,7 @@ export const sidebarList = [
   },
   {
     id: 11,
-    label: "Assigner les élèves aux superviseurs",
+    label: "Assignation des élèves",
     role: ["INTERNSHIP_MANAGER"],
     icon: <SupervisedUserCircleOutlined fontSize="small" sx={{ mr: 1 }} />,
     description: "Assignations des superviseurs aux élèves",
