@@ -31,7 +31,7 @@ const PasswordFormField = ({
     } else {
       setErrorMessage((errors) => ({
         ...errors,
-        confirmPassword: "Les mots de passe ne sont pas identique",
+        confirmPassword: "Les mots de passe ne sont pas identiques",
       }));
       valid(false);
     }

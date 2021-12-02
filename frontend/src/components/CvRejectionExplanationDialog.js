@@ -22,7 +22,7 @@ const CvRejectionExplanationDialog = ({ rejectionExplanation }) => {
       onClose={handleClose}
       open={dialog.cvRejectionExplanationDialog.visible}
     >
-      <DialogTitle>Raison du rejet du C.V.</DialogTitle>
+      <DialogTitle>Raison du rejet du CV</DialogTitle>
       <DialogContent>
         <DialogContentText>{rejectionExplanation}</DialogContentText>
       </DialogContent>

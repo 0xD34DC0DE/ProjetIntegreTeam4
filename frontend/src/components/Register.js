@@ -153,7 +153,6 @@ const Register = () => {
           handleFieldKeyUp={handleFieldKeyUp}
           onFieldChange={handleFormChange}
         />
-        {/* Special form field for each individual role */}
         {form.accountType === "monitor" && (
           <CompanyNameFormField
             valid={setFormValid}

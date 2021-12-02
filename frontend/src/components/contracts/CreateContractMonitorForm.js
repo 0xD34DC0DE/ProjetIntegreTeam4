@@ -54,7 +54,7 @@ const CreateContractMonitorForm = ({ studentEmail, offerId }) => {
 
   const resetErrors = () => {
     setError(getResetErrorState());
-  }
+  };
 
   const getResetErrorState = () => {
     return {
@@ -63,9 +63,9 @@ const CreateContractMonitorForm = ({ studentEmail, offerId }) => {
       hoursPerWeek: { isValid: true, message: "" },
       hourlyRate: { isValid: true, message: "" },
     };
-  }
+  };
 
-  const validateForm = () => {    
+  const validateForm = () => {
     let isValid = true;
     const errorEmpty = { isValid: false, message: "Veuillez remplir le champ" };
 
@@ -79,7 +79,7 @@ const CreateContractMonitorForm = ({ studentEmail, offerId }) => {
         isValid = false;
       }
     }
-    
+
     setError(newState);
 
     return isValid;
@@ -161,7 +161,7 @@ const CreateContractMonitorForm = ({ studentEmail, offerId }) => {
             <TextField
               id={"address"}
               value={form.address}
-              label="Addresse du lieu de stage"
+              label="Adresse du lieu de stage"
               type="text"
               variant="standard"
               error={!error.address.isValid}

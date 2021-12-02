@@ -33,9 +33,9 @@ export const sidebarList = [
     isDialog: false,
     description: "Liste de CV en attente de validation",
     explication: [
-      "Visualisez le CV directement dans l'application",
-      "Téléchargez le CV de l'étudiant",
-      "Approuvez ou Refusez le CV, en pouvant préciser la rasion du refus si tel est le cas",
+      "Visualiser le CV directement dans l'application",
+      "Télécharger le CV de l'étudiant",
+      "Approuver ou refuser le CV, en pouvant préciser la raison du refus si tel est le cas",
     ],
   },
   {
@@ -47,7 +47,7 @@ export const sidebarList = [
     dialogName: "internshipOfferDialog",
     description: "",
     explication: [
-      "Entrez les informations concernant l'offre que vous souhaitez ajouter",
+      "Entrer les informations concernant l'offre que vous souhaitez ajouter",
     ],
   },
   {
@@ -58,8 +58,8 @@ export const sidebarList = [
     isDialog: false,
     description: "Liste d'offres de stage disponible",
     explication: [
-      "Consultez les offres de stage disponible à tous, ainsi que les offres de stage qui vous sont exclusives",
-      "Appliquez aux offres après avoir consulté leurs détails",
+      "Consulter les offres de stage disponibles à tous, ainsi que les offres de stage qui vous sont exclusives",
+      "Appliquer aux offres après avoir consulté leurs détails",
     ],
   },
   {
@@ -69,10 +69,10 @@ export const sidebarList = [
     icon: <FileUploadOutlined sx={{ mr: 1 }} />,
     isDialog: false,
     description:
-      "Téléversez votre CV en le glissant ou en cliquant sur la boite ci-dessous",
+      "Téléverser votre CV en le glissant ou en cliquant sur la boîte ci-dessous",
     explication: [
-      "Téléversez votre CV et consultez tous ceux que vous avez déjà ajouté",
-      "Dans le cas d'un refus de votre CV, consultez sa rasion pour pouvoir en déposez un autre en appliquant les commentaires suggérés",
+      "Téléverser votre CV et consulter tous ceux que vous avez déjà ajouté",
+      "Dans le cas d'un refus de votre CV, consulter sa raison pour pouvoir en déposer un autre en appliquant les commentaires suggérés",
     ],
   },
   {
@@ -83,8 +83,8 @@ export const sidebarList = [
     icon: <FormatListBulletedOutlined sx={{ mr: 1 }} />,
     description: "Liste des étudiants ayant postulés à l'une de vos offres",
     explication: [
-      "Consultez la liste des élèves qui ont appliqués aux offres de stage que vous avez déposé",
-      "Pour chacun des élèves, vous pouvez télécharger leur CV ou le consulter dans l'application, contacter l'étudiant et démarrer le processus de signature s'il est sélectionné",
+      "Consulter la liste des élèves qui ont appliquées aux offres de stage que vous avez déposé",
+      "Pour chacun des élèves, vous pouvez télécharger leur CV ou le consulter dans l'application, contacter l'étudiant et démarrer le processus de signature de contrat",
     ],
   },
   {
@@ -93,10 +93,10 @@ export const sidebarList = [
     role: ["SUPERVISOR"],
     isDialog: false,
     icon: <PeopleAltOutlined sx={{ mr: 1 }} />,
-    description: "Liste des étudiants ayant été assigné",
+    description: "Liste des étudiants ayant été assignés",
     explication: [
-      "Consultez la liste des élèves qui vous ont été assignés ainsi que le statut du processus de recherche de stage",
-      "Pour les élèves ayant trouvez un stage, consultez les informations concernant le stage de l'élève",
+      "Consulter la liste des élèves qui vous ont été assignés ainsi que le statut du processus de recherche de stage",
+      "Pour les élèves ayant trouvé un stage, consultez les informations concernant le stage de l'élève",
     ],
   },
   {
@@ -106,7 +106,7 @@ export const sidebarList = [
     icon: <SupervisedUserCircleOutlined fontSize="small" sx={{ mr: 1 }} />,
     description: "Assignations des superviseurs aux élèves",
     explication: [
-      "Assignez les étudiants aux professeurs qui seront responsables de superviser l'étudiant durant son stage",
+      "Assigner les étudiants aux professeurs qui seront responsables de superviser l'étudiant durant son stage",
     ],
   },
   {
@@ -114,9 +114,9 @@ export const sidebarList = [
     label: "Évaluer un stagiaire",
     role: ["MONITOR"],
     icon: <FindInPageOutlined sx={{ mr: 1 }} />,
-    description: "Évaluation du stagiaire à la fin de son contrat",
+    description: "Évaluation du stagiaire à la fin de son mandat",
     explication: [
-      "Remplissez le formulaire d'évaluation de l'étudiant voulu une fois sont stage terminé",
+      "Remplir le formulaire d'évaluation de l'étudiant une fois son stage terminé",
     ],
   },
   {
@@ -126,7 +126,7 @@ export const sidebarList = [
     icon: <FindInPageOutlined sx={{ mr: 1 }} />,
     description: "Évaluation du stagiaire à son mi-mandat",
     explication: [
-      "Remplissez le formulaire d'évaluation de l'étudiant voulu lorsque son stage est arrivé à la la moitié du mandat",
+      "Remplir le formulaire d'évaluation de l'étudiant à la moitié du mandat",
     ],
   },
   {
@@ -136,7 +136,7 @@ export const sidebarList = [
     icon: <AssignmentSharp fontSize="small" sx={{ mr: 1 }} />,
     description: "Consultation des rapports",
     explication: [
-      "Consultez les rapports concernants divers informations sur l'état des offres de stage, des étudiants et des tout ce qui tourne autour",
+      "Consulter les rapports de l'état des offres de stage, des étudiants inscrits, etc",
     ],
   },
   {

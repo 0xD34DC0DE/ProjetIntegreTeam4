@@ -20,7 +20,7 @@ const Home = () => {
           "Enregistrez-vous.",
           "Connectez-vous.",
           "Ajoutez une offre de stage.",
-          "Contactez les appliquants dans l'application",
+          "Contactez les appliquants dans l'application.",
         ]}
         backgroundColor="#1F2020"
         color="white"
@@ -44,7 +44,7 @@ const Home = () => {
         steps={[
           "Enregistrez-vous.",
           "Connectez-vous.",
-          "Téléversez votre C.V.",
+          "Téléversez votre CV.",
           "Appliquez à une offre de stage concurrente.",
         ]}
         backgroundColor="#1F2020"
