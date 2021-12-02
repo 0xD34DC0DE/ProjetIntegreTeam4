@@ -146,7 +146,11 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
               <Button
                 variant="contained"
                 sx={{
-                  ":hover": { backgroundColor: "rgba(125, 51, 235, 0.8)" },
+                  backgroundColor: "rgba(125, 51, 235, 0.8)",
+                  color: "rgba(255, 255, 255, 0.8) !important",
+                  ":hover": {
+                    backgroundColor: "rgba(95, 21, 195, 0.8)",
+                  },
                 }}
                 onClick={() => {
                   addExclusiveOfferToStudents(selectedUsersEmail);
@@ -167,7 +171,20 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
                 <Grid item xs={11}>
                   <Tooltip title="Chercher un élève par son nom ou son prénom">
                     <input
-                      style={{ width: "100%" }}
+                      style={{
+                        width: "100%",
+                        color: "white",
+                        backgroundColor: "rgba(50, 50, 50, 0.)",
+                        border: "1px solid rgba(255, 255, 255, 0.1)",
+                        fontSize: "0.9em",
+                        height: "30px",
+                        "::focus": {
+                          boxShadow: "0px 0px 15px 2px red !important",
+                        },
+                        ":placeholder": {
+                          color: "white !important",
+                        },
+                      }}
                       type="search"
                       onChange={(e) => {
                         setSearchText(e.target.value);
@@ -224,6 +241,7 @@ const AssignedExclusiveOfferDialog = ({ offer }) => {
                         <Grid container>
                           <Grid item xs={1}>
                             <Avatar
+                              sx={{ width: "50px", height: "50px" }}
                               src={
                                 usersProfileImage
                                   .filter(
