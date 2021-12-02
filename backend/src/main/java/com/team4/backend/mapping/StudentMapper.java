@@ -24,6 +24,7 @@ public abstract class StudentMapper {
                 .studentState(studentCreationDto.getStudentState())
                 .appliedOffersId(new HashSet<>())
                 .evaluationsDates(new TreeSet<>())
+                .exclusiveOffersId(new HashSet<>())
                 .profileImageId("")
                 .interviewsDate(new TreeSet<>())
                 .hasValidCv(false)

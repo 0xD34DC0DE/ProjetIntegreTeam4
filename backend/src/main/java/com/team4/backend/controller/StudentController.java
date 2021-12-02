@@ -72,4 +72,10 @@ public class StudentController {
                 .map(StudentMapper::toDto);
     }
 
+    @GetMapping("/hasValidCv/{studentEmail}")
+    @PreAuthorize("hasAuthority('STUDENT')")
+    public Mono<Boolean> hasValidCv(@PathVariable("studentEmail") String studentEmail) {
+        return studentService.hasValidCv(studentEmail);
+    }
+
 }
