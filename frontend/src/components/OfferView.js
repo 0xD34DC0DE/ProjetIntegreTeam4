@@ -12,15 +12,15 @@ const OfferView = ({
   minSalary,
   maxSalary,
   description,
-   hasAlreadyApplied,
-   id,
+  hasAlreadyApplied,
+  id,
   buttons,
 }) => {
   const theme = useTheme();
   const matchesBreakpointLg = useMediaQuery(theme.breakpoints.down("lg"));
 
   return (
-    <Container sx={{ maxWidth: "md" }}>
+    <Container key={id} sx={{ maxWidth: "md" }}>
       <Paper
         sx={{
           mb: 5,
@@ -70,9 +70,9 @@ const OfferView = ({
             mt={matchesBreakpointLg ? 1 : 0}
           >
             {buttons &&
-            buttons.map((button) => {
-              return button;
-            })}
+              buttons.map((button) => {
+                return button;
+              })}
           </Grid>
         </Grid>
         <Grid container alignContent="center">

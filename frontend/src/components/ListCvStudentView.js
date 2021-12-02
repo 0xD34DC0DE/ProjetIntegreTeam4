@@ -41,10 +41,12 @@ const ListCvStudentView = ({ cvSent }) => {
           Authorization: userInfo.jwt,
         },
         responseType: "json",
-      }).catch((error) => {
+      }).then((response)=> {
+        setCvs(response.data);
+      })
+      .catch((error) => {
         console.log(error);
       });
-      setCvs(response.data);
     };
 
     getAllCvByUserEmail();
