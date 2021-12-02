@@ -1,11 +1,14 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.AuthRequestDto;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.exception.WrongCredentialsException;
 import com.team4.backend.mapping.StudentMapper;
 import com.team4.backend.mapping.UserMapper;
+import com.team4.backend.model.Monitor;
 import com.team4.backend.model.User;
 import com.team4.backend.repository.UserRepository;
+import com.team4.backend.testdata.MonitorMockData;
 import com.team4.backend.testdata.StudentMockData;
 import com.team4.backend.testdata.UserMockData;
 import com.team4.backend.util.JwtUtil;
@@ -22,6 +25,7 @@ import reactor.test.StepVerifier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -113,7 +117,7 @@ public class UserServiceTest {
     }
 
     @Test
-    void shouldGetAllStudentsByRole(){
+    void shouldGetAllStudentsByRole() {
         //ARRANGE
         when(userRepository.findAllByRoleEquals("STUDENT")).thenReturn(UserMockData.getAllStudents());
 
@@ -124,6 +128,64 @@ public class UserServiceTest {
         StepVerifier.create(studentFlux)
                 .expectNextCount(2)
                 .verifyComplete();
+    }
+
+    @Test
+    void shouldFindByEmail() {
+        //ARRANGE
+        User user = UserMockData.getUser();
+
+        when(userRepository.findByEmail(anyString())).thenReturn(Mono.just(user));
+
+        //ACT
+        Mono<User> userMono = userService.findByEmail(user.getEmail());
+
+        //ASSERT
+        StepVerifier.create(userMono)
+                .assertNext(u -> assertEquals(user.getEmail(), u.getEmail()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotFindByEmail() {
+        //ARRANGE
+        when(userRepository.findByEmail(anyString())).thenReturn(Mono.error(UserNotFoundException::new));
+
+        //ACT
+        Mono<User> monitorMono = userService.findByEmail(anyString());
+
+        //ASSERT
+        StepVerifier.create(monitorMono)
+                .verifyError(UserNotFoundException.class);
+    }
+
+    @Test
+    void shouldFindById() {
+        //ARRANGE
+        User user = UserMockData.getUser();
+
+        when(userRepository.findById(anyString())).thenReturn(Mono.just(user));
+
+        //ACT
+        Mono<User> userMono = userService.findById(user.getId());
+
+        //ASSERT
+        StepVerifier.create(userMono)
+                .assertNext(u -> assertEquals(user.getId(), u.getId()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotFindById() {
+        //ARRANGE
+        when(userRepository.findById(anyString())).thenReturn(Mono.error(UserNotFoundException::new));
+
+        //ACT
+        Mono<User> userMono = userService.findById(anyString());
+
+        //ASSERT
+        StepVerifier.create(userMono)
+                .verifyError(UserNotFoundException.class);
     }
 
 }
