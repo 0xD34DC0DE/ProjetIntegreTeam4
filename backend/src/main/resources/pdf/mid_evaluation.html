@@ -1,0 +1,345 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="fr">
+<head>
+    <title>Evaluation</title>
+    <meta charset="UTF-8"/>
+    <bookmarks>
+        <bookmark name="Évaluation" href="#evaluation"></bookmark>
+    </bookmarks>
+    <link th:rel="stylesheet" type="text/css" th:href="@{css/mid_evaluation.css}"/>
+</head>
+<body style="width: 90%; display: block; margin: 0 auto 50px auto">
+<h1 style="text-align: center; font-size: 40px; margin-bottom: 50px;">Fiche d'évaluation du milieu de stage</h1>
+<p style="line-height: 0; font-weight: bold;">IDENTIFICATION DE L'ENTREPRISE</p>
+<div style="border: black 1px solid; margin-bottom: 50px">
+    <div style=" padding-top: 10px; margin-left: 10px">
+        <label style="display: block">
+            Nom de l'entreprise
+        </label>
+        <input id="companyName" th:readonly="true" th:value="${text['companyName'] == null ? '' : text.companyName}"
+               style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+    </div>
+    <div style=" padding-top: 10px; margin-left: 10px">
+        <label style="display: block">
+            Contact
+        </label>
+        <input id="contact" th:readonly="true" th:value="${text['contact'] == null ? '' : text.contact}"
+               style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+    </div>
+    <div style=" padding-top: 10px; margin-left: 10px">
+        <label style="display: block">
+            Adresse
+        </label>
+        <input id="addresse" th:readonly="true" th:value="${text['address'] == null ? '' : text.address}"
+               style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+    </div>
+    <div style=" padding-top: 10px; margin-left: 10px">
+        <label style="display: block">
+            Ville
+        </label>
+        <input id="city" th:readonly="true" th:value="${text['city'] == null ? '' : text.city}"
+               style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+    </div>
+    <div style=" padding-top: 10px; margin-left: 10px">
+        <label style="display: block">
+            Numéro de téléphone
+        </label>
+        <input id="phoneNumber" th:readonly="true" th:value="${text['phoneNumber'] == null ? '' : text.phoneNumber}"
+               style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+    </div>
+    <div style=" padding-top: 10px; margin-left: 10px">
+        <label style="display: block">
+            Télécopieur
+        </label>
+        <input id="faxMachine" th:readonly="true" th:value="${text['faxMachine'] == null ? '' : text.faxMachine}"
+               style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+    </div>
+    <div style="padding-bottom: 10px; padding-top: 10px; margin-left: 10px">
+        <label style="display: block">
+            Code postal
+        </label>
+        <input id="zipCode" th:readonly="true" th:value="${text['zipCode'] == null ? '' : text.zipCode}"
+               style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+    </div>
+</div>
+<p style="line-height: 0; font-weight: bold;">IDENTIFICATION DU STAGIAIRE</p>
+<div style="border: black 1px solid; margin-top: 20px; ; margin-bottom: 50px">
+    <div style=" padding-top: 10px; margin-left: 10px">
+        <label style="display: block">
+            Nom du stagiaire
+        </label>
+        <input id="studentFullName" th:readonly="true"
+               th:value="${text['studentFullName'] == null ? '' : text.studentFullName}"
+               style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+    </div>
+    <div style=" padding-top: 10px; margin-left: 10px">
+        <label style="display: block">
+            Date du stage
+        </label>
+        <input id="internshipDate" th:readonly="true"
+               th:value="${text['internshipDate'] == null ? '' : text.internshipDate}"
+               style="border: 0; border-bottom: 1px black solid; width: 99%"/>
+    </div>
+    <div style="padding-top: 10px; margin-left: 10px; padding-bottom: 10px">
+        <label>
+            Stage :
+            1 :
+            <input name="internshipNumber" th:readonly="true" type="checkbox"
+                   style="border: 0; border-bottom: 1px black solid;"
+                   th:checked="${text['internshipNumber'] == null ? false : text.internshipNumber.equals('1')}"/>
+            2 :
+            <input name="internshipNumber" th:readonly="true" type="checkbox"
+                   style="border: 0; border-bottom: 1px black solid;"
+                   th:checked="${text['internshipNumber'] == null ? false : text.internshipNumber.equals('2')}"/>
+        </label>
+    </div>
+</div>
+<div style=" page-break-inside: avoid;">
+    <p style="line-height: 0; font-weight: bold;">ÉVALUATION</p>
+    <div style="border: black 1px solid; margin-bottom: 50px;">
+        <table style="width: 98%; margin: auto; border-spacing: 10px;">
+            <tr>
+                <th></th>
+                <th>Totalement en accord</th>
+                <th>Plutôt en accord</th>
+                <th>Plutôt en désaccord</th>
+                <th>Totalement en désaccord</th>
+                <th>N/A</th>
+            </tr>
+            <tr>
+                <td>Les tâches confiées au stagiaire sont conformes aux tâches annoncées dans l'entente de stage</td>
+                <td th:each="type: ${ratingTypes}">
+                    <input name="taskRespectAgreement" type="checkbox" style="display: block; margin: auto" th:readonly="true"
+                           th:checked="${rating['taskRespectAgreement'] == null ? false : rating.taskRespectAgreement.name().equals(type)}"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td>Des mesures d'accueil facilitent l'intégration du nouveau stagiaire
+                    <br style="margin-top: 20px; margin-bottom: 20px"/>
+                    Préciser le nombre d'heures/semaine :
+                    <br/>
+                    Premier mois:
+                    <input id="timeSpentWeeklyMonth1" th:readonly="true"
+                           style="border: 0; border-bottom: 1px black solid; text-align: center"
+                           th:value="${text['timeSpentWeeklyMonth1'] == null ? '' : text.timeSpentWeeklyMonth1 + 'h'}"
+                    />
+                    <br/>
+                    Deuxième mois:
+                    <input id="timeSpentWeeklyMonth2" th:readonly="true"
+                           style="border: 0; border-bottom: 1px black solid; text-align: center"
+                           th:value="${text['timeSpentWeeklyMonth2'] == null ? '' : text.timeSpentWeeklyMonth2 + 'h'}"
+                    />
+                    <br/>
+                    Troisième mois:
+                    <input id="timeSpentWeeklyMonth3" th:readonly="true"
+                           style="border: 0; border-bottom: 1px black solid; text-align: center"
+                           th:value="${text['timeSpentWeeklyMonth3'] == null ? '' : text.timeSpentWeeklyMonth3 + 'h'}"
+                    />
+                </td>
+                <td th:each="type: ${ratingTypes}">
+                    <input name="internIntegrationMesures" type="checkbox" style="display: block; margin: auto" th:readonly="true"
+                           th:checked="${rating['internIntegrationMesures'] == null ? false : rating.internIntegrationMesures.name().equals(type)}"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td>Le temps réel consacré à l'encadrement du stagiaire est suffisant</td>
+                <td th:each="type: ${ratingTypes}">
+                    <input name="internSupervisionTimeAllocated" type="checkbox" style="display: block; margin: auto" th:readonly="true"
+                           th:checked="${rating['internSupervisionTimeAllocated'] == null ? false : rating.internSupervisionTimeAllocated.name().equals(type)}"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td>L'environnement de travail respecte les normes d'hygiène et de sécurité au travail</td>
+                <td th:each="type: ${ratingTypes}">
+                    <input name="workEnvironnement" type="checkbox" style="display: block; margin: auto" th:readonly="true"
+                           th:checked="${rating['workEnvironnement'] == null ? false : rating.workEnvironnement.name().equals(type)}"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td>Le climat de travail est agréable</td>
+                <td th:each="type: ${ratingTypes}">
+                    <input name="pleasantWorkClimate" type="checkbox" style="display: block; margin: auto" th:readonly="true"
+                           th:checked="${rating['pleasantWorkClimate'] == null ? false : rating.pleasantWorkClimate.name().equals(type)}"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td>Le milieu de stage est accessible par transport en commun</td>
+                <td th:each="type: ${ratingTypes}">
+                    <input name="publicTransportAccessible" type="checkbox" style="display: block; margin: auto" th:readonly="true"
+                           th:checked="${rating['publicTransportAccessible'] == null ? false : rating.publicTransportAccessible.name().equals(type)}"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td>Le salaire offert est intéressant pour le stagiaire
+                    <br style="margin-top: 20px; margin-bottom: 20px"/>
+                    Préciser le nombre d'heures/semaine :
+                    <br/>
+                    Précisez :
+                    <input id="salaryHour" th:readonly="true"
+                           style="border: 0; border-bottom: 1px black solid; text-align: center"
+                           th:value="${text['salaryHour'] == null ? '' : text.salaryHour + '$'}"
+                    />
+                    /l'heure
+                </td>
+                <td th:each="type: ${ratingTypes}">
+                    <input name="interestingSalary" type="checkbox" style="display: block; margin: auto" th:readonly="true"
+                           th:checked="${rating['interestingSalary'] == null ? false : rating.interestingSalary.name().equals(type)}"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td>La communication avec le superviseur de stage facilite le déroulement du stage</td>
+                <td th:each="type: ${ratingTypes}">
+                    <input name="supervisorCommunicationEase" type="checkbox" style="display: block; margin: auto" th:readonly="true"
+                           th:checked="${rating['supervisorCommunicationEase'] == null ? false : rating.supervisorCommunicationEase.name().equals(type)}"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td>L'équipment fourni est adéquat pour réaliser les tâches confiées</td>
+                <td th:each="type: ${ratingTypes}">
+                    <input name="adequateEquipement" type="checkbox" style="display: block; margin: auto" th:readonly="true"
+                           th:checked="${rating['adequateEquipement'] == null ? false : rating.adequateEquipement.name().equals(type)}"
+                    />
+                </td>
+            </tr>
+            <tr>
+                <td>Le volume de travail est acceptable</td>
+                <td th:each="type: ${ratingTypes}">
+                    <input name="workVolumeAcceptable" type="checkbox" style="display: block; margin: auto" th:readonly="true"
+                           th:checked="${rating['workVolumeAcceptable'] == null ? false : rating.workVolumeAcceptable.name().equals(type)}"
+                    />
+                </td>
+            </tr>
+        </table>
+        <div style="margin-left: 10px">
+            <p style="width: 98%; line-height: 0; display: block; margin: 20px auto 20px auto">Commentaires:</p>
+            <textarea id="evaluationComment" th:text="${text['evaluationComment'] == null ? '' : text.evaluationComment}" rows="5" style="width: 98%; display: block; margin: 0 auto 10px auto"></textarea>
+        </div>
+    </div>
+</div>
+<div style=" page-break-inside: avoid;">
+    <p style="line-height: 0; font-weight: bold;">OBSERVATIONS GÉNÉRALES</p>
+    <div style="border: black 1px solid; margin-top: 20px; margin-bottom: 50px;">
+        <label style="margin-left: 10px; display: block; margin-top: 10px; text-align: center">
+            Ce milieu est à privilégier pour le stage
+            <br/>
+            <input name="privilegeInternship" th:readonly="true" type="checkbox"
+                   style="border: 0; border-bottom: 1px black solid; margin-top: 10px;"
+                   th:checked="${text['privilegeInternship'] == null ? false : text.privilegeInternship.equals('FIRST')}"/>
+            Premier Stage
+            <input name="privilegeInternship" th:readonly="true" type="checkbox"
+                   style="border: 0; border-bottom: 1px black solid; margin-left: 50px;"
+                   th:checked="${text['privilegeInternship'] == null ? false : text.privilegeInternship.equals('SECOND')}"/>
+            Deuxième Stage
+        </label>
+        <label style="margin-left: 10px; display: block; margin-top: 20px; text-align: center">
+            Ce milieu est ouvert à accueillir
+            <br/>
+            <input name="hiringInterns" th:readonly="true" type="checkbox"
+                   style="border: 0; border-bottom: 1px black solid; margin-top: 10px;"
+                   th:checked="${text['hiringInterns'] == null ? false : text.hiringInterns.equals('ONE')}"/>
+            Un stagiaire
+            <input name="hiringInterns" th:readonly="true" type="checkbox"
+                   style="border: 0; border-bottom: 1px black solid; margin-left: 40px"
+                   th:checked="${text['hiringInterns'] == null ? false : text.hiringInterns.equals('TWO')}"/>
+            Deux stagiaires
+            <input name="hiringInterns" th:readonly="true" type="checkbox"
+                   style="border: 0; border-bottom: 1px black solid; margin-left: 20px;"
+                   th:checked="${text['hiringInterns'] == null ? false : text.hiringInterns.equals('THREE')}"/>
+            Trois stagiaires
+            <input name="hiringInterns" th:readonly="true" type="checkbox"
+                   style="border: 0; border-bottom: 1px black solid; margin-left: 20px;"
+                   th:checked="${text['hiringInterns'] == null ? false : text.hiringInterns.equals('THREE_MORE')}"/>
+            Plus de trois stagiaires
+        </label>
+        <label style="margin-left: 10px; display: block; margin-top: 20px; text-align: center">
+            Ce milieu désire accueillir le même stagiaire pour un prochain stage
+            <br/>
+            <input name="interestRehire" th:readonly="true" type="checkbox"
+                   style="border: 0; border-bottom: 1px black solid; margin-top: 10px;"
+                   th:checked="${categorical['interestRehire'] == null ? false : categorical.interestRehire.name().equals('YES')}"/>
+            Oui
+            <input name="interestRehire" th:readonly="true" type="checkbox"
+                   style="border: 0; border-bottom: 1px black solid; margin-left: 50px;"
+                   th:checked="${categorical['interestRehire'] == null ? false : categorical.interestRehire.name().equals('NO')}"/>
+            Non
+        </label>
+        <label style="margin-left: 10px; display: block; margin-top: 20px; text-align: center">
+            Ce milieu offre des quarts de travail variables
+            <br/>
+            <input name="variableWorkShifts" th:readonly="true" type="checkbox"
+                   style="border: 0; border-bottom: 1px black solid; margin-top: 10px;"
+                   th:checked="${categorical['variableWorkShifts'] == null ? false : categorical.variableWorkShifts.name().equals('YES')}"/>
+            Oui
+            <input name="variableWorkShifts" th:readonly="true" type="checkbox"
+                   style="border: 0; border-bottom: 1px black solid; margin-left: 50px"
+                   th:checked="${categorical['variableWorkShifts'] == null ? false : categorical.variableWorkShifts.name().equals('NO')}"/>
+            Non
+        </label>
+        <div style="padding-top: 10px; margin-left: 10px; padding-bottom: 10px">
+            <label>
+                De :
+                <input id="shift1Start" th:readonly="true"
+                       style="border: 0; border-bottom: 1px black solid; text-align: center"
+                       th:value="${text['shift1Start'] == null ? '' : text.shift1Start + 'h'}"
+                />
+                à
+                <input id="shift1End" th:readonly="true"
+                       style="border: 0; border-bottom: 1px black solid; text-align: center"
+                       th:value="${text['shift1End'] == null ? '' : text.shift1End + 'h'}"
+                />
+            </label>
+        </div>
+        <div style="padding-top: 10px; margin-left: 10px; padding-bottom: 10px">
+            <label>
+                De :
+                <input id="shift2Start" th:readonly="true"
+                       style="border: 0; border-bottom: 1px black solid; text-align: center"
+                       th:value="${text['shift2Start'] == null ? '' : text.shift2Start + 'h'}"
+                />
+                à
+                <input id="shift2End" th:readonly="true"
+                       style="border: 0; border-bottom: 1px black solid; text-align: center"
+                       th:value="${text['shift2End'] == null ? '' : text.shift2End + 'h'}"
+                />
+            </label>
+        </div>
+        <div style="padding-top: 10px; margin-left: 10px; padding-bottom: 10px">
+            <label>
+                De :
+                <input id="shift3Start" th:readonly="true"
+                       style="border: 0; border-bottom: 1px black solid; text-align: center"
+                       th:value="${text['shift3Start'] == null ? '' : text.shift3Start + 'h'}"
+                />
+                à
+                <input id="shift3End" th:readonly="true"
+                       style="border: 0; border-bottom: 1px black solid; text-align: center"
+                       th:value="${text['shift3End'] == null ? '' : text.shift3End + 'h'}"
+                />
+            </label>
+        </div>
+    </div>
+</div>
+<div style="border: black 1px solid; text-align: center">
+    <div style="display: block; margin: 10px 0 10px 0">
+        <label>
+            Signature de l'enseignant
+        </label>
+        <input id="signature" th:readonly="true" th:value="${text['signature'] == null ? '' : text.signature}"
+               style="border: 0; border-bottom: 1px black solid; width: 25%"/>
+        <label>
+            Date :
+        </label>
+        <input id="date" th:readonly="true" th:value="${text['date'] == null ? '' : text.date}"
+               style="border: 0; border-bottom: 1px black solid; width: 25%"/>
+    </div>
+</div>
+</body>
+</html>

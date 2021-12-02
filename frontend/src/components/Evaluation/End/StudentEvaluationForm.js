@@ -16,18 +16,7 @@ import { DialogContext } from "../../../stores/DialogStore";
 
 const StudentEvaluationForm = () => {
   const evaluationForm = useRef({
-    text: {
-      studentFullName: "",
-      studyProgram: "",
-      companyName: "",
-      supervisorFullName: "",
-      fonction: "",
-      phoneNumber: "",
-      productivityComment: "",
-      workQualityComment: "",
-      interpersonalRelationshipsComment: "",
-      personalSkillsComment: "",
-    },
+    text: {},
     categorical: {},
     rating: {},
     expectation: {},
@@ -196,6 +185,7 @@ const StudentEvaluationForm = () => {
       <EvaluationDialogPreview
         evaluationId={evaluationId}
         setEvaluationId={setEvaluationId}
+        mid={false}
       ></EvaluationDialogPreview>
     </>
   );

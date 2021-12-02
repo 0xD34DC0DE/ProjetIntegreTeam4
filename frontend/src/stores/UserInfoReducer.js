@@ -1,6 +1,7 @@
 import jwt_decode from "jwt-decode";
 import initialState from "./UserInfoStore";
 import axios from "axios";
+import { sidebarList } from "../components/Configuration";
 
 const UserInfoReducer = (state, action) => {
   const jwtToken = sessionStorage.getItem("jwt");

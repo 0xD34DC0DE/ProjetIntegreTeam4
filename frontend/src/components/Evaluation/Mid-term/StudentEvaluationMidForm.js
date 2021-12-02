@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import { Grid, Typography } from "@mui/material";
 import CompanyIdentificationDropdown from "./CompanyIdentificationDropdown";
 import StudentIdentificationDropdown from "./StudentIdentificationDropdown";
@@ -9,6 +9,8 @@ import SubmitEvaluationButton from "../SubmitEvaluationButton";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { UserInfoContext } from "../../../stores/UserInfoStore";
+import { DialogContext } from "../../../stores/DialogStore";
+import EvaluationDialogPreview from "../EvaluationDialogPreview";
 
 import axios from "axios";
 
@@ -16,6 +18,8 @@ const StudentEvaluationMidForm = () => {
   const [userInfo] = useContext(UserInfoContext);
   const [errorMessage, setErrorMessage] = useState("");
   const [midEvaluationSent, setMidEvaluationSent] = useState(false);
+  const [evaluationId, setEvaluationId] = useState("");
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const midEvaluationForm = useRef({
     text: {},
@@ -69,6 +73,8 @@ const StudentEvaluationMidForm = () => {
     await studentMidEvaluationRef.current.getForm();
     await companyObservationRef.current.getForm();
 
+    console.log(midEvaluationForm.current);
+
     await axios({
       method: "POST",
       url: "http://localhost:8080/evaluation",
@@ -77,14 +83,26 @@ const StudentEvaluationMidForm = () => {
         Authorization: userInfo.jwt,
       },
       responseType: "json",
-    }).catch((error) => {
-      setErrorMessage("Une erreur est survenue, veuillez réessayer.");
-      console.error(error);
-    });
+    })
+      .then((response) => {
+        setEvaluationId(response.data);
+      })
+      .catch((error) => {
+        setErrorMessage("Une erreur est survenue, veuillez réessayer.");
+        console.error(error);
+      });
 
     setMidEvaluationSent(true);
     resetForm();
   };
+
+  useEffect(() => {
+    if (!!evaluationId) return;
+    dialogDispatch({
+      type: "OPEN",
+      dialogName: "evaluationDialogPreview",
+    });
+  }, [evaluationId]);
 
   const resetForm = () => {
     setTimeout(() => {
@@ -165,6 +183,11 @@ const StudentEvaluationMidForm = () => {
           <SubmitEvaluationButton onClick={handleSubmit} delay={1} />
         </Grid>
       )}
+      <EvaluationDialogPreview
+        evaluationId={evaluationId}
+        setEvaluationId={setEvaluationId}
+        mid={true}
+      ></EvaluationDialogPreview>
     </>
   );
 };

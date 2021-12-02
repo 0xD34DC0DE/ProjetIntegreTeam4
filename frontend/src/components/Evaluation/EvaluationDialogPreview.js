@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { DialogContext } from "../../stores/DialogStore.js";
 import PdfView from "../PdfView.js";
 
-function EvaluationDialogPreview({ evaluationId, setEvaluationId }) {
+function EvaluationDialogPreview({ evaluationId, setEvaluationId, mid }) {
   const [dialog, dialogDispatch] = useContext(DialogContext);
   const handleClose = (_, reason) => {
     dialogDispatch({
@@ -14,7 +14,11 @@ function EvaluationDialogPreview({ evaluationId, setEvaluationId }) {
   };
 
   const getPdfUrl = () => {
-    return `http://localhost:8080/evaluation/` + evaluationId;
+    return (
+      `http://localhost:8080/evaluation/` +
+      (mid === true ? "mid/" : "") +
+      evaluationId
+    );
   };
 
   return (
