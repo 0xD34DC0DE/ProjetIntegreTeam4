@@ -27,7 +27,7 @@ function EvaluationDialogPreview({ evaluationId, setEvaluationId, mid }) {
     );
   };
 
-  const createPdfUrl = () => {
+  const generateBlobUrl = () => {
     axios({
       method: "GET",
       headers: {
@@ -84,7 +84,7 @@ function EvaluationDialogPreview({ evaluationId, setEvaluationId, mid }) {
                       boxShadow: "2px 2px 10px 2px rgba(0, 0, 0, 0.5)",
                     }}
                     onClick={() => {
-                      createPdfUrl();
+                      generateBlobUrl();
                     }}
                   >
                     Télécharger
