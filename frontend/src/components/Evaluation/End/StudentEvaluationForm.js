@@ -16,18 +16,7 @@ import { DialogContext } from "../../../stores/DialogStore";
 
 const StudentEvaluationForm = () => {
   const evaluationForm = useRef({
-    text: {
-      studentFullName: "",
-      studyProgram: "",
-      companyName: "",
-      supervisorFullName: "",
-      fonction: "",
-      phoneNumber: "",
-      productivityComment: "",
-      workQualityComment: "",
-      interpersonalRelationshipsComment: "",
-      personalSkillsComment: "",
-    },
+    text: {},
     categorical: {},
     rating: {},
     expectation: {},
@@ -66,7 +55,11 @@ const StudentEvaluationForm = () => {
         setEvaluationId(response.data);
       })
       .catch((error) => {
-        setErrorMessage("Une erreur est survenue, veuillez réessayer.");
+        if (error.response.status)
+          setErrorMessage(
+            "Le nom du stagiaire n'existe pas, veuillez réessayer."
+          );
+        else setErrorMessage("Une erreur est survenue, veuillez réessayer.");
         console.error(error);
       });
 
@@ -196,6 +189,7 @@ const StudentEvaluationForm = () => {
       <EvaluationDialogPreview
         evaluationId={evaluationId}
         setEvaluationId={setEvaluationId}
+        mid={false}
       ></EvaluationDialogPreview>
     </>
   );

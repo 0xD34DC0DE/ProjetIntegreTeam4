@@ -98,8 +98,9 @@ public class InternshipOfferController {
     @PatchMapping("/validateInternshipOffer")
     @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER')")
     public Mono<ResponseEntity<String>> validateInternshipOffer(@RequestParam("id") String id,
-                                                                @RequestParam("isValid") Boolean isValid) {
-        return internshipOfferService.validateInternshipOffer(id, isValid)
+                                                                @RequestParam("isValid") Boolean isValid,
+                                                                Principal principal) {
+        return internshipOfferService.validateInternshipOffer(id, isValid, UserSessionService.getLoggedUserEmail(principal))
                 .flatMap(i -> Mono.just(ResponseEntity.status(HttpStatus.NO_CONTENT).body("")));
     }
 

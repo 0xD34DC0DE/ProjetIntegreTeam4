@@ -158,7 +158,7 @@ export const studentIdentification = {
   title: "Identification du stagiare",
   description: "Information du stagiaire évalué",
   fields: [
-    { label: "Nom du stagiaire", id: "text#studentName", type: "text" },
+    { label: "Nom du stagiaire", id: "text#studentFullName", type: "text" },
     { label: "Date du stage", id: "text#internshipDate", type: "date" },
   ],
 };
@@ -171,7 +171,7 @@ export const companyIdentification = {
     { label: "Contact", id: "text#contact" },
     { label: "Adresse", id: "text#address" },
     { label: "Ville", id: "text#city" },
-    { label: "Numéro de téléphone", id: "text#pĥoneNumber" },
+    { label: "Numéro de téléphone", id: "text#phoneNumber" },
     { label: "Télécopieur", id: "text#faxMachine" },
     { label: "Code postal", id: "text#zipCode" },
   ],
@@ -245,6 +245,7 @@ export const companyObservation = [
     options: [
       { label: "Un stagiaire", value: "ONE" },
       { label: "Deux stagière", value: "TWO" },
+      { label: "Trois stagiaires", value: "THREE" },
       { label: "Plus de trois stagiaires", value: "THREE_MORE" },
     ],
   },

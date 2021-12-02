@@ -124,18 +124,10 @@ const StudentMidEvaluationDropdown = ({ mergeForms }, ref) => {
           <Grid container>
             <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
               <Grid container flexDirection="row" textAlign="center">
-                <Grid item xl={6} lg={6} md={6} sm={6} xs={6}></Grid>
+                <Grid item xl={7} lg={7} md={7} sm={7} xs={7}></Grid>
                 {ratings.map((rating, key3) => {
                   return (
-                    <Grid
-                      item
-                      xl={1.2}
-                      lg={1.2}
-                      md={1.2}
-                      sm={1.2}
-                      xs={1.2}
-                      key={key3}
-                    >
+                    <Grid item xl={1} lg={1} md={1} sm={1} xs={1} key={key3}>
                       <Typography
                         variant="caption"
                         sx={{
@@ -157,11 +149,11 @@ const StudentMidEvaluationDropdown = ({ mergeForms }, ref) => {
                     <React.Fragment key={key2}>
                       <Grid
                         item
-                        xl={6}
-                        lg={6}
-                        md={6}
-                        sm={6}
-                        xs={6}
+                        xl={7}
+                        lg={7}
+                        md={7}
+                        sm={7}
+                        xs={7}
                         alignSelf="center"
                         key={key2}
                       >
@@ -175,11 +167,11 @@ const StudentMidEvaluationDropdown = ({ mergeForms }, ref) => {
                           <Grid
                             item
                             textAlign="center"
-                            xl={1.2}
-                            lg={1.2}
-                            md={1.2}
-                            sm={1.2}
-                            xs={1.2}
+                            xl={1}
+                            lg={1}
+                            md={1}
+                            sm={1}
+                            xs={1}
                             key={key3}
                           >
                             <Radio

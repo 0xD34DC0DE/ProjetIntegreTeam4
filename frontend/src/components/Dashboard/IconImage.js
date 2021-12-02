@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Avatar, Typography, Grid, Button } from "@mui/material";
+import { Avatar, Typography, Grid } from "@mui/material";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import BlockIcon from "@mui/icons-material/Block";
 import { UserInfoContext } from "../../stores/UserInfoStore";
