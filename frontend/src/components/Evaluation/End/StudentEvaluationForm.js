@@ -55,7 +55,11 @@ const StudentEvaluationForm = () => {
         setEvaluationId(response.data);
       })
       .catch((error) => {
-        setErrorMessage("Une erreur est survenue, veuillez réessayer.");
+        if (error.response.status)
+          setErrorMessage(
+            "Le nom du stagiaire n'existe pas, veuillez réessayer."
+          );
+        else setErrorMessage("Une erreur est survenue, veuillez réessayer.");
         console.error(error);
       });
 

@@ -73,8 +73,6 @@ const StudentEvaluationMidForm = () => {
     await studentMidEvaluationRef.current.getForm();
     await companyObservationRef.current.getForm();
 
-    console.log(midEvaluationForm.current);
-
     await axios({
       method: "POST",
       url: "http://localhost:8080/evaluation",
@@ -88,7 +86,11 @@ const StudentEvaluationMidForm = () => {
         setEvaluationId(response.data);
       })
       .catch((error) => {
-        setErrorMessage("Une erreur est survenue, veuillez réessayer.");
+        if (error.response.status)
+          setErrorMessage(
+            "Le nom du stagiaire n'existe pas, veuillez réessayer."
+          );
+        else setErrorMessage("Une erreur est survenue, veuillez réessayer.");
         console.error(error);
       });
 
