@@ -1,14 +1,13 @@
 package com.team4.backend.service;
 
 import com.team4.backend.dto.StudentDetailsDto;
+import com.team4.backend.dto.UserDto;
 import com.team4.backend.exception.DuplicateEntryException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.mapping.StudentMapper;
-import com.team4.backend.model.Evaluation;
-import com.team4.backend.model.Semester;
-import com.team4.backend.model.Supervisor;
-import com.team4.backend.model.TimestampedEntry;
+import com.team4.backend.mapping.UserMapper;
+import com.team4.backend.model.*;
 import com.team4.backend.repository.SupervisorRepository;
 import com.team4.backend.util.PBKDF2Encoder;
 import com.team4.backend.util.SemesterUtil;
@@ -19,7 +18,9 @@ import reactor.util.function.Tuple2;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -157,6 +158,38 @@ public class SupervisorService {
                 .collect(Collectors.toSet())
         ).flatMapMany(studentService::findAllByEmails)
                 .map(StudentMapper::toDto);
+    }
+
+    public Flux<UserDto> getAllStudentsNoSupervisor() {
+        return Mono.zip(
+                semesterService.getCurrentSemester(),
+                studentService.getAll().collectList(),
+                getAll().collectList()
+        ).flatMapMany(tuple -> {
+            Semester semester = tuple.getT1();
+            List<Student> allStudents = tuple.getT2();
+            List<Supervisor> allSupervisors = tuple.getT3();
+
+            Set<String> studentWithSupervisorEmails = allSupervisors.stream()
+                    .map(Supervisor::getStudentTimestampedEntries)
+                    .flatMap(Collection::stream)
+                    .filter(timestampedEntry ->
+                            SemesterUtil.checkIfDatesAreInsideRangeOfSemester(
+                                    semester,
+                                    timestampedEntry.getDate(),
+                                    timestampedEntry.getDate()
+                            )
+                    )
+                    .map(TimestampedEntry::getEmail)
+                    .collect(Collectors.toSet());
+
+            List<UserDto> allStudentsWithoutSupervisorDto = allStudents.stream()
+                    .filter(student -> !studentWithSupervisorEmails.contains(student.getEmail()))
+                    .map(UserMapper::toDto)
+                    .collect(Collectors.toList());
+
+            return Flux.fromIterable(allStudentsWithoutSupervisorDto);
+        });
     }
 
 }

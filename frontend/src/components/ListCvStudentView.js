@@ -17,7 +17,7 @@ import CvRejectionExplanationDialog from "./CvRejectionExplanationDialog";
 import CVDialog from "./CVDialog";
 import { DialogContext } from "../stores/DialogStore";
 
-const ListCvStudentView = () => {
+const ListCvStudentView = ({ cvSent }) => {
   const [userInfo] = useContext(UserInfoContext);
   const [cvs, setCvs] = useState([]);
   const [url, setUrl] = useState("");
@@ -41,15 +41,16 @@ const ListCvStudentView = () => {
           Authorization: userInfo.jwt,
         },
         responseType: "json",
-      }).catch((error) => {
+      }).then((response)=> {
+        setCvs(response.data);
+      })
+      .catch((error) => {
         console.log(error);
       });
-
-      setCvs(response.data);
     };
 
     getAllCvByUserEmail();
-  }, []);
+  }, [cvSent]);
 
   const isNotARenderedAttribute = (identifier) => {
     return !["isValid", "isSeen", "rejectionExplanation", "assetId"].includes(
@@ -109,7 +110,7 @@ const ListCvStudentView = () => {
                       }}
                     >
                       {cv.isSeen === false && (
-                        <Typography title="Le C.V. n'a pas encore été vérifié.">
+                        <Typography title="Le CV n'a pas encore été vérifié.">
                           <InfoIcon
                             sx={{
                               float: "right",
@@ -125,7 +126,7 @@ const ListCvStudentView = () => {
                         </Typography>
                       )}
                       {cv.isSeen === true && cv.isValid === true && (
-                        <Typography title="Le C.V. a été validé. Vous pouvez maintenant appliquer à des offres.">
+                        <Typography title="Le CV a été validé. Vous pouvez maintenant appliquer à des offres.">
                           <ThumbUpIcon
                             sx={{
                               float: "right",
@@ -141,7 +142,7 @@ const ListCvStudentView = () => {
                         </Typography>
                       )}
                       {cv.isSeen === true && cv.isValid === false && (
-                        <Typography title="Le C.V. a été rejeté: cliquez ici pour voir la raison du rejet">
+                        <Typography title="Le CV a été rejeté: cliquez ici pour voir la raison du rejet">
                           <ThumbDownIcon
                             onClick={() =>
                               dialogDispatch({
@@ -166,7 +167,7 @@ const ListCvStudentView = () => {
                       )}
                       <Tooltip
                         title={
-                          "Cliquer pour visualiser votre C.V " + cv.filename
+                          "Cliquez pour visualiser votre CV " + cv.filename
                         }
                       >
                         <Box

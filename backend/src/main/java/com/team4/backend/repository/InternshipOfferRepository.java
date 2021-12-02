@@ -29,7 +29,6 @@ public interface InternshipOfferRepository extends ReactiveMongoRepository<Inter
 
     Flux<InternshipOffer> findAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(LocalDateTime date1, LocalDateTime date2);
 
-    //TODO --> test
     Mono<Boolean> existsByIdAndIsExclusiveTrue(String id);
 
 }

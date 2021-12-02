@@ -267,6 +267,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .evaluationsDates(evaluationsDates)
                         .build(),
                 Student.studentBuilder()
+                        .id("1e0dd146524a11ecbf630242ac130002")
                         .email("3643283423@gmail.com")
                         .firstName("Jean")
                         .lastName("Jordan")
@@ -281,6 +282,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .studentState(StudentState.WAITING_INTERVIEW)
                         .build(),
                 Student.studentBuilder()
+                        .id("524a11ecbf63021ecbf630242ac130002")
                         .email("123667713@gmail.com")
                         .firstName("Farid")
                         .lastName("Shalom")
@@ -295,6 +297,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .studentState(StudentState.WAITING_INTERVIEW)
                         .build(),
                 Student.studentBuilder()
+                        .id("399628a0524a11ecbf630242ac130002")
                         .email("902938912@gmail.com")
                         .firstName("Kevin")
                         .lastName("Alphonse")
@@ -309,6 +312,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasCv(true)
                         .build(),
                 Student.studentBuilder()
+                        .id("39962524a11ecbf63020242ac130002")
                         .email("nocv@gmail.com")
                         .firstName("no")
                         .lastName("cv")
@@ -322,6 +326,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasCv(true)
                         .build(),
                 Student.studentBuilder()
+                        .id("5b1765ca0524a11ecbf630242ac130002")
                         .email("student@gmail.com")
                         .password(pbkdf2Encoder.encode("student"))
                         .firstName("Shia")
@@ -339,6 +344,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                             }
                         }).build(),
                 Student.studentBuilder()
+                        .id("5b176e760524a11ecbf630242ac130002")
                         .email("studentInternFound@gmail.com")
                         .firstName("Maxime")
                         .lastName("Dupuis")

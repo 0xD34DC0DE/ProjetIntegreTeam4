@@ -27,11 +27,10 @@ const fadeIn = {
   },
 };
 
-const DroppableUserCard = ({ user, index }) => {
+const DroppableUserCard = ({ user, index, fetchStudents }) => {
   const [open, setOpen] = useState(false);
   const [justDropped, setJustDropped] = useState(false);
   const [assignedStudents, setAssignedStudents] = useState([]);
-  const [droppedItem, setDroppedItem] = useState();
   const [userInfo] = useContext(UserInfoContext);
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     // The type (or types) to accept - strings or symbols
@@ -50,7 +49,8 @@ const DroppableUserCard = ({ user, index }) => {
             Authorization: userInfo.jwt,
           },
           responseType: "json",
-        }).catch(console.error);
+        }).then(() => fetchStudents()).catch(console.error);
+
 
         setJustDropped(true);
         setTimeout(() => {
@@ -107,7 +107,13 @@ const DroppableUserCard = ({ user, index }) => {
           <CardActions>
             <Tooltip title="Voir les étudiants assignés">
               <IconButton
-                sx={{ margin: "auto" }}
+                sx={{ 
+                  margin: "auto",
+                  backgroundColor: "#5d1f94",
+                  ":hover": {
+                    backgroundColor: "#5d1f94"
+                  },
+                }}
                 onClick={() => {
                   setOpen(true);
                 }}

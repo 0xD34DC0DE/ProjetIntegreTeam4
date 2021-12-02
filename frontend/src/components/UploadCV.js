@@ -170,7 +170,7 @@ const UploadCV = () => {
           delay: 0.25,
         }}
       >
-        <ListCvStudentView />
+        <ListCvStudentView cvSent={cvSent} />
       </motion.div>
     </>
   );

@@ -4,10 +4,6 @@ import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
 import com.team4.backend.dto.NotificationDto;
-import com.team4.backend.exception.InternshipOfferNotFoundException;
-import com.team4.backend.exception.InvalidPageRequestException;
-import com.team4.backend.exception.UnauthorizedException;
-import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.exception.*;
 import com.team4.backend.mapping.InternshipOfferMapper;
 import com.team4.backend.model.*;
@@ -17,12 +13,10 @@ import com.team4.backend.util.ValidatingPageRequest;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple2;
 
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.List;
 
 @Service
 public class InternshipOfferService {

@@ -8,11 +8,11 @@ import SemesterSelect from "./SemesterSelect";
 const ListReport = () => {
   const [reports] = useState([
     {
-      title: "Offres de stages non validées",
+      title: "Offres de stage non validées",
       url: "/generateAllNonValidatedOffersReport",
     },
     {
-      title: "Offres de stages validées",
+      title: "Offres de stage validées",
       url: "/generateAllValidatedOffersReport",
     },
     { title: "Étudiants inscrits", url: "/generateAllStudentsReport" },
@@ -38,7 +38,7 @@ const ListReport = () => {
       url: "/generateStudentsWithInternshipReport",
     },
     {
-      title: "Étudiants pas évalué par leur moniteur",
+      title: "Étudiants pas évalués par leur moniteur",
       url: "/generateStudentsNotEvaluatedReport",
     },
     {
@@ -69,7 +69,7 @@ const ListReport = () => {
       <Grid item>
         <SemesterSelect updateSemesterFullName={updateSemesterFullName} />
       </Grid>
-      <Grid sx={{mt:4}} container justifyContent="center">
+      <Grid sx={{ mt: 4 }} container justifyContent="center">
         {reports.map((current, index) => (
           <Grid
             item

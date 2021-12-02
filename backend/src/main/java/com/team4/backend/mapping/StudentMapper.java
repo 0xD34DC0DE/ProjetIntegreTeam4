@@ -24,6 +24,7 @@ public abstract class StudentMapper {
                 .studentState(studentCreationDto.getStudentState())
                 .appliedOffersId(new HashSet<>())
                 .evaluationsDates(new TreeSet<>())
+                .exclusiveOffersId(new HashSet<>())
                 .profileImageId("")
                 .interviewsDate(new TreeSet<>())
                 .hasValidCv(false)
@@ -31,7 +32,7 @@ public abstract class StudentMapper {
     }
 
     public static StudentDetailsDto toDto(Student student) {
-        return StudentDetailsDto.builder()
+        return StudentDetailsDto.studentDetailsDtoBuilder()
                 .id(student.getId())
                 .email(student.getEmail())
                 .firstName(student.getFirstName())
@@ -45,7 +46,7 @@ public abstract class StudentMapper {
     }
 
     public static StudentProfileDto toProfileDto(Student student) {
-        return StudentProfileDto.builder()
+        return StudentProfileDto.studentProfileDtoBuilder()
                 .id(student.getId())
                 .email(student.getEmail())
                 .firstName(student.getFirstName())

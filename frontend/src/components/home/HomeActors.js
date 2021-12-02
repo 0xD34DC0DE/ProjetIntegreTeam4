@@ -12,23 +12,23 @@ const HomeActors = () => {
   const functionnalities = [
     [
       "Ajouter des offres de stage",
-      "Voir la liste des postulations",
-      "Démarrer le processus de signature de contrat",
-      "Contacter un étudiant",
-      "Afficher/Télécharger le C.V. d'un étudiant",
-      "Évaluer un stagiaire",
+      "Voir la liste des postulations.",
+      "Démarrer le processus de signature de contrat.",
+      "Contacter un étudiant.",
+      "Afficher/Télécharger le C.V. d'un étudiant.",
+      "Évaluer un stagiaire.",
     ],
     [
-      "Afficher vos élèves assignés",
-      "Voir l'état de la demande de stage d'un étudiant",
-      "Évaluer un stagiaire",
+      "Afficher vos élèves assignés.",
+      "Voir l'état de la demande de stage d'un étudiant.",
+      "Évaluer un stagiaire.",
     ],
     [
-      "Afficher votre profil",
-      "Changer le statut de votre demande de stage",
+      "Afficher votre profil.",
+      "Changer le statut de votre demande de stage.",
       "Téléverser un C.V.",
-      "Afficher vos C.V. téléversés",
-      "Appliquer à une offre de stage",
+      "Afficher vos C.V. téléversés.",
+      "Appliquer à une offre de stage.",
     ],
   ];
   const resource = ["downtown.jpg", "cegep.jpg", "etudiant.jpg"];

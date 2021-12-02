@@ -16,7 +16,7 @@ public class MonitorDetailsDto extends UserDetailsDto implements Serializable {
 
     private String companyName;
 
-    @Builder
+    @Builder(builderMethodName = "monitorDetailsDtoBuilder")
     public MonitorDetailsDto(String id,
                              String email,
                              String password,

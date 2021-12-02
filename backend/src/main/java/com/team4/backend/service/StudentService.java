@@ -57,10 +57,6 @@ public class StudentService {
                 .switchIfEmpty(Mono.error(new UserNotFoundException("Can't find student with email" + email)));
     }
 
-    public Flux<Student> findAll() {
-        return studentRepository.findAll();
-    }
-
     public Flux<Student> findAllByEmails(Set<String> emails) {
         return studentRepository.findAllByEmails(emails);
     }
@@ -199,6 +195,10 @@ public class StudentService {
                     student.setStudentState(NO_INTERVIEW);
                     return save(student).subscribe();
                 }).count();
+    }
+
+    public Mono<Boolean> hasValidCv(String studentEmail) {
+        return findByEmail(studentEmail).map(Student::getHasValidCv);
     }
 
     public Mono<Student> save(Student student) {

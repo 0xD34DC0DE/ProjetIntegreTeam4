@@ -21,7 +21,7 @@ public abstract class MonitorMapper {
     }
 
     public static MonitorDetailsDto toDto(Monitor monitor) {
-        return MonitorDetailsDto.builder()
+        return MonitorDetailsDto.monitorDetailsDtoBuilder()
                 .id(monitor.getId())
                 .email(monitor.getEmail())
                 .firstName(monitor.getFirstName())
@@ -34,7 +34,7 @@ public abstract class MonitorMapper {
     }
 
     public static MonitorProfileDto toProfileDto(Monitor monitor) {
-        return MonitorProfileDto.builder()
+        return MonitorProfileDto.monitorProfileDtoBuilder()
                 .id(monitor.getId())
                 .email(monitor.getEmail())
                 .firstName(monitor.getFirstName())

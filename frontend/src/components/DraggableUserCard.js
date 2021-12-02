@@ -2,7 +2,7 @@ import { Avatar, Box, Card, Typography } from "@mui/material";
 import React from "react";
 import { useDrag } from "react-dnd";
 export default function UserCard({ user }) {
-  const [{ isDragging }, drag] = useDrag(
+  const [{ isDragging }, drag, key] = useDrag(
     () => ({
       type: "UserCard",
       item: { user },
@@ -15,6 +15,7 @@ export default function UserCard({ user }) {
 
   return (
     <Card
+      key={key}
       role="Handle"
       ref={drag}
       sx={{
