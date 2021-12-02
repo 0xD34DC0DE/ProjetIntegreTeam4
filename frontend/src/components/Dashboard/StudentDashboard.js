@@ -127,17 +127,17 @@ const StudentDashBoard = () => {
                 >
                   <Typography variant="subtitle1" sx={{ m: 1 }}>
                     <PeopleIcon sx={{ mr: 1, verticalAlign: "middle" }} />
-                    Nombres d'entrevues : {profile.nbrOfInterviews}
+                    Nombre d'entrevues : {profile.nbrOfInterviews}
                   </Typography>
                   <Typography variant="subtitle1" sx={{ m: 1 }}>
                     <TouchAppIcon sx={{ mr: 1, verticalAlign: "middle" }} />
-                    Nombres d'offres appliquées : {profile.nbrOfAppliedOffers}
+                    Nombre d'offres appliquées : {profile.nbrOfAppliedOffers}
                   </Typography>
                   <Typography variant="subtitle1" sx={{ m: 1 }}>
                     <StarBorderPurple500Icon
                       sx={{ mr: 1, verticalAlign: "middle" }}
                     />
-                    Nombres d'offres exclusives : {profile.nbrOfExclusiveOffers}
+                    Nombre d'offres exclusives : {profile.nbrOfExclusiveOffers}
                   </Typography>
 
                   <SelectStudentState

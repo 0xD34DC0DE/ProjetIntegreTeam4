@@ -42,7 +42,7 @@ public class InternshipOffer implements Serializable {
 
     private Boolean isValidated;
 
-    private LocalDateTime validationDate    ;
+    private LocalDateTime validationDate;
 
     private Boolean isExclusive;
 

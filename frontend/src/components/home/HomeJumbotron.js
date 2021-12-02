@@ -9,7 +9,6 @@ const HomeJumbotron = ({
   backgroundColor,
   color,
   steps,
-  imgUrl,
   icon,
 }) => {
   const [scroll, setScroll] = useState(false);
@@ -43,10 +42,13 @@ const HomeJumbotron = ({
           <Typography variant="h3" sx={{ px: 5, py: 5 }}>
             {title}
           </Typography>
-          <Typography variant="body1" sx={{
+          <Typography
+            variant="body1"
+            sx={{
               p: 5,
               fontSize: "2rem",
-            }}>
+            }}
+          >
             {description}
           </Typography>
           <div className="steps">

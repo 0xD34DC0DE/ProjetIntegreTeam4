@@ -162,7 +162,7 @@ const ProfileImageUpload = () => {
                     textShadow: "2px 2px black",
                   }}
                 >
-                  Glisser votre image ou appuyez sur le boutton ci-dessous
+                  Glisser votre image ou appuyer sur le boutton ci-dessous
                 </Typography>
               </Grid>
               <Grid

@@ -371,7 +371,7 @@ const ListStudentApplying = () => {
                                   </Tooltip>
                                 </Grid>
                                 <Grid item xs={3} textAlign="center">
-                                  <Tooltip title="Démarer la signature de contrat">
+                                  <Tooltip title="Démarrer le processus de signature de contrat">
                                     <Button
                                       sx={{
                                         p: 0,
