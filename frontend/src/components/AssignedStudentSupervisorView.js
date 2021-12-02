@@ -42,7 +42,7 @@ const AssignedStudentSupervisorView = () => {
       });
     };
 
-    const getAllAssignedStudentsFronmCurrentSemester = (supervisorId) => {
+    const getAllAssignedStudentsFromCurrentSemester = (supervisorId) => {
       return axios({
         method: "GET",
         url: "http://localhost:8080/supervisor/getAssignedStudents",
@@ -60,7 +60,7 @@ const AssignedStudentSupervisorView = () => {
     };
 
     const supervisorId = await getSupervisorId();
-    getAllAssignedStudentsFronmCurrentSemester(supervisorId);
+    getAllAssignedStudentsFromCurrentSemester(supervisorId);
   }, [semesterFullName]);
 
   const updateSemesterFullName = (fullName) => {
@@ -93,7 +93,7 @@ const AssignedStudentSupervisorView = () => {
                 }}
                 sx={{
                   backgroundColor: "rgba(135, 135, 135, 0.03)",
-                  borderRadius:"10px",
+                  borderRadius: "10px",
                   border: "0.5px solid grey",
                   boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
                   "&:hover": {

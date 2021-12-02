@@ -114,7 +114,7 @@ const CvInternshipManagerView = ({
                         }}
                         variant="overline"
                       >
-                        Email de l'étudiant : {userEmail}
+                        Courriel de l'étudiant : {userEmail}
                       </Typography>
                     </Grid>
                     <Grid item xs={12}>

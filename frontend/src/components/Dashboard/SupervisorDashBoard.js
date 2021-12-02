@@ -93,7 +93,7 @@ const SupervisorDashBoard = () => {
                   justifyContent="center"
                 >
                   <Typography variant="subtitle1" sx={{ m: 1 }}>
-                    <PeopleIcon /> Nombres d'élèves assignés :{" "}
+                    <PeopleIcon /> Nombre d'élèves assignés :{" "}
                     {profile.nbrOfAssignedStudents}
                   </Typography>
                 </Grid>

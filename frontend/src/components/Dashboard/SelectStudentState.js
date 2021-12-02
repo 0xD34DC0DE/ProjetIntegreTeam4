@@ -84,7 +84,7 @@ const SelectStudentState = ({
             variant="subtitle1"
             sx={{ color: "green", textAlign: "center", m: 1 }}
           >
-            STATUT MODIFIÉE
+            STATUT MODIFIÉ
             <PublishedWithChangesIcon />
           </Typography>
         </motion.div>

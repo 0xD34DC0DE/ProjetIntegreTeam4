@@ -82,18 +82,16 @@ const CvValidationDialog = ({ id, removeCv }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          Validation du C.V. étudiant(e)
+          Validation du CV de l'étudiant(e)
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Voulez-vous accepter ou rejeter le C.V. de cet(te) étudiant(e)?
+            Voulez-vous accepter ou rejeter le CV de cet(te) étudiant(e)?
           </DialogContentText>
           {isRejecting && (
             <Dialog open={isRejecting} onClose={handleClose}>
               <DialogContent>
-                <DialogTitle sx={{ pt: 0 }}>
-                  Raison du rejet du C.V.
-                </DialogTitle>
+                <DialogTitle sx={{ pt: 0 }}>Raison du rejet du CV</DialogTitle>
                 {(rejectionExplanation === "" ||
                   rejectionExplanation === null) && (
                   <Typography sx={{ color: "red" }}>{errorMessage}</Typography>
@@ -128,12 +126,12 @@ const CvValidationDialog = ({ id, removeCv }) => {
                     validateCv(false, rejectionExplanation);
                   } else {
                     setErrorMessage(
-                      "La raison du rejet du C.V. doit être inscrite"
+                      "La raison du rejet du CV doit être inscrite"
                     );
                   }
                 }}
               >
-                Rejeter le C.V.
+                Rejeter le CV
               </Button>
             </Dialog>
           )}
