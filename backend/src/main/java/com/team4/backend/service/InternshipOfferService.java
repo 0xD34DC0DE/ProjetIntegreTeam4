@@ -158,11 +158,13 @@ public class InternshipOfferService {
                         .findAllByValidationDateNullAndIsValidatedFalseAndLimitDateToApplyIsBetween(semester.getFrom(), semester.getTo()));
     }
 
-    public Mono<InternshipOffer> validateInternshipOffer(String id, Boolean isValid) {
+    public Mono<InternshipOffer> validateInternshipOffer(String id, Boolean isValid, String internshipMangerEmail) {
         return findInternshipOfferById(id).map(offer -> {
                     offer.setIsValidated(isValid);
                     offer.setValidationDate(LocalDateTime.now());
-
+                    if (isValid) {
+                        offer.setEmailOfApprovingInternshipManager(internshipMangerEmail);
+                    }
                     return offer;
                 })
                 .flatMap(internshipOfferRepository::save)

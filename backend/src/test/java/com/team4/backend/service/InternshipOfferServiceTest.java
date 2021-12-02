@@ -381,7 +381,7 @@ public class InternshipOfferServiceTest {
         doReturn(Mono.just(new Notification())).when(internshipOfferServiceSpy).createNewInternshipNotification();
 
         //ACT
-        Mono<InternshipOffer> internshipOfferDtoMono = internshipOfferServiceSpy.validateInternshipOffer(id, true);
+        Mono<InternshipOffer> internshipOfferDtoMono = internshipOfferServiceSpy.validateInternshipOffer(id, true, "");
 
         //ASSERT
         StepVerifier.create(internshipOfferDtoMono).assertNext(e -> assertTrue(e.getIsValidated()))
@@ -396,7 +396,7 @@ public class InternshipOfferServiceTest {
         when(internshipOfferRepository.findById(id)).thenReturn(Mono.empty());
 
         //ACT
-        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.validateInternshipOffer(id, true);
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.validateInternshipOffer(id, true, "");
 
         //ASSERT
         StepVerifier.create(internshipOfferMono).expectError(InternshipOfferNotFoundException.class).verify();

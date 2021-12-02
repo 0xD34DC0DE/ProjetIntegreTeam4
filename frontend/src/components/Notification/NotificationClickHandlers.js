@@ -1,16 +1,15 @@
 import { sidebarList } from "../Configuration";
 
 const getSelectionById = (id) => {
-
-  for(let selection of sidebarList) {
-    if(selection.id === id) {
+  for (let selection of sidebarList) {
+    if (selection.id === id) {
       return selection;
     }
   }
 
   console.error("Could not find requested selection with id: " + id);
   return null;
-}
+};
 
 const handlers = {
   SIGN_CONTRACT: {

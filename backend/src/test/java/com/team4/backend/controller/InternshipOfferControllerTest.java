@@ -165,7 +165,7 @@ public class InternshipOfferControllerTest {
         InternshipOfferDetailsDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
 
-        when(internshipOfferService.validateInternshipOffer(internshipOfferDto.getId(), true)).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferService.validateInternshipOffer(internshipOfferDto.getId(), true, "")).thenReturn(Mono.just(internshipOffer));
 
         //ACT
         webTestClient
@@ -188,7 +188,7 @@ public class InternshipOfferControllerTest {
         //ARRANGE
         InternshipOfferDetailsDto internshipOfferDto = InternshipOfferMockData.getInternshipOfferDetailedDto();
 
-        when(internshipOfferService.validateInternshipOffer(internshipOfferDto.getId(), true)).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
+        when(internshipOfferService.validateInternshipOffer(internshipOfferDto.getId(), true, "")).thenReturn(Mono.error(InternshipOfferNotFoundException::new));
 
         //ACT
         webTestClient

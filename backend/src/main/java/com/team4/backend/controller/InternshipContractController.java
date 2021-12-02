@@ -2,6 +2,7 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipContractCreationDto;
 import com.team4.backend.dto.InternshipContractDto;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.InternshipContractService;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,12 @@ public class InternshipContractController {
 
     public InternshipContractController(InternshipContractService internshipContractService) {
         this.internshipContractService = internshipContractService;
+    }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<String> onException(UserNotFoundException e) {
+        System.err.println(e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
     }
 
     @PostMapping("/initiate")
