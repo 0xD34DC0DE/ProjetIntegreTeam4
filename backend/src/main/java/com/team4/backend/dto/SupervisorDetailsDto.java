@@ -17,7 +17,7 @@ public class SupervisorDetailsDto extends UserDetailsDto implements Serializable
 
     private Set<String> studentEmails;
 
-    @Builder
+    @Builder(builderMethodName = "supervisorDetailsDtoBuilder")
     public SupervisorDetailsDto(String id,
                                 String email,
                                 String password,

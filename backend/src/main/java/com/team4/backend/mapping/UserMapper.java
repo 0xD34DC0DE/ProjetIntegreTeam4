@@ -16,7 +16,7 @@ public abstract class UserMapper {
     }
 
     public static StudentDetailsDto toDto(User user) {
-        return StudentDetailsDto.builder()
+        return StudentDetailsDto.studentDetailsDtoBuilder()
                 .id(user.getId())
                 .email(user.getEmail())
                 .firstName(user.getFirstName())

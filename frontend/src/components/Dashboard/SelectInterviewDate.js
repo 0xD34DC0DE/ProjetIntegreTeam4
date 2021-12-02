@@ -1,4 +1,4 @@
-import React, { useState,useContext } from "react";
+import React, { useState, useContext } from "react";
 import axios from "axios";
 import { Typography, TextField } from "@mui/material";
 import { motion } from "framer-motion";
@@ -63,6 +63,8 @@ const SelectInterviewDate = ({
         !hasInternship())
     ) {
       setProfile({ ...profile, closestInterviewDate: value });
+      if (profile.studentState === "NO_INTERVIEW")
+        setProfile({ ...profile, studentState: "WAITING_INTERVIEW" });
       updateInterviewDate(value);
       setIsDateValid(true);
     } else {

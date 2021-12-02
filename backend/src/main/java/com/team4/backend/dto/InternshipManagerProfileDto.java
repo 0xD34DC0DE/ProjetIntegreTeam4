@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @EqualsAndHashCode(callSuper = true)
 public class InternshipManagerProfileDto extends UserProfileDto implements Serializable {
 
-    @Builder
+    @Builder(builderMethodName = "internshipManagerProfileDtoBuilder")
     public InternshipManagerProfileDto(String id,
                                        String email,
                                        String firstName,

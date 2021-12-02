@@ -29,7 +29,7 @@ public class SupervisorMockData {
     }
 
     public static SupervisorDetailsDto getMockSupervisorDto() {
-        return SupervisorDetailsDto.builder()
+        return SupervisorDetailsDto.supervisorDetailsDtoBuilder()
                 .id("615a32ce577ae63d7b159b17")
                 .email("jonathan_22@outlook.com")
                 .password("soleil31@")
@@ -89,7 +89,7 @@ public class SupervisorMockData {
     }
 
     public static Flux<SupervisorDetailsDto> getAllSupervisorsDto() {
-        return Flux.just(SupervisorDetailsDto.builder()
+        return Flux.just(SupervisorDetailsDto.supervisorDetailsDtoBuilder()
                 .id("123a45ce678ae91d0b111b21")
                 .email("professeur@outlook.com")
                 .password("prof123")
@@ -100,7 +100,7 @@ public class SupervisorMockData {
                         .collect(Collectors.toSet()))
                 .phoneNumber("514-111-2222")
                 .registrationDate(null) // Current date
-                .build(), SupervisorDetailsDto.builder()
+                .build(), SupervisorDetailsDto.supervisorDetailsDtoBuilder()
                 .id("222a44ce555ae66d0b777b88")
                 .email("enseignant@outlook.com")
                 .password("enseignant123")
@@ -112,7 +112,7 @@ public class SupervisorMockData {
                 .build());
     }
 
-    public static Flux<Supervisor> getAllSupervisorsUpdated() {
+    public static Flux<Supervisor> getAllSupervisorsFlux() {
         return Flux.just(Supervisor.supervisorBuilder()
                 .id("123a45ce678ae91d0b111b21")
                 .email("professeur@outlook.com")
@@ -138,9 +138,16 @@ public class SupervisorMockData {
         return new HashSet<>(Arrays.asList("12395432@gmail.com", "3643283423@gmail.com"));
     }
 
-    public static Set<TimestampedEntry> getTimeStampedEntries() {
+    public static Set<TimestampedEntry> getStudentEmailsTimeStampedEntries() {
         return new HashSet<>(Arrays.asList(
                 new TimestampedEntry("12395432@gmail.com", LocalDateTime.now()),
+                new TimestampedEntry("3643283423@gmail.com", LocalDateTime.now()),
+                new TimestampedEntry("123456789@gmail.com", LocalDateTime.now())));
+    }
+    
+    public static Set<TimestampedEntry> getTimeStampedEntries() {
+        return new HashSet<>(Arrays.asList(
+                new TimestampedEntry("123456789@gmail.com", LocalDateTime.now()),
                 new TimestampedEntry("toto23@outlook.com", LocalDateTime.now())));
     }
 

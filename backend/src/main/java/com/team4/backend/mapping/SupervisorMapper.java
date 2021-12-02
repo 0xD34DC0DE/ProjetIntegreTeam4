@@ -25,7 +25,7 @@ public abstract class SupervisorMapper {
     }
 
     public static SupervisorDetailsDto toDetailsDto(Supervisor supervisor) {
-        return SupervisorDetailsDto.builder()
+        return SupervisorDetailsDto.supervisorDetailsDtoBuilder()
                 .id(supervisor.getId())
                 .email(supervisor.getEmail())
                 .firstName(supervisor.getFirstName())
@@ -40,7 +40,7 @@ public abstract class SupervisorMapper {
     }
 
     public static SupervisorProfileDto toProfileDto(Supervisor supervisor){
-        return SupervisorProfileDto.builder()
+        return SupervisorProfileDto.supervisorProfileDtoBuilder()
                 .id(supervisor.getId())
                 .email(supervisor.getEmail())
                 .firstName(supervisor.getFirstName())
