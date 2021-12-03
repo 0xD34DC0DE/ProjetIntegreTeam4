@@ -199,6 +199,7 @@ const OfferForm = () => {
   };
 
   const saveInternshipOffer = () => {
+    console.log(offer.monitorEmail);
     if (!validateForm()) {
       return;
     }
@@ -253,7 +254,7 @@ const OfferForm = () => {
                     : ""
                 }
                 visible={true}
-                readonly={
+                readOnly={
                   offerKey === "monitorEmail" && userInfo.role === "MONITOR"
                 }
               />
