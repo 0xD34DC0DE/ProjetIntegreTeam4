@@ -45,28 +45,20 @@ const OfferForm = () => {
   const [error, setError] = useState(emptyError);
   const [snackBarErrorMessage, setSnackBarErrorMessage] = useState("");
   const [snackBarSuccessMessage, setSnackBarSuccessMessage] = useState("");
-  useEffect(() => {
-    const fillMonitorEmail = () => {
-      if (userInfo.role === "MONITOR" && offer.monitorEmail === "")
-        setOffer({ ...offer, monitorEmail: userInfo.email });
-    };
-
-    const resetForm = () => {
-      setOffer(emptyOffer);
-      resetErrors();
-    };
-
-    resetForm();
-    fillMonitorEmail();
-  }, []);
 
   const handleFormChange = (event) => {
+    fillMonitorEmail();
     setOffer((previousForm) => ({
       ...previousForm,
       [event.target.id || event.target.name]: event.target.value,
     }));
 
     resetErrors();
+  };
+
+  const fillMonitorEmail = () => {
+    if (userInfo.role === "MONITOR" && offer.monitorEmail === "")
+      setOffer({ ...offer, monitorEmail: userInfo.email });
   };
 
   const validateForm = () => {
@@ -88,7 +80,7 @@ const OfferForm = () => {
       isValid &&
       validateDateEntries() &
         validateEmailEntries() &
-        validateSalary(offer.minSalary, offer.maxSalary)
+        validateSalary(parseFloat(offer.minSalary), parseFloat(offer.maxSalary))
     );
   };
 
@@ -242,6 +234,7 @@ const OfferForm = () => {
         <DialogContent sx={{ minWidth: 425 }}>
           {Object.keys(offer).map((offerKey, key) => {
             let currentField = OFFER_FORM_VALUES[key];
+
             return (
               <TextFormField
                 key={key}

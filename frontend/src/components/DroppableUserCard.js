@@ -102,15 +102,6 @@ const DroppableUserCard = ({ user, index, fetchStudents }) => {
           </motion.div>
         )}
         <Box sx={{ textAlign: "center" }}>
-          <Avatar
-            sx={{
-              mx: "auto",
-              my: 2,
-              clear: "right",
-              width: "75px",
-              height: "75px",
-            }}
-          ></Avatar>
           <Typography>{user.email}</Typography>
           <Typography>
             {user.firstName}, {user.lastName}
