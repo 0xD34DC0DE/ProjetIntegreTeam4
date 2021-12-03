@@ -85,6 +85,13 @@ const Topbar = ({ sidebarOpen, setSidebarOpen }) => {
               )}
             </IconButton>
           )}
+
+        <Avatar
+          variant="square"
+          alt="Remy Sharp"
+          src="logo2.png"
+          sx={{ width: 40, height: 40, marginLeft: "auto", marginRight: "right" }}
+        />
           <Tooltip title="Notifications">
             <IconButton
               onClick={handleNotificationMenuOpen}
