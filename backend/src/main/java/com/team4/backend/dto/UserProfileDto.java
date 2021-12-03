@@ -15,6 +15,8 @@ public class UserProfileDto extends UserDto implements Serializable {
 
     protected String phoneNumber;
 
+    protected String profileImageId;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     protected LocalDate registrationDate;
 
@@ -23,13 +25,15 @@ public class UserProfileDto extends UserDto implements Serializable {
                           String firstName,
                           String lastName,
                           LocalDate registrationDate,
-                          String phoneNumber) {
+                          String phoneNumber,
+                          String profileImageId) {
         this.id = id;
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
         this.registrationDate = registrationDate;
+        this.profileImageId = profileImageId;
     }
 
 }

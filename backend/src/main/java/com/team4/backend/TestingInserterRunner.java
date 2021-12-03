@@ -1,7 +1,7 @@
 package com.team4.backend;
 
 import com.team4.backend.model.*;
-import com.team4.backend.model.enums.NotificationSeverity;
+import com.team4.backend.model.enums.NotificationType;
 import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
 import com.team4.backend.repository.*;
@@ -40,6 +40,8 @@ public class TestingInserterRunner implements ApplicationRunner {
 
     private final PBKDF2Encoder pbkdf2Encoder;
 
+    private final ProfileImageRepository profileImageRepository;
+
     private final FileMetaDataRepository fileMetaDataRepository;
 
     private final InternshipRepository internshipRepository;
@@ -68,7 +70,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                                  EvaluationRepository evaluationRepository,
                                  InternshipContractRepository internshipContractRepository,
                                  PBKDF2Encoder pbkdf2Encoder,
-                                 FileMetaDataRepository fileMetaDataRepository,
+                                 ProfileImageRepository profileImageRepository, FileMetaDataRepository fileMetaDataRepository,
                                  InternshipManagerRepository internshipManagerRepository,
                                  InternshipRepository internshipRepository,
                                  NotificationRepository notificationRepository,
@@ -80,6 +82,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         this.supervisorRepository = supervisorRepository;
         this.internshipContractRepository = internshipContractRepository;
         this.pbkdf2Encoder = pbkdf2Encoder;
+        this.profileImageRepository = profileImageRepository;
         this.fileMetaDataRepository = fileMetaDataRepository;
         this.internshipRepository = internshipRepository;
         this.evaluationRepository = evaluationRepository;
@@ -109,6 +112,7 @@ public class TestingInserterRunner implements ApplicationRunner {
         internshipContractRepository.deleteAll().subscribe();
         semesterRepository.deleteAll().subscribe();
         notificationRepository.deleteAll().subscribe();
+        profileImageRepository.deleteAll().subscribe();
 
         insertSemesters();
         insertInternshipOffersInternshipManagerView();
@@ -116,36 +120,29 @@ public class TestingInserterRunner implements ApplicationRunner {
         insertMonitors();
         insertSupervisors();
         insertCvs();
-        insertNotifications();
         insertInternships();
+        insertProfileImages();
+    }
+
+    private void insertProfileImages() {
+        List<ProfileImage> profileImages = Arrays.asList(
+                ProfileImage.profileImageBuilder()
+                        .fileName("filename1")
+                        .uploaderEmail("123")
+                        .image(null)
+                        .build(),
+                ProfileImage.profileImageBuilder()
+                        .fileName("filename2")
+                        .uploaderEmail("abc")
+                        .image(null)
+                        .build()
+        );
+
+        profileImageRepository.saveAll(profileImages).subscribe();
     }
 
     private void insertSemesters() {
         semesterRepository.saveAll(SemesterUtil.getSemesters(LocalDateTime.now())).subscribe();
-    }
-
-    private void insertNotifications() {
-        List<Notification> notifications = Arrays.asList(
-                Notification.notificationBuilder()
-                        .content("CV refusé!")
-                        .title("Notification")
-                        .receiverIds(Set.of(Objects.requireNonNull(studentRepository.findByEmail("student@gmail.com").map(User::getId).block())))
-                        .severity(NotificationSeverity.HIGH)
-                        .creationDate(LocalDateTime.now())
-                        .data(Collections.emptyMap())
-                        .build(),
-                Notification.notificationBuilder()
-                        .content("CV Accepté!")
-                        .title("Notification")
-                        .receiverIds(Set.of(Objects.requireNonNull(studentRepository.findByEmail("123456789@gmail.com").map(User::getId).block())))
-                        .data(Collections.singletonMap("id", "test"))
-                        .creationDate(LocalDateTime.now())
-                        .severity(NotificationSeverity.LOW)
-                        .build()
-        );
-
-        notificationRepository
-                .saveAll(notifications).subscribe(notification -> log.info("Notifications has been saved: {}", notification));
     }
 
     private void insertInternships() {
@@ -234,6 +231,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .evaluationsDates(evaluationsDates)
                         .build(),
                 Student.studentBuilder()
+                        .id("1e0dd146524a11ecbf630242ac130002")
                         .email("3643283423@gmail.com")
                         .firstName("Jean")
                         .lastName("Jordan")
@@ -242,11 +240,13 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .hasValidCv(false)
                         .hasCv(true)
                         .evaluationsDates(new TreeSet<>())
-                        .appliedOffersId(new HashSet<>()).exclusiveOffersId(new HashSet<>())
+                        .appliedOffersId(new HashSet<>())
+                        .exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
-                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .studentState(StudentState.WAITING_INTERVIEW)
                         .build(),
                 Student.studentBuilder()
+                        .id("524a11ecbf63021ecbf630242ac130002")
                         .email("123667713@gmail.com")
                         .firstName("Farid")
                         .lastName("Shalom")
@@ -258,9 +258,10 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .exclusiveOffersId(new HashSet<>())
                         .evaluationsDates(new TreeSet<>())
                         .interviewsDate(new TreeSet<>(Arrays.asList(LocalDate.now().plusWeeks(2))))
-                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .studentState(StudentState.WAITING_INTERVIEW)
                         .build(),
                 Student.studentBuilder()
+                        .id("399628a0524a11ecbf630242ac130002")
                         .email("902938912@gmail.com")
                         .firstName("Kevin")
                         .lastName("Alphonse")
@@ -270,11 +271,12 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>())
                         .evaluationsDates(new TreeSet<>())
-                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .studentState(StudentState.WAITING_INTERVIEW)
                         .hasValidCv(false)
                         .hasCv(true)
                         .build(),
                 Student.studentBuilder()
+                        .id("39962524a11ecbf63020242ac130002")
                         .email("nocv@gmail.com")
                         .firstName("no")
                         .lastName("cv")
@@ -283,18 +285,19 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .appliedOffersId(new HashSet<>())
                         .exclusiveOffersId(new HashSet<>())
                         .evaluationsDates(new TreeSet<>())
-                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .studentState(StudentState.WAITING_INTERVIEW)
                         .hasValidCv(false)
-                        .hasCv(false)
+                        .hasCv(true)
                         .build(),
                 Student.studentBuilder()
+                        .id("5b1765ca0524a11ecbf630242ac130002")
                         .email("student@gmail.com")
                         .password(pbkdf2Encoder.encode("student"))
                         .firstName("Shia")
                         .lastName("LaBeouf").registrationDate(LocalDate.now())
-                        .studentState(StudentState.REGISTERED)
-                        .hasValidCv(false)
-                        .hasCv(false)
+                        .studentState(StudentState.NO_INTERVIEW)
+                        .hasValidCv(true)
+                        .hasCv(true)
                         .phoneNumber("123-123-1234")
                         .appliedOffersId(new HashSet<>())
                         .evaluationsDates(new TreeSet<>())
@@ -305,6 +308,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                             }
                         }).build(),
                 Student.studentBuilder()
+                        .id("5b176e760524a11ecbf630242ac130002")
                         .email("studentInternFound@gmail.com")
                         .firstName("Maxime")
                         .lastName("Dupuis")
@@ -328,12 +332,16 @@ public class TestingInserterRunner implements ApplicationRunner {
         Monitor monitor = Monitor.monitorBuilder().email("monitor@gmail.com")
                 .password(pbkdf2Encoder.encode("monitor"))
                 .firstName("Giorno")
+                .companyName("Google")
+                .phoneNumber("438-998-7654")
                 .lastName("Giovanna")
                 .build();
 
         Monitor monitor2 = Monitor.monitorBuilder().email("monitor1@gmail.com")
                 .password(pbkdf2Encoder.encode("monitor1"))
                 .firstName("Amir")
+                .companyName("CAE")
+                .phoneNumber("438-529-0976")
                 .lastName("Fernandez")
                 .build();
 
@@ -346,12 +354,14 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .email("supervisor@gmail.com").password(pbkdf2Encoder.encode("supervisor"))
                         .firstName("Ginette")
                         .lastName("Renaud")
+                        .phoneNumber("514-334-5667")
                         .studentTimestampedEntries(new HashSet<>()).build(),
                 Supervisor.supervisorBuilder()
                         .email("supervisor1@gmail.com")
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Michel")
                         .lastName("Lamarck")
+                        .phoneNumber("514-324-5667")
                         .studentTimestampedEntries(new TreeSet<>(Arrays.asList(
                                 new TimestampedEntry("3643283423@gmail.com", LocalDateTime.now())))).build(),
                 Supervisor.supervisorBuilder()
@@ -359,6 +369,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .password(pbkdf2Encoder.encode("supervisor1"))
                         .firstName("Kendrick")
                         .lastName("Lamar")
+                        .phoneNumber("514-545-5667")
                         .studentTimestampedEntries(new TreeSet<>(Arrays.asList(
                                 new TimestampedEntry("studentInternFound@gmail.com", LocalDateTime.now()),
                                 new TimestampedEntry("123456789@gmail.com", LocalDateTime.now())))).build()
@@ -641,7 +652,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isSeen(true)
                         .rejectionExplanation("Rejet Cv par Manager")
                         .uploadDate(LocalDateTime.now().minusMinutes(10))
-                        .build(),FileMetaData.builder()
+                        .build(), FileMetaData.builder()
                         .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("student@gmail.com")
                         .filename("cv1.pdf")
@@ -649,7 +660,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isSeen(true)
                         .rejectionExplanation("Rejet CV test")
                         .uploadDate(LocalDateTime.now().minusHours(2))
-                        .build(),FileMetaData.builder()
+                        .build(), FileMetaData.builder()
                         .assetId("123456789@gmail.com/340942a5-b54f-4611-8d68-6cff6f303121")
                         .userEmail("student@gmail.com")
                         .filename("cv1.pdf")
@@ -657,7 +668,7 @@ public class TestingInserterRunner implements ApplicationRunner {
                         .isSeen(false)
                         .uploadDate(LocalDateTime.now().minusDays(5))
                         .build()
-                );
+        );
 
 
         fileMetaDataRepository.saveAll(fileMetaDataList)

@@ -38,7 +38,7 @@ public class UserRepositoryTest {
                 User.userBuilder().email("testing_3@gmail.com").password("password1").isEnabled(true).role(Role.STUDENT).build()
         );
 
-        userRepository.saveAll(users).subscribe();
+        userRepository.saveAll(users).blockLast();
     }
 
     @Test

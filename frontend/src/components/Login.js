@@ -11,14 +11,20 @@ import { KeyboardArrowRight, KeyboardArrowLeft } from "@mui/icons-material";
 import axios from "axios";
 import React, { useState, useContext } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import { DialogContext } from "../stores/DialogStore";
+import { v4 as uuidv4 } from "uuid";
+import { SelectionContext } from "../stores/SelectionStore";
+import { sidebarList } from "./Configuration";
 
-const Login = ({ open, toggleDialog }) => {
+const Login = () => {
   const [errorMessage, setErrorMessage] = useState();
   const [form, setForm] = useState({
     email: "",
     password: "",
   });
   const [userInfo, userInfoDispatch] = useContext(UserInfoContext);
+  const [dialog, dialogDispatch] = useContext(DialogContext);
+  const [selection, selectionDispatch] = useContext(SelectionContext);
 
   const handleFormChange = (event) => {
     setForm((form) => ({
@@ -31,21 +37,26 @@ const Login = ({ open, toggleDialog }) => {
     axios({
       method: "POST",
       baseURL: "http://localhost:8080",
-      url: "/user/login",
+      url: "/user/login?" + uuidv4(),
       data: JSON.stringify({ email: form.email, password: form.password }),
       headers: {
-        "content-type": "application/json",
+        "Content-Type": "application/json",
       },
+      responseType: "json",
     })
       .then((response) => {
         userInfoDispatch({ type: "LOGIN", payload: { token: response.data } });
         resetForm();
         setErrorMessage();
-        toggleDialog("loginDialog", false);
+        dialogDispatch({
+          type: "CLOSE",
+          dialogName: "loginDialog",
+        });
+        selectionDispatch(sidebarList[0]);
       })
       .catch((error) => {
         let errorMessage =
-          "L’identifiant ou le mot de passe que vous avez fourni n’est pas valide.";
+          "L’identifiant ou le mot de passe que vous avez fourni n’est pas valide";
         setErrorMessage(errorMessage);
         console.error(error);
       });
@@ -58,7 +69,10 @@ const Login = ({ open, toggleDialog }) => {
 
   const handleClose = (_, reason) => {
     if (reason === "backdropClick") {
-      toggleDialog("loginDialog", false);
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "loginDialog",
+      });
       resetForm();
     }
   };
@@ -69,16 +83,30 @@ const Login = ({ open, toggleDialog }) => {
 
   if (!userInfo.loggedIn) {
     return (
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={dialog.loginDialog.visible} onClose={handleClose}>
         <DialogContent>
           <Typography
-            variant="h4"
+            variant="h2"
             align="left"
-            sx={{ minHeight: "5vh", p: 0, m: 0 }}
+            sx={{
+              minHeight: "6vh",
+              p: 0,
+              m: 0,
+              minWidth: "600px",
+              lineHeight: 1.5,
+              fontSize: "2.5em",
+            }}
           >
             Connexion
           </Typography>
-          <DialogContentText style={{ color: "red", p: 0, m: 0 }}>
+          <DialogContentText
+            sx={{
+              color: "rgba(240, 50, 50, 1) !important",
+              p: 0,
+              m: 0,
+              mb: 1,
+            }}
+          >
             {errorMessage}
           </DialogContentText>
           <TextField
@@ -112,27 +140,52 @@ const Login = ({ open, toggleDialog }) => {
             autoComplete="current-password"
           />
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ mb: 1 }}>
           <Button
-            type="submit"
-            variant="text"
-            sx={{ justifySelf: "flex-start", mr: 20, flexGrow: "1" }}
-            color="primary"
             onClick={() => {
-              toggleDialog("loginDialog", false);
+              dialogDispatch({
+                type: "CLOSE",
+                dialogName: "loginDialog",
+              });
+            }}
+            size="small"
+            sx={{
+              ":hover": {
+                backgroundColor: "rgba(125, 51, 235, 1) !important",
+              },
+              ml: 2,
+              mr: "auto",
             }}
           >
             <KeyboardArrowLeft />
-            Quitter
+            <Typography
+              variant="subtitle2"
+              sx={{
+                verticalAlign: "middle",
+                textAlign: "center",
+                pr: 1,
+              }}
+            >
+              Quitter
+            </Typography>
           </Button>
           <Button
-            type="submit"
-            variant="text"
-            color="primary"
-            onClick={logUserIn}
-            sx={{ justifySelf: "flex-end", ml: 20, flexGrow: "1" }}
+            onClick={() => logUserIn()}
+            size="small"
+            sx={{
+              textAlign: "center",
+              ":hover": {
+                backgroundColor: "rgba(125, 51, 235, 1) !important",
+              },
+              mr: 2,
+            }}
           >
-            Envoyer
+            <Typography
+              variant="subtitle2"
+              sx={{ verticalAlign: "middle", pl: 1 }}
+            >
+              Envoyer
+            </Typography>
             <KeyboardArrowRight />
           </Button>
         </DialogActions>

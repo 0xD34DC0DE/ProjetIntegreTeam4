@@ -11,11 +11,16 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageRequest;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Sinks;
 import reactor.test.StepVerifier;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,27 +38,28 @@ public class NotificationServiceTest {
     @Test
     void shouldFindAllNotifications() {
         //ARRANGE
-        String receiverId = "receiverId";
+        String receiverId = "61930b84d3475148583fdff7";
         Flux<Notification> notificationFluxMockData = NotificationMockData.getNotifications();
+        PageRequest pageRequest = PageRequest.of(1, 5);
 
-        when(notificationService.findAllNotifications(receiverId)).thenReturn(notificationFluxMockData);
+        when(notificationRepository.findAllByReceiverId(receiverId, pageRequest)).thenReturn(notificationFluxMockData);
 
         //ACT
-        Flux<Notification> notificationFlux = notificationRepository.findAllByReceiverId(receiverId);
+        Flux<Notification> notificationFlux = notificationRepository.findAllByReceiverId(receiverId, pageRequest);
 
         //ASSERT
         StepVerifier
                 .create(notificationFlux)
                 .assertNext(Assertions::assertNotNull)
-                .expectNextCount(1)
+                .assertNext(notification -> assertTrue(notification.getReceiverIds().contains(receiverId)))
                 .verifyComplete();
     }
 
     @Test
     void shouldDeleteUserNotification() {
         //ARRANGE
-        String notificationId = "notificationId";
-        String userId = "userId";
+        String notificationId = "507f191e810c19729de860ea";
+        String userId = "61930b84d3475148583fdfee";
 
         Notification notification = NotificationMockData.getNotification();
 
@@ -65,7 +71,7 @@ public class NotificationServiceTest {
         //ASSERT
         StepVerifier
                 .create(notificationMono)
-                .assertNext(Assertions::assertNotNull)
+                .assertNext(n -> assertTrue(n.getReceiverIds().contains(userId)))
                 .verifyComplete();
     }
 
@@ -84,6 +90,29 @@ public class NotificationServiceTest {
         StepVerifier
                 .create(notificationMono)
                 .assertNext(Assertions::assertNotNull)
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldAddUserToSeenNotification() {
+        //ARRANGE
+        Notification notification = NotificationMockData.getNotification();
+        String userId = "userId";
+
+        Notification updatedNotification = NotificationMockData.getNotification();
+        Set<String> updatedSeenIds = new HashSet<>(notification.getSeenIds());
+        updatedSeenIds.add(userId);
+        updatedNotification.setSeenIds(updatedSeenIds);
+
+        when(notificationRepository.addUserToSeenNotification(userId, notification.getId())).thenReturn(Mono.just(updatedNotification));
+
+        //ACT
+        Mono<Notification> notificationMono = notificationRepository.addUserToSeenNotification(userId, notification.getId());
+
+        //ASSERT
+        StepVerifier
+                .create(notificationMono)
+                .assertNext(n -> assertTrue(n.getSeenIds().contains(userId)))
                 .verifyComplete();
     }
 

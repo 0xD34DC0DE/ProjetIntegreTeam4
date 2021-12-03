@@ -2,16 +2,19 @@ package com.team4.backend.controller;
 
 
 import com.team4.backend.dto.StudentDetailsDto;
-import com.team4.backend.dto.SupervisorCreationDto;
+import com.team4.backend.dto.SupervisorDetailsDto;
+import com.team4.backend.dto.SupervisorProfileDto;
 import com.team4.backend.mapping.SupervisorMapper;
+import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.SupervisorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/supervisor")
@@ -24,7 +27,7 @@ public class SupervisorController {
     }
 
     @PostMapping("/register")
-    public Mono<ResponseEntity<String>> register(@RequestBody SupervisorCreationDto supervisorDto) {
+    public Mono<ResponseEntity<String>> register(@RequestBody SupervisorDetailsDto supervisorDto) {
         return supervisorService.registerSupervisor(SupervisorMapper.toEntity(supervisorDto))
                 .flatMap(s -> Mono.just(ResponseEntity.status(HttpStatus.CREATED).body("")));
     }
@@ -43,12 +46,24 @@ public class SupervisorController {
         return supervisorService.getAllAssignedStudents(supervisorId, semesterFullName);
     }
 
-    @GetMapping("/{email}")
+    @GetMapping("/getAllAssignedStudentsForCurrentSemester/{supervisorId}")
+    @PreAuthorize("hasAnyAuthority('INTERNSHIP_MANAGER', 'SUPERVISOR')")
+    public Flux<StudentDetailsDto> getAllAssignedStudentsForCurrentSemester(@PathVariable String supervisorId) {
+        return supervisorService.getAllAssignedStudentsForCurrentSemester(supervisorId);
+    }
+
+    @GetMapping("/{getByEmail}")
     @PreAuthorize("hasAnyAuthority('SUPERVISOR')")
-    public Mono<SupervisorCreationDto> getSupervisor(@PathVariable("email") String email) {
+    public Mono<SupervisorDetailsDto> getSupervisor(@PathVariable("getByEmail") String email) {
         return supervisorService.getSupervisor(email)
-                .map(SupervisorMapper::toDetailsDto)
-                .onErrorMap(error -> new ResponseStatusException(HttpStatus.NOT_FOUND, error.getMessage()));
+                .map(SupervisorMapper::toDetailsDto);
+    }
+
+    @GetMapping("/getProfile")
+    @PreAuthorize("hasAuthority('SUPERVISOR')")
+    public Mono<SupervisorProfileDto> getProfile(Principal principal) {
+        return supervisorService.getSupervisor(UserSessionService.getLoggedUserEmail(principal))
+                .map(SupervisorMapper::toProfileDto);
     }
 
 }

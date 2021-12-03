@@ -12,9 +12,9 @@ import axios from "axios";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import EvaluationDialogPreview from "../EvaluationDialogPreview";
+import { DialogContext } from "../../../stores/DialogStore";
 
-const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
-  // TODO: Find a better way then useRef
+const StudentEvaluationForm = () => {
   const evaluationForm = useRef({
     text: {},
     categorical: {},
@@ -25,7 +25,6 @@ const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
   const [userInfo] = useContext(UserInfoContext);
   const [errorMessage, setErrorMessage] = useState("");
   const [evaluationId, setEvaluationId] = useState("");
-
   const studentContactDetailsRef = useRef(null);
   const companyAppreciationRef = useRef(null);
   const companyInterestRef = useRef(null);
@@ -35,6 +34,7 @@ const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
     useRef(null),
     useRef(null),
   ];
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const handleSubmit = async () => {
     await studentContactDetailsRef.current.getForm();
@@ -55,7 +55,11 @@ const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
         setEvaluationId(response.data);
       })
       .catch((error) => {
-        setErrorMessage("Une erreur est survenue, veuillez réessayer.");
+        if (error.response.status)
+          setErrorMessage(
+            "Le nom du stagiaire n'existe pas, veuillez réessayer."
+          );
+        else setErrorMessage("Une erreur est survenue, veuillez réessayer.");
         console.error(error);
       });
 
@@ -65,7 +69,10 @@ const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
 
   useEffect(() => {
     if (!!evaluationId) return;
-    toggleDialog("evaluationDialogPreview", true);
+    dialogDispatch({
+      type: "OPEN",
+      dialogName: "evaluationDialogPreview",
+    });
   }, [evaluationId]);
 
   const resetForm = () => {
@@ -107,7 +114,7 @@ const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
           mergeForms={mergeForms}
           section={section}
           ref={evaluationRefs[key]}
-          key={key}
+          keyRef={key}
         />
       );
     }),
@@ -123,7 +130,7 @@ const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
 
   return (
     <>
-      {evaluationSent && visible ? (
+      {evaluationSent ? (
         <Grid container px={5} pb={3} justifyContent="center">
           <motion.div
             animate={{ opacity: [0, 1] }}
@@ -159,42 +166,30 @@ const StudentEvaluationForm = ({ visible, dialogVisibility, toggleDialog }) => {
           </motion.div>
         </Grid>
       ) : (
-        visible && (
-          <Grid container px={5} pb={3}>
-            {dropdowns.map((dropdown, key) => {
-              return (
-                <Grid
-                  item
-                  xl={12}
-                  lg={12}
-                  md={12}
-                  sm={12}
-                  xs={12}
-                  mt={5}
-                  key={key}
+        <Grid container px={5} pb={3}>
+          {dropdowns.map((dropdown, key) => {
+            return (
+              <Grid item xs={12} mt={5} key={key}>
+                <motion.div
+                  animate={{ opacity: [0, 1] }}
+                  transition={{
+                    duration: 0.2,
+                    delay: (key + 1) * 0.2,
+                  }}
                 >
-                  <motion.div
-                    animate={{ opacity: [0, 1] }}
-                    transition={{
-                      duration: 0.2,
-                      delay: (key + 1) * 0.2,
-                    }}
-                  >
-                    {dropdown}
-                  </motion.div>
-                </Grid>
-              );
-            })}
+                  {dropdown}
+                </motion.div>
+              </Grid>
+            );
+          })}
 
-            <SubmitEvaluationButton onClick={handleSubmit} delay={2} />
-          </Grid>
-        )
+          <SubmitEvaluationButton onClick={handleSubmit} delay={2} />
+        </Grid>
       )}
       <EvaluationDialogPreview
-        open={dialogVisibility.evaluationDialogPreview}
-        toggleDialog={toggleDialog}
         evaluationId={evaluationId}
         setEvaluationId={setEvaluationId}
+        mid={false}
       ></EvaluationDialogPreview>
     </>
   );

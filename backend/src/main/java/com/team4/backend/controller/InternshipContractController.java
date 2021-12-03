@@ -2,6 +2,7 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.InternshipContractCreationDto;
 import com.team4.backend.dto.InternshipContractDto;
+import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.security.UserSessionService;
 import com.team4.backend.service.InternshipContractService;
 import org.springframework.http.HttpStatus;

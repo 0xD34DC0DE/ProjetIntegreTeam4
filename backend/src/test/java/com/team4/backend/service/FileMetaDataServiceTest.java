@@ -46,6 +46,9 @@ class FileMetaDataServiceTest {
     @Mock
     FileAssetService fileAssetService;
 
+    @Mock
+    UserService userService;
+
     @InjectMocks
     FileMetaDataService fileMetaDataService;
 
@@ -170,6 +173,7 @@ class FileMetaDataServiceTest {
         when(fileMetaDataRepository.findById(any(String.class))).thenReturn(Mono.just(fileMetaData));
         when(studentService.updateCvValidity(fileMetaData.getUserEmail(), true)).thenReturn(Mono.just(student));
         when(fileMetaDataRepository.save(any(FileMetaData.class))).thenReturn(Mono.just(fileMetaData));
+        when(userService.findByEmail(anyString())).thenReturn(Mono.just(student));
 
         //ACT
         Mono<FileMetaData> fileMetaDataMono = fileMetaDataService.validateCv(fileMetaData.getId(), true, null);

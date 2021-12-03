@@ -18,8 +18,8 @@ const fadeIn = {
   },
 };
 
-const ListUserDroppable = ({ role, visible }) => {
-  const [users, setUsers] = useState([]);
+const ListUserDroppable = ({ role, students, setStudents, fetchStudents }) => {
+  const [supervisors, setSupervisors] = useState([]);
   const [userInfo] = useContext(UserInfoContext);
 
   useEffect(() => {
@@ -32,34 +32,52 @@ const ListUserDroppable = ({ role, visible }) => {
         },
         responseType: "json",
       });
-      setUsers(response.data);
+      setSupervisors(response.data);
     };
     getAllUsersByRole();
   }, []);
   return (
-    <>
-      {visible && (
-        <DndProvider backend={HTML5Backend}>
-          <Typography variant="h4" sx={{ color: "white", ml: 2, mt: 2 }}>
-            Superviseurs
-          </Typography>
-          <Grid
-            sx={{ py: "1vh", mt: "10%", display: "flex" }}
-            container
-            spacing={{ xs: 2, md: 3 }}
-            columns={{ xs: 4, sm: 8, md: 12 }}
+    <DndProvider backend={HTML5Backend}>
+      <motion.div variants={fadeIn} initial="hidden" animate="show">
+        <Typography
+          variant="subtitle2"
+          sx={{ color: "white", fontSize: "2.2em", mt: 2, ml: 2 }}
+        >
+          Superviseurs
+        </Typography>
+      </motion.div>
+      <Grid
+        sx={{ py: "1vh", mt: "10%", display: "flex" }}
+        container
+        spacing={{ xs: 2, md: 3 }}
+        columns={{ xs: 4, sm: 8, md: 12 }}
+      >
+        {supervisors.length > 0 ? (
+          supervisors.map((user, index) => (
+            <Grid item xs={10} sm={11} md={6} lg={4} xl={2} key={index}>
+              <motion.div variants={fadeIn} initial="hidden" animate="show">
+                <DroppableUserCard
+                  user={user}
+                  key={index}
+                  index={index}
+                  students={students}
+                  setStudents={setStudents}
+                  fetchStudents={fetchStudents}
+                />
+              </motion.div>
+            </Grid>
+          ))
+        ) : (
+          <Typography
+            color={"text.primary"}
+            variant="h2"
+            sx={{ mx: "auto", py: "2rem", fontSize: "2rem" }}
           >
-            {users.map((user, index) => (
-              <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={index}>
-                <motion.div variants={fadeIn} initial="hidden" animate="show">
-                  <DroppableUserCard user={user} key={index} index={index} />
-                </motion.div>
-              </Grid>
-            ))}
-          </Grid>
-        </DndProvider>
-      )}
-    </>
+            Aucun superviseur
+          </Typography>
+        )}
+      </Grid>
+    </DndProvider>
   );
 };
 

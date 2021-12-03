@@ -44,7 +44,8 @@ public class Student extends User {
                    Boolean hasValidCv,
                    Boolean hasCv,
                    Set<LocalDate> evaluationsDates,
-                   Set<LocalDate> interviewsDate) {
+                   Set<LocalDate> interviewsDate,
+                   String profileImageId) {
         super(id,
                 email,
                 firstName,
@@ -53,7 +54,8 @@ public class Student extends User {
                 phoneNumber,
                 Role.STUDENT,
                 true,
-                registrationDate);
+                registrationDate,
+                profileImageId);
         this.phoneNumber = phoneNumber;
         this.studentState = studentState;
         this.appliedOffersId = appliedOffersId;
@@ -66,6 +68,7 @@ public class Student extends User {
         }
         this.evaluationsDates = evaluationsDates;
         this.interviewsDate = interviewsDate;
+        this.profileImageId = profileImageId;
     }
 
 }

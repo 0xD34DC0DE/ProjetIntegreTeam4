@@ -11,7 +11,7 @@ import {
   KeyboardArrowLeft,
   Create,
 } from "@mui/icons-material";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import EmailFormField from "./EmailFormField";
 import NameFormField from "./NameFormField";
 import PhoneNumberFormField from "./PhoneNumberFormField";
@@ -19,8 +19,9 @@ import PasswordFormField from "./PasswordFormField";
 import axios from "axios";
 import AccountFormField from "./AccountFormField";
 import CompanyNameFormField from "./CompanyNameFormField";
+import { DialogContext } from "../stores/DialogStore";
 
-const Register = ({ open, toggleDialog }) => {
+const Register = () => {
   const [step, setStep] = useState(0);
   const [stepCount, setStepCount] = useState(5);
   const [formValid, setFormValid] = useState(false);
@@ -33,7 +34,9 @@ const Register = ({ open, toggleDialog }) => {
     firstName: "",
     lastName: "",
     accountType: "",
+    profileImageId: "",
   });
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const nextStep = () => {
     if (step === stepCount - 1) register();
@@ -42,7 +45,10 @@ const Register = ({ open, toggleDialog }) => {
 
   const prevStep = () => {
     if (step === 0) {
-      toggleDialog("registerDialog", false);
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "registerDialog",
+      });
       return;
     }
     setStep((lastStep) => (lastStep -= 1));
@@ -61,11 +67,15 @@ const Register = ({ open, toggleDialog }) => {
         firstName: form.firstName,
         companyName: form.companyName,
         lastName: form.lastName,
+        profileImageId: "",
       },
       responseType: "json",
     })
       .then(() => {
-        toggleDialog("registerDialog", false);
+        dialogDispatch({
+          type: "CLOSE",
+          dialogName: "registerDialog",
+        });
         setStep(0);
       })
       .catch((error) => {
@@ -74,7 +84,11 @@ const Register = ({ open, toggleDialog }) => {
   };
 
   const handleClose = (_, reason) => {
-    if (reason === "backdropClick") toggleDialog("registerDialog", false);
+    if (reason === "backdropClick")
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "registerDialog",
+      });
   };
 
   const handleFormChange = (event) => {
@@ -97,6 +111,10 @@ const Register = ({ open, toggleDialog }) => {
     else if (accountType === "monitor") setStepCount(6);
   };
 
+  const handleFieldKeyUp = (event) => {
+    if (event.code === "Enter" && formValid) nextStep();
+  };
+
   const displayFormFields = () => {
     return (
       <>
@@ -104,37 +122,42 @@ const Register = ({ open, toggleDialog }) => {
           valid={setFormValid}
           step={step}
           visibleStep={0}
+          handleFieldKeyUp={handleFieldKeyUp}
           onFieldChange={handleAccountTypeChange}
         />
         <EmailFormField
           valid={setFormValid}
           step={step}
           visibleStep={1}
+          handleFieldKeyUp={handleFieldKeyUp}
           onFieldChange={handleFormChange}
         />
         <NameFormField
           valid={setFormValid}
           step={step}
           visibleStep={2}
+          handleFieldKeyUp={handleFieldKeyUp}
           onFieldChange={handleFormChange}
         />
         <PhoneNumberFormField
           valid={setFormValid}
           step={step}
           visibleStep={3}
+          handleFieldKeyUp={handleFieldKeyUp}
           onFieldChange={handleFormChange}
         />
         <PasswordFormField
           valid={setFormValid}
           step={step}
           visibleStep={4}
+          handleFieldKeyUp={handleFieldKeyUp}
           onFieldChange={handleFormChange}
         />
-        {/* Special form field for each individual role */}
         {form.accountType === "monitor" && (
           <CompanyNameFormField
             valid={setFormValid}
             step={step}
+            handleFieldKeyUp={handleFieldKeyUp}
             visibleStep={5}
             onFieldChange={handleFormChange}
           />
@@ -145,9 +168,21 @@ const Register = ({ open, toggleDialog }) => {
 
   return (
     <>
-      <Dialog open={open} onClose={handleClose}>
-        <Typography variant="h4" sx={{ ml: 3, mt: 3 }}>
-          Enregistrement <Create sx={{ ml: 1 }} />
+      <Dialog open={dialog.registerDialog.visible} onClose={handleClose}>
+        <Typography
+          variant="h2"
+          align="left"
+          sx={{
+            p: 0,
+            m: 0,
+            minWidth: "600px",
+            lineHeight: 1.5,
+            fontSize: "2.3em",
+            ml: 3,
+            mt: 2,
+          }}
+        >
+          Enregistrement
         </Typography>
         <DialogContent sx={{ minWidth: "380px" }}>
           {displayFormFields()}
@@ -160,15 +195,49 @@ const Register = ({ open, toggleDialog }) => {
             activeStep={step}
             sx={{ flexGrow: 1 }}
             nextButton={
-              <Button size="small" onClick={nextStep} disabled={!formValid}>
-                {step === stepCount - 1 ? "Envoyer" : "Suivant"}
+              <Button
+                size="small"
+                onClick={nextStep}
+                disabled={!formValid}
+                sx={{
+                  textAlign: "center",
+                  ":hover": {
+                    backgroundColor: "rgba(125, 51, 235, 1) !important",
+                  },
+                  mr: 1,
+                }}
+              >
+                <Typography
+                  variant="subtitle2"
+                  sx={{ verticalAlign: "middle", pl: 1 }}
+                >
+                  {step === stepCount - 1 ? "Envoyer" : "Suivant"}
+                </Typography>
                 <KeyboardArrowRight />
               </Button>
             }
             backButton={
-              <Button size="small" onClick={prevStep}>
+              <Button
+                size="small"
+                onClick={prevStep}
+                sx={{
+                  ":hover": {
+                    backgroundColor: "rgba(125, 51, 235, 1) !important",
+                  },
+                  ml: 1,
+                }}
+              >
                 <KeyboardArrowLeft />
-                {step === 0 ? "Quitter" : "Retour"}
+                <Typography
+                  variant="subtitle2"
+                  sx={{
+                    verticalAlign: "middle",
+                    textAlign: "center",
+                    pr: 1,
+                  }}
+                >
+                  {step === 0 ? "Quitter" : "Retour"}
+                </Typography>
               </Button>
             }
           />

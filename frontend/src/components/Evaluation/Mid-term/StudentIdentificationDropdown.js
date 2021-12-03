@@ -61,12 +61,12 @@ const StudentIdentificationDropdown = ({ mergeForms }, ref) => {
         <Grid container alignItems="center">
           {studentIdentification.fields.map((field, key) => {
             return (
-              <>
+              <React.Fragment key={key}>
                 <Grid
                   item
-                  xl={1.5}
-                  lg={1.5}
-                  md={1.5}
+                  xl={1}
+                  lg={1}
+                  md={1}
                   sm={12}
                   xs={12}
                   key={"label" + key}
@@ -75,9 +75,9 @@ const StudentIdentificationDropdown = ({ mergeForms }, ref) => {
                 </Grid>
                 <Grid
                   item
-                  xl={10.5}
-                  lg={10.5}
-                  md={10.5}
+                  xl={11}
+                  lg={11}
+                  md={11}
                   sm={12}
                   xs={12}
                   key={"field" + key}
@@ -92,13 +92,13 @@ const StudentIdentificationDropdown = ({ mergeForms }, ref) => {
                     fullWidth
                   ></TextField>
                 </Grid>
-              </>
+              </React.Fragment>
             );
           })}
-          <Grid item xl={1.5} lg={1.5} md={1.5} sm={12} xs={12}>
+          <Grid item xl={1} lg={1} md={1} sm={12} xs={12}>
             <Typography sx={{ fontSize: "0.8em" }}>Stage</Typography>
           </Grid>
-          <Grid item xs={12} sm={12} md={10.5} xl={10.5} lg={10.5}>
+          <Grid item xs={12} sm={12} md={11} xl={11} lg={11}>
             <Typography
               alignSelf="center"
               sx={{ fontSize: "0.8em", display: "inline-block" }}

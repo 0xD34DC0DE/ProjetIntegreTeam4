@@ -11,10 +11,12 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import EventSource from "eventsource";
 import { UserInfoContext } from "../../stores/UserInfoStore";
+import { SelectionContext } from "../../stores/SelectionStore";
 
 const Notification = ({ addNotification, deleteNotification }) => {
   const [showSnackbar, setShowSnackbar] = useState(false);
   const [userInfo] = useContext(UserInfoContext);
+  const [selection] = useContext(SelectionContext);
   const [notification, setNotification] = useState({
     id: "",
     title: "",
@@ -54,6 +56,9 @@ const Notification = ({ addNotification, deleteNotification }) => {
       });
       addNotification(data);
     };
+    return () => {
+      eventSource.close();
+    };
   }, [eventSource]);
 
   const handleOnClose = () => {
@@ -80,12 +85,12 @@ const Notification = ({ addNotification, deleteNotification }) => {
               ml={2}
               sx={{ minWidth: "300px", maxWidth: "300px" }}
             >
-              <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+              <Grid item xs={12}>
                 <Typography variant="subtitle2" sx={{ fontSize: "1.35em" }}>
                   {notification.title}
                 </Typography>
               </Grid>
-              <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+              <Grid item xs={12}>
                 <Typography
                   variant="caption"
                   sx={{
@@ -99,7 +104,7 @@ const Notification = ({ addNotification, deleteNotification }) => {
           }
           action={
             <Grid container mr={2}>
-              <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+              <Grid item xs={12}>
                 <Tooltip title="Accuser la réception">
                   <IconButton
                     variant="text"

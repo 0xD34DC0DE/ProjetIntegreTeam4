@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react";
+import React, { useContext, useRef, useState, useEffect } from "react";
 import { Grid, Typography } from "@mui/material";
 import CompanyIdentificationDropdown from "./CompanyIdentificationDropdown";
 import StudentIdentificationDropdown from "./StudentIdentificationDropdown";
@@ -9,13 +9,17 @@ import SubmitEvaluationButton from "../SubmitEvaluationButton";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import { UserInfoContext } from "../../../stores/UserInfoStore";
+import { DialogContext } from "../../../stores/DialogStore";
+import EvaluationDialogPreview from "../EvaluationDialogPreview";
 
 import axios from "axios";
 
-const StudentEvaluationMidForm = ({ visible }) => {
+const StudentEvaluationMidForm = () => {
   const [userInfo] = useContext(UserInfoContext);
   const [errorMessage, setErrorMessage] = useState("");
   const [midEvaluationSent, setMidEvaluationSent] = useState(false);
+  const [evaluationId, setEvaluationId] = useState("");
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   const midEvaluationForm = useRef({
     text: {},
@@ -77,14 +81,30 @@ const StudentEvaluationMidForm = ({ visible }) => {
         Authorization: userInfo.jwt,
       },
       responseType: "json",
-    }).catch((error) => {
-      setErrorMessage("Une erreur est survenue, veuillez réessayer.");
-      console.error(error);
-    });
+    })
+      .then((response) => {
+        setEvaluationId(response.data);
+      })
+      .catch((error) => {
+        if (error.response.status)
+          setErrorMessage(
+            "Le nom du stagiaire n'existe pas, veuillez réessayer."
+          );
+        else setErrorMessage("Une erreur est survenue, veuillez réessayer.");
+        console.error(error);
+      });
 
     setMidEvaluationSent(true);
     resetForm();
   };
+
+  useEffect(() => {
+    if (!!evaluationId) return;
+    dialogDispatch({
+      type: "OPEN",
+      dialogName: "evaluationDialogPreview",
+    });
+  }, [evaluationId]);
 
   const resetForm = () => {
     setTimeout(() => {
@@ -101,7 +121,7 @@ const StudentEvaluationMidForm = ({ visible }) => {
 
   return (
     <>
-      {midEvaluationSent && visible ? (
+      {midEvaluationSent ? (
         <Grid container px={5} pb={3} justifyContent="center">
           <motion.div
             animate={{ opacity: [0, 1] }}
@@ -137,36 +157,39 @@ const StudentEvaluationMidForm = ({ visible }) => {
           </motion.div>
         </Grid>
       ) : (
-        visible && (
-          <Grid container px={5} pb={3}>
-            {dropdowns.map((dropdown, key) => {
-              return (
-                <Grid
-                  item
-                  xl={12}
-                  lg={12}
-                  md={12}
-                  sm={12}
-                  xs={12}
-                  mt={5}
-                  key={key}
+        <Grid container px={5} pb={3}>
+          {dropdowns.map((dropdown, key) => {
+            return (
+              <Grid
+                item
+                xl={12}
+                lg={12}
+                md={12}
+                sm={12}
+                xs={12}
+                mt={5}
+                key={key}
+              >
+                <motion.div
+                  animate={{ opacity: [0, 1] }}
+                  transition={{
+                    duration: 0.2,
+                    delay: (key + 1) * 0.2,
+                  }}
                 >
-                  <motion.div
-                    animate={{ opacity: [0, 1] }}
-                    transition={{
-                      duration: 0.2,
-                      delay: (key + 1) * 0.2,
-                    }}
-                  >
-                    {dropdown}
-                  </motion.div>
-                </Grid>
-              );
-            })}
-            <SubmitEvaluationButton onClick={handleSubmit} delay={1} />
-          </Grid>
-        )
+                  {dropdown}
+                </motion.div>
+              </Grid>
+            );
+          })}
+          <SubmitEvaluationButton onClick={handleSubmit} delay={1} />
+        </Grid>
       )}
+      <EvaluationDialogPreview
+        evaluationId={evaluationId}
+        setEvaluationId={setEvaluationId}
+        mid={true}
+      ></EvaluationDialogPreview>
     </>
   );
 };

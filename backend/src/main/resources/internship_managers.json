@@ -1,20 +1,20 @@
 [
   {
     "email": "manager1@gmail.com",
-    "password": "p@77w0rd",
+    "password": "manager",
     "firstName": "John",
     "lastName": "Doe",
-    "phoneNumber": "123-123-1234",
-    "role" : "INTERNSHIP_MANAGER",
+    "phoneNumber": "514-123-1234",
+    "role": "INTERNSHIP_MANAGER",
     "isEnabled": true
   },
   {
     "email": "manager2@gmail.com",
-    "password": "p@77w0rd",
+    "password": "manager",
     "firstName": "Steve",
     "lastName": "Mineson",
-    "phoneNumber": "123-123-1234",
-    "role" : "INTERNSHIP_MANAGER",
+    "phoneNumber": "438-123-1234",
+    "role": "INTERNSHIP_MANAGER",
     "isEnabled": true
   }
 ]

@@ -41,6 +41,8 @@ public class User implements Serializable {
 
     protected LinkedHashSet<Notification> notifications;
 
+    protected String profileImageId = "";
+
     @Builder(builderMethodName = "userBuilder")
     public User(String id,
                 String email,
@@ -50,7 +52,8 @@ public class User implements Serializable {
                 String phoneNumber,
                 Role role,
                 Boolean isEnabled,
-                LocalDate registrationDate) {
+                LocalDate registrationDate,
+                String profileImageId) {
         this.id = id; // Auto generated
         this.firstName = firstName;
         this.lastName = lastName;
@@ -60,6 +63,7 @@ public class User implements Serializable {
         this.role = role;
         this.isEnabled = isEnabled;
         this.registrationDate = Optional.ofNullable(registrationDate).orElse(LocalDate.now());
+        this.profileImageId = Optional.ofNullable(profileImageId).orElse("");
     }
 
 }

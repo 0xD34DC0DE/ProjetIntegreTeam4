@@ -10,16 +10,15 @@ import {
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import { DialogContext } from "../stores/DialogStore";
 
 const StudentInternshipDetailsDialog = ({
-  open,
   resetOpenedStudentEmail,
   openedStudentEmail,
-  toggleDialog,
 }) => {
   const [internship, setInternship] = useState(null);
   const [userInfo] = useContext(UserInfoContext);
-  const [exists, setExists] = useState(false);
+  const [exists, setExists] = useState(null);
   const internshipLabels = [
     "Courriel du moniteur",
     "Courriel de l'étudiant",
@@ -27,6 +26,7 @@ const StudentInternshipDetailsDialog = ({
     "Date de début du stage",
     "Date de fin du stage",
   ];
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
   useEffect(() => {
     const existsByStudentEmail = async () => {
@@ -37,6 +37,7 @@ const StudentInternshipDetailsDialog = ({
           Authorization: userInfo.jwt,
         },
       });
+      console.log(openedStudentEmail);
       setExists(exists.data);
       return exists.data;
     };
@@ -62,15 +63,21 @@ const StudentInternshipDetailsDialog = ({
     if (reason === "backdropClick" || reason === "timeout") {
       resetOpenedStudentEmail();
       setInternship(null);
-      toggleDialog("internshipDetailsDialog", false);
+      setExists(null);
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "internshipDetailsDialog",
+      });
     }
-    console.log("reason", reason);
   };
 
   return (
     <>
       {exists ? (
-        <Dialog open={open} onClose={handleClose}>
+        <Dialog
+          open={dialog.internshipDetailsDialog.visible}
+          onClose={handleClose}
+        >
           <DialogContent>
             {internship &&
               Object.keys(internship).map((identifier, key) => {
@@ -88,7 +95,11 @@ const StudentInternshipDetailsDialog = ({
           </DialogContent>
         </Dialog>
       ) : (
-        <Snackbar open={open} autoHideDuration={2000} onClose={handleClose}>
+        <Snackbar
+          open={exists == false}
+          autoHideDuration={2000}
+          onClose={handleClose}
+        >
           <Alert severity="warning" sx={{ width: "100%" }}>
             {openedStudentEmail} n'a pas de stage d'attribué
           </Alert>

@@ -24,26 +24,29 @@ public abstract class StudentMapper {
                 .studentState(studentCreationDto.getStudentState())
                 .appliedOffersId(new HashSet<>())
                 .evaluationsDates(new TreeSet<>())
+                .exclusiveOffersId(new HashSet<>())
+                .profileImageId("")
                 .interviewsDate(new TreeSet<>())
                 .hasValidCv(false)
                 .build();
     }
 
     public static StudentDetailsDto toDto(Student student) {
-        return StudentDetailsDto.builder()
+        return StudentDetailsDto.studentDetailsDtoBuilder()
                 .id(student.getId())
                 .email(student.getEmail())
                 .firstName(student.getFirstName())
                 .lastName(student.getLastName())
                 .registrationDate(student.getRegistrationDate())
                 .phoneNumber(student.getPhoneNumber())
+                .profileImageId(student.getProfileImageId())
                 .studentState(student.getStudentState())
                 .hasValidCv(student.getHasValidCv())
                 .build();
     }
 
     public static StudentProfileDto toProfileDto(Student student) {
-        return StudentProfileDto.builder()
+        return StudentProfileDto.studentProfileDtoBuilder()
                 .id(student.getId())
                 .email(student.getEmail())
                 .firstName(student.getFirstName())
@@ -51,6 +54,7 @@ public abstract class StudentMapper {
                 .registrationDate(student.getRegistrationDate())
                 .phoneNumber(student.getPhoneNumber())
                 .studentState(student.getStudentState())
+                .profileImageId(student.getProfileImageId())
                 .nbrOfAppliedOffers(student.getAppliedOffersId().size())
                 .nbrOfExclusiveOffers(student.getExclusiveOffersId().size())
                 .nbrOfInterviews(student.getInterviewsDate().size())

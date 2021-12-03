@@ -5,7 +5,7 @@ import com.team4.backend.model.InternshipManager;
 
 public abstract class InternshipManagerMockData {
 
-    public static InternshipManager GetInternshipManager() {
+    public static InternshipManager getInternshipManager() {
         return InternshipManager.internshipManagerBuilder()
                 .id("internship_manager_id")
                 .email("intership.manager@email.com")
@@ -16,8 +16,8 @@ public abstract class InternshipManagerMockData {
                 .build();
     }
 
-    public static InternshipManagerDetailsDto GetInternshipManagerDto() {
-        return InternshipManagerDetailsDto.builder()
+    public static InternshipManagerDetailsDto getInternshipManagerDto() {
+        return InternshipManagerDetailsDto.internshipManagerDetailsDtoBuilder()
                 .id("internship_manager_id")
                 .email("intership.manager@email.com")
                 .firstName("John")

@@ -6,7 +6,6 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-  Box,
   TextareaAutosize,
   Typography,
 } from "@mui/material";
@@ -64,11 +63,17 @@ const CvValidationDialog = ({ id, removeCv }) => {
       <Button
         size="medium"
         variant="contained"
-        color="success"
-        sx={{ mb: "6px" }}
+        sx={{
+          mt: "6px",
+          backgroundColor: "rgba(125, 51, 235, 0.8)",
+          width: "100%",
+          ":hover": {
+            backgroundColor: "rgba(85, 11, 185, 0.8)",
+          },
+        }}
         onClick={handleOpen}
       >
-        VALIDER <ApprovalIcon></ApprovalIcon>
+        VALIDER <ApprovalIcon sx={{ ml: 1 }} />
       </Button>
       <Dialog
         open={open}
@@ -77,20 +82,18 @@ const CvValidationDialog = ({ id, removeCv }) => {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle id="alert-dialog-title">
-          {"Validation du C.V. étudiant(e)"}
+          Validation du CV de l'étudiant(e)
         </DialogTitle>
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            Voulez-vous accepter ou rejeter le C.V. de cet(te) étudiant(e)?
+            Voulez-vous accepter ou rejeter le CV de cet(te) étudiant(e)?
           </DialogContentText>
           {isRejecting && (
             <Dialog open={isRejecting} onClose={handleClose}>
               <DialogContent>
-                <DialogTitle sx={{ pt: 0 }}>
-                  Raison du rejet du C.V.
-                </DialogTitle>
-                {(rejectionExplanation == "" ||
-                  rejectionExplanation == null) && (
+                <DialogTitle sx={{ pt: 0 }}>Raison du rejet du CV</DialogTitle>
+                {(rejectionExplanation === "" ||
+                  rejectionExplanation === null) && (
                   <Typography sx={{ color: "red" }}>{errorMessage}</Typography>
                 )}
                 <TextareaAutosize
@@ -117,18 +120,18 @@ const CvValidationDialog = ({ id, removeCv }) => {
               <Button
                 onClick={() => {
                   if (
-                    rejectionExplanation != null &&
-                    rejectionExplanation != ""
+                    rejectionExplanation !== null &&
+                    rejectionExplanation !== ""
                   ) {
                     validateCv(false, rejectionExplanation);
                   } else {
                     setErrorMessage(
-                      "La raison du rejet du C.V. doit être inscrite"
+                      "La raison du rejet du CV doit être inscrite"
                     );
                   }
                 }}
               >
-                Rejeter le C.V.
+                Rejeter le CV
               </Button>
             </Dialog>
           )}

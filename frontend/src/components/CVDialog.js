@@ -1,25 +1,29 @@
-import React, { useRef } from "react";
+import React, { useContext, useRef } from "react";
 import { Dialog, DialogContent } from "@mui/material";
-import PdfView from "./PdfView"
+import PdfView from "./PdfView";
+import { DialogContext } from "../stores/DialogStore";
 
-function CVDialog({ open, toggleDialog, cvUrl, setUrl}) {
+const CVDialog = ({ cvUrl, setUrl }) => {
+  let dialogRef = useRef(null);
+  const [dialog, dialogDispatch] = useContext(DialogContext);
 
-    let dialogRef = useRef(null);
+  const handleClose = (_, reason) => {
+    if (reason === "backdropClick") {
+      dialogDispatch({
+        type: "CLOSE",
+        dialogName: "cvDialog",
+      });
+      setUrl("");
+    }
+  };
 
-    const handleClose = (_, reason) => {
-        if (reason === "backdropClick") {
-            toggleDialog("cvDialog", false);
-            setUrl("");
-        }
-    };
-
-    return (
-        <Dialog open={open} onClose={handleClose}>
-            <DialogContent ref={dialogRef}>
-                {dialogRef && <PdfView pdfUrl={cvUrl} dialogRef={dialogRef} />}
-            </DialogContent>
-        </Dialog>
-    )
+  return (
+    <Dialog open={dialog.cvDialog.visible} onClose={handleClose}>
+      <DialogContent ref={dialogRef}>
+        {dialogRef && <PdfView pdfUrl={cvUrl} dialogRef={dialogRef} />}
+      </DialogContent>
+    </Dialog>
+  );
 }
 
-export default CVDialog
+export default CVDialog;

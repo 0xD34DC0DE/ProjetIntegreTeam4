@@ -3,9 +3,13 @@ import { Drawer, Typography, Button, Divider } from "@mui/material";
 import FormatListBulletedOutlinedIcon from "@mui/icons-material/FormatListBulletedOutlined";
 import { sidebarList } from "./Configuration";
 import { UserInfoContext } from "../stores/UserInfoStore";
+import { DialogContext } from "../stores/DialogStore";
+import { SelectionContext } from "../stores/SelectionStore";
 
-const Sidebar = ({ open, onSelectionChanged }) => {
+const Sidebar = ({ open }) => {
   const [userInfo] = useContext(UserInfoContext);
+  const [dialog, dialogDispatch] = useContext(DialogContext);
+  const [selection, selectionDispatch] = useContext(SelectionContext);
 
   return (
     <>
@@ -27,7 +31,7 @@ const Sidebar = ({ open, onSelectionChanged }) => {
             fontSize="2.5em"
             sx={{ mt: 2, textAlign: "left", ml: 3 }}
           >
-            OSE
+            OSER
             <FormatListBulletedOutlinedIcon sx={{ ml: 2 }} />
           </Typography>
           <Divider
@@ -47,12 +51,19 @@ const Sidebar = ({ open, onSelectionChanged }) => {
                   key={item.id}
                   sx={{
                     color: "text.primary",
-                    ":hover": { backgroundColor: "rgba(100, 100, 100, 0.2)" },
+                    ":hover": { backgroundColor: "rgba(125, 51, 235, 0.8)" },
                     justifyContent: "flex-start",
                     ml: 2,
                     mr: 2,
                   }}
-                  onClick={() => onSelectionChanged(item)}
+                  onClick={() => {
+                    if (item.isDialog)
+                      dialogDispatch({
+                        type: "OPEN",
+                        dialogName: item.dialogName,
+                      });
+                    else selectionDispatch(item);
+                  }}
                 >
                   {item.icon}
                   {item.label}

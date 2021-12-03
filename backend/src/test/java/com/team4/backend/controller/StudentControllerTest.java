@@ -2,11 +2,13 @@ package com.team4.backend.controller;
 
 import com.team4.backend.dto.StudentDetailsDto;
 import com.team4.backend.dto.StudentProfileDto;
+import com.team4.backend.dto.UserDto;
 import com.team4.backend.exception.ForbiddenActionException;
 import com.team4.backend.exception.UserAlreadyExistsException;
 import com.team4.backend.exception.UserNotFoundException;
 import com.team4.backend.model.Student;
 import com.team4.backend.service.StudentService;
+import com.team4.backend.service.SupervisorService;
 import com.team4.backend.testdata.StudentMockData;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -35,6 +37,9 @@ public class StudentControllerTest {
 
     @MockBean
     StudentService studentService;
+
+    @MockBean
+    SupervisorService supervisorService;
 
     @Test
     public void shouldCreateStudent() {
@@ -209,6 +214,38 @@ public class StudentControllerTest {
                 //ASSERT
                 .expectStatus().isNotFound()
                 .expectBodyList(StudentProfileDto.class);
+    }
+
+    @Test
+    void shouldGetAllStudentNotContainingExclusiveOffer() {
+        //ARRANGE
+        String id = "id_test";
+        when(studentService.getAllStudentNotContainingExclusiveOffer(any())).thenReturn(StudentMockData.getAllStudentsFlux());
+
+        
+        //ACT
+        webTestClient
+                .get()
+                .uri("/student/getAllStudentNotContainingExclusiveOffer/" + id)
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(StudentDetailsDto.class);
+    }
+    
+    @Test
+    void shouldGetAllStudentsNoSupervisor() {
+        //ARRANGE
+        when(supervisorService.getAllStudentsNoSupervisor()).thenReturn(StudentMockData.getAllFluxUserDto());
+        
+        //ACT
+        webTestClient
+                .get()
+                .uri("/student/getAllStudentsNoSupervisor")
+                .exchange()
+                //ASSERT
+                .expectStatus().isOk()
+                .expectBodyList(UserDto.class);
     }
 
 }

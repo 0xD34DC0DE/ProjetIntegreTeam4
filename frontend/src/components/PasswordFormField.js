@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import TextFormField from "./TextFormField";
 
-const PasswordFormField = ({ valid, onFieldChange, step, visibleStep }) => {
+const PasswordFormField = ({
+  valid,
+  onFieldChange,
+  step,
+  visibleStep,
+  handleFieldKeyUp,
+}) => {
   const [errorMessage, setErrorMessage] = useState({
     password: "",
     confirmPassword: "",
@@ -25,7 +31,7 @@ const PasswordFormField = ({ valid, onFieldChange, step, visibleStep }) => {
     } else {
       setErrorMessage((errors) => ({
         ...errors,
-        confirmPassword: "Les mots de passe ne sont pas identique",
+        confirmPassword: "Les mots de passe ne sont pas identiques",
       }));
       valid(false);
     }
@@ -48,6 +54,7 @@ const PasswordFormField = ({ valid, onFieldChange, step, visibleStep }) => {
         label="Mot de passe"
         onChange={handleFieldChange}
         value={field.password}
+        handleFieldKeyUp={handleFieldKeyUp}
         error={errorMessage.password}
         type="password"
         visible={step === visibleStep}
@@ -59,6 +66,7 @@ const PasswordFormField = ({ valid, onFieldChange, step, visibleStep }) => {
         label="Comfirmation du mot de passe"
         onChange={handleFieldChange}
         value={field.confirmPassword}
+        handleFieldKeyUp={handleFieldKeyUp}
         error={errorMessage.confirmPassword}
         type="password"
         visible={step === visibleStep}

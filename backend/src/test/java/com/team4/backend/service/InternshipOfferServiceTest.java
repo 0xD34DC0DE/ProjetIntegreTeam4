@@ -3,11 +3,9 @@ package com.team4.backend.service;
 import com.team4.backend.dto.InternshipOfferCreationDto;
 import com.team4.backend.dto.InternshipOfferStudentInterestViewDto;
 import com.team4.backend.dto.InternshipOfferStudentViewDto;
-import com.team4.backend.exception.InternshipOfferNotFoundException;
-import com.team4.backend.exception.InvalidPageRequestException;
-import com.team4.backend.exception.UnauthorizedException;
-import com.team4.backend.exception.UserNotFoundException;
+import com.team4.backend.exception.*;
 import com.team4.backend.model.InternshipOffer;
+import com.team4.backend.model.Notification;
 import com.team4.backend.model.Semester;
 import com.team4.backend.model.Student;
 import com.team4.backend.model.enums.SemesterName;
@@ -29,14 +27,13 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.same;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @Log
 @ExtendWith(MockitoExtension.class)
@@ -297,16 +294,94 @@ public class InternshipOfferServiceTest {
     }
 
     @Test
-    void shouldValidateInternshipOffer() {
+    void shouldChangeInternshipOfferExclusivityWhenIsTrue() {
+        //ARRANGE
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferRepository.findById(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
+        when(internshipOfferRepository.save(any())).thenReturn(Mono.just(internshipOffer));
+
+        //ACT
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.changeInternshipOfferExclusivity(internshipOffer.getId(), true);
+
+        //ASSERT
+        StepVerifier.create(internshipOfferMono)
+                .assertNext(i -> assertTrue(i.getIsExclusive()))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldChangeInternshipOfferExclusivityAndRemoveIdFromExclusiveOfferOfStudentWhenIsFalse() {
+        //ARRANGE
+        Student student = StudentMockData.getMockStudent();
+
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        internshipOffer.setId(student.getExclusiveOffersId().stream().findFirst().get());
+
+        when(internshipOfferRepository.findById(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
+        when(studentService.getAllStudentContainingExclusiveOffer(any())).thenReturn(Flux.fromIterable(Arrays.asList(student)));
+        when(studentService.save(any())).thenReturn(Mono.just(student));
+        when(internshipOfferRepository.save(any())).thenReturn(Mono.just(internshipOffer));
+
+        //ACT
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.changeInternshipOfferExclusivity(internshipOffer.getId(), false);
+
+        //ASSERT
+        StepVerifier.create(internshipOfferMono)
+                .assertNext(i -> {
+                    assertFalse(i.getIsExclusive());
+                    assertFalse(student.getExclusiveOffersId().contains(i.getId()));
+                })
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldNotChangeInternshipOfferExclusivityWhenNotFound() {
         //ARRANGE
         String id = "234dsd2egd54ter";
+        when(internshipOfferRepository.findById(id)).thenReturn(Mono.empty());
+
+        //ACT
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.changeInternshipOfferExclusivity(id, false);
+
+        //ASSERT
+        StepVerifier.create(internshipOfferMono)
+                .verifyError(InternshipOfferNotFoundException.class);
+    }
+
+    @Test
+    void shouldNotChangeInternshipOfferExclusivityWhenItIsNotValidated() {
+        //ARRANGE
         InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        internshipOffer.setIsValidated(false);
+
+        when(internshipOfferRepository.findById(internshipOffer.getId())).thenReturn(Mono.just(internshipOffer));
+
+        //ACT
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.changeInternshipOfferExclusivity(internshipOffer.getId(), false);
+
+        //ASSERT
+        StepVerifier.create(internshipOfferMono)
+                .verifyError(ForbiddenActionException.class);
+    }
+
+    @Test
+    void shouldValidateInternshipOffer() {
+        //ARRANGE
+        String id = "id";
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        InternshipOfferService internshipOfferServiceSpy = spy(internshipOfferService);
 
         when(internshipOfferRepository.findById(id)).thenReturn(Mono.just(internshipOffer));
         when(internshipOfferRepository.save(any(InternshipOffer.class))).thenReturn(Mono.just(internshipOffer));
+        doReturn(Mono.just(new Notification())).when(internshipOfferServiceSpy).createInternshipOfferValidationNotification(any(), any(Boolean.class));
+        doReturn(Mono.just(new Notification())).when(internshipOfferServiceSpy).createNewInternshipNotification();
 
         //ACT
-        Mono<InternshipOffer> internshipOfferDtoMono = internshipOfferService.validateInternshipOffer(id, true);
+        Mono<InternshipOffer> internshipOfferDtoMono = internshipOfferServiceSpy.validateInternshipOffer(id, true, "");
 
         //ASSERT
         StepVerifier.create(internshipOfferDtoMono).assertNext(e -> assertTrue(e.getIsValidated()))
@@ -321,10 +396,49 @@ public class InternshipOfferServiceTest {
         when(internshipOfferRepository.findById(id)).thenReturn(Mono.empty());
 
         //ACT
-        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.validateInternshipOffer(id, true);
+        Mono<InternshipOffer> internshipOfferMono = internshipOfferService.validateInternshipOffer(id, true, "");
 
         //ASSERT
         StepVerifier.create(internshipOfferMono).expectError(InternshipOfferNotFoundException.class).verify();
+    }
+
+    @Test
+    void shouldAddExclusiveOfferToStudents() {
+        //ARRANGE
+        List<Student> students = StudentMockData.getListStudent(3)
+                .stream().peek(student -> student.setExclusiveOffersId(new HashSet<>())).collect(Collectors.toList());
+        Set<String> studentEmails = students.stream().map(Student::getEmail).collect(Collectors.toSet());
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(studentService.findAllByEmails(studentEmails)).thenReturn(Flux.fromIterable(students));
+        when(internshipOfferRepository.existsByIdAndIsExclusiveTrue(internshipOffer.getId())).thenReturn(Mono.just(true));
+        students.forEach(s -> when(studentService.save(s)).thenReturn(Mono.just(s)));
+
+        //ACT
+        Mono<Long> count = internshipOfferService.addExclusiveOfferToStudents(internshipOffer.getId(), studentEmails);
+
+        //ASSERT
+        StepVerifier.create(count)
+                .assertNext(c -> assertEquals(3, c))
+                .verifyComplete();
+    }
+
+    @Test
+    void shouldAddExclusiveOfferToStudentsWhenInternshipOfferDoNotExistOrNotExclusive() {
+        //ARRANGE
+        List<Student> students = StudentMockData.getListStudent(3)
+                .stream().peek(student -> student.setExclusiveOffersId(new HashSet<>())).collect(Collectors.toList());
+        Set<String> studentEmails = students.stream().map(Student::getEmail).collect(Collectors.toSet());
+        InternshipOffer internshipOffer = InternshipOfferMockData.getInternshipOffer();
+
+        when(internshipOfferRepository.existsByIdAndIsExclusiveTrue(internshipOffer.getId())).thenReturn(Mono.just(false));
+
+        //ACT
+        Mono<Long> count = internshipOfferService.addExclusiveOfferToStudents(internshipOffer.getId(), studentEmails);
+
+        //ASSERT
+        StepVerifier.create(count)
+                .verifyError(ForbiddenActionException.class);
     }
 
     @Test

@@ -40,6 +40,13 @@ const theme = createTheme({
         },
       },
     },
+    MuiBadge: {
+      styleOverrides: {
+        badge: {
+          backgroundColor: "red",
+        },
+      },
+    },
     MuiInput: {
       styleOverrides: {
         underline: {
@@ -66,17 +73,17 @@ const theme = createTheme({
           "& .MuiOutlinedInput-notchedOutline": {
             borderColor: "rgba(100, 100, 100, 0.5)",
           },
-          "& .MuiOutlinedInput-input.Mui-disabled" : {
+          "& .MuiOutlinedInput-input.Mui-disabled": {
             backgroundColor: "rgba(255, 255, 255, 0.6)",
-            opacity: 1
-          }
+            opacity: 1,
+          },
         },
       },
     },
     MuiTabs: {
       styleOverrides: {
         indicator: {
-          backgroundColor: "white",
+          backgroundColor: "rgba(125, 51, 235, 1.0)",
         },
         root: {
           "& .MuiButtonBase-root": {
@@ -103,6 +110,15 @@ const theme = createTheme({
           color: "gray",
           "&.Mui-checked": {
             color: "white",
+          },
+        },
+      },
+    },
+    MuiPaginationItem: {
+      styleOverrides: {
+        root: {
+          "&.Mui-selected": {
+            backgroundColor: "rgba(125, 51, 235, 1.0) !important",
           },
         },
       },
@@ -142,7 +158,7 @@ const theme = createTheme({
             backgroundColor: "rgba(100, 100, 100, 0.3)",
           },
           "& .MuiMobileStepper-dotActive": {
-            backgroundColor: "rgba(255, 255, 255, 0.3)",
+            backgroundColor: "rgba(125, 51, 235, 0.8)",
           },
           "& .MuiDialogContentText-root": {
             color: "rgba(255, 255, 255, 0.5)",
@@ -154,10 +170,10 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           "& .MuiMenuItem-root:hover": {
-            backgroundColor: "rgba(100, 100, 100, 0.3)",
+            backgroundColor: "rgba(255, 255, 255, 0.1)",
           },
           "& .MuiList-root": {
-            backgroundColor: "rgba(24, 24, 27, 1)",
+            backgroundColor: "rgba(34, 34, 37, 0.5)",
           },
           "& .MuiPaper-root": {
             backgroundColor: "rgba(24, 24, 27, 1)",

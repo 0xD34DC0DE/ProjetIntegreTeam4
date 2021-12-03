@@ -8,14 +8,14 @@ import lombok.NoArgsConstructor;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-public class InternshipDetailedDto extends InternshipDto implements Serializable {
+public class InternshipDetailsDto extends InternshipDto implements Serializable {
 
     @Builder(builderMethodName = "internshipDetailedDtoBuilder")
-    public InternshipDetailedDto(String monitorEmail,
-                                 String studentEmail,
-                                 String internshipManagerEmail,
-                                 LocalDate startDate,
-                                 LocalDate endDate) {
+    public InternshipDetailsDto(String monitorEmail,
+                                String studentEmail,
+                                String internshipManagerEmail,
+                                LocalDate startDate,
+                                LocalDate endDate) {
         super(monitorEmail, studentEmail, internshipManagerEmail, startDate, endDate);
     }
 

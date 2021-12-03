@@ -1,6 +1,7 @@
 package com.team4.backend.mapping;
 
-import com.team4.backend.dto.SupervisorCreationDto;
+import com.team4.backend.dto.SupervisorDetailsDto;
+import com.team4.backend.dto.SupervisorProfileDto;
 import com.team4.backend.model.Supervisor;
 import com.team4.backend.model.TimestampedEntry;
 
@@ -10,7 +11,7 @@ import java.util.stream.Collectors;
 
 public abstract class SupervisorMapper {
 
-    public static Supervisor toEntity(SupervisorCreationDto supervisorDto) {
+    public static Supervisor toEntity(SupervisorDetailsDto supervisorDto) {
         return Supervisor.supervisorBuilder()
                 .email(supervisorDto.getEmail())
                 .password(supervisorDto.getPassword())
@@ -19,11 +20,12 @@ public abstract class SupervisorMapper {
                 .studentTimestampedEntries(new HashSet<>())
                 .registrationDate(LocalDate.now())
                 .phoneNumber(supervisorDto.getPhoneNumber())
+                .profileImageId("")
                 .build();
     }
 
-    public static SupervisorCreationDto toDetailsDto(Supervisor supervisor) {
-        return SupervisorCreationDto.builder()
+    public static SupervisorDetailsDto toDetailsDto(Supervisor supervisor) {
+        return SupervisorDetailsDto.supervisorDetailsDtoBuilder()
                 .id(supervisor.getId())
                 .email(supervisor.getEmail())
                 .firstName(supervisor.getFirstName())
@@ -33,6 +35,19 @@ public abstract class SupervisorMapper {
                         .collect(Collectors.toSet()))
                 .registrationDate(supervisor.getRegistrationDate())
                 .phoneNumber(supervisor.getPhoneNumber())
+                .profileImageId(supervisor.getProfileImageId())
+                .build();
+    }
+
+    public static SupervisorProfileDto toProfileDto(Supervisor supervisor){
+        return SupervisorProfileDto.supervisorProfileDtoBuilder()
+                .id(supervisor.getId())
+                .email(supervisor.getEmail())
+                .firstName(supervisor.getFirstName())
+                .lastName(supervisor.getLastName())
+                .registrationDate(supervisor.getRegistrationDate())
+                .phoneNumber(supervisor.getPhoneNumber())
+                .nbrOfAssignedStudents(supervisor.getStudentTimestampedEntries().size())
                 .build();
     }
 

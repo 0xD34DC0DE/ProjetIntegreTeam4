@@ -20,16 +20,17 @@ const AssignedStudentsDialog = ({
 }) => {
   const [userInfo] = useContext(UserInfoContext);
   useEffect(() => {
-    const getAssignedStudents = async () => {
-      let response = await axios({
+    const getAssignedStudents = () => {
+      axios({
         method: "GET",
-        url: `http://localhost:8080/supervisor/getAssignedStudents/${user.id}`,
+        url: `http://localhost:8080/supervisor/getAllAssignedStudentsForCurrentSemester/${user.id}`,
         headers: {
           Authorization: userInfo.jwt,
         },
         responseType: "json",
+      }).then((response) => {
+        handleStudentAssignment(response.data);
       });
-      handleStudentAssignment(response.data);
     };
 
     getAssignedStudents();

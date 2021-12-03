@@ -1,6 +1,7 @@
 package com.team4.backend.repository;
 
 import com.team4.backend.model.Student;
+import com.team4.backend.model.enums.Role;
 import com.team4.backend.model.enums.StudentState;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
@@ -41,7 +42,8 @@ public class StudentRepositoryTest {
                 Student.studentBuilder()
                         .email("testing_1@gmail.com")
                         .password("password1")
-                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .studentState(StudentState.WAITING_INTERVIEW)
+                        .exclusiveOffersId(Set.of("61a679bf094df9767f779234"))
                         .interviewsDate(new TreeSet<>(Arrays.asList(
                                 LocalDate.now().minusWeeks(3),
                                 LocalDate.now(),
@@ -49,16 +51,18 @@ public class StudentRepositoryTest {
                         .build(),
                 Student.studentBuilder()
                         .email("testing_2@gmail.com")
-                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .studentState(StudentState.WAITING_INTERVIEW)
                         .password("password2")
+                        .exclusiveOffersId(new HashSet<>())
                         .interviewsDate(new TreeSet<>())
-                        .evaluationsDates(Stream.of(LocalDate.now(),LocalDate.now().plusYears(2))
+                        .evaluationsDates(Stream.of(LocalDate.now(), LocalDate.now().plusYears(2))
                                 .collect(Collectors.toCollection(TreeSet::new)))
                         .build(),
                 Student.studentBuilder()
                         .email("testing_3@gmail.com")
                         .password("password1")
-                        .studentState(StudentState.INTERNSHIP_NOT_FOUND)
+                        .exclusiveOffersId(new HashSet<>())
+                        .studentState(StudentState.WAITING_INTERVIEW)
                         .evaluationsDates(Stream.of(LocalDate.now().plusYears(2))
                                 .collect(Collectors.toCollection(TreeSet::new)))
                         .interviewsDate(new TreeSet<>(Arrays.asList(
@@ -68,7 +72,7 @@ public class StudentRepositoryTest {
                         .build()
         );
 
-        studentRepository.saveAll(users).subscribe();
+        studentRepository.saveAll(users).blockLast();
     }
 
     @Test
@@ -116,6 +120,40 @@ public class StudentRepositoryTest {
     }
 
     @Test
+    void shouldFindAllByRoleAndExclusiveOffersIdNotContains() {
+        //ARRANGE
+        String id = "61a679bf094df9767f779234";
+        String role = Role.STUDENT.toString();
+
+
+        //ACT
+        Flux<Student> studentFlux = studentRepository.findAllByRoleAndExclusiveOffersIdNotContains(role, id);
+
+        //ASSERT
+        StepVerifier.create(studentFlux)
+                .expectNextCount(2)
+                .expectComplete()
+                .verify();
+    }
+
+    @Test
+    void shouldFindAllByRoleAndExclusiveOffersIdContains() {
+        //ARRANGE
+        String id = "61a679bf094df9767f779234";
+        String role = Role.STUDENT.toString();
+
+
+        //ACT
+        Flux<Student> studentFlux = studentRepository.findAllByRoleAndExclusiveOffersIdContains(role, id);
+
+        //ASSERT
+        StepVerifier.create(studentFlux)
+                .expectNextCount(1)
+                .expectComplete()
+                .verify();
+    }
+
+    @Test
     void shouldNotFindAllByEmails() {
         //ARRANGE
         Set<String> emails = new HashSet<>(Arrays.asList("nonexistentemail1@gmail.com", "nonexistentemail2@gmail.com"));
@@ -132,7 +170,7 @@ public class StudentRepositoryTest {
     @Test
     void shouldFindAllByStudentStateAndInterviewsDateIsNotEmpty() {
         //ARRANGE && ACT
-        Flux<Student> studentFlux = studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.INTERNSHIP_NOT_FOUND);
+        Flux<Student> studentFlux = studentRepository.findAllByStudentStateAndInterviewsDateIsNotEmpty(StudentState.WAITING_INTERVIEW);
 
         //ASSERT
         StepVerifier.create(studentFlux)

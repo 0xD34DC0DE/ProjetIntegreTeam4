@@ -9,7 +9,7 @@ const ContentTitle = ({ role, description }) => {
       flexDirection={"column"}
       sx={{ backgroundColor: "rgba(14, 14, 16, 0.2)" }}
     >
-      <Grid item xl={12} lg={12} md={12} sm={12} xs={12} ml={2}>
+      <Grid item xs={12} ml={2}>
         <motion.div
           animate={{ opacity: [0, 1] }}
           transition={{

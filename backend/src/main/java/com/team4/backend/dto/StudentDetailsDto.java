@@ -20,7 +20,7 @@ public class StudentDetailsDto extends UserDetailsDto implements Serializable {
 
     private Boolean hasValidCv;
 
-    @Builder
+    @Builder(builderMethodName = "studentDetailsDtoBuilder")
     public StudentDetailsDto(String id,
                              String email,
                              String password,
@@ -29,7 +29,8 @@ public class StudentDetailsDto extends UserDetailsDto implements Serializable {
                              LocalDate registrationDate,
                              String phoneNumber,
                              StudentState studentState,
-                             Boolean hasValidCv) {
+                             Boolean hasValidCv,
+                             String profileImageId) {
         super(id,
                 email,
                 password,
@@ -37,7 +38,8 @@ public class StudentDetailsDto extends UserDetailsDto implements Serializable {
                 lastName,
                 registrationDate,
                 phoneNumber,
-                Role.STUDENT);
+                Role.STUDENT,
+                profileImageId);
         this.studentState = studentState;
         this.hasValidCv = hasValidCv;
     }
