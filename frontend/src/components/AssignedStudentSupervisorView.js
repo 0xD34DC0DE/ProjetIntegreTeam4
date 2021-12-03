@@ -81,7 +81,7 @@ const AssignedStudentSupervisorView = () => {
         columns={{ xs: 4, sm: 8, md: 12 }}
       >
         {assignedStudents.map((student) => (
-          <Grid item xs={6} sm={4} md={4} lg={3} xl={2} key={student.id}>
+          <Grid item xs={10} sm={10} md={6} lg={3} xl={3} key={student.id}>
             <motion.div variants={fadeIn} initial="hidden" animate="show">
               <Card
                 onClick={() => {
@@ -93,12 +93,11 @@ const AssignedStudentSupervisorView = () => {
                 }}
                 sx={{
                   backgroundColor: "rgba(135, 135, 135, 0.03)",
-                  borderRadius: "10px",
-                  border: "0.5px solid grey",
+                  borderRadius: "5px",
+                  border: "0.5px solid rgba(255, 255, 255, 0.2)",
                   boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
                   "&:hover": {
-                    boxShadow: "0px 0px 15px 1px rgba(255, 255, 255, 0.3)",
-                    backgroundColor: "#272929",
+                    boxShadow: "0px 0px 15px 1px rgba(125, 51, 235, 0.8)",
                     cursor: "pointer",
                   },
                   alignItem: "center",
@@ -108,7 +107,9 @@ const AssignedStudentSupervisorView = () => {
                 }}
               >
                 <Box sx={{ textAlign: "center" }}>
-                  <Avatar sx={{ mx: "auto", my: 2 }}></Avatar>
+                  <Avatar
+                    sx={{ mx: "auto", width: "80px", height: "80px", my: 2 }}
+                  ></Avatar>
                   <Typography>{student.email}</Typography>
                   <Typography>
                     {student.firstName}, {student.lastName}
