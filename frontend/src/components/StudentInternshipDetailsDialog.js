@@ -18,7 +18,7 @@ const StudentInternshipDetailsDialog = ({
 }) => {
   const [internship, setInternship] = useState(null);
   const [userInfo] = useContext(UserInfoContext);
-  const [exists, setExists] = useState(false);
+  const [exists, setExists] = useState(null);
   const internshipLabels = [
     "Courriel du moniteur",
     "Courriel de l'étudiant",
@@ -37,6 +37,7 @@ const StudentInternshipDetailsDialog = ({
           Authorization: userInfo.jwt,
         },
       });
+      console.log(openedStudentEmail);
       setExists(exists.data);
       return exists.data;
     };
@@ -62,6 +63,7 @@ const StudentInternshipDetailsDialog = ({
     if (reason === "backdropClick" || reason === "timeout") {
       resetOpenedStudentEmail();
       setInternship(null);
+      setExists(null);
       dialogDispatch({
         type: "CLOSE",
         dialogName: "internshipDetailsDialog",
@@ -93,7 +95,11 @@ const StudentInternshipDetailsDialog = ({
           </DialogContent>
         </Dialog>
       ) : (
-        <Snackbar autoHideDuration={2000} onClose={handleClose}>
+        <Snackbar
+          open={exists == false}
+          autoHideDuration={2000}
+          onClose={handleClose}
+        >
           <Alert severity="warning" sx={{ width: "100%" }}>
             {openedStudentEmail} n'a pas de stage d'attribué
           </Alert>

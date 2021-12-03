@@ -16,6 +16,7 @@ import { UserInfoContext } from "../stores/UserInfoStore";
 import CvRejectionExplanationDialog from "./CvRejectionExplanationDialog";
 import CVDialog from "./CVDialog";
 import { DialogContext } from "../stores/DialogStore";
+import { motion } from "framer-motion";
 
 const ListCvStudentView = ({ cvSent }) => {
   const [userInfo] = useContext(UserInfoContext);
@@ -32,6 +33,8 @@ const ListCvStudentView = ({ cvSent }) => {
       },
     },
   };
+
+  const labels = ["Fichier:", "Vu: ", "Téléversement: "];
   useEffect(() => {
     const getAllCvByUserEmail = async () => {
       var response = await axios({
@@ -84,105 +87,111 @@ const ListCvStudentView = ({ cvSent }) => {
                     lg={3}
                     xl={3}
                   >
-                    <Card
-                      variant="outlined"
-                      sx={{
-                        backgroundColor: "rgba(155, 155, 155, 0.1)",
-                        borderRadius: 4,
-                        boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
-                        mt: 2,
-                        mb: 5,
-                        textAlign: "right",
-                        ":hover": {
-                          backgroundColor: "rgba(200, 200, 200, 0.1)",
-                          cursor: "pointer",
-                          boxShadow: "0px 0px 15px 1px rgba(125, 51, 235, 0.8)",
-                        },
-                      }}
+                    <motion.div
+                      variants={fadeIn}
+                      initial="hidden"
+                      animate="show"
                     >
-                      {cv.isSeen === false && (
-                        <Typography title="Le CV n'a pas encore été vérifié.">
-                          <InfoIcon
+                      <Card
+                        variant="outlined"
+                        sx={{
+                          backgroundColor: "rgba(155, 155, 155, 0.1)",
+                          borderRadius: 4,
+                          boxShadow: "15px 15px 10px 0px rgba(0,0,0,0.35);",
+                          mt: 2,
+                          mb: 5,
+                          textAlign: "right",
+                          ":hover": {
+                            backgroundColor: "rgba(200, 200, 200, 0.1)",
+                            cursor: "pointer",
+                            boxShadow:
+                              "0px 0px 15px 1px rgba(125, 51, 235, 0.8)",
+                          },
+                        }}
+                      >
+                        {cv.isSeen === false && (
+                          <Typography title="Le CV n'a pas encore été vérifié.">
+                            <InfoIcon
+                              sx={{
+                                float: "right",
+                                mr: 1,
+                                mt: 1,
+                                color: "lightgrey",
+                                ":hover": {
+                                  color: "darkgray",
+                                  cursor: "pointer",
+                                },
+                              }}
+                            />
+                          </Typography>
+                        )}
+                        {cv.isSeen === true && cv.isValid === true && (
+                          <Typography title="Le CV a été validé. Vous pouvez maintenant appliquer à des offres.">
+                            <ThumbUpIcon
+                              sx={{
+                                float: "right",
+                                mr: 1,
+                                mt: 1,
+                                color: "green",
+                                ":hover": {
+                                  color: "darkgreen",
+                                  cursor: "pointer",
+                                },
+                              }}
+                            />
+                          </Typography>
+                        )}
+                        {cv.isSeen === true && cv.isValid === false && (
+                          <Typography title="Le CV a été rejeté: cliquez ici pour voir la raison du rejet">
+                            <ThumbDownIcon
+                              onClick={() =>
+                                dialogDispatch({
+                                  type: "OPEN",
+                                  dialogName: "cvRejectionExplanationDialog",
+                                })
+                              }
+                              sx={{
+                                float: "right",
+                                mr: 1,
+                                mt: 1,
+                                color: "red",
+                                ":hover": {
+                                  color: "darkred",
+                                },
+                              }}
+                            />
+                            <CvRejectionExplanationDialog
+                              rejectionExplanation={cv.rejectionExplanation}
+                            />
+                          </Typography>
+                        )}
+                        <Tooltip
+                          title={
+                            "Cliquez pour visualiser votre CV " + cv.filename
+                          }
+                        >
+                          <Box
                             sx={{
-                              float: "right",
-                              mr: 1,
-                              mt: 1,
-                              color: "lightgrey",
-                              ":hover": {
-                                color: "darkgray",
-                                cursor: "pointer",
-                              },
+                              textAlign: "center",
                             }}
-                          />
-                        </Typography>
-                      )}
-                      {cv.isSeen === true && cv.isValid === true && (
-                        <Typography title="Le CV a été validé. Vous pouvez maintenant appliquer à des offres.">
-                          <ThumbUpIcon
-                            sx={{
-                              float: "right",
-                              mr: 1,
-                              mt: 1,
-                              color: "green",
-                              ":hover": {
-                                color: "darkgreen",
-                                cursor: "pointer",
-                              },
-                            }}
-                          />
-                        </Typography>
-                      )}
-                      {cv.isSeen === true && cv.isValid === false && (
-                        <Typography title="Le CV a été rejeté: cliquez ici pour voir la raison du rejet">
-                          <ThumbDownIcon
-                            onClick={() =>
+                            onClick={() => {
                               dialogDispatch({
                                 type: "OPEN",
-                                dialogName: "cvRejectionExplanationDialog",
-                              })
-                            }
-                            sx={{
-                              float: "right",
-                              mr: 1,
-                              mt: 1,
-                              color: "red",
-                              ":hover": {
-                                color: "darkred",
-                              },
+                                dialogName: "cvDialog",
+                              });
+                              openCv(cv.assetId);
                             }}
-                          />
-                          <CvRejectionExplanationDialog
-                            rejectionExplanation={cv.rejectionExplanation}
-                          />
-                        </Typography>
-                      )}
-                      <Tooltip
-                        title={
-                          "Cliquez pour visualiser votre CV " + cv.filename
-                        }
-                      >
-                        <Box
-                          sx={{
-                            textAlign: "center",
-                          }}
-                          onClick={() => {
-                            dialogDispatch({
-                              type: "OPEN",
-                              dialogName: "cvDialog",
-                            });
-                            openCv(cv.assetId);
-                          }}
-                        >
-                          {Object.keys(cv).map((identifier, key) => {
-                            var value = Object.values(cv)[key];
-                            if (value && isNotARenderedAttribute(identifier))
-                              return (
-                                <CardContent key={key}>{value}</CardContent>
-                              );
-                          })}
-                        </Box>
-                      </Tooltip>
-                    </Card>
+                          >
+                            <CardContent key={key}>
+                              <Typography>Fichier: {cv.filename}</Typography>
+                              <Typography>
+                                Téléversé: {cv.uploadDate}
+                              </Typography>
+                            </CardContent>
+                          </Box>
+                        </Tooltip>
+                      </Card>
+                    </motion.div>
                   </Grid>
                 );
               })}
