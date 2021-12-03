@@ -1,0 +1,25 @@
+.jumbotronImage{
+    width:50%;
+  }
+
+.jumbotronText{
+    width:50%;
+    text-align: "left";
+    margin-bottom:2vh;
+}
+
+.steps{
+  padding: 2rem;
+  text-align: left;
+}
+  
+  @media screen and (max-width: 600px){
+    .jumbotronImage{
+        display: none;
+    }
+    .jumbotronText{
+        width:100%;
+        text-align: center;
+        margin:auto;
+    }
+}
