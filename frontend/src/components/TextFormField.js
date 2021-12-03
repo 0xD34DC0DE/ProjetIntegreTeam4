@@ -12,6 +12,7 @@ const TextFormField = ({
   visible,
   dialogContentText,
   handleFieldKeyUp,
+  readOnly,
 }) => {
   return (
     <>
@@ -33,6 +34,7 @@ const TextFormField = ({
               onChange={onChange}
               visible={visible.toString()}
               variant="standard"
+              inputProps={{ readOnly: readOnly }}
             />
           </FormControl>
         </>
